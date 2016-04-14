@@ -12,6 +12,9 @@
     "babel-node": "babel-node",
     "prepublish": "npm run build:commonjs"
   },
+  "pre-commit": [
+    "lint"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tetris-solutions/adpeek-front.git"
