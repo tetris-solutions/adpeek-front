@@ -2,25 +2,44 @@ import React from 'react'
 import {branch} from 'baobab-react/dist-modules/higher-order'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import {logoutAction} from '@tetris/front-server/lib/actions/logout-action'
+import find from 'lodash/find'
 
 const {PropTypes} = React
 
 export const App = React.createClass({
   displayName: 'App',
   propTypes: {
-    user: PropTypes.object,
+    children: PropTypes.node,
+    params: PropTypes.shape({
+      company: PropTypes.string
+    }),
+    user: PropTypes.shape({
+      name: PropTypes.string,
+      companies: PropTypes.array
+    }),
     dispatch: PropTypes.func
   },
   contextTypes: {
     router: PropTypes.object.isRequired
+  },
+  childContextTypes: {
+    company: PropTypes.object
   },
   handleLogoutClick (e) {
     e.preventDefault()
     this.props.dispatch(logoutAction)
     this.context.router.push('/')
   },
+  getCompany () {
+    return find(this.props.user.companies, {id: this.props.params.company})
+  },
+  getChildContext () {
+    return {
+      company: this.getCompany()
+    }
+  },
   render () {
-    const {user: {name}} = this.props
+    const {children, user: {name}} = this.props
     return (
       <div className='mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header'>
         <header className='mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600'>
@@ -42,11 +61,7 @@ export const App = React.createClass({
           </nav>
         </div>
         <main className='mdl-layout__content mdl-color--grey-100'>
-          <p>The year is 1987 and NASA launches the last of America's deep space probes. In a freak mishap, Ranger 3 and
-            its pilot Captain William 'Buck' Rogers are blown out of their trajectory into an orbit which freezes his
-            life
-            support system and returns Buck Rogers to Earth five hundred years later.
-          </p>
+          {children}
         </main>
       </div>
     )
