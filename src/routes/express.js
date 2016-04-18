@@ -12,4 +12,8 @@ export function setAppRoutes (app, uiRoute) {
       loadUserCompaniesActionServerAdaptor,
       loadCompanyWorkspacesActionServerAdaptor),
     uiRoute)
+
+  app.get('/company/:company/create/workspace',
+    protectedRouteMiddleware,
+    uiRoute)
 }

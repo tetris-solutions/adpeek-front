@@ -29,6 +29,7 @@
     "@tetris/http": "^0.2.3",
     "baobab": "^2.3.3",
     "baobab-react": "^2.0.0-rc1",
+    "classnames": "^2.2.3",
     "global": "^4.3.0",
     "js-cookie": "^2.1.0",
     "lodash": "^4.11.1",
