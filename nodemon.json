@@ -1,6 +1,7 @@
 {
   "verbose": true,
   "watch": [
+    "gulpfile.js",
     "src/server.js",
     "src/components/HTML.js",
     "src/middlewares",

@@ -1,0 +1,49 @@
+.WAS__container {
+  position: relative;
+}
+
+.WAS__input {
+  width: 240px;
+  height: 30px;
+  padding: 10px 20px;
+  font-weight: 300;
+  font-size: 16px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+.WAS__input:focus {
+  outline: none;
+}
+
+.WAS__container--open {
+  .WAS__input {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.WAS__suggestions-container {
+  position: absolute;
+  top: 51px;
+  width: 280px;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  border: 1px solid #aaa;
+  background-color: #fff;
+  font-weight: 300;
+  font-size: 16px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  z-index: 2;
+}
+
+.WAS__suggestion {
+  cursor: pointer;
+  padding: 10px 20px;
+}
+
+.WAS__suggestion--focused {
+  background-color: #ddd;
+}

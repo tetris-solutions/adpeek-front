@@ -9,6 +9,18 @@ import includes from 'lodash/includes'
 const {PropTypes} = React
 const getSuggestionValue = get('external_name')
 
+const theme = {
+  container: 'WAS__container',
+  containerOpen: 'WAS__container--open',
+  input: 'WAS__input',
+  suggestionsContainer: 'WAS__suggestions-container',
+  suggestion: 'WAS__suggestion',
+  suggestionFocused: 'WAS__suggestion--focused',
+  sectionContainer: 'WAS__section-container',
+  sectionTitle: 'WAS__section-title',
+  sectionSuggestionsContainer: 'WAS__section-suggestions-container'
+}
+
 function Suggestion ({external_name}) {
   return <span>{external_name}</span>
 }
@@ -72,6 +84,7 @@ export const WorkspaceAccountSelector = React.createClass({
       <div>
         <input type='hidden' name={`${this.props.platform}_account`} value={JSON.stringify(account)}/>
         <Autosuggest
+          theme={theme}
           suggestions={suggestions}
           onSuggestionSelected={this.onSuggestionSelected}
           onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
