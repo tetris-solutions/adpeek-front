@@ -17,6 +17,8 @@ export function loadCompanyWorkspacesAction (tree, id, token) {
 
       tree.set(['user', 'companies', index, 'workspaces'], response.data)
       tree.commit()
+
+      return response
     })
     .catch(pushResponseErrorToState(tree))
 }
