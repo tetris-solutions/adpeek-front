@@ -12,8 +12,8 @@ const inputFields = [
   'value'
 ]
 
-export const TrivialInput = React.createClass({
-  displayName: 'Trivial-Input',
+export const Input = React.createClass({
+  displayName: 'Input',
   propTypes: {
     value: PropTypes.any,
     defaultValue: PropTypes.any,
@@ -69,4 +69,4 @@ export const TrivialInput = React.createClass({
   }
 })
 
-export default TrivialInput
+export default Input

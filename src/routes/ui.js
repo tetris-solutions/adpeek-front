@@ -9,6 +9,7 @@ import CreateWorkspace from '../components/WorkspaceCreate'
 import App from '../components/App'
 import {loadUserCompaniesActionRouterAdaptor} from '@tetris/front-server/lib/actions/load-user-companies-action'
 import {loadCompanyWorkspacesActionRouterAdaptor} from '../actions/load-company-workspaces'
+import {loadCompanyRolesActionRouterAdaptor} from '../actions/load-company-roles'
 
 const Header = () => null
 
@@ -26,7 +27,7 @@ export function getRoutes (tree, protectRoute, preload) {
       <Route onEnter={protectRoute}>
         <Route path='company/:company' component={App} onEnter={preload(loadUserCompaniesActionRouterAdaptor)}>
           <IndexRoute component={Workspaces} onEnter={preload(loadCompanyWorkspacesActionRouterAdaptor)}/>
-          <Route path='create/workspace' component={CreateWorkspace}/>
+          <Route path='create/workspace' component={CreateWorkspace} onEnter={preload(loadCompanyRolesActionRouterAdaptor)}/>
         </Route>
       </Route>
     </Route>

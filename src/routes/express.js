@@ -2,6 +2,7 @@ import {protectedRouteMiddleware} from '@tetris/front-server/lib/middlewares/pro
 import {performActionsMiddleware} from '@tetris/front-server/lib/middlewares/perform-actions'
 import {loadUserCompaniesActionServerAdaptor} from '@tetris/front-server/lib/actions/load-user-companies-action'
 import {loadCompanyWorkspacesActionServerAdaptor} from '../actions/load-company-workspaces'
+import {loadCompanyRolesActionServerAdaptor} from '../actions/load-company-roles'
 
 export function setAppRoutes (app, uiRoute) {
   app.get('/', uiRoute)
@@ -17,6 +18,7 @@ export function setAppRoutes (app, uiRoute) {
     protectedRouteMiddleware,
     performActionsMiddleware(
       loadUserCompaniesActionServerAdaptor,
-      loadCompanyWorkspacesActionServerAdaptor),
+      loadCompanyWorkspacesActionServerAdaptor,
+      loadCompanyRolesActionServerAdaptor),
     uiRoute)
 }
