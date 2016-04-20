@@ -12,24 +12,25 @@ export const CreateWorkspace = React.createClass({
   mixins: [FormMixin],
   render () {
     return (
-      <form>
-        <h3>
-          <Message>newWorkspaceHeader</Message>
-        </h3>
+      <form className='mdl-card mdl-shadow--6dp WrkCreateForm'>
+        <header className='mdl-card__title mdl-color--primary mdl-color-text--white'>
+          <h3 className='mdl-card__title-text'>
+            <Message>newWorkspaceHeader</Message>
+          </h3>
+        </header>
 
-        <Input label='name'/>
+        <section className='mdl-card__supporting-text'>
+          <Input label='name'/>
+          <AccountSelector platform='facebook'/>
+          <AccountSelector platform='adwords'/>
+          <RolesSelector/>
+        </section>
 
-        <div className='mdl-grid'>
-          <div className='mdl-cell mdl-cell--6-col'>
-            <label>Facebook</label>
-            <AccountSelector platform='facebook'/>
-          </div>
-          <div className='mdl-cell mdl-cell--6-col'>
-            <label>Adwords</label>
-            <AccountSelector platform='adwords'/>
-          </div>
-        </div>
-        <RolesSelector/>
+        <footer className='mdl-card__actions mdl-card--border'>
+          <button className='mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect'>
+            Create
+          </button>
+        </footer>
       </form>
     )
   }

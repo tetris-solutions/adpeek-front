@@ -5,20 +5,25 @@ import Autosuggest from 'react-autosuggest'
 import get from 'lodash/fp/get'
 import filter from 'lodash/filter'
 import includes from 'lodash/includes'
+import lowerCase from 'lodash/lowerCase'
+import deburr from 'lodash/deburr'
+import upperFirst from 'lodash/upperFirst'
 
 const {PropTypes} = React
 const getSuggestionValue = get('external_name')
 
+const cleanStr = str => deburr(lowerCase(str))
+
 const theme = {
-  container: 'WAS__container',
-  containerOpen: 'WAS__container--open',
-  input: 'WAS__input',
-  suggestionsContainer: 'WAS__suggestions-container',
-  suggestion: 'WAS__suggestion',
-  suggestionFocused: 'WAS__suggestion--focused',
-  sectionContainer: 'WAS__section-container',
-  sectionTitle: 'WAS__section-title',
-  sectionSuggestionsContainer: 'WAS__section-suggestions-container'
+  container: 'WrkAccSel__container',
+  containerOpen: 'WrkAccSel__container--open',
+  input: 'WrkAccSel__input',
+  suggestionsContainer: 'WrkAccSel__suggestions-container',
+  suggestion: 'WrkAccSel__suggestion',
+  suggestionFocused: 'WrkAccSel__suggestion--focused',
+  sectionContainer: 'WrkAccSel__section-container',
+  sectionTitle: 'WrkAccSel__section-title',
+  sectionSuggestionsContainer: 'WrkAccSel__section-suggestions-container'
 }
 
 function Suggestion ({external_name}) {
@@ -63,7 +68,7 @@ export const WorkspaceAccountSelector = React.createClass({
     this.setState(newState)
   },
   onSuggestionsUpdateRequested ({value}) {
-    const matchingName = ({external_name}) => includes(external_name, value)
+    const matchingName = ({external_name}) => includes(cleanStr(external_name), cleanStr(value))
     this.setState({
       suggestions: filter(this.context.company.accounts, matchingName)
     })
@@ -73,16 +78,16 @@ export const WorkspaceAccountSelector = React.createClass({
   },
   render () {
     const {isLoading, suggestions, value, account} = this.state
-
+    const {platform} = this.props
     const inputProps = {
       value,
-      placeholder: isLoading ? 'Loading...' : 'Type account name',
+      placeholder: isLoading ? 'Loading...' : upperFirst(`${platform} account`),
       onChange: this.onChange
     }
 
     return (
       <div>
-        <input type='hidden' name={`${this.props.platform}_account`} value={JSON.stringify(account)}/>
+        <input type='hidden' name={`${platform}_account`} value={JSON.stringify(account)}/>
         <Autosuggest
           theme={theme}
           suggestions={suggestions}
