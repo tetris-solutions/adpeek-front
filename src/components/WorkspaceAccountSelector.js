@@ -13,6 +13,15 @@ import Message from 'intl-messageformat'
 const {PropTypes} = React
 const getSuggestionValue = get('external_name')
 
+/**
+ * prevent formSubmit
+ * @param {KeyboardEvent} e keydown event
+ * @returns {undefined}
+ */
+function preventSubmit (e) {
+  if (e.keyCode === 13) e.preventDefault()
+}
+
 const cleanStr = str => deburr(lowerCase(str))
 
 const theme = {
@@ -88,7 +97,8 @@ export const WorkspaceAccountSelector = React.createClass({
       placeholder: isLoading
         ? 'Loading...'
         : new Message(accountSelectorPlaceholder, locales).format({platform: upperFirst(platform)}),
-      onChange: this.onChange
+      onChange: this.onChange,
+      onKeyDown: preventSubmit
     }
 
     return (

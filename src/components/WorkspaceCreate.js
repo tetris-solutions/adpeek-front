@@ -4,12 +4,23 @@ import Message from '@tetris/front-server/lib/components/intl/Message'
 import Input from './Input'
 import AccountSelector from './WorkspaceAccountSelector'
 import RolesSelector from './WorkspaceRolesSelector'
+import startsWith from 'lodash/startsWith'
+import {branch} from 'baobab-react/dist-modules/higher-order'
+import {createWorkspaceAction} from '../actions/create-workspace'
+import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 
-// const {PropTypes} = React
+const {PropTypes} = React
 
 export const CreateWorkspace = React.createClass({
   displayName: 'Create-Workspace',
   mixins: [FormMixin],
+  propTypes: {
+    dispatch: PropTypes.func
+  },
+  contextTypes: {
+    company: PropTypes.object,
+    router: PropTypes.object
+  },
   /**
    * handles submit event
    * @param {Event} e submit event
@@ -17,8 +28,38 @@ export const CreateWorkspace = React.createClass({
    */
   handleSubmit (e) {
     e.preventDefault()
+    const {target: {elements}} = e
+    const {router, company} = this.context
+    const {dispatch} = this.props
+    const data = {
+      name: elements.name.value,
+      accounts: {
+        facebook: JSON.parse(elements.facebook_account.value),
+        adwords: JSON.parse(elements.adwords_account.value)
+      },
+      roles: []
+    }
+
+    Object.keys(elements)
+      .forEach(name => {
+        const prefix = 'role_'
+        if (startsWith(name, prefix) && elements[name].checked) {
+          data.roles.push(name.substr(prefix.length))
+        }
+      })
+
+    this.preSubmit()
+
+    return dispatch(createWorkspaceAction, company.id, data)
+      .then(() => dispatch(pushSuccessMessageAction))
+      .catch(this.handleSubmitException)
+      .then(() => {
+        router.push(`/company/${company.id}`)
+      })
+      .then(this.posSubmit)
   },
   render () {
+    const {errors} = this.state
     return (
       <form className='mdl-card mdl-shadow--6dp WrkCreateForm' onSubmit={this.handleSubmit}>
         <header className='mdl-card__title mdl-color--primary mdl-color-text--white'>
@@ -28,7 +69,7 @@ export const CreateWorkspace = React.createClass({
         </header>
 
         <section className='mdl-card__supporting-text'>
-          <Input label='name'/>
+          <Input label='name' name='name' error={errors.name}/>
           <AccountSelector platform='facebook'/>
           <AccountSelector platform='adwords'/>
           <RolesSelector/>
@@ -44,4 +85,4 @@ export const CreateWorkspace = React.createClass({
   }
 })
 
-export default CreateWorkspace
+export default branch({}, CreateWorkspace)

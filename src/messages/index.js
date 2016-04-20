@@ -7,7 +7,8 @@ export default {
     newWorkspaceHeader: 'New workspace',
     newWorkspaceCallToAction: 'Create workspace',
     nameLabel: 'Name',
-    accountSelectorPlaceholder: 'Select the {platform} account'
+    accountSelectorPlaceholder: 'Select the {platform} account',
+    onSuccessAlert: 'Operation completed successfully!'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -17,6 +18,7 @@ export default {
     newWorkspaceHeader: 'Nova área de trabalho',
     newWorkspaceCallToAction: 'Criar',
     nameLabel: 'Nome',
-    accountSelectorPlaceholder: 'Selecione a conta {platform}'
+    accountSelectorPlaceholder: 'Selecione a conta {platform}',
+    onSuccessAlert: 'Operação realizada com sucesso!'
   }
 }
