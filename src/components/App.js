@@ -7,6 +7,13 @@ import SideNav from './SideNav'
 
 const {PropTypes} = React
 
+const levels = [
+  ['company', 'companies'],
+  ['workspace', 'workspaces'],
+  ['folder', 'folders'],
+  ['campaign', 'campaigns']
+]
+
 export const App = React.createClass({
   displayName: 'App',
   propTypes: {
@@ -24,15 +31,29 @@ export const App = React.createClass({
     router: PropTypes.object.isRequired
   },
   childContextTypes: {
-    company: PropTypes.object
-  },
-  getCompany () {
-    return find(this.props.user.companies, {id: this.props.params.company})
+    company: PropTypes.any,
+    workspace: PropTypes.any,
+    folder: PropTypes.any,
+    campaign: PropTypes.any
   },
   getChildContext () {
-    return {
-      company: this.getCompany()
+    const context = {}
+    let obj = this.props.user
+
+    const {params} = this.props
+
+    for (var i = 0; i < levels.length; i++) {
+      const [singular, plural] = levels[i]
+
+      context[singular] = null
+
+      if (obj && params[singular]) {
+        obj = find(obj[plural], {id: params[singular]})
+        context[singular] = obj || null
+      }
     }
+
+    return context
   },
   render () {
     const {children, user: {name}} = this.props

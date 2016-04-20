@@ -4,12 +4,12 @@ import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save
 import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetch-config'
 import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
 
-export function loadCompany (id, config) {
+export function loadCompanyRoles (id, config) {
   return GET(`${process.env.USER_API_URL}/company/${id}/roles`, config)
 }
 
 export function loadCompanyRolesAction (tree, id, token) {
-  return loadCompany(id, getApiFetchConfig(tree, token))
+  return loadCompanyRoles(id, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
     .then(response => {
       const companies = tree.get('user', 'companies')
