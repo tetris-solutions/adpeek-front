@@ -6,7 +6,8 @@ export default {
     navSignup: 'Signup',
     newWorkspaceHeader: 'New workspace',
     newWorkspaceCallToAction: 'Create workspace',
-    nameLabel: 'Name'
+    nameLabel: 'Name',
+    accountSelectorPlaceholder: 'Select the {platform} account'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -15,6 +16,7 @@ export default {
     navSignup: 'Cadastrar',
     newWorkspaceHeader: 'Nova área de trabalho',
     newWorkspaceCallToAction: 'Criar',
-    nameLabel: 'Nome'
+    nameLabel: 'Nome',
+    accountSelectorPlaceholder: 'Selecione a conta {platform}'
   }
 }

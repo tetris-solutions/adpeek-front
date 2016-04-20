@@ -8,6 +8,7 @@ import includes from 'lodash/includes'
 import lowerCase from 'lodash/lowerCase'
 import deburr from 'lodash/deburr'
 import upperFirst from 'lodash/upperFirst'
+import Message from 'intl-messageformat'
 
 const {PropTypes} = React
 const getSuggestionValue = get('external_name')
@@ -41,7 +42,9 @@ export const WorkspaceAccountSelector = React.createClass({
     company: PropTypes.shape({
       id: PropTypes.string,
       accounts: PropTypes.array
-    })
+    }),
+    locales: PropTypes.string,
+    messages: PropTypes.object
   },
   propTypes: {
     platform: PropTypes.string,
@@ -77,11 +80,14 @@ export const WorkspaceAccountSelector = React.createClass({
     this.setState({account: suggestion || null})
   },
   render () {
+    const {locales, messages: {accountSelectorPlaceholder}} = this.context
     const {isLoading, suggestions, value, account} = this.state
     const {platform} = this.props
     const inputProps = {
       value,
-      placeholder: isLoading ? 'Loading...' : upperFirst(`${platform} account`),
+      placeholder: isLoading
+        ? 'Loading...'
+        : new Message(accountSelectorPlaceholder, locales).format({platform: upperFirst(platform)}),
       onChange: this.onChange
     }
 
