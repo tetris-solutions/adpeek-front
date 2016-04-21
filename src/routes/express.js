@@ -38,4 +38,20 @@ export function setAppRoutes (app, uiRoute) {
       loadCompanyWorkspacesActionServerAdaptor,
       loadWorkspaceFoldersActionServerAdaptor),
     uiRoute)
+
+  app.get('/company/:company/workspace/:workspace/folder/:folder',
+    protectedRouteMiddleware,
+    performActionsMiddleware(
+      loadUserCompaniesActionServerAdaptor,
+      loadCompanyWorkspacesActionServerAdaptor,
+      loadWorkspaceFoldersActionServerAdaptor),
+    uiRoute)
+
+  app.get('/company/:company/workspace/:workspace/folder/:folder/create/campaign',
+    protectedRouteMiddleware,
+    performActionsMiddleware(
+      loadUserCompaniesActionServerAdaptor,
+      loadCompanyWorkspacesActionServerAdaptor,
+      loadWorkspaceFoldersActionServerAdaptor),
+    uiRoute)
 }

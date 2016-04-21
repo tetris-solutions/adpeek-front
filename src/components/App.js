@@ -1,7 +1,7 @@
 import React from 'react'
+import {Link} from 'react-router'
 import {branch} from 'baobab-react/dist-modules/higher-order'
-import Message from '@tetris/front-server/lib/components/intl/Message'
-
+import Header from './Header'
 import find from 'lodash/find'
 import SideNav from './SideNav'
 
@@ -18,6 +18,7 @@ export const App = React.createClass({
   displayName: 'App',
   propTypes: {
     children: PropTypes.node,
+    routes: PropTypes.array,
     params: PropTypes.shape({
       company: PropTypes.string
     }),
@@ -56,22 +57,18 @@ export const App = React.createClass({
     return context
   },
   render () {
-    const {children, user: {name}} = this.props
+    const {children, user, params, routes} = this.props
+
     return (
       <div className='mdl-layout__container'>
         <div className='mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header is-upgraded'>
-          <header className='mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600'>
-            <div className='mdl-layout__drawer-button'/>
-            <div className='mdl-layout__header-row'>
-              <span className='mdl-layout-title'>
-                <Message name={name}>welcomeMessage</Message>
-              </span>
-              <div className='mdl-layout-spacer'/>
-            </div>
-          </header>
-          <div className='mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50'>
-            <SideNav/>
-          </div>
+          <Header
+            user={user}
+            params={params}
+            routes={routes}/>
+
+          <SideNav/>
+
           <main className='mdl-layout__content mdl-color--grey-100'>
             {children}
           </main>
@@ -81,5 +78,18 @@ export const App = React.createClass({
     )
   }
 })
+
+export function Breadcrumb (props, {company: {id, name}}) {
+  return (
+    <Link to={`/company/${id}`}>
+      {name}
+    </Link>
+  )
+}
+
+Breadcrumb.displayName = 'Company-Breadcrumb'
+Breadcrumb.contextTypes = {
+  company: PropTypes.object
+}
 
 export default branch({user: ['user']}, App)

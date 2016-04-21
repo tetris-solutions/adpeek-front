@@ -63,4 +63,25 @@ export const Workspaces = React.createClass({
   }
 })
 
+export function Breadcrumb ({params: {company}}, {workspace: {id, name}}) {
+  return (
+    <Link to={`/company/${company}/workspace/${id}`}>
+      {name}
+    </Link>
+  )
+}
+
+Breadcrumb.displayName = 'Workspace-Breadcrumb'
+Breadcrumb.contextTypes = {
+  workspace: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string
+  })
+}
+Breadcrumb.propTypes = {
+  params: PropTypes.shape({
+    company: PropTypes.string
+  })
+}
+
 export default Workspaces

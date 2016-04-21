@@ -21,17 +21,19 @@ export const SideNav = React.createClass({
   },
   render () {
     return (
-      <nav className='mdl-navigation mdl-color--blue-grey-800'>
-        <div>
-          <LocaleSelector/>
-        </div>
-        <a href='/' className='mdl-navigation__link' onClick={this.handleLogoutClick}>
-          <i className='mdl-color-text--blue-grey-400 material-icons'>close</i>
-          <strong>
-            <Message>navLogout</Message>
-          </strong>
-        </a>
-      </nav>
+      <aside className='mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50'>
+        <nav className='mdl-navigation mdl-color--blue-grey-800'>
+          <div>
+            <LocaleSelector/>
+          </div>
+          <a href='/' className='mdl-navigation__link' onClick={this.handleLogoutClick}>
+            <i className='mdl-color-text--blue-grey-400 material-icons'>close</i>
+            <strong>
+              <Message>navLogout</Message>
+            </strong>
+          </a>
+        </nav>
+      </aside>
     )
   }
 })

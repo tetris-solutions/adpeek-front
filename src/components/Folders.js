@@ -68,4 +68,26 @@ export const Folders = React.createClass({
   }
 })
 
+export function Breadcrumb ({params: {company, workspace}}, {folder: {id, name}}) {
+  return (
+    <Link to={`/company/${company}/workspace/${workspace}/folder/${id}`}>
+      {name}
+    </Link>
+  )
+}
+
+Breadcrumb.displayName = 'Folder-Breadcrumb'
+Breadcrumb.contextTypes = {
+  folder: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string
+  })
+}
+Breadcrumb.propTypes = {
+  params: PropTypes.shape({
+    company: PropTypes.string,
+    workspace: PropTypes.string
+  })
+}
+
 export default Folders

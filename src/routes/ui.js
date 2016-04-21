@@ -3,12 +3,12 @@ import {Link, IndexRoute, Route} from 'react-router'
 import {root} from 'baobab-react/dist-modules/higher-order'
 import {root as createRoot} from '@tetris/front-server/lib/higher-order/root'
 import Home from '../components/Home'
-import Workspaces from '../components/Workspaces'
+import Workspaces, {Breadcrumb as WorkspaceBreadcrumb} from '../components/Workspaces'
 import CreateWorkspace from '../components/WorkspaceCreate'
 import CreateFolder from '../components/FolderCreate'
-import Folders from '../components/Folders'
+import Folders, {Breadcrumb as FolderBreadcrumb} from '../components/Folders'
 
-import App from '../components/App'
+import App, {Breadcrumb as CompanyBreadcrumb} from '../components/App'
 import {loadUserCompaniesActionRouterAdaptor} from '@tetris/front-server/lib/actions/load-user-companies-action'
 import {loadCompanyWorkspacesActionRouterAdaptor} from '../actions/load-company-workspaces'
 import {loadCompanyRolesActionRouterAdaptor} from '../actions/load-company-roles'
@@ -39,6 +39,7 @@ Campaigns.propTypes = {
     folder: PropTypes.string
   })
 }
+
 /**
  * returns the route config
  * @param {Baobab} tree state tree
@@ -51,18 +52,18 @@ export function getRoutes (tree, protectRoute, preload) {
     <Route path='/' component={root(tree, createRoot(Header))}>
       <IndexRoute component={Home}/>
       <Route onEnter={protectRoute}>
-        <Route path='company/:company' component={App} onEnter={preload(loadUserCompaniesActionRouterAdaptor)}>
+        <Route path='company/:company' breadcrumb={CompanyBreadcrumb} component={App} onEnter={preload(loadUserCompaniesActionRouterAdaptor)}>
           <IndexRoute component={Workspaces} onEnter={preload(loadCompanyWorkspacesActionRouterAdaptor)}/>
           <Route
             path='create/workspace'
             component={CreateWorkspace}
             onEnter={preload(loadCompanyRolesActionRouterAdaptor)}/>
 
-          <Route path='workspace/:workspace'>
+          <Route path='workspace/:workspace' breadcrumb={WorkspaceBreadcrumb}>
             <IndexRoute component={Folders} onEnter={preload(loadWorkspaceFoldersActionRouterAdaptor)}/>
             <Route path='create/folder' component={CreateFolder}/>
 
-            <Route path='folder/:folder'>
+            <Route path='folder/:folder' breadcrumb={FolderBreadcrumb}>
               <IndexRoute component={Campaigns}/>
               <Route path='create/campaign' component={CreateFolder}/>
             </Route>
