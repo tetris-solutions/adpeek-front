@@ -9,6 +9,7 @@ import lowerCase from 'lodash/lowerCase'
 import deburr from 'lodash/deburr'
 import upperFirst from 'lodash/upperFirst'
 import Message from 'intl-messageformat'
+import debounce from 'lodash/debounce'
 
 const {PropTypes} = React
 const getSuggestionValue = get('external_name')
@@ -23,6 +24,25 @@ function preventSubmit (e) {
 }
 
 const cleanStr = str => deburr(lowerCase(str))
+
+/**
+ * filters matching accounts
+ * @param {String} platform platform name
+ * @param {String} value input value
+ * @returns {filterCallback} function to be used on .filter
+ */
+function filterAccounts (platform, value) {
+  value = cleanStr(value)
+  /**
+   * actually compares account
+   * @param {Object} account account object
+   * @returns {boolean} is matching account
+   */
+  function filterCallback (account) {
+    return account.platform === platform && includes(cleanStr(account.external_name), value)
+  }
+  return filterCallback
+}
 
 const theme = {
   container: 'WrkAccSel__container',
@@ -68,6 +88,7 @@ export const WorkspaceAccountSelector = React.createClass({
     }
   },
   componentDidMount () {
+    this.onSuggestionsUpdateRequested = debounce(this.onSuggestionsUpdateRequested, 300)
     this.props.dispatch(loadCompanyAccountsAction, this.context.company.id, this.props.platform)
       .then(() => {
         const updateSuggestions = () => this.onSuggestionsUpdateRequested({value: ''})
@@ -80,7 +101,7 @@ export const WorkspaceAccountSelector = React.createClass({
     this.setState(newState)
   },
   onSuggestionsUpdateRequested ({value}) {
-    const matchingName = ({external_name}) => includes(cleanStr(external_name), cleanStr(value))
+    const matchingName = filterAccounts(this.props.platform, value)
     this.setState({
       suggestions: filter(this.context.company.accounts, matchingName)
     })
