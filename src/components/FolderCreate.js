@@ -36,10 +36,10 @@ export const CreateFolder = React.createClass({
 
     return dispatch(createFolderAction, company, workspace, elements.name.value)
       .then(() => dispatch(pushSuccessMessageAction))
-      .catch(this.handleSubmitException)
       .then(() => {
         this.context.router.push(`/company/${company}/workspace/${workspace}`)
       })
+      .catch(this.handleSubmitException)
       .then(this.posSubmit)
   },
   render () {

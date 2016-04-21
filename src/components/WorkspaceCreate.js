@@ -52,10 +52,10 @@ export const CreateWorkspace = React.createClass({
 
     return dispatch(createWorkspaceAction, company.id, data)
       .then(() => dispatch(pushSuccessMessageAction))
-      .catch(this.handleSubmitException)
       .then(() => {
         router.push(`/company/${company.id}`)
       })
+      .catch(this.handleSubmitException)
       .then(this.posSubmit)
   },
   render () {
