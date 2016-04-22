@@ -79,10 +79,11 @@ export const App = React.createClass({
   }
 })
 
-export function Breadcrumb (props, {company: {id, name}}) {
+export function Breadcrumb (props, {company}) {
+  if (!company) return null
   return (
-    <Link to={`/company/${id}`}>
-      {name}
+    <Link to={`/company/${company.id}`}>
+      {company.name}
     </Link>
   )
 }

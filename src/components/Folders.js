@@ -68,10 +68,11 @@ export const Folders = React.createClass({
   }
 })
 
-export function Breadcrumb ({params: {company, workspace}}, {folder: {id, name}}) {
+export function Breadcrumb ({params: {company, workspace}}, {folder}) {
+  if (!folder) return null
   return (
-    <Link to={`/company/${company}/workspace/${workspace}/folder/${id}`}>
-      {name}
+    <Link to={`/company/${company}/workspace/${workspace}/folder/${folder.id}`}>
+      {folder.name}
     </Link>
   )
 }

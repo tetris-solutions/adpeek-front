@@ -63,10 +63,11 @@ export const Workspaces = React.createClass({
   }
 })
 
-export function Breadcrumb ({params: {company}}, {workspace: {id, name}}) {
+export function Breadcrumb ({params: {company}}, {workspace}) {
+  if (!workspace) return null
   return (
-    <Link to={`/company/${company}/workspace/${id}`}>
-      {name}
+    <Link to={`/company/${company}/workspace/${workspace.id}`}>
+      {workspace.name}
     </Link>
   )
 }
