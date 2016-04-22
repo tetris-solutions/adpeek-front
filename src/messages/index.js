@@ -8,6 +8,8 @@ export default {
     newWorkspaceCallToAction: 'Create workspace',
     newFolderHeader: 'New folder',
     newFolderCallToAction: 'Create folder',
+    newCampaignHeader: 'New campaign',
+    newCampaignCallToAction: 'Create campaign',
     nameLabel: 'Name',
     accountSelectorPlaceholder: 'Select the {platform} account',
     onSuccessAlert: 'Operation completed successfully!'
@@ -21,6 +23,8 @@ export default {
     newWorkspaceCallToAction: 'Criar',
     newFolderHeader: 'Nova pasta',
     newFolderCallToAction: 'Criar pasta',
+    newCampaignHeader: 'Nova campanha',
+    newCampaignCallToAction: 'Criar campanha',
     nameLabel: 'Nome',
     accountSelectorPlaceholder: 'Selecione a conta {platform}',
     onSuccessAlert: 'Operação realizada com sucesso!'

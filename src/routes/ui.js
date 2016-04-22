@@ -6,6 +6,7 @@ import Home from '../components/Home'
 import Workspaces, {Breadcrumb as WorkspaceBreadcrumb} from '../components/Workspaces'
 import CreateWorkspace from '../components/WorkspaceCreate'
 import CreateFolder from '../components/FolderCreate'
+import CreateCampaign from '../components/CampaignCreate'
 import Folders, {Breadcrumb as FolderBreadcrumb} from '../components/Folders'
 
 import App, {Breadcrumb as CompanyBreadcrumb} from '../components/App'
@@ -65,7 +66,7 @@ export function getRoutes (tree, protectRoute, preload) {
 
             <Route path='folder/:folder' breadcrumb={FolderBreadcrumb}>
               <IndexRoute component={Campaigns}/>
-              <Route path='create/campaign' component={CreateFolder}/>
+              <Route path='create/campaign' component={CreateCampaign}/>
             </Route>
           </Route>
         </Route>
