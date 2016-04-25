@@ -14,6 +14,7 @@ import {loadUserCompaniesActionRouterAdaptor} from '@tetris/front-server/lib/act
 import {loadCompanyWorkspacesActionRouterAdaptor} from '../actions/load-company-workspaces'
 import {loadCompanyRolesActionRouterAdaptor} from '../actions/load-company-roles'
 import {loadWorkspaceFoldersActionRouterAdaptor} from '../actions/load-workspaces-folders'
+import {loadWorkspaceAccountsActionRouterAdaptor} from '../actions/load-workspaces-accounts'
 
 const Header = () => null
 
@@ -62,7 +63,7 @@ export function getRoutes (tree, protectRoute, preload) {
 
           <Route path='workspace/:workspace' breadcrumb={WorkspaceBreadcrumb}>
             <IndexRoute component={Folders} onEnter={preload(loadWorkspaceFoldersActionRouterAdaptor)}/>
-            <Route path='create/folder' component={CreateFolder}/>
+            <Route path='create/folder' component={CreateFolder} onEnter={preload(loadWorkspaceAccountsActionRouterAdaptor)}/>
 
             <Route path='folder/:folder' breadcrumb={FolderBreadcrumb}>
               <IndexRoute component={Campaigns}/>
