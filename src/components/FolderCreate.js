@@ -34,10 +34,14 @@ export const CreateFolder = React.createClass({
     const {target: {elements}} = e
     const {params: {company, workspace}} = this.props
     const {dispatch} = this.props
+    const folder = {
+      name: elements.name.value,
+      account: elements.account.value
+    }
 
     this.preSubmit()
 
-    return dispatch(createFolderAction, company, workspace, elements.name.value)
+    return dispatch(createFolderAction, company, workspace, folder)
       .then(() => dispatch(pushSuccessMessageAction))
       .then(() => {
         this.context.router.push(`/company/${company}/workspace/${workspace}`)

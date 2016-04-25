@@ -46,7 +46,11 @@ export const Input = React.createClass({
   render () {
     const {isDirty, isFocused} = this.state
     const {error, label} = this.props
-    const wrapperClasses = cx('mdl-textfield', error && 'is-invalid', isDirty && 'is-dirty', isFocused && 'is-focused')
+    const wrapperClasses = cx('mdl-textfield',
+      label && 'mdl-textfield--floating-label',
+      error && 'is-invalid',
+      isDirty && 'is-dirty',
+      isFocused && 'is-focused')
 
     return (
       <div className={wrapperClasses}>
