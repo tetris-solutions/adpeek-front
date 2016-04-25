@@ -11,6 +11,7 @@ export default {
     newCampaignHeader: 'New campaign',
     newCampaignCallToAction: 'Create campaign',
     nameLabel: 'Name',
+    externalAccountLabel: 'External account',
     accountSelectorPlaceholder: 'Select the {platform} account',
     onSuccessAlert: 'Operation completed successfully!'
   },
@@ -26,6 +27,7 @@ export default {
     newCampaignHeader: 'Nova campanha',
     newCampaignCallToAction: 'Criar campanha',
     nameLabel: 'Nome',
+    externalAccountLabel: 'Conta externa',
     accountSelectorPlaceholder: 'Selecione a conta {platform}',
     onSuccessAlert: 'Operação realizada com sucesso!'
   }

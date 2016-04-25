@@ -30,7 +30,7 @@ export const CreateCampaign = React.createClass({
   render () {
     const {errors} = this.state
     return (
-      <form className='mdl-card mdl-shadow--6dp WrkCreateForm' onSubmit={this.handleSubmit}>
+      <form className='mdl-card mdl-shadow--6dp FloatingCardForm' onSubmit={this.handleSubmit}>
         <header className='mdl-card__title mdl-color--primary mdl-color-text--white'>
           <h3 className='mdl-card__title-text'>
             <Message>newCampaignHeader</Message>

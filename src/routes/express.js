@@ -4,6 +4,7 @@ import {loadUserCompaniesActionServerAdaptor} from '@tetris/front-server/lib/act
 import {loadCompanyWorkspacesActionServerAdaptor} from '../actions/load-company-workspaces'
 import {loadCompanyRolesActionServerAdaptor} from '../actions/load-company-roles'
 import {loadWorkspaceFoldersActionServerAdaptor} from '../actions/load-workspaces-folders'
+import {loadWorkspaceAccountsActionServerAdaptor} from '../actions/load-workspaces-accounts'
 
 export function setAppRoutes (app, uiRoute) {
   app.get('/', uiRoute)
@@ -36,7 +37,8 @@ export function setAppRoutes (app, uiRoute) {
     performActionsMiddleware(
       loadUserCompaniesActionServerAdaptor,
       loadCompanyWorkspacesActionServerAdaptor,
-      loadWorkspaceFoldersActionServerAdaptor),
+      loadWorkspaceFoldersActionServerAdaptor,
+      loadWorkspaceAccountsActionServerAdaptor),
     uiRoute)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder',

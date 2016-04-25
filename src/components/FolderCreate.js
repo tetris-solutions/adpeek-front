@@ -5,6 +5,8 @@ import Input from './Input'
 import {branch} from 'baobab-react/dist-modules/higher-order'
 import {createFolderAction} from '../actions/create-folder'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
+import Select from './Select'
+import map from 'lodash/map'
 
 const {PropTypes} = React
 
@@ -19,7 +21,8 @@ export const CreateFolder = React.createClass({
     })
   },
   contextTypes: {
-    router: PropTypes.object
+    router: PropTypes.object,
+    workspace: PropTypes.object
   },
   /**
    * handles submit event
@@ -44,8 +47,9 @@ export const CreateFolder = React.createClass({
   },
   render () {
     const {errors} = this.state
+    const {accounts} = this.context.workspace
     return (
-      <form className='mdl-card mdl-shadow--6dp WrkCreateForm' onSubmit={this.handleSubmit}>
+      <form className='mdl-card mdl-shadow--6dp FloatingCardForm' onSubmit={this.handleSubmit}>
         <header className='mdl-card__title mdl-color--primary mdl-color-text--white'>
           <h3 className='mdl-card__title-text'>
             <Message>newFolderHeader</Message>
@@ -54,6 +58,13 @@ export const CreateFolder = React.createClass({
 
         <section className='mdl-card__supporting-text'>
           <Input label='name' name='name' error={errors.name}/>
+          <Select name='account' label='externalAccount' error={errors.account}>
+            <option value=''></option>
+
+            {map(accounts,
+              ({id, platform, name}, index) =>
+                <option key={index} value={id}>{`${platform} :: ${name}`}</option>)}
+          </Select>
         </section>
 
         <footer className='mdl-card__actions mdl-card--border'>

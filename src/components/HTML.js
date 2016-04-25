@@ -7,9 +7,10 @@ export const HTML = ({documentTitle = 'Tetris Solutions', payload, children}) =>
       <meta charSet='UTF-8'/>
       <meta name='viewport' content='width=device-width, initial-scale=1'/>
       <title>{documentTitle}</title>
-      <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700' type='text/css' />
+      <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700' type='text/css'/>
       <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons'/>
       <link rel='stylesheet' href='https://code.getmdl.io/1.1.3/material.cyan-light_blue.min.css'/>
+      <link rel='stylesheet' href='https://cdn.rawgit.com/mebibou/mdl-selectfield/master/mdl-selectfield.min.css'/>
       <link rel='stylesheet' href='https://cdn.rawgit.com/daneden/animate.css/master/animate.css'/>
       <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css'/>
       <link rel='stylesheet' href='/css/main.css'/>
