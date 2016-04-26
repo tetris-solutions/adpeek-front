@@ -15,8 +15,7 @@ import {loadCompanyWorkspacesActionRouterAdaptor} from '../actions/load-company-
 import {loadCompanyRolesActionRouterAdaptor} from '../actions/load-company-roles'
 import {loadWorkspaceFoldersActionRouterAdaptor} from '../actions/load-workspaces-folders'
 import {loadWorkspaceAccountsActionRouterAdaptor} from '../actions/load-workspaces-accounts'
-
-const Header = () => null
+import {loadMediasActionRouterAdaptor} from '../actions/load-medias'
 
 const {PropTypes} = React
 
@@ -51,10 +50,15 @@ Campaigns.propTypes = {
  */
 export function getRoutes (tree, protectRoute, preload) {
   return (
-    <Route path='/' component={root(tree, createRoot(Header))}>
+    <Route path='/' component={root(tree, createRoot())}>
       <IndexRoute component={Home}/>
       <Route onEnter={protectRoute}>
-        <Route path='company/:company' breadcrumb={CompanyBreadcrumb} component={App} onEnter={preload(loadUserCompaniesActionRouterAdaptor)}>
+        <Route
+          path='company/:company'
+          breadcrumb={CompanyBreadcrumb}
+          component={App}
+          onEnter={preload(loadUserCompaniesActionRouterAdaptor)}>
+
           <IndexRoute component={Workspaces} onEnter={preload(loadCompanyWorkspacesActionRouterAdaptor)}/>
           <Route
             path='create/workspace'
@@ -63,7 +67,10 @@ export function getRoutes (tree, protectRoute, preload) {
 
           <Route path='workspace/:workspace' breadcrumb={WorkspaceBreadcrumb}>
             <IndexRoute component={Folders} onEnter={preload(loadWorkspaceFoldersActionRouterAdaptor)}/>
-            <Route path='create/folder' component={CreateFolder} onEnter={preload(loadWorkspaceAccountsActionRouterAdaptor)}/>
+            <Route
+              path='create/folder'
+              component={CreateFolder}
+              onEnter={preload(loadMediasActionRouterAdaptor, loadWorkspaceAccountsActionRouterAdaptor)}/>
 
             <Route path='folder/:folder' breadcrumb={FolderBreadcrumb}>
               <IndexRoute component={Campaigns}/>

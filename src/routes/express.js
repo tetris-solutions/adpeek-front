@@ -5,6 +5,7 @@ import {loadCompanyWorkspacesActionServerAdaptor} from '../actions/load-company-
 import {loadCompanyRolesActionServerAdaptor} from '../actions/load-company-roles'
 import {loadWorkspaceFoldersActionServerAdaptor} from '../actions/load-workspaces-folders'
 import {loadWorkspaceAccountsActionServerAdaptor} from '../actions/load-workspaces-accounts'
+import {loadMediasActionServerAdaptor} from '../actions/load-medias'
 
 export function setAppRoutes (app, uiRoute) {
   app.get('/', uiRoute)
@@ -35,6 +36,7 @@ export function setAppRoutes (app, uiRoute) {
   app.get('/company/:company/workspace/:workspace/create/folder',
     protectedRouteMiddleware,
     performActionsMiddleware(
+      loadMediasActionServerAdaptor,
       loadUserCompaniesActionServerAdaptor,
       loadCompanyWorkspacesActionServerAdaptor,
       loadWorkspaceFoldersActionServerAdaptor,
