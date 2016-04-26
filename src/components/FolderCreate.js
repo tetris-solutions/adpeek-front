@@ -15,6 +15,7 @@ export const CreateFolder = React.createClass({
   mixins: [FormMixin],
   propTypes: {
     dispatch: PropTypes.func,
+    medias: PropTypes.array,
     params: PropTypes.shape({
       company: PropTypes.string,
       workspace: PropTypes.string
@@ -36,7 +37,9 @@ export const CreateFolder = React.createClass({
     const {dispatch} = this.props
     const folder = {
       name: elements.name.value,
-      account: elements.account.value
+      account: elements.account.value,
+      tag: elements.tag.value,
+      media: elements.media.value
     }
 
     this.preSubmit()
@@ -50,6 +53,7 @@ export const CreateFolder = React.createClass({
       .then(this.posSubmit)
   },
   render () {
+    const {medias} = this.props
     const {errors} = this.state
     const {accounts} = this.context.workspace
     return (
@@ -69,6 +73,16 @@ export const CreateFolder = React.createClass({
               ({id, platform, name}, index) =>
                 <option key={index} value={id}>{`${platform} :: ${name}`}</option>)}
           </Select>
+
+          <Select name='media' label='media' error={errors.media}>
+            <option value=''></option>
+
+            {map(medias,
+              ({id, name}, index) =>
+                <option key={index} value={id}>{name}</option>)}
+          </Select>
+
+          <Input name='tag' label='tag' error={errors.tag} />
         </section>
 
         <footer className='mdl-card__actions mdl-card--border'>
@@ -81,4 +95,6 @@ export const CreateFolder = React.createClass({
   }
 })
 
-export default branch({}, CreateFolder)
+export default branch({
+  medias: ['medias']
+}, CreateFolder)
