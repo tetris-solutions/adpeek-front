@@ -1,8 +1,8 @@
 import {GET} from '@tetris/http'
-import findIndex from 'lodash/findIndex'
 import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save-token-as-cookie'
 import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetch-config'
 import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
+import {saveResponseData} from '../functions/save-response-data'
 
 export function loadCompanyWorkspaces (id, config) {
   return GET(`${process.env.ADPEEK_API_URL}/company/${id}/workspaces`, config)
@@ -11,15 +11,11 @@ export function loadCompanyWorkspaces (id, config) {
 export function loadCompanyWorkspacesAction (tree, id, token) {
   return loadCompanyWorkspaces(id, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
-    .then(response => {
-      const companies = tree.get('user', 'companies')
-      const index = findIndex(companies, {id})
-
-      tree.set(['user', 'companies', index, 'workspaces'], response.data)
-      tree.commit()
-
-      return response
-    })
+    .then(saveResponseData(tree, [
+      'user',
+      ['companies', id],
+      'workspaces'
+    ]))
     .catch(pushResponseErrorToState(tree))
 }
 

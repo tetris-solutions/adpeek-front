@@ -65,16 +65,19 @@ export const CreateFolder = React.createClass({
         </header>
 
         <section className='mdl-card__supporting-text'>
-          <Input label='name' name='name' error={errors.name}/>
-          <Select name='account' label='externalAccount' error={errors.account}>
+          <Input label='name' name='name' error={errors.name} onChange={this.dismissError}/>
+
+          <Select name='account' label='externalAccount' error={errors.account} onChange={this.dismissError}>
+
             <option value=''></option>
 
             {map(accounts,
               ({id, platform, name}, index) =>
                 <option key={index} value={id}>{`${platform} :: ${name}`}</option>)}
+
           </Select>
 
-          <Select name='media' label='media' error={errors.media}>
+          <Select name='media' label='media' error={errors.media} onChange={this.dismissError}>
             <option value=''></option>
 
             {map(medias,
@@ -82,11 +85,11 @@ export const CreateFolder = React.createClass({
                 <option key={index} value={id}>{name}</option>)}
           </Select>
 
-          <Input name='tag' label='tag' error={errors.tag} />
+          <Input name='tag' label='tag' error={errors.tag} onChange={this.dismissError}/>
         </section>
 
         <footer className='mdl-card__actions mdl-card--border'>
-          <button type='submit' className='mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect'>
+          <button type='submit' className='mdl-button mdl-button--colored'>
             <Message>newFolderCallToAction</Message>
           </button>
         </footer>

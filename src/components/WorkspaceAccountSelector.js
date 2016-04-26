@@ -122,7 +122,8 @@ export const WorkspaceAccountSelector = React.createClass({
         ? 'Loading...'
         : new Message(accountSelectorPlaceholder, locales).format({platform: upperFirst(platform)}),
       onChange: this.onChange,
-      onKeyDown: preventSubmit
+      onKeyDown: preventSubmit,
+      readOnly: isLoading
     }
 
     return (

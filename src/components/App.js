@@ -1,5 +1,4 @@
 import React from 'react'
-import {Link} from 'react-router'
 import {branch} from 'baobab-react/dist-modules/higher-order'
 import Header from './Header'
 import find from 'lodash/find'
@@ -61,13 +60,16 @@ export const App = React.createClass({
 
     return (
       <div className='mdl-layout__container'>
-        <div className='mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header is-upgraded'>
+        <div className='mdl-layout mdl-layout--fixed-drawer mdl-layout--fixed-header is-upgraded'>
           <Header
             user={user}
             params={params}
             routes={routes}/>
 
-          <SideNav/>
+          <SideNav
+            params={params}
+            routes={routes}
+            router={this.context.router}/>
 
           <main className='mdl-layout__content mdl-color--grey-100'>
             {children}
@@ -78,19 +80,5 @@ export const App = React.createClass({
     )
   }
 })
-
-export function Breadcrumb (props, {company}) {
-  if (!company) return null
-  return (
-    <Link to={`/company/${company.id}`}>
-      {company.name}
-    </Link>
-  )
-}
-
-Breadcrumb.displayName = 'Company-Breadcrumb'
-Breadcrumb.contextTypes = {
-  company: PropTypes.object
-}
 
 export default branch({user: ['user']}, App)

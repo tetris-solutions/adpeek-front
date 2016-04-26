@@ -28,7 +28,7 @@ export const Checkbox = React.createClass({
   render () {
     const {label} = this.props
     const {isChecked} = this.state
-    const classes = cx('mdl-checkbox mdl-js-checkbox is-upgraded', isChecked && 'is-checked')
+    const classes = cx('mdl-checkbox is-upgraded', isChecked && 'is-checked')
 
     return (
       <label className={classes}>
@@ -41,7 +41,7 @@ export const Checkbox = React.createClass({
           <span className='mdl-checkbox__tick-outline'/>
         </span>
 
-        <span className='mdl-checkbox__ripple-container mdl-js-ripple-effect mdl-ripple--center'>
+        <span className='mdl-checkbox__ripple-container mdl-ripple--center'>
           <span className='mdl-ripple is-animating'/>
         </span>
       </label>

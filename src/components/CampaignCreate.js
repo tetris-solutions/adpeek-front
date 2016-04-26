@@ -42,7 +42,7 @@ export const CreateCampaign = React.createClass({
         </section>
 
         <footer className='mdl-card__actions mdl-card--border'>
-          <button type='submit' className='mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect'>
+          <button type='submit' className='mdl-button mdl-button--colored'>
             <Message>newCampaignCallToAction</Message>
           </button>
         </footer>

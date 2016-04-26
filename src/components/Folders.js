@@ -55,7 +55,7 @@ export const Folders = React.createClass({
               </div>
               <div className='mdl-card__actions mdl-card--border'>
                 <Link
-                  className='mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect'
+                  className='mdl-button mdl-button--colored'
                   to={`/company/${company.id}/workspace/${id}/create/folder`}>
                   <Message>newFolderCallToAction</Message>
                 </Link>
@@ -67,28 +67,5 @@ export const Folders = React.createClass({
     )
   }
 })
-
-export function Breadcrumb ({params: {company, workspace}}, {folder}) {
-  if (!folder) return null
-  return (
-    <Link to={`/company/${company}/workspace/${workspace}/folder/${folder.id}`}>
-      {folder.name}
-    </Link>
-  )
-}
-
-Breadcrumb.displayName = 'Folder-Breadcrumb'
-Breadcrumb.contextTypes = {
-  folder: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string
-  })
-}
-Breadcrumb.propTypes = {
-  params: PropTypes.shape({
-    company: PropTypes.string,
-    workspace: PropTypes.string
-  })
-}
 
 export default Folders

@@ -3,19 +3,25 @@ import {Link, IndexRoute, Route} from 'react-router'
 import {root} from 'baobab-react/dist-modules/higher-order'
 import {root as createRoot} from '@tetris/front-server/lib/higher-order/root'
 import Home from '../components/Home'
-import Workspaces, {Breadcrumb as WorkspaceBreadcrumb} from '../components/Workspaces'
+import Workspaces from '../components/Workspaces'
+import WorkspaceBreadcrumb from '../components/WorkspaceBreadcrumb'
 import CreateWorkspace from '../components/WorkspaceCreate'
 import CreateFolder from '../components/FolderCreate'
 import CreateCampaign from '../components/CampaignCreate'
-import Folders, {Breadcrumb as FolderBreadcrumb} from '../components/Folders'
+import Folders from '../components/Folders'
+import FolderBreadcrumb from '../components/FolderBreadcrumb'
+import CompanyBreadcrumb from '../components/CompanyBreadcrumb'
+import WorkspaceAside from '../components/WorkspaceAside'
+import WorkspaceEdit from '../components/WorkspaceEdit'
 
-import App, {Breadcrumb as CompanyBreadcrumb} from '../components/App'
-import {loadUserCompaniesActionRouterAdaptor} from '@tetris/front-server/lib/actions/load-user-companies-action'
-import {loadCompanyWorkspacesActionRouterAdaptor} from '../actions/load-company-workspaces'
-import {loadCompanyRolesActionRouterAdaptor} from '../actions/load-company-roles'
-import {loadWorkspaceFoldersActionRouterAdaptor} from '../actions/load-workspaces-folders'
-import {loadWorkspaceAccountsActionRouterAdaptor} from '../actions/load-workspaces-accounts'
-import {loadMediasActionRouterAdaptor} from '../actions/load-medias'
+import App from '../components/App'
+import {loadUserCompaniesActionRouterAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
+import {loadCompanyWorkspacesActionRouterAdaptor as workspaces} from '../actions/load-company-workspaces'
+import {loadCompanyRolesActionRouterAdaptor as roles} from '../actions/load-company-roles'
+import {loadWorkspaceFoldersActionRouterAdaptor as folders} from '../actions/load-workspaces-folders'
+import {loadWorkspaceAccountsActionRouterAdaptor as accounts} from '../actions/load-workspaces-accounts'
+import {loadMediasActionRouterAdaptor as medias} from '../actions/load-medias'
+import {loadWorkspaceActionRouterAdaptor as workspace} from '../actions/load-workspace'
 
 const {PropTypes} = React
 
@@ -53,24 +59,40 @@ export function getRoutes (tree, protectRoute, preload) {
     <Route path='/' component={root(tree, createRoot())}>
       <IndexRoute component={Home}/>
       <Route onEnter={protectRoute}>
+
         <Route
           path='company/:company'
           breadcrumb={CompanyBreadcrumb}
           component={App}
-          onEnter={preload(loadUserCompaniesActionRouterAdaptor)}>
+          onEnter={preload(companies)}>
 
-          <IndexRoute component={Workspaces} onEnter={preload(loadCompanyWorkspacesActionRouterAdaptor)}/>
+          <IndexRoute
+            component={Workspaces}
+            onEnter={preload(workspaces)}/>
+
           <Route
             path='create/workspace'
             component={CreateWorkspace}
-            onEnter={preload(loadCompanyRolesActionRouterAdaptor)}/>
+            onEnter={preload(roles)}/>
 
-          <Route path='workspace/:workspace' breadcrumb={WorkspaceBreadcrumb}>
-            <IndexRoute component={Folders} onEnter={preload(loadWorkspaceFoldersActionRouterAdaptor)}/>
+          <Route
+            path='workspace/:workspace'
+            breadcrumb={WorkspaceBreadcrumb}
+            aside={WorkspaceAside}>
+
+            <IndexRoute
+              component={Folders}
+              onEnter={preload(folders)}/>
+
+            <Route
+              path='edit'
+              onEnter={preload(workspace)}
+              component={WorkspaceEdit}/>
+
             <Route
               path='create/folder'
               component={CreateFolder}
-              onEnter={preload(loadMediasActionRouterAdaptor, loadWorkspaceAccountsActionRouterAdaptor)}/>
+              onEnter={preload(medias, accounts)}/>
 
             <Route path='folder/:folder' breadcrumb={FolderBreadcrumb}>
               <IndexRoute component={Campaigns}/>

@@ -7,15 +7,15 @@ const {PropTypes} = React
 
 function Workspace ({company, id, name}) {
   return (
-    <Link to={`/company/${company}/workspace/${id}`} className='mdl-cell mdl-cell--2-col'>
+    <div className='mdl-cell mdl-cell--2-col'>
       <div className='mdl-card mdl-shadow--2dp ContainedCard'>
-        <div className='mdl-card__title mdl-card--expand'>
+        <Link to={`/company/${company}/workspace/${id}`} className='mdl-card__title mdl-card--expand'>
           <h3 className='mdl-card__title-text'>
             {name}
           </h3>
-        </div>
+        </Link>
       </div>
-    </Link>
+    </div>
   )
 }
 
@@ -62,27 +62,5 @@ export const Workspaces = React.createClass({
     )
   }
 })
-
-export function Breadcrumb ({params: {company}}, {workspace}) {
-  if (!workspace) return null
-  return (
-    <Link to={`/company/${company}/workspace/${workspace.id}`}>
-      {workspace.name}
-    </Link>
-  )
-}
-
-Breadcrumb.displayName = 'Workspace-Breadcrumb'
-Breadcrumb.contextTypes = {
-  workspace: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string
-  })
-}
-Breadcrumb.propTypes = {
-  params: PropTypes.shape({
-    company: PropTypes.string
-  })
-}
 
 export default Workspaces
