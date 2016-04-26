@@ -39,7 +39,10 @@ function filterAccounts (platform, value) {
    * @returns {boolean} is matching account
    */
   function filterCallback (account) {
-    return account.platform === platform && includes(cleanStr(account.external_name), value)
+    return account.platform === platform && (
+        includes(cleanStr(account.external_name), value) ||
+        includes(cleanStr(account.external_account), value)
+      )
   }
   return filterCallback
 }

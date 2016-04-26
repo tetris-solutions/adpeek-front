@@ -12,10 +12,10 @@ export function Header ({user, params, routes}) {
         <Breadcrumbs params={params} routes={routes}/>
 
         <div className='mdl-layout-spacer'/>
-
         <span className='mdl-layout-title'>
           <Message name={user.name}>welcomeMessage</Message>
         </span>
+
       </div>
     </header>
   )
