@@ -3,10 +3,11 @@ import FormMixin from '@tetris/front-server/lib/mixins/FormMixin'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import Input from './Input'
 import {branch} from 'baobab-react/dist-modules/higher-order'
-import {createFolderAction} from '../actions/create-folder'
+import {updateFolderAction} from '../actions/update-folder'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import Select from './Select'
 import map from 'lodash/map'
+import omit from 'lodash/omit'
 
 const {PropTypes} = React
 
@@ -23,7 +24,16 @@ export const CreateFolder = React.createClass({
   },
   contextTypes: {
     router: PropTypes.object,
-    workspace: PropTypes.object
+    folder: PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      tag: PropTypes.string,
+      workspace_account: PropTypes.string,
+      media: PropTypes.string
+    }),
+    workspace: PropTypes.shape({
+      accounts: PropTypes.array
+    })
   },
   /**
    * handles submit event
@@ -35,7 +45,9 @@ export const CreateFolder = React.createClass({
     const {target: {elements}} = e
     const {params: {company, workspace}} = this.props
     const {dispatch} = this.props
+    const {folder: {id}} = this.context
     const folder = {
+      id,
       name: elements.name.value,
       workspace_account: elements.workspace_account.value,
       tag: elements.tag.value,
@@ -44,18 +56,31 @@ export const CreateFolder = React.createClass({
 
     this.preSubmit()
 
-    return dispatch(createFolderAction, company, workspace, folder)
+    return dispatch(updateFolderAction, company, workspace, folder)
       .then(() => dispatch(pushSuccessMessageAction))
       .then(() => {
-        this.context.router.push(`/company/${company}/workspace/${workspace}`)
+        this.context.router.push(`/company/${company}/workspace/${workspace}/folder/${id}`)
       })
       .catch(this.handleSubmitException)
       .then(this.posSubmit)
   },
+  saveAndDismiss (name) {
+    return ({target: {value}}) => {
+      const errors = omit(this.state.errors, name)
+      this.setState({errors, [name]: value})
+    }
+  },
   render () {
     const {medias} = this.props
     const {errors} = this.state
-    const {accounts} = this.context.workspace
+    const {workspace: {accounts}, folder} = this.context
+    const name = this.state.name || folder.name
+    const workspace_account = this.state.workspace_account || folder.workspace_account
+    const media = this.state.media || folder.media
+    const tag = this.state.tag || folder.tag
+
+    // @todo update <Message>s
+
     return (
       <form className='mdl-card mdl-shadow--6dp FloatingCardForm' onSubmit={this.handleSubmit}>
         <header className='mdl-card__title mdl-color--primary mdl-color-text--white'>
@@ -65,9 +90,14 @@ export const CreateFolder = React.createClass({
         </header>
 
         <section className='mdl-card__supporting-text'>
-          <Input label='name' name='name' error={errors.name} onChange={this.dismissError}/>
+          <Input label='name' name='name' error={errors.name} value={name} onChange={this.saveAndDismiss('name')}/>
 
-          <Select name='workspace_account' label='externalAccount' error={errors.workspace_account} onChange={this.dismissError}>
+          <Select
+            name='workspace_account'
+            label='externalAccount'
+            error={errors.workspace_account}
+            value={workspace_account}
+            onChange={this.saveAndDismiss('workspace_account')}>
 
             <option value=''/>
 
@@ -80,7 +110,13 @@ export const CreateFolder = React.createClass({
 
           </Select>
 
-          <Select name='media' label='media' error={errors.media} onChange={this.dismissError}>
+          <Select
+            name='media'
+            label='media'
+            error={errors.media}
+            value={media}
+            onChange={this.saveAndDismiss('media')}>
+
             <option value=''/>
 
             {map(medias,
@@ -91,7 +127,13 @@ export const CreateFolder = React.createClass({
               ))}
           </Select>
 
-          <Input name='tag' label='tag' error={errors.tag} onChange={this.dismissError}/>
+          <Input
+            name='tag'
+            label='tag'
+            error={errors.tag}
+            value={tag}
+            onChange={this.saveAndDismiss('tag')}/>
+
         </section>
 
         <footer className='mdl-card__actions mdl-card--border'>

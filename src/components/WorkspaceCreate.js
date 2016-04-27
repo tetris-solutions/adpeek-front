@@ -52,7 +52,7 @@ export const CreateWorkspace = React.createClass({
         </header>
 
         <section className='mdl-card__supporting-text'>
-          <Input label='name' name='name' error={errors.name}/>
+          <Input label='name' name='name' error={errors.name} onChange={this.dismissError}/>
           <AccountSelector platform='facebook'/>
           <AccountSelector platform='adwords'/>
           <RolesSelector/>

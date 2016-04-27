@@ -13,6 +13,8 @@ import FolderBreadcrumb from '../components/FolderBreadcrumb'
 import CompanyBreadcrumb from '../components/CompanyBreadcrumb'
 import WorkspaceAside from '../components/WorkspaceAside'
 import WorkspaceEdit from '../components/WorkspaceEdit'
+import FolderEdit from '../components/FolderEdit'
+import FolderAside from '../components/FolderAside'
 
 import App from '../components/App'
 import {loadUserCompaniesActionRouterAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
@@ -22,6 +24,7 @@ import {loadWorkspaceFoldersActionRouterAdaptor as folders} from '../actions/loa
 import {loadWorkspaceAccountsActionRouterAdaptor as accounts} from '../actions/load-workspaces-accounts'
 import {loadMediasActionRouterAdaptor as medias} from '../actions/load-medias'
 import {loadWorkspaceActionRouterAdaptor as workspace} from '../actions/load-workspace'
+import {loadFolderActionRouterAdaptor as folder} from '../actions/load-folder'
 
 const {PropTypes} = React
 
@@ -78,6 +81,7 @@ export function getRoutes (tree, protectRoute, preload) {
           <Route
             path='workspace/:workspace'
             breadcrumb={WorkspaceBreadcrumb}
+            onEnter={preload(workspace)}
             aside={WorkspaceAside}>
 
             <IndexRoute
@@ -86,7 +90,7 @@ export function getRoutes (tree, protectRoute, preload) {
 
             <Route
               path='edit'
-              onEnter={preload(roles, workspace)}
+              onEnter={preload(roles)}
               component={WorkspaceEdit}/>
 
             <Route
@@ -94,8 +98,19 @@ export function getRoutes (tree, protectRoute, preload) {
               component={CreateFolder}
               onEnter={preload(medias, accounts)}/>
 
-            <Route path='folder/:folder' breadcrumb={FolderBreadcrumb}>
+            <Route
+              path='folder/:folder'
+              aside={FolderAside}
+              breadcrumb={FolderBreadcrumb}
+              onEnter={preload(folder)}>
+
               <IndexRoute component={Campaigns}/>
+
+              <Route
+                path='edit'
+                onEnter={preload(medias, accounts)}
+                component={FolderEdit}/>
+
               <Route path='create/campaign' component={CreateCampaign}/>
             </Route>
           </Route>
