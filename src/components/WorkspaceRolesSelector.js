@@ -1,6 +1,7 @@
 import React from 'react'
 import map from 'lodash/map'
 import CheckBox from './Checkbox'
+import includes from 'lodash/includes'
 
 const {PropTypes} = React
 
@@ -11,7 +12,11 @@ export const WorkspaceRolesSelector = React.createClass({
       roles: PropTypes.array
     })
   },
+  propTypes: {
+    roles: PropTypes.array
+  },
   render () {
+    const selectedRoles = this.props.roles
     return (
       <fieldset>
         {map(this.context.company.roles, ({id, name}, index) => (
@@ -20,7 +25,7 @@ export const WorkspaceRolesSelector = React.createClass({
               {index === 0 && 'Grupos:'}
             </div>
             <div className='mdl-cell mdl-cell--8-col'>
-              <CheckBox name={`role_${id}`} label={name} />
+              <CheckBox name={`role_${id}`} label={name} checked={includes(selectedRoles, id)} />
             </div>
           </div>
         ))}

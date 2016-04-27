@@ -26,13 +26,18 @@ export const Checkbox = React.createClass({
     }
   },
   render () {
-    const {label} = this.props
+    const {label, name} = this.props
     const {isChecked} = this.state
     const classes = cx('mdl-checkbox is-upgraded', isChecked && 'is-checked')
 
     return (
       <label className={classes}>
-        <input type='checkbox' className='mdl-checkbox__input' {...this.props} onChange={this.onChange}/>
+        <input
+          name={name}
+          type='checkbox'
+          className='mdl-checkbox__input'
+          checked={isChecked}
+          onChange={this.onChange}/>
 
         <span className='mdl-checkbox__label'>{label}</span>
         <span className='mdl-checkbox__focus-helper'/>

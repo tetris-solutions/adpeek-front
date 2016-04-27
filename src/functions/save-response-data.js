@@ -31,7 +31,7 @@ export function saveResponseData (tree, path, transform = identity) {
       if (!id) return
 
       if (!tree.get(cursor)) {
-        tree.set([])
+        tree.set(cursor, [])
       }
 
       const index = findIndex(tree.get(cursor), {id})
@@ -42,6 +42,7 @@ export function saveResponseData (tree, path, transform = identity) {
     path.forEach(dive)
 
     tree.set(cursor, transform(response.data, tree.get(cursor)))
+    tree.commit()
 
     return response
   }

@@ -44,6 +44,7 @@ function filterAccounts (platform, value) {
         includes(cleanStr(account.external_account), value)
       )
   }
+
   return filterCallback
 }
 
@@ -68,6 +69,18 @@ Suggestion.propTypes = {
   external_name: PropTypes.string
 }
 
+/**
+ * filters suggestions
+ * @param {Array} accounts list of available accounts
+ * @param {String} platform current platform
+ * @param {String} value input value
+ * @returns {Array} filtered list
+ */
+function getSuggestions (accounts, platform, value) {
+  const matchingName = filterAccounts(platform, value)
+  return filter(accounts, matchingName)
+}
+
 export const WorkspaceAccountSelector = React.createClass({
   displayName: 'Workspace-Account-Selector',
   contextTypes: {
@@ -80,21 +93,37 @@ export const WorkspaceAccountSelector = React.createClass({
   },
   propTypes: {
     platform: PropTypes.string,
-    dispatch: PropTypes.func
+    dispatch: PropTypes.func,
+    value: PropTypes.string,
+    account: PropTypes.object
+  },
+  getDefaultProps () {
+    return {
+      account: null,
+      value: ''
+    }
   },
   getInitialState () {
     return {
-      account: null,
-      value: '',
-      suggestions: [],
+      account: this.props.account,
+      value: this.props.value,
       isLoading: true
     }
+  },
+  componentWillMount () {
+    this.setState({
+      suggestions: getSuggestions(
+        this.context.company.accounts,
+        this.props.platform,
+        this.state.value
+      )
+    })
   },
   componentDidMount () {
     this.onSuggestionsUpdateRequested = debounce(this.onSuggestionsUpdateRequested, 300)
     this.props.dispatch(loadCompanyAccountsAction, this.context.company.id, this.props.platform)
       .then(() => {
-        const updateSuggestions = () => this.onSuggestionsUpdateRequested({value: ''})
+        const updateSuggestions = () => this.onSuggestionsUpdateRequested(this.state)
         this.setState({isLoading: false}, updateSuggestions)
       })
   },
@@ -104,9 +133,12 @@ export const WorkspaceAccountSelector = React.createClass({
     this.setState(newState)
   },
   onSuggestionsUpdateRequested ({value}) {
-    const matchingName = filterAccounts(this.props.platform, value)
     this.setState({
-      suggestions: filter(this.context.company.accounts, matchingName)
+      suggestions: getSuggestions(
+        this.context.company.accounts,
+        this.props.platform,
+        value
+      )
     })
   },
   onSuggestionSelected (event, {suggestion}) {
