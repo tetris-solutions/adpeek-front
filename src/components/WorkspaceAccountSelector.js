@@ -115,7 +115,7 @@ export const WorkspaceAccountSelector = React.createClass({
       suggestions: getSuggestions(
         this.context.company.accounts,
         this.props.platform,
-        this.state.value
+        this.state.account ? this.state.account.external_account : this.state.value
       )
     })
   },
