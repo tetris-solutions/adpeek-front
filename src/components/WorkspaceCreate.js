@@ -4,10 +4,10 @@ import Message from '@tetris/front-server/lib/components/intl/Message'
 import Input from './Input'
 import AccountSelector from './WorkspaceAccountSelector'
 import RolesSelector from './WorkspaceRolesSelector'
-import startsWith from 'lodash/startsWith'
 import {branch} from 'baobab-react/dist-modules/higher-order'
 import {createWorkspaceAction} from '../actions/create-workspace'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
+import {serializeWorkspaceForm} from '../functions/serialize-workspace-form'
 
 const {PropTypes} = React
 
@@ -28,29 +28,12 @@ export const CreateWorkspace = React.createClass({
    */
   handleSubmit (e) {
     e.preventDefault()
-    const {target: {elements}} = e
     const {router, company} = this.context
     const {dispatch} = this.props
-    const data = {
-      name: elements.name.value,
-      accounts: {
-        facebook: JSON.parse(elements.facebook_account.value),
-        adwords: JSON.parse(elements.adwords_account.value)
-      },
-      roles: []
-    }
-
-    Object.keys(elements)
-      .forEach(name => {
-        const prefix = 'role_'
-        if (startsWith(name, prefix) && elements[name].checked) {
-          data.roles.push(name.substr(prefix.length))
-        }
-      })
 
     this.preSubmit()
 
-    return dispatch(createWorkspaceAction, company.id, data)
+    return dispatch(createWorkspaceAction, company.id, serializeWorkspaceForm(e.target))
       .then(() => dispatch(pushSuccessMessageAction))
       .then(() => {
         router.push(`/company/${company.id}`)

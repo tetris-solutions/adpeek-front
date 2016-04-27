@@ -86,7 +86,7 @@ export function getRoutes (tree, protectRoute, preload) {
 
             <Route
               path='edit'
-              onEnter={preload(workspace)}
+              onEnter={preload(roles, workspace)}
               component={WorkspaceEdit}/>
 
             <Route

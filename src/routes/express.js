@@ -28,7 +28,7 @@ export function setAppRoutes (app, render) {
 
   app.get('/company/:company/workspace/:workspace/edit',
     protect,
-    preload(companies, workspace, roles),
+    preload(companies, roles, workspace),
     render)
 
   app.get('/company/:company/workspace/:workspace/create/folder',

@@ -5,6 +5,10 @@ import Input from './Input'
 import AccountSelector from './WorkspaceAccountSelector'
 import RolesSelector from './WorkspaceRolesSelector'
 import Message from '@tetris/front-server/lib/components/intl/Message'
+import {updateWorkspaceAction} from '../actions/update-workspace'
+import {pushSuccessMessageAction} from '../actions/push-success-message-action'
+import {serializeWorkspaceForm} from '../functions/serialize-workspace-form'
+import {branch} from 'baobab-react/dist-modules/higher-order'
 
 const {PropTypes} = React
 
@@ -12,9 +16,14 @@ export const WorkspaceEdit = React.createClass({
   displayName: 'Workspace-Edit',
   mixins: [FormMixin],
   propTypes: {
-    dispatch: PropTypes.func
+    dispatch: PropTypes.func,
+    params: PropTypes.shape({
+      workspace: PropTypes.string,
+      company: PropTypes.string
+    })
   },
   contextTypes: {
+    router: PropTypes.object,
     workspace: PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string
@@ -22,6 +31,20 @@ export const WorkspaceEdit = React.createClass({
   },
   handleSubmit (e) {
     e.preventDefault()
+    const {dispatch, params: {workspace, company}} = this.props
+    const {router} = this.context
+    const data = serializeWorkspaceForm(e.target)
+    data.id = workspace
+
+    this.preSubmit()
+
+    return dispatch(updateWorkspaceAction, company, data)
+      .then(() => dispatch(pushSuccessMessageAction))
+      .then(() => {
+        router.push(`/company/${company}/workspace/${workspace}`)
+      })
+      .catch(this.handleSubmitException)
+      .then(this.posSubmit)
   },
   saveAndDismiss (name) {
     return ({target: {value}}) => {
@@ -76,4 +99,4 @@ export const WorkspaceEdit = React.createClass({
   }
 })
 
-export default WorkspaceEdit
+export default branch({}, WorkspaceEdit)
