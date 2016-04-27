@@ -32,6 +32,7 @@ export const WorkspaceEdit = React.createClass({
   render () {
     const {errors} = this.state
     const {workspace} = this.context
+    if (!workspace.accounts) return null
     const name = this.state.name || workspace.name
     const roles = workspace.roles
     const {accounts: {facebook, adwords}} = workspace
