@@ -15,6 +15,7 @@ const inputFields = [
 export const Input = React.createClass({
   displayName: 'Input',
   propTypes: {
+    className: PropTypes.string,
     value: PropTypes.any,
     defaultValue: PropTypes.any,
     error: PropTypes.string,

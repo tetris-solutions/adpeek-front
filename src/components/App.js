@@ -36,6 +36,10 @@ export const App = React.createClass({
     folder: PropTypes.any,
     campaign: PropTypes.any
   },
+  componentWillMount () {
+    this.styles = []
+    this.styleText = ''
+  },
   getChildContext () {
     const context = {}
     let obj = this.props.user

@@ -1,7 +1,6 @@
 import React from 'react'
 import {Link, IndexRoute, Route} from 'react-router'
 import {root} from 'baobab-react/dist-modules/higher-order'
-import {root as createRoot} from '@tetris/front-server/lib/higher-order/root'
 import Home from '../components/Home'
 import Workspaces from '../components/Workspaces'
 import WorkspaceBreadcrumb from '../components/WorkspaceBreadcrumb'
@@ -55,9 +54,10 @@ Campaigns.propTypes = {
  * @param {Baobab} tree state tree
  * @param {Function} protectRoute access block onEnter hook
  * @param {Function} preload call this function with actions to run them onEnter
+ * @param {Function} createRoot higher order root elem
  * @returns {Route} the route config
  */
-export function getRoutes (tree, protectRoute, preload) {
+export function getRoutes (tree, protectRoute, preload, createRoot) {
   return (
     <Route path='/' component={root(tree, createRoot())}>
       <IndexRoute component={Home}/>

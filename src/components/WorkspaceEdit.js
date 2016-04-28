@@ -9,6 +9,7 @@ import {updateWorkspaceAction} from '../actions/update-workspace'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import {serializeWorkspaceForm} from '../functions/serialize-workspace-form'
 import {branch} from 'baobab-react/dist-modules/higher-order'
+import {Form, Content, Header, Footer} from './FloatingForm'
 
 const {PropTypes} = React
 
@@ -65,14 +66,12 @@ export const WorkspaceEdit = React.createClass({
     const {accounts: {facebook, adwords}} = workspace
 
     return (
-      <form className='mdl-card mdl-shadow--6dp FloatingCardForm' onSubmit={this.handleSubmit}>
-        <header className='mdl-card__title mdl-color--primary mdl-color-text--white'>
-          <h3 className='mdl-card__title-text'>
-            <Message>editWorkspaceHeader</Message>
-          </h3>
-        </header>
+      <Form onSubmit={this.handleSubmit}>
+        <Header>
+          <Message>editWorkspaceHeader</Message>
+        </Header>
 
-        <section className='mdl-card__supporting-text'>
+        <Content>
           <Input
             label='name'
             name='name'
@@ -91,14 +90,12 @@ export const WorkspaceEdit = React.createClass({
             platform='adwords'/>
 
           <RolesSelector roles={roles}/>
-        </section>
+        </Content>
 
-        <footer className='mdl-card__actions mdl-card--border'>
-          <button type='submit' className='mdl-button mdl-button--colored'>
-            <Message>saveCallToAction</Message>
-          </button>
-        </footer>
-      </form>
+        <Footer>
+          <Message>saveCallToAction</Message>
+        </Footer>
+      </Form>
     )
   }
 })

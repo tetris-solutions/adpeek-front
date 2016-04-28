@@ -10,6 +10,7 @@ import deburr from 'lodash/deburr'
 import upperFirst from 'lodash/upperFirst'
 import Message from 'intl-messageformat'
 import debounce from 'lodash/debounce'
+import csjs from 'csjs'
 
 const {PropTypes} = React
 const getSuggestionValue = get('external_name')
@@ -48,20 +49,80 @@ function filterAccounts (platform, value) {
   return filterCallback
 }
 
-const theme = {
-  container: 'WrkAccSel__container',
-  containerOpen: 'WrkAccSel__container--open',
-  input: 'WrkAccSel__input',
-  suggestionsContainer: 'WrkAccSel__suggestions-container',
-  suggestion: 'WrkAccSel__suggestion',
-  suggestionFocused: 'WrkAccSel__suggestion--focused',
-  sectionContainer: 'WrkAccSel__section-container',
-  sectionTitle: 'WrkAccSel__section-title',
-  sectionSuggestionsContainer: 'WrkAccSel__section-suggestions-container'
+const style = csjs`
+.container {
+  position: relative;
+  margin: 1em 0;
 }
 
+.input {
+  width: 100%;
+  text-indent: .5em;
+  font-size: medium;
+  font-weight: 300;
+  line-height: 2.5em;
+  border: none;
+  border-bottom: 1px solid rgba(0,0,0,.12);
+}
+
+.input:focus {
+  outline: none;
+}
+
+.containerOpen > .input {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.suggestionsContainer {
+  position: absolute;
+  top: 2.5em;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  border: 1px solid #aaa;
+  background-color: #fff;
+  font-weight: 300;
+  font-size: medium;
+  z-index: 2;
+}
+
+.suggestion {
+  cursor: pointer;
+  line-height: 3em;
+  text-indent: 1em;
+}
+
+.suggestionLine {
+  display: block;
+  width: 94%;
+  margin: 0 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.suggestionFocused {
+  background-color: #ddd;
+}
+.sectionContainer {}
+.sectionTitle {}
+.sectionSuggestionsContainer {}`
+
+const theme = {}
+
+Object.keys(style)
+  .forEach(className => {
+    theme[className] = '' + style[className]
+  })
+
 function Suggestion ({external_name}) {
-  return <span>{external_name}</span>
+  return (
+    <span className={style.suggestionLine}>
+      {external_name}
+    </span>
+  )
 }
 
 Suggestion.displayName = 'Suggestion'
@@ -84,6 +145,7 @@ function getSuggestions (accounts, platform, value) {
 export const WorkspaceAccountSelector = React.createClass({
   displayName: 'Workspace-Account-Selector',
   contextTypes: {
+    insertCss: PropTypes.func,
     company: PropTypes.shape({
       id: PropTypes.string,
       accounts: PropTypes.array
@@ -145,7 +207,7 @@ export const WorkspaceAccountSelector = React.createClass({
     this.setState({account: suggestion || null})
   },
   render () {
-    const {locales, messages: {accountSelectorPlaceholder}} = this.context
+    const {insertCss, locales, messages: {accountSelectorPlaceholder}} = this.context
     const {isLoading, suggestions, value, account} = this.state
     const {platform} = this.props
     const inputProps = {
@@ -157,6 +219,7 @@ export const WorkspaceAccountSelector = React.createClass({
       onKeyDown: preventSubmit,
       readOnly: isLoading
     }
+    insertCss(style)
 
     return (
       <div>

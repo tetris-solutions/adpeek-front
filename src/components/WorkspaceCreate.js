@@ -8,6 +8,7 @@ import {branch} from 'baobab-react/dist-modules/higher-order'
 import {createWorkspaceAction} from '../actions/create-workspace'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import {serializeWorkspaceForm} from '../functions/serialize-workspace-form'
+import {Form, Content, Header, Footer} from './FloatingForm'
 
 const {PropTypes} = React
 
@@ -44,26 +45,22 @@ export const CreateWorkspace = React.createClass({
   render () {
     const {errors} = this.state
     return (
-      <form className='mdl-card mdl-shadow--6dp FloatingCardForm' onSubmit={this.handleSubmit}>
-        <header className='mdl-card__title mdl-color--primary mdl-color-text--white'>
-          <h3 className='mdl-card__title-text'>
-            <Message>newWorkspaceHeader</Message>
-          </h3>
-        </header>
+      <Form onSubmit={this.handleSubmit}>
+        <Header>
+          <Message>newWorkspaceHeader</Message>
+        </Header>
 
-        <section className='mdl-card__supporting-text'>
+        <Content>
           <Input label='name' name='name' error={errors.name} onChange={this.dismissError}/>
           <AccountSelector platform='facebook'/>
           <AccountSelector platform='adwords'/>
           <RolesSelector/>
-        </section>
+        </Content>
 
-        <footer className='mdl-card__actions mdl-card--border'>
-          <button type='submit' className='mdl-button mdl-button--colored'>
-            <Message>newWorkspaceCallToAction</Message>
-          </button>
-        </footer>
-      </form>
+        <Footer>
+          <Message>newWorkspaceCallToAction</Message>
+        </Footer>
+      </Form>
     )
   }
 })

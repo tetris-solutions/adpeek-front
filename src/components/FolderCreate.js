@@ -7,6 +7,7 @@ import {createFolderAction} from '../actions/create-folder'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import Select from './Select'
 import map from 'lodash/map'
+import {Form, Content, Header, Footer} from './FloatingForm'
 
 const {PropTypes} = React
 
@@ -56,18 +57,25 @@ export const CreateFolder = React.createClass({
     const {medias} = this.props
     const {errors} = this.state
     const {accounts} = this.context.workspace
+
     return (
-      <form className='mdl-card mdl-shadow--6dp FloatingCardForm' onSubmit={this.handleSubmit}>
-        <header className='mdl-card__title mdl-color--primary mdl-color-text--white'>
-          <h3 className='mdl-card__title-text'>
-            <Message>newFolderHeader</Message>
-          </h3>
-        </header>
+      <Form onSubmit={this.handleSubmit}>
+        <Header>
+          <Message>newFolderHeader</Message>
+        </Header>
 
-        <section className='mdl-card__supporting-text'>
-          <Input label='name' name='name' error={errors.name} onChange={this.dismissError}/>
+        <Content>
+          <Input
+            label='name'
+            name='name'
+            error={errors.name}
+            onChange={this.dismissError}/>
 
-          <Select name='workspace_account' label='externalAccount' error={errors.workspace_account} onChange={this.dismissError}>
+          <Select
+            name='workspace_account'
+            label='externalAccount'
+            error={errors.workspace_account}
+            onChange={this.dismissError}>
 
             <option value=''/>
 
@@ -80,7 +88,12 @@ export const CreateFolder = React.createClass({
 
           </Select>
 
-          <Select name='media' label='media' error={errors.media} onChange={this.dismissError}>
+          <Select
+            name='media'
+            label='media'
+            error={errors.media}
+            onChange={this.dismissError}>
+
             <option value=''/>
 
             {map(medias,
@@ -91,19 +104,19 @@ export const CreateFolder = React.createClass({
               ))}
           </Select>
 
-          <Input name='tag' label='tag' error={errors.tag} onChange={this.dismissError}/>
-        </section>
+          <Input
+            name='tag'
+            label='tag'
+            error={errors.tag}
+            onChange={this.dismissError}/>
+        </Content>
 
-        <footer className='mdl-card__actions mdl-card--border'>
-          <button type='submit' className='mdl-button mdl-button--colored'>
-            <Message>newFolderCallToAction</Message>
-          </button>
-        </footer>
-      </form>
+        <Footer>
+          <Message>newFolderCallToAction</Message>
+        </Footer>
+      </Form>
     )
   }
 })
 
-export default branch({
-  medias: ['medias']
-}, CreateFolder)
+export default branch({medias: ['medias']}, CreateFolder)

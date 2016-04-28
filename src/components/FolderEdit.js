@@ -9,6 +9,7 @@ import Select from './Select'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
 import pick from 'lodash/pick'
+import {Form, Content, Header, Footer} from './FloatingForm'
 
 const {PropTypes} = React
 
@@ -85,15 +86,18 @@ export const CreateFolder = React.createClass({
     const {workspace: {accounts}} = this.context
 
     return (
-      <form className='mdl-card mdl-shadow--6dp FloatingCardForm' onSubmit={this.handleSubmit}>
-        <header className='mdl-card__title mdl-color--primary mdl-color-text--white'>
-          <h3 className='mdl-card__title-text'>
-            <Message>editFolderHeader</Message>
-          </h3>
-        </header>
+      <Form onSubmit={this.handleSubmit}>
+        <Header>
+          <Message>editFolderHeader</Message>
+        </Header>
 
-        <section className='mdl-card__supporting-text'>
-          <Input label='name' name='name' error={errors.name} value={name} onChange={this.saveAndDismiss('name')}/>
+        <Content>
+          <Input
+            label='name'
+            name='name'
+            error={errors.name}
+            value={name}
+            onChange={this.saveAndDismiss('name')}/>
 
           <Select
             name='workspace_account'
@@ -137,14 +141,12 @@ export const CreateFolder = React.createClass({
             value={tag}
             onChange={this.saveAndDismiss('tag')}/>
 
-        </section>
+        </Content>
 
-        <footer className='mdl-card__actions mdl-card--border'>
-          <button type='submit' className='mdl-button mdl-button--colored'>
-            <Message>saveCallToAction</Message>
-          </button>
-        </footer>
-      </form>
+        <Footer>
+          <Message>saveCallToAction</Message>
+        </Footer>
+      </Form>
     )
   }
 })
