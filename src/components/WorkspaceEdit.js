@@ -29,6 +29,11 @@ export const WorkspaceEdit = React.createClass({
       name: PropTypes.string
     })
   },
+  componentWillMount () {
+    this.setState({
+      name: this.context.workspace.name
+    })
+  },
   handleSubmit (e) {
     e.preventDefault()
     const {dispatch, params: {workspace, company}} = this.props
@@ -53,10 +58,9 @@ export const WorkspaceEdit = React.createClass({
     }
   },
   render () {
-    const {errors} = this.state
+    const {errors, name} = this.state
     const {workspace} = this.context
     if (!workspace.accounts) return null
-    const name = this.state.name || workspace.name
     const roles = workspace.roles
     const {accounts: {facebook, adwords}} = workspace
 

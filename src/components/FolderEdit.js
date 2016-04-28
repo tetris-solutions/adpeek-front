@@ -8,6 +8,7 @@ import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import Select from './Select'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
+import pick from 'lodash/pick'
 
 const {PropTypes} = React
 
@@ -34,6 +35,14 @@ export const CreateFolder = React.createClass({
     workspace: PropTypes.shape({
       accounts: PropTypes.array
     })
+  },
+  componentWillMount () {
+    this.setState(pick(this.context.folder, [
+      'name',
+      'tag',
+      'workspace_account',
+      'media'
+    ]))
   },
   /**
    * handles submit event
@@ -72,20 +81,14 @@ export const CreateFolder = React.createClass({
   },
   render () {
     const {medias} = this.props
-    const {errors} = this.state
-    const {workspace: {accounts}, folder} = this.context
-    const name = this.state.name || folder.name
-    const workspace_account = this.state.workspace_account || folder.workspace_account
-    const media = this.state.media || folder.media
-    const tag = this.state.tag || folder.tag
-
-    // @todo update <Message>s
+    const {errors, name, workspace_account, media, tag} = this.state
+    const {workspace: {accounts}} = this.context
 
     return (
       <form className='mdl-card mdl-shadow--6dp FloatingCardForm' onSubmit={this.handleSubmit}>
         <header className='mdl-card__title mdl-color--primary mdl-color-text--white'>
           <h3 className='mdl-card__title-text'>
-            <Message>newFolderHeader</Message>
+            <Message>editFolderHeader</Message>
           </h3>
         </header>
 
@@ -138,7 +141,7 @@ export const CreateFolder = React.createClass({
 
         <footer className='mdl-card__actions mdl-card--border'>
           <button type='submit' className='mdl-button mdl-button--colored'>
-            <Message>newFolderCallToAction</Message>
+            <Message>saveCallToAction</Message>
           </button>
         </footer>
       </form>
