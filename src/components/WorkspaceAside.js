@@ -3,11 +3,11 @@ import ContextMenu from './ContextMenu'
 
 const {PropTypes} = React
 
-export function WorkspaceAside ({params: {company}}, {workspace}) {
+export function WorkspaceAside ({params: {company}}, {workspace, messages: {editCallToAction}}) {
   if (!workspace) return null
 
   const options = [{
-    label: 'Edit',
+    label: editCallToAction,
     to: `/company/${company}/workspace/${workspace.id}/edit`
   }]
 
@@ -22,6 +22,7 @@ WorkspaceAside.propTypes = {
   })
 }
 WorkspaceAside.contextTypes = {
+  messages: PropTypes.object,
   workspace: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string

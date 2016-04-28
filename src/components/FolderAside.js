@@ -3,10 +3,10 @@ import ContextMenu from './ContextMenu'
 
 const {PropTypes} = React
 
-export function FolderAside ({params: {company, workspace}}, {folder}) {
+export function FolderAside ({params: {company, workspace}}, {folder, messages: {editCallToAction}}) {
   if (!folder) return null
   const options = [{
-    label: 'Edit',
+    label: editCallToAction,
     to: `/company/${company}/workspace/${workspace}/folder/${folder.id}/edit`
   }]
 
@@ -21,6 +21,7 @@ FolderAside.propTypes = {
   })
 }
 FolderAside.contextTypes = {
+  messages: PropTypes.object,
   folder: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string
