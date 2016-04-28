@@ -13,7 +13,6 @@ export const HTML = ({documentTitle = 'Tetris Solutions', payload, children, css
       <link rel='stylesheet' href='https://cdn.rawgit.com/mebibou/mdl-selectfield/v0.0.3/mdl-selectfield.min.css'/>
       <link rel='stylesheet' href='https://cdn.rawgit.com/daneden/animate.css/master/animate.css'/>
       <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css'/>
-      <link rel='stylesheet' href='/css/main.css'/>
 
       <script
         id='state-injection'

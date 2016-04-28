@@ -2,7 +2,6 @@
 // pra que o usuário possa rodar `webpack` normalmente da pasta src
 
 var path = require('path')
-var spawn = require('child_process').spawn
 var dotenv = require('dotenv')
 
 dotenv.config({
@@ -10,15 +9,6 @@ dotenv.config({
   silent: true
 })
 
-var watchMode = !process.env.BUILD_PROD
-
-if (watchMode) {
-  var proc = spawn('npm', ['run', 'gulp'])
-
-  proc.stdout.pipe(process.stdout)
-  proc.stderr.pipe(process.stderr)
-}
-
-module.exports = watchMode
+module.exports = !process.env.BUILD_PROD
   ? require('./webpack.config.dev')
   : require('./webpack.config.prod')
