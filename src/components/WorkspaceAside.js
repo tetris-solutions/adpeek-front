@@ -1,18 +1,17 @@
 import React from 'react'
-import {Link} from 'react-router'
+import ContextMenu from './ContextMenu'
 
 const {PropTypes} = React
 
 export function WorkspaceAside ({params: {company}}, {workspace}) {
   if (!workspace) return null
-  return (
-    <header style={{textAlign: 'center'}}>
-      <h5>{workspace.name}</h5>
-      <Link className='mdl-button' to={`/company/${company}/workspace/${workspace.id}/edit`}>
-        Edit
-      </Link>
-    </header>
-  )
+
+  const options = [{
+    label: 'Edit',
+    to: `/company/${company}/workspace/${workspace.id}/edit`
+  }]
+
+  return <ContextMenu title={workspace.name} icon='domain' options={options}/>
 }
 
 WorkspaceAside.displayName = 'Workspace-Aside'
