@@ -1,5 +1,5 @@
 import React from 'react'
-import {Link, IndexRoute, Route} from 'react-router'
+import {IndexRoute, Route} from 'react-router'
 import {root} from 'baobab-react/dist-modules/higher-order'
 import Home from '../components/Home'
 import Workspaces from '../components/Workspaces'
@@ -14,6 +14,7 @@ import WorkspaceAside from '../components/WorkspaceAside'
 import WorkspaceEdit from '../components/WorkspaceEdit'
 import FolderEdit from '../components/FolderEdit'
 import FolderAside from '../components/FolderAside'
+import Campaigns from '../components/Campaigns'
 
 import App from '../components/App'
 import {loadUserCompaniesActionRouterAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
@@ -24,30 +25,7 @@ import {loadWorkspaceAccountsActionRouterAdaptor as accounts} from '../actions/l
 import {loadMediasActionRouterAdaptor as medias} from '../actions/load-medias'
 import {loadWorkspaceActionRouterAdaptor as workspace} from '../actions/load-workspace'
 import {loadFolderActionRouterAdaptor as folder} from '../actions/load-folder'
-
-const {PropTypes} = React
-
-function Campaigns ({params: {company, workspace, folder}}) {
-  return (
-    <ul>
-      <li>huge</li>
-      <li>list</li>
-      <li>of</li>
-      <li>campaigns</li>
-      <li>
-        <Link to={`/company/${company}/workspace/${workspace}/folder/${folder}/create/campaign`}>CREATE NEW</Link>
-      </li>
-    </ul>
-  )
-}
-Campaigns.displayName = 'Campaigns'
-Campaigns.propTypes = {
-  params: PropTypes.shape({
-    company: PropTypes.string,
-    workspace: PropTypes.string,
-    folder: PropTypes.string
-  })
-}
+import {loadAvailableCampaignsActionRouterAdaptor as availableCampaigns} from '../actions/load-available-campaigns'
 
 /**
  * returns the route config
@@ -104,7 +82,9 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
               breadcrumb={FolderBreadcrumb}
               onEnter={preload(folder)}>
 
-              <IndexRoute component={Campaigns}/>
+              <IndexRoute
+                component={Campaigns}
+                onEnter={preload(availableCampaigns)}/>
 
               <Route
                 path='edit'

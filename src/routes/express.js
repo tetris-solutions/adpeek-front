@@ -8,6 +8,7 @@ import {loadFolderActionServerAdaptor as folder} from '../actions/load-folder'
 import {loadWorkspaceAccountsActionServerAdaptor as accounts} from '../actions/load-workspaces-accounts'
 import {loadMediasActionServerAdaptor as medias} from '../actions/load-medias'
 import {loadWorkspaceActionServerAdaptor as workspace} from '../actions/load-workspace'
+import {loadAvailableCampaignsActionServerAdaptor as availableCampaigns} from '../actions/load-available-campaigns'
 
 export function setAppRoutes (app, render) {
   app.get('/', render)
@@ -39,12 +40,7 @@ export function setAppRoutes (app, render) {
 
   app.get('/company/:company/workspace/:workspace/folder/:folder',
     protect,
-    preload(companies, workspace, folder),
-    render)
-
-  app.get('/company/:company/workspace/:workspace/folder/:folder',
-    protect,
-    preload(companies, workspace, folder),
+    preload(companies, workspace, folder, availableCampaigns),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/edit',
