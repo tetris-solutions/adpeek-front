@@ -185,9 +185,13 @@ export const WorkspaceAccountSelector = React.createClass({
     this.onSuggestionsUpdateRequested = debounce(this.onSuggestionsUpdateRequested, 300)
     this.props.dispatch(loadCompanyAccountsAction, this.context.company.id, this.props.platform)
       .then(() => {
+        if (this.hasUnmounted) return
         const updateSuggestions = () => this.onSuggestionsUpdateRequested(this.state)
         this.setState({isLoading: false}, updateSuggestions)
       })
+  },
+  componentWillUnmount () {
+    this.hasUnmounted = true
   },
   onChange (e, {newValue}) {
     const newState = {value: newValue}
