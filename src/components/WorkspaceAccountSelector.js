@@ -133,7 +133,7 @@ Suggestion.propTypes = {
 
 /**
  * filters suggestions
- * @param {Array} accounts list of available accounts
+ * @param {Array} accounts list of loose accounts
  * @param {String} platform current platform
  * @param {String} value input value
  * @returns {Array} filtered list

@@ -9,7 +9,7 @@ export const Checkbox = React.createClass({
     onChange: PropTypes.func,
     checked: PropTypes.bool,
     name: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired
+    label: PropTypes.string
   },
   getInitialState () {
     return {
@@ -39,7 +39,11 @@ export const Checkbox = React.createClass({
           checked={isChecked}
           onChange={this.onChange}/>
 
-        <span className='mdl-checkbox__label'>{label}</span>
+        {label ? (
+          <span className='mdl-checkbox__label'>
+            {label}
+          </span>) : null}
+
         <span className='mdl-checkbox__focus-helper'/>
 
         <span className='mdl-checkbox__box-outline'>
