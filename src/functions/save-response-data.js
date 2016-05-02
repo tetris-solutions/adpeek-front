@@ -1,6 +1,5 @@
-import findIndex from 'lodash/findIndex'
-import isArray from 'lodash/isArray'
 import identity from 'lodash/identity'
+import {getDeepCursor} from './get-deep-cursor'
 
 /**
  * computes dynamic tree cursor and sets fetch response there
@@ -16,30 +15,7 @@ export function saveResponseData (tree, path, transform = identity) {
    * @returns {Response} passes the same response ahead
    */
   function onFulfilled (response) {
-    const cursor = []
-
-    function dive (name) {
-      let id
-
-      if (isArray(name)) {
-        id = name[1]
-        name = name[0]
-      }
-
-      cursor.push(name)
-
-      if (!id) return
-
-      if (!tree.get(cursor)) {
-        tree.set(cursor, [])
-      }
-
-      const index = findIndex(tree.get(cursor), {id})
-
-      cursor.push(index >= 0 ? index : 0)
-    }
-
-    path.forEach(dive)
+    const cursor = getDeepCursor(tree, path)
 
     tree.set(cursor, transform(response.data, tree.get(cursor)))
     tree.commit()
