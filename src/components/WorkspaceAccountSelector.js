@@ -112,6 +112,7 @@ const style = csjs`
 
 const theme = {}
 
+// assemble `theme` object, required by ReactAutosuggest
 Object.keys(style)
   .forEach(className => {
     theme[className] = '' + style[className]

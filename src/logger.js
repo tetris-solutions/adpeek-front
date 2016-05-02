@@ -15,7 +15,7 @@ if (!process.env.SILENT) {
   transports.push(new Logstash({
     level: 'debug',
     port: 28777,
-    node_name: 'main-front@' + os.hostname(),
+    node_name: 'adpeek-front@' + os.hostname(),
     host: process.env.LOGSTASH_HOST
   }))
 }
