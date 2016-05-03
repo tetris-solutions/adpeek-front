@@ -1,20 +1,23 @@
 import React from 'react'
 import {Link} from 'react-router'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
-export function CompanyBreadcrumb (props, {company}) {
-  if (!company) return null
+export function CompanyBreadcrumb ({company: {id, name}}) {
   return (
-    <Link to={`/company/${company.id}`}>
-      {company.name}
+    <Link to={`/company/${id}`}>
+      {name}
     </Link>
   )
 }
 
-CompanyBreadcrumb.displayName = 'Company-CompanyBreadcrumb'
-CompanyBreadcrumb.contextTypes = {
-  company: PropTypes.object
+CompanyBreadcrumb.displayName = 'Company-Breadcrumb'
+CompanyBreadcrumb.propTypes = {
+  company: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.tring
+  })
 }
 
-export default CompanyBreadcrumb
+export default contextualize(CompanyBreadcrumb, 'company')

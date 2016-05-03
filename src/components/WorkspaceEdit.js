@@ -10,6 +10,7 @@ import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import {serializeWorkspaceForm} from '../functions/serialize-workspace-form'
 import {branch} from 'baobab-react/dist-modules/higher-order'
 import {Form, Content, Header, Footer} from './FloatingForm'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
@@ -21,9 +22,7 @@ export const WorkspaceEdit = React.createClass({
     params: PropTypes.shape({
       workspace: PropTypes.string,
       company: PropTypes.string
-    })
-  },
-  contextTypes: {
+    }),
     router: PropTypes.object,
     workspace: PropTypes.shape({
       id: PropTypes.string,
@@ -32,13 +31,12 @@ export const WorkspaceEdit = React.createClass({
   },
   componentWillMount () {
     this.setState({
-      name: this.context.workspace.name
+      name: this.props.workspace.name
     })
   },
   handleSubmit (e) {
     e.preventDefault()
-    const {dispatch, params: {workspace, company}} = this.props
-    const {router} = this.context
+    const {router, dispatch, params: {workspace, company}} = this.props
     const data = serializeWorkspaceForm(e.target)
     data.id = workspace
 
@@ -60,8 +58,7 @@ export const WorkspaceEdit = React.createClass({
   },
   render () {
     const {errors, name} = this.state
-    const {workspace} = this.context
-    if (!workspace.accounts) return null
+    const {workspace} = this.props
     const roles = workspace.roles
     const {accounts: {facebook, adwords}} = workspace
 
@@ -100,4 +97,4 @@ export const WorkspaceEdit = React.createClass({
   }
 })
 
-export default branch({}, WorkspaceEdit)
+export default branch({}, contextualize(WorkspaceEdit, 'workspace', 'router'))

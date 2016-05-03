@@ -1,17 +1,18 @@
 import React from 'react'
 import assign from 'lodash/assign'
+import forEach from 'lodash/forEach'
 
 const {PropTypes} = React
 
 export function contextualize (Component, ...names) {
   const contextTypes = {}
 
-  names.forEach(name => {
+  forEach(names, name => {
     contextTypes[name] = PropTypes.any
   })
 
   return React.createClass({
-    displayName: `${Component.displayName}(${names.join(', ')})`,
+    displayName: `Contextualize(${[Component.displayName].concat(names).join(', ')})`,
     getInitialState () {
       return {}
     },
@@ -22,9 +23,9 @@ export function contextualize (Component, ...names) {
     componentWillReceiveProps (props, context) {
       const newState = {}
 
-      names.forEach(name => {
+      forEach(names, name => {
         if (context[name] && context[name] !== this.state[name]) {
-          newState[name] = context[name]
+          newState[name] = assign({}, this.state[name], context[name])
         }
       })
 

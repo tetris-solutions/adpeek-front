@@ -1,5 +1,6 @@
 import isArray from 'lodash/isArray'
 import findIndex from 'lodash/findIndex'
+import forEach from 'lodash/forEach'
 
 /**
  * transforms dynamic cursor in a working one
@@ -37,7 +38,7 @@ export function getDeepCursor (tree, path) {
     cursor.push(index >= 0 ? index : 0)
   }
 
-  path.forEach(dive)
+  forEach(path, dive)
 
   return cursor
 }

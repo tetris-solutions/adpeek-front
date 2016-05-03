@@ -1,10 +1,10 @@
 import React from 'react'
 import {Link} from 'react-router'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
-export function FolderBreadcrumb ({params: {company, workspace}}, {folder}) {
-  if (!folder) return null
+export function FolderBreadcrumb ({params: {company, workspace}, folder}) {
   return (
     <Link to={`/company/${company}/workspace/${workspace}/folder/${folder.id}`}>
       {folder.name}
@@ -12,19 +12,16 @@ export function FolderBreadcrumb ({params: {company, workspace}}, {folder}) {
   )
 }
 
-FolderBreadcrumb.displayName = 'Folder-CompanyBreadcrumb'
-FolderBreadcrumb.contextTypes = {
+FolderBreadcrumb.displayName = 'Folder-Breadcrumb'
+FolderBreadcrumb.propTypes = {
   folder: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string
-  })
-}
-
-FolderBreadcrumb.propTypes = {
+  }),
   params: PropTypes.shape({
     company: PropTypes.string,
     workspace: PropTypes.string
   })
 }
 
-export default FolderBreadcrumb
+export default contextualize(FolderBreadcrumb, 'folder')

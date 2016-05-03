@@ -1,10 +1,14 @@
 import React from 'react'
 import ContextMenu from './ContextMenu'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
-export function FolderAside ({params: {company, workspace}}, {folder, messages: {editCallToAction}}) {
-  if (!folder) return null
+export function FolderAside ({
+  folder,
+  params: {company, workspace},
+  messages: {editCallToAction}
+}) {
   const options = [{
     label: editCallToAction,
     to: `/company/${company}/workspace/${workspace}/folder/${folder.id}/edit`
@@ -15,17 +19,15 @@ export function FolderAside ({params: {company, workspace}}, {folder, messages: 
 
 FolderAside.displayName = 'Folder-Aside'
 FolderAside.propTypes = {
+  messages: PropTypes.object,
+  folder: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string
+  }),
   params: PropTypes.shape({
     company: PropTypes.string,
     workspace: PropTypes.string
   })
 }
-FolderAside.contextTypes = {
-  messages: PropTypes.object,
-  folder: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string
-  })
-}
 
-export default FolderAside
+export default contextualize(FolderAside, 'folder', 'messages')

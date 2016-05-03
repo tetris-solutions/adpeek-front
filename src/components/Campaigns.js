@@ -5,7 +5,6 @@ import {unlinkCampaignAction} from '../actions/unlink-campaign'
 import {linkCampaignAction} from '../actions/link-campaign'
 import {loadCampaignsAction} from '../actions/load-campaigns'
 import {loadLooseCampaignsAction} from '../actions/load-loose-campaigns'
-import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import {branch} from 'baobab-react/dist-modules/higher-order'
 import CampaignLoose from './CampaignLoose'
 import Campaign from './Campaign'
@@ -13,7 +12,7 @@ import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
-const Campaigns = React.createClass({
+export const Campaigns = React.createClass({
   displayName: 'Campaigns',
   propTypes: {
     dispatch: PropTypes.func,
@@ -30,7 +29,6 @@ const Campaigns = React.createClass({
     const {dispatch, params: {company, workspace, folder}} = this.props
 
     return Promise.resolve()
-      .then(() => dispatch(pushSuccessMessageAction))
       .then(() => Promise.all([
         dispatch(loadCampaignsAction, company, workspace, folder),
         dispatch(loadLooseCampaignsAction, company, workspace, folder)

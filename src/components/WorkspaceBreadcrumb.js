@@ -1,10 +1,10 @@
 import React from 'react'
 import {Link} from 'react-router'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
-export function WorkspaceBreadcrumb ({params: {company}}, {workspace}) {
-  if (!workspace) return null
+export function WorkspaceBreadcrumb ({params: {company}, workspace}) {
   return (
     <Link to={`/company/${company}/workspace/${workspace.id}`}>
       {workspace.name}
@@ -12,17 +12,15 @@ export function WorkspaceBreadcrumb ({params: {company}}, {workspace}) {
   )
 }
 
-WorkspaceBreadcrumb.displayName = 'Workspace-CompanyBreadcrumb'
-WorkspaceBreadcrumb.contextTypes = {
+WorkspaceBreadcrumb.displayName = 'Workspace-Breadcrumb'
+WorkspaceBreadcrumb.propTypes = {
   workspace: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string
-  })
-}
-WorkspaceBreadcrumb.propTypes = {
+  }),
   params: PropTypes.shape({
     company: PropTypes.string
   })
 }
 
-export default WorkspaceBreadcrumb
+export default contextualize(WorkspaceBreadcrumb, 'workspace')
