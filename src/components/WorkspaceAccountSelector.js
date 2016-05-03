@@ -13,7 +13,7 @@ import debounce from 'lodash/debounce'
 import csjs from 'csjs'
 
 const {PropTypes} = React
-const getSuggestionValue = get('external_name')
+const getSuggestionValue = get('name')
 
 /**
  * prevent formSubmit
@@ -41,8 +41,8 @@ function filterAccounts (platform, value) {
    */
   function filterCallback (account) {
     return account.platform === platform && (
-        includes(cleanStr(account.external_name), value) ||
-        includes(cleanStr(account.external_account), value)
+        includes(cleanStr(account.name), value) ||
+        includes(cleanStr(account.external_id), value)
       )
   }
 
@@ -118,17 +118,17 @@ Object.keys(style)
     theme[className] = '' + style[className]
   })
 
-function Suggestion ({external_name}) {
+function Suggestion ({name}) {
   return (
     <span className={style.suggestionLine}>
-      {external_name}
+      {name}
     </span>
   )
 }
 
 Suggestion.displayName = 'Suggestion'
 Suggestion.propTypes = {
-  external_name: PropTypes.string
+  name: PropTypes.string
 }
 
 /**
@@ -178,7 +178,7 @@ export const WorkspaceAccountSelector = React.createClass({
       suggestions: getSuggestions(
         this.context.company.accounts,
         this.props.platform,
-        this.state.account ? this.state.account.external_account : this.state.value
+        this.state.account ? this.state.account.external_id : this.state.value
       )
     })
   },

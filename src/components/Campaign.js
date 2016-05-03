@@ -11,7 +11,7 @@ const CampaignLoose = React.createClass({
     name: PropTypes.string
   },
   unlink () {
-    this.props.unlinkCampaign(this.props.id)
+    setTimeout(() => this.props.unlinkCampaign(this.props.id), 300)
   },
   render () {
     const {id, name} = this.props

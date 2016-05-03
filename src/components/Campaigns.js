@@ -68,7 +68,7 @@ const Campaigns = React.createClass({
             <ul className='mdl-list'>
 
               {map(folder.looseCampaigns, (campaign, index) =>
-                <CampaignLoose key={campaign.external_campaign} {...campaign} linkCampaign={this.link}/>)}
+                <CampaignLoose key={campaign.external_id} {...campaign} linkCampaign={this.link}/>)}
             </ul>
           </div>
         </div>

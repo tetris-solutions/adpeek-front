@@ -11,7 +11,7 @@ export function loadCompanyAccounts (id, config, platform = null) {
   return GET(url, config)
 }
 
-const union = (a, b) => unionBy(b, a, 'external_account')
+const union = (a, b) => unionBy(b, a, 'external_id')
 
 export function loadCompanyAccountsAction (tree, id, platform = null) {
   return loadCompanyAccounts(id, getApiFetchConfig(tree), platform)

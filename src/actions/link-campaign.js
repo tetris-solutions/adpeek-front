@@ -7,7 +7,7 @@ import {getDeepCursor} from '../functions/get-deep-cursor'
 
 export function linkCampaign (folder, campaign, config) {
   return POST(`${process.env.ADPEEK_API_URL}/folder/${folder}/campaign`,
-    assign({body: {campaign}}, config))
+    assign({body: campaign}, config))
 }
 
 export function linkCampaignAction (tree, company, workspace, folder, campaign) {
@@ -16,7 +16,7 @@ export function linkCampaignAction (tree, company, workspace, folder, campaign) 
     ['companies', company],
     ['workspaces', workspace],
     ['folders', folder],
-    ['looseCampaigns', campaign, 'external_campaign']
+    ['looseCampaigns', campaign.external_id, 'external_id']
   ])
   const index = cursor.pop()
 

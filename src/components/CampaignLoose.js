@@ -1,5 +1,6 @@
 import React from 'react'
 import Checkbox from './Checkbox'
+import pick from 'lodash/pick'
 
 const {PropTypes} = React
 
@@ -7,14 +8,15 @@ const CampaignLoose = React.createClass({
   displayName: 'Campaign-Loose',
   propTypes: {
     linkCampaign: PropTypes.func,
-    external_campaign: PropTypes.string,
+    external_id: PropTypes.string,
     name: PropTypes.string
   },
   link () {
-    this.props.linkCampaign(this.props.external_campaign)
+    const campaign = pick(this.props, 'name', 'external_id', 'status', 'sub_status', 'platform')
+    setTimeout(() => this.props.linkCampaign(campaign), 500)
   },
   render () {
-    const {external_campaign, name} = this.props
+    const {external_id, name} = this.props
     return (
       <li className='mdl-list__item'>
         <span className='mdl-list__item-primary-content'>
@@ -22,7 +24,7 @@ const CampaignLoose = React.createClass({
           {name}
         </span>
         <span className='mdl-list__item-secondary-action'>
-          <Checkbox name={external_campaign} onChange={this.link}/>
+          <Checkbox name={external_id} onChange={this.link}/>
         </span>
       </li>
     )

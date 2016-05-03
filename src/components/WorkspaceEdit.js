@@ -81,12 +81,12 @@ export const WorkspaceEdit = React.createClass({
 
           <AccountSelector
             account={facebook}
-            value={facebook ? facebook.external_name : ''}
+            value={facebook ? facebook.name : ''}
             platform='facebook'/>
 
           <AccountSelector
             account={adwords}
-            value={adwords ? adwords.external_name : ''}
+            value={adwords ? adwords.name : ''}
             platform='adwords'/>
 
           <RolesSelector roles={roles}/>
