@@ -9,6 +9,7 @@ import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import {branch} from 'baobab-react/dist-modules/higher-order'
 import CampaignLoose from './CampaignLoose'
 import Campaign from './Campaign'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
@@ -16,15 +17,13 @@ const Campaigns = React.createClass({
   displayName: 'Campaigns',
   propTypes: {
     dispatch: PropTypes.func,
-    params: PropTypes.shape({
-      company: PropTypes.string,
-      workspace: PropTypes.string
-    })
-  },
-  contextTypes: {
     folder: PropTypes.shape({
       looseCampaigns: PropTypes.array,
       campaigns: PropTypes.array
+    }),
+    params: PropTypes.shape({
+      company: PropTypes.string,
+      workspace: PropTypes.string
     })
   },
   reload () {
@@ -50,8 +49,7 @@ const Campaigns = React.createClass({
       .then(this.reload)
   },
   render () {
-    const {params: {company, workspace}} = this.props
-    const {folder} = this.context
+    const {folder, params: {company, workspace}} = this.props
 
     return (
       <div>
@@ -82,4 +80,4 @@ const Campaigns = React.createClass({
   }
 })
 
-export default branch({}, Campaigns)
+export default branch({}, contextualize(Campaigns, 'folder'))
