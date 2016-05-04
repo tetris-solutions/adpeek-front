@@ -9,6 +9,7 @@ import {loadWorkspaceAccountsActionServerAdaptor as accounts} from '../actions/l
 import {loadMediasActionServerAdaptor as medias} from '../actions/load-medias'
 import {loadWorkspaceActionServerAdaptor as workspace} from '../actions/load-workspace'
 import {loadCampaignsActionServerAdaptor as campaigns} from '../actions/load-campaigns'
+import {loadStatusesActionServerAdaptor as statuses} from '../actions/load-statuses'
 
 export function setAppRoutes (app, render) {
   app.get('/', render)
@@ -40,7 +41,7 @@ export function setAppRoutes (app, render) {
 
   app.get('/company/:company/workspace/:workspace/folder/:folder',
     protect,
-    preload(companies, workspace, folder, campaigns),
+    preload(statuses, companies, workspace, folder, campaigns),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/edit',

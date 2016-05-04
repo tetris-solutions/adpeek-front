@@ -24,6 +24,7 @@ const {PropTypes} = React
 export const Campaigns = React.createClass({
   displayName: 'Campaigns',
   propTypes: {
+    statuses: PropTypes.array,
     dispatch: PropTypes.func,
     folder: PropTypes.shape({
       looseCampaigns: PropTypes.array,
@@ -82,7 +83,11 @@ export const Campaigns = React.createClass({
       <div>
         <header className='mdl-layout__header'>
           <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
-            <small>nope nope</small>
+            <Link
+              className='mdl-button mdl-color-text--grey-100'
+              to={`/company/${company}/workspace/${workspace}/folder/${folder.id}/create/campaign`}>
+              CREATE NEW
+            </Link>
             <div className='mdl-layout-spacer'/>
             <SearchBox onEnter={this.setFilterValue}/>
           </div>
@@ -116,14 +121,9 @@ export const Campaigns = React.createClass({
 
           </div>
         </div>
-
-        <hr/>
-        <Link to={`/company/${company}/workspace/${workspace}/folder/${folder.id}/create/campaign`}>
-          CREATE NEW
-        </Link>
       </div>
     )
   }
 })
 
-export default branch({}, contextualize(Campaigns, 'folder', 'messages'))
+export default branch({}, contextualize(Campaigns, 'folder', 'messages', 'statuses'))

@@ -1,46 +1,5 @@
 import upperCase from 'lodash/upperCase'
 
-/*
-<< ADWORDS
-
-  STATUS:
-    UNKNOWN
-    ENABLED
-    PAUSED
-    REMOVED
-
-  SUB STATUS:
-    SERVING
-    NONE
-    ENDED
-    PENDING
-    SUSPENDED
-
->>
-
-<< FACEBOOK
-
-  STATUS:
-    ACTIVE
-    PAUSED
-    ARCHIVED
-    DELETED
-
-  SUB STATUS:
-    ACTIVE
-    PAUSED
-    DELETED
-    PENDING_REVIEW
-    DISAPPROVED
-    PREAPPROVED
-    PENDING_BILLING_INFO
-    CAMPAIGN_PAUSED
-    ARCHIVED
-    ADSET_PAUSED
-
->>
- */
-
 export function getStatusIcon (status, sub_status) {
   switch (upperCase(status)) {
     case 'ACTIVE':

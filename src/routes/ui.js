@@ -26,6 +26,7 @@ import {loadMediasActionRouterAdaptor as medias} from '../actions/load-medias'
 import {loadWorkspaceActionRouterAdaptor as workspace} from '../actions/load-workspace'
 import {loadFolderActionRouterAdaptor as folder} from '../actions/load-folder'
 import {loadCampaignsActionRouterAdaptor as campaigns} from '../actions/load-campaigns'
+import {loadStatusesActionRouterAdaptor as statuses} from '../actions/load-statuses'
 
 /**
  * returns the route config
@@ -84,7 +85,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
               <IndexRoute
                 component={Campaigns}
-                onEnter={preload(campaigns)}/>
+                onEnter={preload(statuses, campaigns)}/>
 
               <Route
                 path='edit'
