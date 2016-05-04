@@ -3,7 +3,7 @@ export default {
     welcomeMessage: 'Hey, {name}',
     linkCampaignsCallToAction: 'Link selected campaigns',
     unlinkCampaignsCallToAction: 'Unlink selected campaigns',
-    nCampaigns: '{n} campaigns linked to this folder',
+    nCampaigns: '{n} linked campaigns',
     nLooseCampaigns: '{n} loose campaigns',
     navLogout: 'Logout',
     navLogin: 'Login',

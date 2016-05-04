@@ -12,9 +12,13 @@ import {contextualize} from './higher-order/contextualize'
 import CampaignsToggle from './CampaignsToggle'
 import settle from 'promise-settle'
 import Message from '@tetris/front-server/lib/components/intl/Message'
-import size from 'lodash/size'
 import SearchBox from './SearchBox'
+import deburr from 'lodash/deburr'
+import lowerCase from 'lodash/lowerCase'
+import includes from 'lodash/includes'
+import filter from 'lodash/filter'
 
+const cleanStr = str => deburr(lowerCase(str))
 const {PropTypes} = React
 
 export const Campaigns = React.createClass({
@@ -34,6 +38,9 @@ export const Campaigns = React.createClass({
       workspace: PropTypes.string,
       folder: PropTypes.string
     })
+  },
+  getInitialState () {
+    return {}
   },
   componentWillMount () {
     const {dispatch, params: {folder, company, workspace}} = this.props
@@ -57,8 +64,15 @@ export const Campaigns = React.createClass({
     this.link = action(linkCampaignAction)
     this.unlink = action(unlinkCampaignAction)
   },
+  setFilterValue (filterValue) {
+    this.setState({filterValue})
+  },
   render () {
+    const value = cleanStr(this.state.filterValue)
     const {folder, messages, params: {company, workspace}} = this.props
+    const match = ({external_id, name}) => !value || includes(external_id, value) || includes(cleanStr(name), value)
+    const linked = filter(folder.campaigns, match)
+    const loose = filter(folder.looseCampaigns, match)
 
     return (
       <div>
@@ -66,7 +80,7 @@ export const Campaigns = React.createClass({
           <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
             <small>nope nope</small>
             <div className='mdl-layout-spacer'/>
-            <SearchBox />
+            <SearchBox onEnter={this.setFilterValue}/>
           </div>
         </header>
 
@@ -75,10 +89,10 @@ export const Campaigns = React.createClass({
           <div className='mdl-cell mdl-cell--7-col'>
             <CampaignsToggle
               onSelected={this.unlink}
-              title={<Message n={size(folder.campaigns)}>nCampaigns</Message>}
+              title={<Message n={String(linked.length)}>nCampaigns</Message>}
               label={messages.unlinkCampaignsCallToAction}>
 
-              {map(folder.campaigns, (campaign, index) =>
+              {map(linked, (campaign, index) =>
                 <Campaign key={campaign.id} {...campaign}/>)}
 
             </CampaignsToggle>
@@ -88,10 +102,10 @@ export const Campaigns = React.createClass({
 
             <CampaignsToggle
               onSelected={this.link}
-              title={<Message n={size(folder.looseCampaigns)}>nLooseCampaigns</Message>}
+              title={<Message n={String(loose.length)}>nLooseCampaigns</Message>}
               label={messages.linkCampaignsCallToAction}>
 
-              {map(folder.looseCampaigns, (campaign, index) =>
+              {map(loose, (campaign, index) =>
                 <CampaignLoose key={campaign.external_id} {...campaign}/>)}
 
             </CampaignsToggle>

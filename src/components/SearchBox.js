@@ -1,5 +1,6 @@
 import React from 'react'
 import cx from 'classnames'
+import debounce from 'lodash/debounce'
 
 const {PropTypes} = React
 
@@ -9,13 +10,16 @@ export const SearchBox = React.createClass({
     className: PropTypes.string,
     value: PropTypes.any,
     defaultValue: PropTypes.any,
-    onChange: PropTypes.func
+    onEnter: PropTypes.func
   },
   getInitialState () {
     return {
       isDirty: Boolean(this.props.value || this.props.defaultValue),
       isFocused: false
     }
+  },
+  componentWillMount () {
+    this.save = debounce(value => this.props.onEnter(value), 300)
   },
   manuallySetFocus () {
     this.setState({isFocused: true}, () => {
@@ -27,14 +31,12 @@ export const SearchBox = React.createClass({
       isDirty: Boolean(e.target.value)
     })
 
-    if (this.props.onChange) {
-      this.props.onChange(e)
-    }
+    this.save(e.target.value)
   },
-  onFocus (e) {
+  onFocus () {
     this.setState({isFocused: true})
   },
-  onBlur (e) {
+  onBlur () {
     this.setState({isFocused: false})
   },
   render () {
