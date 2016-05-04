@@ -3,14 +3,25 @@ import csjs from 'csjs'
 
 const style = csjs`
 .card {
-  width: 35%;
   margin: 3em auto;
+}
+.small extends .card {
+  width: 35%;
   overflow: visible;
 }
-.content {
+.large extends .card {
+  width: 90%;
+}
+.small > .content {
   overflow: visible;
   width: 90%;
   margin: .5em auto;
+}
+.large > .content {
+  width: 90%;
+  margin: .5em auto;
+  height: 50vh;
+  overflow-y: auto;
 }
 .content > div {
   width: 100%;
@@ -18,16 +29,20 @@ const style = csjs`
 
 const {PropTypes} = React
 
-export function Form ({onSubmit, children}, {insertCss}) {
+export function Form ({onSubmit, children, size}, {insertCss}) {
   insertCss(style)
   return (
-    <form className={`mdl-card mdl-shadow--6dp ${style.card}`} onSubmit={onSubmit}>
+    <form className={`mdl-card mdl-shadow--6dp ${style[size]}`} onSubmit={onSubmit}>
       {children}
     </form>
   )
 }
 
+Form.defaultProps = {
+  size: 'small'
+}
 Form.propTypes = {
+  size: PropTypes.oneOf(['small', 'large']),
   onSubmit: PropTypes.func,
   children: PropTypes.node
 }

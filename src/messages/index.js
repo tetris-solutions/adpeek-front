@@ -1,8 +1,10 @@
 export default {
   en: {
     welcomeMessage: 'Hey, {name}',
-    linkCampaignsCallToAction: 'Link campaigns',
-    unlinkCampaignsCallToAction: 'Unlink campaigns',
+    linkCampaignsCallToAction: 'Link selected campaigns',
+    unlinkCampaignsCallToAction: 'Unlink selected campaigns',
+    nCampaigns: '{n} campaigns linked to this folder',
+    nLooseCampaigns: '{n} loose campaigns',
     navLogout: 'Logout',
     navLogin: 'Login',
     navSignup: 'Signup',
@@ -25,8 +27,10 @@ export default {
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
-    linkCampaignsCallToAction: 'Associar campanhas',
-    unlinkCampaignsCallToAction: 'Desassociar campanhas',
+    linkCampaignsCallToAction: 'Associar campanhas selecionadas',
+    unlinkCampaignsCallToAction: 'Desassociar campanhas selecionadas',
+    nCampaigns: '{n} campanhas nesta pasta',
+    nLooseCampaigns: '{n} campanhas soltas',
     navLogout: 'Sair',
     navLogin: 'Entrar',
     navSignup: 'Cadastrar',

@@ -10,6 +10,9 @@ import CampaignLoose from './CampaignLoose'
 import Campaign from './Campaign'
 import {contextualize} from './higher-order/contextualize'
 import CampaignsToggle from './CampaignsToggle'
+import settle from 'promise-settle'
+import Message from '@tetris/front-server/lib/components/intl/Message'
+import size from 'lodash/size'
 
 const {PropTypes} = React
 
@@ -34,14 +37,17 @@ export const Campaigns = React.createClass({
   componentWillMount () {
     const {dispatch, params: {folder, company, workspace}} = this.props
 
-    this.reload = () => Promise.all([
-      dispatch(loadCampaignsAction, company, workspace, folder),
-      dispatch(loadLooseCampaignsAction, company, workspace, folder)
-    ])
+    function reload () {
+      return Promise.all([
+        dispatch(loadCampaignsAction, company, workspace, folder),
+        dispatch(loadLooseCampaignsAction, company, workspace, folder)
+      ])
+    }
 
     function action (fn) {
-      function invoke (campaign) {
-        return dispatch(fn, company, workspace, folder, campaign)
+      function invoke (campaigns) {
+        const actions = campaigns.map(campaign => dispatch(fn, company, workspace, folder, campaign))
+        return settle(actions).then(reload)
       }
 
       return invoke
@@ -51,23 +57,39 @@ export const Campaigns = React.createClass({
     this.unlink = action(unlinkCampaignAction)
   },
   render () {
-    const {folder, messages: {linkCampaignsCallToAction, unlinkCampaignsCallToAction}, params: {company, workspace}} = this.props
+    const {folder, messages: {
+      linkCampaignsCallToAction,
+      unlinkCampaignsCallToAction}, params: {company, workspace}} = this.props
 
     return (
       <div>
         <div className='mdl-grid'>
 
           <div className='mdl-cell mdl-cell--7-col'>
-            <CampaignsToggle action={this.unlink} after={this.reload} label={unlinkCampaignsCallToAction}>
+
+            <CampaignsToggle
+              onSelected={this.unlink}
+              title={<Message n={size(folder.campaigns)}>nCampaigns</Message>}
+              label={unlinkCampaignsCallToAction}>
+
               {map(folder.campaigns, (campaign, index) =>
                 <Campaign key={campaign.id} {...campaign}/>)}
+
             </CampaignsToggle>
+
           </div>
           <div className='mdl-cell mdl-cell--5-col'>
-            <CampaignsToggle action={this.link} after={this.reload} label={linkCampaignsCallToAction}>
+
+            <CampaignsToggle
+              onSelected={this.link}
+              title={<Message n={size(folder.looseCampaigns)}>nLooseCampaigns</Message>}
+              label={linkCampaignsCallToAction}>
+
               {map(folder.looseCampaigns, (campaign, index) =>
                 <CampaignLoose key={campaign.external_id} {...campaign}/>)}
+
             </CampaignsToggle>
+
           </div>
         </div>
 

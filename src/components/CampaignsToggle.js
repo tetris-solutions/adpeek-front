@@ -1,16 +1,17 @@
 import React from 'react'
 import forEach from 'lodash/forEach'
-import settle from 'promise-settle'
+
+import {Form, Content, Header, Footer} from './FloatingForm'
 
 const {PropTypes} = React
 
 export const CampaignsToggle = React.createClass({
   displayName: 'CampaignListToggle',
   propTypes: {
+    title: PropTypes.node,
     label: PropTypes.string,
     children: PropTypes.node,
-    action: PropTypes.func,
-    after: PropTypes.func
+    onSelected: PropTypes.func
   },
   handleSubmit (e) {
     e.preventDefault()
@@ -24,24 +25,26 @@ export const CampaignsToggle = React.createClass({
 
     if (!values.length) return
 
-    const {after, action} = this.props
-
-    settle(values.map(action)).then(after)
+    this.props.onSelected(values)
   },
   render () {
+    const {title, children, label} = this.props
     return (
-      <form onSubmit={this.handleSubmit}>
+      <Form size='large' onSubmit={this.handleSubmit}>
+        <Header>
+          {title}
+        </Header>
 
-        <button type='submit' className='mdl-button mdl-js-button'>
-          {this.props.label}
-        </button>
+        <Content>
+          <ul className='mdl-list'>
+            {children}
+          </ul>
+        </Content>
 
-        <hr/>
-
-        <ul className='mdl-list'>
-          {this.props.children}
-        </ul>
-      </form>
+        <Footer>
+          {label}
+        </Footer>
+      </Form>
     )
   }
 })
