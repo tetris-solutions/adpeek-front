@@ -1,6 +1,8 @@
 export default {
   en: {
     welcomeMessage: 'Hey, {name}',
+    linkCampaignsCallToAction: 'Link campaigns',
+    unlinkCampaignsCallToAction: 'Unlink campaigns',
     navLogout: 'Logout',
     navLogin: 'Login',
     navSignup: 'Signup',
@@ -23,6 +25,8 @@ export default {
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
+    linkCampaignsCallToAction: 'Associar campanhas',
+    unlinkCampaignsCallToAction: 'Desassociar campanhas',
     navLogout: 'Sair',
     navLogin: 'Entrar',
     navSignup: 'Cadastrar',

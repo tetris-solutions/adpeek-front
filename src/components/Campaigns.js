@@ -9,6 +9,7 @@ import {branch} from 'baobab-react/dist-modules/higher-order'
 import CampaignLoose from './CampaignLoose'
 import Campaign from './Campaign'
 import {contextualize} from './higher-order/contextualize'
+import CampaignsToggle from './CampaignsToggle'
 
 const {PropTypes} = React
 
@@ -20,52 +21,53 @@ export const Campaigns = React.createClass({
       looseCampaigns: PropTypes.array,
       campaigns: PropTypes.array
     }),
+    messages: PropTypes.shape({
+      unlinkCampaignsCallToAction: PropTypes.string,
+      linkCampaignsCallToAction: PropTypes.string
+    }),
     params: PropTypes.shape({
       company: PropTypes.string,
-      workspace: PropTypes.string
+      workspace: PropTypes.string,
+      folder: PropTypes.string
     })
   },
-  reload () {
-    const {dispatch, params: {company, workspace, folder}} = this.props
-
-    return Promise.resolve()
-      .then(() => Promise.all([
-        dispatch(loadCampaignsAction, company, workspace, folder),
-        dispatch(loadLooseCampaignsAction, company, workspace, folder)
-      ]))
-  },
-  link (campaign) {
+  componentWillMount () {
     const {dispatch, params: {folder, company, workspace}} = this.props
 
-    dispatch(linkCampaignAction, company, workspace, folder, campaign)
-      .then(this.reload)
-  },
-  unlink (campaign) {
-    const {dispatch, params: {folder, company, workspace}} = this.props
+    this.reload = () => Promise.all([
+      dispatch(loadCampaignsAction, company, workspace, folder),
+      dispatch(loadLooseCampaignsAction, company, workspace, folder)
+    ])
 
-    dispatch(unlinkCampaignAction, company, workspace, folder, campaign)
-      .then(this.reload)
+    function action (fn) {
+      function invoke (campaign) {
+        return dispatch(fn, company, workspace, folder, campaign)
+      }
+
+      return invoke
+    }
+
+    this.link = action(linkCampaignAction)
+    this.unlink = action(unlinkCampaignAction)
   },
   render () {
-    const {folder, params: {company, workspace}} = this.props
+    const {folder, messages: {linkCampaignsCallToAction, unlinkCampaignsCallToAction}, params: {company, workspace}} = this.props
 
     return (
       <div>
         <div className='mdl-grid'>
 
           <div className='mdl-cell mdl-cell--7-col'>
-            <ul className='mdl-list'>
-
+            <CampaignsToggle action={this.unlink} after={this.reload} label={unlinkCampaignsCallToAction}>
               {map(folder.campaigns, (campaign, index) =>
-                <Campaign key={campaign.id} {...campaign} unlinkCampaign={this.unlink}/>)}
-            </ul>
+                <Campaign key={campaign.id} {...campaign}/>)}
+            </CampaignsToggle>
           </div>
           <div className='mdl-cell mdl-cell--5-col'>
-            <ul className='mdl-list'>
-
+            <CampaignsToggle action={this.link} after={this.reload} label={linkCampaignsCallToAction}>
               {map(folder.looseCampaigns, (campaign, index) =>
-                <CampaignLoose key={campaign.external_id} {...campaign} linkCampaign={this.link}/>)}
-            </ul>
+                <CampaignLoose key={campaign.external_id} {...campaign}/>)}
+            </CampaignsToggle>
           </div>
         </div>
 
@@ -78,4 +80,4 @@ export const Campaigns = React.createClass({
   }
 })
 
-export default branch({}, contextualize(Campaigns, 'folder'))
+export default branch({}, contextualize(Campaigns, 'folder', 'messages'))

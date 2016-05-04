@@ -9,7 +9,13 @@ export const Checkbox = React.createClass({
     onChange: PropTypes.func,
     checked: PropTypes.bool,
     name: PropTypes.string.isRequired,
-    label: PropTypes.string
+    label: PropTypes.string,
+    value: PropTypes.string
+  },
+  getDefaultProps () {
+    return {
+      value: 'on'
+    }
   },
   getInitialState () {
     return {
@@ -26,7 +32,7 @@ export const Checkbox = React.createClass({
     }
   },
   render () {
-    const {label, name} = this.props
+    const {label, name, value} = this.props
     const {isChecked} = this.state
     const classes = cx('mdl-checkbox is-upgraded', isChecked && 'is-checked')
 
@@ -37,6 +43,7 @@ export const Checkbox = React.createClass({
           type='checkbox'
           className='mdl-checkbox__input'
           checked={isChecked}
+          value={value}
           onChange={this.onChange}/>
 
         {label ? (
