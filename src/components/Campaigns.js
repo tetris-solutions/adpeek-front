@@ -45,10 +45,12 @@ export const Campaigns = React.createClass({
   componentWillMount () {
     const {dispatch, params: {folder, company, workspace}} = this.props
 
+    const loadLoose = () => dispatch(loadLooseCampaignsAction, company, workspace, folder)
+
     function reload () {
       return Promise.all([
         dispatch(loadCampaignsAction, company, workspace, folder),
-        dispatch(loadLooseCampaignsAction, company, workspace, folder)
+        loadLoose()
       ])
     }
 
@@ -63,6 +65,8 @@ export const Campaigns = React.createClass({
 
     this.link = action(linkCampaignAction)
     this.unlink = action(unlinkCampaignAction)
+
+    loadLoose()
   },
   setFilterValue (filterValue) {
     this.setState({filterValue})

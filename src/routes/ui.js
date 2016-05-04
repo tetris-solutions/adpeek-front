@@ -25,7 +25,6 @@ import {loadWorkspaceAccountsActionRouterAdaptor as accounts} from '../actions/l
 import {loadMediasActionRouterAdaptor as medias} from '../actions/load-medias'
 import {loadWorkspaceActionRouterAdaptor as workspace} from '../actions/load-workspace'
 import {loadFolderActionRouterAdaptor as folder} from '../actions/load-folder'
-import {loadLooseCampaignsActionRouterAdaptor as looseCampaigns} from '../actions/load-loose-campaigns'
 import {loadCampaignsActionRouterAdaptor as campaigns} from '../actions/load-campaigns'
 
 /**
@@ -85,7 +84,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
               <IndexRoute
                 component={Campaigns}
-                onEnter={preload(campaigns, looseCampaigns)}/>
+                onEnter={preload(campaigns)}/>
 
               <Route
                 path='edit'
