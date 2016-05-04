@@ -13,6 +13,7 @@ import CampaignsToggle from './CampaignsToggle'
 import settle from 'promise-settle'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import size from 'lodash/size'
+import SearchBox from './SearchBox'
 
 const {PropTypes} = React
 
@@ -57,20 +58,25 @@ export const Campaigns = React.createClass({
     this.unlink = action(unlinkCampaignAction)
   },
   render () {
-    const {folder, messages: {
-      linkCampaignsCallToAction,
-      unlinkCampaignsCallToAction}, params: {company, workspace}} = this.props
+    const {folder, messages, params: {company, workspace}} = this.props
 
     return (
       <div>
+        <header className='mdl-layout__header'>
+          <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
+            <small>nope nope</small>
+            <div className='mdl-layout-spacer'/>
+            <SearchBox />
+          </div>
+        </header>
+
         <div className='mdl-grid'>
 
           <div className='mdl-cell mdl-cell--7-col'>
-
             <CampaignsToggle
               onSelected={this.unlink}
               title={<Message n={size(folder.campaigns)}>nCampaigns</Message>}
-              label={unlinkCampaignsCallToAction}>
+              label={messages.unlinkCampaignsCallToAction}>
 
               {map(folder.campaigns, (campaign, index) =>
                 <Campaign key={campaign.id} {...campaign}/>)}
@@ -83,7 +89,7 @@ export const Campaigns = React.createClass({
             <CampaignsToggle
               onSelected={this.link}
               title={<Message n={size(folder.looseCampaigns)}>nLooseCampaigns</Message>}
-              label={linkCampaignsCallToAction}>
+              label={messages.linkCampaignsCallToAction}>
 
               {map(folder.looseCampaigns, (campaign, index) =>
                 <CampaignLoose key={campaign.external_id} {...campaign}/>)}
