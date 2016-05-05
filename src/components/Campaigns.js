@@ -94,7 +94,7 @@ export const Campaigns = React.createClass({
           workspace={workspace}
           folder={folder.id}
           onSwitch={this.switchActiveFilter}
-          onEnter={this.filterValue}/>
+          onEnter={this.setFilterValue}/>
 
         <div className='mdl-grid'>
 
