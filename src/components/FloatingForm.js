@@ -29,29 +29,34 @@ const style = csjs`
 
 const {PropTypes} = React
 
-export function Form ({onSubmit, children, size}, {insertCss}) {
-  insertCss(style)
-  return (
-    <form className={`mdl-card mdl-shadow--6dp ${style[size]}`} onSubmit={onSubmit}>
-      {children}
-    </form>
-  )
-}
+export const Form = React.createClass({
+  displayName: 'Form',
+  getDefaultProps () {
+    return {
+      size: 'small'
+    }
+  },
+  propTypes: {
+    size: PropTypes.oneOf(['small', 'large']),
+    onSubmit: PropTypes.func,
+    children: PropTypes.node
+  },
+  contextTypes: {
+    insertCss: PropTypes.func
+  },
+  render () {
+    const {onSubmit, children, size} = this.props
+    const {insertCss} = this.context
 
-Form.defaultProps = {
-  size: 'small'
-}
-Form.propTypes = {
-  size: PropTypes.oneOf(['small', 'large']),
-  onSubmit: PropTypes.func,
-  children: PropTypes.node
-}
+    insertCss(style)
 
-Form.contextTypes = {
-  insertCss: PropTypes.func
-}
-
-Form.displayName = 'Form'
+    return (
+      <form className={`mdl-card mdl-shadow--6dp ${style[size]}`} onSubmit={onSubmit}>
+        {children}
+      </form>
+    )
+  }
+})
 
 export function Content ({children}) {
   return (
@@ -81,17 +86,19 @@ Header.propTypes = {
   children: PropTypes.node
 }
 
-export function Footer ({children}) {
+export function Footer ({children, multipleButtons}) {
   return (
     <footer className='mdl-card__actions mdl-card--border'>
-      <button type='submit' className='mdl-button mdl-button--colored'>
-        {children}
-      </button>
+      {multipleButtons ? children : (
+        <button type='submit' className='mdl-button mdl-button--colored'>
+          {children}
+        </button>)}
     </footer>
   )
 }
 
 Footer.displayName = 'Footer'
 Footer.propTypes = {
+  multipleButtons: PropTypes.bool,
   children: PropTypes.node
 }

@@ -1,12 +1,13 @@
 import React from 'react'
 import cx from 'classnames'
+import window from 'global/window'
 
 const {PropTypes} = React
+const isBrowser = typeof document !== 'undefined'
 
 export const Checkbox = React.createClass({
   displayName: 'Checkbox',
   propTypes: {
-    onChange: PropTypes.func,
     checked: PropTypes.bool,
     name: PropTypes.string.isRequired,
     label: PropTypes.string,
@@ -17,49 +18,27 @@ export const Checkbox = React.createClass({
       value: 'on'
     }
   },
-  getInitialState () {
-    return {
-      isChecked: Boolean(this.props.checked)
-    }
-  },
-  onChange (e) {
-    this.setState({
-      isChecked: Boolean(e.target.checked)
-    })
-
-    if (this.props.onChange) {
-      this.props.onChange(e)
-    }
+  componentDidMount () {
+    window.componentHandler.upgradeElement(this.refs.wrapper)
   },
   render () {
-    const {label, name, value} = this.props
-    const {isChecked} = this.state
-    const classes = cx('mdl-checkbox is-upgraded', isChecked && 'is-checked')
+    const {label, name, checked, value} = this.props
+    const classes = cx('mdl-checkbox',
+      isBrowser && 'mdl-js-checkbox mdl-js-ripple-effect')
 
     return (
-      <label className={classes}>
+      <label className={classes} ref='wrapper'>
         <input
           name={name}
           type='checkbox'
           className='mdl-checkbox__input'
-          checked={isChecked}
-          value={value}
-          onChange={this.onChange}/>
+          defaultChecked={checked}
+          value={value}/>
 
         {label ? (
           <span className='mdl-checkbox__label'>
             {label}
           </span>) : null}
-
-        <span className='mdl-checkbox__focus-helper'/>
-
-        <span className='mdl-checkbox__box-outline'>
-          <span className='mdl-checkbox__tick-outline'/>
-        </span>
-
-        <span className='mdl-checkbox__ripple-container mdl-ripple--center'>
-          <span className='mdl-ripple is-animating'/>
-        </span>
       </label>
     )
   }
