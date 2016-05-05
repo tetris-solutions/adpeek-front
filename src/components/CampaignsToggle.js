@@ -63,10 +63,8 @@ export const CampaignsToggle = React.createClass({
           {title}
         </Header>
 
-        <Content>
-          <ul className='mdl-list'>
-            {children}
-          </ul>
+        <Content tag='ul' className='mdl-list'>
+          {children}
         </Content>
 
         <Footer multipleButtons>

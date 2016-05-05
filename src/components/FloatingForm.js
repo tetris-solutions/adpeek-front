@@ -58,16 +58,20 @@ export const Form = React.createClass({
   }
 })
 
-export function Content ({children}) {
-  return (
-    <section className={`mdl-card__supporting-text ${style.content}`}>
-      {children}
-    </section>
-  )
+export function Content ({children, tag, className}) {
+  return React.createElement(tag, {
+    className: `mdl-card__supporting-text ${style.content} ${className}`
+  }, children)
 }
 
+Content.defaultProps = {
+  tag: 'section',
+  className: ''
+}
 Content.displayName = 'Content'
 Content.propTypes = {
+  tag: PropTypes.string,
+  className: PropTypes.string,
   children: PropTypes.node
 }
 
