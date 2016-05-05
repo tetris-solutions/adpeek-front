@@ -1,25 +1,46 @@
 import React from 'react'
 import ContextMenu from './ContextMenu'
 import {contextualize} from './higher-order/contextualize'
+import {Link} from 'react-router'
+import {branch} from 'baobab-react/dist-modules/higher-order'
+import {deleteFolderAction} from '../actions/delete-folder'
 
 const {PropTypes} = React
 
 export function FolderAside ({
+  dispatch,
+  router,
   folder,
-  params: {company, workspace},
-  messages: {editCallToAction}
+  params: {company, workspace}
 }) {
-  const options = [{
-    label: editCallToAction,
-    to: `/company/${company}/workspace/${workspace}/folder/${folder.id}/edit`
-  }]
+  function onClick () {
+    dispatch(deleteFolderAction, folder.id)
+      .then(() => {
+        router.push(`/company/${company}/workspace/${workspace}`)
+      })
+  }
 
-  return <ContextMenu title={folder.name} icon='folder' options={options}/>
+  return (
+    <ContextMenu title={folder.name} icon='folder'>
+      <Link
+        className='mdl-button mdl-js-button mdl-button--icon'
+        to={`/company/${company}/workspace/${workspace}/folder/${folder.id}/edit`}>
+
+        <i className='material-icons'>mode_edit</i>
+      </Link>
+      <button
+        className='mdl-button mdl-js-button mdl-button--icon'
+        onClick={onClick}>
+        <i className='material-icons'>delete</i>
+      </button>
+    </ContextMenu>
+  )
 }
 
 FolderAside.displayName = 'Folder-Aside'
 FolderAside.propTypes = {
-  messages: PropTypes.object,
+  dispatch: PropTypes.func,
+  router: PropTypes.object,
   folder: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string
@@ -30,4 +51,4 @@ FolderAside.propTypes = {
   })
 }
 
-export default contextualize(FolderAside, 'folder', 'messages')
+export default contextualize(branch({}, FolderAside), 'folder', 'messages', 'router')

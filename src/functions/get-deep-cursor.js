@@ -12,7 +12,7 @@ import size from 'lodash/size'
 export function getDeepCursor (tree, path) {
   const cursor = []
 
-  function dive (pointer) {
+  function dive (pointer, index) {
     let id, name
     let idField = 'id'
 
@@ -36,12 +36,21 @@ export function getDeepCursor (tree, path) {
       tree.set(cursor, [])
     }
 
-    const index = findIndex(data, {[idField]: id})
+    const innerIndex = findIndex(data, {[idField]: id})
 
-    cursor.push(index >= 0 ? index : size(data))
+    if (innerIndex === -1 && index < path.length - 1) {
+      // data returned would be placed in a leaf (of the state tree) whose parent node does not exist
+      throw new Error('The system has failed')
+    }
+
+    cursor.push(innerIndex >= 0 ? innerIndex : size(data))
   }
 
-  forEach(path, dive)
-
-  return cursor
+  try {
+    forEach(path, dive)
+    return cursor
+  } catch (e) {
+    // @todo find a better way to deal with data returned from the api but that don't fit the state tree
+    return ['lostAndFound', Math.random().toString(36).substr(2)]
+  }
 }
