@@ -28,7 +28,7 @@ export function updateWorkspaceAction (tree, company, workspace) {
     .then(saveResponseData(tree, [
       'user',
       ['companies', company],
-      ['workspaces', workspace]
+      ['workspaces', workspace.id]
     ]))
     .catch(pushResponseErrorToState(tree))
 }

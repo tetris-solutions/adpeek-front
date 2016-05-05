@@ -31,7 +31,7 @@ export function updateFolderAction (tree, company, workspace, folder) {
       'user',
       ['companies', company],
       ['workspaces', workspace],
-      ['folders', folder]
+      ['folders', folder.id]
     ]))
     .catch(pushResponseErrorToState(tree))
 }
