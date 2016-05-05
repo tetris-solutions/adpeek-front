@@ -22,7 +22,7 @@ export const HTML = ({documentTitle = 'Tetris Solutions', payload, children, css
         id='style-injection'
         dangerouslySetInnerHTML={{__html: css}}/>
 
-      {/* <script src='https://code.getmdl.io/1.1.3/material.min.js' defer/>*/}
+      <script src='https://code.getmdl.io/1.1.3/material.min.js' defer/>
       <script src='/js/client.js' defer/>
 
     </head>

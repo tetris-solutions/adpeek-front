@@ -4,8 +4,8 @@ import debounce from 'lodash/debounce'
 
 const {PropTypes} = React
 
-export const SearchBox = React.createClass({
-  displayName: 'Search-Box',
+export const HeaderSearchBox = React.createClass({
+  displayName: 'Header-Search-Box',
   propTypes: {
     className: PropTypes.string,
     value: PropTypes.any,
@@ -47,7 +47,7 @@ export const SearchBox = React.createClass({
 
     return (
       <div className={wrapperClasses}>
-        <label className='mdl-button mdl-js-button mdl-button--icon' onClick={this.manuallySetFocus}>
+        <label className='mdl-button mdl-button--icon' onClick={this.manuallySetFocus}>
           <i className='material-icons'>search</i>
         </label>
         <div className='mdl-textfield__expandable-holder'>
@@ -65,4 +65,4 @@ export const SearchBox = React.createClass({
   }
 })
 
-export default SearchBox
+export default HeaderSearchBox

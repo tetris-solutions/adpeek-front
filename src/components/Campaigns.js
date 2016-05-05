@@ -1,6 +1,5 @@
 import React from 'react'
 import map from 'lodash/map'
-import {Link} from 'react-router'
 import {unlinkCampaignAction} from '../actions/unlink-campaign'
 import {linkCampaignAction} from '../actions/link-campaign'
 import {loadCampaignsAction} from '../actions/load-campaigns'
@@ -12,14 +11,16 @@ import {contextualize} from './higher-order/contextualize'
 import CampaignsToggle from './CampaignsToggle'
 import settle from 'promise-settle'
 import Message from '@tetris/front-server/lib/components/intl/Message'
-import SearchBox from './SearchBox'
 import deburr from 'lodash/deburr'
 import lowerCase from 'lodash/lowerCase'
 import includes from 'lodash/includes'
 import filter from 'lodash/filter'
+import CampaignsHeader from './CampaignsHeader'
+import identity from 'lodash/identity'
 
 const cleanStr = str => deburr(lowerCase(str))
 const {PropTypes} = React
+const filterActive = ls => filter(ls, ({status: {is_active}}) => is_active)
 
 export const Campaigns = React.createClass({
   displayName: 'Campaigns',
@@ -41,7 +42,9 @@ export const Campaigns = React.createClass({
     })
   },
   getInitialState () {
-    return {}
+    return {
+      filterActiveCampaigns: true
+    }
   },
   componentWillMount () {
     const {dispatch, params: {folder, company, workspace}} = this.props
@@ -72,26 +75,26 @@ export const Campaigns = React.createClass({
   setFilterValue (filterValue) {
     this.setState({filterValue})
   },
+  switchActiveFilter (filterActiveCampaigns) {
+    this.setState({filterActiveCampaigns})
+  },
   render () {
     const value = cleanStr(this.state.filterValue)
     const {folder, messages, params: {company, workspace}} = this.props
+    const filterValid = this.state.filterActiveCampaigns ? filterActive : identity
     const match = ({external_id, name}) => !value || includes(external_id, value) || includes(cleanStr(name), value)
-    const linked = filter(folder.campaigns, match)
-    const loose = filter(folder.looseCampaigns, match)
+    const linked = filter(filterValid(folder.campaigns), match)
+    const loose = filter(filterValid(folder.looseCampaigns), match)
 
     return (
       <div>
-        <header className='mdl-layout__header'>
-          <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
-            <Link
-              className='mdl-button mdl-color-text--grey-100'
-              to={`/company/${company}/workspace/${workspace}/folder/${folder.id}/create/campaign`}>
-              CREATE NEW
-            </Link>
-            <div className='mdl-layout-spacer'/>
-            <SearchBox onEnter={this.setFilterValue}/>
-          </div>
-        </header>
+
+        <CampaignsHeader
+          company={company}
+          workspace={workspace}
+          folder={folder.id}
+          onSwitch={this.switchActiveFilter}
+          onEnter={this.filterValue}/>
 
         <div className='mdl-grid'>
 

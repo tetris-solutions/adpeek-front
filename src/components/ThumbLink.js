@@ -45,7 +45,7 @@ export function ThumbButton ({to, title, label}, {insertCss}) {
           </h3>
         </div>
         <div className='mdl-card__actions mdl-card--border'>
-          <Link className='mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect' to={to}>
+          <Link className='mdl-button mdl-button--colored' to={to}>
             {label}
           </Link>
         </div>
