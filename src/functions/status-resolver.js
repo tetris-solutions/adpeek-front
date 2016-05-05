@@ -8,7 +8,7 @@ export function statusResolver (statuses) {
     const {platform, sub_status, status} = campaign
 
     const defaultStatus = {
-      name: 'UNKNOWN',
+      name: sub_status || status,
       is_active: false,
       platform,
       description: '???'
@@ -22,7 +22,7 @@ export function statusResolver (statuses) {
       status: assign({}, foundDescriptor, {
         status,
         sub_status,
-        icon: getStatusIcon(status, sub_status)
+        icon: getStatusIcon(foundDescriptor)
       })
     })
   }

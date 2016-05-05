@@ -1,12 +1,14 @@
 import upperCase from 'lodash/upperCase'
 
-export function getStatusIcon (status, sub_status) {
-  switch (upperCase(status)) {
+export function getStatusIcon ({is_active, name}) {
+  if (is_active) return 'play_circle_filled'
+  switch (upperCase(name)) {
     case 'ACTIVE':
     case 'ENABLED':
       return 'play_circle_filled'
     case 'PAUSED':
       return 'pause_circle_filled'
+    case 'ENDED':
     case 'ARCHIVED':
       return 'remove_circle'
     case 'DELETED':
