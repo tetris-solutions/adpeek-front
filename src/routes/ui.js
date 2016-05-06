@@ -15,6 +15,8 @@ import WorkspaceEdit from '../components/WorkspaceEdit'
 import FolderEdit from '../components/FolderEdit'
 import FolderAside from '../components/FolderAside'
 import Campaigns from '../components/Campaigns'
+import Orders from '../components/Orders'
+import Order from '../components/Order'
 
 import App from '../components/App'
 import {loadUserCompaniesActionRouterAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
@@ -27,19 +29,6 @@ import {loadWorkspaceActionRouterAdaptor as workspace} from '../actions/load-wor
 import {loadFolderActionRouterAdaptor as folder} from '../actions/load-folder'
 import {loadCampaignsActionRouterAdaptor as campaigns} from '../actions/load-campaigns'
 import {loadStatusesActionRouterAdaptor as statuses} from '../actions/load-statuses'
-
-function Nothing () {
-  return (
-    <div>
-      <h2>Nothing at all</h2>
-      <hr/>
-      <ul>
-        <li>um</li>
-        <li>dois</li>
-      </ul>
-    </div>
-  )
-}
 
 /**
  * returns the route config
@@ -100,9 +89,10 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 component={Campaigns}
                 onEnter={preload(statuses, campaigns)}/>
 
-              <Route
-                path='orders'
-                component={Nothing}/>
+              <Route path='orders' component={Orders}/>
+
+              <Route path='order/:order' component={Order}/>
+              <Route path='create/order' component={Order}/>
 
               <Route
                 path='edit'

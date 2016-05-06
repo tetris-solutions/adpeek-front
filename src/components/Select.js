@@ -2,6 +2,12 @@ import React from 'react'
 import cx from 'classnames'
 import pick from 'lodash/pick'
 import Message from '@tetris/front-server/lib/components/intl/Message'
+import csjs from 'csjs'
+
+const style = csjs`
+.select option {
+  color: #333
+}`
 
 const {PropTypes} = React
 const selectFields = [
@@ -22,6 +28,9 @@ export const Select = React.createClass({
     label: PropTypes.string,
     name: PropTypes.string.isRequired,
     onChange: PropTypes.func
+  },
+  contextTypes: {
+    insertCss: PropTypes.func
   },
   getInitialState () {
     return {
@@ -45,9 +54,11 @@ export const Select = React.createClass({
     this.setState({isFocused: false})
   },
   render () {
+    this.context.insertCss(style)
     const {isDirty, isFocused} = this.state
     const {error, label} = this.props
     const wrapperClasses = cx('mdl-selectfield',
+      String(style.select),
       error && 'is-invalid',
       isDirty && 'is-dirty',
       isFocused && 'is-focused',
