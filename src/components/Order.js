@@ -2,6 +2,7 @@ import React from 'react'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import OrderSelector from './OrdersSelector'
 import HeaderSearchBox from './HeaderSearchBox'
+import OrderEdit from './OrderEdit'
 
 // const {PropTypes} = React
 
@@ -28,6 +29,7 @@ export const Order = React.createClass({
             <HeaderSearchBox onEnter={this.onEnter}/>
           </div>
         </header>
+        <OrderEdit />
       </form>
     )
   }
