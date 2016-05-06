@@ -24,7 +24,9 @@ export const CreateFolder = React.createClass({
   },
   contextTypes: {
     router: PropTypes.object,
-    workspace: PropTypes.object
+    workspace: PropTypes.shape({
+      accounts: PropTypes.object
+    })
   },
   /**
    * handles submit event

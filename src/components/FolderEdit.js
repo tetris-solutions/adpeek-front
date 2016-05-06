@@ -13,8 +13,8 @@ import {Form, Content, Header, Footer} from './FloatingForm'
 
 const {PropTypes} = React
 
-export const CreateFolder = React.createClass({
-  displayName: 'Create-Folder',
+export const EditFolder = React.createClass({
+  displayName: 'Edit-Folder',
   mixins: [FormMixin],
   propTypes: {
     dispatch: PropTypes.func,
@@ -34,7 +34,7 @@ export const CreateFolder = React.createClass({
       media: PropTypes.string
     }),
     workspace: PropTypes.shape({
-      accounts: PropTypes.array
+      accounts: PropTypes.object
     })
   },
   componentWillMount () {
@@ -153,4 +153,4 @@ export const CreateFolder = React.createClass({
 
 export default branch({
   medias: ['medias']
-}, CreateFolder)
+}, EditFolder)

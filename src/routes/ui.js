@@ -28,6 +28,19 @@ import {loadFolderActionRouterAdaptor as folder} from '../actions/load-folder'
 import {loadCampaignsActionRouterAdaptor as campaigns} from '../actions/load-campaigns'
 import {loadStatusesActionRouterAdaptor as statuses} from '../actions/load-statuses'
 
+function Nothing () {
+  return (
+    <div>
+      <h2>Nothing at all</h2>
+      <hr/>
+      <ul>
+        <li>um</li>
+        <li>dois</li>
+      </ul>
+    </div>
+  )
+}
+
 /**
  * returns the route config
  * @param {Baobab} tree state tree
@@ -86,6 +99,10 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
               <IndexRoute
                 component={Campaigns}
                 onEnter={preload(statuses, campaigns)}/>
+
+              <Route
+                path='orders'
+                component={Nothing}/>
 
               <Route
                 path='edit'

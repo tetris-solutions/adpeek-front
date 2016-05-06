@@ -24,10 +24,22 @@ export function FolderAside ({
     <ContextMenu title={folder.name} icon='folder'>
       <Link
         className='mdl-button mdl-js-button mdl-button--icon'
-        to={`/company/${company}/workspace/${workspace}/folder/${folder.id}/edit`}>
+        to={`/company/${company}/workspace/${workspace}/folder/${folder.id}`}>
+        <i className='material-icons'>view_quilt</i>
+      </Link>
 
+      <Link
+        className='mdl-button mdl-js-button mdl-button--icon'
+        to={`/company/${company}/workspace/${workspace}/folder/${folder.id}/orders`}>
+        <i className='material-icons'>attach_money</i>
+      </Link>
+
+      <Link
+        className='mdl-button mdl-js-button mdl-button--icon'
+        to={`/company/${company}/workspace/${workspace}/folder/${folder.id}/edit`}>
         <i className='material-icons'>mode_edit</i>
       </Link>
+
       <button
         className='mdl-button mdl-js-button mdl-button--icon'
         onClick={onClick}>
