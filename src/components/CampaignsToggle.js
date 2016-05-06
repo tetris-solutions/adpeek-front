@@ -44,11 +44,11 @@ export const CampaignsToggle = React.createClass({
 
     const form = ReactDOM.findDOMNode(this.refs.form)
     const {selected} = this.state
-    const op = selected ? 'uncheck' : 'check'
+    const op = selected ? 'programaticallyUncheck' : 'programaticallyCheck'
 
     forEach(form.elements, el => {
-      if (el.type === 'checkbox') {
-        el.parentNode.MaterialCheckbox[op]()
+      if (typeof el[op] === 'function') {
+        el[op]()
       }
     })
 
