@@ -53,9 +53,16 @@ function parseChildren (child, parent) {
   const node = omit(props, 'children')
 
   if (isEmpty(node) && !isObject(props.children) && !isArray(props.children)) {
-    parent[type] = props.children === undefined
-      ? true
-      : props.children
+    if (type === 'title') {
+      parent.title = {
+        text: props.children
+      }
+    } else {
+      parent[type] = props.children === undefined
+        ? true
+        : props.children
+    }
+
     return
   }
 
@@ -101,8 +108,13 @@ export const Chart = createClass({
       tag: 'div'
     }
   },
+  getInitialState () {
+    return {
+      config: mapPropsToConfig(this.props)
+    }
+  },
   componentDidMount () {
-    Highcharts.chart(this.refs.container, mapPropsToConfig(this.props))
+    Highcharts.chart(this.refs.container, this.state.config)
   },
   render () {
     const {tag, className, style} = this.props

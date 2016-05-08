@@ -34,9 +34,7 @@ export const OrderPie = React.createClass({
           plotShadow={false}
           type='pie'/>
 
-        <title>
-          {name}
-        </title>
+        <title>{name}</title>
 
         <tooltip pointFormat='{series.name}: <b>R$ {point.y:.2f}</b>'/>
 
