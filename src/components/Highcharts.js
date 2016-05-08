@@ -7,6 +7,16 @@ import isArray from 'lodash/isArray'
 import isString from 'lodash/isString'
 import includes from 'lodash/includes'
 import camelCase from 'lodash/camelCase'
+import forEach from 'lodash/forEach'
+import lowerCase from 'lodash/lowerCase'
+
+function isUpperCase (letter) {
+  return letter !== letter.toLowerCase()
+}
+
+function looksLikeAnEventHandler (name) {
+  return name.length > 2 && name.substr(0, 2) === 'on' && isUpperCase(name[2])
+}
 
 const {createElement, createClass, Children, PropTypes} = React
 
@@ -65,6 +75,13 @@ function parseChildren (child, parent) {
 
     return
   }
+
+  forEach(node, (value, name) => {
+    if (looksLikeAnEventHandler(name)) {
+      node.events = node.events || {}
+      node.events[lowerCase(name.slice(2))] = value
+    }
+  })
 
   if (parent.isRoot && includes(seriesTypes, type)) {
     node.type = type

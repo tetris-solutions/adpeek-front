@@ -5,6 +5,7 @@ import map from 'lodash/map'
 import csjs from 'csjs'
 import isNumber from 'lodash/isNumber'
 
+const {PropTypes} = React
 const style = csjs`
 .orderPieChart {
   height: 30vh
@@ -13,7 +14,11 @@ const style = csjs`
 export const OrderPie = React.createClass({
   displayName: 'Order-Pie',
   propTypes: {
-    order: orderType
+    order: orderType,
+    selectBudget: PropTypes.func
+  },
+  onBudgetClick ({point}) {
+    this.props.selectBudget(point.index)
   },
   render () {
     const {order: {name, amount, budgets}} = this.props
@@ -39,7 +44,7 @@ export const OrderPie = React.createClass({
         <tooltip pointFormat='{series.name}: <b>R$ {point.y:.2f}</b>'/>
 
         <plot-options>
-          <pie showInLegend allowPointSelect>
+          <pie showInLegend allowPointSelect onClick={this.onBudgetClick}>
             <cursor>pointer</cursor>
             <data-labels enabled={false}/>
           </pie>
@@ -49,7 +54,7 @@ export const OrderPie = React.createClass({
           <name>Budget</name>
 
           {map(budgets, (budget, index) => (
-            <point key={index} y={calculateAmount(budget)}>
+            <point key={index} y={calculateAmount(budget)} index={index}>
               {budget.name}
             </point>
           ))}

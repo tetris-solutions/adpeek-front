@@ -35,15 +35,19 @@ export const OrderEdit = React.createClass({
   },
   getInitialState () {
     return {
-      order: cloneDeep(this.props.order)
+      order: cloneDeep(this.props.order),
+      selectedBudgetIndex: null
     }
+  },
+  selectBudget (selectedBudgetIndex) {
+    this.setState({selectedBudgetIndex})
   },
   render () {
     return (
       <div className='mdl-grid'>
         <div className='mdl-cell mdl-cell--5-col'>
           <br/>
-          <OrderPie order={this.state.order}/>
+          <OrderPie order={this.state.order} selectBudget={this.selectBudget}/>
         </div>
         <div className='mdl-cell mdl-cell--7-col'>
           EDIT
