@@ -3,6 +3,7 @@ import moment from 'moment'
 import cloneDeep from 'lodash/cloneDeep'
 import OrderPie from './OrderPie'
 import orderType from '../propTypes/order'
+import OrderHeader from './OrderHeader'
 
 export const OrderEdit = React.createClass({
   displayName: 'Order-Edit',
@@ -43,14 +44,16 @@ export const OrderEdit = React.createClass({
     this.setState({selectedBudgetIndex})
   },
   render () {
+    const {order} = this.state
+
     return (
       <div className='mdl-grid'>
         <div className='mdl-cell mdl-cell--5-col'>
           <br/>
-          <OrderPie order={this.state.order} selectBudget={this.selectBudget}/>
+          <OrderPie order={order} selectBudget={this.selectBudget}/>
         </div>
         <div className='mdl-cell mdl-cell--7-col'>
-          EDIT
+          <OrderHeader order={order} />
         </div>
       </div>
     )

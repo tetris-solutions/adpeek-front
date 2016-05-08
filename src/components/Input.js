@@ -15,6 +15,7 @@ const inputFields = [
 export const Input = React.createClass({
   displayName: 'Input',
   propTypes: {
+    type: PropTypes.string,
     className: PropTypes.string,
     value: PropTypes.any,
     defaultValue: PropTypes.any,
@@ -22,6 +23,11 @@ export const Input = React.createClass({
     label: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     onChange: PropTypes.func
+  },
+  getDefaultProps () {
+    return {
+      type: 'text'
+    }
   },
   getInitialState () {
     return {
