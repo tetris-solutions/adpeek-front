@@ -7,6 +7,7 @@ import Input from './Input'
 import VerticalAlign from './VerticalAlign'
 import {Card, Content} from './Card'
 const {PropTypes} = React
+import map from 'lodash/map'
 
 export const BudgetEdit = React.createClass({
   displayName: 'Budget-Edit',
@@ -27,7 +28,7 @@ export const BudgetEdit = React.createClass({
     const {
       maxAmount,
       messages: {percentageLabel, amountLabel},
-      budget: {value, mode}
+      budget: {value, mode, campaigns}
     } = this.props
 
     let max, min, switchLabel, switchChecked
@@ -68,6 +69,9 @@ export const BudgetEdit = React.createClass({
                 name='value'/>
             </div>
           </div>
+          <ul>
+            {map(campaigns, ({name}) => <li>{name}</li>)}
+          </ul>
         </Content>
       </Card>
     )

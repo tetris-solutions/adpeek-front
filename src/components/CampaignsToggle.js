@@ -2,13 +2,20 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import forEach from 'lodash/forEach'
 import {contextualize} from './higher-order/contextualize'
-
+import csjs from 'csjs'
 import {Form, Content, Header, Footer} from './Card'
+import {styled} from './mixins/styled'
+
+const style = csjs`
+.content {
+  height: 50vh
+}`
 
 const {PropTypes} = React
 
 export const CampaignsToggle = React.createClass({
   displayName: 'CampaignListToggle',
+  mixins: [styled(style)],
   propTypes: {
     title: PropTypes.node,
     label: PropTypes.string,
@@ -63,7 +70,7 @@ export const CampaignsToggle = React.createClass({
           {title}
         </Header>
 
-        <Content tag='ul' className='mdl-list'>
+        <Content className={`mdl-list ${style.content}`} tag='ul'>
           {children}
         </Content>
 

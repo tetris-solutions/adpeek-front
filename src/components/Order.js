@@ -16,7 +16,7 @@ export const Order = React.createClass({
   },
   render () {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <div>
         <header className='mdl-layout__header'>
           <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
             <span>
@@ -30,7 +30,7 @@ export const Order = React.createClass({
           </div>
         </header>
         <OrderEdit />
-      </form>
+      </div>
     )
   }
 })

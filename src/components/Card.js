@@ -2,6 +2,7 @@ import React from 'react'
 import csjs from 'csjs'
 import omit from 'lodash/omit'
 import assign from 'lodash/assign'
+import {styled} from './mixins/styled'
 
 const style = csjs`
 .card {
@@ -22,7 +23,6 @@ const style = csjs`
 .large > .content {
   width: 90%;
   margin: .5em auto;
-  height: 50vh;
   overflow-y: auto;
 }
 .content > div {
@@ -33,6 +33,7 @@ const {PropTypes} = React
 
 export const Card = React.createClass({
   displayName: 'Card',
+  mixins: [styled(style)],
   getDefaultProps () {
     return {
       size: 'small',
@@ -44,14 +45,8 @@ export const Card = React.createClass({
     tag: PropTypes.string,
     children: PropTypes.node
   },
-  contextTypes: {
-    insertCss: PropTypes.func
-  },
   render () {
     const {children, size, tag} = this.props
-    const {insertCss} = this.context
-
-    insertCss(style)
 
     const props = omit(this.props, 'tag')
 

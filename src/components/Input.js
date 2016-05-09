@@ -2,6 +2,8 @@ import React from 'react'
 import cx from 'classnames'
 import pick from 'lodash/pick'
 import Message from '@tetris/front-server/lib/components/intl/Message'
+import isNumber from 'lodash/isNumber'
+import isString from 'lodash/isString'
 
 const {PropTypes} = React
 const inputFields = [
@@ -11,6 +13,12 @@ const inputFields = [
   'defaultValue',
   'value'
 ]
+
+function notEmptyString (value) {
+  return isString(value) || isNumber(value)
+    ? String(value).length > 0
+    : false
+}
 
 export const Input = React.createClass({
   displayName: 'Input',
@@ -31,13 +39,13 @@ export const Input = React.createClass({
   },
   getInitialState () {
     return {
-      isDirty: Boolean(this.props.value || this.props.defaultValue),
+      isDirty: notEmptyString(this.props.value || this.props.defaultValue),
       isFocused: false
     }
   },
   onChange (e) {
     this.setState({
-      isDirty: Boolean(e.target.value)
+      isDirty: notEmptyString(e.target.value)
     })
 
     if (this.props.onChange) {
@@ -49,6 +57,11 @@ export const Input = React.createClass({
   },
   onBlur (e) {
     this.setState({isFocused: false})
+  },
+  componentWillReceiveProps ({value}) {
+    this.setState({
+      isDirty: notEmptyString(value)
+    })
   },
   render () {
     const {isDirty, isFocused} = this.state

@@ -8,6 +8,15 @@ import BudgetEdit from './BudgetEdit'
 import assign from 'lodash/assign'
 import map from 'lodash/map'
 import isNumber from 'lodash/isNumber'
+import OrderCampaigns from './OrderCampaigns'
+import {contextualize} from './higher-order/contextualize'
+import find from 'lodash/find'
+import flatten from 'lodash/flatten'
+import includes from 'lodash/includes'
+import filter from 'lodash/filter'
+import negate from 'lodash/negate'
+
+const {PropTypes} = React
 
 function normalizeBudget (budget) {
   const mode = isNumber(budget.percentage) ? 'percentage' : 'amount'
@@ -25,7 +34,10 @@ const other = {percentage: 'amount', amount: 'percentage'}
 export const OrderEdit = React.createClass({
   displayName: 'Order-Edit',
   propTypes: {
-    order: orderType
+    order: orderType,
+    folder: PropTypes.shape({
+      campaigns: PropTypes.array
+    })
   },
   getDefaultProps () {
     return {
@@ -89,31 +101,48 @@ export const OrderEdit = React.createClass({
   changeBudgetValue (value) {
     this.changeCurrentBudget({value})
   },
+  addCampaigns (campaigns) {
+    const {folder} = this.props
+    const budget = this.getCurrentBudget()
+
+    budget.campaigns = budget.campaigns.concat(map(campaigns,
+      id => find(folder.campaigns, {id})))
+
+    this.setCurrentBudget(budget)
+  },
   render () {
+    const {folder: {campaigns}} = this.props
     const {selectedBudgetIndex} = this.state
     const {order} = this.state
     const budget = order.budgets[selectedBudgetIndex]
+    const takenCampaigns = flatten(map(order.budgets, ({campaigns}) => map(campaigns, ({id}) => id)))
 
     return (
-      <div className='mdl-grid'>
-        <div className='mdl-cell mdl-cell--5-col'>
-          <br/>
-          <OrderPie order={order} selectBudget={this.selectBudget}/>
-        </div>
-        <div className='mdl-cell mdl-cell--7-col'>
-          <OrderHeader order={order}/>
+      <div>
+        <div className='mdl-grid'>
+          <div className='mdl-cell mdl-cell--5-col'>
+            <br/>
+            <OrderPie order={order} selectBudget={this.selectBudget}/>
+          </div>
+          <div className='mdl-cell mdl-cell--7-col'>
+            <OrderHeader order={order}/>
 
-          {budget ? (
-            <BudgetEdit
-              maxAmount={order.amount}
-              budget={budget}
-              changeMode={this.changeBudgetMode}
-              changeValue={this.changeBudgetValue}/>
-          ) : null}
+            {budget ? (
+              <BudgetEdit
+                maxAmount={order.amount}
+                budget={budget}
+                changeMode={this.changeBudgetMode}
+                changeValue={this.changeBudgetValue}/>
+            ) : null}
+          </div>
         </div>
+
+        <OrderCampaigns
+          campaigns={filter(campaigns, negate(({id}) => includes(takenCampaigns, id)))}
+          addCampaigns={this.addCampaigns}/>
       </div>
     )
   }
 })
 
-export default OrderEdit
+export default contextualize(OrderEdit, 'folder')

@@ -91,8 +91,10 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
               <Route path='orders' component={Orders}/>
 
-              <Route path='order/:order' component={Order}/>
-              <Route path='create/order' component={Order}/>
+              <Route onEnter={preload(campaigns)}>
+                <Route path='order/:order' component={Order}/>
+                <Route path='create/order' component={Order}/>
+              </Route>
 
               <Route
                 path='edit'
