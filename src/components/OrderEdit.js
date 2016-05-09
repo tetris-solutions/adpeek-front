@@ -14,9 +14,17 @@ import find from 'lodash/find'
 import flatten from 'lodash/flatten'
 import includes from 'lodash/includes'
 import filter from 'lodash/filter'
-import negate from 'lodash/negate'
 
 const {PropTypes} = React
+
+const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
+
+function looseCampaigns (campaigns, budgets) {
+  const takenCampaigns = flatten(map(budgets, getCampaignIds))
+  const notTaken = ({id}) => !includes(takenCampaigns, id)
+
+  return filter(campaigns, notTaken)
+}
 
 function normalizeBudget (budget) {
   const mode = isNumber(budget.percentage) ? 'percentage' : 'amount'
@@ -111,11 +119,9 @@ export const OrderEdit = React.createClass({
     this.setCurrentBudget(budget)
   },
   render () {
-    const {folder: {campaigns}} = this.props
     const {selectedBudgetIndex} = this.state
     const {order} = this.state
     const budget = order.budgets[selectedBudgetIndex]
-    const takenCampaigns = flatten(map(order.budgets, ({campaigns}) => map(campaigns, ({id}) => id)))
 
     return (
       <div>
@@ -138,7 +144,7 @@ export const OrderEdit = React.createClass({
         </div>
 
         <OrderCampaigns
-          campaigns={filter(campaigns, negate(({id}) => includes(takenCampaigns, id)))}
+          campaigns={looseCampaigns(this.props.folder.campaigns, order.budgets)}
           addCampaigns={this.addCampaigns}/>
       </div>
     )
