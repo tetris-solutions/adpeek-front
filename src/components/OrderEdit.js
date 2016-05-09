@@ -60,17 +60,24 @@ export const OrderEdit = React.createClass({
   selectBudget (selectedBudgetIndex) {
     this.setState({selectedBudgetIndex})
   },
-  changeCurrentBudget (changes) {
+  getCurrentBudget () {
     const {selectedBudgetIndex, order} = this.state
-    const budget = order.budgets[selectedBudgetIndex]
+
+    return order.budgets[selectedBudgetIndex]
+  },
+  setCurrentBudget (budget) {
+    const {selectedBudgetIndex, order} = this.state
+    order.budgets[selectedBudgetIndex] = budget
+
+    this.setState({order})
+  },
+  changeCurrentBudget (changes) {
+    const budget = this.getCurrentBudget()
     const mode = changes.mode || budget.mode
 
-    if (changes.value !== undefined) {
-      changes[mode] = changes.value
-    }
+    changes[mode] = changes.value
 
-    order.budgets[selectedBudgetIndex] = assign({}, budget, changes)
-    this.setState({order})
+    this.setCurrentBudget(assign({}, budget, changes))
   },
   changeBudgetMode (mode) {
     this.changeCurrentBudget({
