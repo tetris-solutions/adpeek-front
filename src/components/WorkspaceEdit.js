@@ -9,7 +9,7 @@ import {updateWorkspaceAction} from '../actions/update-workspace'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import {serializeWorkspaceForm} from '../functions/serialize-workspace-form'
 import {branch} from 'baobab-react/dist-modules/higher-order'
-import {Form, Content, Header, Footer} from './FloatingForm'
+import {Form, Content, Header, Footer} from './Card'
 import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React

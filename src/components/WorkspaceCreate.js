@@ -8,7 +8,7 @@ import {branch} from 'baobab-react/dist-modules/higher-order'
 import {createWorkspaceAction} from '../actions/create-workspace'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import {serializeWorkspaceForm} from '../functions/serialize-workspace-form'
-import {Form, Content, Header, Footer} from './FloatingForm'
+import {Form, Content, Header, Footer} from './Card'
 
 const {PropTypes} = React
 

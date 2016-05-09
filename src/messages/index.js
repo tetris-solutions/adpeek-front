@@ -28,7 +28,11 @@ export default {
     tagLabel: 'Tag',
     externalAccountLabel: 'External account',
     accountSelectorPlaceholder: 'Select the {platform} account',
-    onSuccessAlert: 'Operation completed successfully!'
+    onSuccessAlert: 'Operation completed successfully!',
+    percentageLabel: 'Percentage',
+    amountLabel: 'Amount',
+    valueLabel: 'Value',
+    investmentLabel: 'Investment'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -59,6 +63,10 @@ export default {
     tagLabel: 'Tag',
     externalAccountLabel: 'Conta externa',
     accountSelectorPlaceholder: 'Selecione a conta {platform}',
-    onSuccessAlert: 'Operação realizada com sucesso!'
+    onSuccessAlert: 'Operação realizada com sucesso!',
+    percentageLabel: 'Porcentagem',
+    amountLabel: 'Valor Exato',
+    valueLabel: 'Valor',
+    investmentLabel: 'Investimento'
   }
 }

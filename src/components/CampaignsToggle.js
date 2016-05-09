@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import forEach from 'lodash/forEach'
 import {contextualize} from './higher-order/contextualize'
 
-import {Form, Content, Header, Footer} from './FloatingForm'
+import {Form, Content, Header, Footer} from './Card'
 
 const {PropTypes} = React
 

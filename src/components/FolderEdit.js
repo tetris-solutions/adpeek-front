@@ -9,7 +9,7 @@ import Select from './Select'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
 import pick from 'lodash/pick'
-import {Form, Content, Header, Footer} from './FloatingForm'
+import {Form, Content, Header, Footer} from './Card'
 
 const {PropTypes} = React
 

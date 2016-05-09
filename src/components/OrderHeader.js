@@ -2,6 +2,7 @@ import React from 'react'
 import orderType from '../propTypes/order'
 import Input from './Input'
 import Switch from './Switch'
+import VerticalAlign from './VerticalAlign'
 
 export const OrderHeader = React.createClass({
   displayName: 'Order-Header',
@@ -23,13 +24,15 @@ export const OrderHeader = React.createClass({
             label='End date'
             name='end'/>
         </div>
-        <div className='mdl-cell mdl-cell--5-col'>
-          <Switch name='auto_budget' label='Auto Budget'/>
-        </div>
+        <VerticalAlign className='mdl-cell mdl-cell--1-offset mdl-cell--4-col'>
+          <div>
+            <Switch name='auto_budget' label='Auto Budget'/>
+          </div>
+        </VerticalAlign>
         <div className='mdl-cell mdl-cell--3-col'>
           <Input
             type='number'
-            label='Investment'
+            label='investment'
             name='amount'/>
         </div>
       </header>

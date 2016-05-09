@@ -1,5 +1,7 @@
 import React from 'react'
 import csjs from 'csjs'
+import omit from 'lodash/omit'
+import assign from 'lodash/assign'
 
 const style = csjs`
 .card {
@@ -29,32 +31,44 @@ const style = csjs`
 
 const {PropTypes} = React
 
-export const Form = React.createClass({
-  displayName: 'Form',
+export const Card = React.createClass({
+  displayName: 'Card',
   getDefaultProps () {
     return {
-      size: 'small'
+      size: 'small',
+      tag: 'div'
     }
   },
   propTypes: {
     size: PropTypes.oneOf(['small', 'large']),
-    onSubmit: PropTypes.func,
+    tag: PropTypes.string,
     children: PropTypes.node
   },
   contextTypes: {
     insertCss: PropTypes.func
   },
   render () {
-    const {onSubmit, children, size} = this.props
+    const {children, size, tag} = this.props
     const {insertCss} = this.context
 
     insertCss(style)
 
-    return (
-      <form className={`mdl-card mdl-shadow--6dp ${style[size]}`} onSubmit={onSubmit}>
-        {children}
-      </form>
-    )
+    const props = omit(this.props, 'tag')
+
+    return React.createElement(tag, assign(props, {
+      className: `mdl-card mdl-shadow--6dp ${style[size]}`
+    }), children)
+  }
+})
+
+export const Form = React.createClass({
+  displayName: 'Form',
+  propTypes: {
+    onSubmit: PropTypes.func,
+    children: PropTypes.node
+  },
+  render () {
+    return <Card {...this.props} tag='form'/>
   }
 })
 

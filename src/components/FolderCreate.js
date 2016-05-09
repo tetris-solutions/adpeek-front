@@ -7,7 +7,7 @@ import {createFolderAction} from '../actions/create-folder'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import Select from './Select'
 import map from 'lodash/map'
-import {Form, Content, Header, Footer} from './FloatingForm'
+import {Form, Content, Header, Footer} from './Card'
 
 const {PropTypes} = React
 
