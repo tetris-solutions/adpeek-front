@@ -2,14 +2,27 @@ import React from 'react'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import OrderSelector from './OrdersSelector'
 import HeaderSearchBox from './HeaderSearchBox'
-import OrderForm from './OrderForm'
 import campaignType from '../propTypes/campaign'
 import orderType from '../propTypes/campaign'
 import budgetType from '../propTypes/campaign'
+import OrderHeader from './OrderHeader'
+import BudgetEdit from './BudgetEdit'
+import OrderCampaigns from './OrderCampaigns'
+import OrderPie from './OrderPie'
 
 const {PropTypes} = React
 
-export function OrderEdit ({budgetMax, onEnter, addCampaigns, selectBudget, changeField, budget, order, campaigns}) {
+export function OrderEdit ({
+  remainingValue,
+  remainingAmount,
+  onEnter,
+  addCampaigns,
+  selectBudget,
+  changeField,
+  budget,
+  order,
+  campaigns
+}) {
   return (
     <div>
       <header className='mdl-layout__header'>
@@ -25,22 +38,44 @@ export function OrderEdit ({budgetMax, onEnter, addCampaigns, selectBudget, chan
         </div>
       </header>
 
-      <OrderForm
-        budgetMax={budgetMax}
-        addCampaigns={addCampaigns}
-        selectBudget={selectBudget}
-        changeField={changeField}
-        budget={budget}
-        order={order}
-        campaigns={campaigns}/>
+      <section>
+        <div className='mdl-grid'>
+          <div className='mdl-cell mdl-cell--5-col'>
+            <br/>
 
+            <OrderPie
+              remainingAmount={remainingAmount}
+              order={order}
+              selectBudget={selectBudget}/>
+
+          </div>
+          <div className='mdl-cell mdl-cell--7-col'>
+            <OrderHeader order={order}/>
+
+            {budget ? (
+              <BudgetEdit
+                key={budget.id}
+                max={remainingValue + budget.value}
+                budget={budget}
+                change={changeField}/>
+            ) : null}
+          </div>
+        </div>
+
+        {budget ? (
+          <OrderCampaigns
+            campaigns={campaigns}
+            addCampaigns={addCampaigns}/>
+        ) : null}
+      </section>
     </div>
   )
 }
 
 OrderEdit.displayName = 'Order-Edit'
 OrderEdit.propTypes = {
-  budgetMax: PropTypes.number,
+  remainingAmount: PropTypes.number,
+  remainingValue: PropTypes.number,
   onEnter: PropTypes.func,
   addCampaigns: PropTypes.func,
   selectBudget: PropTypes.func,

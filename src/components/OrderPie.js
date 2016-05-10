@@ -4,29 +4,33 @@ import Highcharts from './Highcharts'
 import map from 'lodash/map'
 import csjs from 'csjs'
 import isNumber from 'lodash/isNumber'
+import size from 'lodash/size'
+import {styled} from './mixins/styled'
 
 const {PropTypes} = React
 const style = csjs`
 .orderPieChart {
-  height: 30vh
+  height: 70vh
 }`
 
 export const OrderPie = React.createClass({
   displayName: 'Order-Pie',
+  mixins: [styled(style)],
   propTypes: {
+    remainingAmount: PropTypes.number,
     order: orderType,
     selectBudget: PropTypes.func
   },
-  onBudgetClick ({point}) {
-    this.props.selectBudget(point.index)
+  onBudgetClick ({point: {options: {index, id}}}) {
+    this.props.selectBudget(id === 'remaining' ? null : index)
   },
   render () {
-    const {order: {name, amount, budgets}} = this.props
+    const {remainingAmount, order: {name, amount, budgets}} = this.props
 
-    function calculateAmount (budget) {
-      return isNumber(budget.amount)
-        ? budget.amount
-        : (budget.percentage / 100) * amount
+    function calculateAmount (b) {
+      return isNumber(b.amount)
+        ? b.amount
+        : (b.percentage / 100) * amount
     }
 
     return (
@@ -50,14 +54,18 @@ export const OrderPie = React.createClass({
           </pie>
         </plot-options>
 
-        <pie colorByPoint>
+        <pie id='budgets' colorByPoint>
           <name>Budget</name>
 
           {map(budgets, (budget, index) => (
-            <point key={index} y={calculateAmount(budget)} index={index}>
+            <point key={index} id={budget.id} y={calculateAmount(budget)} index={index}>
               {budget.name}
             </point>
           ))}
+
+          <point color='#c1c1c1' id='remaining' y={remainingAmount} index={size(budgets)}>
+            Restante
+          </point>
         </pie>
       </Highcharts>
     )

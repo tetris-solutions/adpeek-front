@@ -87,9 +87,13 @@ export const Order = React.createClass({
     this.setCurrentBudget(assign({}, budget, changes))
   },
   changeBudgetMode (mode) {
+    const {order, budget} = this.calculateParams()
+
     this.changeCurrentBudget({
       mode,
-      value: 0,
+      value: mode === 'percentage'
+        ? (budget.value / order.amount) * 100
+        : (budget.value / 100) * order.amount,
       [other[mode]]: null
     })
   },
@@ -112,21 +116,33 @@ export const Order = React.createClass({
   onEnter () {
     // @todo filter by campaign
   },
-  render () {
+  calculateParams () {
     const {order, selectedBudgetIndex} = this.state
     const budget = order.budgets[selectedBudgetIndex]
     const campaigns = looseCampaigns(this.props.folder.campaigns, order.budgets)
-    const maxAmount = availableAmount(order.amount, order.budgets)
-    const budgetMax = get(budget, 'mode') === 'percentage'
-      ? (maxAmount / order.amount) * 100
-      : maxAmount
+    const remainingAmount = availableAmount(order.amount, order.budgets)
+    const remainingValue = get(budget, 'mode') === 'percentage'
+      ? (remainingAmount / order.amount) * 100
+      : remainingAmount
+
+    return {
+      order,
+      budget,
+      campaigns,
+      remainingAmount,
+      remainingValue
+    }
+  },
+  render () {
+    const {order, budget, campaigns, remainingAmount, remainingValue} = this.calculateParams()
 
     return (
       <OrderEdit
         addCampaigns={this.addCampaigns}
         selectBudget={this.selectBudget}
         changeField={this.changeField}
-        budgetMax={budgetMax + (budget ? budget.value : 0)}
+        remainingAmount={remainingAmount}
+        remainingValue={remainingValue}
         budget={budget}
         order={order}
         campaigns={campaigns}

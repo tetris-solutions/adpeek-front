@@ -1,5 +1,5 @@
 import React from 'react'
-import Highcharts from 'highcharts'
+import Highcharts from 'highcharts/highcharts.src'
 import omit from 'lodash/omit'
 import isEmpty from 'lodash/isEmpty'
 import isObject from 'lodash/isObject'
@@ -9,6 +9,8 @@ import includes from 'lodash/includes'
 import camelCase from 'lodash/camelCase'
 import forEach from 'lodash/forEach'
 import lowerCase from 'lodash/lowerCase'
+import find from 'lodash/find'
+import isEqual from 'lodash/isEqual'
 
 function isUpperCase (letter) {
   return letter !== letter.toLowerCase()
@@ -131,7 +133,43 @@ export const Chart = createClass({
     }
   },
   componentDidMount () {
-    Highcharts.chart(this.refs.container, this.state.config)
+    this.chart = Highcharts.chart(this.refs.container, this.state.config)
+  },
+  componentWillReceiveProps (props) {
+    // const {config} = this.state
+    const newConfig = mapPropsToConfig(props)
+    // let changed = false
+
+    forEach(newConfig.series, series => {
+      const oldSerie = find(this.chart.series, ['options.id', series.id])
+
+      if (!oldSerie) {
+        // changed = true
+        return this.chart.addSeries(series)
+      }
+
+      forEach(series.data, point => {
+        const oldPoint = find(oldSerie.data, ['options.id', point.id])
+
+        if (!oldPoint) {
+          return oldSerie.addPoint(point)
+        }
+
+        if (isEqual(oldPoint.options, point)) {
+          return
+        }
+
+        // changed = true
+        oldPoint.update(point)
+      })
+    })
+
+    // if (changed) {
+    //   this.chart.redraw()
+    // }
+  },
+  shouldComponentUpdate () {
+    return false
   },
   render () {
     const {tag, className, style} = this.props

@@ -14,20 +14,30 @@ export const Slide = React.createClass({
   },
   componentDidMount () {
     window.componentHandler.upgradeElement(this.refs.input)
+    this.refs.input.addEventListener('change', this.props.onChange)
   },
-  componentWillReceiveProps ({value}) {
-    if (value !== this.props.value) {
-      this.refs.input.MaterialSlider.change(value)
+  componentWillReceiveProps ({value, min, max}) {
+    const {input} = this.refs
+    if (
+      value !== Number(input.value) ||
+      min !== Number(input.min) ||
+      max !== Number(input.max)
+    ) {
+      input.min = min
+      input.max = max
+      input.MaterialSlider.change(value)
     }
   },
+  shouldComponentUpdate () {
+    return false
+  },
   render () {
-    const {name, value, min, max, onChange} = this.props
+    const {name, value, min, max} = this.props
     return (
       <input
         ref='input'
         name={name}
-        value={value}
-        onChange={onChange}
+        defaultValue={value}
         className='mdl-slider mdl-js-slider'
         type='range'
         min={min}
