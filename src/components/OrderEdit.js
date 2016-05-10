@@ -106,8 +106,12 @@ export const OrderEdit = React.createClass({
       [other[mode]]: null
     })
   },
-  changeBudgetValue (value) {
-    this.changeCurrentBudget({value})
+  changeField (field, value) {
+    if (field === 'mode') {
+      this.changeBudgetMode(value)
+    } else {
+      this.changeCurrentBudget({[field]: value})
+    }
   },
   addCampaigns (campaigns) {
     const {folder} = this.props
@@ -137,8 +141,7 @@ export const OrderEdit = React.createClass({
               <BudgetEdit
                 maxAmount={order.amount}
                 budget={budget}
-                changeMode={this.changeBudgetMode}
-                changeValue={this.changeBudgetValue}/>
+                change={this.changeField}/>
             ) : null}
           </div>
         </div>

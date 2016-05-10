@@ -14,7 +14,7 @@ export function CampaignsHeader ({onEnter, company, workspace, folder, onSwitch,
     <header className='mdl-layout__header'>
       <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
         <span>
-          <Switch label={filterActiveCampaigns} checked onSwitch={onChange(onSwitch)}/>
+          <Switch label={filterActiveCampaigns} checked onChange={onChange(onSwitch)}/>
         </span>
         <div className='mdl-layout-spacer'/>
         <Link

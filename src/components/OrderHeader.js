@@ -34,7 +34,7 @@ export const OrderHeader = React.createClass({
         </VerticalAlign>
         <div className='mdl-cell mdl-cell--3-col'>
           <Input
-            amount={amount}
+            value={amount}
             type='number'
             label='investment'
             name='amount'/>

@@ -59,6 +59,7 @@ export const Input = React.createClass({
     this.setState({isFocused: false})
   },
   componentWillReceiveProps ({value}) {
+    if (value === undefined) return
     this.setState({
       isDirty: notEmptyString(value)
     })

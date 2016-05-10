@@ -13,23 +13,25 @@ import Message from '@tetris/front-server/lib/components/intl/Message'
 export const BudgetEdit = React.createClass({
   displayName: 'Budget-Edit',
   propTypes: {
-    changeMode: PropTypes.func,
-    changeValue: PropTypes.func,
+    change: PropTypes.func,
     maxAmount: PropTypes.number,
     budget: budgetType,
     messages: PropTypes.object
   },
   onChangeMode ({target: {checked}}) {
-    this.props.changeMode(checked ? 'percentage' : 'amount')
+    this.props.change('mode', checked ? 'percentage' : 'amount')
   },
   onChangeValue ({target: {value}}) {
-    this.props.changeValue(Number(value))
+    this.props.change('value', Number(value))
+  },
+  onChangeName ({target: {value}}) {
+    this.props.change('name', value)
   },
   render () {
     const {
       maxAmount,
       messages: {percentageLabel, amountLabel},
-      budget: {value, mode, campaigns}
+      budget: {name, value, mode, campaigns}
     } = this.props
 
     let max, min, switchLabel, switchChecked
@@ -53,9 +55,19 @@ export const BudgetEdit = React.createClass({
         </Header>
         <Content>
           <div className='mdl-grid'>
-            <div className='mdl-cell mdl-cell--12-col'>
-              <Switch checked={switchChecked} onChange={this.onChangeMode} label={switchLabel}/>
+            <div className='mdl-cell mdl-cell--8-col'>
+              <Input
+                onChange={this.onChangeName}
+                value={name}
+                label='name'
+                name='name'/>
             </div>
+            <VerticalAlign className='mdl-cell mdl-cell--4-col'>
+              <Switch checked={switchChecked} onChange={this.onChangeMode} label={switchLabel}/>
+            </VerticalAlign>
+          </div>
+
+          <div className='mdl-grid'>
             <VerticalAlign className='mdl-cell mdl-cell--8-col'>
               <Slide
                 onChange={this.onChangeValue}
