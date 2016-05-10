@@ -6,13 +6,42 @@ import {contextualize} from './higher-order/contextualize'
 import Input from './Input'
 import VerticalAlign from './VerticalAlign'
 import {Card, Content, Header} from './Card'
-const {PropTypes} = React
 import map from 'lodash/map'
 import Message from '@tetris/front-server/lib/components/intl/Message'
+import campaignType from '../propTypes/campaign'
+import size from 'lodash/size'
+
+const {PropTypes} = React
+
+function Campaign ({campaign, removeCampaign}) {
+  function onClick (e) {
+    e.preventDefault()
+    removeCampaign(campaign)
+  }
+
+  return (
+    <div className='mdl-list__item'>
+      <span className='mdl-list__item-primary-content'>
+        <i className='material-icons mdl-list__item-avatar'>{campaign.status.icon}</i>
+        <span>{campaign.name}</span>
+      </span>
+      <a className='mdl-list__item-secondary-action' onClick={onClick}>
+        <i className='material-icons'>clear</i>
+      </a>
+    </div>
+  )
+}
+
+Campaign.displayName = 'Campaign'
+Campaign.propTypes = {
+  campaign: campaignType,
+  removeCampaign: PropTypes.func
+}
 
 export const BudgetEdit = React.createClass({
   displayName: 'Budget-Edit',
   propTypes: {
+    removeCampaign: PropTypes.func,
     change: PropTypes.func,
     max: PropTypes.number,
     budget: budgetType,
@@ -81,10 +110,21 @@ export const BudgetEdit = React.createClass({
                 name='value'/>
             </div>
           </div>
-          <ul>
-            {map(campaigns,
-              ({name, id}) => <li key={id}>{name}</li>)}
-          </ul>
+
+          {size(campaigns) > 0 && (
+            <h5>
+              <Message>budgetCampaigns</Message>
+            </h5>
+          )}
+
+          <div className='mdl-list'>
+            {map(campaigns, campaign => (
+              <Campaign
+                key={campaign.id}
+                campaign={campaign}
+                removeCampaign={this.props.removeCampaign}/>
+            ))}
+          </div>
         </Content>
       </Card>
     )

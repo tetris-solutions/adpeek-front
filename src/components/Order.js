@@ -14,6 +14,7 @@ import defaultOrder from '../mocks/order'
 import sum from 'lodash/sum'
 import get from 'lodash/get'
 import round from 'lodash/round'
+import without from 'lodash/without'
 
 const {PropTypes} = React
 const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
@@ -83,14 +84,18 @@ export const Order = React.createClass({
   },
   changeCurrentBudget (changes) {
     const budget = this.getCurrentBudget()
-    const mode = changes.mode || budget.mode
 
-    changes[mode] = changes.value
+    if (isNumber(changes.value)) {
+      const mode = changes.mode || budget.mode
+
+      changes[mode] = changes.value
+    }
 
     this.setCurrentBudget(assign({}, budget, changes))
   },
   changeBudgetMode (mode) {
-    const {order, budget} = this.calculateParams()
+    const budget = this.getCurrentBudget()
+    const {order} = this.state
 
     this.changeCurrentBudget({
       mode,
@@ -121,6 +126,13 @@ export const Order = React.createClass({
 
     this.setCurrentBudget(budget)
   },
+  removeCampaign (campaign) {
+    const {campaigns} = this.getCurrentBudget()
+
+    this.changeCurrentBudget({
+      campaigns: without(campaigns, campaign)
+    })
+  },
   onEnter () {
     // @todo filter by campaign
   },
@@ -147,6 +159,7 @@ export const Order = React.createClass({
     return (
       <OrderEdit
         addCampaigns={this.addCampaigns}
+        removeCampaign={this.removeCampaign}
         selectBudget={this.selectBudget}
         changeOrderField={this.changeOrderField}
         changeBudgetField={this.changeBudgetField}
