@@ -18,7 +18,8 @@ export function OrderEdit ({
   onEnter,
   addCampaigns,
   selectBudget,
-  changeField,
+  changeOrderField,
+  changeBudgetField,
   budget,
   order,
   campaigns
@@ -50,14 +51,16 @@ export function OrderEdit ({
 
           </div>
           <div className='mdl-cell mdl-cell--7-col'>
-            <OrderHeader order={order}/>
+            <OrderHeader
+              change={changeOrderField}
+              order={order}/>
 
             {budget ? (
               <BudgetEdit
                 key={budget.id}
                 max={remainingValue + budget.value}
                 budget={budget}
-                change={changeField}/>
+                change={changeBudgetField}/>
             ) : null}
           </div>
         </div>
@@ -79,7 +82,8 @@ OrderEdit.propTypes = {
   onEnter: PropTypes.func,
   addCampaigns: PropTypes.func,
   selectBudget: PropTypes.func,
-  changeField: PropTypes.func,
+  changeOrderField: PropTypes.func,
+  changeBudgetField: PropTypes.func,
   budget: orderType,
   order: budgetType,
   campaigns: PropTypes.arrayOf(campaignType)

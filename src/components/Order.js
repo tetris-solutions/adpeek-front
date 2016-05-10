@@ -100,7 +100,12 @@ export const Order = React.createClass({
       [other[mode]]: null
     })
   },
-  changeField (field, value) {
+  changeOrderField (field, value) {
+    this.setState({
+      order: assign({}, this.state.order, {[field]: value})
+    })
+  },
+  changeBudgetField (field, value) {
     if (field === 'mode') {
       this.changeBudgetMode(value)
     } else {
@@ -143,7 +148,8 @@ export const Order = React.createClass({
       <OrderEdit
         addCampaigns={this.addCampaigns}
         selectBudget={this.selectBudget}
-        changeField={this.changeField}
+        changeOrderField={this.changeOrderField}
+        changeBudgetField={this.changeBudgetField}
         remainingAmount={remainingAmount}
         remainingValue={remainingValue}
         budget={budget}
