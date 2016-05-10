@@ -11,6 +11,8 @@ import assign from 'lodash/assign'
 import map from 'lodash/map'
 import OrderEdit from './OrderEdit'
 import defaultOrder from '../mocks/order'
+import sum from 'lodash/sum'
+import get from 'lodash/get'
 
 const {PropTypes} = React
 const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
@@ -34,6 +36,11 @@ function normalizeOrder (order) {
 }
 
 const other = {percentage: 'amount', amount: 'percentage'}
+
+function availableAmount (total, budgets) {
+  const exactAmount = ({mode, value}) => mode === 'percentage' ? (value / 100) * total : value
+  return total - sum(map(budgets, exactAmount))
+}
 
 export const Order = React.createClass({
   displayName: 'Order',
@@ -109,12 +116,17 @@ export const Order = React.createClass({
     const {order, selectedBudgetIndex} = this.state
     const budget = order.budgets[selectedBudgetIndex]
     const campaigns = looseCampaigns(this.props.folder.campaigns, order.budgets)
+    const maxAmount = availableAmount(order.amount, order.budgets)
+    const budgetMax = get(budget, 'mode') === 'percentage'
+      ? (maxAmount / order.amount) * 100
+      : maxAmount
 
     return (
       <OrderEdit
         addCampaigns={this.addCampaigns}
         selectBudget={this.selectBudget}
         changeField={this.changeField}
+        budgetMax={budgetMax + (budget ? budget.value : 0)}
         budget={budget}
         order={order}
         campaigns={campaigns}

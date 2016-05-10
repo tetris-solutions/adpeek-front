@@ -7,14 +7,17 @@ export default {
   auto_budget: true,
   amount: 1000,
   budgets: [{
+    id: 'abc',
     name: 'Mc Melody',
-    percentage: 50,
+    percentage: 40,
     campaigns: []
   }, {
+    id: 'def',
     name: 'Faustão',
     percentage: 30,
     campaigns: []
   }, {
+    id: 'ghi',
     name: 'Neymar',
     percentage: 20,
     campaigns: []

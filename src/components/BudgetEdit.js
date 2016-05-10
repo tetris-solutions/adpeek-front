@@ -14,7 +14,7 @@ export const BudgetEdit = React.createClass({
   displayName: 'Budget-Edit',
   propTypes: {
     change: PropTypes.func,
-    maxAmount: PropTypes.number,
+    max: PropTypes.number,
     budget: budgetType,
     messages: PropTypes.object
   },
@@ -29,22 +29,18 @@ export const BudgetEdit = React.createClass({
   },
   render () {
     const {
-      maxAmount,
+      max,
       messages: {percentageLabel, amountLabel},
       budget: {name, value, mode, campaigns}
     } = this.props
 
-    let max, min, switchLabel, switchChecked
-
-    min = 0
+    let switchLabel, switchChecked
 
     if (mode === 'percentage') {
       switchChecked = true
-      max = 100
       switchLabel = percentageLabel
     } else {
       switchChecked = false
-      max = maxAmount
       switchLabel = amountLabel
     }
 
@@ -73,7 +69,7 @@ export const BudgetEdit = React.createClass({
                 onChange={this.onChangeValue}
                 value={value}
                 max={max}
-                min={min}/>
+                min={1}/>
             </VerticalAlign>
 
             <div className='mdl-cell mdl-cell--4-col'>

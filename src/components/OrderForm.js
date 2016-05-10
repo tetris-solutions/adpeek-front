@@ -14,6 +14,7 @@ const {PropTypes} = React
 export const OrderForm = React.createClass({
   displayName: 'Order-Form',
   propTypes: {
+    budgetMax: PropTypes.number,
     addCampaigns: PropTypes.func,
     selectBudget: PropTypes.func,
     changeField: PropTypes.func,
@@ -23,6 +24,7 @@ export const OrderForm = React.createClass({
   },
   render () {
     const {
+      budgetMax,
       selectBudget,
       changeField,
       addCampaigns,
@@ -43,7 +45,8 @@ export const OrderForm = React.createClass({
 
             {budget ? (
               <BudgetEdit
-                maxAmount={order.amount}
+                key={budget.id}
+                max={budgetMax}
                 budget={budget}
                 change={changeField}/>
             ) : null}

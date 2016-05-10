@@ -9,7 +9,7 @@ import budgetType from '../propTypes/campaign'
 
 const {PropTypes} = React
 
-export function OrderEdit ({onEnter, addCampaigns, selectBudget, changeField, budget, order, campaigns}) {
+export function OrderEdit ({budgetMax, onEnter, addCampaigns, selectBudget, changeField, budget, order, campaigns}) {
   return (
     <div>
       <header className='mdl-layout__header'>
@@ -26,6 +26,7 @@ export function OrderEdit ({onEnter, addCampaigns, selectBudget, changeField, bu
       </header>
 
       <OrderForm
+        budgetMax={budgetMax}
         addCampaigns={addCampaigns}
         selectBudget={selectBudget}
         changeField={changeField}
@@ -39,6 +40,7 @@ export function OrderEdit ({onEnter, addCampaigns, selectBudget, changeField, bu
 
 OrderEdit.displayName = 'Order-Edit'
 OrderEdit.propTypes = {
+  budgetMax: PropTypes.number,
   onEnter: PropTypes.func,
   addCampaigns: PropTypes.func,
   selectBudget: PropTypes.func,
