@@ -84,9 +84,9 @@ Content.propTypes = {
   children: PropTypes.node
 }
 
-export function Header ({children}) {
+export function Header ({children, color, textColor}) {
   return (
-    <header className='mdl-card__title mdl-color--primary mdl-color-text--white'>
+    <header className={`mdl-card__title mdl-color--${color} mdl-color-text--${textColor}`}>
       <h3 className='mdl-card__title-text'>
         {children}
       </h3>
@@ -94,8 +94,14 @@ export function Header ({children}) {
   )
 }
 
+Header.defaultProps = {
+  color: 'primary',
+  textColor: 'white'
+}
 Header.displayName = 'Header'
 Header.propTypes = {
+  color: PropTypes.string,
+  textColor: PropTypes.string,
   children: PropTypes.node
 }
 

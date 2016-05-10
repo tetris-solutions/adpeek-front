@@ -17,6 +17,8 @@ export const CampaignsToggle = React.createClass({
   displayName: 'CampaignListToggle',
   mixins: [styled(style)],
   propTypes: {
+    headerColor: PropTypes.string,
+    headerTextColor: PropTypes.string,
     title: PropTypes.node,
     label: PropTypes.string,
     children: PropTypes.node,
@@ -29,6 +31,12 @@ export const CampaignsToggle = React.createClass({
   getInitialState () {
     return {
       selected: false
+    }
+  },
+  getDefaultProps () {
+    return {
+      headerColor: 'primary',
+      headerTextColor: 'white'
     }
   },
   handleSubmit (e) {
@@ -63,10 +71,18 @@ export const CampaignsToggle = React.createClass({
   },
   render () {
     const {selected} = this.state
-    const {title, children, label, messages: {selectAllCampaigns, deselectAllCampaigns}} = this.props
+    const {
+      headerColor,
+      headerTextColor,
+      title,
+      children,
+      label,
+      messages: {selectAllCampaigns, deselectAllCampaigns}
+    } = this.props
+
     return (
       <Form ref='form' size='large' onSubmit={this.handleSubmit}>
-        <Header>
+        <Header color={headerColor} textColor={headerTextColor}>
           {title}
         </Header>
 

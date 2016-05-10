@@ -24,6 +24,7 @@ export const OrderCampaigns = React.createClass({
 
     return (
       <CampaignsToggle
+        headerColor='grey-600'
         onSelected={this.props.addCampaigns}
         title={<Message n={String(size(campaigns))}>nLooseCampaigns</Message>}
         label={messages.linkCampaignsCallToAction}>

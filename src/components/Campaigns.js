@@ -113,6 +113,7 @@ export const Campaigns = React.createClass({
           <div className='mdl-cell mdl-cell--5-col'>
 
             <CampaignsToggle
+              headerColor='grey-600'
               onSelected={this.link}
               title={<Message n={String(loose.length)}>nLooseCampaigns</Message>}
               label={messages.linkCampaignsCallToAction}>
