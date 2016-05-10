@@ -5,9 +5,10 @@ import Switch from './Switch'
 import {contextualize} from './higher-order/contextualize'
 import Input from './Input'
 import VerticalAlign from './VerticalAlign'
-import {Card, Content} from './Card'
+import {Card, Content, Header} from './Card'
 const {PropTypes} = React
 import map from 'lodash/map'
+import Message from '@tetris/front-server/lib/components/intl/Message'
 
 export const BudgetEdit = React.createClass({
   displayName: 'Budget-Edit',
@@ -47,6 +48,9 @@ export const BudgetEdit = React.createClass({
 
     return (
       <Card size='large'>
+        <Header>
+          <Message>editBudgetHeader</Message>
+        </Header>
         <Content>
           <div className='mdl-grid'>
             <div className='mdl-cell mdl-cell--12-col'>
@@ -70,7 +74,8 @@ export const BudgetEdit = React.createClass({
             </div>
           </div>
           <ul>
-            {map(campaigns, ({name}) => <li>{name}</li>)}
+            {map(campaigns,
+              ({name, id}) => <li key={id}>{name}</li>)}
           </ul>
         </Content>
       </Card>

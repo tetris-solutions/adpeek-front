@@ -17,6 +17,7 @@ export default {
     newWorkspaceCallToAction: 'Create workspace',
     newFolderHeader: 'New folder',
     editFolderHeader: 'Edit folder',
+    editBudgetHeader: 'Edit budget',
     newFolderCallToAction: 'Create folder',
     newOrderHeader: 'New order',
     newOrderCallToAction: 'Create order',
@@ -32,7 +33,9 @@ export default {
     percentageLabel: 'Percentage',
     amountLabel: 'Amount',
     valueLabel: 'Value',
-    investmentLabel: 'Investment'
+    investmentLabel: 'Investment',
+    startDateLabel: 'Start date',
+    endDateLabel: 'End date'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -52,6 +55,7 @@ export default {
     newWorkspaceCallToAction: 'Criar',
     newFolderHeader: 'Nova pasta',
     editFolderHeader: 'Editar pasta',
+    editBudgetHeader: 'Editar orçamento',
     newFolderCallToAction: 'Criar pasta',
     newCampaignHeader: 'Nova campanha',
     newCampaignCallToAction: 'Criar campanha',
@@ -67,6 +71,8 @@ export default {
     percentageLabel: 'Porcentagem',
     amountLabel: 'Valor Exato',
     valueLabel: 'Valor',
-    investmentLabel: 'Investimento'
+    investmentLabel: 'Investimento',
+    startDateLabel: 'Data início',
+    endDateLabel: 'Data final'
   }
 }
