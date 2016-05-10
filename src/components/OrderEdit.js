@@ -13,6 +13,7 @@ import OrderPie from './OrderPie'
 const {PropTypes} = React
 
 export function OrderEdit ({
+  createBudget,
   removeCampaign,
   remainingValue,
   remainingAmount,
@@ -46,6 +47,7 @@ export function OrderEdit ({
             <br/>
 
             <OrderPie
+              selectedBudgetId={budget ? budget.id : null}
               remainingAmount={remainingAmount}
               order={order}
               selectBudget={selectBudget}/>
@@ -63,7 +65,11 @@ export function OrderEdit ({
                 max={remainingValue + budget.value}
                 budget={budget}
                 change={changeBudgetField}/>
-            ) : null}
+            ) : (
+              <button onClick={createBudget}>
+                Novo orçamento
+              </button>
+            )}
           </div>
         </div>
 
@@ -79,6 +85,7 @@ export function OrderEdit ({
 
 OrderEdit.displayName = 'Order-Edit'
 OrderEdit.propTypes = {
+  createBudget: PropTypes.func,
   removeCampaign: PropTypes.func,
   remainingAmount: PropTypes.number,
   remainingValue: PropTypes.number,

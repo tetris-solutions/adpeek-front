@@ -8,6 +8,7 @@ import size from 'lodash/size'
 import {styled} from './mixins/styled'
 import {contextualize} from './higher-order/contextualize'
 import round from 'lodash/round'
+import find from 'lodash/find'
 
 const {PropTypes} = React
 const style = csjs`
@@ -19,6 +20,7 @@ export const OrderPie = React.createClass({
   displayName: 'Order-Pie',
   mixins: [styled(style)],
   propTypes: {
+    selectedBudgetId: PropTypes.string,
     messages: PropTypes.object,
     remainingAmount: PropTypes.number,
     order: orderType,
@@ -26,6 +28,18 @@ export const OrderPie = React.createClass({
   },
   onBudgetClick ({point: {options: {index, id}}}) {
     this.props.selectBudget(id === 'remaining' ? null : index)
+  },
+  componentWillReceiveProps ({selectedBudgetId, order: {budgets}}) {
+    const {chart} = this.refs.chart
+    const points = chart.series[0].data
+
+    if (budgets.length === points.length) {
+      setTimeout(() => {
+        const point = find(chart.series[0].data, ['options.id', selectedBudgetId])
+        point.select()
+        chart.redraw()
+      }, 300)
+    }
   },
   render () {
     const {messages: {availableBudget, budgetLabel}, remainingAmount, order: {name, amount, budgets}} = this.props
@@ -37,7 +51,7 @@ export const OrderPie = React.createClass({
     }
 
     return (
-      <Highcharts className={String(style.orderPieChart)}>
+      <Highcharts ref='chart' className={String(style.orderPieChart)}>
         <credits enabled={false}/>
 
         <chart
@@ -61,12 +75,20 @@ export const OrderPie = React.createClass({
           <name>{budgetLabel}</name>
 
           {map(budgets, (budget, index) => (
-            <point key={index} id={budget.id} y={calculateAmount(budget)} index={index}>
+            <point
+              key={index}
+              id={budget.id}
+              y={calculateAmount(budget)}
+              index={index}>
               {budget.name}
             </point>
           ))}
 
-          <point color='#c1c1c1' id='remaining' y={remainingAmount} index={size(budgets)}>
+          <point
+            color='#c1c1c1'
+            id='remaining'
+            y={remainingAmount}
+            index={size(budgets)}>
             {availableBudget}
           </point>
         </pie>

@@ -10,7 +10,6 @@ import camelCase from 'lodash/camelCase'
 import forEach from 'lodash/forEach'
 import lowerCase from 'lodash/lowerCase'
 import find from 'lodash/find'
-import isEqual from 'lodash/isEqual'
 
 function isUpperCase (letter) {
   return letter !== letter.toLowerCase()
@@ -136,37 +135,17 @@ export const Chart = createClass({
     this.chart = Highcharts.chart(this.refs.container, this.state.config)
   },
   componentWillReceiveProps (props) {
-    // const {config} = this.state
     const newConfig = mapPropsToConfig(props)
-    // let changed = false
 
     forEach(newConfig.series, series => {
       const oldSerie = find(this.chart.series, ['options.id', series.id])
 
       if (!oldSerie) {
-        // changed = true
         return this.chart.addSeries(series)
       }
 
-      forEach(series.data, point => {
-        const oldPoint = find(oldSerie.data, ['options.id', point.id])
-
-        if (!oldPoint) {
-          return oldSerie.addPoint(point)
-        }
-
-        if (isEqual(oldPoint.options, point)) {
-          return
-        }
-
-        // changed = true
-        oldPoint.update(point)
-      })
+      oldSerie.setData(series.data)
     })
-
-    // if (changed) {
-    //   this.chart.redraw()
-    // }
   },
   shouldComponentUpdate () {
     return false

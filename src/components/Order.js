@@ -12,12 +12,14 @@ import map from 'lodash/map'
 import OrderEdit from './OrderEdit'
 import defaultOrder from '../mocks/order'
 import sum from 'lodash/sum'
-import get from 'lodash/get'
 import round from 'lodash/round'
 import without from 'lodash/without'
+import random from 'lodash/random'
 
 const {PropTypes} = React
 const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
+const toPercentage = (value, total) => round((value / total) * 100, 2)
+const fromPercentage = (value, total) => round((value / 100) * total, 2)
 
 function looseCampaigns (campaigns, budgets) {
   const takenCampaigns = flatten(map(budgets, getCampaignIds))
@@ -41,15 +43,37 @@ const other = {percentage: 'amount', amount: 'percentage'}
 
 function availableAmount (total, budgets) {
   const exactAmount = ({mode, value}) => mode === 'percentage'
-    ? round((value / 100) * total, 2)
+    ? fromPercentage(value, total)
     : value
   return total - sum(map(budgets, exactAmount))
 }
+
+function calculateParams (order, selectedBudgetIndex, campaigns) {
+  const budget = isNumber(selectedBudgetIndex)
+    ? order.budgets[selectedBudgetIndex]
+    : null
+
+  const remainingAmount = availableAmount(order.amount, order.budgets)
+
+  const remainingValue = budget && budget.mode === 'percentage'
+    ? toPercentage(remainingAmount, order.amount)
+    : remainingAmount
+
+  return {
+    order,
+    budget,
+    campaigns: looseCampaigns(campaigns, order.budgets),
+    remainingAmount,
+    remainingValue
+  }
+}
+const NEW_BUDGET_PREFIX = 'my-new-budget-'
 
 export const Order = React.createClass({
   displayName: 'Order',
   propTypes: {
     order: orderType,
+    messages: PropTypes.object,
     folder: PropTypes.shape({
       campaigns: PropTypes.array
     })
@@ -100,8 +124,8 @@ export const Order = React.createClass({
     this.changeCurrentBudget({
       mode,
       value: mode === 'percentage'
-        ? round((budget.value / order.amount) * 100, 2)
-        : round((budget.value / 100) * order.amount, 2),
+        ? toPercentage(budget.value, order.amount)
+        : fromPercentage(budget.value, order.amount),
       [other[mode]]: null
     })
   },
@@ -133,31 +157,32 @@ export const Order = React.createClass({
       campaigns: without(campaigns, campaign)
     })
   },
+  createBudget () {
+    const {state: {order, selectedBudgetIndex}, props: {folder, messages}} = this
+    const {remainingAmount} = calculateParams(order, selectedBudgetIndex, folder.campaigns)
+    const newBudget = normalizeBudget({
+      id: `${NEW_BUDGET_PREFIX}-${Math.random().toString(36).substr(2)}`,
+      name: `${messages.budgetLabel} #${order.budgets.length + 1}`,
+      percentage: random(1, toPercentage(remainingAmount, order.amount)),
+      campaigns: []
+    })
+
+    this.setState({selectedBudgetIndex: order.budgets.length})
+    this.changeOrderField('budgets', order.budgets.concat([newBudget]))
+  },
   onEnter () {
     // @todo filter by campaign
   },
-  calculateParams () {
-    const {order, selectedBudgetIndex} = this.state
-    const budget = order.budgets[selectedBudgetIndex]
-    const campaigns = looseCampaigns(this.props.folder.campaigns, order.budgets)
-    const remainingAmount = availableAmount(order.amount, order.budgets)
-    const remainingValue = get(budget, 'mode') === 'percentage'
-      ? round((remainingAmount / order.amount) * 100, 2)
-      : remainingAmount
-
-    return {
-      order,
-      budget,
-      campaigns,
-      remainingAmount,
-      remainingValue
-    }
-  },
   render () {
-    const {order, budget, campaigns, remainingAmount, remainingValue} = this.calculateParams()
+    const {order, budget, campaigns, remainingAmount, remainingValue} = calculateParams(
+      this.state.order,
+      this.state.selectedBudgetIndex,
+      this.props.folder.campaigns
+    )
 
     return (
       <OrderEdit
+        createBudget={this.createBudget}
         addCampaigns={this.addCampaigns}
         removeCampaign={this.removeCampaign}
         selectBudget={this.selectBudget}
@@ -173,4 +198,4 @@ export const Order = React.createClass({
   }
 })
 
-export default contextualize(Order, 'folder')
+export default contextualize(Order, 'folder', 'messages')
