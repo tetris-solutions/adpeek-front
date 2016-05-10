@@ -13,26 +13,26 @@ export const OrderHeader = React.createClass({
     const {order: {amount, start, end}} = this.props
     return (
       <header className='mdl-grid'>
-        <div className='mdl-cell mdl-cell--2-col'>
+        <div className='mdl-cell mdl-cell--3-col'>
           <Input
             type='date'
             value={start}
             label='startDate'
             name='start'/>
         </div>
-        <div className='mdl-cell mdl-cell--2-col'>
+        <div className='mdl-cell mdl-cell--3-col'>
           <Input
             value={end}
             type='date'
             label='endDate'
             name='end'/>
         </div>
-        <VerticalAlign className='mdl-cell mdl-cell--1-offset mdl-cell--4-col'>
+        <VerticalAlign className='mdl-cell mdl-cell--1-offset mdl-cell--3-col'>
           <div>
             <Switch name='auto_budget' label='Auto Budget'/>
           </div>
         </VerticalAlign>
-        <div className='mdl-cell mdl-cell--3-col'>
+        <div className='mdl-cell mdl-cell--2-col'>
           <Input
             value={amount}
             type='number'

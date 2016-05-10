@@ -1,8 +1,8 @@
 export default {
   en: {
     welcomeMessage: 'Hey, {name}',
-    linkCampaignsCallToAction: 'Link selected campaigns',
-    unlinkCampaignsCallToAction: 'Unlink selected campaigns',
+    linkCampaignsCallToAction: 'Link selected',
+    unlinkCampaignsCallToAction: 'Unlink selected',
     nCampaigns: '{n} linked campaigns',
     nLooseCampaigns: '{n} loose campaigns',
     filterActiveCampaigns: 'Filter active campaigns',
@@ -39,8 +39,8 @@ export default {
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
-    linkCampaignsCallToAction: 'Associar campanhas selecionadas',
-    unlinkCampaignsCallToAction: 'Desassociar campanhas selecionadas',
+    linkCampaignsCallToAction: 'Associar',
+    unlinkCampaignsCallToAction: 'Desassociar',
     nCampaigns: '{n} campanhas nesta pasta',
     nLooseCampaigns: '{n} campanhas soltas',
     filterActiveCampaigns: 'Filtrar campanhas ativas',

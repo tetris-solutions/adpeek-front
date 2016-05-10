@@ -78,6 +78,9 @@ export const OrderEdit = React.createClass({
     }
   },
   selectBudget (selectedBudgetIndex) {
+    if (selectedBudgetIndex === this.state.selectedBudgetIndex) {
+      selectedBudgetIndex = null
+    }
     this.setState({selectedBudgetIndex})
   },
   getCurrentBudget () {
@@ -146,9 +149,11 @@ export const OrderEdit = React.createClass({
           </div>
         </div>
 
-        <OrderCampaigns
-          campaigns={looseCampaigns(this.props.folder.campaigns, order.budgets)}
-          addCampaigns={this.addCampaigns}/>
+        {selectedBudgetIndex ? (
+          <OrderCampaigns
+            campaigns={looseCampaigns(this.props.folder.campaigns, order.budgets)}
+            addCampaigns={this.addCampaigns}/>
+        ) : null}
       </div>
     )
   }
