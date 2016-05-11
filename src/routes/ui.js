@@ -96,7 +96,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 onEnter={preload(orders)}
                 component={Orders}/>
 
-              <Route onEnter={preload(campaigns, orders)}>
+              <Route onEnter={preload(statuses, campaigns, orders)}>
                 <Route
                   path='order/:order'
                   onEnter={preload(budgets)}

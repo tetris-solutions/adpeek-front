@@ -3,12 +3,20 @@ import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save
 import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetch-config'
 import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
 import {saveResponseData} from '../functions/save-response-data'
+import map from 'lodash/map'
+import assign from 'lodash/assign'
+import {statusResolver} from '../functions/status-resolver'
 
 export function loadBudgets (order, config) {
   return GET(`${process.env.ADPEEK_API_URL}/order/${order}/budgets`, config)
 }
 
 export function loadBudgetsAction (tree, company, workspace, folder, order, token) {
+  const setStatus = statusResolver(tree.get('statuses'))
+  const transformCampaigns = ls => map(ls, setStatus)
+  const hydradeBudget = budget => assign({}, budget, {campaigns: transformCampaigns(budget.campaigns)})
+  const transformBudgets = budgets => map(budgets, hydradeBudget)
+
   return loadBudgets(order, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
     .then(saveResponseData(tree, [
@@ -18,7 +26,7 @@ export function loadBudgetsAction (tree, company, workspace, folder, order, toke
       ['folders', folder],
       ['orders', order],
       'budgets'
-    ]))
+    ], transformBudgets))
     .catch(pushResponseErrorToState(tree))
 }
 
