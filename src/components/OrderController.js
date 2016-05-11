@@ -13,6 +13,7 @@ import sum from 'lodash/sum'
 import round from 'lodash/round'
 import without from 'lodash/without'
 import {persistOrder} from '../functions/persist-order'
+import findIndex from 'lodash/findIndex'
 
 const {PropTypes} = React
 const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
@@ -21,7 +22,7 @@ const fromPercentage = (value, total) => round((value / 100) * total, 2)
 
 function looseCampaigns (campaigns, budgets) {
   const takenCampaigns = flatten(map(budgets, getCampaignIds))
-  const notTaken = ({id}) => !includes(takenCampaigns, id)
+  const notTaken = ({id, budget}) => !budget && !includes(takenCampaigns, id)
 
   return filter(campaigns, notTaken)
 }
@@ -66,10 +67,10 @@ function calculateParams (order, selectedBudgetIndex, campaigns) {
   }
 }
 
-export const NEW_BUDGET_PREFIX = 'my-new-budget-'
+export const NEW_BUDGET_PREFIX = 'my-new-budget'
 
 export const Order = React.createClass({
-  displayName: 'Order',
+  displayName: 'Order-Controller',
   propTypes: {
     order: orderType,
     params: PropTypes.shape({
@@ -80,11 +81,13 @@ export const Order = React.createClass({
     campaigns: PropTypes.array
   },
   contextTypes: {
+    router: PropTypes.object,
     messages: PropTypes.object,
     tree: PropTypes.object
   },
   getInitialState () {
     return {
+      campaigns: cloneDeep(this.props.campaigns),
       order: normalizeOrder(cloneDeep(this.props.order)),
       selectedBudgetIndex: null
     }
@@ -145,21 +148,28 @@ export const Order = React.createClass({
     const budget = this.getCurrentBudget()
 
     budget.campaigns = budget.campaigns.concat(map(campaigns,
-      id => find(this.props.campaigns, {id})))
+      id => find(this.state.campaigns, {id})))
 
     this.setCurrentBudget(budget)
   },
-  removeCampaign (campaign) {
-    const {campaigns} = this.getCurrentBudget()
+  unlockCampaign (id) {
+    const campaigns = this.state.campaigns.concat()
+    const index = findIndex(campaigns, {id})
 
+    campaigns[index] = assign({}, campaigns[index], {budget: null})
+
+    this.setState({campaigns})
+  },
+  removeCampaign (campaign) {
+    this.unlockCampaign(campaign.id)
     this.changeCurrentBudget({
-      campaigns: without(campaigns, campaign)
+      campaigns: without(this.getCurrentBudget().campaigns, campaign)
     })
   },
   createBudget () {
     const {order, selectedBudgetIndex} = this.state
 
-    const {remainingAmount} = calculateParams(order, selectedBudgetIndex, this.props.campaigns)
+    const {remainingAmount} = calculateParams(order, selectedBudgetIndex, this.state.campaigns)
     const newBudget = normalizeBudget({
       id: `${NEW_BUDGET_PREFIX}-${Math.random().toString(36).substr(2)}`,
       name: `${this.context.messages.budgetLabel} #${order.budgets.length + 1}`,
@@ -174,16 +184,20 @@ export const Order = React.createClass({
     // @todo filter by campaign
   },
   save () {
+    const {tree, router} = this.context
     const {params, order} = this.props
 
-    persistOrder(params, this.context.tree, order, this.state.order)
+    return persistOrder(params, tree, order, this.state.order)
+      .then(orderId => {
+        router.push(`/company/${params.company}/workspace/${params.workspace}/folder/${params.folder}/order/${orderId}`)
+      })
   },
   render () {
-    const {order, budget, campaigns, remainingAmount, remainingValue} = calculateParams(
-      this.state.order,
-      this.state.selectedBudgetIndex,
-      this.props.campaigns
-    )
+    const {order, budget, campaigns, remainingAmount, remainingValue} =
+      calculateParams(
+        this.state.order,
+        this.state.selectedBudgetIndex,
+        this.state.campaigns)
 
     return (
       <OrderEdit
