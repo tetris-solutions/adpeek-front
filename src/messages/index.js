@@ -45,7 +45,7 @@ export default {
     emptyBudgetSelectionBody: `
       <p>
         Here you can say how those <strong>$ {amount}</strong> you set for this Order
-        can be distributed between your campaigns.
+        can be shared among your campaigns.
       </p>
       <p>
         Each slice in the pie aside is a partition of that sum.
