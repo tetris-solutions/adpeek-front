@@ -1,12 +1,12 @@
 import moment from 'moment'
 
 export default {
-  name: 'Campanhas TOP',
+  name: 'New Order',
   start: moment().format('YYYY-MM-DD'),
   end: moment().add(1, 'month').format('YYYY-MM-DD'),
   auto_budget: true,
   amount: 1000,
-  budgets: [{
+  budgets: [/* {
     id: 'abc',
     name: 'Mc Melody',
     percentage: 40,
@@ -21,5 +21,5 @@ export default {
     name: 'Neymar',
     percentage: 20,
     campaigns: []
-  }]
+  }*/]
 }

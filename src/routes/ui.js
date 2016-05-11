@@ -22,13 +22,15 @@ import App from '../components/App'
 import {loadUserCompaniesActionRouterAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
 import {loadCompanyWorkspacesActionRouterAdaptor as workspaces} from '../actions/load-company-workspaces'
 import {loadCompanyRolesActionRouterAdaptor as roles} from '../actions/load-company-roles'
-import {loadWorkspaceFoldersActionRouterAdaptor as folders} from '../actions/load-workspaces-folders'
-import {loadWorkspaceAccountsActionRouterAdaptor as accounts} from '../actions/load-workspaces-accounts'
+import {loadWorkspaceFoldersActionRouterAdaptor as folders} from '../actions/load-folders'
+import {loadWorkspaceAccountsActionRouterAdaptor as accounts} from '../actions/load-accounts'
 import {loadMediasActionRouterAdaptor as medias} from '../actions/load-medias'
 import {loadWorkspaceActionRouterAdaptor as workspace} from '../actions/load-workspace'
 import {loadFolderActionRouterAdaptor as folder} from '../actions/load-folder'
 import {loadCampaignsActionRouterAdaptor as campaigns} from '../actions/load-campaigns'
 import {loadStatusesActionRouterAdaptor as statuses} from '../actions/load-statuses'
+import {loadOrdersActionRouterAdaptor as orders} from '../actions/load-orders'
+import {loadBudgetsActionRouterAdaptor as budgets} from '../actions/load-budgets'
 
 /**
  * returns the route config
@@ -89,11 +91,20 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 component={Campaigns}
                 onEnter={preload(statuses, campaigns)}/>
 
-              <Route path='orders' component={Orders}/>
+              <Route
+                path='orders'
+                onEnter={preload(orders)}
+                component={Orders}/>
 
-              <Route onEnter={preload(campaigns)}>
-                <Route path='order/:order' component={Order}/>
-                <Route path='create/order' component={Order}/>
+              <Route onEnter={preload(campaigns, orders)}>
+                <Route
+                  path='order/:order'
+                  onEnter={preload(budgets)}
+                  component={Order}/>
+
+                <Route
+                  path='create/order'
+                  component={Order}/>
               </Route>
 
               <Route
