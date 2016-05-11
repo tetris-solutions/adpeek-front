@@ -14,6 +14,7 @@ import EmptySelectionCard from './BudgetEmptySelection'
 const {PropTypes} = React
 
 export function OrderEdit ({
+  save,
   createBudget,
   removeCampaign,
   remainingValue,
@@ -35,7 +36,7 @@ export function OrderEdit ({
             <OrderSelector/>
           </span>
           <div className='mdl-layout-spacer'/>
-          <button className='mdl-button mdl-color-text--grey-100'>
+          <button onClick={save} className='mdl-button mdl-color-text--grey-100'>
             <Message>saveCallToAction</Message>
           </button>
           <HeaderSearchBox onEnter={onEnter}/>
@@ -89,6 +90,7 @@ export function OrderEdit ({
 
 OrderEdit.displayName = 'Order-Edit'
 OrderEdit.propTypes = {
+  save: PropTypes.func,
   createBudget: PropTypes.func,
   removeCampaign: PropTypes.func,
   remainingAmount: PropTypes.number,

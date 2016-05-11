@@ -14,6 +14,7 @@ import defaultOrder from '../mocks/order'
 import sum from 'lodash/sum'
 import round from 'lodash/round'
 import without from 'lodash/without'
+import {persistOrder} from '../functions/persist-order'
 
 const {PropTypes} = React
 const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
@@ -66,12 +67,19 @@ function calculateParams (order, selectedBudgetIndex, campaigns) {
     remainingValue
   }
 }
-const NEW_BUDGET_PREFIX = 'my-new-budget-'
+
+export const NEW_BUDGET_PREFIX = 'my-new-budget-'
 
 export const Order = React.createClass({
   displayName: 'Order',
   propTypes: {
+    tree: PropTypes.object,
     order: orderType,
+    params: PropTypes.shape({
+      company: PropTypes.string,
+      workspace: PropTypes.string,
+      folder: PropTypes.string
+    }),
     messages: PropTypes.object,
     folder: PropTypes.shape({
       campaigns: PropTypes.array
@@ -83,8 +91,11 @@ export const Order = React.createClass({
     }
   },
   getInitialState () {
+    const order = normalizeOrder(cloneDeep(this.props.order))
+
     return {
-      order: normalizeOrder(cloneDeep(this.props.order)),
+      order,
+      originalOrder: order,
       selectedBudgetIndex: null
     }
   },
@@ -172,6 +183,12 @@ export const Order = React.createClass({
   onEnter () {
     // @todo filter by campaign
   },
+  save () {
+    const {originalOrder, order} = this.state
+    const {tree, params} = this.props
+
+    persistOrder(params, tree, originalOrder, order)
+  },
   render () {
     const {order, budget, campaigns, remainingAmount, remainingValue} = calculateParams(
       this.state.order,
@@ -181,6 +198,7 @@ export const Order = React.createClass({
 
     return (
       <OrderEdit
+        save={this.save}
         createBudget={this.createBudget}
         addCampaigns={this.addCampaigns}
         removeCampaign={this.removeCampaign}
@@ -197,4 +215,4 @@ export const Order = React.createClass({
   }
 })
 
-export default contextualize(Order, 'folder', 'messages')
+export default contextualize(Order, 'folder', 'messages', 'tree')
