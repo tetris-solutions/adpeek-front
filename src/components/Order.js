@@ -14,7 +14,6 @@ import defaultOrder from '../mocks/order'
 import sum from 'lodash/sum'
 import round from 'lodash/round'
 import without from 'lodash/without'
-import random from 'lodash/random'
 
 const {PropTypes} = React
 const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
@@ -45,7 +44,7 @@ function availableAmount (total, budgets) {
   const exactAmount = ({mode, value}) => mode === 'percentage'
     ? fromPercentage(value, total)
     : value
-  return total - sum(map(budgets, exactAmount))
+  return round(total - sum(map(budgets, exactAmount)), 2)
 }
 
 function calculateParams (order, selectedBudgetIndex, campaigns) {
@@ -163,7 +162,7 @@ export const Order = React.createClass({
     const newBudget = normalizeBudget({
       id: `${NEW_BUDGET_PREFIX}-${Math.random().toString(36).substr(2)}`,
       name: `${messages.budgetLabel} #${order.budgets.length + 1}`,
-      percentage: random(1, toPercentage(remainingAmount, order.amount)),
+      amount: round(remainingAmount / 2),
       campaigns: []
     })
 

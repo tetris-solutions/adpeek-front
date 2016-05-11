@@ -25,7 +25,9 @@ export default {
     newCampaignHeader: 'New campaign',
     newCampaignCallToAction: 'Create campaign',
     saveCallToAction: 'Save',
+    budgetNameLabel: 'Budget name',
     nameLabel: 'Name',
+    orderNameLabel: 'Order name',
     mediaLabel: 'Media',
     tagLabel: 'Tag',
     externalAccountLabel: 'External account',
@@ -38,7 +40,25 @@ export default {
     valueLabel: 'Value',
     investmentLabel: 'Investment',
     startDateLabel: 'Start date',
-    endDateLabel: 'End date'
+    endDateLabel: 'End date',
+    emptyBudgetSelectionTitle: 'No budget selected',
+    emptyBudgetSelectionBody: `
+      <p>
+        Here you can say how those <strong>$ {amount}</strong> you set for this Order
+        can be distributed between your campaigns.
+      </p>
+      <p>
+        Each slice in the pie aside is a partition of that sum.
+        Inside each one of these slices you can put as many campaigns as you like, so the amount will be shared between them.
+      </p>
+      <p>
+        You still have <strong>$ {available}</strong> left.
+      </p>`,
+    createBudget: 'Slice a new budget',
+    budgetWithoutCampaigns: `
+    <p>
+        You still did not include any campaign in this budget. To remedy that, select some of those campaigns in the list below and click on "Link Selected".
+    </p>`
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -66,6 +86,8 @@ export default {
     newOrderHeader: 'Nova ordem',
     newOrderCallToAction: 'Criar ordem',
     saveCallToAction: 'Salvar',
+    budgetNameLabel: 'Nome do orçamento',
+    orderNameLabel: 'Nome do Pedido',
     nameLabel: 'Nome',
     mediaLabel: 'Pilar de mídia',
     tagLabel: 'Tag',
@@ -79,6 +101,23 @@ export default {
     valueLabel: 'Valor',
     investmentLabel: 'Investimento',
     startDateLabel: 'Data início',
-    endDateLabel: 'Data final'
+    endDateLabel: 'Data final',
+    emptyBudgetSelectionTitle: 'Nenhum orçamento selecionado',
+    emptyBudgetSelectionBody: `
+      <p>
+        Aqui você pode dizer como os <strong>R$ {amount}</strong> do seu PI vão ser distribuídos.
+      </p>
+      <p>
+        Cada fatia do gráfico ao lado representa um orçamento, que é uma partição do budget total da ordem.
+        É possível associar quantas campanhas você quiser a um orçamento, de forma que o valor será distribuído entre elas.
+      </p>
+      <p>
+        Você ainda tem <strong>R$ {available}</strong> disponíveis.
+      </p>`,
+    createBudget: 'Separar novo orçamento',
+    budgetWithoutCampaigns: `
+    <p>
+        Você ainda não incluiu nenhuma campanha neste orçamento, pra fazer isso você só precisa selecionar alguma das campanhas na lista abaixo e clicar em "Associar".
+    </p>`
   }
 }

@@ -10,6 +10,9 @@ import camelCase from 'lodash/camelCase'
 import forEach from 'lodash/forEach'
 import lowerCase from 'lodash/lowerCase'
 import find from 'lodash/find'
+import isEqual from 'lodash/isEqual'
+// import merge from 'lodash/merge'
+// import get from 'lodash/get'
 
 function isUpperCase (letter) {
   return letter !== letter.toLowerCase()
@@ -137,6 +140,17 @@ export const Chart = createClass({
   componentWillReceiveProps (props) {
     const newConfig = mapPropsToConfig(props)
 
+    if (!isEqual(newConfig.title, this.state.config.title)) {
+      this.chart.setTitle(newConfig.title)
+    }
+    // const options = omit(newConfig, 'series')
+    // const oldOptions = omit(this.state.config, 'series')
+    //
+    // if (!isEqual(options, oldOptions)) {
+    //   merge(this.chart.options, options)
+    //   this.chart.redraw()
+    // }
+
     forEach(newConfig.series, series => {
       const oldSerie = find(this.chart.series, ['options.id', series.id])
 
@@ -146,6 +160,8 @@ export const Chart = createClass({
 
       oldSerie.setData(series.data)
     })
+
+    this.setState({config: newConfig})
   },
   shouldComponentUpdate () {
     return false

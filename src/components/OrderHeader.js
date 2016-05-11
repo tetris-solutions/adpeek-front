@@ -12,48 +12,59 @@ export const OrderHeader = React.createClass({
   },
   componentWillMount () {
     const {change} = this.props
-    this.onChangeStart = this.onChangeEnd = ({target: {name, value}}) => change(name, value)
-    this.onChangeAmount = ({target: {name, value}}) => change('amount', Number(value))
-    this.onChangeBudget = ({target: {checked}}) => change('auto_budget', checked)
+    this.onChangeValue = ({target: {name, value}}) => change(name, value)
+    this.onChangeNumber = ({target: {name, value}}) => change(name, Number(value))
+    this.onChangeBoolean = ({target: {checked, name}}) => change(name, checked)
   },
   render () {
-    const {order: {auto_budget, amount, start, end}} = this.props
+    const {order: {name, auto_budget, amount, start, end}} = this.props
     return (
-      <header className='mdl-grid'>
-        <div className='mdl-cell mdl-cell--3-col'>
-          <Input
-            type='date'
-            value={start}
-            label='startDate'
-            onChange={this.onChangeStart}
-            name='start'/>
-        </div>
-        <div className='mdl-cell mdl-cell--3-col'>
-          <Input
-            value={end}
-            type='date'
-            label='endDate'
-            onChange={this.onChangeEnd}
-            name='end'/>
-        </div>
-        <VerticalAlign className='mdl-cell mdl-cell--1-offset mdl-cell--3-col'>
-          <div>
-            <Switch
-              onChange={this.onChangeBudget}
-              checked={auto_budget}
-              name='auto_budget'
-              label='Auto Budget'/>
+      <div className='mdl-card mdl-shadow--2dp ' style={{width: '96%', margin: '1em auto 0 auto', minHeight: 0}}>
+        <div className='mdl-card__supporting-text' style={{width: '96%', margin: '.3em auto', padding: 0}}>
+          <div className='mdl-grid'>
+            <div className='mdl-cell mdl-cell--4-col'>
+              <Input
+                name='name'
+                value={name}
+                label='orderName'
+                onChange={this.onChangeValue}/>
+            </div>
+            <div className='mdl-cell mdl-cell--2-col'>
+              <Input
+                type='date'
+                value={start}
+                label='startDate'
+                onChange={this.onChangeValue}
+                name='start'/>
+            </div>
+            <div className='mdl-cell mdl-cell--2-col'>
+              <Input
+                value={end}
+                type='date'
+                label='endDate'
+                onChange={this.onChangeValue}
+                name='end'/>
+            </div>
+            <VerticalAlign className='mdl-cell mdl-cell--1-offset mdl-cell--2-col'>
+              <div>
+                <Switch
+                  onChange={this.onChangeBoolean}
+                  checked={auto_budget}
+                  name='auto_budget'
+                  label='Auto Budget'/>
+              </div>
+            </VerticalAlign>
+            <div className='mdl-cell mdl-cell--1-col'>
+              <Input
+                value={amount}
+                type='number'
+                label='investment'
+                onChange={this.onChangeNumber}
+                name='amount'/>
+            </div>
           </div>
-        </VerticalAlign>
-        <div className='mdl-cell mdl-cell--2-col'>
-          <Input
-            value={amount}
-            type='number'
-            label='investment'
-            onChange={this.onChangeAmount}
-            name='amount'/>
         </div>
-      </header>
+      </div>
     )
   }
 })

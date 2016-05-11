@@ -84,7 +84,7 @@ export const BudgetEdit = React.createClass({
               <Input
                 onChange={this.onChangeName}
                 value={name}
-                label='name'
+                label='budgetName'
                 name='name'/>
             </div>
             <VerticalAlign className='mdl-cell mdl-cell--4-col'>
@@ -111,11 +111,11 @@ export const BudgetEdit = React.createClass({
             </div>
           </div>
 
-          {size(campaigns) > 0 && (
-            <h5>
-              <Message>budgetCampaigns</Message>
-            </h5>
-          )}
+          <h5>
+            <Message>budgetCampaigns</Message>
+          </h5>
+
+          {!size(campaigns) && <Message html>budgetWithoutCampaigns</Message>}
 
           <div className='mdl-list'>
             {map(campaigns, campaign => (

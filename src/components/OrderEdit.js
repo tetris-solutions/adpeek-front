@@ -9,6 +9,7 @@ import OrderHeader from './OrderHeader'
 import BudgetEdit from './BudgetEdit'
 import OrderCampaigns from './OrderCampaigns'
 import OrderPie from './OrderPie'
+import EmptySelectionCard from './BudgetEmptySelection'
 
 const {PropTypes} = React
 
@@ -42,6 +43,11 @@ export function OrderEdit ({
       </header>
 
       <section>
+
+        <OrderHeader
+          change={changeOrderField}
+          order={order}/>
+
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--5-col'>
             <br/>
@@ -54,9 +60,6 @@ export function OrderEdit ({
 
           </div>
           <div className='mdl-cell mdl-cell--7-col'>
-            <OrderHeader
-              change={changeOrderField}
-              order={order}/>
 
             {budget ? (
               <BudgetEdit
@@ -66,9 +69,10 @@ export function OrderEdit ({
                 budget={budget}
                 change={changeBudgetField}/>
             ) : (
-              <button onClick={createBudget}>
-                Novo orçamento
-              </button>
+              <EmptySelectionCard
+                available={remainingAmount}
+                amount={order.amount}
+                createBudget={createBudget}/>
             )}
           </div>
         </div>
