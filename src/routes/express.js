@@ -10,6 +10,8 @@ import {loadMediasActionServerAdaptor as medias} from '../actions/load-medias'
 import {loadWorkspaceActionServerAdaptor as workspace} from '../actions/load-workspace'
 import {loadCampaignsActionServerAdaptor as campaigns} from '../actions/load-campaigns'
 import {loadStatusesActionServerAdaptor as statuses} from '../actions/load-statuses'
+import {loadOrdersActionServerAdaptor as orders} from '../actions/load-orders'
+import {loadBudgetsActionServerAdaptor as budgets} from '../actions/load-budgets'
 
 export function setAppRoutes (app, render) {
   app.get('/', render)
@@ -46,17 +48,17 @@ export function setAppRoutes (app, render) {
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/orders',
     protect,
-    preload(statuses, companies, workspace, folder, campaigns),
+    preload(statuses, companies, workspace, folder, campaigns, orders),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/order/:order',
     protect,
-    preload(statuses, companies, workspace, folder, campaigns),
+    preload(statuses, companies, workspace, folder, campaigns, orders, budgets),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/create/order',
     protect,
-    preload(statuses, companies, workspace, folder, campaigns),
+    preload(statuses, companies, workspace, folder, campaigns, orders),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/edit',

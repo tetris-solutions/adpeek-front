@@ -58,7 +58,8 @@ export default {
     budgetWithoutCampaigns: `
     <p>
         You still did not include any campaign in this budget. To remedy that, select some of those campaigns in the list below and click on "Link Selected".
-    </p>`
+    </p>`,
+    newOrderName: '{month} order'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -118,6 +119,7 @@ export default {
     budgetWithoutCampaigns: `
     <p>
         Você ainda não incluiu nenhuma campanha neste orçamento, pra fazer isso você só precisa selecionar alguma das campanhas na lista abaixo e clicar em "Associar".
-    </p>`
+    </p>`,
+    newOrderName: 'PI {month}'
   }
 }

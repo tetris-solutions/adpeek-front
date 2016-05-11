@@ -1,9 +1,9 @@
 import React from 'react'
 import Select from './Select'
 import map from 'lodash/map'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
-const orders = [{id: '0123', name: 'PI Outubro'}, {id: '0456', name: 'PI Março'}]
 
 export const OrdersSelector = React.createClass({
   displayName: 'Orders-Selector',
@@ -14,6 +14,11 @@ export const OrdersSelector = React.createClass({
       workspace: PropTypes.string,
       folder: PropTypes.string,
       order: PropTypes.string
+    })
+  },
+  propTypes: {
+    folder: PropTypes.shape({
+      orders: PropTypes.array
     })
   },
   onChange ({target: {value}}) {
@@ -31,7 +36,7 @@ export const OrdersSelector = React.createClass({
       <Select name='order' value={this.context.params.order || ''} onChange={this.onChange}>
         <option value=''>Create order</option>
 
-        {map(orders, ({id, name}) => (
+        {map(this.props.folder.orders, ({id, name}) => (
           <option key={id} value={id}>
             {name}
           </option>))}
@@ -40,4 +45,4 @@ export const OrdersSelector = React.createClass({
   }
 })
 
-export default OrdersSelector
+export default contextualize(OrdersSelector, 'folder')
