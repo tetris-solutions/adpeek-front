@@ -69,6 +69,10 @@ function calculateParams (order, selectedBudgetIndex, campaigns) {
 
 export const NEW_BUDGET_PREFIX = 'my-new-budget'
 
+function defaultBudgetName ({budgetLabel}, index) {
+  return `${budgetLabel} #${index}`
+}
+
 export const Order = React.createClass({
   displayName: 'Order-Controller',
   propTypes: {
@@ -144,11 +148,25 @@ export const Order = React.createClass({
       this.changeCurrentBudget({[field]: value})
     }
   },
-  addCampaigns (campaigns) {
+  /**
+   * include a list of campaigns in the selected budget
+   * @param {Array.<String>} insertedCampaignIds campaign ids
+   * @returns {undefined}
+   */
+  addCampaigns (insertedCampaignIds) {
     const budget = this.getCurrentBudget()
 
-    budget.campaigns = budget.campaigns.concat(map(campaigns,
-      id => find(this.state.campaigns, {id})))
+    const {selectedBudgetIndex, campaigns} = this.state
+
+    budget.campaigns = budget.campaigns.concat(
+      map(insertedCampaignIds, id => find(campaigns, {id})))
+
+    const {messages} = this.context
+    const didnotChangeName = budget.name === defaultBudgetName(messages, selectedBudgetIndex + 1)
+
+    if (insertedCampaignIds.length === 1 && didnotChangeName) {
+      budget.name = find(campaigns, {id: insertedCampaignIds[0]}).name
+    }
 
     this.setCurrentBudget(budget)
   },
@@ -172,7 +190,7 @@ export const Order = React.createClass({
     const {remainingAmount} = calculateParams(order, selectedBudgetIndex, this.state.campaigns)
     const newBudget = normalizeBudget({
       id: `${NEW_BUDGET_PREFIX}-${Math.random().toString(36).substr(2)}`,
-      name: `${this.context.messages.budgetLabel} #${order.budgets.length + 1}`,
+      name: defaultBudgetName(this.context.messages, order.budgets.length + 1),
       amount: round(remainingAmount / 2),
       campaigns: []
     })

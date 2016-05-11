@@ -6,7 +6,6 @@ import csjs from 'csjs'
 import isNumber from 'lodash/isNumber'
 import size from 'lodash/size'
 import {styled} from './mixins/styled'
-import {contextualize} from './higher-order/contextualize'
 import round from 'lodash/round'
 import find from 'lodash/find'
 
@@ -21,10 +20,12 @@ export const OrderPie = React.createClass({
   mixins: [styled(style)],
   propTypes: {
     selectedBudgetId: PropTypes.string,
-    messages: PropTypes.object,
     remainingAmount: PropTypes.number,
     order: orderType,
     selectBudget: PropTypes.func
+  },
+  contextTypes: {
+    messages: PropTypes.object
   },
   onBudgetClick ({point: {options: {index, id}}}) {
     this.props.selectBudget(id === 'remaining' ? null : index)
@@ -42,7 +43,8 @@ export const OrderPie = React.createClass({
     }
   },
   render () {
-    const {messages: {availableBudget, budgetLabel}, remainingAmount, order: {name, amount, budgets}} = this.props
+    const {messages: {availableBudget, budgetLabel}} = this.context
+    const {remainingAmount, order: {name, amount, budgets}} = this.props
 
     function calculateAmount (b) {
       return isNumber(b.amount)
@@ -62,7 +64,11 @@ export const OrderPie = React.createClass({
 
         <title>{name}</title>
 
-        <tooltip pointFormat='{series.name}: <b>R$ {point.y:.2f}</b><i> {point.percentage:.1f}%</i>'/>
+        <tooltip>
+          <point-format>{
+            '{series.name}: <b>R$ {point.y:.2f}</b><i> {point.percentage:.1f}%</i><br/>{point.options.campaigns}'
+          }</point-format>
+        </tooltip>
 
         <plot-options>
           <pie showInLegend allowPointSelect onClick={this.onBudgetClick}>
@@ -78,6 +84,7 @@ export const OrderPie = React.createClass({
             <point
               key={index}
               id={budget.id}
+              campaigns={map(budget.campaigns, ({name}) => `- ${name}`).join('<br/>')}
               y={calculateAmount(budget)}
               index={index}>
               {budget.name}
@@ -97,4 +104,5 @@ export const OrderPie = React.createClass({
   }
 })
 
-export default contextualize(OrderPie, 'messages')
+export default OrderPie
+
