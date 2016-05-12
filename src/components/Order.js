@@ -9,7 +9,7 @@ const {PropTypes} = React
 
 export function Order ({params, folder: {campaigns, orders}}, {messages: {newOrderName}, moment, locales}) {
   const defaultOrder = () => ({
-    name: new Message(newOrderName, locales).format({month: upperFirst(moment().format('MMMM'))}),
+    name: new Message(newOrderName, locales).format({month: upperFirst(moment().format('MMMM, YY'))}),
     start: moment().format('YYYY-MM-DD'),
     end: moment().add(1, 'month').format('YYYY-MM-DD'),
     auto_budget: true,

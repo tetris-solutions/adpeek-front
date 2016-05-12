@@ -45,4 +45,4 @@ WorkspaceAside.propTypes = {
   })
 }
 
-export default contextualize(branch({}, WorkspaceAside), 'workspace', 'messages', 'router')
+export default contextualize(branch({}, WorkspaceAside), 'workspace', 'router')

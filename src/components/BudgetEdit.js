@@ -2,7 +2,6 @@ import React from 'react'
 import budgetType from '../propTypes/budget'
 import Slide from './Slide'
 import Switch from './Switch'
-import {contextualize} from './higher-order/contextualize'
 import Input from './Input'
 import VerticalAlign from './VerticalAlign'
 import {Card, Content, Header} from './Card'
@@ -25,7 +24,9 @@ function Campaign ({campaign, removeCampaign}) {
   return (
     <div className='mdl-list__item'>
       <span className='mdl-list__item-primary-content'>
-        <i className='material-icons mdl-list__item-avatar'>{campaign.status.icon}</i>
+        <i className='material-icons mdl-list__item-avatar' title={campaign.status.description}>
+          {campaign.status.icon}
+        </i>
         <span>{campaign.name}</span>
       </span>
       <a className='mdl-list__item-secondary-action' onClick={onClick}>
@@ -50,7 +51,9 @@ export const BudgetEdit = React.createClass({
     removeCampaign: PropTypes.func,
     change: PropTypes.func,
     max: PropTypes.number,
-    budget: budgetType,
+    budget: budgetType
+  },
+  contextTypes: {
     messages: PropTypes.object
   },
   onChangeMode ({target: {checked}}) {
@@ -66,10 +69,10 @@ export const BudgetEdit = React.createClass({
     this.props.change('delivery_method', value)
   },
   render () {
+    const {messages: {percentageLabel, amountLabel}} = this.context
     const {
       deliveryMethods,
       max,
-      messages: {percentageLabel, amountLabel},
       budget: {name, value, mode, campaigns, delivery_method}
     } = this.props
 
@@ -155,4 +158,4 @@ export const BudgetEdit = React.createClass({
   }
 })
 
-export default contextualize(branch({deliveryMethods: ['deliveryMethods']}, BudgetEdit), 'messages')
+export default branch({deliveryMethods: ['deliveryMethods']}, BudgetEdit)

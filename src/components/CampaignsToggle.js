@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import forEach from 'lodash/forEach'
-import {contextualize} from './higher-order/contextualize'
 import csjs from 'csjs'
 import {Form, Content, Header, Footer} from './Card'
 import {styled} from './mixins/styled'
@@ -22,7 +21,9 @@ export const CampaignsToggle = React.createClass({
     title: PropTypes.node,
     label: PropTypes.string,
     children: PropTypes.node,
-    onSelected: PropTypes.func,
+    onSelected: PropTypes.func
+  },
+  contextTypes: {
     messages: PropTypes.shape({
       selectAllCampaigns: PropTypes.string,
       deselectAllCampaigns: PropTypes.string
@@ -71,14 +72,8 @@ export const CampaignsToggle = React.createClass({
   },
   render () {
     const {selected} = this.state
-    const {
-      headerColor,
-      headerTextColor,
-      title,
-      children,
-      label,
-      messages: {selectAllCampaigns, deselectAllCampaigns}
-    } = this.props
+    const {messages: {selectAllCampaigns, deselectAllCampaigns}} = this.context
+    const {headerColor, headerTextColor, title, children, label} = this.props
 
     return (
       <Form ref='form' size='large' onSubmit={this.handleSubmit}>
@@ -104,4 +99,4 @@ export const CampaignsToggle = React.createClass({
   }
 })
 
-export default contextualize(CampaignsToggle, 'messages')
+export default CampaignsToggle

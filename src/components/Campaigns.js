@@ -31,14 +31,16 @@ export const Campaigns = React.createClass({
       looseCampaigns: PropTypes.array,
       campaigns: PropTypes.array
     }),
-    messages: PropTypes.shape({
-      unlinkCampaignsCallToAction: PropTypes.string,
-      linkCampaignsCallToAction: PropTypes.string
-    }),
     params: PropTypes.shape({
       company: PropTypes.string,
       workspace: PropTypes.string,
       folder: PropTypes.string
+    })
+  },
+  contextTypes: {
+    messages: PropTypes.shape({
+      unlinkCampaignsCallToAction: PropTypes.string,
+      linkCampaignsCallToAction: PropTypes.string
     })
   },
   getInitialState () {
@@ -80,7 +82,8 @@ export const Campaigns = React.createClass({
   },
   render () {
     const value = cleanStr(this.state.filterValue)
-    const {folder, messages, params: {company, workspace}} = this.props
+    const {messages} = this.context
+    const {folder, params: {company, workspace}} = this.props
     const filterValid = this.state.filterActiveCampaigns ? filterActive : identity
     const match = ({external_id, name}) => !value || includes(external_id, value) || includes(cleanStr(name), value)
     const linked = filter(filterValid(folder.campaigns), match)
@@ -130,4 +133,4 @@ export const Campaigns = React.createClass({
   }
 })
 
-export default branch({}, contextualize(Campaigns, 'folder', 'messages', 'statuses'))
+export default branch({}, contextualize(Campaigns, 'folder', 'statuses'))

@@ -3,13 +3,20 @@ import Message from '@tetris/front-server/lib/components/intl/Message'
 import {Link} from 'react-router'
 import HeaderSearchBox from './HeaderSearchBox'
 import Switch from './Switch'
-import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
 const onChange = onSwitch => ({target: {checked}}) => onSwitch(checked)
 
-export function CampaignsHeader ({onEnter, company, workspace, folder, onSwitch, messages: {filterActiveCampaigns}}) {
+export function CampaignsHeader ({
+  onEnter,
+  company,
+  workspace,
+  folder,
+  onSwitch
+}, {
+  messages: {filterActiveCampaigns}
+}) {
   return (
     <header className='mdl-layout__header'>
       <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
@@ -34,8 +41,10 @@ CampaignsHeader.propTypes = {
   workspace: PropTypes.string,
   folder: PropTypes.string,
   onSwitch: PropTypes.func,
-  onEnter: PropTypes.func,
+  onEnter: PropTypes.func
+}
+CampaignsHeader.contextTypes = {
   messages: PropTypes.object
 }
 
-export default contextualize(CampaignsHeader, 'messages')
+export default CampaignsHeader

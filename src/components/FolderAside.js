@@ -63,4 +63,4 @@ FolderAside.propTypes = {
   })
 }
 
-export default contextualize(branch({}, FolderAside), 'folder', 'messages', 'router')
+export default contextualize(branch({}, FolderAside), 'folder', 'router')

@@ -1,5 +1,4 @@
 import React from 'react'
-import {contextualize} from './higher-order/contextualize'
 import CampaignsToggle from './CampaignsToggle'
 import Campaign from './Campaign'
 import size from 'lodash/size'
@@ -13,14 +12,17 @@ export const OrderCampaigns = React.createClass({
   displayName: 'Order-Campaigns',
   propTypes: {
     addCampaigns: PropTypes.func,
-    campaigns: PropTypes.array,
+    campaigns: PropTypes.array
+  },
+  contextTypes: {
     messages: PropTypes.object
   },
   shouldComponentUpdate ({campaigns}) {
     return size(campaigns) !== size(this.props.campaigns)
   },
   render () {
-    const {campaigns, messages} = this.props
+    const {messages} = this.context
+    const {campaigns} = this.props
 
     return (
       <CampaignsToggle
@@ -37,4 +39,4 @@ export const OrderCampaigns = React.createClass({
   }
 })
 
-export default contextualize(OrderCampaigns, 'messages')
+export default OrderCampaigns
