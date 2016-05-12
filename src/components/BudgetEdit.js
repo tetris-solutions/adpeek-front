@@ -4,7 +4,7 @@ import Slide from './Slide'
 import Switch from './Switch'
 import Input from './Input'
 import VerticalAlign from './VerticalAlign'
-import {Card, Content, Header} from './Card'
+import {Card, Content, Header, Footer} from './Card'
 import map from 'lodash/map'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import campaignType from '../propTypes/campaign'
@@ -47,6 +47,7 @@ const notUnknown = ({id}) => id !== 'UNKNOWN'
 export const BudgetEdit = React.createClass({
   displayName: 'Budget-Edit',
   propTypes: {
+    close: PropTypes.func,
     deliveryMethods: PropTypes.array,
     removeCampaign: PropTypes.func,
     change: PropTypes.func,
@@ -71,6 +72,7 @@ export const BudgetEdit = React.createClass({
   render () {
     const {messages: {percentageLabel, amountLabel}} = this.context
     const {
+      close,
       deliveryMethods,
       max,
       budget: {name, value, mode, campaigns, delivery_method}
@@ -153,6 +155,11 @@ export const BudgetEdit = React.createClass({
             ))}
           </div>
         </Content>
+        <Footer multipleButtons>
+          <button className='mdl-button mdl-button--colored' onClick={close}>
+            <Message>closeBudget</Message>
+          </button>
+        </Footer>
       </Card>
     )
   }

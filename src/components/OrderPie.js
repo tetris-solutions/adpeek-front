@@ -44,7 +44,7 @@ export const OrderPie = React.createClass({
   },
   render () {
     const {messages: {availableBudget, budgetLabel}} = this.context
-    const {remainingAmount, order: {name, amount, budgets}} = this.props
+    const {selectedBudgetId, remainingAmount, order: {name, amount, budgets}} = this.props
 
     function calculateAmount (b) {
       return isNumber(b.amount)
@@ -84,6 +84,7 @@ export const OrderPie = React.createClass({
             <point
               key={index}
               id={budget.id}
+              sliced={selectedBudgetId === budget.id}
               campaigns={map(budget.campaigns, ({name}) => `- ${name}`).join('<br/>')}
               y={calculateAmount(budget)}
               index={index}>

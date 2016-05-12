@@ -28,6 +28,9 @@ export function OrderEdit ({
   order,
   campaigns
 }) {
+  function closeBudget () {
+    selectBudget(null)
+  }
   return (
     <div>
       <header className='mdl-layout__header'>
@@ -64,6 +67,7 @@ export function OrderEdit ({
 
             {budget ? (
               <BudgetEdit
+                close={closeBudget}
                 removeCampaign={removeCampaign}
                 key={budget.id}
                 max={remainingValue + budget.value}
