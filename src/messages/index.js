@@ -59,7 +59,8 @@ export default {
     <p>
         You still did not include any campaign in this budget. To remedy that, select some of those campaigns in the list below and click on "Link Selected".
     </p>`,
-    newOrderName: '{month} order'
+    newOrderName: '{month} order',
+    deliveryMethodLabel: 'Delivery method'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -120,6 +121,7 @@ export default {
     <p>
         Você ainda não incluiu nenhuma campanha neste orçamento, pra fazer isso você só precisa selecionar alguma das campanhas na lista abaixo e clicar em "Associar".
     </p>`,
-    newOrderName: 'PI {month}'
+    newOrderName: 'PI {month}',
+    deliveryMethodLabel: 'Forma de entrega'
   }
 }

@@ -14,6 +14,7 @@ import round from 'lodash/round'
 import without from 'lodash/without'
 import {persistOrder} from '../functions/persist-order'
 import findIndex from 'lodash/findIndex'
+import {branch} from 'baobab-react/dist-modules/higher-order'
 
 const {PropTypes} = React
 const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
@@ -76,6 +77,7 @@ function defaultBudgetName ({budgetLabel}, index) {
 export const Order = React.createClass({
   displayName: 'Order-Controller',
   propTypes: {
+    deliveryMethods: PropTypes.array,
     order: orderType,
     params: PropTypes.shape({
       company: PropTypes.string,
@@ -185,6 +187,7 @@ export const Order = React.createClass({
     })
   },
   createBudget () {
+    const {deliveryMethods} = this.props
     const {order, selectedBudgetIndex} = this.state
 
     const {remainingAmount} = calculateParams(order, selectedBudgetIndex, this.state.campaigns)
@@ -192,6 +195,7 @@ export const Order = React.createClass({
       id: `${NEW_BUDGET_PREFIX}-${Math.random().toString(36).substr(2)}`,
       name: defaultBudgetName(this.context.messages, order.budgets.length + 1),
       amount: round(remainingAmount / 2),
+      delivery_method: find(deliveryMethods, ({id}) => id !== 'UNKNOWN').id,
       campaigns: []
     })
 
@@ -236,4 +240,4 @@ export const Order = React.createClass({
   }
 })
 
-export default Order
+export default branch({deliveryMethods: ['deliveryMethods']}, Order)

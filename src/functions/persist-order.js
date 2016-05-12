@@ -23,7 +23,7 @@ import {loadOrdersAction} from '../actions/load-orders'
 import {loadBudgetsAction} from '../actions/load-budgets'
 import {loadCampaignsAction} from '../actions/load-campaigns'
 
-const editableBudgetFields = ['name', 'amount', 'percentage']
+const editableBudgetFields = ['name', 'amount', 'percentage', 'delivery_method']
 const editableOrderFields = ['name', 'start', 'end', 'amount', 'auto_budget']
 
 export function persistOrder ({company, workspace, folder}, tree, oldOrder, newOrder) {

@@ -10,6 +10,9 @@ import map from 'lodash/map'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import campaignType from '../propTypes/campaign'
 import size from 'lodash/size'
+import Select from './Select'
+import {branch} from 'baobab-react/dist-modules/higher-order'
+import filter from 'lodash/filter'
 
 const {PropTypes} = React
 
@@ -38,9 +41,12 @@ Campaign.propTypes = {
   removeCampaign: PropTypes.func
 }
 
+const notUnknown = ({id}) => id !== 'UNKNOWN'
+
 export const BudgetEdit = React.createClass({
   displayName: 'Budget-Edit',
   propTypes: {
+    deliveryMethods: PropTypes.array,
     removeCampaign: PropTypes.func,
     change: PropTypes.func,
     max: PropTypes.number,
@@ -56,11 +62,15 @@ export const BudgetEdit = React.createClass({
   onChangeName ({target: {value}}) {
     this.props.change('name', value)
   },
+  onChangeDeliveryMethod ({target: {value}}) {
+    this.props.change('delivery_method', value)
+  },
   render () {
     const {
+      deliveryMethods,
       max,
       messages: {percentageLabel, amountLabel},
-      budget: {name, value, mode, campaigns}
+      budget: {name, value, mode, campaigns, delivery_method}
     } = this.props
 
     let switchLabel, switchChecked
@@ -80,20 +90,34 @@ export const BudgetEdit = React.createClass({
         </Header>
         <Content>
           <div className='mdl-grid'>
-            <div className='mdl-cell mdl-cell--8-col'>
+            <div className='mdl-cell mdl-cell--7-col'>
               <Input
                 onChange={this.onChangeName}
                 value={name}
                 label='budgetName'
                 name='name'/>
             </div>
-            <VerticalAlign className='mdl-cell mdl-cell--4-col'>
-              <Switch checked={switchChecked} onChange={this.onChangeMode} label={switchLabel}/>
-            </VerticalAlign>
+            <div className='mdl-cell mdl-cell--5-col'>
+              <Select
+                name='delivery_method'
+                label='deliveryMethod'
+                value={delivery_method}
+                onChange={this.onChangeDeliveryMethod}>
+
+                {map(filter(deliveryMethods, notUnknown), ({id, name}, index) =>
+                  <option key={index} value={id}>{name}</option>)}
+
+              </Select>
+            </div>
           </div>
 
           <div className='mdl-grid'>
-            <VerticalAlign className='mdl-cell mdl-cell--8-col'>
+            <VerticalAlign className='mdl-cell mdl-cell--3-col'>
+              <br/>
+              <Switch checked={switchChecked} onChange={this.onChangeMode} label={switchLabel}/>
+            </VerticalAlign>
+
+            <VerticalAlign className='mdl-cell mdl-cell--6-col'>
               <Slide
                 onChange={this.onChangeValue}
                 value={value}
@@ -101,7 +125,7 @@ export const BudgetEdit = React.createClass({
                 min={1}/>
             </VerticalAlign>
 
-            <div className='mdl-cell mdl-cell--4-col'>
+            <div className='mdl-cell mdl-cell--3-col'>
               <Input
                 onChange={this.onChangeValue}
                 value={value}
@@ -131,4 +155,4 @@ export const BudgetEdit = React.createClass({
   }
 })
 
-export default contextualize(BudgetEdit, 'messages')
+export default contextualize(branch({deliveryMethods: ['deliveryMethods']}, BudgetEdit), 'messages')

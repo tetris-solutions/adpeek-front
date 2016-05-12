@@ -31,7 +31,7 @@ import {loadCampaignsActionRouterAdaptor as campaigns} from '../actions/load-cam
 import {loadStatusesActionRouterAdaptor as statuses} from '../actions/load-statuses'
 import {loadOrdersActionRouterAdaptor as orders} from '../actions/load-orders'
 import {loadBudgetsActionRouterAdaptor as budgets} from '../actions/load-budgets'
-
+import {loadDeliveryMethodsActionRouterAdaptor as deliveryMethods} from '../actions/load-delivery-methods'
 /**
  * returns the route config
  * @param {Baobab} tree state tree
@@ -96,7 +96,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 onEnter={preload(orders)}
                 component={Orders}/>
 
-              <Route onEnter={preload(statuses, campaigns, orders)}>
+              <Route onEnter={preload(deliveryMethods, statuses, campaigns, orders)}>
                 <Route
                   path='order/:order'
                   onEnter={preload(budgets)}
