@@ -8,14 +8,17 @@ import upperFirst from 'lodash/upperFirst'
 const {PropTypes} = React
 
 export function Order ({params, folder: {campaigns, orders}}, {messages: {newOrderName}, moment, locales}) {
-  const defaultOrder = () => ({
-    name: new Message(newOrderName, locales).format({month: upperFirst(moment().format('MMMM, YY'))}),
-    start: moment().format('YYYY-MM-DD'),
-    end: moment().add(1, 'month').format('YYYY-MM-DD'),
-    auto_budget: true,
-    amount: 1000,
-    budgets: []
-  })
+  const defaultOrder = () => {
+    const nextMonth = moment().add(1, 'month')
+    return {
+      name: new Message(newOrderName, locales).format({month: upperFirst(nextMonth.format('MMMM, YY'))}),
+      start: nextMonth.date(1).format('YYYY-MM-DD'),
+      end: nextMonth.add(1, 'month').date(0).format('YYYY-MM-DD'),
+      auto_budget: true,
+      amount: 1000,
+      budgets: []
+    }
+  }
 
   const order = find(orders, {id: params.order}) || defaultOrder()
 
