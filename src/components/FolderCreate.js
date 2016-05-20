@@ -7,6 +7,8 @@ import {createFolderAction} from '../actions/create-folder'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import Select from './Select'
 import map from 'lodash/map'
+import find from 'lodash/find'
+import get from 'lodash/get'
 import {Form, Content, Header, Footer} from './Card'
 
 const {PropTypes} = React
@@ -28,6 +30,11 @@ export const CreateFolder = React.createClass({
       accounts: PropTypes.object
     })
   },
+  getInitialState () {
+    return {
+      selectedMedia: ''
+    }
+  },
   /**
    * handles submit event
    * @param {Event} e submit event
@@ -42,7 +49,8 @@ export const CreateFolder = React.createClass({
       name: elements.name.value,
       workspace_account: elements.workspace_account.value,
       tag: elements.tag.value,
-      media: elements.media.value
+      media: elements.media.value,
+      kpi: elements.kpi.value
     }
 
     this.preSubmit()
@@ -55,9 +63,16 @@ export const CreateFolder = React.createClass({
       .catch(this.handleSubmitException)
       .then(this.posSubmit)
   },
+  onChangeMedia (e) {
+    this.dismissError(e)
+
+    this.setState({
+      selectedMedia: e.target.value
+    })
+  },
   render () {
     const {medias} = this.props
-    const {errors} = this.state
+    const {errors, selectedMedia} = this.state
     const {accounts} = this.context.workspace
 
     return (
@@ -94,11 +109,28 @@ export const CreateFolder = React.createClass({
             name='media'
             label='media'
             error={errors.media}
-            onChange={this.dismissError}>
+            value={selectedMedia}
+            onChange={this.onChangeMedia}>
 
             <option value=''/>
 
             {map(medias,
+              ({id, name}, index) => (
+                <option key={index} value={id}>
+                  {name}
+                </option>
+              ))}
+          </Select>
+
+          <Select
+            name='kpi'
+            label='kpi'
+            error={errors.kpi}
+            onChange={this.dismissError}>
+
+            <option value=''/>
+
+            {map(get(find(medias, {id: selectedMedia}), 'kpis'),
               ({id, name}, index) => (
                 <option key={index} value={id}>
                   {name}

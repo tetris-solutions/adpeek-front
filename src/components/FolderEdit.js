@@ -9,6 +9,8 @@ import Select from './Select'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
 import pick from 'lodash/pick'
+import find from 'lodash/find'
+import get from 'lodash/get'
 import {Form, Content, Header, Footer} from './Card'
 
 const {PropTypes} = React
@@ -31,7 +33,8 @@ export const EditFolder = React.createClass({
       name: PropTypes.string,
       tag: PropTypes.string,
       workspace_account: PropTypes.string,
-      media: PropTypes.string
+      media: PropTypes.string,
+      kpi: PropTypes.string
     }),
     workspace: PropTypes.shape({
       accounts: PropTypes.object
@@ -42,7 +45,8 @@ export const EditFolder = React.createClass({
       'name',
       'tag',
       'workspace_account',
-      'media'
+      'media',
+      'kpi'
     ]))
   },
   /**
@@ -61,7 +65,8 @@ export const EditFolder = React.createClass({
       name: elements.name.value,
       workspace_account: elements.workspace_account.value,
       tag: elements.tag.value,
-      media: elements.media.value
+      media: elements.media.value,
+      kpi: elements.kpi.value
     }
 
     this.preSubmit()
@@ -82,7 +87,7 @@ export const EditFolder = React.createClass({
   },
   render () {
     const {medias} = this.props
-    const {errors, name, workspace_account, media, tag} = this.state
+    const {errors, kpi, name, workspace_account, media, tag} = this.state
     const {workspace: {accounts}} = this.context
 
     return (
@@ -127,6 +132,23 @@ export const EditFolder = React.createClass({
             <option value=''/>
 
             {map(medias,
+              ({id, name}, index) => (
+                <option key={index} value={id}>
+                  {name}
+                </option>
+              ))}
+          </Select>
+
+          <Select
+            name='kpi'
+            label='kpi'
+            error={errors.kpi}
+            value={kpi}
+            onChange={this.saveAndDismiss('kpi')}>
+
+            <option value=''/>
+
+            {map(get(find(medias, {id: media}), 'kpis'),
               ({id, name}, index) => (
                 <option key={index} value={id}>
                   {name}
