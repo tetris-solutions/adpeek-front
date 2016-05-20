@@ -14,9 +14,16 @@ export function statusResolver (statuses) {
       description: '???'
     }
 
-    const foundDescriptor = find(statuses, {name: sub_status, platform}) ||
-      find(statuses, {name: status, platform}) ||
-      defaultStatus
+    const foundStatus = find(statuses, {name: status, platform})
+    const foundSubStatus = find(statuses, {name: sub_status, platform})
+
+    let foundDescriptor
+
+    if (foundStatus && !foundStatus.is_active) {
+      foundDescriptor = foundStatus
+    } else {
+      foundDescriptor = foundSubStatus || foundStatus || defaultStatus
+    }
 
     return assign(omit(campaign, 'status', 'sub_status'), {
       status: assign({}, foundDescriptor, {
