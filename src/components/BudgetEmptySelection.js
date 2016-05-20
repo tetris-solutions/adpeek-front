@@ -22,8 +22,8 @@ function BudgetEmptySelection ({
       <Content>
 
         <Message
-          available={available}
-          amount={amount}
+          available={available.toFixed(2).toString()}
+          amount={amount.toFixed(2).toString()}
           html>emptyBudgetSelectionBody</Message>
 
       </Content>
