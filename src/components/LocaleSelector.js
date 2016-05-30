@@ -2,14 +2,12 @@ import React from 'react'
 import Select from './Select'
 import {branch} from 'baobab-react/dist-modules/higher-order'
 import {changeLocaleAction} from '@tetris/front-server/lib/actions/change-locale-action'
-import window from 'global/window'
 
 const {PropTypes} = React
 
 function onChange (dispatch) {
   return ({target: {value}}) => {
     dispatch(changeLocaleAction, value)
-    window.tetrisLoadLocale(value)
   }
 }
 
