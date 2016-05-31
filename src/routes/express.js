@@ -13,6 +13,8 @@ import {loadStatusesActionServerAdaptor as statuses} from '../actions/load-statu
 import {loadOrdersActionServerAdaptor as orders} from '../actions/load-orders'
 import {loadBudgetsActionServerAdaptor as budgets} from '../actions/load-budgets'
 import {loadDeliveryMethodsActionServerAdaptor as deliveryMethods} from '../actions/load-delivery-methods'
+import {loadAutoBudgetLogsActionServerAdaptor as autoBudgetLogs} from '../actions/load-autobudget-logs'
+
 export function setAppRoutes (app, render) {
   app.get('/', render)
 
@@ -58,7 +60,7 @@ export function setAppRoutes (app, render) {
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/order/:order/autobudget',
     protect,
-    preload(deliveryMethods, statuses, companies, workspace, folder, campaigns, orders, budgets),
+    preload(deliveryMethods, statuses, companies, workspace, folder, campaigns, orders, budgets, autoBudgetLogs),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/create/order',

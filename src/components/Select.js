@@ -3,6 +3,7 @@ import cx from 'classnames'
 import pick from 'lodash/pick'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import csjs from 'csjs'
+import {styled} from './mixins/styled'
 
 const style = csjs`
 .select option {
@@ -20,6 +21,7 @@ const selectFields = [
 
 export const Select = React.createClass({
   displayName: 'Select',
+  mixins: [styled(style)],
   propTypes: {
     children: PropTypes.node,
     value: PropTypes.any,
@@ -28,9 +30,6 @@ export const Select = React.createClass({
     label: PropTypes.string,
     name: PropTypes.string.isRequired,
     onChange: PropTypes.func
-  },
-  contextTypes: {
-    insertCss: PropTypes.func
   },
   getInitialState () {
     return {
@@ -54,7 +53,6 @@ export const Select = React.createClass({
     this.setState({isFocused: false})
   },
   render () {
-    this.context.insertCss(style)
     const {isDirty, isFocused} = this.state
     const {error, label} = this.props
     const wrapperClasses = cx('mdl-selectfield',

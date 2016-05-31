@@ -35,6 +35,8 @@ import {loadStatusesActionRouterAdaptor as statuses} from '../actions/load-statu
 import {loadOrdersActionRouterAdaptor as orders} from '../actions/load-orders'
 import {loadBudgetsActionRouterAdaptor as budgets} from '../actions/load-budgets'
 import {loadDeliveryMethodsActionRouterAdaptor as deliveryMethods} from '../actions/load-delivery-methods'
+import {loadAutoBudgetLogsActionRouterAdaptor as autoBudgetLogs} from '../actions/load-autobudget-logs'
+
 /**
  * returns the route config
  * @param {Baobab} tree state tree
@@ -110,6 +112,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
                   <Route
                     path='autobudget'
+                    onEnter={preload(autoBudgetLogs)}
                     component={OrderAutoBudget}/>
                 </Route>
 
