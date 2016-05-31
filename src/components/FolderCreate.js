@@ -10,6 +10,7 @@ import map from 'lodash/map'
 import find from 'lodash/find'
 import get from 'lodash/get'
 import {Form, Content, Header, Footer} from './Card'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
@@ -22,13 +23,13 @@ export const CreateFolder = React.createClass({
     params: PropTypes.shape({
       company: PropTypes.string,
       workspace: PropTypes.string
-    })
-  },
-  contextTypes: {
-    router: PropTypes.object,
+    }),
     workspace: PropTypes.shape({
       accounts: PropTypes.object
     })
+  },
+  contextTypes: {
+    router: PropTypes.object
   },
   getInitialState () {
     return {
@@ -71,9 +72,8 @@ export const CreateFolder = React.createClass({
     })
   },
   render () {
-    const {medias} = this.props
+    const {medias, workspace: {accounts}} = this.props
     const {errors, selectedMedia} = this.state
-    const {accounts} = this.context.workspace
 
     return (
       <Form onSubmit={this.handleSubmit}>
@@ -153,4 +153,6 @@ export const CreateFolder = React.createClass({
   }
 })
 
-export default branch({medias: ['medias']}, CreateFolder)
+export default branch({
+  medias: ['medias']
+}, contextualize(CreateFolder, 'workspace'))

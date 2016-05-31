@@ -12,6 +12,7 @@ import pick from 'lodash/pick'
 import find from 'lodash/find'
 import get from 'lodash/get'
 import {Form, Content, Header, Footer} from './Card'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
@@ -24,10 +25,7 @@ export const EditFolder = React.createClass({
     params: PropTypes.shape({
       company: PropTypes.string,
       workspace: PropTypes.string
-    })
-  },
-  contextTypes: {
-    router: PropTypes.object,
+    }),
     folder: PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string,
@@ -40,8 +38,11 @@ export const EditFolder = React.createClass({
       accounts: PropTypes.object
     })
   },
+  contextTypes: {
+    router: PropTypes.object
+  },
   componentWillMount () {
-    this.setState(pick(this.context.folder, [
+    this.setState(pick(this.props.folder, [
       'name',
       'tag',
       'workspace_account',
@@ -57,9 +58,8 @@ export const EditFolder = React.createClass({
   handleSubmit (e) {
     e.preventDefault()
     const {target: {elements}} = e
-    const {params: {company, workspace}} = this.props
+    const {params: {company, workspace}, folder: {id}} = this.props
     const {dispatch} = this.props
-    const {folder: {id}} = this.context
     const folder = {
       id,
       name: elements.name.value,
@@ -86,9 +86,8 @@ export const EditFolder = React.createClass({
     }
   },
   render () {
-    const {medias} = this.props
+    const {medias, workspace: {accounts}} = this.props
     const {errors, kpi, name, workspace_account, media, tag} = this.state
-    const {workspace: {accounts}} = this.context
 
     return (
       <Form onSubmit={this.handleSubmit}>
@@ -175,4 +174,4 @@ export const EditFolder = React.createClass({
 
 export default branch({
   medias: ['medias']
-}, EditFolder)
+}, contextualize(EditFolder, 'folder', 'workspace'))

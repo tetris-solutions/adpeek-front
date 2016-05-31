@@ -11,6 +11,8 @@ import upperFirst from 'lodash/upperFirst'
 import Message from 'intl-messageformat'
 import debounce from 'lodash/debounce'
 import csjs from 'csjs'
+import {contextualize} from './higher-order/contextualize'
+import {styled} from './mixins/styled'
 
 const {PropTypes} = React
 const getSuggestionValue = get('name')
@@ -145,16 +147,16 @@ function getSuggestions (accounts, platform, value) {
 
 export const WorkspaceAccountSelector = React.createClass({
   displayName: 'Workspace-Account-Selector',
+  mixins: [styled(style)],
   contextTypes: {
-    insertCss: PropTypes.func,
-    company: PropTypes.shape({
-      id: PropTypes.string,
-      accounts: PropTypes.array
-    }),
     locales: PropTypes.string,
     messages: PropTypes.object
   },
   propTypes: {
+    company: PropTypes.shape({
+      id: PropTypes.string,
+      accounts: PropTypes.array
+    }),
     platform: PropTypes.string,
     dispatch: PropTypes.func,
     value: PropTypes.string,
@@ -176,7 +178,7 @@ export const WorkspaceAccountSelector = React.createClass({
   componentWillMount () {
     this.setState({
       suggestions: getSuggestions(
-        this.context.company.accounts,
+        this.props.company.accounts,
         this.props.platform,
         this.state.account ? this.state.account.external_id : this.state.value
       )
@@ -184,7 +186,7 @@ export const WorkspaceAccountSelector = React.createClass({
   },
   componentDidMount () {
     this.onSuggestionsUpdateRequested = debounce(this.onSuggestionsUpdateRequested, 300)
-    this.props.dispatch(loadCompanyAccountsAction, this.context.company.id, this.props.platform)
+    this.props.dispatch(loadCompanyAccountsAction, this.props.company.id, this.props.platform)
       .then(() => {
         if (this.hasUnmounted) return
         const updateSuggestions = () => this.onSuggestionsUpdateRequested(this.state)
@@ -202,7 +204,7 @@ export const WorkspaceAccountSelector = React.createClass({
   onSuggestionsUpdateRequested ({value}) {
     this.setState({
       suggestions: getSuggestions(
-        this.context.company.accounts,
+        this.props.company.accounts,
         this.props.platform,
         value
       )
@@ -212,7 +214,7 @@ export const WorkspaceAccountSelector = React.createClass({
     this.setState({account: suggestion || null})
   },
   render () {
-    const {insertCss, locales, messages: {accountSelectorPlaceholder}} = this.context
+    const {locales, messages: {accountSelectorPlaceholder}} = this.context
     const {isLoading, suggestions, value, account} = this.state
     const {platform} = this.props
     const inputProps = {
@@ -224,7 +226,6 @@ export const WorkspaceAccountSelector = React.createClass({
       onKeyDown: preventSubmit,
       readOnly: isLoading
     }
-    insertCss(style)
 
     return (
       <div>
@@ -242,4 +243,4 @@ export const WorkspaceAccountSelector = React.createClass({
   }
 })
 
-export default branch({}, WorkspaceAccountSelector)
+export default branch({}, contextualize(WorkspaceAccountSelector, 'company'))

@@ -2,6 +2,7 @@ import React from 'react'
 import {ThumbLink, ThumbButton} from './ThumbLink'
 import map from 'lodash/map'
 import Message from '@tetris/front-server/lib/components/intl/Message'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
@@ -19,17 +20,15 @@ Folder.propTypes = {
 
 export const Folders = React.createClass({
   displayName: 'Folders',
-  contextTypes: {
-    company: PropTypes.object,
-    workspace: PropTypes.object
-  },
   propTypes: {
     params: PropTypes.shape({
       workspace: PropTypes.string
-    })
+    }),
+    company: PropTypes.object,
+    workspace: PropTypes.object
   },
   render () {
-    const {company, workspace: {id, folders}} = this.context
+    const {company, workspace: {id, folders}} = this.props
     return (
       <div>
         <div className='mdl-grid'>
@@ -46,4 +45,4 @@ export const Folders = React.createClass({
   }
 })
 
-export default Folders
+export default contextualize(Folders, 'company', 'workspace')

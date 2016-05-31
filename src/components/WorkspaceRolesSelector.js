@@ -2,24 +2,23 @@ import React from 'react'
 import map from 'lodash/map'
 import CheckBox from './Checkbox'
 import includes from 'lodash/includes'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
 export const WorkspaceRolesSelector = React.createClass({
   displayName: 'Workspace-Roles-Selector',
-  contextTypes: {
+  propTypes: {
     company: PropTypes.shape({
       roles: PropTypes.array
-    })
-  },
-  propTypes: {
+    }),
     roles: PropTypes.array
   },
   render () {
     const selectedRoles = this.props.roles
     return (
       <fieldset>
-        {map(this.context.company.roles, ({id, name}, index) => (
+        {map(this.props.company.roles, ({id, name}, index) => (
           <div className='mdl-grid' key={index}>
             <div className='mdl-cell mdl-cell--4-col'>
               {index === 0 && 'Grupos:'}
@@ -34,4 +33,4 @@ export const WorkspaceRolesSelector = React.createClass({
   }
 })
 
-export default WorkspaceRolesSelector
+export default contextualize(WorkspaceRolesSelector, 'company')

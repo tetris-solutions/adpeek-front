@@ -2,6 +2,7 @@ import React from 'react'
 import map from 'lodash/map'
 import {ThumbLink, ThumbButton} from './ThumbLink'
 import Message from '@tetris/front-server/lib/components/intl/Message'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
@@ -18,13 +19,13 @@ Workspace.propTypes = {
 
 export const Workspaces = React.createClass({
   displayName: 'Workspaces',
-  contextTypes: {
+  propTypes: {
     company: PropTypes.shape({
       workspaces: PropTypes.array
     })
   },
   render () {
-    const {company: {id, workspaces}} = this.context
+    const {company: {id, workspaces}} = this.props
     return (
       <div>
         <div className='mdl-grid'>
@@ -41,4 +42,4 @@ export const Workspaces = React.createClass({
   }
 })
 
-export default Workspaces
+export default contextualize(Workspaces, 'company')

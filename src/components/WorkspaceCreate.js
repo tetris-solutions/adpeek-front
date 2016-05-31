@@ -9,6 +9,7 @@ import {createWorkspaceAction} from '../actions/create-workspace'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import {serializeWorkspaceForm} from '../functions/serialize-workspace-form'
 import {Form, Content, Header, Footer} from './Card'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
@@ -16,10 +17,10 @@ export const CreateWorkspace = React.createClass({
   displayName: 'Create-Workspace',
   mixins: [FormMixin],
   propTypes: {
-    dispatch: PropTypes.func
+    dispatch: PropTypes.func,
+    company: PropTypes.object
   },
   contextTypes: {
-    company: PropTypes.object,
     router: PropTypes.object
   },
   /**
@@ -29,8 +30,8 @@ export const CreateWorkspace = React.createClass({
    */
   handleSubmit (e) {
     e.preventDefault()
-    const {router, company} = this.context
-    const {dispatch} = this.props
+    const {router} = this.context
+    const {dispatch, company} = this.props
 
     this.preSubmit()
 
@@ -65,4 +66,4 @@ export const CreateWorkspace = React.createClass({
   }
 })
 
-export default branch({}, CreateWorkspace)
+export default branch({}, contextualize(CreateWorkspace, 'company'))
