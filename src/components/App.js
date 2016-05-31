@@ -3,15 +3,30 @@ import {branch} from 'baobab-react/dist-modules/higher-order'
 import Header from './Header'
 import find from 'lodash/find'
 import SideNav from './SideNav'
+import map from 'lodash/map'
 
 const {PropTypes} = React
 
-const levels = [
-  ['company', 'companies'],
-  ['workspace', 'workspaces'],
-  ['folder', 'folders'],
-  ['campaign', 'campaigns']
-]
+const levels = ['company', 'companies', [
+  ['workspace', 'workspaces', [
+    ['folder', 'folders', [
+      ['campaign', 'campaigns'],
+      ['order', 'orders']
+    ]]
+  ]]
+]]
+
+function buildContext (context, params, obj, level) {
+  const [singular, plural, nextLevel] = level
+
+  if (!obj || !params[singular]) return
+
+  obj = find(obj[plural], {id: params[singular]})
+  context[singular] = obj || null
+
+  map(nextLevel, child =>
+    buildContext(context, params, obj, child))
+}
 
 export const App = React.createClass({
   displayName: 'App',
@@ -34,28 +49,23 @@ export const App = React.createClass({
     company: PropTypes.any,
     workspace: PropTypes.any,
     folder: PropTypes.any,
-    campaign: PropTypes.any
+    campaign: PropTypes.any,
+    order: PropTypes.any
   },
   componentWillMount () {
     this.styles = []
     this.styleText = ''
   },
   getChildContext () {
-    const context = {}
-    let obj = this.props.user
-
-    const {params} = this.props
-
-    for (var i = 0; i < levels.length; i++) {
-      const [singular, plural] = levels[i]
-
-      context[singular] = null
-
-      if (obj && params[singular]) {
-        obj = find(obj[plural], {id: params[singular]})
-        context[singular] = obj || null
-      }
+    const context = {
+      company: null,
+      workspace: null,
+      folder: null,
+      campaign: null,
+      order: null
     }
+
+    buildContext(context, this.props.params, this.props.user, levels)
 
     return context
   },

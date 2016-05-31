@@ -1,5 +1,4 @@
 import React from 'react'
-import find from 'lodash/find'
 import {contextualize} from './higher-order/contextualize'
 import OrderController from './OrderController'
 import Message from 'intl-messageformat'
@@ -7,7 +6,7 @@ import upperFirst from 'lodash/upperFirst'
 
 const {PropTypes} = React
 
-export function Order ({params, folder: {campaigns, orders}}, {messages: {newOrderName}, moment, locales}) {
+export function Order ({params, order, folder}, {messages: {newOrderName}, moment, locales}) {
   const defaultOrder = () => {
     const nextMonth = moment().add(1, 'month')
     return {
@@ -20,13 +19,13 @@ export function Order ({params, folder: {campaigns, orders}}, {messages: {newOrd
     }
   }
 
-  const order = find(orders, {id: params.order}) || defaultOrder()
+  order = order || defaultOrder()
 
   return (
     <OrderController
       key={order.id || 'new-order'}
       params={params}
-      campaigns={campaigns}
+      campaigns={folder.campaigns}
       order={order}/>
   )
 }
@@ -34,7 +33,8 @@ export function Order ({params, folder: {campaigns, orders}}, {messages: {newOrd
 Order.displayName = 'Order'
 Order.propTypes = {
   params: PropTypes.object,
-  folder: PropTypes.object
+  folder: PropTypes.object,
+  order: PropTypes.any
 }
 Order.contextTypes = {
   moment: PropTypes.func,
@@ -42,4 +42,4 @@ Order.contextTypes = {
   messages: PropTypes.object
 }
 
-export default contextualize(Order, 'folder')
+export default contextualize(Order, 'folder', 'order')

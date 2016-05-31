@@ -17,6 +17,9 @@ import FolderAside from '../components/FolderAside'
 import Campaigns from '../components/Campaigns'
 import Orders from '../components/Orders'
 import Order from '../components/Order'
+import OrderAutoBudget from '../components/OrderAutoBudget'
+import OrderBreadCrumb from '../components/OrderBreadcrumb'
+import OrdersBreadCrumb from '../components/OrdersBreadcrumb'
 
 import App from '../components/App'
 import {loadUserCompaniesActionRouterAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
@@ -96,11 +99,19 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 onEnter={preload(orders)}
                 component={Orders}/>
 
-              <Route onEnter={preload(deliveryMethods, statuses, campaigns, orders)}>
-                <Route
-                  path='order/:order'
-                  onEnter={preload(budgets)}
-                  component={Order}/>
+              <Route
+                breadcrumb={OrdersBreadCrumb}
+                onEnter={preload(deliveryMethods, statuses, campaigns, orders)}>
+
+                <Route path='order/:order' breadcrumb={OrderBreadCrumb}>
+                  <IndexRoute
+                    onEnter={preload(budgets)}
+                    component={Order}/>
+
+                  <Route
+                    path='autobudget'
+                    component={OrderAutoBudget}/>
+                </Route>
 
                 <Route
                   path='create/order'
