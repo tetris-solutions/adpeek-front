@@ -12,9 +12,7 @@ const {PropTypes} = React
 const style = csjs`
 `
 
-const yesterday = () => moment()
-/* .subtract(1, 'day')*/
-  .format('YYYY-MM-DD')
+const yesterday = () => moment().subtract(1, 'day').format('YYYY-MM-DD')
 
 export const OrderAutoBudget = React.createClass({
   displayName: 'OrderAutoBudget',

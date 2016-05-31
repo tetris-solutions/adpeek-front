@@ -8,9 +8,7 @@ import forEach from 'lodash/forEach'
 import moment from 'moment'
 import pick from 'lodash/pick'
 
-const yesterday = () => moment()
-/* .subtract(1, 'day')*/
-  .format('YYYY-MM-DD')
+const yesterday = () => moment().subtract(1, 'day').format('YYYY-MM-DD')
 
 export function loadAutoBudgetLogs (day, query, config) {
   const qs = []
