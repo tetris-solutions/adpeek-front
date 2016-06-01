@@ -7,7 +7,9 @@ const {PropTypes} = React
 const paramDependent = ['company', 'workspace', 'folder', 'order']
 
 export function contextualize (Component, ...names) {
-  const contextTypes = {}
+  const contextTypes = {
+    params: PropTypes.object
+  }
 
   forEach(names, name => {
     contextTypes[name] = PropTypes.any
@@ -26,7 +28,7 @@ export function contextualize (Component, ...names) {
       const newState = {}
 
       forEach(names, name => {
-        if (includes(paramDependent, name) && !props.params[name]) {
+        if (includes(paramDependent, name) && !context.params[name]) {
           newState[name] = null
         }
         if (context[name] && context[name] !== this.state[name]) {
