@@ -63,6 +63,11 @@ export function setAppRoutes (app, render) {
     preload(deliveryMethods, statuses, companies, workspace, folder, campaigns, orders, budgets, autoBudgetLogs),
     render)
 
+  app.get('/company/:company/workspace/:workspace/folder/:folder/order/:order/autobudget/:day',
+    protect,
+    preload(deliveryMethods, statuses, companies, workspace, folder, campaigns, orders, budgets, autoBudgetLogs),
+    render)
+
   app.get('/company/:company/workspace/:workspace/folder/:folder/create/order',
     protect,
     preload(deliveryMethods, statuses, companies, workspace, folder, campaigns, orders),

@@ -106,12 +106,14 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 onEnter={preload(deliveryMethods, statuses, campaigns, orders)}>
 
                 <Route path='order/:order' breadcrumb={OrderBreadCrumb}>
-                  <IndexRoute
-                    onEnter={preload(budgets)}
-                    component={Order}/>
-
+                  <IndexRoute onEnter={preload(budgets)} component={Order}/>
                   <Route
                     path='autobudget'
+                    onEnter={preload(autoBudgetLogs)}
+                    component={OrderAutoBudget}/>
+
+                  <Route
+                    path='autobudget/:day'
                     onEnter={preload(autoBudgetLogs)}
                     component={OrderAutoBudget}/>
                 </Route>

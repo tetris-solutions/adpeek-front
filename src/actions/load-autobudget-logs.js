@@ -7,6 +7,7 @@ import compact from 'lodash/compact'
 import forEach from 'lodash/forEach'
 import moment from 'moment'
 import pick from 'lodash/pick'
+import find from 'lodash/find'
 
 const yesterday = () => moment().subtract(1, 'day').format('YYYY-MM-DD')
 
@@ -20,20 +21,14 @@ export function loadAutoBudgetLogs (day, query, config) {
 }
 
 export function loadAutoBudgetLogsAction (tree, day, params, token) {
-  const query = pick(params, 'company', 'workspace', 'folder', 'order')
-  const sQuery = {}
-
-  if (query.order) {
-    sQuery.order = query.order
-  } else if (query.folder) {
-    sQuery.order = query.folder
-  } else if (query.workspace) {
-    sQuery.order = query.workspace
-  } else if (query.company) {
-    sQuery.order = query.company
+  const keys = ['company', 'workspace', 'folder', 'order'].reverse()
+  const query = pick(params, ...keys)
+  const selectedKey = find(keys, key => Boolean(query[key]))
+  const queryParams = {
+    [selectedKey]: query[selectedKey]
   }
 
-  return loadAutoBudgetLogs(day, sQuery, getApiFetchConfig(tree, token))
+  return loadAutoBudgetLogs(day, queryParams, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
     .then(saveResponseData(tree, compact([
       'user',
@@ -49,7 +44,7 @@ export function loadAutoBudgetLogsAction (tree, day, params, token) {
 export function loadAutoBudgetLogsActionServerAdaptor (req, res) {
   return loadAutoBudgetLogsAction(
     res.locals.tree,
-    req.query.day || yesterday(),
+    req.params.day || yesterday(),
     req.params,
     req.authToken)
 }
@@ -57,6 +52,6 @@ export function loadAutoBudgetLogsActionServerAdaptor (req, res) {
 export function loadAutoBudgetLogsActionRouterAdaptor (state, tree) {
   return loadAutoBudgetLogsAction(
     tree,
-    state.location.query.day || yesterday(),
+    state.params.day || yesterday(),
     state.params)
 }
