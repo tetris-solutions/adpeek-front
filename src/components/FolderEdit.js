@@ -2,7 +2,6 @@ import React from 'react'
 import FormMixin from '@tetris/front-server/lib/mixins/FormMixin'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import Input from './Input'
-import {branch} from 'baobab-react/dist-modules/higher-order'
 import {updateFolderAction} from '../actions/update-folder'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import Select from './Select'
@@ -172,6 +171,4 @@ export const EditFolder = React.createClass({
   }
 })
 
-export default branch({
-  medias: ['medias']
-}, contextualize(EditFolder, 'folder', 'workspace'))
+export default contextualize(EditFolder, {medias: ['medias']}, 'folder', 'workspace')

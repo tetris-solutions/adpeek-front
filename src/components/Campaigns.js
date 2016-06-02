@@ -4,7 +4,6 @@ import {unlinkCampaignAction} from '../actions/unlink-campaign'
 import {linkCampaignAction} from '../actions/link-campaign'
 import {loadCampaignsAction} from '../actions/load-campaigns'
 import {loadLooseCampaignsAction} from '../actions/load-loose-campaigns'
-import {branch} from 'baobab-react/dist-modules/higher-order'
 import CampaignLoose from './CampaignLoose'
 import Campaign from './Campaign'
 import {contextualize} from './higher-order/contextualize'
@@ -25,7 +24,6 @@ const filterActive = ls => filter(ls, ({status: {is_active}}) => is_active)
 export const Campaigns = React.createClass({
   displayName: 'Campaigns',
   propTypes: {
-    statuses: PropTypes.array,
     dispatch: PropTypes.func,
     folder: PropTypes.shape({
       looseCampaigns: PropTypes.array,
@@ -133,4 +131,4 @@ export const Campaigns = React.createClass({
   }
 })
 
-export default branch({}, contextualize(Campaigns, 'folder', 'statuses'))
+export default contextualize(Campaigns, 'folder')

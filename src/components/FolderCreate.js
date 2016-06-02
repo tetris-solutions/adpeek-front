@@ -2,7 +2,6 @@ import React from 'react'
 import FormMixin from '@tetris/front-server/lib/mixins/FormMixin'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import Input from './Input'
-import {branch} from 'baobab-react/dist-modules/higher-order'
 import {createFolderAction} from '../actions/create-folder'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import Select from './Select'
@@ -153,6 +152,4 @@ export const CreateFolder = React.createClass({
   }
 })
 
-export default branch({
-  medias: ['medias']
-}, contextualize(CreateFolder, 'workspace'))
+export default contextualize(CreateFolder, {medias: ['medias']}, 'workspace')

@@ -2,18 +2,18 @@ import React from 'react'
 import ContextMenu from './ContextMenu'
 import {contextualize} from './higher-order/contextualize'
 import {Link} from 'react-router'
-import {branch} from 'baobab-react/dist-modules/higher-order'
 import {deleteWorkspaceAction} from '../actions/delete-workspace'
 
 const {PropTypes} = React
 
-export function WorkspaceAside ({params: {company}, workspace, dispatch, router}) {
+export function WorkspaceAside ({params: {company}, workspace, dispatch}, {router}) {
   function onClick () {
     dispatch(deleteWorkspaceAction, workspace.id)
       .then(() => {
         router.push(`/company/${company}`)
       })
   }
+
   return (
     <ContextMenu title={workspace.name} icon='domain'>
       <Link
@@ -32,9 +32,11 @@ export function WorkspaceAside ({params: {company}, workspace, dispatch, router}
 }
 
 WorkspaceAside.displayName = 'Workspace-Aside'
+WorkspaceAside.contextTypes = {
+  router: PropTypes.object
+}
 WorkspaceAside.propTypes = {
   dispatch: PropTypes.func,
-  router: PropTypes.object,
   workspace: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string
@@ -45,4 +47,4 @@ WorkspaceAside.propTypes = {
   })
 }
 
-export default contextualize(branch({}, WorkspaceAside), 'workspace', 'router')
+export default contextualize(WorkspaceAside, 'workspace')

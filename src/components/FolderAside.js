@@ -2,17 +2,15 @@ import React from 'react'
 import ContextMenu from './ContextMenu'
 import {contextualize} from './higher-order/contextualize'
 import {Link} from 'react-router'
-import {branch} from 'baobab-react/dist-modules/higher-order'
 import {deleteFolderAction} from '../actions/delete-folder'
 
 const {PropTypes} = React
 
 export function FolderAside ({
   dispatch,
-  router,
   folder,
   params: {company, workspace}
-}) {
+}, {router}) {
   function onClick () {
     dispatch(deleteFolderAction, folder.id)
       .then(() => {
@@ -50,9 +48,11 @@ export function FolderAside ({
 }
 
 FolderAside.displayName = 'Folder-Aside'
+FolderAside.contextTypes = {
+  router: PropTypes.object
+}
 FolderAside.propTypes = {
   dispatch: PropTypes.func,
-  router: PropTypes.object,
   folder: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string
@@ -63,4 +63,4 @@ FolderAside.propTypes = {
   })
 }
 
-export default contextualize(branch({}, FolderAside), 'folder', 'router')
+export default contextualize(FolderAside, 'folder')

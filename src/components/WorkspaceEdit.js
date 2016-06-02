@@ -8,7 +8,6 @@ import Message from '@tetris/front-server/lib/components/intl/Message'
 import {updateWorkspaceAction} from '../actions/update-workspace'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import {serializeWorkspaceForm} from '../functions/serialize-workspace-form'
-import {branch} from 'baobab-react/dist-modules/higher-order'
 import {Form, Content, Header, Footer} from './Card'
 import {contextualize} from './higher-order/contextualize'
 
@@ -17,13 +16,15 @@ const {PropTypes} = React
 export const WorkspaceEdit = React.createClass({
   displayName: 'Workspace-Edit',
   mixins: [FormMixin],
+  contextTypes: {
+    router: PropTypes.object
+  },
   propTypes: {
     dispatch: PropTypes.func,
     params: PropTypes.shape({
       workspace: PropTypes.string,
       company: PropTypes.string
     }),
-    router: PropTypes.object,
     workspace: PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string
@@ -36,7 +37,7 @@ export const WorkspaceEdit = React.createClass({
   },
   handleSubmit (e) {
     e.preventDefault()
-    const {router, dispatch, params: {workspace, company}} = this.props
+    const {dispatch, params: {workspace, company}} = this.props
     const data = serializeWorkspaceForm(e.target)
     data.id = workspace
 
@@ -45,7 +46,7 @@ export const WorkspaceEdit = React.createClass({
     return dispatch(updateWorkspaceAction, company, data)
       .then(() => dispatch(pushSuccessMessageAction))
       .then(() => {
-        router.push(`/company/${company}/workspace/${workspace}`)
+        this.context.router.push(`/company/${company}/workspace/${workspace}`)
       })
       .catch(this.handleSubmitException)
       .then(this.posSubmit)
@@ -97,4 +98,4 @@ export const WorkspaceEdit = React.createClass({
   }
 })
 
-export default branch({}, contextualize(WorkspaceEdit, 'workspace', 'router'))
+export default contextualize(WorkspaceEdit, 'workspace')

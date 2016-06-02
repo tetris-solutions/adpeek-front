@@ -4,7 +4,6 @@ import Message from '@tetris/front-server/lib/components/intl/Message'
 import Input from './Input'
 import AccountSelector from './WorkspaceAccountSelector'
 import RolesSelector from './WorkspaceRolesSelector'
-import {branch} from 'baobab-react/dist-modules/higher-order'
 import {createWorkspaceAction} from '../actions/create-workspace'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import {serializeWorkspaceForm} from '../functions/serialize-workspace-form'
@@ -66,4 +65,4 @@ export const CreateWorkspace = React.createClass({
   }
 })
 
-export default branch({}, contextualize(CreateWorkspace, 'company'))
+export default contextualize(CreateWorkspace, 'company')

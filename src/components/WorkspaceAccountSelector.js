@@ -1,5 +1,4 @@
 import React from 'react'
-import {branch} from 'baobab-react/dist-modules/higher-order'
 import {loadCompanyAccountsAction} from '../actions/load-company-accounts'
 import Autosuggest from 'react-autosuggest'
 import get from 'lodash/fp/get'
@@ -243,4 +242,4 @@ export const WorkspaceAccountSelector = React.createClass({
   }
 })
 
-export default branch({}, contextualize(WorkspaceAccountSelector, 'company'))
+export default contextualize(WorkspaceAccountSelector, 'company')
