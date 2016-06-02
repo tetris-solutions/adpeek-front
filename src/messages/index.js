@@ -64,7 +64,20 @@ export default {
     </p>`,
     newOrderName: '{month}',
     deliveryMethodLabel: 'Delivery method',
-    closeBudget: 'Close'
+    closeBudget: 'Close',
+
+    calculateBudgetAmountTitle: 'Calculated budget amount',
+    totalAmountTitle: 'Total',
+    averageAmountTitle: 'Average',
+    previousAmountTitle: 'Previous',
+    todayAmountTitle: 'Today\'s',
+    loadCampaignBudgetTitle: 'Loaded campaign budget',
+    loadCampaignCostTitle: 'Loaded campaign cost',
+    closedCostTitle: 'Closed',
+    totalCostTitle: 'Total',
+    todayCostTitle: 'Today\'s',
+    campaignTitle: 'Campaign {name}',
+    budgetTitle: 'Budget {name}'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -130,6 +143,19 @@ export default {
     </p>`,
     newOrderName: 'PI de {month}',
     deliveryMethodLabel: 'Forma de entrega',
-    closeBudget: 'Fechar'
+    closeBudget: 'Fechar',
+
+    calculateBudgetAmountTitle: 'Calculado valor do orçamento',
+    totalAmountTitle: 'Total',
+    averageAmountTitle: 'Média',
+    previousAmountTitle: 'Anterior',
+    todayAmountTitle: 'Do dia',
+    loadCampaignBudgetTitle: 'Carregado orçamento da campanha',
+    loadCampaignCostTitle: 'Carregado custo da campanha',
+    closedCostTitle: 'Fechado',
+    totalCostTitle: 'Total',
+    todayCostTitle: 'Do dia',
+    campaignTitle: 'Campanha {name}',
+    budgetTitle: 'Orçamento {name}'
   }
 }

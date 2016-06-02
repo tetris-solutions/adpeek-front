@@ -10,6 +10,7 @@ import filter from 'lodash/filter'
 import {Card, Content, Header} from './Card'
 import isNumber from 'lodash/isNumber'
 import has from 'lodash/fp/has'
+import Message from '@tetris/front-server/lib/components/intl/Message'
 
 const money = n => isNumber(n) ? '$ ' + n.toFixed(2) : '?'
 const {PropTypes} = React
@@ -20,14 +21,24 @@ const yesterday = () => moment().subtract(1, 'day').format('YYYY-MM-DD')
 
 const CalculateBudgetAmount = ({amount}) => (
   <div>
-    <h4>Calculado novo orçamento</h4>
+    <h4>
+      <Message>calculateBudgetAmountTitle</Message>
+    </h4>
     <table className='mdl-data-table mdl-shadow--2dp'>
       <thead>
         <tr>
-          <th>Total</th>
-          <th>Médio</th>
-          <th>Anterior</th>
-          <th>Hoje</th>
+          <th>
+            <Message>totalAmountTitle</Message>
+          </th>
+          <th>
+            <Message>averageAmountTitle</Message>
+          </th>
+          <th>
+            <Message>previousAmountTitle</Message>
+          </th>
+          <th>
+            <Message>todayAmountTitle</Message>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -53,18 +64,22 @@ CalculateBudgetAmount.propTypes = {
 
 const LoadCampaignBudget = ({current_budget}) => (
   <div>
-    <h4>Carregado orçamento</h4>
+    <h4>
+      <Message>loadCampaignBudgetTitle</Message>
+    </h4>
     <table className='mdl-data-table mdl-shadow--2dp'>
       <thead>
         <tr>
           <th>ID</th>
           <th className='mdl-data-table__cell--non-numeric'>
-            Name
+            <Message>nameLabel</Message>
           </th>
           <th className='mdl-data-table__cell--non-numeric'>
-            Delivery Method
+            <Message>deliveryMethodLabel</Message>
           </th>
-          <th>Amount</th>
+          <th>
+            <Message>amountLabel</Message>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -93,13 +108,21 @@ LoadCampaignBudget.propTypes = {
 
 const LoadCampaignCost = ({cost}) => (
   <div>
-    <h4>Carregado custo</h4>
+    <h4>
+      <Message>loadCampaignCostTitle</Message>
+    </h4>
     <table className='mdl-data-table mdl-shadow--2dp'>
       <thead>
         <tr>
-          <th>Fechado</th>
-          <th>Total</th>
-          <th>Hoje</th>
+          <th>
+            <Message>closedCostTitle</Message>
+          </th>
+          <th>
+            <Message>totalCostTitle</Message>
+          </th>
+          <th>
+            <Message>todayCostTitle</Message>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -132,7 +155,9 @@ const actions = {
 function Budget ({entries}) {
   return (
     <Card size='large'>
-      <Header>Orçamento {entries[0].budget.name}</Header>
+      <Header>
+        <Message name={entries[0].budget.name}>budgetTitle</Message>
+      </Header>
       <Content>
         {map(entries, (entry, index) => {
           const Component = actions[entry.action]
@@ -149,7 +174,9 @@ Budget.propTypes = {
 
 const Campaign = ({entries}) => (
   <Card size='large'>
-    <Header>Campanha {entries[0].campaign.name}</Header>
+    <Header>
+      <Message name={entries[0].campaign.name}>campaignTitle</Message>
+    </Header>
     <Content>
       {map(entries, (entry, index) => {
         const Component = actions[entry.action]
