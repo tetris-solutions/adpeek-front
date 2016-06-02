@@ -1,5 +1,6 @@
 import React from 'react'
 import csjs from 'csjs'
+import {styledFnComponent} from './higher-order/styled-fn-component'
 
 const style = csjs`
 .header {
@@ -15,8 +16,7 @@ const style = csjs`
 
 const {PropTypes} = React
 
-export function ContextMenu ({children, title, icon}, {insertCss}) {
-  insertCss(style)
+export function ContextMenu ({children, title, icon}) {
   return (
     <header className={style.header}>
       <i className={`material-icons ${style.icon}`}>{icon}</i>
@@ -32,8 +32,5 @@ ContextMenu.propTypes = {
   icon: PropTypes.string,
   children: PropTypes.node
 }
-ContextMenu.contextTypes = {
-  insertCss: PropTypes.func
-}
 
-export default ContextMenu
+export default styledFnComponent(ContextMenu, style)

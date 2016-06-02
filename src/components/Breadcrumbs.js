@@ -3,6 +3,7 @@ import filter from 'lodash/filter'
 import map from 'lodash/map'
 import has from 'lodash/fp/has'
 import csjs from 'csjs'
+import {styledFnComponent} from './higher-order/styled-fn-component'
 
 const style = csjs`
 .breadcrumb {
@@ -13,8 +14,7 @@ const style = csjs`
 const {PropTypes} = React
 const hasBreadcrumbs = has('breadcrumb')
 
-export function Breadcrumbs (props, {params, routes, insertCss}) {
-  insertCss(style)
+export function Breadcrumbs (props, {params, routes}) {
   return (
     <span>
       {map(filter(routes, hasBreadcrumbs), ({breadcrumb}, index) => {
@@ -31,10 +31,9 @@ export function Breadcrumbs (props, {params, routes, insertCss}) {
 
 Breadcrumbs.contextTypes = {
   params: PropTypes.object,
-  insertCss: PropTypes.func,
   routes: PropTypes.array
 }
 
 Breadcrumbs.displayName = 'Breadcrumbs'
 
-export default Breadcrumbs
+export default styledFnComponent(Breadcrumbs, style)

@@ -1,6 +1,7 @@
 import React from 'react'
 import csjs from 'csjs'
 import {Link} from 'react-router'
+import {styledFnComponent} from './higher-order/styled-fn-component'
 
 const style = csjs`
 .card {
@@ -9,8 +10,7 @@ const style = csjs`
 
 const {PropTypes} = React
 
-export function ThumbLink ({to, title}, {insertCss}) {
-  insertCss(style)
+function TLink ({to, title}) {
   return (
     <Link to={to} className='mdl-cell mdl-cell--2-col'>
       <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
@@ -24,18 +24,13 @@ export function ThumbLink ({to, title}, {insertCss}) {
   )
 }
 
-ThumbLink.displayName = 'Thumb-Link'
-ThumbLink.propTypes = {
+TLink.displayName = 'Thumb-Link'
+TLink.propTypes = {
   to: PropTypes.string,
   title: PropTypes.string
 }
 
-ThumbLink.contextTypes = {
-  insertCss: PropTypes.func
-}
-
-export function ThumbButton ({to, title, label}, {insertCss}) {
-  insertCss(style)
+function TButton ({to, title, label}) {
   return (
     <div className='mdl-cell mdl-cell--2-col'>
       <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
@@ -54,13 +49,12 @@ export function ThumbButton ({to, title, label}, {insertCss}) {
   )
 }
 
-ThumbButton.displayName = 'Thumb-Button'
-ThumbButton.propTypes = {
+TButton.displayName = 'Thumb-Button'
+TButton.propTypes = {
   to: PropTypes.string,
   title: PropTypes.node,
   label: PropTypes.node
 }
 
-ThumbButton.contextTypes = {
-  insertCss: PropTypes.func
-}
+export const ThumbLink = styledFnComponent(TLink, style)
+export const ThumbButton = styledFnComponent(TButton, style)

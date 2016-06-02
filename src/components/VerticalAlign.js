@@ -1,5 +1,6 @@
 import React from 'react'
 import csjs from 'csjs'
+import {styledFnComponent} from './higher-order/styled-fn-component'
 
 const {PropTypes} = React
 const style = csjs`
@@ -12,8 +13,7 @@ const style = csjs`
   width: 100%
 }`
 
-function VerticalAlign ({children, className}, {insertCss}) {
-  insertCss(style)
+function VerticalAlign ({children, className}) {
   return (
     <div className={`${className} ${style.verticallyAligned}`}>
       {children}
@@ -29,8 +29,5 @@ VerticalAlign.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string
 }
-VerticalAlign.contextTypes = {
-  insertCss: PropTypes.func
-}
 
-export default VerticalAlign
+export default styledFnComponent(VerticalAlign)
