@@ -30,4 +30,4 @@ VerticalAlign.propTypes = {
   className: PropTypes.string
 }
 
-export default styledFnComponent(VerticalAlign)
+export default styledFnComponent(VerticalAlign, style)
