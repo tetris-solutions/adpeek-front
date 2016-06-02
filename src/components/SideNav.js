@@ -14,22 +14,23 @@ const getSubNav = get('aside')
 export const SideNav = React.createClass({
   displayName: 'Side-Nav',
   propTypes: {
-    dispatch: PropTypes.func,
+    dispatch: PropTypes.func
+  },
+  contextTypes: {
     router: PropTypes.object,
-    params: PropTypes.object,
     routes: PropTypes.array
   },
   handleLogoutClick (e) {
     e.preventDefault()
     this.props.dispatch(logoutAction)
-    this.props.router.push('/')
+    this.context.router.push('/')
   },
   render () {
-    const SubNav = getSubNav(findLast(this.props.routes, hasSubNav))
+    const SubNav = getSubNav(findLast(this.context.routes, hasSubNav))
 
     return (
       <aside className='mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50'>
-        {SubNav ? <SubNav {...this.props} /> : null}
+        {SubNav ? <SubNav /> : null}
 
         <nav className='mdl-navigation mdl-color--blue-grey-800'>
           <a href='/' className='mdl-navigation__link' onClick={this.handleLogoutClick}>

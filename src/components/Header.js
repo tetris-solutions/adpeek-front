@@ -5,18 +5,17 @@ import {branch} from 'baobab-react/dist-modules/higher-order'
 
 const {PropTypes} = React
 
-export function Header ({userName, params, routes}) {
+export function Header ({userName}) {
   return (
     <header className='mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600'>
       <div className='mdl-layout__drawer-button'/>
       <div className='mdl-layout__header-row'>
-        <Breadcrumbs params={params} routes={routes}/>
+        <Breadcrumbs />
 
         <div className='mdl-layout-spacer'/>
         <span className='mdl-layout-title'>
           <Message name={userName}>welcomeMessage</Message>
         </span>
-
       </div>
     </header>
   )
@@ -25,8 +24,7 @@ export function Header ({userName, params, routes}) {
 Header.displayName = 'Header'
 Header.propTypes = {
   userName: PropTypes.string,
-  params: PropTypes.object,
-  routes: PropTypes.array
+  params: PropTypes.object
 }
 
 export default branch({

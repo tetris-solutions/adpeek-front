@@ -13,7 +13,7 @@ const style = csjs`
 const {PropTypes} = React
 const hasBreadcrumbs = has('breadcrumb')
 
-export function Breadcrumbs ({routes, params}, {insertCss}) {
+export function Breadcrumbs (props, {params, routes, insertCss}) {
   insertCss(style)
   return (
     <span>
@@ -29,13 +29,10 @@ export function Breadcrumbs ({routes, params}, {insertCss}) {
   )
 }
 
-Breadcrumbs.propTypes = {
-  routes: PropTypes.array,
-  params: PropTypes.object
-}
-
 Breadcrumbs.contextTypes = {
-  insertCss: PropTypes.func
+  params: PropTypes.object,
+  insertCss: PropTypes.func,
+  routes: PropTypes.array
 }
 
 Breadcrumbs.displayName = 'Breadcrumbs'
