@@ -23,8 +23,7 @@ export function Header ({userName}) {
 
 Header.displayName = 'Header'
 Header.propTypes = {
-  userName: PropTypes.string,
-  params: PropTypes.object
+  userName: PropTypes.string
 }
 
 export default branch({

@@ -19,15 +19,7 @@ const App = ({children}) => (
 
 App.displayName = 'App'
 App.propTypes = {
-  children: PropTypes.node,
-  routes: PropTypes.array,
-  params: PropTypes.shape({
-    company: PropTypes.string
-  }),
-  dispatch: PropTypes.func
-}
-App.contextTypes = {
-  router: PropTypes.object.isRequired
+  children: PropTypes.node
 }
 
 export default App
