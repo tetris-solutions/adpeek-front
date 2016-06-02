@@ -1,7 +1,7 @@
 import React from 'react'
 import {loadCompanyAccountsAction} from '../actions/load-company-accounts'
 import Autosuggest from 'react-autosuggest'
-import get from 'lodash/fp/get'
+import property from 'lodash/property'
 import filter from 'lodash/filter'
 import includes from 'lodash/includes'
 import lowerCase from 'lodash/lowerCase'
@@ -14,7 +14,7 @@ import {contextualize} from './higher-order/contextualize'
 import {styled} from './mixins/styled'
 
 const {PropTypes} = React
-const getSuggestionValue = get('name')
+const getSuggestionValue = property('name')
 
 /**
  * prevent formSubmit

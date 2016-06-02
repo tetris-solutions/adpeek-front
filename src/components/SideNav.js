@@ -4,12 +4,12 @@ import {branch} from 'baobab-react/dist-modules/higher-order'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import LocaleSelector from './LocaleSelector'
 import findLast from 'lodash/findLast'
-import get from 'lodash/fp/get'
+import property from 'lodash/property'
 import has from 'lodash/fp/has'
 
 const {PropTypes} = React
 const hasSubNav = has('aside')
-const getSubNav = get('aside')
+const getSubNav = property('aside')
 
 export const SideNav = React.createClass({
   displayName: 'Side-Nav',
