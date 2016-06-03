@@ -77,7 +77,11 @@ export default {
     totalCostTitle: 'Total',
     todayCostTitle: 'Today\'s',
     campaignTitle: 'Campaign {name}',
-    budgetTitle: 'Budget {name}'
+    budgetTitle: 'Budget {name}',
+
+    createBudgetTitle: 'Created budget',
+    setCampaignBudgetTitle: 'Changed campaign budget',
+    updateBudgetTitle: 'Updated budget'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -156,6 +160,10 @@ export default {
     totalCostTitle: 'Total',
     todayCostTitle: 'Do dia',
     campaignTitle: 'Campanha {name}',
-    budgetTitle: 'Orçamento {name}'
+    budgetTitle: 'Orçamento {name}',
+
+    createBudgetTitle: 'Criado novo orçamento',
+    setCampaignBudgetTitle: 'Alterado orçamento da campanha',
+    updateBudgetTitle: 'Orçamento atualizado'
   }
 }
