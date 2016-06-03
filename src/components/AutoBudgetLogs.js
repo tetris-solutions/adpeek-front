@@ -362,22 +362,21 @@ const actions = {
   'set-campaign-budget': SetCampaignBudget
 }
 
-function Budget ({entries}) {
-  return (
-    <Card size='large'>
-      <Header>
-        <Message name={entries[0].budget.name}>budgetTitle</Message>
-      </Header>
-      <Content>
-        {map(entries, (entry, index) => {
-          const Component = actions[entry.action] || DefaultActionComponent
+const Budget = ({entries}) => (
+  <Card size='large'>
+    <Header>
+      <Message name={entries[0].budget.name}>budgetTitle</Message>
+    </Header>
+    <Content>
+      {map(entries, (entry, index) => {
+        const Component = actions[entry.action] || DefaultActionComponent
 
-          return <Component key={index} {...entry} />
-        })}
-      </Content>
-    </Card>
-  )
-}
+        return <Component key={index} {...entry} />
+      })}
+    </Content>
+  </Card>
+)
+
 Budget.displayName = 'Budget-Actions'
 Budget.propTypes = {
   entries: PropTypes.array

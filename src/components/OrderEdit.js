@@ -17,6 +17,7 @@ const {PropTypes} = React
 export function OrderEdit ({
   save,
   createBudget,
+  removeBudget,
   removeCampaign,
   remainingValue,
   remainingAmount,
@@ -77,6 +78,7 @@ export function OrderEdit ({
             {budget ? (
               <BudgetEdit
                 close={closeBudget}
+                remove={removeBudget}
                 removeCampaign={removeCampaign}
                 key={budget.id}
                 max={remainingValue + budget.value}
@@ -105,6 +107,7 @@ OrderEdit.displayName = 'Order-Edit'
 OrderEdit.propTypes = {
   save: PropTypes.func,
   createBudget: PropTypes.func,
+  removeBudget: PropTypes.func,
   removeCampaign: PropTypes.func,
   remainingAmount: PropTypes.number,
   remainingValue: PropTypes.number,

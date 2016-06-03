@@ -48,6 +48,7 @@ export const BudgetEdit = React.createClass({
   displayName: 'Budget-Edit',
   propTypes: {
     close: PropTypes.func,
+    remove: PropTypes.func,
     deliveryMethods: PropTypes.array,
     removeCampaign: PropTypes.func,
     change: PropTypes.func,
@@ -72,6 +73,7 @@ export const BudgetEdit = React.createClass({
   render () {
     const {messages: {percentageLabel, amountLabel}} = this.context
     const {
+      remove,
       close,
       deliveryMethods,
       max,
@@ -156,6 +158,9 @@ export const BudgetEdit = React.createClass({
           </div>
         </Content>
         <Footer multipleButtons>
+          <button className='mdl-button mdl-button--colored' onClick={remove}>
+            <Message>removeBudget</Message>
+          </button>
           <button className='mdl-button mdl-button--colored' onClick={close}>
             <Message>closeBudget</Message>
           </button>

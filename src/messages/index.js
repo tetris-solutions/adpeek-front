@@ -81,7 +81,8 @@ export default {
 
     createBudgetTitle: 'Created budget',
     setCampaignBudgetTitle: 'Changed campaign budget',
-    updateBudgetTitle: 'Updated budget'
+    updateBudgetTitle: 'Updated budget',
+    removeBudget: 'Remove'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -164,6 +165,7 @@ export default {
 
     createBudgetTitle: 'Criado novo orçamento',
     setCampaignBudgetTitle: 'Alterado orçamento da campanha',
-    updateBudgetTitle: 'Orçamento atualizado'
+    updateBudgetTitle: 'Orçamento atualizado',
+    removeBudget: 'Remover'
   }
 }
