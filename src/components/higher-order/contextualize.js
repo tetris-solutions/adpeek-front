@@ -74,7 +74,7 @@ export function contextualize (Component, baseCursors, ...names) {
 
   function PropsInjector (props) {
     forEach(names, name => {
-      if (isRouteParam[name] && !props[name] && !props.params[name]) {
+      if (isRouteParam[name] && !props.params[name]) {
         cached[name] = null
       } else {
         cached[name] = props[name] || cached[name]

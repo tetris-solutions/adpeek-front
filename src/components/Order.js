@@ -23,7 +23,7 @@ export function Order ({params, order, folder}, {messages: {newOrderName}, momen
 
   return (
     <OrderController
-      key={order.id || 'new-order'}
+      key={params.order || 'new-order'}
       params={params}
       campaigns={folder.campaigns}
       order={order}/>
