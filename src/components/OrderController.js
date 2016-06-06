@@ -18,6 +18,7 @@ import {branch} from 'baobab-react/dist-modules/higher-order'
 import {saveOrderAction} from '../actions/save-order'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import startsWith from 'lodash/startsWith'
+import {loadOrdersAction} from '../actions/load-orders'
 
 const {PropTypes} = React
 const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
@@ -226,22 +227,22 @@ export const Order = React.createClass({
 
     order.budgets = map(order.budgets,
       budget => assign(budget, {
-        folder: params.folder,
         id: startsWith(budget.id, NEW_BUDGET_PREFIX)
           ? null
           : budget.id
       }))
 
+    order.folder = params.folder
+
     return dispatch(saveOrderAction, order)
       .then(response => {
         const url = `/company/${params.company}/workspace/${params.workspace}/folder/${params.folder}/order/${response.data.id}`
 
-        if (isNewOrder) {
-          return router.push(url)
-        }
+        const reloadStuff = isNewOrder
+          ? dispatch(loadOrdersAction, params.company, params.workspace, params.folder)
+          : dispatch(loadBudgetsAction, params.company, params.workspace, params.folder, params.order)
 
-        dispatch(loadBudgetsAction, params.company, params.workspace, params.folder, params.order)
-          .then(() => router.push(url))
+        reloadStuff.then(() => router.push(url))
       })
       .then(() => dispatch(pushSuccessMessageAction))
   },
