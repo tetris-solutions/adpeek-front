@@ -1,6 +1,6 @@
 import React from 'react'
 import CampaignsToggle from './CampaignsToggle'
-import Campaign from './Campaign'
+import CampaignAdsets from './CampaignAdsets'
 import size from 'lodash/size'
 
 import Message from '@tetris/front-server/lib/components/intl/Message'
@@ -17,9 +17,9 @@ export const OrderCampaigns = React.createClass({
   contextTypes: {
     messages: PropTypes.object
   },
-  shouldComponentUpdate ({campaigns}) {
-    return size(campaigns) !== size(this.props.campaigns)
-  },
+  // shouldComponentUpdate ({campaigns}) {
+  //   return size(campaigns) !== size(this.props.campaigns)
+  // },
   render () {
     const {messages} = this.context
     const {campaigns} = this.props
@@ -32,7 +32,7 @@ export const OrderCampaigns = React.createClass({
         label={messages.linkCampaignsCallToAction}>
 
         {map(campaigns, (campaign, index) =>
-          <Campaign key={campaign.external_id} {...campaign}/>)}
+          <CampaignAdsets key={campaign.external_id} {...campaign}/>)}
 
       </CampaignsToggle>
     )

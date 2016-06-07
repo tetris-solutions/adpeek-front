@@ -6,7 +6,7 @@ import upperFirst from 'lodash/upperFirst'
 
 const {PropTypes} = React
 
-export function Order ({params, order, folder}, {messages: {newOrderName}, moment, locales}) {
+export function Order ({deliveryMethods, dispatch, params, order, folder}, {messages: {newOrderName}, moment, locales}) {
   const defaultOrder = () => {
     const nextMonth = moment().add(1, 'month')
     return {
@@ -25,6 +25,8 @@ export function Order ({params, order, folder}, {messages: {newOrderName}, momen
     <OrderController
       key={params.order || 'new-order'}
       params={params}
+      deliveryMethods={deliveryMethods}
+      dispatch={dispatch}
       campaigns={folder.campaigns}
       order={order}/>
   )
@@ -32,6 +34,8 @@ export function Order ({params, order, folder}, {messages: {newOrderName}, momen
 
 Order.displayName = 'Order'
 Order.propTypes = {
+  dispatch: PropTypes.func,
+  deliveryMethods: PropTypes.array,
   params: PropTypes.object,
   folder: PropTypes.object,
   order: PropTypes.any
@@ -42,4 +46,4 @@ Order.contextTypes = {
   messages: PropTypes.object
 }
 
-export default contextualize(Order, 'folder', 'order')
+export default contextualize(Order, {deliveryMethods: ['deliveryMethods']}, 'folder', 'order')

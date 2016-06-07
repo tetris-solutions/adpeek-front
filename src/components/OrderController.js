@@ -13,8 +13,6 @@ import sum from 'lodash/sum'
 import round from 'lodash/round'
 import without from 'lodash/without'
 import {loadBudgetsAction} from '../actions/load-budgets'
-import findIndex from 'lodash/findIndex'
-import {branch} from 'baobab-react/dist-modules/higher-order'
 import {saveOrderAction} from '../actions/save-order'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import startsWith from 'lodash/startsWith'
@@ -25,9 +23,9 @@ const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
 const toPercentage = (value, total) => round((value / total) * 100, 2)
 const fromPercentage = (value, total) => round((value / 100) * total, 2)
 
-function looseCampaigns (campaigns, budgets) {
+function looseCampaigns (campaigns, budgets, unlockedCampaigns) {
   const takenCampaigns = flatten(map(budgets, getCampaignIds))
-  const notTaken = ({id, budget}) => !budget && !includes(takenCampaigns, id)
+  const notTaken = ({id, budget}) => !(budget && !includes(unlockedCampaigns, id)) && !includes(takenCampaigns, id)
 
   return filter(campaigns, notTaken)
 }
@@ -52,33 +50,13 @@ function availableAmount (total, budgets) {
   return round(total - sum(map(budgets, exactAmount)), 2)
 }
 
-function calculateParams (order, selectedBudgetIndex, campaigns) {
-  const budget = isNumber(selectedBudgetIndex)
-    ? order.budgets[selectedBudgetIndex]
-    : null
-
-  const remainingAmount = availableAmount(order.amount, order.budgets)
-
-  const remainingValue = budget && budget.mode === 'percentage'
-    ? toPercentage(remainingAmount, order.amount)
-    : remainingAmount
-
-  return {
-    order,
-    budget,
-    campaigns: looseCampaigns(campaigns, order.budgets),
-    remainingAmount,
-    remainingValue
-  }
-}
-
 export const NEW_BUDGET_PREFIX = 'my-new-budget'
 
 function defaultBudgetName ({budgetLabel}, index) {
   return `${budgetLabel} #${index}`
 }
 
-export const Order = React.createClass({
+export const OrderController = React.createClass({
   displayName: 'Order-Controller',
   propTypes: {
     deliveryMethods: PropTypes.array,
@@ -97,7 +75,7 @@ export const Order = React.createClass({
   },
   getInitialState () {
     return {
-      campaigns: cloneDeep(this.props.campaigns),
+      unlockedCampaigns: [],
       order: normalizeOrder(cloneDeep(this.props.order)),
       selectedBudgetIndex: null
     }
@@ -162,7 +140,8 @@ export const Order = React.createClass({
   addCampaigns (insertedCampaignIds) {
     const budget = this.getCurrentBudget()
 
-    const {selectedBudgetIndex, campaigns} = this.state
+    const {campaigns} = this.props
+    const {selectedBudgetIndex} = this.state
 
     budget.campaigns = budget.campaigns.concat(
       map(insertedCampaignIds, id => find(campaigns, {id})))
@@ -177,12 +156,13 @@ export const Order = React.createClass({
     this.setCurrentBudget(budget)
   },
   unlockCampaign (id) {
-    const campaigns = this.state.campaigns.concat()
-    const index = findIndex(campaigns, {id})
+    const {unlockedCampaigns} = this.state
 
-    campaigns[index] = assign({}, campaigns[index], {budget: null})
+    if (includes(unlockedCampaigns, id)) return
 
-    this.setState({campaigns})
+    this.setState({
+      unlockedCampaigns: unlockedCampaigns.concat([id])
+    })
   },
   removeCampaign (campaign) {
     this.unlockCampaign(campaign.id)
@@ -192,9 +172,9 @@ export const Order = React.createClass({
   },
   createBudget () {
     const {deliveryMethods} = this.props
-    const {order, selectedBudgetIndex} = this.state
+    const {order} = this.state
+    const remainingAmount = availableAmount(order.amount, order.budgets)
 
-    const {remainingAmount} = calculateParams(order, selectedBudgetIndex, this.state.campaigns)
     const newBudget = normalizeBudget({
       id: `${NEW_BUDGET_PREFIX}-${Math.random().toString(36).substr(2)}`,
       name: defaultBudgetName(this.context.messages, order.budgets.length + 1),
@@ -247,11 +227,18 @@ export const Order = React.createClass({
       .then(() => dispatch(pushSuccessMessageAction))
   },
   render () {
-    const {order, budget, campaigns, remainingAmount, remainingValue} =
-      calculateParams(
-        this.state.order,
-        this.state.selectedBudgetIndex,
-        this.state.campaigns)
+    const {order, selectedBudgetIndex, unlockedCampaigns} = this.state
+    const budget = isNumber(selectedBudgetIndex)
+      ? order.budgets[selectedBudgetIndex]
+      : null
+
+    const remainingAmount = availableAmount(order.amount, order.budgets)
+
+    const remainingValue = budget && budget.mode === 'percentage'
+      ? toPercentage(remainingAmount, order.amount)
+      : remainingAmount
+
+    const campaigns = looseCampaigns(this.props.campaigns, order.budgets, unlockedCampaigns)
 
     return (
       <OrderEdit
@@ -273,4 +260,4 @@ export const Order = React.createClass({
   }
 })
 
-export default branch({deliveryMethods: ['deliveryMethods']}, Order)
+export default OrderController
