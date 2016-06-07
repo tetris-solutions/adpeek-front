@@ -36,6 +36,7 @@ import {loadOrdersActionRouterAdaptor as orders} from '../actions/load-orders'
 import {loadBudgetsActionRouterAdaptor as budgets} from '../actions/load-budgets'
 import {loadDeliveryMethodsActionRouterAdaptor as deliveryMethods} from '../actions/load-delivery-methods'
 import {loadAutoBudgetLogsActionRouterAdaptor as autoBudgetLogs} from '../actions/load-autobudget-logs'
+import bind from 'lodash/bind'
 
 /**
  * returns the route config
@@ -46,6 +47,9 @@ import {loadAutoBudgetLogsActionRouterAdaptor as autoBudgetLogs} from '../action
  * @returns {Route} the route config
  */
 export function getRoutes (tree, protectRoute, preload, createRoot) {
+  const _ = bind.placeholder
+  const campaignsWithAdsets = bind(campaigns, null, _, _, true)
+
   return (
     <Route path='/' component={root(tree, createRoot())}>
       <IndexRoute component={Home}/>
@@ -103,7 +107,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
               <Route
                 breadcrumb={OrdersBreadCrumb}
-                onEnter={preload(deliveryMethods, statuses, campaigns, orders)}>
+                onEnter={preload(deliveryMethods, statuses, campaignsWithAdsets, orders)}>
 
                 <Route path='order/:order' breadcrumb={OrderBreadCrumb}>
                   <IndexRoute onEnter={preload(budgets)} component={Order}/>

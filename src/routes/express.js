@@ -14,8 +14,12 @@ import {loadOrdersActionServerAdaptor as orders} from '../actions/load-orders'
 import {loadBudgetsActionServerAdaptor as budgets} from '../actions/load-budgets'
 import {loadDeliveryMethodsActionServerAdaptor as deliveryMethods} from '../actions/load-delivery-methods'
 import {loadAutoBudgetLogsActionServerAdaptor as autoBudgetLogs} from '../actions/load-autobudget-logs'
+import bind from 'lodash/bind'
 
 export function setAppRoutes (app, render) {
+  const _ = bind.placeholder
+  const campaignsWithAdsets = bind(campaigns, null, _, _, true)
+
   app.get('/', render)
 
   app.get('/company/:company',
@@ -55,22 +59,22 @@ export function setAppRoutes (app, render) {
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/order/:order',
     protect,
-    preload(deliveryMethods, statuses, companies, workspace, folder, campaigns, orders, budgets),
+    preload(deliveryMethods, statuses, companies, workspace, folder, campaignsWithAdsets, orders, budgets),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/order/:order/autobudget',
     protect,
-    preload(deliveryMethods, statuses, companies, workspace, folder, campaigns, orders, budgets, autoBudgetLogs),
+    preload(deliveryMethods, statuses, companies, workspace, folder, campaignsWithAdsets, orders, budgets, autoBudgetLogs),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/order/:order/autobudget/:day',
     protect,
-    preload(deliveryMethods, statuses, companies, workspace, folder, campaigns, orders, budgets, autoBudgetLogs),
+    preload(deliveryMethods, statuses, companies, workspace, folder, campaignsWithAdsets, orders, budgets, autoBudgetLogs),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/create/order',
     protect,
-    preload(deliveryMethods, statuses, companies, workspace, folder, campaigns, orders),
+    preload(deliveryMethods, statuses, companies, workspace, folder, campaignsWithAdsets, orders),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/edit',
