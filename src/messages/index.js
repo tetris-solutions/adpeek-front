@@ -3,7 +3,6 @@ export default {
     welcomeMessage: 'Hey, {name}',
     linkCampaignsCallToAction: 'Link selected',
     unlinkCampaignsCallToAction: 'Unlink selected',
-    budgetCampaigns: 'Budget campaigns',
     nCampaigns: '{n} linked campaigns',
     nLooseCampaigns: '{n} loose campaigns',
     filterActiveCampaigns: 'Filter active campaigns',
@@ -58,10 +57,10 @@ export default {
         You still have <strong>$ {available}</strong> left.
       </p>`,
     createBudget: 'Slice a new budget',
-    budgetWithoutCampaigns: `
-    <p>
-        You still did not include any campaign in this budget. To remedy that, select some of those campaigns in the list below and click on "Link Selected".
-    </p>`,
+    folderCampaignsTitle: 'Folder campaigns',
+    budgetCampaignsTitle: 'Budget campaigns',
+    maxCampaignsPerBudgetReached: '<p>You can\'t add anymore campaign in this budget</p>',
+    budgetWithoutCampaigns: '<p>You still did not include any campaign in this budget.</p>',
     newOrderName: '{month}',
     deliveryMethodLabel: 'Delivery method',
     closeBudget: 'Close',
@@ -88,7 +87,6 @@ export default {
     welcomeMessage: 'Olá, {name}',
     linkCampaignsCallToAction: 'Associar',
     unlinkCampaignsCallToAction: 'Desassociar',
-    budgetCampaigns: 'Campanhas neste orçamento',
     nCampaigns: '{n} campanhas nesta pasta',
     nLooseCampaigns: '{n} campanhas soltas',
     filterActiveCampaigns: 'Filtrar campanhas ativas',
@@ -142,10 +140,10 @@ export default {
         Você ainda tem <strong>R$ {available}</strong> disponíveis.
       </p>`,
     createBudget: 'Separar novo orçamento',
-    budgetWithoutCampaigns: `
-    <p>
-        Você ainda não incluiu nenhuma campanha neste orçamento, pra fazer isso você só precisa selecionar alguma das campanhas na lista abaixo e clicar em "Associar".
-    </p>`,
+    folderCampaignsTitle: 'Campanhas da pasta',
+    budgetCampaignsTitle: 'Campanhas do orçamento',
+    maxCampaignsPerBudgetReached: '<p>Você não pode adicionar mais campanhas neste orçamento.</p>',
+    budgetWithoutCampaigns: '<p>Você ainda não incluiu nenhuma campanha neste orçamento.</p>',
     newOrderName: 'PI de {month}',
     deliveryMethodLabel: 'Forma de entrega',
     closeBudget: 'Fechar',

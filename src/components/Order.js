@@ -44,7 +44,7 @@ export function Order ({deliveryMethods, dispatch, params, order, folder}, {mess
       params={params}
       deliveryMethods={deliveryMethods}
       dispatch={dispatch}
-      childEntity={adsetMode ? 'adset' : 'campaign'}
+      maxCampaignsPerBudget={adsetMode ? 1 : Infinity}
       campaigns={adsetMode ? flatten(map(folder.campaigns, normalizeCampaign)) : folder.campaigns}
       order={order}/>
   )

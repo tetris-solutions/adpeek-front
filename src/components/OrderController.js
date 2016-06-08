@@ -67,7 +67,8 @@ export const OrderController = React.createClass({
       folder: PropTypes.string
     }),
     dispatch: PropTypes.func,
-    campaigns: PropTypes.array
+    campaigns: PropTypes.array,
+    maxCampaignsPerBudget: PropTypes.number
   },
   contextTypes: {
     router: PropTypes.object,
@@ -238,7 +239,12 @@ export const OrderController = React.createClass({
       ? toPercentage(remainingAmount, order.amount)
       : remainingAmount
 
-    const campaigns = looseCampaigns(this.props.campaigns, order.budgets, unlockedCampaigns)
+    const showFolderCampaigns = !(budget && budget.campaigns.length >= this.props.maxCampaignsPerBudget)
+    let folderCampaigns = []
+
+    if (showFolderCampaigns && budget) {
+      folderCampaigns = looseCampaigns(this.props.campaigns, order.budgets, unlockedCampaigns)
+    }
 
     return (
       <OrderEdit
@@ -254,7 +260,8 @@ export const OrderController = React.createClass({
         remainingValue={remainingValue}
         budget={budget}
         order={order}
-        campaigns={campaigns}
+        showFolderCampaigns={showFolderCampaigns}
+        folderCampaigns={folderCampaigns}
         onEnter={this.onEnter}/>
     )
   }

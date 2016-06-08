@@ -7,7 +7,6 @@ import orderType from '../propTypes/campaign'
 import budgetType from '../propTypes/campaign'
 import OrderHeader from './OrderHeader'
 import BudgetEdit from './BudgetEdit'
-import OrderCampaigns from './OrderCampaigns'
 import OrderPie from './OrderPie'
 import EmptySelectionCard from './BudgetEmptySelection'
 import {Link} from 'react-router'
@@ -16,6 +15,7 @@ const {PropTypes} = React
 
 export function OrderEdit ({
   save,
+  showFolderCampaigns,
   createBudget,
   removeBudget,
   removeCampaign,
@@ -28,7 +28,7 @@ export function OrderEdit ({
   changeBudgetField,
   budget,
   order,
-  campaigns
+  folderCampaigns
 }, {params}) {
   function closeBudget () {
     selectBudget(null)
@@ -79,8 +79,11 @@ export function OrderEdit ({
               <BudgetEdit
                 close={closeBudget}
                 remove={removeBudget}
+                folderCampaigns={folderCampaigns}
                 removeCampaign={removeCampaign}
+                addCampaigns={addCampaigns}
                 key={budget.id}
+                showFolderCampaigns={showFolderCampaigns}
                 max={remainingValue + budget.value}
                 budget={budget}
                 change={changeBudgetField}/>
@@ -92,12 +95,6 @@ export function OrderEdit ({
             )}
           </div>
         </div>
-
-        {budget ? (
-          <OrderCampaigns
-            campaigns={campaigns}
-            addCampaigns={addCampaigns}/>
-        ) : null}
       </section>
     </div>
   )
@@ -105,6 +102,7 @@ export function OrderEdit ({
 
 OrderEdit.displayName = 'Order-Edit'
 OrderEdit.propTypes = {
+  showFolderCampaigns: PropTypes.bool,
   save: PropTypes.func,
   createBudget: PropTypes.func,
   removeBudget: PropTypes.func,
@@ -118,7 +116,7 @@ OrderEdit.propTypes = {
   changeBudgetField: PropTypes.func,
   budget: orderType,
   order: budgetType,
-  campaigns: PropTypes.arrayOf(campaignType)
+  folderCampaigns: PropTypes.arrayOf(campaignType)
 }
 OrderEdit.contextTypes = {
   params: PropTypes.shape({

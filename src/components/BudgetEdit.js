@@ -12,13 +12,14 @@ import size from 'lodash/size'
 import Select from './Select'
 import {branch} from 'baobab-react/dist-modules/higher-order'
 import filter from 'lodash/filter'
+import {Tabs, Tab} from './Tabs'
 
 const {PropTypes} = React
 
-function Campaign ({campaign, removeCampaign}) {
-  function onClick (e) {
+function Campaign ({campaign, actionIcon, onClick}) {
+  function onIconClick (e) {
     e.preventDefault()
-    removeCampaign(campaign)
+    onClick(campaign)
   }
 
   return (
@@ -29,8 +30,8 @@ function Campaign ({campaign, removeCampaign}) {
         </i>
         <span>{campaign.name}</span>
       </span>
-      <a className='mdl-list__item-secondary-action' onClick={onClick}>
-        <i className='material-icons'>clear</i>
+      <a className='mdl-list__item-secondary-action' onClick={onIconClick}>
+        <i className='material-icons'>{actionIcon}</i>
       </a>
     </div>
   )
@@ -39,7 +40,8 @@ function Campaign ({campaign, removeCampaign}) {
 Campaign.displayName = 'Campaign'
 Campaign.propTypes = {
   campaign: campaignType,
-  removeCampaign: PropTypes.func
+  actionIcon: PropTypes.string,
+  onClick: PropTypes.func
 }
 
 const notUnknown = ({id}) => id !== 'UNKNOWN'
@@ -53,7 +55,10 @@ export const BudgetEdit = React.createClass({
     removeCampaign: PropTypes.func,
     change: PropTypes.func,
     max: PropTypes.number,
-    budget: budgetType
+    budget: budgetType,
+    folderCampaigns: PropTypes.array,
+    showFolderCampaigns: PropTypes.bool,
+    addCampaigns: PropTypes.func
   },
   contextTypes: {
     messages: PropTypes.object
@@ -71,8 +76,11 @@ export const BudgetEdit = React.createClass({
     this.props.change('delivery_method', value)
   },
   render () {
-    const {messages: {percentageLabel, amountLabel}} = this.context
+    const {messages: {percentageLabel, amountLabel, folderCampaignsTitle, budgetCampaignsTitle}} = this.context
     const {
+      folderCampaigns,
+      showFolderCampaigns,
+      addCampaigns,
       remove,
       close,
       deliveryMethods,
@@ -88,6 +96,10 @@ export const BudgetEdit = React.createClass({
     } else {
       switchChecked = false
       switchLabel = amountLabel
+    }
+
+    function includeCampaign ({id}) {
+      addCampaigns([id])
     }
 
     return (
@@ -142,20 +154,38 @@ export const BudgetEdit = React.createClass({
             </div>
           </div>
 
-          <h5>
-            <Message>budgetCampaigns</Message>
-          </h5>
-
-          {!size(campaigns) && <Message html>budgetWithoutCampaigns</Message>}
-
-          <div className='mdl-list'>
-            {map(campaigns, campaign => (
-              <Campaign
-                key={campaign.id}
-                campaign={campaign}
-                removeCampaign={this.props.removeCampaign}/>
-            ))}
-          </div>
+          <Tabs>
+            <Tab id='budget-campaigns' title={budgetCampaignsTitle}>
+              <br/>
+              {!size(campaigns) ? (
+                <Message html>budgetWithoutCampaigns</Message>
+              ) : (
+                <div className='mdl-list'>
+                  {map(campaigns, campaign => (
+                    <Campaign
+                      key={campaign.id}
+                      campaign={campaign}
+                      actionIcon='clear'
+                      onClick={this.props.removeCampaign}/>
+                  ))}
+                </div>)}
+            </Tab>
+            <Tab id='folder-campaigns' title={folderCampaignsTitle}>
+              <br/>
+              {!showFolderCampaigns ? (
+                <Message html>maxCampaignsPerBudgetReached</Message>
+              ) : (
+                <div className='mdl-list'>
+                  {map(folderCampaigns, campaign => (
+                    <Campaign
+                      key={campaign.id}
+                      campaign={campaign}
+                      actionIcon='add'
+                      onClick={includeCampaign}/>
+                  ))}
+                </div>)}
+            </Tab>
+          </Tabs>
         </Content>
         <Footer multipleButtons>
           <button className='mdl-button mdl-button--colored' onClick={remove}>
