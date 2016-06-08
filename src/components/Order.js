@@ -9,20 +9,15 @@ import assign from 'lodash/assign'
 
 const {PropTypes} = React
 
-function normalizeCampaign (campaign) {
-  function normalizeAdset (adset) {
-    const defaults = {
-      id: `external::${adset.external_id}`,
-      campaign: campaign.id,
-      status: campaign.status
-    }
-    return assign(defaults, adset)
-  }
+function normalizeAdset (adset) {
+  return assign({id: `external::${adset.external_id}`}, adset)
+}
 
+function normalizeCampaign (campaign) {
   return map(campaign.adsets, normalizeAdset)
 }
 
-export function Order ({deliveryMethods, dispatch, params, order, folder}, {messages: {newOrderName}, moment, locales}) {
+export function Order ({deliveryMethods, dispatch, params, order, folder, statuses}, {messages: {newOrderName}, moment, locales}) {
   const defaultOrder = () => {
     const nextMonth = moment().add(1, 'month')
     return {
@@ -37,6 +32,9 @@ export function Order ({deliveryMethods, dispatch, params, order, folder}, {mess
 
   order = order || defaultOrder()
   const adsetMode = folder.account.platform === 'facebook'
+  const campaigns = adsetMode
+    ? flatten(map(folder.campaigns, normalizeCampaign))
+    : folder.campaigns
 
   return (
     <OrderController
@@ -45,13 +43,14 @@ export function Order ({deliveryMethods, dispatch, params, order, folder}, {mess
       deliveryMethods={deliveryMethods}
       dispatch={dispatch}
       maxCampaignsPerBudget={adsetMode ? 1 : Infinity}
-      campaigns={adsetMode ? flatten(map(folder.campaigns, normalizeCampaign)) : folder.campaigns}
+      campaigns={campaigns}
       order={order}/>
   )
 }
 
 Order.displayName = 'Order'
 Order.propTypes = {
+  statuses: PropTypes.array,
   dispatch: PropTypes.func,
   deliveryMethods: PropTypes.array,
   params: PropTypes.object,
@@ -64,4 +63,4 @@ Order.contextTypes = {
   messages: PropTypes.object
 }
 
-export default contextualize(Order, {deliveryMethods: ['deliveryMethods']}, 'folder', 'order')
+export default contextualize(Order, {deliveryMethods: ['deliveryMethods'], statuses: ['statuses']}, 'folder', 'order')

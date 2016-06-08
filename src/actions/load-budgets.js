@@ -13,7 +13,15 @@ export function loadBudgets (order, config) {
 
 export function loadBudgetsAction (tree, company, workspace, folder, order, token) {
   const setStatus = statusResolver(tree.get('statuses'))
-  const transformCampaigns = ls => map(ls, setStatus)
+  const transformCampaigns = ls => map(ls, campaign => {
+    campaign = setStatus(campaign)
+
+    if (campaign.adsets) {
+      campaign.adsets = map(campaign.adsets, setStatus)
+    }
+
+    return campaign
+  })
   const hydradeBudget = budget => assign({}, budget, {campaigns: transformCampaigns(budget.campaigns)})
   const transformBudgets = budgets => map(budgets, hydradeBudget)
 
