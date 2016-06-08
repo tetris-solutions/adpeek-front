@@ -3,8 +3,24 @@ import {contextualize} from './higher-order/contextualize'
 import OrderController from './OrderController'
 import Message from 'intl-messageformat'
 import upperFirst from 'lodash/upperFirst'
+import flatten from 'lodash/flatten'
+import map from 'lodash/map'
+import assign from 'lodash/assign'
 
 const {PropTypes} = React
+
+function normalizeCampaign (campaign) {
+  function normalizeAdset (adset) {
+    const defaults = {
+      id: `external::${adset.external_id}`,
+      campaign: campaign.id,
+      status: campaign.status
+    }
+    return assign(defaults, adset)
+  }
+
+  return map(campaign.adsets, normalizeAdset)
+}
 
 export function Order ({deliveryMethods, dispatch, params, order, folder}, {messages: {newOrderName}, moment, locales}) {
   const defaultOrder = () => {
@@ -20,6 +36,7 @@ export function Order ({deliveryMethods, dispatch, params, order, folder}, {mess
   }
 
   order = order || defaultOrder()
+  const adsetMode = folder.account.platform === 'facebook'
 
   return (
     <OrderController
@@ -27,7 +44,8 @@ export function Order ({deliveryMethods, dispatch, params, order, folder}, {mess
       params={params}
       deliveryMethods={deliveryMethods}
       dispatch={dispatch}
-      campaigns={folder.campaigns}
+      childEntity={adsetMode ? 'adset' : 'campaign'}
+      campaigns={adsetMode ? flatten(map(folder.campaigns, normalizeCampaign)) : folder.campaigns}
       order={order}/>
   )
 }
