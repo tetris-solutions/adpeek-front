@@ -22,8 +22,8 @@ export function loadBudgetsAction (tree, company, workspace, folder, order, toke
 
     return campaign
   })
-  const hydradeBudget = budget => assign({}, budget, {campaigns: transformCampaigns(budget.campaigns)})
-  const transformBudgets = budgets => map(budgets, hydradeBudget)
+  const hydrateBudget = budget => assign({}, budget, {campaigns: transformCampaigns(budget.campaigns)})
+  const transformBudgets = budgets => map(budgets, hydrateBudget)
 
   return loadBudgets(order, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
