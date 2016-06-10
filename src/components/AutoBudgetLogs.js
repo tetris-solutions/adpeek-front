@@ -10,7 +10,7 @@ import {styledFnComponent} from './higher-order/styled-fn-component'
 import csjs from 'csjs'
 
 const style = csjs`
-.actionHeader > small {
+.actionHeader > small:last-child {
   float: right;
 }`
 const money = n => isNumber(n) ? '$ ' + n.toFixed(2) : '?'
@@ -102,6 +102,47 @@ CalculateBudgetAmount.propTypes = {
   timestamp: PropTypes.string
 }
 
+const CalculateAdsetAmount = ({amount, timestamp}) => (
+  <div>
+    <ActionHeader>
+      <Message>calculateAdsetAmountTitle</Message>
+      <Timestamp>{timestamp}</Timestamp>
+    </ActionHeader>
+    <table className='mdl-data-table mdl-shadow--2dp'>
+      <thead>
+        <tr>
+          <th>
+            <Message>totalAmountTitle</Message>
+          </th>
+          <th>
+            <Message>averageAmountTitle</Message>
+          </th>
+          <th>
+            <Message>previousAmountTitle</Message>
+          </th>
+          <th>
+            <Message>todayAmountTitle</Message>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{money(amount.total)}</td>
+          <td>{money(amount.average)}</td>
+          <td>{money(amount.previous)}</td>
+          <td>{money(amount.today)}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+)
+
+CalculateAdsetAmount.displayName = 'Calculate-Adset-Amount'
+CalculateAdsetAmount.propTypes = {
+  amount: amountPropTypes,
+  timestamp: PropTypes.string
+}
+
 const LoadCampaignBudget = ({current_budget, timestamp}) => (
   <div>
     <ActionHeader>
@@ -179,8 +220,70 @@ const LoadCampaignCost = ({cost, timestamp}) => (
 LoadCampaignCost.displayName = 'Load-Campaign-Cost'
 LoadCampaignCost.propTypes = {
   cost: PropTypes.shape({
+    closed: PropTypes.number,
     today: PropTypes.number,
     total: PropTypes.number
+  }),
+  timestamp: PropTypes.string
+}
+
+const LoadAdsetCost = ({cost, timestamp}) => (
+  <div>
+    <ActionHeader>
+      <Message>loadAdsetCostTitle</Message>
+      {`: ${money(cost.total)}`}
+      <Timestamp>{timestamp}</Timestamp>
+    </ActionHeader>
+  </div>
+)
+
+LoadAdsetCost.displayName = 'Load-Adset-Cost'
+LoadAdsetCost.propTypes = {
+  cost: PropTypes.shape({
+    closed: PropTypes.number,
+    today: PropTypes.number,
+    total: PropTypes.number
+  }),
+  timestamp: PropTypes.string
+}
+
+const LoadAdsetInfo = ({info, timestamp}) => (
+  <div>
+    <ActionHeader>
+      <Message>loadAdsetInfoTitle</Message>
+      <Timestamp>{timestamp}</Timestamp>
+    </ActionHeader>
+    <table className='mdl-data-table mdl-shadow--2dp'>
+      <thead>
+        <tr>
+          <th>
+            <Message>dailyBudgetTitle</Message>
+          </th>
+          <th>
+            <Message>lifetimeBudgetTitle</Message>
+          </th>
+          <th>
+            <Message>budgetRemainingTitle</Message>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{money(info.daily_budget)}</td>
+          <td>{money(info.lifetime_budget)}</td>
+          <td>{money(info.budget_remaining)}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+)
+
+LoadAdsetInfo.displayName = 'Load-Adset-Info'
+LoadAdsetInfo.propTypes = {
+  info: PropTypes.shape({
+    daily_budget: PropTypes.number,
+    lifetime_budget: PropTypes.number,
+    budget_remaining: PropTypes.number
   }),
   timestamp: PropTypes.string
 }
@@ -353,13 +456,75 @@ UpdateBudget.propTypes = {
   changes: budgetPropTypes
 }
 
+const UpdateAdset = ({budget, changes, timestamp}) => (
+  <div>
+    <ActionHeader>
+      <Message>updateAdsetTitle</Message>
+      <Timestamp>{timestamp}</Timestamp>
+    </ActionHeader>
+    <table className='mdl-data-table mdl-shadow--2dp'>
+      <thead>
+        <tr>
+          <th>ID</th>
+
+          {changes.name && (
+            <th className='mdl-data-table__cell--non-numeric'>
+              <Message>nameLabel</Message>
+            </th>)}
+
+          {changes.delivery_method && (
+            <th>
+              <Message>deliveryMethodLabel</Message>
+            </th>)}
+
+          {changes.amount && (
+            <th>
+              <Message>amountLabel</Message>
+            </th>)}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            {budget.external_id}
+          </td>
+
+          {changes.name && (
+            <td className='mdl-data-table__cell--non-numeric'>
+              {changes.name}
+            </td>)}
+
+          {changes.delivery_method && (
+            <td className='mdl-data-table__cell--non-numeric'>
+              {changes.delivery_method}
+            </td>)}
+
+          {changes.amount && (<td>{money(changes.amount)}</td>)}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+)
+
+UpdateAdset.displayName = 'Update-Adset'
+UpdateAdset.propTypes = {
+  timestamp: PropTypes.string,
+  budget: budgetPropTypes,
+  changes: budgetPropTypes
+}
+
 const actions = {
   'load-campaign-budget': LoadCampaignBudget,
   'load-campaign-cost': LoadCampaignCost,
   'calculate-budget-amount': CalculateBudgetAmount,
   'create-budget': CreateBudget,
   'update-budget': UpdateBudget,
-  'set-campaign-budget': SetCampaignBudget
+  'set-campaign-budget': SetCampaignBudget,
+
+  'load-adset-cost': LoadAdsetCost,
+  'load-adset-info': LoadAdsetInfo,
+  'calculate-adset-amount': CalculateAdsetAmount,
+  'update-adset': UpdateAdset
 }
 
 const Budget = ({entries}) => (
@@ -401,7 +566,37 @@ Campaign.propTypes = {
   entries: PropTypes.array
 }
 
-function ABLogs ({logs}) {
+const Adset = ({entries}) => (
+  <Card size='large'>
+    <Header>
+      <Message name={entries[0].adset.name}>adsetTitle</Message>
+    </Header>
+    <Content>
+      {map(entries, (entry, index) => {
+        const Component = actions[entry.action] || DefaultActionComponent
+
+        return <Component key={index} {...entry} />
+      })}
+    </Content>
+  </Card>
+)
+Adset.displayName = 'Adset-Actions'
+Adset.propTypes = {
+  entries: PropTypes.array
+}
+
+function ABLogs ({logs, platform}) {
+  if (platform === 'facebook') {
+    const adsets = groupBy(logs, 'adset.id')
+
+    return (
+      <div>
+        {map(adsets, (entries, id) =>
+          <Adset key={id} entries={entries}/>)}
+      </div>
+    )
+  }
+
   const campaigns = groupBy(filter(logs, has('campaign')), 'campaign.id')
   const budgets = groupBy(filter(logs, has('budget')), 'budget.id')
 
@@ -417,7 +612,8 @@ function ABLogs ({logs}) {
 }
 ABLogs.displayName = 'Auto-Budget-Logs'
 ABLogs.propTypes = {
-  logs: PropTypes.array
+  logs: PropTypes.array,
+  platform: PropTypes.string
 }
 
 export const AutoBudgetLogs = styledFnComponent(ABLogs, style)

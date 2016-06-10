@@ -66,21 +66,30 @@ export default {
     closeBudget: 'Close',
 
     calculateBudgetAmountTitle: 'Calculated budget amount',
+    calculateAdsetAmountTitle: 'Calculated ad set amount',
     totalAmountTitle: 'Total',
     averageAmountTitle: 'Average',
     previousAmountTitle: 'Previous',
     todayAmountTitle: 'Today\'s',
     loadCampaignBudgetTitle: 'Loaded campaign budget',
     loadCampaignCostTitle: 'Loaded campaign cost',
+    loadAdsetCostTitle: 'Loaded Ad Set cost',
+    loadAdsetInfoTitle: 'Loaded Ad Set Information',
     closedCostTitle: 'Closed',
     totalCostTitle: 'Total',
     todayCostTitle: 'Today\'s',
     campaignTitle: 'Campaign {name}',
     budgetTitle: 'Budget {name}',
+    adsetTitle: 'Ad Set {name}',
+
+    dailyBudgetTitle: 'Daily budget',
+    lifetimeBudgetTitle: 'Lifetime budget',
+    budgetRemainingTitle: 'Remaining budget',
 
     createBudgetTitle: 'Created budget',
     setCampaignBudgetTitle: 'Changed campaign budget',
     updateBudgetTitle: 'Updated budget',
+    updateAdsetTitle: 'Updated Ad Set',
     removeBudget: 'Remove'
   },
   'pt-BR': {
@@ -149,21 +158,30 @@ export default {
     closeBudget: 'Fechar',
 
     calculateBudgetAmountTitle: 'Calculado valor do orçamento',
+    calculateAdsetAmountTitle: 'Calculado orçamento do adset',
     totalAmountTitle: 'Total',
     averageAmountTitle: 'Média',
     previousAmountTitle: 'Anterior',
     todayAmountTitle: 'Do dia',
     loadCampaignBudgetTitle: 'Carregado orçamento da campanha',
     loadCampaignCostTitle: 'Carregado custo da campanha',
+    loadAdsetCostTitle: 'Carregado custo do Ad Set',
+    loadAdsetInfoTitle: 'Carregados dados do Ad Set',
     closedCostTitle: 'Fechado',
     totalCostTitle: 'Total',
     todayCostTitle: 'Do dia',
     campaignTitle: 'Campanha {name}',
     budgetTitle: 'Orçamento {name}',
+    adsetTitle: 'Ad Set {name}',
+
+    dailyBudgetTitle: 'Orçamento diário',
+    lifetimeBudgetTitle: 'Orçamento vitalício',
+    budgetRemainingTitle: 'Orçamento restante',
 
     createBudgetTitle: 'Criado novo orçamento',
     setCampaignBudgetTitle: 'Alterado orçamento da campanha',
     updateBudgetTitle: 'Orçamento atualizado',
+    updateAdsetTitle: 'Ad Set atualizado',
     removeBudget: 'Remover'
   }
 }

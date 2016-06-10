@@ -20,6 +20,7 @@ export const OrderAutoBudget = React.createClass({
   },
   propTypes: {
     order: PropTypes.object,
+    folder: PropTypes.object,
     routeParams: PropTypes.object,
     params: PropTypes.object
   },
@@ -32,7 +33,7 @@ export const OrderAutoBudget = React.createClass({
     )
   },
   render () {
-    const {order: {autoBudgetLogs}, routeParams: {day}} = this.props
+    const {folder, order: {autoBudgetLogs}, routeParams: {day}} = this.props
 
     return (
       <div className='mdl-grid'>
@@ -43,11 +44,11 @@ export const OrderAutoBudget = React.createClass({
             label='day'
             value={day || yesterday()}
             onChange={this.onChangeDay}/>
-          <AutoBudgetLogs logs={autoBudgetLogs}/>
+          <AutoBudgetLogs logs={autoBudgetLogs} platform={folder.account.platform}/>
         </div>
       </div>
     )
   }
 })
 
-export default contextualize(OrderAutoBudget, 'order')
+export default contextualize(OrderAutoBudget, 'order', 'folder')
