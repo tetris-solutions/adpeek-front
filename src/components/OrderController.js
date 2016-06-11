@@ -15,7 +15,6 @@ import without from 'lodash/without'
 import {loadBudgetsAction} from '../actions/load-budgets'
 import {saveOrderAction} from '../actions/save-order'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
-import startsWith from 'lodash/startsWith'
 import {loadOrdersAction} from '../actions/load-orders'
 
 const {PropTypes} = React
@@ -50,8 +49,6 @@ function availableAmount (total, budgets) {
   return round(total - sum(map(budgets, exactAmount)), 2)
 }
 
-export const NEW_BUDGET_PREFIX = 'my-new-budget'
-
 function defaultBudgetName ({budgetLabel}, index) {
   return `${budgetLabel} #${index}`
 }
@@ -64,7 +61,8 @@ export const OrderController = React.createClass({
     params: PropTypes.shape({
       company: PropTypes.string,
       workspace: PropTypes.string,
-      folder: PropTypes.string
+      folder: PropTypes.string,
+      order: PropTypes.string
     }),
     dispatch: PropTypes.func,
     campaigns: PropTypes.array,
@@ -177,7 +175,8 @@ export const OrderController = React.createClass({
     const remainingAmount = availableAmount(order.amount, order.budgets)
 
     const newBudget = normalizeBudget({
-      id: `${NEW_BUDGET_PREFIX}-${Math.random().toString(36).substr(2)}`,
+      isNewBudget: true,
+      id: `NewBudget::${Math.random().toString(36).substr(2)}`,
       name: defaultBudgetName(this.context.messages, order.budgets.length + 1),
       amount: round(remainingAmount / 2),
       delivery_method: find(deliveryMethods, ({id}) => id !== 'UNKNOWN').id,
@@ -208,7 +207,7 @@ export const OrderController = React.createClass({
 
     order.budgets = map(order.budgets,
       budget => assign(budget, {
-        id: startsWith(budget.id, NEW_BUDGET_PREFIX)
+        id: budget.isNewBudget
           ? null
           : budget.id
       }))
@@ -228,6 +227,7 @@ export const OrderController = React.createClass({
       .then(() => dispatch(pushSuccessMessageAction))
   },
   render () {
+    const {campaigns, maxCampaignsPerBudget} = this.props
     const {order, selectedBudgetIndex, unlockedCampaigns} = this.state
     const budget = isNumber(selectedBudgetIndex)
       ? order.budgets[selectedBudgetIndex]
@@ -239,11 +239,11 @@ export const OrderController = React.createClass({
       ? toPercentage(remainingAmount, order.amount)
       : remainingAmount
 
-    const showFolderCampaigns = !(budget && budget.campaigns.length >= this.props.maxCampaignsPerBudget)
+    const showFolderCampaigns = !(budget && budget.campaigns.length >= maxCampaignsPerBudget)
     let folderCampaigns = []
 
     if (showFolderCampaigns && budget) {
-      folderCampaigns = looseCampaigns(this.props.campaigns, order.budgets, unlockedCampaigns)
+      folderCampaigns = looseCampaigns(campaigns, order.budgets, unlockedCampaigns)
     }
 
     return (

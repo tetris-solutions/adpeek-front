@@ -20,6 +20,7 @@ import Order from '../components/Order'
 import OrderAutoBudget from '../components/OrderAutoBudget'
 import OrderBreadCrumb from '../components/OrderBreadcrumb'
 import OrdersBreadCrumb from '../components/OrdersBreadcrumb'
+import OrderAside from '../components/OrderAside'
 
 import App from '../components/App'
 import {loadUserCompaniesActionRouterAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
@@ -109,8 +110,13 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 breadcrumb={OrdersBreadCrumb}
                 onEnter={preload(deliveryMethods, statuses, campaignsWithAdsets, orders)}>
 
-                <Route path='order/:order' breadcrumb={OrderBreadCrumb}>
+                <Route
+                  aside={OrderAside}
+                  path='order/:order'
+                  breadcrumb={OrderBreadCrumb}>
+
                   <IndexRoute onEnter={preload(budgets)} component={Order}/>
+
                   <Route
                     path='autobudget'
                     onEnter={preload(autoBudgetLogs)}
