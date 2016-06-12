@@ -1,7 +1,6 @@
 import React from 'react'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import OrderSelector from './OrdersSelector'
-import HeaderSearchBox from './HeaderSearchBox'
 import campaignType from '../propTypes/campaign'
 import orderType from '../propTypes/campaign'
 import budgetType from '../propTypes/campaign'
@@ -9,7 +8,6 @@ import OrderHeader from './OrderHeader'
 import BudgetEdit from './BudgetEdit'
 import OrderPie from './OrderPie'
 import EmptySelectionCard from './BudgetEmptySelection'
-import {Link} from 'react-router'
 
 const {PropTypes} = React
 
@@ -21,7 +19,6 @@ export function OrderEdit ({
   removeCampaign,
   remainingValue,
   remainingAmount,
-  onEnter,
   addCampaigns,
   selectBudget,
   changeOrderField,
@@ -29,7 +26,7 @@ export function OrderEdit ({
   budget,
   order,
   folderCampaigns
-}, {params}) {
+}) {
   function closeBudget () {
     selectBudget(null)
   }
@@ -42,17 +39,9 @@ export function OrderEdit ({
             <OrderSelector/>
           </span>
           <div className='mdl-layout-spacer'/>
-          <Link
-            className='mdl-button mdl-color-text--grey-100'
-            to={`/company/${params.company}/workspace/${params.workspace}/folder/${params.folder}/order/${params.order}/autobudget`}>
-
-            Auto Budget
-
-          </Link>
           <button onClick={save} className='mdl-button mdl-color-text--grey-100'>
             <Message>saveCallToAction</Message>
           </button>
-          <HeaderSearchBox onEnter={onEnter}/>
         </div>
       </header>
 
@@ -109,7 +98,6 @@ OrderEdit.propTypes = {
   removeCampaign: PropTypes.func,
   remainingAmount: PropTypes.number,
   remainingValue: PropTypes.number,
-  onEnter: PropTypes.func,
   addCampaigns: PropTypes.func,
   selectBudget: PropTypes.func,
   changeOrderField: PropTypes.func,
@@ -117,14 +105,6 @@ OrderEdit.propTypes = {
   budget: orderType,
   order: budgetType,
   folderCampaigns: PropTypes.arrayOf(campaignType)
-}
-OrderEdit.contextTypes = {
-  params: PropTypes.shape({
-    company: PropTypes.string,
-    workspace: PropTypes.string,
-    folder: PropTypes.string,
-    order: PropTypes.string
-  })
 }
 
 export default OrderEdit

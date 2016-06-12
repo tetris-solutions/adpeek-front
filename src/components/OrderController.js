@@ -186,9 +186,6 @@ export const OrderController = React.createClass({
     this.setState({selectedBudgetIndex: order.budgets.length})
     this.changeOrderField('budgets', order.budgets.concat([newBudget]))
   },
-  onEnter () {
-    // @todo filter by campaign
-  },
   removeBudget () {
     const {selectedBudgetIndex, order} = this.state
 
@@ -261,8 +258,7 @@ export const OrderController = React.createClass({
         budget={budget}
         order={order}
         showFolderCampaigns={showFolderCampaigns}
-        folderCampaigns={folderCampaigns}
-        onEnter={this.onEnter}/>
+        folderCampaigns={folderCampaigns}/>
     )
   }
 })
