@@ -13,11 +13,15 @@ const yesterday = () => moment().subtract(1, 'day').format('YYYY-MM-DD')
 
 export function loadAutoBudgetLogs (day, query, config) {
   const qs = []
+  const d = moment(day)
+
+  query.from = d.format('X')
+  query.to = d.add(1, 'day').subtract(1, 'second').format('X')
 
   forEach(query, (val, name) =>
     qs.push(`${name}=${val}`))
 
-  return GET(`${process.env.ADPEEK_API_URL}/autobudget/logs/${day}?${qs.join('&')}`, config)
+  return GET(`${process.env.ADPEEK_API_URL}/autobudget/logs?${qs.join('&')}`, config)
 }
 
 export function loadAutoBudgetLogsAction (tree, day, params, token) {
