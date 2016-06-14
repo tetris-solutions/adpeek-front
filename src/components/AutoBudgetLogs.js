@@ -456,7 +456,7 @@ UpdateBudget.propTypes = {
   changes: budgetPropTypes
 }
 
-const UpdateAdset = ({budget, changes, timestamp}) => (
+const UpdateAdset = ({adset, changes, timestamp}) => (
   <div>
     <ActionHeader>
       <Message>updateAdsetTitle</Message>
@@ -486,7 +486,7 @@ const UpdateAdset = ({budget, changes, timestamp}) => (
       <tbody>
         <tr>
           <td>
-            {budget.external_id}
+            {adset.external_id}
           </td>
 
           {changes.name && (
@@ -509,8 +509,12 @@ const UpdateAdset = ({budget, changes, timestamp}) => (
 UpdateAdset.displayName = 'Update-Adset'
 UpdateAdset.propTypes = {
   timestamp: PropTypes.string,
-  budget: budgetPropTypes,
-  changes: budgetPropTypes
+  adset: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+    external_id: PropTypes.string
+  }),
+  changes: amountPropTypes
 }
 
 const actions = {
