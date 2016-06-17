@@ -1,5 +1,5 @@
-import identity from 'lodash/identity'
 import {getDeepCursor} from './get-deep-cursor'
+import {mergeResponseArray} from './merge-arrays'
 
 /**
  * computes dynamic tree cursor and sets fetch response there
@@ -8,7 +8,7 @@ import {getDeepCursor} from './get-deep-cursor'
  * @param {Function} [transform=identity] transform function
  * @returns {Function} resolve handler
  */
-export function saveResponseData (tree, path, transform = identity) {
+export function saveResponseData (tree, path, transform = mergeResponseArray) {
   /**
    * resolve handler
    * @param {Response} response response object
