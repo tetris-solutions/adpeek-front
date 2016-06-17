@@ -1,5 +1,5 @@
 import {getDeepCursor} from './get-deep-cursor'
-import {mergeResponseArray} from './merge-arrays'
+import {mergeResponseArray} from './merge-response-arrays'
 
 /**
  * computes dynamic tree cursor and sets fetch response there
