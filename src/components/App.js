@@ -13,7 +13,7 @@ const App = ({children}) => (
         {children}
       </main>
     </div>
-    <div className='mdl-layout__obfuscator'></div>
+    <div className='mdl-layout__obfuscator'/>
   </div>
 )
 
