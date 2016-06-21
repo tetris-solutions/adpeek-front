@@ -40,8 +40,6 @@ function normalizeOrder (order) {
   return assign(order, {budgets: map(order.budgets, normalizeBudget)})
 }
 
-const other = {percentage: 'amount', amount: 'percentage'}
-
 function availableAmount (total, budgets) {
   const exactAmount = ({mode, value}) => mode === 'percentage'
     ? fromPercentage(value, total)
@@ -97,27 +95,28 @@ export const OrderController = React.createClass({
     this.setState({order})
   },
   changeCurrentBudget (changes) {
-    const budget = this.getCurrentBudget()
-
-    if (isNumber(changes.value)) {
-      const mode = changes.mode || budget.mode
-
-      changes[mode] = changes.value
-    }
-
-    this.setCurrentBudget(assign({}, budget, changes))
+    this.setCurrentBudget(
+      assign(
+        {},
+        this.getCurrentBudget(),
+        changes
+      )
+    )
   },
   changeBudgetMode (mode) {
     const budget = this.getCurrentBudget()
     const {order} = this.state
+    const changes = {mode}
 
-    this.changeCurrentBudget({
-      mode,
-      value: mode === 'percentage'
-        ? toPercentage(budget.value, order.amount)
-        : fromPercentage(budget.value, order.amount),
-      [other[mode]]: null
-    })
+    if (mode === 'percentage') {
+      changes.percentage = changes.value = toPercentage(budget.value, order.amount)
+      changes.amount = null
+    } else {
+      changes.amount = changes.value = fromPercentage(budget.value, order.amount)
+      changes.percentage = null
+    }
+
+    this.changeCurrentBudget(changes)
   },
   changeOrderField (field, value) {
     this.setState({
@@ -127,6 +126,13 @@ export const OrderController = React.createClass({
   changeBudgetField (field, value) {
     if (field === 'mode') {
       this.changeBudgetMode(value)
+    } else if (field === 'value') {
+      const budget = this.getCurrentBudget()
+
+      this.changeCurrentBudget({
+        value,
+        [budget.mode]: value
+      })
     } else {
       this.changeCurrentBudget({[field]: value})
     }
