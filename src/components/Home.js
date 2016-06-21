@@ -56,8 +56,9 @@ const Home = React.createClass({
           </a>
         ))
     } else {
+      const {FRONT_URL, ADPEEK_URL} = process.env
       headerNav = (
-        <a href={process.env.FRONT_URL + '/login'}>
+        <a className='mdl-navigation__link' href={`${FRONT_URL}/login?next=${ADPEEK_URL}`}>
           Login
         </a>
       )
