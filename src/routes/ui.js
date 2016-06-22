@@ -1,6 +1,6 @@
 import React from 'react'
 import {IndexRoute, Route} from 'react-router'
-import {root} from 'baobab-react/dist-modules/higher-order'
+import {root} from 'baobab-react/higher-order'
 import Home from '../components/Home'
 import Workspaces from '../components/Workspaces'
 import WorkspaceBreadcrumb from '../components/WorkspaceBreadcrumb'

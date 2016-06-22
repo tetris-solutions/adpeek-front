@@ -32,10 +32,10 @@
   "homepage": "https://github.com/tetris-solutions/adpeek-front#readme",
   "dependencies": {
     "@tetris/base-lib": "^0.1.0",
-    "@tetris/front-server": "^0.1.8",
+    "@tetris/front-server": "^0.1.10",
     "@tetris/http": "^0.2.4",
     "baobab": "^2.3.3",
-    "baobab-react": "^2.0.0-rc1",
+    "baobab-react": "^2.1.1",
     "classnames": "^2.2.3",
     "csjs": "^1.0.1",
     "dotenv": "^2.0.0",

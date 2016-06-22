@@ -2,7 +2,7 @@ import React from 'react'
 import FormMixin from '@tetris/front-server/lib/mixins/FormMixin'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import Input from './Input'
-import {branch} from 'baobab-react/dist-modules/higher-order'
+import {branch} from 'baobab-react/higher-order'
 import {Form, Content, Header, Footer} from './Card'
 
 const {PropTypes} = React

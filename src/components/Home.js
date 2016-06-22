@@ -1,5 +1,5 @@
 import React from 'react'
-import {branch} from 'baobab-react/dist-modules/higher-order'
+import {branch} from 'baobab-react/higher-order'
 import {loadUserCompaniesAction} from '@tetris/front-server/lib/actions/load-user-companies-action'
 import map from 'lodash/map'
 import Highcharts from './Highcharts'

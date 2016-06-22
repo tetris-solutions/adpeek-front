@@ -1,7 +1,7 @@
 import React from 'react'
 import Breadcrumbs from './Breadcrumbs'
 import Message from '@tetris/front-server/lib/components/intl/Message'
-import {branch} from 'baobab-react/dist-modules/higher-order'
+import {branch} from 'baobab-react/higher-order'
 
 const {PropTypes} = React
 

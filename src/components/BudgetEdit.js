@@ -10,7 +10,7 @@ import Message from '@tetris/front-server/lib/components/intl/Message'
 import campaignType from '../propTypes/campaign'
 import size from 'lodash/size'
 import Select from './Select'
-import {branch} from 'baobab-react/dist-modules/higher-order'
+import {branch} from 'baobab-react/higher-order'
 import filter from 'lodash/filter'
 import {Tabs, Tab} from './Tabs'
 

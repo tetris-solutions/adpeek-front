@@ -1,6 +1,6 @@
 import React from 'react'
 import {logoutAction} from '@tetris/front-server/lib/actions/logout-action'
-import {branch} from 'baobab-react/dist-modules/higher-order'
+import {branch} from 'baobab-react/higher-order'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import LocaleSelector from './LocaleSelector'
 import findLast from 'lodash/findLast'
