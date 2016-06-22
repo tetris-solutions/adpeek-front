@@ -3,6 +3,7 @@ import {branch} from 'baobab-react/higher-order'
 import {loadUserCompaniesAction} from '@tetris/front-server/lib/actions/load-user-companies-action'
 import map from 'lodash/map'
 import Highcharts from './Highcharts'
+import {Link} from 'react-router'
 
 function fmtPoint () {
   return (this.value / 1000) + 'k'
@@ -51,9 +52,9 @@ const Home = React.createClass({
     if (user) {
       headerNav = map(user.companies,
         ({id, name}) => (
-          <a key={id} className='mdl-navigation__link' href={`/company/${id}`}>
+          <Link key={id} className='mdl-navigation__link' to={`/company/${id}`}>
             {name}
-          </a>
+          </Link>
         ))
     } else {
       const {FRONT_URL, ADPEEK_URL} = process.env
