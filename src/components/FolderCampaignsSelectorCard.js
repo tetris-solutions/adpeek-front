@@ -12,8 +12,8 @@ const style = csjs`
 
 const {PropTypes} = React
 
-export const CampaignsToggle = React.createClass({
-  displayName: 'CampaignListToggle',
+export const FolderCampaignsSelector = React.createClass({
+  displayName: 'Campaigns-Selector',
   mixins: [styled(style)],
   propTypes: {
     headerColor: PropTypes.string,
@@ -99,4 +99,4 @@ export const CampaignsToggle = React.createClass({
   }
 })
 
-export default CampaignsToggle
+export default FolderCampaignsSelector

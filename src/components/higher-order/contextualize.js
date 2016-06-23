@@ -11,7 +11,8 @@ const isRouteParam = {
   company: true,
   workspace: true,
   folder: true,
-  order: true
+  order: true,
+  campaign: true
 }
 const searchPath = {
   company: [['company', 'companies']]
@@ -19,6 +20,8 @@ const searchPath = {
 
 searchPath.workspace = searchPath.company.concat([['workspace', 'workspaces']])
 searchPath.folder = searchPath.workspace.concat([['folder', 'folders']])
+
+searchPath.campaign = searchPath.folder.concat([['campaign', 'campaigns']])
 searchPath.order = searchPath.folder.concat([['order', 'orders']])
 
 /**
@@ -83,6 +86,7 @@ export function contextualize (Component, baseCursors, ...names) {
 
     return <Component {...props} {...cached} />
   }
+
   const propsNames = keys(baseCursors).concat(names).join(', ')
 
   const injectParams = Child => {

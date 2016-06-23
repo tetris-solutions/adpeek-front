@@ -1,32 +1,18 @@
 import React from 'react'
-import Checkbox from './Checkbox'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
-export function Campaign ({id, name, status}) {
+export function Campaign ({campaign}) {
   return (
-    <li className='mdl-list__item'>
-      <span className='mdl-list__item-primary-content'>
-        <i className='material-icons mdl-list__item-avatar' title={status.description}>
-          {status.icon}
-        </i>
-        {name}
-      </span>
-      <span className='mdl-list__item-secondary-action'>
-        <Checkbox name={id} value={JSON.stringify(id)}/>
-      </span>
-    </li>
+    <div>
+      <h1>{campaign.name}</h1>
+    </div>
   )
 }
 
-Campaign.displayName = 'Campaign'
 Campaign.propTypes = {
-  id: PropTypes.string,
-  name: PropTypes.string,
-  status: PropTypes.shape({
-    icon: PropTypes.string,
-    description: PropTypes.string
-  })
+  campaign: PropTypes.object
 }
 
-export default Campaign
+export default contextualize(Campaign, 'campaign')

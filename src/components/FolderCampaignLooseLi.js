@@ -3,7 +3,7 @@ import Checkbox from './Checkbox'
 
 const {PropTypes} = React
 
-export function CampaignLoose ({external_id, name, status, platform}) {
+export function FolderCampaignLooseLi ({external_id, name, status, platform}) {
   const serialized = JSON.stringify({
     name,
     external_id,
@@ -27,8 +27,8 @@ export function CampaignLoose ({external_id, name, status, platform}) {
   )
 }
 
-CampaignLoose.displayName = 'Campaign-Loose'
-CampaignLoose.propTypes = {
+FolderCampaignLooseLi.displayName = 'Loose-Campaign'
+FolderCampaignLooseLi.propTypes = {
   platform: PropTypes.string,
   external_id: PropTypes.string,
   name: PropTypes.string,
@@ -37,4 +37,4 @@ CampaignLoose.propTypes = {
     description: PropTypes.string
   })
 }
-export default CampaignLoose
+export default FolderCampaignLooseLi

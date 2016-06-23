@@ -4,25 +4,25 @@ import {unlinkCampaignAction} from '../actions/unlink-campaign'
 import {linkCampaignAction} from '../actions/link-campaign'
 import {loadCampaignsAction} from '../actions/load-campaigns'
 import {loadLooseCampaignsAction} from '../actions/load-loose-campaigns'
-import CampaignLoose from './CampaignLoose'
-import Campaign from './Campaign'
+import CampaignLoose from './FolderCampaignLooseLi'
+import Campaign from './FolderCampaignLi'
 import {contextualize} from './higher-order/contextualize'
-import CampaignsToggle from './CampaignsToggle'
+import CampaignsToggle from './FolderCampaignsSelectorCard'
 import settle from 'promise-settle'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import deburr from 'lodash/deburr'
 import lowerCase from 'lodash/lowerCase'
 import includes from 'lodash/includes'
 import filter from 'lodash/filter'
-import CampaignsHeader from './CampaignsHeader'
+import CampaignsHeader from './FolderCampaignsHeader'
 import identity from 'lodash/identity'
 
 const cleanStr = str => deburr(lowerCase(str))
 const {PropTypes} = React
 const filterActive = ls => filter(ls, ({status: {is_active}}) => is_active)
 
-export const Campaigns = React.createClass({
-  displayName: 'Campaigns',
+export const FolderCampaigns = React.createClass({
+  displayName: 'Folder-Campaigns',
   propTypes: {
     dispatch: PropTypes.func,
     folder: PropTypes.shape({
@@ -131,4 +131,4 @@ export const Campaigns = React.createClass({
   }
 })
 
-export default contextualize(Campaigns, 'folder')
+export default contextualize(FolderCampaigns, 'folder')

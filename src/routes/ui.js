@@ -14,13 +14,14 @@ import WorkspaceAside from '../components/WorkspaceAside'
 import WorkspaceEdit from '../components/WorkspaceEdit'
 import FolderEdit from '../components/FolderEdit'
 import FolderAside from '../components/FolderAside'
-import Campaigns from '../components/Campaigns'
+import Campaigns from '../components/FolderCampaigns'
 import Orders from '../components/Orders'
 import Order from '../components/Order'
 import OrderAutoBudget from '../components/OrderAutoBudget'
 import OrderBreadCrumb from '../components/OrderBreadcrumb'
 import OrdersBreadCrumb from '../components/OrdersBreadcrumb'
 import OrderAside from '../components/OrderAside'
+import Campaign from '../components/Campaign'
 
 import App from '../components/App'
 import {loadUserCompaniesActionRouterAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
@@ -96,6 +97,10 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
               aside={FolderAside}
               breadcrumb={FolderBreadcrumb}
               onEnter={preload(folder)}>
+
+              <Route path='campaign/:campaign'>
+                <IndexRoute component={Campaign}/>
+              </Route>
 
               <IndexRoute
                 component={Campaigns}

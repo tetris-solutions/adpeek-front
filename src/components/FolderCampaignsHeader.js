@@ -8,7 +8,7 @@ const {PropTypes} = React
 
 const onChange = onSwitch => ({target: {checked}}) => onSwitch(checked)
 
-export function CampaignsHeader ({
+export function FolderCampaignsHeader ({
   onEnter,
   company,
   workspace,
@@ -35,16 +35,16 @@ export function CampaignsHeader ({
   )
 }
 
-CampaignsHeader.displayName = 'Campaigns-Header'
-CampaignsHeader.propTypes = {
+FolderCampaignsHeader.displayName = 'Campaigns-Header'
+FolderCampaignsHeader.propTypes = {
   company: PropTypes.string,
   workspace: PropTypes.string,
   folder: PropTypes.string,
   onSwitch: PropTypes.func,
   onEnter: PropTypes.func
 }
-CampaignsHeader.contextTypes = {
+FolderCampaignsHeader.contextTypes = {
   messages: PropTypes.object
 }
 
-export default CampaignsHeader
+export default FolderCampaignsHeader
