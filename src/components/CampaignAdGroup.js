@@ -32,11 +32,11 @@ export const CampaignAdGroup = React.createClass({
         <header className={`mdl-color--grey-700 mdl-color-text--white ${style.header}`}>
           {adGroup.name}
         </header>
-        <ul>
+        <div>
           {map(adGroup.ads, ad => (
             <CampaignAdGroupAd key={ad.id} {...ad}/>
           ))}
-        </ul>
+        </div>
       </div>
     )
   }
