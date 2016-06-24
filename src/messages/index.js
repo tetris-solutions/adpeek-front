@@ -90,7 +90,8 @@ export default {
     setCampaignBudgetTitle: 'Changed campaign budget',
     updateBudgetTitle: 'Updated budget',
     updateAdsetTitle: 'Updated Ad Set',
-    removeBudget: 'Remove'
+    removeBudget: 'Remove',
+    campaignAdsTitle: 'Ads {campaign}'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -182,6 +183,7 @@ export default {
     setCampaignBudgetTitle: 'Alterado orçamento da campanha',
     updateBudgetTitle: 'Orçamento atualizado',
     updateAdsetTitle: 'Ad Set atualizado',
-    removeBudget: 'Remover'
+    removeBudget: 'Remover',
+    campaignAdsTitle: 'Criativos {campaign}'
   }
 }

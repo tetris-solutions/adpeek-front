@@ -1,9 +1,7 @@
 import React from 'react'
-import CampaignAdGroup from './CampaignAdGroup'
+import CampaignAdGroups from './CampaignAdGroups'
 import {contextualize} from './higher-order/contextualize'
-import {loadCampaignAdGroupsAction} from '../actions/load-adgroups'
-import {loadCampaignAdGroupAdsAction} from '../actions/load-adgroup-ads'
-import map from 'lodash/map'
+import Message from '@tetris/front-server/lib/components/intl/Message'
 
 const {PropTypes} = React
 
@@ -17,50 +15,23 @@ export const Campaign = React.createClass({
     }),
     params: PropTypes.object
   },
-  componentDidMount () {
-    if (this.props.campaign.platform === 'adwords') {
-      this.loadAdGroups()
-    }
-  },
-  loadAdGroups () {
-    const {dispatch, params} = this.props
-
-    dispatch(loadCampaignAdGroupsAction,
-      params.company,
-      params.workspace,
-      params.folder,
-      params.campaign)
-  },
-  loadAdGroupAds (adGroup) {
-    if (!this.loadAdsPromise) {
-      this.loadAdsPromise = Promise.resolve()
-    }
-
-    this.loadAdsPromise = this.loadAdsPromise.then(() => {
-      const {dispatch, params} = this.props
-
-      return dispatch(loadCampaignAdGroupAdsAction,
-        params.company,
-        params.workspace,
-        params.folder,
-        params.campaign,
-        adGroup)
-    })
-  },
   render () {
-    const {campaign} = this.props
+    const {params, dispatch, campaign} = this.props
 
     return (
       <div>
-        <h1>{campaign.name}</h1>
+        <header className='mdl-layout__header'>
+          <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
+            <Message campaign={campaign.name}>campaignAdsTitle</Message>
+          </div>
+        </header>
 
-        {map(campaign.adGroups,
-          adGroup => (
-            <CampaignAdGroup
-              key={adGroup.id}
-              loadAdGroupAds={this.loadAdGroupAds}
-              adGroup={adGroup}/>
-          ))}
+        {campaign.platform === 'adwords' && (
+          <CampaignAdGroups
+            campaign={campaign}
+            dispatch={dispatch}
+            params={params}/>
+        )}
       </div>
     )
   }
