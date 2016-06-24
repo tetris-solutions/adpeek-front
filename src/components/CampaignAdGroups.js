@@ -78,9 +78,8 @@ export const CampaignAdGroups = React.createClass({
             <div className={`${style.grid}`} ref='grid' style={gridStyle}>
               {map(campaign.adGroups,
                 adGroup => (
-                  <div className={`${style.column}`}>
+                  <div key={adGroup.id} className={`${style.column}`}>
                     <CampaignAdGroup
-                      key={adGroup.id}
                       loadAdGroupAds={this.loadAdGroupAds}
                       adGroup={adGroup}/>
                   </div>
