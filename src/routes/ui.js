@@ -22,6 +22,8 @@ import OrderBreadCrumb from '../components/OrderBreadcrumb'
 import OrdersBreadCrumb from '../components/OrdersBreadcrumb'
 import OrderAside from '../components/OrderAside'
 import Campaign from '../components/Campaign'
+import CampaignAside from '../components/CampaignAside'
+import CampaignBreadcrumb from '../components/CampaignBreadcrumb'
 
 import App from '../components/App'
 import {loadUserCompaniesActionRouterAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
@@ -98,7 +100,11 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
               breadcrumb={FolderBreadcrumb}
               onEnter={preload(folder)}>
 
-              <Route path='campaign/:campaign'>
+              <Route
+                path='campaign/:campaign'
+                aside={CampaignAside}
+                breadcrumb={CampaignBreadcrumb}>
+
                 <IndexRoute component={Campaign}/>
               </Route>
 
