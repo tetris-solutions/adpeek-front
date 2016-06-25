@@ -5,29 +5,32 @@ import Message from '@tetris/front-server/lib/components/intl/Message'
 
 const {PropTypes} = React
 
-export const Campaign = React.createClass({
+export const FolderAdGroups = React.createClass({
   displayName: 'Campaign',
   propTypes: {
     dispatch: PropTypes.func,
-    campaign: PropTypes.shape({
-      platform: PropTypes.string
+    folder: PropTypes.shape({
+      account: PropTypes.shape({
+        platform: PropTypes.string
+      }),
+      campaigns: PropTypes.array
     }),
     params: PropTypes.object
   },
   render () {
-    const {params, dispatch, campaign} = this.props
+    const {params, dispatch, folder} = this.props
 
     return (
       <div>
         <header className='mdl-layout__header'>
           <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
-            <Message campaign={campaign.name}>campaignAdsTitle</Message>
+            <Message folder={folder.name}>folderAdsTitle</Message>
           </div>
         </header>
 
-        {campaign.platform === 'adwords' && (
+        {folder.account.platform === 'adwords' && (
           <AdGroups
-            campaigns={[campaign]}
+            campaigns={folder.campaigns}
             dispatch={dispatch}
             params={params}/>
         )}
@@ -36,4 +39,4 @@ export const Campaign = React.createClass({
   }
 })
 
-export default contextualize(Campaign, 'campaign')
+export default contextualize(FolderAdGroups, 'folder')

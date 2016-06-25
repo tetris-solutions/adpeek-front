@@ -17,24 +17,24 @@ export function FolderAside ({
         router.push(`/company/${company}/workspace/${workspace}`)
       })
   }
-
+  const baseUrl = `/company/${company}/workspace/${workspace}/folder/${folder.id}`
   return (
     <ContextMenu title={folder.name} icon='folder'>
       <Link
         className='mdl-button mdl-js-button mdl-button--icon'
-        to={`/company/${company}/workspace/${workspace}/folder/${folder.id}`}>
-        <i className='material-icons'>view_quilt</i>
+        to={`${baseUrl}/adgroups`}>
+        <i className='material-icons'>receipt</i>
       </Link>
 
       <Link
         className='mdl-button mdl-js-button mdl-button--icon'
-        to={`/company/${company}/workspace/${workspace}/folder/${folder.id}/orders`}>
+        to={`${baseUrl}/orders`}>
         <i className='material-icons'>attach_money</i>
       </Link>
 
       <Link
         className='mdl-button mdl-js-button mdl-button--icon'
-        to={`/company/${company}/workspace/${workspace}/folder/${folder.id}/edit`}>
+        to={`${baseUrl}/edit`}>
         <i className='material-icons'>mode_edit</i>
       </Link>
 

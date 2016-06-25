@@ -48,10 +48,12 @@ export const AdGroups = React.createClass({
     const {dispatch, params} = this.props
     let promise = Promise.resolve()
 
-    const preventRace = fn => (...args) => {
-      if (this.dead) return Promise.resolve()
+    const cancelable = fn => (...args) => this.dead
+      ? Promise.resolve()
+      : fn(...args)
 
-      const run = () => fn(...args)
+    const preventRace = action => (...args) => {
+      const run = cancelable(() => action(...args))
 
       promise = promise.then(run, run)
 
