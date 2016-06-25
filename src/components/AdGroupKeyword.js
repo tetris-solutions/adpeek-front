@@ -18,7 +18,7 @@ export const Keyword = ({text, status, criterion_use, match_type}) => (
   </div>
 )
 
-Keyword.displayName = 'Keyword'
+Keyword.displayName = 'AdGroup-Keyword'
 Keyword.propTypes = {
   text: PropTypes.string,
   status: PropTypes.string,

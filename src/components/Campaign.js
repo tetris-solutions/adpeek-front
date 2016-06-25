@@ -1,5 +1,5 @@
 import React from 'react'
-import CampaignAdGroups from './CampaignAdGroups'
+import AdGroups from './AdGroups'
 import {contextualize} from './higher-order/contextualize'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 
@@ -27,8 +27,8 @@ export const Campaign = React.createClass({
         </header>
 
         {campaign.platform === 'adwords' && (
-          <CampaignAdGroups
-            campaign={campaign}
+          <AdGroups
+            campaigns={[campaign]}
             dispatch={dispatch}
             params={params}/>
         )}

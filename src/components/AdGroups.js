@@ -1,5 +1,5 @@
 import React from 'react'
-import CampaignAdGroup from './CampaignAdGroup'
+import AdGroup from './AdGroup'
 import {loadCampaignAdGroupsAction} from '../actions/load-adgroups'
 import {loadCampaignAdGroupAdsAction} from '../actions/load-adgroup-ads'
 import {loadCampaignAdGroupKeywordsAction} from '../actions/load-adgroup-keywords'
@@ -8,6 +8,9 @@ import map from 'lodash/map'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
 import size from 'lodash/size'
+import flatten from 'lodash/flatten'
+import settle from 'promise-settle'
+import assign from 'lodash/assign'
 
 const isBrowser = typeof window !== 'undefined'
 const style = csjs`
@@ -26,65 +29,77 @@ const style = csjs`
 
 const {PropTypes} = React
 
-export const CampaignAdGroups = React.createClass({
-  displayName: 'Campaign-AdGroups',
+export const AdGroups = React.createClass({
+  displayName: '-AdGroups',
   mixins: [styled(style)],
   propTypes: {
     dispatch: PropTypes.func,
+    campaigns: PropTypes.array,
     campaign: PropTypes.shape({
       adGroups: PropTypes.array,
       platform: PropTypes.string
     }),
     params: PropTypes.object
   },
+  componentWillUnmount () {
+    this.dead = true
+  },
   componentDidMount () {
     const {dispatch, params} = this.props
     let promise = Promise.resolve()
 
     const preventRace = fn => (...args) => {
-      promise = promise
-        .then(() => fn(...args))
+      if (this.dead) return Promise.resolve()
+
+      const run = () => fn(...args)
+
+      promise = promise.then(run, run)
 
       return promise
     }
 
-    const loadAdGroupAds = adGroup =>
+    const loadAdGroupAds = (campaign, adGroup) =>
       dispatch(loadCampaignAdGroupAdsAction,
         params.company,
         params.workspace,
         params.folder,
-        params.campaign,
+        campaign,
         adGroup)
 
-    const loadAdGroupKeywords = adGroup =>
+    const loadAdGroupKeywords = (campaign, adGroup) =>
       dispatch(loadCampaignAdGroupKeywordsAction,
         params.company,
         params.workspace,
         params.folder,
-        params.campaign,
+        campaign,
         adGroup)
 
-    const loadAdGroups = () =>
+    const loadAdGroups = preventRace(campaign =>
       dispatch(loadCampaignAdGroupsAction,
         params.company,
         params.workspace,
         params.folder,
-        params.campaign)
+        campaign))
 
-    const loadAdGroupDependencies = preventRace(id =>
-      loadAdGroupAds(id)
-        .then(() => loadAdGroupKeywords(id)))
+    const loadAdGroupDependencies = preventRace((campaign, adGroup) =>
+      loadAdGroupAds(campaign, adGroup)
+        .then(() => loadAdGroupKeywords(campaign, adGroup)))
 
-    loadAdGroups()
+    settle(map(this.props.campaigns, ({id}) => loadAdGroups(id)))
       .then(() => delay(300))
-      .then(() => Promise.all(map(this.props.campaign.adGroups, ({id}) => loadAdGroupDependencies(id))))
+      .then(() => settle(map(this.getAdGroups(), ({id, campaign}) => loadAdGroupDependencies(campaign, id))))
+  },
+  getAdGroups () {
+    return flatten(map(this.props.campaigns,
+      ({id, adGroups}) => map(adGroups || [],
+        adGroup => assign({campaign: id}, adGroup))))
   },
   render () {
-    const {campaign} = this.props
+    const adGroups = this.getAdGroups()
     const gridStyle = {}
 
     if (isBrowser) {
-      gridStyle.width = (size(campaign.adGroups) * 300) + 20
+      gridStyle.width = (size(adGroups) * 300) + 20
     }
 
     return (
@@ -92,12 +107,11 @@ export const CampaignAdGroups = React.createClass({
         <div className='mdl-cell mdl-cell--12-col'>
           <div className={`${style.wrapper}`}>
             <div className={`${style.grid}`} ref='grid' style={gridStyle}>
-              {map(campaign.adGroups,
-                adGroup => (
-                  <div key={adGroup.id} className={`${style.column}`}>
-                    <CampaignAdGroup {...adGroup}/>
-                  </div>
-                ))}
+              {map(adGroups, adGroup => (
+                <div key={adGroup.id} className={`${style.column}`}>
+                  <AdGroup {...adGroup}/>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -106,4 +120,4 @@ export const CampaignAdGroups = React.createClass({
   }
 })
 
-export default CampaignAdGroups
+export default AdGroups
