@@ -2,6 +2,8 @@ import React from 'react'
 import CampaignAdGroup from './CampaignAdGroup'
 import {loadCampaignAdGroupsAction} from '../actions/load-adgroups'
 import {loadCampaignAdGroupAdsAction} from '../actions/load-adgroup-ads'
+import {loadCampaignAdGroupKeywordsAction} from '../actions/load-adgroup-keywords'
+import delay from 'delay'
 import map from 'lodash/map'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
@@ -14,11 +16,11 @@ const style = csjs`
   min-height: 40vh;
 }
 .grid {
+  display: flex;
 }
 .column {
-  display: block;
-  float: left;
-  width: 280px;
+  flex: 1;
+  overflow: hidden;
   padding: 10px 10px 0 10px;
 }`
 
@@ -30,45 +32,59 @@ export const CampaignAdGroups = React.createClass({
   propTypes: {
     dispatch: PropTypes.func,
     campaign: PropTypes.shape({
-      platform: PropTypes.string,
-      ads: PropTypes.array
+      adGroups: PropTypes.array,
+      platform: PropTypes.string
     }),
     params: PropTypes.object
   },
   componentDidMount () {
-    this.loadAdGroups()
-  },
-  loadAdGroups () {
     const {dispatch, params} = this.props
+    let promise = Promise.resolve()
 
-    return dispatch(loadCampaignAdGroupsAction,
-      params.company,
-      params.workspace,
-      params.folder,
-      params.campaign)
-  },
-  loadAdGroupAds (adGroup) {
-    if (!this.loadAdsPromise) {
-      this.loadAdsPromise = Promise.resolve()
+    const preventRace = fn => (...args) => {
+      promise = promise
+        .then(() => fn(...args))
+
+      return promise
     }
 
-    this.loadAdsPromise = this.loadAdsPromise.then(() => {
-      const {dispatch, params} = this.props
-
-      return dispatch(loadCampaignAdGroupAdsAction,
+    const loadAdGroupAds = adGroup =>
+      dispatch(loadCampaignAdGroupAdsAction,
         params.company,
         params.workspace,
         params.folder,
         params.campaign,
         adGroup)
-    })
+
+    const loadAdGroupKeywords = adGroup =>
+      dispatch(loadCampaignAdGroupKeywordsAction,
+        params.company,
+        params.workspace,
+        params.folder,
+        params.campaign,
+        adGroup)
+
+    const loadAdGroups = () =>
+      dispatch(loadCampaignAdGroupsAction,
+        params.company,
+        params.workspace,
+        params.folder,
+        params.campaign)
+
+    const loadAdGroupDependencies = preventRace(id =>
+      loadAdGroupAds(id)
+        .then(() => loadAdGroupKeywords(id)))
+
+    loadAdGroups()
+      .then(() => delay(300))
+      .then(() => Promise.all(map(this.props.campaign.adGroups, ({id}) => loadAdGroupDependencies(id))))
   },
   render () {
     const {campaign} = this.props
     const gridStyle = {}
 
     if (isBrowser) {
-      gridStyle.width = Math.max(size(campaign.adGroups) + 20, window.innerWidth) + 'px'
+      gridStyle.width = (size(campaign.adGroups) * 300) + 20
     }
 
     return (
@@ -79,9 +95,7 @@ export const CampaignAdGroups = React.createClass({
               {map(campaign.adGroups,
                 adGroup => (
                   <div key={adGroup.id} className={`${style.column}`}>
-                    <CampaignAdGroup
-                      loadAdGroupAds={this.loadAdGroupAds}
-                      adGroup={adGroup}/>
+                    <CampaignAdGroup {...adGroup}/>
                   </div>
                 ))}
             </div>

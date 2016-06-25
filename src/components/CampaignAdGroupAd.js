@@ -9,6 +9,9 @@ const style = csjs`
   padding-bottom: 1em;
   border-bottom: 1px solid grey;
 }
+.wrapper:last-child {
+  border-bottom: none;
+}
 .finalUrl {
   overflow: hidden;
   max-width: 100%;

@@ -1,5 +1,6 @@
 import React from 'react'
 import CampaignAdGroupAd from './CampaignAdGroupAd'
+import CampaignAdGroupKeyword from './CampaignAdGroupKeyword'
 import map from 'lodash/map'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
@@ -18,23 +19,26 @@ export const CampaignAdGroup = React.createClass({
   displayName: 'Campaign-AdGroup',
   mixins: [styled(style)],
   propTypes: {
-    adGroup: PropTypes.object,
-    loadAdGroupAds: PropTypes.func
-  },
-  contextTypes: {},
-  componentDidMount () {
-    this.props.loadAdGroupAds(this.props.adGroup.id)
+    name: PropTypes.string,
+    ads: PropTypes.array,
+    keywords: PropTypes.array
   },
   render () {
-    const {adGroup} = this.props
+    const {name, ads, keywords} = this.props
+
     return (
       <div>
         <header className={`mdl-color--grey-700 mdl-color-text--white ${style.header}`}>
-          {adGroup.name}
+          {name}
         </header>
         <div>
-          {map(adGroup.ads, ad => (
+          {map(ads, ad => (
             <CampaignAdGroupAd key={ad.id} {...ad}/>
+          ))}
+        </div>
+        <div>
+          {map(keywords, keyword => (
+            <CampaignAdGroupKeyword key={keyword.id} {...keyword}/>
           ))}
         </div>
       </div>
