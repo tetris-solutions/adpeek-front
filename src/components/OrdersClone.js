@@ -125,14 +125,14 @@ export const OrdersClone = React.createClass({
           </div>
         </header>
         <div className='mdl-grid'>
-          <div className='mdl-cell--10-col mdl-cell--1-offset'>
+          <div className='mdl-cell--12-col'>
             {hasSelected && (
               <EditableHeader/>
             )}
             <table className={`${style.table} mdl-data-table mdl-data-table--selectable mdl-shadow--2dp`}>
               <thead>
                 <tr>
-                  {!hasSelected && <th className='mdl-data-table__cell--non-numeric'>#</th>}
+                  <th className='mdl-data-table__cell--non-numeric'>Select</th>
                   <th className='mdl-data-table__cell--non-numeric'>Name</th>
                   <th className='mdl-data-table__cell--non-numeric'>Start</th>
                   <th className='mdl-data-table__cell--non-numeric'>End</th>
