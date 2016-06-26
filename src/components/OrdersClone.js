@@ -26,12 +26,18 @@ const {PropTypes} = React
 
 const ClonableRow = ({name, id, start, end, amount}) => (
   <tr>
-    <td>
+    <td className='mdl-data-table__cell--non-numeric'>
       <Checkbox name={id}/>
     </td>
-    <td>{name}</td>
-    <td>{start}</td>
-    <td>{end}</td>
+    <td className='mdl-data-table__cell--non-numeric'>
+      {name}
+    </td>
+    <td className='mdl-data-table__cell--non-numeric'>
+      {start}
+    </td>
+    <td className='mdl-data-table__cell--non-numeric'>
+      {end}
+    </td>
     <td>{amount.toFixed(2)}</td>
   </tr>
 )
