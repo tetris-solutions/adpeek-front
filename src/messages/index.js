@@ -93,7 +93,9 @@ export default {
     removeBudget: 'Remove',
     campaignAdsTitle: 'Campaign "{campaign}" Ads',
     finalUrl: 'Final URL',
-    folderAdsTitle: 'Folder "{folder}" Ads'
+    folderAdsTitle: 'Folder "{folder}" Ads',
+    cloneOrders: 'Clone Orders',
+    selectOrders: 'Select'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -188,6 +190,8 @@ export default {
     removeBudget: 'Remover',
     campaignAdsTitle: 'Criativos da campanha "{campaign}"',
     finalUrl: 'URL de destino',
-    folderAdsTitle: 'Criativos da pasta "{folder}"'
+    folderAdsTitle: 'Criativos da pasta "{folder}"',
+    cloneOrders: 'Clonar Pedidos',
+    selectOrders: 'Selecionar'
   }
 }

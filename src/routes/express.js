@@ -67,6 +67,11 @@ export function setAppRoutes (app, render) {
     preload(companies, workspace, folder, campaigns, orders),
     render)
 
+  app.get('/company/:company/workspace/:workspace/folder/:folder/orders/clone',
+    protect,
+    preload(companies, workspace, folder, campaigns, orders),
+    render)
+
   app.get('/company/:company/workspace/:workspace/folder/:folder/order/:order',
     protect,
     preload(deliveryMethods, statuses, companies, workspace, folder, campaignsWithAdsets, orders, budgets),

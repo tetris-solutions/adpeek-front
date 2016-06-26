@@ -3,6 +3,7 @@ import {ThumbLink, ThumbButton} from './ThumbLink'
 import map from 'lodash/map'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import {contextualize} from './higher-order/contextualize'
+import {Link} from 'react-router'
 
 const {PropTypes} = React
 
@@ -25,6 +26,7 @@ export const Orders = React.createClass({
     folder: PropTypes.shape({
       orders: PropTypes.array
     }),
+    location: PropTypes.object,
     params: PropTypes.shape({
       company: PropTypes.string,
       workspace: PropTypes.string,
@@ -32,9 +34,18 @@ export const Orders = React.createClass({
     })
   },
   render () {
-    const {folder, params: {company, workspace}} = this.props
+    const {folder, location, params: {company, workspace}} = this.props
     return (
       <div>
+        <header className='mdl-layout__header'>
+          <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
+            <Message>orders</Message>
+            <div className='mdl-layout-spacer'/>
+            <Link className='mdl-button mdl-color-text--grey-100' to={`${location.pathname}/clone`}>
+              <Message>cloneOrders</Message>
+            </Link>
+          </div>
+        </header>
         <div className='mdl-grid'>
 
           {map(folder.orders, (order, index) =>

@@ -25,6 +25,7 @@ import Campaign from '../components/Campaign'
 import CampaignAside from '../components/CampaignAside'
 import CampaignBreadcrumb from '../components/CampaignBreadcrumb'
 import FolderAdGroups from '../components/FolderAdGroups'
+import OrdersClone from '../components/OrdersClone'
 
 import App from '../components/App'
 import {loadUserCompaniesActionRouterAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
@@ -120,8 +121,12 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
               <Route
                 path='orders'
-                onEnter={preload(orders)}
-                component={Orders}/>
+                breadcrumb={OrdersBreadCrumb}
+                onEnter={preload(orders)}>
+
+                <IndexRoute component={Orders}/>
+                <Route path='clone' component={OrdersClone}/>
+              </Route>
 
               <Route
                 breadcrumb={OrdersBreadCrumb}

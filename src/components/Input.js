@@ -28,7 +28,7 @@ export const Input = React.createClass({
     value: PropTypes.any,
     defaultValue: PropTypes.any,
     error: PropTypes.string,
-    label: PropTypes.string.isRequired,
+    label: PropTypes.string,
     name: PropTypes.string.isRequired,
     onChange: PropTypes.func
   },
