@@ -10,7 +10,7 @@ const style = csjs`
 .card {
   width: 96%;
   margin: 1em auto 0 auto;
-  minHeight: 0
+  min-height: 0
 }
 .inner {
   width: '96%';

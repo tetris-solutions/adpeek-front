@@ -12,6 +12,9 @@ import sortBy from 'lodash/sortBy'
 import EditableRow from './OrdersCloneEditableRow'
 import EditableHeader from './OrdersCloneEditableHeader'
 import MessageFormat from 'intl-messageformat'
+import {cloneOrderAction} from '../actions/clone-order'
+import {loadOrdersAction} from '../actions/load-orders'
+import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 
 const style = csjs`
 .table {
@@ -46,11 +49,14 @@ export const OrdersClone = React.createClass({
   displayName: 'Orders-Clone',
   mixins: [FormMixin, styled(style)],
   propTypes: {
+    dispatch: PropTypes.func,
     folder: PropTypes.shape({
       orders: PropTypes.array
-    })
+    }),
+    params: PropTypes.object
   },
   contextTypes: {
+    router: PropTypes.object,
     messages: PropTypes.shape({
       copyOfOrderName: PropTypes.string
     }),
@@ -66,7 +72,30 @@ export const OrdersClone = React.createClass({
    * @return {undefined}
    */
   cloneOrders (form) {
-    // const {selectedOrders} = this.state
+    const {dispatch, params} = this.props
+    const promises = map(this.state.selectedOrders,
+      ({clone}, index) =>
+        dispatch(cloneOrderAction, clone, {
+          folder: params.folder,
+          name: form.elements[`${index}.name`].value,
+          start: form.elements[`${index}.start`].value,
+          end: form.elements[`${index}.end`].value,
+          amount: form.elements[`${index}.amount`].value,
+          auto_budget: form.elements[`${index}.autoBudget`].checked
+        }))
+
+    return Promise.all(promises)
+      .then(() => dispatch(pushSuccessMessageAction))
+      .then(() =>
+        dispatch(loadOrdersAction,
+          params.company,
+          params.workspace,
+          params.folder))
+      .then(() => {
+        const orderListUrl = `/company/${params.company}/workspace/${params.workspace}/folder/${params.folder}/orders`
+
+        this.context.router.push(orderListUrl)
+      })
   },
   /**
    * @param {HTMLFormElement} form the form el
@@ -100,7 +129,7 @@ export const OrdersClone = React.createClass({
   handleSubmit (e) {
     e.preventDefault()
     if (this.state.selectedOrders) {
-
+      this.cloneOrders(e.target)
     } else {
       this.selectOrders(e.target)
     }
@@ -132,14 +161,22 @@ export const OrdersClone = React.createClass({
             <table className={`${style.table} mdl-data-table mdl-data-table--selectable mdl-shadow--2dp`}>
               <thead>
                 <tr>
-                  <th className='mdl-data-table__cell--non-numeric'>Select</th>
-                  <th className='mdl-data-table__cell--non-numeric'>Name</th>
-                  <th className='mdl-data-table__cell--non-numeric'>Start</th>
-                  <th className='mdl-data-table__cell--non-numeric'>End</th>
-                  <th className={hasSelected ? 'mdl-data-table__cell--non-numeric' : ''}>
-                    Investment
+                  <th className='mdl-data-table__cell--non-numeric'>
+                    ✓
                   </th>
-                  {hasSelected && <th>AutoBudget</th>}
+                  <th className='mdl-data-table__cell--non-numeric'>
+                    <Message>nameLabel</Message>
+                  </th>
+                  <th className='mdl-data-table__cell--non-numeric'>
+                    <Message>startDateLabel</Message>
+                  </th>
+                  <th className='mdl-data-table__cell--non-numeric'>
+                    <Message>endDateLabel</Message>
+                  </th>
+                  <th className={hasSelected ? 'mdl-data-table__cell--non-numeric' : ''}>
+                    <Message>investmentLabel</Message>
+                  </th>
+                  {hasSelected && <th>Auto Budget</th>}
                 </tr>
               </thead>
               <tbody>

@@ -28,7 +28,7 @@ export const Editable = React.createClass({
     return (
       <tr>
         <td className='mdl-data-table__cell--non-numeric'>
-          <Checkbox checked={false} name={`${index}.selected`}/>
+          <Checkbox checked name={`${index}.selected`}/>
         </td>
         <td className='mdl-data-table__cell--non-numeric'>
           <Input name={`${index}.name`} defaultValue={name}/>
