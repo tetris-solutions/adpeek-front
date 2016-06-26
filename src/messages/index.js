@@ -95,6 +95,7 @@ export default {
     finalUrl: 'Final URL',
     folderAdsTitle: 'Folder "{folder}" Ads',
     cloneOrders: 'Clone Orders',
+    cloneSingleOrder: 'Clone Order',
     selectOrders: 'Select',
     applyToSelectedOrders: 'Apply',
     copyOfOrderName: 'Copy of {name}'
@@ -194,6 +195,7 @@ export default {
     finalUrl: 'URL de destino',
     folderAdsTitle: 'Criativos da pasta "{folder}"',
     cloneOrders: 'Clonar Pedidos',
+    cloneSingleOrder: 'Clonar PI',
     selectOrders: 'Selecionar',
     applyToSelectedOrders: 'Aplicar',
     copyOfOrderName: 'Cópia de {name}'

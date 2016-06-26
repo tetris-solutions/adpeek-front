@@ -62,6 +62,7 @@ export const OrdersClone = React.createClass({
     params: PropTypes.object
   },
   contextTypes: {
+    location: PropTypes.object,
     router: PropTypes.object,
     messages: PropTypes.shape({
       copyOfOrderName: PropTypes.string
@@ -72,6 +73,28 @@ export const OrdersClone = React.createClass({
     return {
       selectedOrders: null
     }
+  },
+  componentWillMount () {
+    const orderId = this.context.location.query.order
+    if (!orderId) return
+
+    const {folder: {orders}} = this.props
+    const order = find(orders, {id: orderId})
+
+    if (!order) return
+
+    this.setState({
+      selectedOrders: [this.getCopyOf(order)]
+    })
+  },
+  getCopyOf (order) {
+    const {locales, messages: {copyOfOrderName}} = this.context
+
+    return assign({}, order, {
+      id: null,
+      clone: order.id,
+      name: new MessageFormat(copyOfOrderName, locales).format({name: order.name})
+    })
   },
   /**
    * @param {HTMLFormElement} form the form el
@@ -108,7 +131,6 @@ export const OrdersClone = React.createClass({
    * @return {undefined}
    */
   selectOrders (form) {
-    const {locales, messages: {copyOfOrderName}} = this.context
     const selectedOrders = []
     const gone = {}
     const {folder: {orders}} = this.props
@@ -120,12 +142,7 @@ export const OrdersClone = React.createClass({
 
         if (order && !gone[order.id]) {
           gone[order.id] = true
-          const newOrder = assign({}, order, {
-            id: null,
-            clone: order.id,
-            name: new MessageFormat(copyOfOrderName, locales).format({name: order.name})
-          })
-          selectedOrders.push(newOrder)
+          selectedOrders.push(this.getCopyOf(order))
         }
       }
     }
@@ -161,7 +178,7 @@ export const OrdersClone = React.createClass({
         </header>
         <div className='mdl-grid'>
           <div className='mdl-cell--12-col'>
-            {hasSelected && (
+            {hasSelected && selectedOrders.length > 1 && (
               <EditableHeader/>
             )}
             <table className={`${style.table} mdl-data-table mdl-data-table--selectable mdl-shadow--2dp`}>
