@@ -40,7 +40,8 @@ export const Switch = React.createClass({
         <input
           type='checkbox'
           name={name}
-          className='mdl-switch__input' checked={this.state.checked}
+          className='mdl-switch__input'
+          checked={this.state.checked}
           onChange={this.onChange}/>
         <span className='mdl-switch__label'>{label}</span>
       </label>

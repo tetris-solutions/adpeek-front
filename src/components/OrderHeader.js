@@ -3,9 +3,23 @@ import orderType from '../propTypes/order'
 import Input from './Input'
 import Switch from './Switch'
 import VerticalAlign from './VerticalAlign'
+import csjs from 'csjs'
+import {styled} from './mixins/styled'
 
+const style = csjs`
+.card {
+  width: 96%;
+  margin: 1em auto 0 auto;
+  minHeight: 0
+}
+.inner {
+  width: '96%';
+  margin: .3em auto;
+  padding: 0
+}`
 export const OrderHeader = React.createClass({
   displayName: 'Order-Header',
+  mixins: [styled(style)],
   propTypes: {
     change: React.PropTypes.func,
     order: orderType
@@ -19,8 +33,8 @@ export const OrderHeader = React.createClass({
   render () {
     const {order: {name, auto_budget, amount, start, end}} = this.props
     return (
-      <div className='mdl-card mdl-shadow--2dp ' style={{width: '96%', margin: '1em auto 0 auto', minHeight: 0}}>
-        <div className='mdl-card__supporting-text' style={{width: '96%', margin: '.3em auto', padding: 0}}>
+      <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
+        <div className={`mdl-card__supporting-text ${style.inner}`}>
           <div className='mdl-grid'>
             <div className='mdl-cell mdl-cell--4-col'>
               <Input

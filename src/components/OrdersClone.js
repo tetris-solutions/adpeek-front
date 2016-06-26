@@ -4,21 +4,24 @@ import {contextualize} from './higher-order/contextualize'
 import map from 'lodash/map'
 import FormMixin from '@tetris/front-server/lib/mixins/FormMixin'
 import {styled} from './mixins/styled'
-import Input from './Input'
 import Checkbox from './Checkbox'
 import csjs from 'csjs'
 import find from 'lodash/find'
 import assign from 'lodash/assign'
 import sortBy from 'lodash/sortBy'
+import EditableRow from './OrdersCloneEditableRow'
+import EditableHeader from './OrdersCloneEditableHeader'
+import MessageFormat from 'intl-messageformat'
 
 const style = csjs`
 .table {
-  margin: 2em auto 0 auto
+  width: 100%;
+  margin: 2em 0 0
 }`
 
 const {PropTypes} = React
 
-const Clonable = ({name, id, start, end, amount}) => (
+const ClonableRow = ({name, id, start, end, amount}) => (
   <tr>
     <td>
       <Checkbox name={id}/>
@@ -30,36 +33,10 @@ const Clonable = ({name, id, start, end, amount}) => (
   </tr>
 )
 
-Clonable.displayName = 'Clonable'
-Clonable.propTypes = {
+ClonableRow.displayName = 'Clonable-Row'
+ClonableRow.propTypes = {
   name: PropTypes.string,
   id: PropTypes.string,
-  start: PropTypes.string,
-  end: PropTypes.string,
-  amount: PropTypes.number
-}
-
-const Editable = ({index, name, start, end, amount}) => (
-  <tr>
-    <td>
-      <Input name={`${index}.name`} defaultValue={name}/>
-    </td>
-    <td>
-      <Input type='date' name={`${index}.start`} defaultValue={start}/>
-    </td>
-    <td>
-      <Input type='date' name={`${index}.end`} defaultValue={end}/>
-    </td>
-    <td>
-      <Input type='number' name={`${index}.amount`} defaultValue={amount}/>
-    </td>
-  </tr>
-)
-
-Editable.displayName = 'Editable'
-Editable.propTypes = {
-  index: PropTypes.number,
-  name: PropTypes.string,
   start: PropTypes.string,
   end: PropTypes.string,
   amount: PropTypes.number
@@ -72,6 +49,12 @@ export const OrdersClone = React.createClass({
     folder: PropTypes.shape({
       orders: PropTypes.array
     })
+  },
+  contextTypes: {
+    messages: PropTypes.shape({
+      copyOfOrderName: PropTypes.string
+    }),
+    locales: PropTypes.any
   },
   getInitialState () {
     return {
@@ -90,6 +73,7 @@ export const OrdersClone = React.createClass({
    * @return {undefined}
    */
   selectOrders (form) {
+    const {locales, messages: {copyOfOrderName}} = this.context
     const selectedOrders = []
     const gone = {}
     const {folder: {orders}} = this.props
@@ -101,7 +85,12 @@ export const OrdersClone = React.createClass({
 
         if (order && !gone[order.id]) {
           gone[order.id] = true
-          selectedOrders.push(assign({}, order))
+          const newOrder = assign({}, order, {
+            id: null,
+            clone: order.id,
+            name: new MessageFormat(copyOfOrderName, locales).format({name: order.name})
+          })
+          selectedOrders.push(newOrder)
         }
       }
     }
@@ -135,25 +124,33 @@ export const OrdersClone = React.createClass({
             </button>
           </div>
         </header>
-        <table className={`${style.table} mdl-data-table mdl-data-table--selectable mdl-shadow--2dp`}>
-          <thead>
-            <tr>
-              {!hasSelected && <th className='mdl-data-table__cell--non-numeric'>#</th>}
-              <th className='mdl-data-table__cell--non-numeric'>Name</th>
-              <th className='mdl-data-table__cell--non-numeric'>Start</th>
-              <th className='mdl-data-table__cell--non-numeric'>End</th>
-              <th className={hasSelected ? 'mdl-data-table__cell--non-numeric' : ''}>
-                Investment
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {map(selectedOrders || sortBy(orders, 'start').reverse(),
-              (order, index) => hasSelected
-                ? <Editable key={index} {...order} index={index}/>
-                : <Clonable key={order.id} {...order}/>)}
-          </tbody>
-        </table>
+        <div className='mdl-grid'>
+          <div className='mdl-cell--10-col mdl-cell--1-offset'>
+            {hasSelected && (
+              <EditableHeader/>
+            )}
+            <table className={`${style.table} mdl-data-table mdl-data-table--selectable mdl-shadow--2dp`}>
+              <thead>
+                <tr>
+                  {!hasSelected && <th className='mdl-data-table__cell--non-numeric'>#</th>}
+                  <th className='mdl-data-table__cell--non-numeric'>Name</th>
+                  <th className='mdl-data-table__cell--non-numeric'>Start</th>
+                  <th className='mdl-data-table__cell--non-numeric'>End</th>
+                  <th className={hasSelected ? 'mdl-data-table__cell--non-numeric' : ''}>
+                    Investment
+                  </th>
+                  {hasSelected && <th>AutoBudget</th>}
+                </tr>
+              </thead>
+              <tbody>
+                {map(selectedOrders || sortBy(orders, 'start').reverse(),
+                  (order, index) => hasSelected
+                    ? <EditableRow key={index} {...order} index={index}/>
+                    : <ClonableRow key={order.id} {...order}/>)}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </form>
     )
   }
