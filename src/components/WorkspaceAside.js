@@ -19,8 +19,12 @@ export function WorkspaceAside ({params: {company}, workspace, dispatch}, {route
       <Link
         className='mdl-button mdl-js-button mdl-button--icon'
         to={`/company/${company}/workspace/${workspace.id}/edit`}>
-
         <i className='material-icons'>mode_edit</i>
+      </Link>
+      <Link
+        className='mdl-button mdl-js-button mdl-button--icon'
+        to={`/company/${company}/workspace/${workspace.id}/orders`}>
+        <i className='material-icons'>attach_money</i>
       </Link>
       <button
         className='mdl-button mdl-js-button mdl-button--icon'

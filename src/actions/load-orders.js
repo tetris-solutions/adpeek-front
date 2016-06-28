@@ -3,30 +3,33 @@ import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save
 import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetch-config'
 import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
 import {saveResponseData} from '../functions/save-response-data'
-import assign from 'lodash/assign'
-import map from 'lodash/map'
-import find from 'lodash/find'
 
-export function loadOrders (folder, config) {
-  return GET(`${process.env.ADPEEK_API_URL}/folder/${folder}/orders`, config)
+export function loadOrders (company, query, config) {
+  return GET(`${process.env.ADPEEK_API_URL}/company/${company}/orders${query || ''}`, config)
 }
 
-function updateEach (newOrders, oldOrders) {
-  return map(newOrders, order => {
-    return assign({}, find(oldOrders, {id: order.id}), order)
-  })
-}
+export function loadOrdersAction (tree, company, workspace = null, folder = null, token = null) {
+  let query = ''
+  const path = [
+    'user',
+    ['companies', company]
+  ]
 
-export function loadOrdersAction (tree, company, workspace, folder, token) {
-  return loadOrders(folder, getApiFetchConfig(tree, token))
+  if (workspace) {
+    query = `?workspace=${workspace}`
+    path.push(['workspaces', workspace])
+
+    if (folder) {
+      query = `?folder=${folder}`
+      path.push(['folders', folder])
+    }
+  }
+
+  path.push('orders')
+
+  return loadOrders(company, query, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
-    .then(saveResponseData(tree, [
-      'user',
-      ['companies', company],
-      ['workspaces', workspace],
-      ['folders', folder],
-      'orders'
-    ], updateEach))
+    .then(saveResponseData(tree, path))
     .catch(pushResponseErrorToState(tree))
 }
 

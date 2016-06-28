@@ -5,8 +5,18 @@ import Message from '@tetris/front-server/lib/components/intl/Message'
 const {PropTypes} = React
 
 export function OrdersBreadcrumb ({params: {company, workspace, folder}}) {
+  let url = `/company/${company}`
+
+  if (workspace) {
+    url += `/workspace/${workspace}`
+    if (folder) {
+      url += `/folder/${folder}`
+    }
+  }
+  url += '/orders'
+
   return (
-    <Link to={`/company/${company}/workspace/${workspace}/folder/${folder}/orders`}>
+    <Link to={url}>
       <Message>orders</Message>
     </Link>
   )

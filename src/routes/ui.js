@@ -15,7 +15,9 @@ import WorkspaceEdit from '../components/WorkspaceEdit'
 import FolderEdit from '../components/FolderEdit'
 import FolderAside from '../components/FolderAside'
 import Campaigns from '../components/FolderCampaigns'
-import Orders from '../components/FolderOrders'
+import FolderOrders from '../components/FolderOrders'
+import CompanyOrders from '../components/CompanyOrders'
+import WorkspaceOrders from '../components/WorkspaceOrders'
 import Order from '../components/Order'
 import OrderAutoBudget from '../components/OrderAutoBudget'
 import OrderBreadCrumb from '../components/OrderBreadcrumb'
@@ -26,6 +28,9 @@ import CampaignAside from '../components/CampaignAside'
 import CampaignBreadcrumb from '../components/CampaignBreadcrumb'
 import FolderAdGroups from '../components/FolderAdGroups'
 import FolderOrdersCloning from '../components/FolderOrdersCloning'
+import CompanyOrdersCloning from '../components/CompanyOrdersCloning'
+import WorkspaceOrdersCloning from '../components/WorkspaceOrdersCloning'
+import CompanyAside from '../components/CompanyAside'
 
 import App from '../components/App'
 import {loadUserCompaniesActionRouterAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
@@ -64,12 +69,22 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
         <Route
           path='company/:company'
           breadcrumb={CompanyBreadcrumb}
+          aside={CompanyAside}
           component={App}
           onEnter={preload(companies)}>
 
           <IndexRoute
             component={Workspaces}
             onEnter={preload(workspaces)}/>
+
+          <Route
+            path='orders'
+            breadcrumb={OrdersBreadCrumb}
+            onEnter={preload(orders)}>
+
+            <IndexRoute component={CompanyOrders}/>
+            <Route path='clone' component={CompanyOrdersCloning}/>
+          </Route>
 
           <Route
             path='create/workspace'
@@ -85,6 +100,15 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
             <IndexRoute
               component={Folders}
               onEnter={preload(folders)}/>
+
+            <Route
+              path='orders'
+              breadcrumb={OrdersBreadCrumb}
+              onEnter={preload(orders)}>
+
+              <IndexRoute component={WorkspaceOrders}/>
+              <Route path='clone' component={WorkspaceOrdersCloning}/>
+            </Route>
 
             <Route
               path='edit'
@@ -124,7 +148,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 breadcrumb={OrdersBreadCrumb}
                 onEnter={preload(orders)}>
 
-                <IndexRoute component={Orders}/>
+                <IndexRoute component={FolderOrders}/>
                 <Route path='clone' component={FolderOrdersCloning}/>
               </Route>
 
@@ -137,7 +161,9 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                   path='order/:order'
                   breadcrumb={OrderBreadCrumb}>
 
-                  <IndexRoute onEnter={preload(budgets)} component={Order}/>
+                  <IndexRoute
+                    onEnter={preload(budgets)}
+                    component={Order}/>
 
                   <Route
                     path='autobudget'

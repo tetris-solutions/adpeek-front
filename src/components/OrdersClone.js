@@ -119,7 +119,14 @@ export const OrdersClone = React.createClass({
           params.workspace,
           params.folder))
       .then(() => {
-        const orderListUrl = `/company/${params.company}/workspace/${params.workspace}/folder/${params.folder}/orders`
+        let orderListUrl = `/company/${params.company}`
+        if (params.workspace) {
+          orderListUrl += `/workspace/${params.workspace}`
+          if (params.folder) {
+            orderListUrl += `/folder/${params.folder}`
+          }
+        }
+        orderListUrl += '/orders'
 
         this.context.router.push(orderListUrl)
       })

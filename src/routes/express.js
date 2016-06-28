@@ -27,6 +27,16 @@ export function setAppRoutes (app, render) {
     preload(companies, workspaces),
     render)
 
+  app.get('/company/:company/orders',
+    protect,
+    preload(companies, orders),
+    render)
+
+  app.get('/company/:company/orders/clone',
+    protect,
+    preload(companies, orders),
+    render)
+
   app.get('/company/:company/create/workspace',
     protect,
     preload(companies, roles),
@@ -35,6 +45,16 @@ export function setAppRoutes (app, render) {
   app.get('/company/:company/workspace/:workspace',
     protect,
     preload(companies, workspace, folders),
+    render)
+
+  app.get('/company/:company/workspace/:workspace/orders',
+    protect,
+    preload(companies, workspace, orders),
+    render)
+
+  app.get('/company/:company/workspace/:workspace/orders/clone',
+    protect,
+    preload(companies, workspace, orders),
     render)
 
   app.get('/company/:company/workspace/:workspace/edit',
@@ -64,12 +84,12 @@ export function setAppRoutes (app, render) {
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/orders',
     protect,
-    preload(companies, workspace, folder, campaigns, orders),
+    preload(companies, workspace, folder, orders),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/orders/clone',
     protect,
-    preload(companies, workspace, folder, campaigns, orders),
+    preload(companies, workspace, folder, orders),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/order/:order',
