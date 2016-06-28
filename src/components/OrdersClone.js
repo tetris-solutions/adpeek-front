@@ -56,10 +56,10 @@ export const OrdersClone = React.createClass({
   mixins: [FormMixin, styled(style)],
   propTypes: {
     dispatch: PropTypes.func,
-    orders: PropTypes.array,
-    params: PropTypes.object
+    orders: PropTypes.array
   },
   contextTypes: {
+    params: PropTypes.object,
     location: PropTypes.object,
     router: PropTypes.object,
     messages: PropTypes.shape({
@@ -99,7 +99,8 @@ export const OrdersClone = React.createClass({
    * @return {undefined}
    */
   cloneOrders (form) {
-    const {dispatch, params} = this.props
+    const {params} = this.context
+    const {dispatch} = this.props
     const promises = map(this.state.selectedOrders,
       ({clonedOrderId, folder}, index) =>
         dispatch(cloneOrderAction, clonedOrderId, {
