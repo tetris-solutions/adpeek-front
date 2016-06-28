@@ -15,7 +15,7 @@ import WorkspaceEdit from '../components/WorkspaceEdit'
 import FolderEdit from '../components/FolderEdit'
 import FolderAside from '../components/FolderAside'
 import Campaigns from '../components/FolderCampaigns'
-import Orders from '../components/Orders'
+import Orders from '../components/FolderOrders'
 import Order from '../components/Order'
 import OrderAutoBudget from '../components/OrderAutoBudget'
 import OrderBreadCrumb from '../components/OrderBreadcrumb'
@@ -25,7 +25,7 @@ import Campaign from '../components/Campaign'
 import CampaignAside from '../components/CampaignAside'
 import CampaignBreadcrumb from '../components/CampaignBreadcrumb'
 import FolderAdGroups from '../components/FolderAdGroups'
-import OrdersClone from '../components/OrdersClone'
+import FolderOrdersCloning from '../components/FolderOrdersCloning'
 
 import App from '../components/App'
 import {loadUserCompaniesActionRouterAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
@@ -125,7 +125,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 onEnter={preload(orders)}>
 
                 <IndexRoute component={Orders}/>
-                <Route path='clone' component={OrdersClone}/>
+                <Route path='clone' component={FolderOrdersCloning}/>
               </Route>
 
               <Route

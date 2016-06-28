@@ -1,6 +1,6 @@
 import React from 'react'
 import Message from '@tetris/front-server/lib/components/intl/Message'
-import {contextualize} from './higher-order/contextualize'
+import {branch} from 'baobab-react/higher-order'
 import map from 'lodash/map'
 import FormMixin from '@tetris/front-server/lib/mixins/FormMixin'
 import {styled} from './mixins/styled'
@@ -56,9 +56,7 @@ export const OrdersClone = React.createClass({
   mixins: [FormMixin, styled(style)],
   propTypes: {
     dispatch: PropTypes.func,
-    folder: PropTypes.shape({
-      orders: PropTypes.array
-    }),
+    orders: PropTypes.array,
     params: PropTypes.object
   },
   contextTypes: {
@@ -78,7 +76,7 @@ export const OrdersClone = React.createClass({
     const orderId = this.context.location.query.order
     if (!orderId) return
 
-    const {folder: {orders}} = this.props
+    const {orders} = this.props
     const order = find(orders, {id: orderId})
 
     if (!order) return
@@ -92,7 +90,7 @@ export const OrdersClone = React.createClass({
 
     return assign({}, order, {
       id: null,
-      clone: order.id,
+      clonedOrderId: order.id,
       name: new MessageFormat(copyOfOrderName, locales).format({name: order.name})
     })
   },
@@ -103,9 +101,9 @@ export const OrdersClone = React.createClass({
   cloneOrders (form) {
     const {dispatch, params} = this.props
     const promises = map(this.state.selectedOrders,
-      ({clone}, index) =>
-        dispatch(cloneOrderAction, clone, {
-          folder: params.folder,
+      ({clonedOrderId, folder}, index) =>
+        dispatch(cloneOrderAction, clonedOrderId, {
+          folder: folder,
           name: form.elements[`${index}.name`].value,
           start: form.elements[`${index}.start`].value,
           end: form.elements[`${index}.end`].value,
@@ -133,7 +131,7 @@ export const OrdersClone = React.createClass({
   selectOrders (form) {
     const selectedOrders = []
     const gone = {}
-    const {folder: {orders}} = this.props
+    const {orders} = this.props
 
     for (const key in form.elements) {
       const input = form.elements[key]
@@ -151,6 +149,7 @@ export const OrdersClone = React.createClass({
   },
   handleSubmit (e) {
     e.preventDefault()
+
     if (this.state.selectedOrders) {
       this.cloneOrders(e.target)
     } else {
@@ -159,7 +158,7 @@ export const OrdersClone = React.createClass({
   },
   render () {
     const {selectedOrders} = this.state
-    const {folder: {orders}} = this.props
+    const {orders} = this.props
     const hasSelected = Boolean(selectedOrders)
 
     return (
@@ -216,4 +215,4 @@ export const OrdersClone = React.createClass({
   }
 })
 
-export default contextualize(OrdersClone, 'folder')
+export default branch({}, OrdersClone)
