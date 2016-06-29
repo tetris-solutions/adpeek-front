@@ -1,5 +1,29 @@
 import React from 'react'
 
+const paceCss = `
+.pace {
+  -webkit-pointer-events: none;
+  pointer-events: none;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.pace-inactive {
+  display: none;
+}
+
+.pace .pace-progress {
+  background: #7fcc7e;
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+  right: 100%;
+  width: 100%;
+  height: 2px;
+}`
+
 export const HTML = ({documentTitle = 'Tetris Solutions', payload, children, css}) => (
   <html>
     <head>
@@ -17,6 +41,9 @@ export const HTML = ({documentTitle = 'Tetris Solutions', payload, children, css
       <script
         id='state-injection'
         dangerouslySetInnerHTML={{__html: `var backendPayload = ${JSON.stringify(payload)}`}}/>
+
+      <script src='https://cdn.rawgit.com/HubSpot/pace/v1.0.0/pace.min.js' async />
+      <style dangerouslySetInnerHTML={{__html: paceCss}}/>
 
       <style
         id='style-injection'
