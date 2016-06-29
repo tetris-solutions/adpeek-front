@@ -37,9 +37,6 @@ export const AdGroups = React.createClass({
   propTypes: {
     adGroups: PropTypes.array
   },
-  componentWillUnmount () {
-    this.dead = true
-  },
   componentDidMount () {
     fitWrapper(this.refs.wrapper)
   },
