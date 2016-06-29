@@ -2,8 +2,8 @@ import React from 'react'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import OrderSelector from './OrdersSelector'
 import campaignType from '../propTypes/campaign'
-import orderType from '../propTypes/campaign'
-import budgetType from '../propTypes/campaign'
+import orderType from '../propTypes/order'
+import budgetType from '../propTypes/budget'
 import OrderHeader from './OrderHeader'
 import BudgetEdit from './BudgetEdit'
 import OrderPie from './OrderPie'
@@ -109,8 +109,8 @@ OrderEdit.propTypes = {
   selectBudget: PropTypes.func,
   changeOrderField: PropTypes.func,
   changeBudgetField: PropTypes.func,
-  budget: orderType,
-  order: budgetType,
+  budget: budgetType,
+  order: orderType,
   folderCampaigns: PropTypes.arrayOf(campaignType)
 }
 OrderEdit.contextTypes = {

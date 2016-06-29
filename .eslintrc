@@ -8,6 +8,8 @@
     "no-console": 2,
     "no-debugger": 2,
     "prefer-const": 2,
-    "arrow-parens": 0
+    "arrow-parens": 0,
+    "camelcase": 0,
+    "react/jsx-space-before-closing": 0
   }
 }
