@@ -12,7 +12,7 @@ export function OrderAside ({params: {company, workspace, folder}, order, dispat
   function onClick () {
     dispatch(deleteOrderAction, order.id)
       .then(() => {
-        router.push(`${folderUrl}/orders`)
+        router.replace(`${folderUrl}/orders`)
       })
   }
 

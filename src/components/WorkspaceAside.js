@@ -10,7 +10,7 @@ export function WorkspaceAside ({params: {company}, workspace, dispatch}, {route
   function onClick () {
     dispatch(deleteWorkspaceAction, workspace.id)
       .then(() => {
-        router.push(`/company/${company}`)
+        router.replace(`/company/${company}`)
       })
   }
 
