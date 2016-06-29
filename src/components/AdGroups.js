@@ -13,7 +13,6 @@ const isBrowser = typeof window !== 'undefined'
 const style = csjs`
 .wrapper {
   overflow: auto;
-  min-height: 40vh;
 }
 .grid {
   display: flex;
@@ -25,6 +24,16 @@ const style = csjs`
 }`
 
 const {PropTypes} = React
+
+/**
+ * fits scrollable wrapper in screen
+ * @param {HTMLDivElement} wrapper div
+ * @return {undefined}
+ */
+function fitWrapper (wrapper) {
+  const rect = wrapper.getBoundingClientRect()
+  wrapper.style.height = (window.innerHeight - rect.top - 20) + 'px'
+}
 
 export const AdGroups = React.createClass({
   displayName: '-AdGroups',
@@ -65,6 +74,8 @@ export const AdGroups = React.createClass({
         campaign))
 
     settle(map(this.props.campaigns, ({id}) => loadAdGroups(id)))
+
+    fitWrapper(this.refs.wrapper)
   },
   getAdGroups () {
     return flatten(map(this.props.campaigns,
@@ -82,7 +93,7 @@ export const AdGroups = React.createClass({
     return (
       <section className='mdl-grid'>
         <div className='mdl-cell mdl-cell--12-col'>
-          <div className={`${style.wrapper}`}>
+          <div ref='wrapper' className={`${style.wrapper}`}>
             <div className={`${style.grid}`} ref='grid' style={gridStyle}>
               {map(adGroups, adGroup => (
                 <div key={adGroup.id} className={`${style.column}`}>

@@ -7,13 +7,13 @@ const style = csjs`
   text-align: center;
   line-height: 1.6em;
   margin: .3em 0;
+  padding: 0 .5em
 }`
 
 const {PropTypes} = React
-const colorFor = criterion_use => criterion_use === 'NEGATIVE' ? 'mdl-color--red-900' : 'mdl-color--light-green-900'
 
 export const Keyword = ({text, status, criterion_use, match_type}) => (
-  <div className={`${style.keyword} mdl-color-text--white ${colorFor(criterion_use)}`}>
+  <div className={`${style.keyword} mdl-color-text--grey-900 mdl-color--grey-300`}>
     {match_type === 'EXACT' ? `[${text}]` : text}
   </div>
 )

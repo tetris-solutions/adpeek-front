@@ -98,7 +98,9 @@ export default {
     cloneSingleOrder: 'Clone Order',
     selectOrders: 'Select',
     applyToSelectedOrders: 'Apply',
-    copyOfOrderName: 'Copy of {name}'
+    copyOfOrderName: 'Copy of {name}',
+    biddableKeywords: 'Biddable Keywords',
+    negativeKeywords: 'Negative Keywords'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -198,6 +200,8 @@ export default {
     cloneSingleOrder: 'Clonar PI',
     selectOrders: 'Selecionar',
     applyToSelectedOrders: 'Aplicar',
-    copyOfOrderName: 'Cópia de {name}'
+    copyOfOrderName: 'Cópia de {name}',
+    biddableKeywords: 'Palavras positivas',
+    negativeKeywords: 'Palavras negativas'
   }
 }

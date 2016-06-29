@@ -4,6 +4,8 @@ import AdGroupKeyword from './AdGroupKeyword'
 import map from 'lodash/map'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
+import groupBy from 'lodash/groupBy'
+import Message from '@tetris/front-server/lib/components/intl/Message'
 
 const style = csjs`
 .header {
@@ -25,6 +27,7 @@ export const AdGroup = React.createClass({
   },
   render () {
     const {name, ads, keywords} = this.props
+    const criterions = groupBy(keywords, 'criterion_use')
 
     return (
       <div>
@@ -36,11 +39,26 @@ export const AdGroup = React.createClass({
             <AdGroupAd key={ad.id} {...ad}/>
           ))}
         </div>
-        <div>
-          {map(keywords, keyword => (
-            <AdGroupKeyword key={keyword.id} {...keyword}/>
-          ))}
-        </div>
+
+        {criterions.BIDDABLE ? (
+          <div>
+            <h5>
+              <Message>biddableKeywords</Message>
+            </h5>
+            {map(criterions.BIDDABLE, keyword => (
+              <AdGroupKeyword key={keyword.id} {...keyword}/>
+            ))}
+          </div>) : null}
+
+        {criterions.NEGATIVE ? (
+          <div>
+            <h5>
+              <Message>negativeKeywords</Message>
+            </h5>
+            {map(criterions.NEGATIVE, keyword => (
+              <AdGroupKeyword key={keyword.id} {...keyword}/>
+            ))}
+          </div>) : null}
       </div>
     )
   }
