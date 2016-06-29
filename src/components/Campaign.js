@@ -2,7 +2,7 @@ import React from 'react'
 import AdGroups from './AdGroups'
 import {contextualize} from './higher-order/contextualize'
 import Message from '@tetris/front-server/lib/components/intl/Message'
-
+import {loadCampaignAdGroupsAction} from '../actions/load-campaign-adgroups'
 const {PropTypes} = React
 
 export const Campaign = React.createClass({
@@ -10,12 +10,24 @@ export const Campaign = React.createClass({
   propTypes: {
     dispatch: PropTypes.func,
     campaign: PropTypes.shape({
-      platform: PropTypes.string
+      platform: PropTypes.string,
+      adGroups: PropTypes.array
     }),
     params: PropTypes.object
   },
+  componentDidMount () {
+    const {campaign, dispatch, params} = this.props
+
+    if (campaign.platform === 'adwords') {
+      dispatch(loadCampaignAdGroupsAction,
+        params.company,
+        params.workspace,
+        params.folder,
+        campaign.id)
+    }
+  },
   render () {
-    const {params, dispatch, campaign} = this.props
+    const {campaign} = this.props
 
     return (
       <div>
@@ -26,10 +38,7 @@ export const Campaign = React.createClass({
         </header>
 
         {campaign.platform === 'adwords' && (
-          <AdGroups
-            campaigns={[campaign]}
-            dispatch={dispatch}
-            params={params}/>
+          <AdGroups adGroups={campaign.adGroups || []}/>
         )}
       </div>
     )

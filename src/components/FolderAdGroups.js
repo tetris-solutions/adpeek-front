@@ -2,6 +2,7 @@ import React from 'react'
 import AdGroups from './AdGroups'
 import {contextualize} from './higher-order/contextualize'
 import Message from '@tetris/front-server/lib/components/intl/Message'
+import {loadFolderAdGroupsAction} from '../actions/load-folder-adgroups'
 
 const {PropTypes} = React
 
@@ -17,8 +18,18 @@ export const FolderAdGroups = React.createClass({
     }),
     params: PropTypes.object
   },
+  componentDidMount () {
+    const {folder, params, dispatch} = this.props
+
+    if (folder.account.platform === 'adwords') {
+      dispatch(loadFolderAdGroupsAction,
+        params.company,
+        params.workspace,
+        params.folder)
+    }
+  },
   render () {
-    const {params, dispatch, folder} = this.props
+    const {folder} = this.props
 
     return (
       <div>
@@ -29,10 +40,7 @@ export const FolderAdGroups = React.createClass({
         </header>
 
         {folder.account.platform === 'adwords' && (
-          <AdGroups
-            campaigns={folder.campaigns}
-            dispatch={dispatch}
-            params={params}/>
+          <AdGroups adGroups={folder.adGroups || []}/>
         )}
       </div>
     )
