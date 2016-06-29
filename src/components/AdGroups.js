@@ -1,9 +1,6 @@
 import React from 'react'
 import AdGroup from './AdGroup'
 import {loadCampaignAdGroupsAction} from '../actions/load-adgroups'
-import {loadCampaignAdGroupAdsAction} from '../actions/load-adgroup-ads'
-import {loadCampaignAdGroupKeywordsAction} from '../actions/load-adgroup-keywords'
-import delay from 'delay'
 import map from 'lodash/map'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
@@ -60,22 +57,6 @@ export const AdGroups = React.createClass({
       return promise
     }
 
-    const loadAdGroupAds = (campaign, adGroup) =>
-      dispatch(loadCampaignAdGroupAdsAction,
-        params.company,
-        params.workspace,
-        params.folder,
-        campaign,
-        adGroup)
-
-    const loadAdGroupKeywords = (campaign, adGroup) =>
-      dispatch(loadCampaignAdGroupKeywordsAction,
-        params.company,
-        params.workspace,
-        params.folder,
-        campaign,
-        adGroup)
-
     const loadAdGroups = preventRace(campaign =>
       dispatch(loadCampaignAdGroupsAction,
         params.company,
@@ -83,13 +64,7 @@ export const AdGroups = React.createClass({
         params.folder,
         campaign))
 
-    const loadAdGroupDependencies = preventRace((campaign, adGroup) =>
-      loadAdGroupAds(campaign, adGroup)
-        .then(() => loadAdGroupKeywords(campaign, adGroup)))
-
     settle(map(this.props.campaigns, ({id}) => loadAdGroups(id)))
-      .then(() => delay(300))
-      .then(() => settle(map(this.getAdGroups(), ({id, campaign}) => loadAdGroupDependencies(campaign, id))))
   },
   getAdGroups () {
     return flatten(map(this.props.campaigns,
