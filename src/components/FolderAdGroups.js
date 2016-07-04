@@ -4,6 +4,7 @@ import {contextualize} from './higher-order/contextualize'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import {loadFolderAdGroupsAction} from '../actions/load-folder-adgroups'
 import NotImplemented from './AdGroupsNotImplemented'
+import LoadingHorizontal from './LoadingHorizontal'
 
 const {PropTypes} = React
 
@@ -19,6 +20,11 @@ export const FolderAdGroups = React.createClass({
     }),
     params: PropTypes.object
   },
+  getInitialState () {
+    return {
+      isLoading: this.props.folder.account.platform === 'adwords'
+    }
+  },
   componentDidMount () {
     const {folder, params, dispatch} = this.props
 
@@ -27,10 +33,14 @@ export const FolderAdGroups = React.createClass({
         params.company,
         params.workspace,
         params.folder)
+        .then(() => this.setState({isLoading: false}))
     }
   },
   render () {
     const {folder} = this.props
+    const inner = folder.account.platform === 'adwords'
+      ? <AdGroups adGroups={folder.adGroups || []}/>
+      : <NotImplemented />
 
     return (
       <div>
@@ -40,9 +50,11 @@ export const FolderAdGroups = React.createClass({
           </div>
         </header>
 
-        {folder.account.platform === 'adwords'
-          ? <AdGroups adGroups={folder.adGroups || []}/>
-          : <NotImplemented />}
+        {this.state.isLoading ? (
+          <LoadingHorizontal>
+            <Message>loadingAds</Message>
+          </LoadingHorizontal>
+        ) : inner}
       </div>
     )
   }

@@ -4,6 +4,7 @@ import {contextualize} from './higher-order/contextualize'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import {loadCampaignAdGroupsAction} from '../actions/load-campaign-adgroups'
 import NotImplemented from './AdGroupsNotImplemented'
+import LoadingHorizontal from './LoadingHorizontal'
 
 const {PropTypes} = React
 
@@ -17,6 +18,11 @@ export const Campaign = React.createClass({
     }),
     params: PropTypes.object
   },
+  getInitialState () {
+    return {
+      isLoading: this.props.campaign.platform === 'adwords'
+    }
+  },
   componentDidMount () {
     const {campaign, dispatch, params} = this.props
 
@@ -26,10 +32,14 @@ export const Campaign = React.createClass({
         params.workspace,
         params.folder,
         campaign.id)
+        .then(() => this.setState({isLoading: false}))
     }
   },
   render () {
     const {campaign} = this.props
+    const inner = campaign.platform === 'adwords'
+      ? <AdGroups adGroups={campaign.adGroups || []}/>
+      : <NotImplemented />
 
     return (
       <div>
@@ -39,9 +49,11 @@ export const Campaign = React.createClass({
           </div>
         </header>
 
-        {campaign.platform === 'adwords'
-          ? <AdGroups adGroups={campaign.adGroups || []}/>
-          : <NotImplemented />}
+        {this.state.isLoading ? (
+          <LoadingHorizontal>
+            <Message>loadingAds</Message>
+          </LoadingHorizontal>
+        ) : inner}
       </div>
     )
   }

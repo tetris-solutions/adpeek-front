@@ -99,9 +99,10 @@ export default {
     selectOrders: 'Select',
     applyToSelectedOrders: 'Apply',
     copyOfOrderName: 'Copy of {name}',
-    biddableKeywords: 'Biddable Keywords',
+    biddableKeywords: 'Keywords',
     negativeKeywords: 'Negative Keywords',
-    notYetImplemented: 'Not yet implemented'
+    notYetImplemented: 'Not yet implemented',
+    loadingAds: 'Loading Ads...'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -202,8 +203,9 @@ export default {
     selectOrders: 'Selecionar',
     applyToSelectedOrders: 'Aplicar',
     copyOfOrderName: 'Cópia de {name}',
-    biddableKeywords: 'Palavras positivas',
-    negativeKeywords: 'Palavras negativas',
-    notYetImplemented: 'Em construção'
+    biddableKeywords: 'Palavras chaves',
+    negativeKeywords: 'Palavras chaves negativas',
+    notYetImplemented: 'Em construção',
+    loadingAds: 'Carregando criativos...'
   }
 }
