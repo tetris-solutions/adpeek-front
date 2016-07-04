@@ -3,6 +3,7 @@ import AdGroups from './AdGroups'
 import {contextualize} from './higher-order/contextualize'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import {loadFolderAdGroupsAction} from '../actions/load-folder-adgroups'
+import NotImplemented from './AdGroupsNotImplemented'
 
 const {PropTypes} = React
 
@@ -39,9 +40,9 @@ export const FolderAdGroups = React.createClass({
           </div>
         </header>
 
-        {folder.account.platform === 'adwords' && (
-          <AdGroups adGroups={folder.adGroups || []}/>
-        )}
+        {folder.account.platform === 'adwords'
+          ? <AdGroups adGroups={folder.adGroups || []}/>
+          : <NotImplemented />}
       </div>
     )
   }

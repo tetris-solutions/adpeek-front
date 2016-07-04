@@ -100,7 +100,8 @@ export default {
     applyToSelectedOrders: 'Apply',
     copyOfOrderName: 'Copy of {name}',
     biddableKeywords: 'Biddable Keywords',
-    negativeKeywords: 'Negative Keywords'
+    negativeKeywords: 'Negative Keywords',
+    notYetImplemented: 'Not yet implemented'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -202,6 +203,7 @@ export default {
     applyToSelectedOrders: 'Aplicar',
     copyOfOrderName: 'Cópia de {name}',
     biddableKeywords: 'Palavras positivas',
-    negativeKeywords: 'Palavras negativas'
+    negativeKeywords: 'Palavras negativas',
+    notYetImplemented: 'Em construção'
   }
 }
