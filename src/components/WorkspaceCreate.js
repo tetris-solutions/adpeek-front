@@ -54,6 +54,7 @@ export const CreateWorkspace = React.createClass({
           <Input label='name' name='name' error={errors.name} onChange={this.dismissError}/>
           <AccountSelector platform='facebook'/>
           <AccountSelector platform='adwords'/>
+          {/* <AccountSelector platform='twitter'/> */}
           <RolesSelector/>
         </Content>
 
