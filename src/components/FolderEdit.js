@@ -166,6 +166,8 @@ export const EditFolder = React.createClass({
             value={tag}
             onChange={this.saveAndDismiss('tag')}/>
 
+          <br/>
+
           {tag && (
             <Checkbox
               checked
