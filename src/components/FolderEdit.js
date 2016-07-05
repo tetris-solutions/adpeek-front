@@ -63,7 +63,7 @@ export const EditFolder = React.createClass({
       id,
       name: elements.name.value,
       workspace_account: elements.workspace_account.value,
-      tag: elements.tag.value,
+      tag: elements.tag.value || null,
       media: elements.media.value,
       kpi: elements.kpi.value
     }
