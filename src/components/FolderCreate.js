@@ -155,10 +155,12 @@ export const CreateFolder = React.createClass({
             label='folderTag'
             error={errors.tag}
             onChange={this.onChangeTag}/>
+
           <br/>
 
           {showTagCheckbox && (
             <Checkbox
+              checked
               label={<Message>autoLinkRightAway</Message>}
               name='searchTagsRightAway'/>)}
 

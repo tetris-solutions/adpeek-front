@@ -12,6 +12,7 @@ import find from 'lodash/find'
 import get from 'lodash/get'
 import {Form, Content, Header, Footer} from './Card'
 import {contextualize} from './higher-order/contextualize'
+import Checkbox from './Checkbox'
 
 const {PropTypes} = React
 
@@ -66,6 +67,10 @@ export const EditFolder = React.createClass({
       tag: elements.tag.value || null,
       media: elements.media.value,
       kpi: elements.kpi.value
+    }
+
+    if (folder.tag) {
+      folder.searchTagsRightAway = elements.searchTagsRightAway.checked
     }
 
     this.preSubmit()
@@ -160,6 +165,12 @@ export const EditFolder = React.createClass({
             error={errors.tag}
             value={tag}
             onChange={this.saveAndDismiss('tag')}/>
+
+          {tag && (
+            <Checkbox
+              checked
+              label={<Message>autoLinkRightAway</Message>}
+              name='searchTagsRightAway'/>)}
         </Content>
 
         <Footer>
