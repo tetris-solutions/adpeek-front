@@ -10,6 +10,7 @@ import find from 'lodash/find'
 import get from 'lodash/get'
 import {Form, Content, Header, Footer} from './Card'
 import {contextualize} from './higher-order/contextualize'
+import Checkbox from './Checkbox'
 
 const {PropTypes} = React
 
@@ -32,6 +33,7 @@ export const CreateFolder = React.createClass({
   },
   getInitialState () {
     return {
+      showTagCheckbox: false,
       selectedMedia: ''
     }
   },
@@ -53,6 +55,10 @@ export const CreateFolder = React.createClass({
       kpi: elements.kpi.value
     }
 
+    if (folder.tag) {
+      folder.searchTagsRightAway = elements.searchTagsRightAway.checked
+    }
+
     this.preSubmit()
 
     return dispatch(createFolderAction, company, workspace, folder)
@@ -70,9 +76,16 @@ export const CreateFolder = React.createClass({
       selectedMedia: e.target.value
     })
   },
+  onChangeTag (e) {
+    this.dismissError(e)
+
+    this.setState({
+      showTagCheckbox: Boolean(e.target.value)
+    })
+  },
   render () {
     const {medias, workspace: {accounts}} = this.props
-    const {errors, selectedMedia} = this.state
+    const {errors, selectedMedia, showTagCheckbox} = this.state
 
     return (
       <Form onSubmit={this.handleSubmit}>
@@ -139,9 +152,16 @@ export const CreateFolder = React.createClass({
 
           <Input
             name='tag'
-            label='tag'
+            label='folderTag'
             error={errors.tag}
-            onChange={this.dismissError}/>
+            onChange={this.onChangeTag}/>
+          <br/>
+
+          {showTagCheckbox && (
+            <Checkbox
+              label={<Message>autoLinkRightAway</Message>}
+              name='searchTagsRightAway'/>)}
+
         </Content>
 
         <Footer>

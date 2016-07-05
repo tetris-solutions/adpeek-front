@@ -156,11 +156,10 @@ export const EditFolder = React.createClass({
 
           <Input
             name='tag'
-            label='tag'
+            label='folderTag'
             error={errors.tag}
             value={tag}
             onChange={this.saveAndDismiss('tag')}/>
-
         </Content>
 
         <Footer>

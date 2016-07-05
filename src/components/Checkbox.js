@@ -49,7 +49,7 @@ export const Checkbox = React.createClass({
   propTypes: {
     checked: PropTypes.bool,
     name: PropTypes.string.isRequired,
-    label: PropTypes.string,
+    label: PropTypes.node,
     value: PropTypes.string
   },
   getDefaultProps () {
