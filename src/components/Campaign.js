@@ -5,7 +5,8 @@ import Message from '@tetris/front-server/lib/components/intl/Message'
 import {loadCampaignAdGroupsAction} from '../actions/load-campaign-adgroups'
 import NotImplemented from './AdGroupsNotImplemented'
 import LoadingHorizontal from './LoadingHorizontal'
-import {extractCampaignAdGroupsAction} from '../actions/extract-campaign-adgroups'
+import {createCampaignAdGroupsReportAction} from '../actions/create-campaign-adgroups-report'
+import DownloadReportButton from './DownloadReportButton'
 
 const {PropTypes} = React
 
@@ -25,19 +26,15 @@ export const Campaign = React.createClass({
   getInitialState () {
     return {
       creatingReport: false,
-      isLoading: this.props.campaign.platform === 'adwords'
+      isLoading: this.isAdwords()
     }
   },
+  isAdwords () {
+    return this.props.campaign.platform === 'adwords'
+  },
   componentDidMount () {
-    const {campaign, dispatch, params} = this.props
-
-    if (campaign.platform === 'adwords') {
-      dispatch(loadCampaignAdGroupsAction,
-        params.company,
-        params.workspace,
-        params.folder,
-        campaign.id)
-        .then(() => this.setState({isLoading: false}))
+    if (this.isAdwords()) {
+      this.loadAdGroups()
     }
   },
   onReportCreated () {
@@ -45,17 +42,32 @@ export const Campaign = React.createClass({
 
     window.location.href = this.props.campaign.adGroupsReport.url
   },
-  extractReport () {
-    const {campaign, dispatch, params} = this.props
+  loadAdGroups () {
+    const {dispatch, params} = this.props
 
-    this.setState({creatingReport: true})
-
-    dispatch(extractCampaignAdGroupsAction,
+    this.loadingAdGroups = dispatch(loadCampaignAdGroupsAction,
       params.company,
       params.workspace,
       params.folder,
-      campaign.id)
-      .then(this.onReportCreated)
+      params.campaign)
+      .then(() => this.setState({isLoading: false}))
+  },
+  extractReport () {
+    if (!this.isAdwords) return
+
+    this.setState({creatingReport: true})
+
+    this.loadingAdGroups.then(() => {
+      const {campaign, dispatch, params} = this.props
+
+      dispatch(createCampaignAdGroupsReportAction,
+        params.company,
+        params.workspace,
+        params.folder,
+        campaign.id,
+        campaign.adGroups)
+        .then(this.onReportCreated)
+    })
   },
   render () {
     const {creatingReport, isLoading} = this.state
@@ -71,15 +83,10 @@ export const Campaign = React.createClass({
             <Message campaign={campaign.name}>campaignAdsTitle</Message>
             <div className='mdl-layout-spacer'/>
 
-            <button
-              disabled={creatingReport}
-              onClick={this.extractReport}
-              className='mdl-button mdl-color-text--grey-100'>
-
-              {creatingReport
-                ? <Message>creatingReport</Message>
-                : <Message>extractReport</Message>}
-            </button>
+            <DownloadReportButton
+              loading={creatingReport}
+              extract={this.extractReport}
+              report={campaign.adGroupsReport} />
           </div>
         </header>
 

@@ -3,9 +3,10 @@ import AdGroups from './AdGroups'
 import {contextualize} from './higher-order/contextualize'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import {loadFolderAdGroupsAction} from '../actions/load-folder-adgroups'
-import {extractFolderAdGroupsAction} from '../actions/extract-folder-adgroups'
+import {createFolderAdGroupsReportAction} from '../actions/create-folder-adgroups-report'
 import NotImplemented from './AdGroupsNotImplemented'
 import LoadingHorizontal from './LoadingHorizontal'
+import DownloadReportButton from './DownloadReportButton'
 
 const {PropTypes} = React
 
@@ -27,18 +28,15 @@ export const FolderAdGroups = React.createClass({
   },
   getInitialState () {
     return {
-      isLoading: this.props.folder.account.platform === 'adwords'
+      isLoading: this.isAdwords()
     }
   },
+  isAdwords () {
+    return this.props.folder.account.platform === 'adwords'
+  },
   componentDidMount () {
-    const {folder, params, dispatch} = this.props
-
-    if (folder.account.platform === 'adwords') {
-      dispatch(loadFolderAdGroupsAction,
-        params.company,
-        params.workspace,
-        params.folder)
-        .then(() => this.setState({isLoading: false}))
+    if (this.isAdwords()) {
+      this.loadAdGroups()
     }
   },
   onReportCreated () {
@@ -46,16 +44,30 @@ export const FolderAdGroups = React.createClass({
 
     window.location.href = this.props.folder.adGroupsReport.url
   },
-  extractReport () {
-    const {dispatch, params} = this.props
+  loadAdGroups () {
+    const {params, dispatch} = this.props
 
-    this.setState({creatingReport: true})
-
-    dispatch(extractFolderAdGroupsAction,
+    this.loadingAdGroups = dispatch(loadFolderAdGroupsAction,
       params.company,
       params.workspace,
       params.folder)
-      .then(this.onReportCreated)
+      .then(() => this.setState({isLoading: false}))
+  },
+  extractReport () {
+    if (!this.isAdwords()) return
+
+    this.setState({creatingReport: true})
+
+    this.loadingAdGroups.then(() => {
+      const {folder: {adGroups}, dispatch, params} = this.props
+
+      dispatch(createFolderAdGroupsReportAction,
+        params.company,
+        params.workspace,
+        params.folder,
+        adGroups)
+        .then(this.onReportCreated)
+    })
   },
   render () {
     const {creatingReport, isLoading} = this.state
@@ -71,15 +83,10 @@ export const FolderAdGroups = React.createClass({
             <Message folder={folder.name}>folderAdsTitle</Message>
             <div className='mdl-layout-spacer'/>
 
-            <button
-              disabled={creatingReport}
-              onClick={this.extractReport}
-              className='mdl-button mdl-color-text--grey-100'>
-
-              {creatingReport
-                ? <Message>creatingReport</Message>
-                : <Message>extractReport</Message>}
-            </button>
+            <DownloadReportButton
+              loading={creatingReport}
+              extract={this.extractReport}
+              report={folder.adGroupsReport} />
           </div>
         </header>
 
