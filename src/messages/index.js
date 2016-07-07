@@ -103,7 +103,9 @@ export default {
     biddableKeywords: 'Keywords',
     negativeKeywords: 'Negative Keywords',
     notYetImplemented: 'Not yet implemented',
-    loadingAds: 'Loading Ads...'
+    loadingAds: 'Loading Ads...',
+    extractReport: 'Download Report',
+    creatingReport: 'Creating Report...'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -208,6 +210,8 @@ export default {
     biddableKeywords: 'Palavras chaves',
     negativeKeywords: 'Palavras chaves negativas',
     notYetImplemented: 'Em construção',
-    loadingAds: 'Carregando criativos...'
+    loadingAds: 'Carregando criativos...',
+    extractReport: 'Extrair Report',
+    creatingReport: 'Gerando Report...'
   }
 }

@@ -5,6 +5,7 @@ import Message from '@tetris/front-server/lib/components/intl/Message'
 import {loadCampaignAdGroupsAction} from '../actions/load-campaign-adgroups'
 import NotImplemented from './AdGroupsNotImplemented'
 import LoadingHorizontal from './LoadingHorizontal'
+import {extractCampaignAdGroupsAction} from '../actions/extract-campaign-adgroups'
 
 const {PropTypes} = React
 
@@ -13,6 +14,9 @@ export const Campaign = React.createClass({
   propTypes: {
     dispatch: PropTypes.func,
     campaign: PropTypes.shape({
+      adGroupsReport: PropTypes.shape({
+        url: PropTypes.string
+      }),
       platform: PropTypes.string,
       adGroups: PropTypes.array
     }),
@@ -20,6 +24,7 @@ export const Campaign = React.createClass({
   },
   getInitialState () {
     return {
+      creatingReport: false,
       isLoading: this.props.campaign.platform === 'adwords'
     }
   },
@@ -35,7 +40,25 @@ export const Campaign = React.createClass({
         .then(() => this.setState({isLoading: false}))
     }
   },
+  onReportCreated () {
+    this.setState({creatingReport: false})
+
+    window.location.href = this.props.campaign.adGroupsReport.url
+  },
+  extractReport () {
+    const {campaign, dispatch, params} = this.props
+
+    this.setState({creatingReport: true})
+
+    dispatch(extractCampaignAdGroupsAction,
+      params.company,
+      params.workspace,
+      params.folder,
+      campaign.id)
+      .then(this.onReportCreated)
+  },
   render () {
+    const {creatingReport, isLoading} = this.state
     const {campaign} = this.props
     const inner = campaign.platform === 'adwords'
       ? <AdGroups adGroups={campaign.adGroups || []}/>
@@ -46,10 +69,21 @@ export const Campaign = React.createClass({
         <header className='mdl-layout__header'>
           <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
             <Message campaign={campaign.name}>campaignAdsTitle</Message>
+            <div className='mdl-layout-spacer'/>
+
+            <button
+              disabled={creatingReport}
+              onClick={this.extractReport}
+              className='mdl-button mdl-color-text--grey-100'>
+
+              {creatingReport
+                ? <Message>creatingReport</Message>
+                : <Message>extractReport</Message>}
+            </button>
           </div>
         </header>
 
-        {this.state.isLoading ? (
+        {isLoading ? (
           <LoadingHorizontal>
             <Message>loadingAds</Message>
           </LoadingHorizontal>
