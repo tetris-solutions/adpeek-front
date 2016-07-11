@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   en: {
     welcomeMessage: 'Hey, {name}',
     linkCampaignsCallToAction: 'Link selected',
