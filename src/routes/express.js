@@ -72,6 +72,11 @@ export function setAppRoutes (app, render) {
     preload(statuses, companies, workspace, folder, campaigns),
     render)
 
+  app.get('/company/:company/workspace/:workspace/folder/:folder/report/builder',
+    protect,
+    preload(statuses, companies, workspace, folder, campaigns),
+    render)
+
   app.get('/company/:company/workspace/:workspace/folder/:folder/adgroups',
     protect,
     preload(statuses, companies, workspace, folder, campaigns),

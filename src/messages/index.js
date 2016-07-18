@@ -105,7 +105,12 @@ module.exports = {
     notYetImplemented: 'Not yet implemented',
     loadingAds: 'Loading Ads...',
     extractReport: 'Download Report',
-    creatingReport: 'Creating Report...'
+    creatingReport: 'Creating Report...',
+    today: 'Today',
+    yesterday: 'Yesterday',
+    pastWeek: 'Past week',
+    currentMonth: 'Current month',
+    pastMonth: 'Past month'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -212,6 +217,11 @@ module.exports = {
     notYetImplemented: 'Em construção',
     loadingAds: 'Carregando criativos...',
     extractReport: 'Extrair Report',
-    creatingReport: 'Gerando Report...'
+    creatingReport: 'Gerando Report...',
+    today: 'Hoje',
+    yesterday: 'Ontém',
+    pastWeek: 'Semana passada',
+    currentMonth: 'Mês atual',
+    pastMonth: 'Mês passado'
   }
 }

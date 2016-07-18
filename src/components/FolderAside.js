@@ -34,6 +34,12 @@ export function FolderAside ({
 
       <Link
         className='mdl-button mdl-js-button mdl-button--icon'
+        to={`${baseUrl}/report/builder`}>
+        <i className='material-icons'>show_chart</i>
+      </Link>
+
+      <Link
+        className='mdl-button mdl-js-button mdl-button--icon'
         to={`${baseUrl}/edit`}>
         <i className='material-icons'>mode_edit</i>
       </Link>

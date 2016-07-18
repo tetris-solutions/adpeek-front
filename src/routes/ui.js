@@ -31,6 +31,7 @@ import FolderOrdersCloning from '../components/FolderOrdersCloning'
 import CompanyOrdersCloning from '../components/CompanyOrdersCloning'
 import WorkspaceOrdersCloning from '../components/WorkspaceOrdersCloning'
 import CompanyAside from '../components/CompanyAside'
+import ReportBuilder from '../components/ReportBuilder'
 
 import App from '../components/App'
 import {loadUserCompaniesActionRouterAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
@@ -125,6 +126,10 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
               aside={FolderAside}
               breadcrumb={FolderBreadcrumb}
               onEnter={preload(folder)}>
+
+              <Route
+                component={ReportBuilder}
+                path='report/builder'/>
 
               <Route
                 path='campaign/:campaign'
