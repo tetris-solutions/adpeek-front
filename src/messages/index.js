@@ -110,7 +110,8 @@ module.exports = {
     yesterday: 'Yesterday',
     pastWeek: 'Past week',
     currentMonth: 'Current month',
-    pastMonth: 'Past month'
+    pastMonth: 'Past month',
+    reportBuilder: 'Report Builder'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -222,6 +223,7 @@ module.exports = {
     yesterday: 'Ontém',
     pastWeek: 'Semana passada',
     currentMonth: 'Mês atual',
-    pastMonth: 'Mês passado'
+    pastMonth: 'Mês passado',
+    reportBuilder: 'Criação de Relatórios'
   }
 }

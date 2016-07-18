@@ -1,5 +1,5 @@
 import React from 'react'
-import {DateRange as D} from 'react-date-range'
+import {DateRange as DTRangePicker} from 'react-date-range'
 
 const {PropTypes} = React
 
@@ -7,6 +7,11 @@ const DateRange = React.createClass({
   displayName: 'Date-Range',
   contextTypes: {
     messages: PropTypes.object
+  },
+  propTypes: {
+    startDate: PropTypes.object,
+    endDate: PropTypes.object,
+    onChange: PropTypes.func.isRequired
   },
   componentWillMount () {
     const {
@@ -63,7 +68,15 @@ const DateRange = React.createClass({
     }
   },
   render () {
-    return <D ranges={this.ranges}/>
+    const {startDate, endDate, onChange} = this.props
+
+    return (
+      <DTRangePicker
+        startDate={startDate}
+        endDate={endDate}
+        onChange={onChange}
+        ranges={this.ranges}/>
+    )
   }
 })
 
