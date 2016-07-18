@@ -34,8 +34,8 @@ export const HTML = ({documentTitle = 'Tetris Solutions', payload, children, css
       <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700' type='text/css'/>
       <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons'/>
       <link rel='stylesheet' href='https://code.getmdl.io/1.1.3/material.indigo-pink.min.css'/>
-      <link rel='stylesheet' href='https://cdn.rawgit.com/mebibou/mdl-selectfield/v0.0.3/mdl-selectfield.min.css'/>
-      <link rel='stylesheet' href='https://cdn.rawgit.com/daneden/animate.css/master/animate.css'/>
+      <link rel='stylesheet' href='/css/mdl-selectfield.min.css'/>
+      <link rel='stylesheet' href='/css/animate.min.css'/>
       <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css'/>
 
       <script
