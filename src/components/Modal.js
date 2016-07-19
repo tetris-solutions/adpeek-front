@@ -102,13 +102,20 @@ const createPortal = contextAttributes => {
       unmountComponentAtNode(wrapper)
       document.body.removeChild(wrapper)
     },
-    render () {
+    renderModal () {
       render((
         <Modal {...this.context}>
           {this.props.children}
         </Modal>
       ), wrapper)
-
+    },
+    componentDidMount () {
+      this.renderModal()
+    },
+    componentDidUpdate () {
+      this.renderModal()
+    },
+    render () {
       return null
     }
   })
