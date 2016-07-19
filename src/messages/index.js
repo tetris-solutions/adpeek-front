@@ -111,7 +111,9 @@ module.exports = {
     pastWeek: 'Past week',
     currentMonth: 'Current month',
     pastMonth: 'Past month',
-    reportBuilder: 'Report Builder'
+    reportBuilder: 'Report Builder',
+    dateRangeLabel: 'from {startDate} until {endDate}',
+    reportRangeTitle: 'Report date range'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -224,6 +226,8 @@ module.exports = {
     pastWeek: 'Semana passada',
     currentMonth: 'Mês atual',
     pastMonth: 'Mês passado',
-    reportBuilder: 'Criação de Relatórios'
+    reportBuilder: 'Criação de Relatórios',
+    dateRangeLabel: 'de {startDate} até {endDate}',
+    reportRangeTitle: 'Intervalo do relatório'
   }
 }
