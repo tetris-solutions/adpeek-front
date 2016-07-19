@@ -6,6 +6,9 @@ import pick from 'lodash/pick'
 import forEach from 'lodash/forEach'
 import isEmpty from 'lodash/isEmpty'
 import assign from 'lodash/assign'
+import upperCase from 'lodash/upperCase'
+
+const notInput = el => !el || (upperCase(el.tagName) !== 'INPUT' && upperCase(el.tagName) !== 'TEXTAREA')
 
 const {PropTypes} = React
 const style = csjs`
@@ -41,8 +44,17 @@ const style = csjs`
   
   overflow-x: hidden;
   overflow-y: auto;
+}
+.small {
+  width: 420px
+}
+.medium {
+  width: 750px
+}
+.large {
+  width: 1024px
 }`
-
+const sizeType = PropTypes.oneOf(['small', 'medium', 'large'])
 const createPortal = contextAttributes => {
   if (typeof window === 'undefined') return () => null
 
@@ -66,13 +78,19 @@ const createPortal = contextAttributes => {
 
   const Modal = React.createClass(assign({
     displayName: 'Modal',
+    getDefaultProps () {
+      return {
+        size: 'medium'
+      }
+    },
     propTypes: {
+      size: sizeType,
       children: PropTypes.node.isRequired
     },
     render () {
       return (
         <div className={`${style.relativeLayer}`}>
-          <div className={`${style.content}`}>
+          <div className={`${style.content} ${style[this.props.size]}`}>
             <div className='mdl-grid'>
               <div className='mdl-cell mdl-cell--12-col'>
                 {this.props.children}
@@ -95,25 +113,37 @@ const createPortal = contextAttributes => {
     displayName: 'Portal',
     contextTypes,
     propTypes: {
+      size: sizeType,
+      onEscPressed: PropTypes.func,
       children: PropTypes.node.isRequired
+    },
+    componentDidMount () {
+      this.renderModal()
+
+      if (this.props.onEscPressed) {
+        document.addEventListener('keyup', this.grepEsc)
+      }
+    },
+    componentDidUpdate () {
+      this.renderModal()
     },
     componentWillUnmount () {
       document.body.style.overflow = previousOverflow
       unmountComponentAtNode(wrapper)
       document.body.removeChild(wrapper)
+      document.removeEventListener('keyup', this.grepEsc)
+    },
+    grepEsc (event) {
+      if (notInput(event.target) && event.which === 27) {
+        this.props.onEscPressed()
+      }
     },
     renderModal () {
       render((
-        <Modal {...this.context}>
+        <Modal {...this.context} size={this.props.size}>
           {this.props.children}
         </Modal>
       ), wrapper)
-    },
-    componentDidMount () {
-      this.renderModal()
-    },
-    componentDidUpdate () {
-      this.renderModal()
     },
     render () {
       return null
@@ -125,6 +155,8 @@ const ModalSpawner = React.createClass({
   displayName: 'Modal-Spawner',
   mixins: [styled(style)],
   propTypes: {
+    size: sizeType,
+    onEscPressed: PropTypes.func,
     children: PropTypes.node.isRequired,
     provide: PropTypes.array
   },
@@ -133,10 +165,11 @@ const ModalSpawner = React.createClass({
   },
   render () {
     const {Portal} = this
+    const {onEscPressed, children, size} = this.props
 
     return (
-      <Portal>
-        {this.props.children}
+      <Portal size={size} onEscPressed={onEscPressed}>
+        {children}
       </Portal>
     )
   }

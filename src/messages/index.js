@@ -113,7 +113,10 @@ module.exports = {
     pastMonth: 'Past month',
     reportBuilder: 'Report Builder',
     dateRangeLabel: 'from {startDate} until {endDate}',
-    reportRangeTitle: 'Report date range'
+    reportRangeTitle: 'Report date range',
+    campaigns: 'Campaigns',
+    newModule: 'New module',
+    moduleTypeLabel: 'Module type'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -228,6 +231,9 @@ module.exports = {
     pastMonth: 'Mês passado',
     reportBuilder: 'Criação de Relatórios',
     dateRangeLabel: 'de {startDate} até {endDate}',
-    reportRangeTitle: 'Intervalo do relatório'
+    reportRangeTitle: 'Intervalo do relatório',
+    campaigns: 'Campanhas',
+    newModule: 'Novo módulo',
+    moduleTypeLabel: 'Tipo de módulo'
   }
 }
