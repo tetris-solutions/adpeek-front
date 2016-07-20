@@ -1,5 +1,6 @@
 import React from 'react'
 import Edit from './ReportModuleEdit'
+import Modal from './Modal'
 
 const {PropTypes} = React
 
@@ -18,7 +19,10 @@ const ReportModule = React.createClass({
   propTypes: {
     id: PropTypes.string,
     type: PropTypes.oneOf([
-      'line'
+      'line',
+      'column',
+      'pie',
+      'table'
     ]),
     editable: PropTypes.bool,
     entity: PropTypes.object,
@@ -65,7 +69,9 @@ const ReportModule = React.createClass({
         )}
 
         {editable && (/* type === null || */editMode === true) && (
-          <Edit {...this.props} cancel={this.closeModal}/>
+          <Modal size='large' provide={['messages', 'locales', 'insertCss']} onEscPress={this.closeModal}>
+            <Edit {...this.props} cancel={this.closeModal}/>
+          </Modal>
         )}
       </div>
     )

@@ -34,8 +34,20 @@ export const Select = React.createClass({
   getInitialState () {
     return {
       isDirty: Boolean(this.props.value || this.props.defaultValue),
-      isFocused: false
+      isFocused: this.hasEmptyValue()
     }
+  },
+  hasEmptyValue () {
+    const {value, defaultValue, children} = this.props
+
+    if (!value && !defaultValue) {
+      const childrenArray = React.Children.toArray(children)
+
+      if (!childrenArray[0] || !childrenArray[0].props.value) {
+        return true
+      }
+    }
+    return false
   },
   onChange (e) {
     this.setState({
@@ -46,11 +58,11 @@ export const Select = React.createClass({
       this.props.onChange(e)
     }
   },
-  onFocus (e) {
+  onFocus () {
     this.setState({isFocused: true})
   },
-  onBlur (e) {
-    this.setState({isFocused: false})
+  onBlur () {
+    this.setState({isFocused: this.hasEmptyValue()})
   },
   render () {
     const {isDirty, isFocused} = this.state
@@ -65,11 +77,13 @@ export const Select = React.createClass({
     return (
       <div className={wrapperClasses}>
 
-        <select {...pick(this.props, selectFields)}
+        <select
+          {...pick(this.props, selectFields)}
           className='mdl-selectfield__select'
           onChange={this.onChange}
           onBlur={this.onBlur}
           onFocus={this.onFocus}>
+
           {this.props.children}
         </select>
 

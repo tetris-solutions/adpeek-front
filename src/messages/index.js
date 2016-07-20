@@ -116,7 +116,11 @@ module.exports = {
     reportRangeTitle: 'Report date range',
     campaigns: 'Campaigns',
     newModule: 'New module',
-    moduleTypeLabel: 'Module type'
+    moduleTypeLabel: 'Module type',
+    lineChart: 'Line chart',
+    columnChart: 'Column chart',
+    pieChart: 'Pie chart',
+    table: 'Table'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -234,6 +238,10 @@ module.exports = {
     reportRangeTitle: 'Intervalo do relatório',
     campaigns: 'Campanhas',
     newModule: 'Novo módulo',
-    moduleTypeLabel: 'Tipo de módulo'
+    moduleTypeLabel: 'Tipo de módulo',
+    lineChart: 'Gráfico em linha',
+    columnChart: 'Gráfico em coluna',
+    pieChart: 'Gráfico de pizza',
+    table: 'Tabela'
   }
 }

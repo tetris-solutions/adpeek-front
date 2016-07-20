@@ -29,7 +29,8 @@ const style = csjs`
 .content {
   position: relative;
   background: white;
-    
+  padding: .5em;
+      
   width: 40%;
   min-width: 300px;
   height: auto;
@@ -91,11 +92,7 @@ const createPortal = contextAttributes => {
       return (
         <div className={`${style.relativeLayer}`}>
           <div className={`${style.content} ${style[this.props.size]}`}>
-            <div className='mdl-grid'>
-              <div className='mdl-cell mdl-cell--12-col'>
-                {this.props.children}
-              </div>
-            </div>
+            {this.props.children}
           </div>
         </div>
       )
@@ -114,13 +111,13 @@ const createPortal = contextAttributes => {
     contextTypes,
     propTypes: {
       size: sizeType,
-      onEscPressed: PropTypes.func,
+      onEscPress: PropTypes.func,
       children: PropTypes.node.isRequired
     },
     componentDidMount () {
       this.renderModal()
 
-      if (this.props.onEscPressed) {
+      if (this.props.onEscPress) {
         document.addEventListener('keyup', this.grepEsc)
       }
     },
@@ -135,7 +132,7 @@ const createPortal = contextAttributes => {
     },
     grepEsc (event) {
       if (notInput(event.target) && event.which === 27) {
-        this.props.onEscPressed()
+        this.props.onEscPress()
       }
     },
     renderModal () {
@@ -156,7 +153,7 @@ const ModalSpawner = React.createClass({
   mixins: [styled(style)],
   propTypes: {
     size: sizeType,
-    onEscPressed: PropTypes.func,
+    onEscPress: PropTypes.func,
     children: PropTypes.node.isRequired,
     provide: PropTypes.array
   },
@@ -165,10 +162,10 @@ const ModalSpawner = React.createClass({
   },
   render () {
     const {Portal} = this
-    const {onEscPressed, children, size} = this.props
+    const {onEscPress, children, size} = this.props
 
     return (
-      <Portal size={size} onEscPressed={onEscPressed}>
+      <Portal size={size} onEscPress={onEscPress}>
         {children}
       </Portal>
     )

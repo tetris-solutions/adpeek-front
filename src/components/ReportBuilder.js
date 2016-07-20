@@ -12,7 +12,7 @@ const getNewModule = () => ({
   type: null,
   dimensions: [],
   filter: {
-    id: []
+    id: {}
   }
 })
 
