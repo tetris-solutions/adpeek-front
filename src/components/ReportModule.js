@@ -49,7 +49,7 @@ const ReportModule = React.createClass({
   },
   render () {
     const {editMode} = this.state
-    const {id, editable, type, dimensions, entity, filters} = this.props
+    const {id, editable, type, dimensions, entity, filters, reportParams} = this.props
 
     return (
       <div className='mdl-card mdl-shadow--2dp' style={{width: '100%'}}>
@@ -60,7 +60,7 @@ const ReportModule = React.createClass({
             type={type}
             entity={entity}
             filters={filters}
-            reportParams={this.props.reportParams}/>
+            reportParams={reportParams}/>
         </div>
 
         {editable && (
@@ -83,7 +83,7 @@ const ReportModule = React.createClass({
         {editable && (type === null || editMode === true) && (
           <Modal
             size='large'
-            provide={['messages', 'locales', 'insertCss']}
+            provide={['tree', 'messages', 'locales', 'insertCss']}
             onEscPress={type !== null ? this.closeModal : undefined}>
 
             <Edit
@@ -92,6 +92,7 @@ const ReportModule = React.createClass({
               type={type}
               entity={entity}
               filters={filters}
+              reportParams={reportParams}
               save={this.save}
               cancel={this.closeModal}/>
 

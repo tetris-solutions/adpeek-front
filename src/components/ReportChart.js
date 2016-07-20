@@ -76,9 +76,14 @@ const ReportChart = React.createClass({
 
     if (typeof window === 'undefined' || !query) return
 
+    if (!this.apiPromise) {
+      this.apiPromise = Promise.resolve()
+    }
+
     this.setState({isLoading: true})
 
-    this.props.dispatch(loadReportAction, this.props.id, query)
+    this.apiPromise = this.apiPromise
+      .then(() => this.props.dispatch(loadReportAction, this.props.id, query))
       .then(() => this.setState({isLoading: false}))
   },
   render () {

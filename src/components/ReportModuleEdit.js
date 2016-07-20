@@ -8,6 +8,7 @@ import assign from 'lodash/assign'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import includes from 'lodash/includes'
 import reportType from '../propTypes/report'
+import ReportChart from './ReportChart'
 
 const style = csjs`
 .listTitle {
@@ -59,6 +60,9 @@ const editableFields = ['type', 'dimensions', 'filters']
 const ModuleEdit = React.createClass({
   displayName: 'Edit-Module',
   mixins: [styled(style)],
+  contextTypes: {
+    messages: PropTypes.object
+  },
   propTypes: assign({
     cancel: PropTypes.func,
     save: PropTypes.func
@@ -88,8 +92,9 @@ const ModuleEdit = React.createClass({
     })
   },
   render () {
-    const {entity} = this.props
-    const {type, filters} = this.state
+    const {messages} = this.context
+    const {entity, id, reportParams} = this.props
+    const {type, filters, dimensions} = this.state
     const canCancel = Boolean(this.props.type)
     const canSave = Boolean(type)
 
@@ -111,23 +116,35 @@ const ModuleEdit = React.createClass({
           </div>
 
           <div className='mdl-cell mdl-cell--8-col'>
-            <Select label='moduleType' name='type' onChange={this.onChangeType} value={type}>
-              <option value=''>-- select --</option>
+            <Select
+              label='moduleType'
+              name='type'
+              onChange={this.onChangeType}
+              value={type || ''}>
+
+              <option value=''/>
               <option value='column'>
-                <Message>columnChart</Message>
+                {messages.columnChart}
               </option>
               <option value='line'>
-                <Message>lineChart</Message>
+                {messages.lineChart}
               </option>
               <option value='pie'>
-                <Message>pieChart</Message>
+                {messages.pieChart}
               </option>
               <option value='table'>
-                <Message>table</Message>
+                {messages.table}
               </option>
             </Select>
             <hr/>
-            <img src='/contrived-graph.png'/>
+
+            <ReportChart
+              dimensions={dimensions}
+              id={id}
+              type={type}
+              entity={entity}
+              filters={filters}
+              reportParams={reportParams}/>
           </div>
         </div>
 
