@@ -12,7 +12,7 @@ const getNewModule = () => ({
   id: uuid.v4(),
   type: null,
   dimensions: [],
-  filter: {
+  filters: {
     id: []
   }
 })
@@ -20,6 +20,11 @@ const getNewModule = () => ({
 const ReportBuilder = React.createClass({
   displayName: 'Report-Builder',
   propTypes: {
+    reportParams: PropTypes.shape({
+      ad_account: PropTypes.string,
+      plaftorm: PropTypes.string,
+      tetris_account: PropTypes.string
+    }),
     entity: PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string,
@@ -56,6 +61,10 @@ const ReportBuilder = React.createClass({
   },
   render () {
     const {modules, startDate, endDate} = this.state
+    const reportParams = assign({
+      from: startDate.format('YYYY-MM-DD'),
+      to: endDate.format('YYYY-MM-DD')
+    }, this.props.reportParams)
 
     return (
       <div>
@@ -79,6 +88,7 @@ const ReportBuilder = React.createClass({
               <Module
                 {...m}
                 editable
+                reportParams={reportParams}
                 entity={this.props.entity}
                 update={this.updateModule}
                 remove={this.removeModule}/>

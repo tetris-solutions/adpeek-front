@@ -7,6 +7,7 @@ import csjs from 'csjs'
 import assign from 'lodash/assign'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import includes from 'lodash/includes'
+import reportType from '../propTypes/report'
 
 const style = csjs`
 .listTitle {
@@ -53,27 +54,15 @@ Li.propTypes = {
   remove: PropTypes.func
 }
 
-const editableFields = ['type', 'dimensions', 'filter']
+const editableFields = ['type', 'dimensions', 'filters']
 
 const ModuleEdit = React.createClass({
   displayName: 'Edit-Module',
   mixins: [styled(style)],
-  propTypes: {
-    id: PropTypes.string,
-    type: PropTypes.oneOf([
-      'line',
-      'column',
-      'pie',
-      'table'
-    ]),
-    entity: PropTypes.object,
-    dimensions: PropTypes.array,
-    filter: PropTypes.shape({
-      id: PropTypes.array
-    }),
+  propTypes: assign({
     cancel: PropTypes.func,
     save: PropTypes.func
-  },
+  }, reportType),
   getInitialState () {
     return pick(this.props, editableFields)
   },
@@ -86,21 +75,21 @@ const ModuleEdit = React.createClass({
   },
   removeEntity (id) {
     this.setState({
-      filter: assign({}, this.state.filter, {
-        id: this.state.filter.id.filter(m => m !== id)
+      filters: assign({}, this.state.filters, {
+        id: this.state.filters.id.filter(m => m !== id)
       })
     })
   },
   addEntity (id) {
     this.setState({
-      filter: assign({}, this.state.filter, {
-        id: this.state.filter.id.concat([id])
+      filters: assign({}, this.state.filters, {
+        id: this.state.filters.id.concat([id])
       })
     })
   },
   render () {
     const {entity} = this.props
-    const {type, filter} = this.state
+    const {type, filters} = this.state
     const canCancel = Boolean(this.props.type)
     const canSave = Boolean(type)
 
@@ -116,7 +105,7 @@ const ModuleEdit = React.createClass({
                   {...item}
                   add={this.addEntity}
                   remove={this.removeEntity}
-                  selected={includes(filter.id, item.id)}
+                  selected={includes(filters.id, item.id)}
                   key={item.id}/>)}
             </ul>
           </div>

@@ -9,6 +9,7 @@ module.exports = function passEnv () {
     'NODE_ENV',
     'ADPEEK_URL',
     'ADPEEK_API_URL',
+    'NUMBERS_API_URL',
     'FRONT_HOST',
     'FRONT_URL',
     'USER_API_URL',

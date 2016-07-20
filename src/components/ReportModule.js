@@ -1,6 +1,9 @@
 import React from 'react'
 import Edit from './ReportModuleEdit'
 import Modal from './Modal'
+import ReportChart from './ReportChart'
+import reportType from '../propTypes/report'
+import assign from 'lodash/assign'
 
 const {PropTypes} = React
 
@@ -16,23 +19,18 @@ const ReportModule = React.createClass({
       editMode: false
     }
   },
-  propTypes: {
-    id: PropTypes.string,
-    type: PropTypes.oneOf([
-      'line',
-      'column',
-      'pie',
-      'table'
-    ]),
+  propTypes: assign({
     editable: PropTypes.bool,
-    entity: PropTypes.object,
-    dimensions: PropTypes.array,
-    filter: PropTypes.shape({
-      id: PropTypes.array
-    }),
     remove: PropTypes.func,
-    update: PropTypes.func
-  },
+    update: PropTypes.func,
+    reportParams: PropTypes.shape({
+      ad_account: PropTypes.string,
+      tetris_account: PropTypes.string,
+      platform: PropTypes.string,
+      from: PropTypes.string,
+      to: PropTypes.string
+    })
+  }, reportType),
   openModal () {
     this.setState({editMode: true})
   },
@@ -51,12 +49,18 @@ const ReportModule = React.createClass({
   },
   render () {
     const {editMode} = this.state
-    const {editable, type} = this.props
+    const {id, editable, type, dimensions, entity, filters} = this.props
 
     return (
       <div className='mdl-card mdl-shadow--2dp' style={{width: '100%'}}>
         <div className='mdl-card__title mdl-card--expand'>
-          <img src='/contrived-graph.png'/>
+          <ReportChart
+            dimensions={dimensions}
+            id={id}
+            type={type}
+            entity={entity}
+            filters={filters}
+            reportParams={this.props.reportParams}/>
         </div>
 
         {editable && (
@@ -83,7 +87,11 @@ const ReportModule = React.createClass({
             onEscPress={type !== null ? this.closeModal : undefined}>
 
             <Edit
-              {...this.props}
+              dimensions={dimensions}
+              id={id}
+              type={type}
+              entity={entity}
+              filters={filters}
               save={this.save}
               cancel={this.closeModal}/>
 
