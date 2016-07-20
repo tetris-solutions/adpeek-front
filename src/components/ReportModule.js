@@ -4,11 +4,19 @@ import Modal from './Modal'
 import ReportChart from './ReportChart'
 import reportType from '../propTypes/report'
 import assign from 'lodash/assign'
+import csjs from 'csjs'
+import {styled} from './mixins/styled'
+
+const style = csjs`
+.card, .content, .content > div {
+  width: 100%;
+}`
 
 const {PropTypes} = React
 
 const ReportModule = React.createClass({
   displayName: 'Report-Module',
+  mixins: [styled(style)],
   getDefaultProps () {
     return {
       editable: false
@@ -52,8 +60,8 @@ const ReportModule = React.createClass({
     const {id, editable, type, dimensions, entity, filters, reportParams} = this.props
 
     return (
-      <div className='mdl-card mdl-shadow--2dp' style={{width: '100%'}}>
-        <div className='mdl-card__title mdl-card--expand'>
+      <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
+        <div className={`mdl-card__title mdl-card--expand ${style.content}`}>
           <ReportChart
             dimensions={dimensions}
             id={id}

@@ -41,6 +41,10 @@ const ReportChart = React.createClass({
     }
   },
   getChartQuery (props) {
+    props = props || this.props
+
+    if (!props.type) return null
+
     const {
       /* dimensions, */filters, entity,
       reportParams: {
@@ -50,7 +54,7 @@ const ReportChart = React.createClass({
         from,
         to
       }
-    } = props || this.props
+    } = props
 
     const ids = filters.id.length
       ? filters.id
@@ -90,7 +94,9 @@ const ReportChart = React.createClass({
     return (
       <div>
         <h3>{this.props.type}</h3>
-        <pre>{JSON.stringify(this.props.result, null, 2)}</pre>
+        <pre style={{maxHeight: 300, overflowY: 'auto'}}>
+          {JSON.stringify(this.props.result, null, 2)}
+        </pre>
       </div>
     )
   }
