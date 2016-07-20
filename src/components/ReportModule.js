@@ -30,7 +30,8 @@ const ReportModule = React.createClass({
     filter: PropTypes.shape({
       id: PropTypes.array
     }),
-    removeModule: PropTypes.func
+    remove: PropTypes.func,
+    update: PropTypes.func
   },
   openModal () {
     this.setState({editMode: true})
@@ -39,7 +40,14 @@ const ReportModule = React.createClass({
     this.setState({editMode: false})
   },
   remove () {
-    this.props.removeModule(this.props.id)
+    this.props.remove(this.props.id)
+  },
+  save (updatedModule) {
+    this.closeModal()
+    this.props.update(
+      this.props.id,
+      updatedModule
+    )
   },
   render () {
     const {editMode} = this.state
@@ -70,7 +78,7 @@ const ReportModule = React.createClass({
 
         {editable && (/* type === null || */editMode === true) && (
           <Modal size='large' provide={['messages', 'locales', 'insertCss']} onEscPress={this.closeModal}>
-            <Edit {...this.props} cancel={this.closeModal}/>
+            <Edit {...this.props} save={this.save} cancel={this.closeModal}/>
           </Modal>
         )}
       </div>

@@ -6,6 +6,7 @@ import {styled} from './mixins/styled'
 import csjs from 'csjs'
 import assign from 'lodash/assign'
 import Message from '@tetris/front-server/lib/components/intl/Message'
+import includes from 'lodash/includes'
 
 const style = csjs`
 .listTitle {
@@ -31,8 +32,10 @@ const style = csjs`
 
 const {PropTypes} = React
 
-const Li = ({id, name, selected, toggle}) => {
-  const onClick = () => toggle(id)
+const Li = ({id, name, selected, add, remove}) => {
+  const onClick = selected
+    ? () => remove(id)
+    : () => add(id)
 
   return (
     <li onClick={onClick} className={`${style.item} ${selected ? style.selected : ''}`}>
@@ -46,14 +49,16 @@ Li.propTypes = {
   id: PropTypes.string,
   name: PropTypes.string,
   selected: PropTypes.bool,
-  toggle: PropTypes.func
+  add: PropTypes.func,
+  remove: PropTypes.func
 }
+
+const editableFields = ['type', 'dimensions', 'filter']
 
 const ModuleEdit = React.createClass({
   displayName: 'Edit-Module',
   mixins: [styled(style)],
   propTypes: {
-    cancel: PropTypes.func,
     id: PropTypes.string,
     type: PropTypes.oneOf([
       'line',
@@ -65,28 +70,32 @@ const ModuleEdit = React.createClass({
     dimensions: PropTypes.array,
     filter: PropTypes.shape({
       id: PropTypes.array
-    })
+    }),
+    cancel: PropTypes.func,
+    save: PropTypes.func
   },
   getInitialState () {
-    return pick(this.props, 'type', 'dimensions', 'filter')
+    return pick(this.props, editableFields)
   },
   onChangeType ({target: {value}}) {
     this.setState({type: value})
   },
   handleSubmit (e) {
     e.preventDefault()
+    this.props.save(pick(this.state, editableFields))
   },
-  toggleEntityFilter (id) {
-    const idFilter = this.state.filter.id
-
-    if (idFilter[id]) {
-      delete idFilter[id]
-    } else {
-      idFilter[id] = true
-    }
-
+  removeEntity (id) {
     this.setState({
-      filter: assign({}, this.state.filter, {id: idFilter})
+      filter: assign({}, this.state.filter, {
+        id: this.state.filter.id.filter(m => m !== id)
+      })
+    })
+  },
+  addEntity (id) {
+    this.setState({
+      filter: assign({}, this.state.filter, {
+        id: this.state.filter.id.concat([id])
+      })
     })
   },
   render () {
@@ -103,14 +112,15 @@ const ModuleEdit = React.createClass({
               {map(entity.list, item =>
                 <Li
                   {...item}
-                  toggle={this.toggleEntityFilter}
-                  selected={Boolean(filter.id[item.id])}
+                  add={this.addEntity}
+                  remove={this.removeEntity}
+                  selected={includes(filter.id, item.id)}
                   key={item.id}/>)}
             </ul>
 
           </div>
           <div className='mdl-cell mdl-cell--8-col'>
-            <Select label='moduleType' name='type' onChange={this.onChangeType}>
+            <Select label='moduleType' name='type' onChange={this.onChangeType} value={type}>
               <option value=''>-- select --</option>
               <option value='column'>
                 <Message>columnChart</Message>

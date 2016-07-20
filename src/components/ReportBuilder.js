@@ -5,6 +5,7 @@ import ReportDateRange from './ReportDateRange'
 import map from 'lodash/map'
 import Module from './ReportModule'
 import uuid from 'uuid'
+import assign from 'lodash/assign'
 
 const {PropTypes} = React
 const getNewModule = () => ({
@@ -12,7 +13,7 @@ const getNewModule = () => ({
   type: null,
   dimensions: [],
   filter: {
-    id: {}
+    id: []
   }
 })
 
@@ -38,6 +39,14 @@ const ReportBuilder = React.createClass({
   addNewModule () {
     this.setState({
       modules: this.state.modules.concat([getNewModule()])
+    })
+  },
+  updateModule (id, updatedModule) {
+    this.setState({
+      modules: this.state.modules
+        .map(m => m.id === id
+          ? assign({}, m, updatedModule)
+          : m)
     })
   },
   removeModule (id) {
@@ -71,7 +80,8 @@ const ReportBuilder = React.createClass({
                 {...m}
                 editable
                 entity={this.props.entity}
-                removeModule={this.removeModule}/>
+                update={this.updateModule}
+                remove={this.removeModule}/>
             </div>
           ))}
 
