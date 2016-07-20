@@ -84,11 +84,25 @@ const ReportChart = React.createClass({
       this.apiPromise = Promise.resolve()
     }
 
-    this.setState({isLoading: true})
+    const myCall = this.lastCall = Date.now()
+    const skipIfChanged = fn => () => {
+      if (this.lastCall === myCall) {
+        return fn()
+      }
+    }
+
+    const onDoneLoading = skipIfChanged(() =>
+      this.setState({isLoading: false}))
+
+    const makeApiCall = skipIfChanged(() => {
+      this.setState({isLoading: true})
+
+      return this.props.dispatch(loadReportAction, this.props.id, query)
+        .then(onDoneLoading)
+    })
 
     this.apiPromise = this.apiPromise
-      .then(() => this.props.dispatch(loadReportAction, this.props.id, query))
-      .then(() => this.setState({isLoading: false}))
+      .then(makeApiCall)
   },
   render () {
     return (
