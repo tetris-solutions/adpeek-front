@@ -34,14 +34,12 @@ export const Select = React.createClass({
   getInitialState () {
     return {
       isDirty: Boolean(this.props.value || this.props.defaultValue),
-      isFocused: this.hasEmptyValue()
+      isFocused: this.hasEmptyValue(this.props.value || this.props.defaultValue)
     }
   },
-  hasEmptyValue () {
-    const {value, defaultValue, children} = this.props
-
-    if (!value && !defaultValue) {
-      const childrenArray = React.Children.toArray(children)
+  hasEmptyValue (value) {
+    if (!value) {
+      const childrenArray = React.Children.toArray(this.props.children)
 
       if (!childrenArray[0] || !childrenArray[0].props.value) {
         return true
@@ -61,8 +59,8 @@ export const Select = React.createClass({
   onFocus () {
     this.setState({isFocused: true})
   },
-  onBlur () {
-    this.setState({isFocused: this.hasEmptyValue()})
+  onBlur (e) {
+    this.setState({isFocused: this.hasEmptyValue(e.target.value)})
   },
   render () {
     const {isDirty, isFocused} = this.state
