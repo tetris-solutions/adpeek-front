@@ -91,7 +91,7 @@ export const WorkspaceEdit = React.createClass({
         </Content>
 
         <Footer>
-          <Message>saveCallToAction</Message>
+          <Message>save</Message>
         </Footer>
       </Form>
     )

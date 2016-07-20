@@ -178,7 +178,7 @@ export const OrdersClone = React.createClass({
 
             <button className='mdl-button mdl-color-text--grey-100' type='submit'>
               {hasSelected
-                ? <Message>saveCallToAction</Message>
+                ? <Message>save</Message>
                 : <Message>selectOrders</Message>}
             </button>
           </div>

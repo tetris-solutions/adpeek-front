@@ -101,6 +101,8 @@ const ModuleEdit = React.createClass({
   render () {
     const {entity} = this.props
     const {type, filter} = this.state
+    const canCancel = Boolean(this.props.type)
+    const canSave = Boolean(type)
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -117,8 +119,8 @@ const ModuleEdit = React.createClass({
                   selected={includes(filter.id, item.id)}
                   key={item.id}/>)}
             </ul>
-
           </div>
+
           <div className='mdl-cell mdl-cell--8-col'>
             <Select label='moduleType' name='type' onChange={this.onChangeType} value={type}>
               <option value=''>-- select --</option>
@@ -140,11 +142,11 @@ const ModuleEdit = React.createClass({
           </div>
         </div>
 
-        <a className='mdl-button' onClick={this.props.cancel}>
-          cancel
+        <a className='mdl-button' disabled={!canCancel} onClick={canCancel ? this.props.cancel : undefined}>
+          <Message>cancel</Message>
         </a>
-        <button className='mdl-button' disabled={type === null}>
-          save
+        <button className='mdl-button' disabled={!canSave}>
+          <Message>save</Message>
         </button>
       </form>
     )

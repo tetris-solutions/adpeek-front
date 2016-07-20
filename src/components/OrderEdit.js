@@ -47,7 +47,7 @@ export function OrderEdit ({
               <Message>cloneSingleOrder</Message>
             </Link>)}
           <button onClick={save} className='mdl-button mdl-color-text--grey-100'>
-            <Message>saveCallToAction</Message>
+            <Message>save</Message>
           </button>
         </div>
       </header>
