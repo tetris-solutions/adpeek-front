@@ -3,10 +3,12 @@ import {branch} from 'baobab-react/higher-order'
 import {loadReportAction} from '../actions/load-report'
 import reportType from '../propTypes/report'
 import assign from 'lodash/assign'
-import isEqual from 'lodash/isEqual'
-import join from 'lodash/join'
+import {isvalidReportQuery} from '../functions/is-valid-report-query'
+import isEmpty from 'lodash/isEmpty'
+import pick from 'lodash/pick'
 
 const {PropTypes} = React
+const onServerSide = typeof window === 'undefined'
 
 const ReportChart = React.createClass({
   displayName: 'Report-Chart',
@@ -37,64 +39,43 @@ const ReportChart = React.createClass({
   componentWillReceiveProps (nextProps) {
     const query = this.getChartQuery(nextProps)
 
-    if (!isEqual(query, this.state.query)) {
-      this.setState({query}, this.loadReport)
-    }
+    this.setState({query}, this.loadReport)
   },
   getChartQuery (props) {
     props = props || this.props
 
-    if (!props.type) return null
+    const {entity} = props
+    const filters = assign({}, props.filters)
 
-    const {
-      dimensions, metrics, filters, entity,
-      reportParams: {
-        ad_account,
-        tetris_account,
-        platform,
-        from,
-        to
-      }
-    } = props
-
-    const ids = filters.id.length
-      ? filters.id
-      : entity.list.map(({id}) => id)
-
-    if (!ids.length) return null
-
-    return {
-      filters: `id(${join(ids, '|')})`,
-      entity: entity.id,
-      ad_account,
-      tetris_account,
-      platform,
-      from,
-      to,
-      dimensions: join(dimensions, ','),
-      metrics: join(metrics, ',')
+    if (isEmpty(filters.id)) {
+      filters.id = entity.list.map(({id}) => id)
     }
+
+    return assign({filters, entity: entity.id},
+      pick(props, 'dimensions', 'metrics'),
+      pick(props.reportParams, 'ad_account', 'tetris_account', 'platform', 'from', 'to')
+    )
   },
   loadReport () {
     const {query} = this.state
 
-    if (typeof window === 'undefined' || !query || !query.metrics.length) return
+    if (onServerSide || !isvalidReportQuery(query)) return
 
     if (!this.apiPromise) {
       this.apiPromise = Promise.resolve()
     }
 
     const myCall = this.lastCall = Date.now()
-    const skipIfChanged = fn => () => {
+    const skipIfNotLatestCall = fn => () => {
       if (this.lastCall === myCall) {
         return fn()
       }
     }
 
-    const onDoneLoading = skipIfChanged(() =>
+    const onDoneLoading = skipIfNotLatestCall(() =>
       this.setState({isLoading: false}))
 
-    const makeApiCall = skipIfChanged(() => {
+    const makeApiCall = skipIfNotLatestCall(() => {
       this.setState({isLoading: true})
 
       return this.props.dispatch(loadReportAction, this.props.id, query)
@@ -117,5 +98,5 @@ const ReportChart = React.createClass({
 })
 
 export default branch(({id}) => ({
-  result: ['reports', 'result', id]
+  result: ['reports', 'modules', id, 'data']
 }), ReportChart)

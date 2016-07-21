@@ -12,6 +12,7 @@ export function loadReportMetaDataAction (tree, platform, entity, token) {
     .then(saveResponseTokenAsCookie)
     .then(response => {
       tree.set(['reports', 'metaData', platform, entity], response.data)
+      tree.commit()
 
       return response
     })
