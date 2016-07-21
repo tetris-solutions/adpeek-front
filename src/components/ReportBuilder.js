@@ -10,7 +10,7 @@ import assign from 'lodash/assign'
 const {PropTypes} = React
 const getNewModule = () => ({
   id: uuid.v4(),
-  type: null,
+  type: 'line',
   metrics: [],
   dimensions: [],
   filters: {

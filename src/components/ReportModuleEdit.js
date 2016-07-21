@@ -121,8 +121,8 @@ const ModuleEdit = React.createClass({
     const {messages} = this.context
     const {metaData, entity, id, reportParams} = this.props
     const {type, filters, metrics, dimensions} = this.state
-    const canCancel = Boolean(this.props.type) && !isEmpty(this.props.metrics)
-    const canSave = Boolean(type) && !isEmpty(metrics)
+    const canCancel = !isEmpty(this.props.metrics)
+    const canSave = !isEmpty(metrics)
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -170,8 +170,6 @@ const ModuleEdit = React.createClass({
               name='type'
               onChange={this.onChangeType}
               value={type || ''}>
-
-              <option value=''/>
               <option value='column'>
                 {messages.columnChart}
               </option>

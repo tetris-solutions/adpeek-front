@@ -3,7 +3,6 @@ import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save
 import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetch-config'
 import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
 import queryString from 'query-string'
-import isEqual from 'lodash/isEqual'
 import join from 'lodash/join'
 import assign from 'lodash/assign'
 import map from 'lodash/map'
@@ -26,10 +25,6 @@ function loadReport (query, config) {
 
 export function loadReportAction (tree, id, query, token) {
   const moduleCursor = tree.select(['reports', 'modules', id])
-
-  if (isEqual(query, moduleCursor.get('query'))) {
-    return Promise.resolve()
-  }
 
   return loadReport(query, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)

@@ -6,14 +6,19 @@ import assign from 'lodash/assign'
 import {isvalidReportQuery} from '../functions/is-valid-report-query'
 import isEmpty from 'lodash/isEmpty'
 import pick from 'lodash/pick'
+import Line from './ReportChartLine'
+import isEqual from 'lodash/isEqual'
 
+const typeComponent = {
+  line: Line
+}
 const {PropTypes} = React
-const onServerSide = typeof window === 'undefined'
 
 const ReportChart = React.createClass({
   displayName: 'Report-Chart',
   propTypes: assign({
     result: PropTypes.array,
+    query: PropTypes.object,
     dispatch: PropTypes.func,
     reportParams: PropTypes.shape({
       ad_account: PropTypes.string,
@@ -28,22 +33,14 @@ const ReportChart = React.createClass({
       result: []
     }
   },
-  getInitialState () {
-    return {
-      query: this.getChartQuery()
-    }
-  },
-  componentWillMount () {
+  componentDidMount () {
     this.loadReport()
   },
-  componentWillReceiveProps (nextProps) {
-    const query = this.getChartQuery(nextProps)
-
-    this.setState({query}, this.loadReport)
+  componentDidUpdate () {
+    this.loadReport()
   },
-  getChartQuery (props) {
-    props = props || this.props
-
+  getChartQuery () {
+    const {props} = this
     const {entity} = props
     const filters = assign({}, props.filters)
 
@@ -57,9 +54,10 @@ const ReportChart = React.createClass({
     )
   },
   loadReport () {
-    const {query} = this.state
+    const query = this.getChartQuery()
 
-    if (onServerSide || !isvalidReportQuery(query)) return
+    if (!isvalidReportQuery(query)) return
+    if (isEqual(query, this.props.query)) return
 
     if (!this.apiPromise) {
       this.apiPromise = Promise.resolve()
@@ -86,17 +84,18 @@ const ReportChart = React.createClass({
       .then(makeApiCall, makeApiCall)
   },
   render () {
+    const Chart = typeComponent[this.props.type]
+
     return (
       <div>
         <h3>{this.props.type}</h3>
-        <pre style={{maxHeight: 300, overflowY: 'auto'}}>
-          {JSON.stringify(this.props.result, null, 2)}
-        </pre>
+        <Chart {...this.props}/>
       </div>
     )
   }
 })
 
 export default branch(({id}) => ({
-  result: ['reports', 'modules', id, 'data']
+  result: ['reports', 'modules', id, 'data'],
+  query: ['reports', 'modules', id, 'query']
 }), ReportChart)

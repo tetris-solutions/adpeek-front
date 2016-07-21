@@ -57,10 +57,9 @@ const ReportModule = React.createClass({
     )
   },
   render () {
-    // platform => entity
     const {editMode} = this.state
     const {id, editable, type, metrics, dimensions, entity, filters, reportParams} = this.props
-    const configIsComplete = Boolean(type) && !isEmpty(metrics)
+    const configIsComplete = !isEmpty(metrics)
 
     return (
       <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
