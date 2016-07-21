@@ -7,10 +7,14 @@ import {isvalidReportQuery} from '../functions/is-valid-report-query'
 import isEmpty from 'lodash/isEmpty'
 import pick from 'lodash/pick'
 import Line from './ReportChartLine'
+import Column from './ReportChartColumn'
+import Pie from './ReportChartPie'
 import isEqual from 'lodash/isEqual'
 
 const typeComponent = {
-  line: Line
+  line: Line,
+  pie: Pie,
+  column: Column
 }
 const {PropTypes} = React
 

@@ -118,7 +118,7 @@ export const Chart = createClass({
   displayName: 'Highcharts',
   propTypes: {
     tag: PropTypes.string,
-    children: PropTypes.node.isRequired,
+    children: PropTypes.node,
     className: PropTypes.string,
     style: PropTypes.object
   },

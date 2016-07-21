@@ -29,6 +29,9 @@ const style = csjs`
   line-height: 1.8em;
   user-select: none
 }
+.fixed {
+  color: #232363
+}
 .selected {
   border-left: 3px solid #79cbf3;
   font-weight: bold
@@ -36,23 +39,29 @@ const style = csjs`
 
 const {PropTypes} = React
 
-const Li = ({id, name, selected, add, remove}) => {
+const Li = ({id, name, selected, add, remove, fixed}) => {
   const onClick = selected
     ? () => remove(id)
     : () => add(id)
 
+  const className = `${style.item} ${selected ? style.selected : ''} ${fixed ? style.fixed : ''}`
+
   return (
-    <li onClick={onClick} className={`${style.item} ${selected ? style.selected : ''}`}>
+    <li onClick={fixed ? undefined : onClick} className={className}>
       {name}
     </li>
   )
 }
 
 Li.displayName = 'Item'
+Li.defaultProps = {
+  fixed: false
+}
 Li.propTypes = {
   id: PropTypes.string,
   name: PropTypes.string,
   selected: PropTypes.bool,
+  fixed: PropTypes.bool,
   add: PropTypes.func,
   remove: PropTypes.func
 }
@@ -75,7 +84,13 @@ const ModuleEdit = React.createClass({
     save: PropTypes.func
   }, reportType),
   getInitialState () {
-    return pick(this.props, editableFields)
+    const state = pick(this.props, editableFields)
+
+    if (isEmpty(state.dimensions) && this.props.entity.id === 'Campaign') {
+      state.dimensions = ['id']
+    }
+
+    return state
   },
   getDefaultProps () {
     return {
@@ -153,14 +168,19 @@ const ModuleEdit = React.createClass({
 
             <h5 className={`${style.listTitle}`}>Dimensions</h5>
             <ul className={`${style.list}`}>
-              {map(metaData.dimensions, item =>
-                <Li
-                  id={item}
-                  name={item}
-                  add={this.addItem('dimensions')}
-                  remove={this.removeItem('dimensions')}
-                  selected={includes(dimensions, item)}
-                  key={item}/>)}
+              {map(metaData.dimensions, item => {
+                const fixed = item === 'id' && entity.id === 'Campaign'
+                return (
+                  <Li
+                    id={item}
+                    name={item}
+                    fixed={fixed}
+                    add={this.addItem('dimensions')}
+                    remove={this.removeItem('dimensions')}
+                    selected={includes(dimensions, item)}
+                    key={item}/>
+                )
+              })}
             </ul>
           </div>
 

@@ -11,6 +11,7 @@ import sortBy from 'lodash/sortBy'
 import assign from 'lodash/assign'
 import isString from 'lodash/isString'
 import uniq from 'lodash/uniq'
+import omit from 'lodash/omit'
 
 const {PropTypes} = React
 
@@ -49,14 +50,14 @@ export function reportChart (ChartComponent) {
     series.length = 0
 
     forEach(result, (row, index) => {
-      const groupBy = pick(row, dimensions)
+      const includedDimensions = pick(row, dimensions)
 
       if (xAxisDimension !== 'date' && isString(row[xAxisDimension])) {
         categories.push(row[xAxisDimension])
       }
 
       forEach(metrics, (metric, yAxisIndex) => {
-        const selector = assign({metric}, groupBy)
+        const selector = assign({metric}, includedDimensions)
 
         let pointSeries = find(series, s => isEqual(s.selector, selector))
 
@@ -64,11 +65,25 @@ export function reportChart (ChartComponent) {
           const descriptors = map(selector, (val, key) => `${key}(${val})`)
 
           pointSeries = {
+            type,
             id: join(descriptors, ':'),
             name: join(descriptors, ':'),
             selector,
             yAxis: yAxisIndex,
             data: []
+          }
+
+          if (includedDimensions.id !== undefined) {
+            const refEntity = find(entity.list, {id: includedDimensions.id})
+
+            if (refEntity) {
+              const nameParts = map(omit(selector, 'id'),
+                (val, key) => `${key}: ${val}`)
+
+              nameParts.unshift(refEntity.name)
+
+              pointSeries.name = join(nameParts, ' - ')
+            }
           }
 
           series.push(pointSeries)
