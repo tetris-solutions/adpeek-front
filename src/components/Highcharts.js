@@ -11,8 +11,6 @@ import forEach from 'lodash/forEach'
 import lowerCase from 'lodash/lowerCase'
 import find from 'lodash/find'
 import isEqual from 'lodash/isEqual'
-// import merge from 'lodash/merge'
-// import get from 'lodash/get'
 
 function isUpperCase (letter) {
   return letter !== letter.toLowerCase()
@@ -120,7 +118,7 @@ export const Chart = createClass({
   displayName: 'Highcharts',
   propTypes: {
     tag: PropTypes.string,
-    children: PropTypes.node,
+    children: PropTypes.node.isRequired,
     className: PropTypes.string,
     style: PropTypes.object
   },
@@ -135,6 +133,9 @@ export const Chart = createClass({
     }
   },
   componentDidMount () {
+    this.draw()
+  },
+  draw () {
     this.chart = Highcharts.chart(this.refs.container, this.state.config)
   },
   componentWillReceiveProps (props) {
@@ -143,25 +144,28 @@ export const Chart = createClass({
     if (!isEqual(newConfig.title, this.state.config.title)) {
       this.chart.setTitle(newConfig.title)
     }
-    // const options = omit(newConfig, 'series')
-    // const oldOptions = omit(this.state.config, 'series')
-    //
-    // if (!isEqual(options, oldOptions)) {
-    //   merge(this.chart.options, options)
-    //   this.chart.redraw()
-    // }
 
-    forEach(newConfig.series, series => {
-      const oldSerie = find(this.chart.series, ['options.id', series.id])
+    const options = omit(newConfig, 'series', 'title')
+    const oldOptions = omit(this.state.config, 'series', 'title')
 
-      if (!oldSerie) {
-        return this.chart.addSeries(series)
-      }
+    if (!isEqual(options, oldOptions)) {
+      this.setState({config: newConfig}, () => {
+        this.chart.destroy()
+        this.draw()
+      })
+    } else {
+      this.setState({config: newConfig})
 
-      oldSerie.setData(series.data)
-    })
+      forEach(newConfig.series, series => {
+        const oldSerie = find(this.chart.series, ['options.id', series.id])
 
-    this.setState({config: newConfig})
+        if (!oldSerie) {
+          return this.chart.addSeries(series)
+        }
+
+        oldSerie.setData(series.data)
+      })
+    }
   },
   shouldComponentUpdate () {
     return false

@@ -16,7 +16,13 @@ const {PropTypes} = React
 
 export function reportChart (ChartComponent) {
   function ReportChart ({dimensions, result, metrics, entity, type}) {
-    // const yAxis = {}
+    const yAxis = map(metrics, (metric, index) => ({
+      title: {
+        text: metric
+      },
+      opposite: index % 2 !== 0
+    }))
+
     const categories = []
     const xAxisDimension = includes(dimensions, 'date')
       ? 'date'
@@ -49,7 +55,7 @@ export function reportChart (ChartComponent) {
         categories.push(row[xAxisDimension])
       }
 
-      forEach(metrics, metric => {
+      forEach(metrics, (metric, yAxisIndex) => {
         const selector = assign({metric}, groupBy)
 
         let pointSeries = find(series, s => isEqual(s.selector, selector))
@@ -59,7 +65,9 @@ export function reportChart (ChartComponent) {
 
           pointSeries = {
             id: join(descriptors, ':'),
+            name: join(descriptors, ':'),
             selector,
+            yAxis: yAxisIndex,
             data: []
           }
 
@@ -80,7 +88,11 @@ export function reportChart (ChartComponent) {
       })
     })
 
-    const config = {xAxis: {}, series}
+    const config = {yAxis, xAxis: {}, series}
+
+    if (xAxisDimension === 'date') {
+      config.xAxis.type = 'datetime'
+    }
 
     if (categories.length) {
       config.xAxis.categories = uniq(categories)

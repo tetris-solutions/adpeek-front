@@ -183,7 +183,6 @@ const ModuleEdit = React.createClass({
                 {messages.table}
               </option>
             </Select>
-            <hr/>
 
             <ReportChart
               dimensions={dimensions}
