@@ -6,6 +6,7 @@ import reportType from '../propTypes/report'
 import assign from 'lodash/assign'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
+import isEmpty from 'lodash/isEmpty'
 
 const style = csjs`
 .card, .content, .content > div {
@@ -56,15 +57,18 @@ const ReportModule = React.createClass({
     )
   },
   render () {
+    // platform => entity
     const {editMode} = this.state
-    const {id, editable, type, dimensions, entity, filters, reportParams} = this.props
+    const {id, editable, type, metrics, dimensions, entity, filters, reportParams} = this.props
+    const configIsComplete = Boolean(type) && !isEmpty(metrics)
 
     return (
       <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
         <div className={`mdl-card__title mdl-card--expand ${style.content}`}>
           <ReportChart
-            dimensions={dimensions}
             id={id}
+            dimensions={dimensions}
+            metrics={metrics}
             type={type}
             entity={entity}
             filters={filters}
@@ -88,16 +92,17 @@ const ReportModule = React.createClass({
           </div>
         )}
 
-        {editable && (type === null || editMode === true) && (
+        {editable && (!configIsComplete || editMode === true) && (
           <Modal
             size='large'
             provide={['tree', 'messages', 'locales', 'insertCss']}
-            onEscPress={type !== null ? this.closeModal : undefined}>
+            onEscPress={configIsComplete ? this.closeModal : undefined}>
 
             <Edit
               dimensions={dimensions}
               id={id}
               type={type}
+              metrics={metrics}
               entity={entity}
               filters={filters}
               reportParams={reportParams}

@@ -3,6 +3,7 @@ import ReportBuilder from './ReportBuilder'
 import {contextualize} from './higher-order/contextualize'
 import map from 'lodash/map'
 import assign from 'lodash/assign'
+import {loadReportMetaDataAction} from '../actions/load-report-meta-data'
 
 const {PropTypes} = React
 
@@ -12,6 +13,7 @@ const FolderReactBuilder = React.createClass({
     messages: PropTypes.object
   },
   propTypes: {
+    dispatch: PropTypes.func,
     folder: PropTypes.shape({
       campaigns: PropTypes.array,
       account: PropTypes.shape({
@@ -20,6 +22,13 @@ const FolderReactBuilder = React.createClass({
         platform: PropTypes.string
       })
     })
+  },
+  componentDidMount () {
+    this.props.dispatch(
+      loadReportMetaDataAction,
+      this.props.folder.account.platform,
+      'Campaign'
+    )
   },
   render () {
     const reportParams = {

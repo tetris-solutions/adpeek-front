@@ -1,4 +1,5 @@
 import React from 'react'
+import {branch} from 'baobab-react/higher-order'
 import pick from 'lodash/pick'
 import Select from './Select'
 import map from 'lodash/map'
@@ -9,6 +10,7 @@ import Message from '@tetris/front-server/lib/components/intl/Message'
 import includes from 'lodash/includes'
 import reportType from '../propTypes/report'
 import ReportChart from './ReportChart'
+import isEmpty from 'lodash/isEmpty'
 
 const style = csjs`
 .listTitle {
@@ -55,7 +57,7 @@ Li.propTypes = {
   remove: PropTypes.func
 }
 
-const editableFields = ['type', 'dimensions', 'filters']
+const editableFields = ['type', 'dimensions', 'filters', 'metrics']
 
 const ModuleEdit = React.createClass({
   displayName: 'Edit-Module',
@@ -64,11 +66,25 @@ const ModuleEdit = React.createClass({
     messages: PropTypes.object
   },
   propTypes: assign({
+    metaData: PropTypes.shape({
+      metrics: PropTypes.array,
+      dimensions: PropTypes.array,
+      filters: PropTypes.array
+    }),
     cancel: PropTypes.func,
     save: PropTypes.func
   }, reportType),
   getInitialState () {
     return pick(this.props, editableFields)
+  },
+  getDefaultProps () {
+    return {
+      metaData: {
+        metrics: [],
+        dimensions: [],
+        filters: []
+      }
+    }
   },
   onChangeType ({target: {value}}) {
     this.setState({type: value})
@@ -91,18 +107,27 @@ const ModuleEdit = React.createClass({
       })
     })
   },
+  removeItem (name) {
+    return id => this.setState({
+      [name]: this.state[name].filter(i => i !== id)
+    })
+  },
+  addItem (name) {
+    return id => this.setState({
+      [name]: this.state[name].concat([id])
+    })
+  },
   render () {
     const {messages} = this.context
-    const {entity, id, reportParams} = this.props
-    const {type, filters, dimensions} = this.state
-    const canCancel = Boolean(this.props.type)
-    const canSave = Boolean(type)
+    const {metaData, entity, id, reportParams} = this.props
+    const {type, filters, metrics, dimensions} = this.state
+    const canCancel = Boolean(this.props.type) && !isEmpty(this.props.metrics)
+    const canSave = Boolean(type) && !isEmpty(metrics)
 
     return (
       <form onSubmit={this.handleSubmit}>
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--4-col'>
-
             <h5 className={`${style.listTitle}`}>{entity.name}</h5>
             <ul className={`${style.list}`}>
               {map(entity.list, item =>
@@ -112,6 +137,30 @@ const ModuleEdit = React.createClass({
                   remove={this.removeEntity}
                   selected={includes(filters.id, item.id)}
                   key={item.id}/>)}
+            </ul>
+
+            <h5 className={`${style.listTitle}`}>Metrics</h5>
+            <ul className={`${style.list}`}>
+              {map(metaData.metrics, item =>
+                <Li
+                  id={item}
+                  name={item}
+                  add={this.addItem('metrics')}
+                  remove={this.removeItem('metrics')}
+                  selected={includes(metrics, item)}
+                  key={item}/>)}
+            </ul>
+
+            <h5 className={`${style.listTitle}`}>Dimensions</h5>
+            <ul className={`${style.list}`}>
+              {map(metaData.dimensions, item =>
+                <Li
+                  id={item}
+                  name={item}
+                  add={this.addItem('dimensions')}
+                  remove={this.removeItem('dimensions')}
+                  selected={includes(dimensions, item)}
+                  key={item}/>)}
             </ul>
           </div>
 
@@ -140,6 +189,7 @@ const ModuleEdit = React.createClass({
 
             <ReportChart
               dimensions={dimensions}
+              metrics={metrics}
               id={id}
               type={type}
               entity={entity}
@@ -159,4 +209,6 @@ const ModuleEdit = React.createClass({
   }
 })
 
-export default ModuleEdit
+export default branch(({entity, reportParams}) => ({
+  metaData: ['reports', 'metaData', reportParams.platform, entity.id]
+}), ModuleEdit)

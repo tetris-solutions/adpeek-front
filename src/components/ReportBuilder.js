@@ -11,6 +11,7 @@ const {PropTypes} = React
 const getNewModule = () => ({
   id: uuid.v4(),
   type: null,
+  metrics: [],
   dimensions: [],
   filters: {
     id: []
@@ -83,10 +84,10 @@ const ReportBuilder = React.createClass({
           </div>
         </header>
         <div className='mdl-grid'>
-          {map(modules, m => (
-            <div key={m.id} className='mdl-cell mdl-cell--4-col'>
+          {map(modules, module => (
+            <div key={module.id} className='mdl-cell mdl-cell--4-col'>
               <Module
-                {...m}
+                {...module}
                 editable
                 reportParams={reportParams}
                 entity={this.props.entity}

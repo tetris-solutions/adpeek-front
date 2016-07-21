@@ -4,6 +4,7 @@ import {loadReportAction} from '../actions/load-report'
 import reportType from '../propTypes/report'
 import assign from 'lodash/assign'
 import isEqual from 'lodash/isEqual'
+import join from 'lodash/join'
 
 const {PropTypes} = React
 
@@ -46,7 +47,7 @@ const ReportChart = React.createClass({
     if (!props.type) return null
 
     const {
-      /* dimensions, */filters, entity,
+      dimensions, metrics, filters, entity,
       reportParams: {
         ad_account,
         tetris_account,
@@ -63,22 +64,21 @@ const ReportChart = React.createClass({
     if (!ids.length) return null
 
     return {
-      filters: `id(${ids.join('|')})`,
+      filters: `id(${join(ids, '|')})`,
       entity: entity.id,
       ad_account,
       tetris_account,
       platform,
       from,
       to,
-      // @todo use dynamic values
-      dimensions: 'date',
-      metrics: 'clicks'
+      dimensions: join(dimensions, ','),
+      metrics: join(metrics, ',')
     }
   },
   loadReport () {
     const {query} = this.state
 
-    if (typeof window === 'undefined' || !query) return
+    if (typeof window === 'undefined' || !query || !query.metrics.length) return
 
     if (!this.apiPromise) {
       this.apiPromise = Promise.resolve()
@@ -117,5 +117,5 @@ const ReportChart = React.createClass({
 })
 
 export default branch(({id}) => ({
-  result: ['report', id]
+  result: ['reports', 'result', id]
 }), ReportChart)

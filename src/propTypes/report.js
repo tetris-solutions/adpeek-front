@@ -11,6 +11,7 @@ export default {
     'table'
   ]),
   dimensions: PropTypes.arrayOf(PropTypes.string).isRequired,
+  metrics: PropTypes.arrayOf(PropTypes.string).isRequired,
   filters: PropTypes.shape({
     id: PropTypes.arrayOf(PropTypes.string)
   }).isRequired,
