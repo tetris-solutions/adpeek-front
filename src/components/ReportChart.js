@@ -83,7 +83,7 @@ const ReportChart = React.createClass({
     })
 
     this.apiPromise = this.apiPromise
-      .then(makeApiCall)
+      .then(makeApiCall, makeApiCall)
   },
   render () {
     return (
