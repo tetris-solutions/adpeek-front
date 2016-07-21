@@ -90,12 +90,7 @@ const ReportChart = React.createClass({
   render () {
     const Chart = typeComponent[this.props.type]
 
-    return (
-      <div>
-        <h3>{this.props.type}</h3>
-        <Chart {...this.props}/>
-      </div>
-    )
+    return <Chart {...this.props}/>
   }
 })
 
