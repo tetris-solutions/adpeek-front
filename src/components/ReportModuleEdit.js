@@ -175,6 +175,7 @@ const ModuleEdit = React.createClass({
     const canCancel = !isEmpty(this.props.metrics)
     const canSave = !isEmpty(metrics)
     const attributes = filter(metaData.attributes, ({is_dimension, is_metric}) => is_dimension || is_metric)
+    const lastSelectedMetric = metrics.length === 1
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -197,16 +198,16 @@ const ModuleEdit = React.createClass({
             </h5>
 
             <ul className={`${style.list}`}>
-              {map(attributes, ({id, name}) => {
+              {map(attributes, ({id, name, is_metric}) => {
                 const isSelected = includes(metrics, id) || includes(dimensions, id)
                 const add = () => this.addItem(id)
-                const remove = () => () => this.removeItem(id)
+                const remove = () => this.removeItem(id)
 
                 return (
                   <Li
                     id={id}
                     name={name}
-                    fixed={isSelected && metrics.length === 1}
+                    fixed={id === 'id' || (isSelected && is_metric && lastSelectedMetric)}
                     add={add}
                     remove={remove}
                     selected={isSelected}

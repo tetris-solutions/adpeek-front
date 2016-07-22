@@ -24,6 +24,9 @@ const ReportChart = React.createClass({
     result: PropTypes.array,
     query: PropTypes.object,
     dispatch: PropTypes.func,
+    metaData: PropTypes.shape({
+      attributes: PropTypes.object
+    }),
     reportParams: PropTypes.shape({
       ad_account: PropTypes.string,
       tetris_account: PropTypes.string,
@@ -34,7 +37,10 @@ const ReportChart = React.createClass({
   }, reportType),
   getDefaultProps () {
     return {
-      result: []
+      result: [],
+      metaData: {
+        attributes: {}
+      }
     }
   },
   getInitialState () {
@@ -83,14 +89,15 @@ const ReportChart = React.createClass({
   },
   render () {
     const localQuery = this.state.query
-    const {type, result, entity, query} = this.props
+    const {type, result, entity, query, metaData: {attributes}} = this.props
     const Chart = typeComponent[type]
 
-    return <Chart entity={entity} result={result} query={query || localQuery}/>
+    return <Chart attributes={attributes} entity={entity} result={result} query={query || localQuery}/>
   }
 })
 
-export default branch(({id}) => ({
+export default branch(({id, reportParams, entity}) => ({
+  metaData: ['reports', 'metaData', reportParams.platform, entity.id],
   result: ['reports', 'modules', id, 'data'],
   query: ['reports', 'modules', id, 'query']
 }), ReportChart)

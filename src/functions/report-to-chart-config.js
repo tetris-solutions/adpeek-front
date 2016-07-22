@@ -12,7 +12,7 @@ import isString from 'lodash/isString'
 import uniq from 'lodash/uniq'
 import omit from 'lodash/omit'
 
-export function reportToChartConfig (type, {query: {metrics, dimensions}, result, entity}) {
+export function reportToChartConfig (type, {query: {metrics, dimensions}, result, entity, attributes}) {
   const yAxis = map(metrics, (metric, index) => ({
     title: {
       text: metric
@@ -51,13 +51,24 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
       }
     }
 
+    function formatAttrName (val, key) {
+      if (key === 'metric') {
+        return attributes[val].name
+      }
+
+      const name = attributes[key] ? attributes[key].name : key
+
+      return `${name}: ${val}`
+    }
+
     function metricIterator (metric, yAxisIndex) {
       const selector = assign({metric}, pointDimensions)
 
       let seriesConfig = find(series, s => isEqual(s.selector, selector))
 
       if (!seriesConfig) {
-        const descriptors = map(selector, (val, key) => `${key}(${val})`)
+        const descriptors = map(selector,
+          (val, key) => `${key}(${val})`)
 
         seriesConfig = {
           type,
@@ -72,12 +83,11 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
           referenceEntity = referenceEntity || getRefEntity()
 
           if (referenceEntity) {
-            const nameParts = map(omit(selector, 'id'),
-              (val, key) => `${key}: ${val}`)
+            const nameParts = map(omit(selector, 'id'), formatAttrName)
 
             nameParts.unshift(referenceEntity.name)
 
-            seriesConfig.name = join(nameParts, ' - ')
+            seriesConfig.name = join(nameParts, ', ')
           }
         }
 
