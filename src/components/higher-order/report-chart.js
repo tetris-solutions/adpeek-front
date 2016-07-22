@@ -16,7 +16,7 @@ import omit from 'lodash/omit'
 const {PropTypes} = React
 
 export function reportChart (ChartComponent) {
-  function ReportChart ({dimensions, result, metrics, entity, type}) {
+  function ReportChart ({query: {metrics, dimensions}, result, entity, type}) {
     const yAxis = map(metrics, (metric, index) => ({
       title: {
         text: metric
@@ -103,7 +103,11 @@ export function reportChart (ChartComponent) {
       })
     })
 
-    const config = {yAxis, xAxis: {}, series}
+    const config = {
+      credits: {enabled: false},
+      yAxis, xAxis: {},
+      series
+    }
 
     if (xAxisDimension === 'date') {
       config.xAxis.type = 'datetime'
@@ -119,9 +123,11 @@ export function reportChart (ChartComponent) {
   ReportChart.displayName = `Report(${ChartComponent.displayName})`
   ReportChart.propTypes = {
     type: PropTypes.string,
-    dimensions: PropTypes.array,
     result: PropTypes.array,
-    metrics: PropTypes.array,
+    query: PropTypes.shape({
+      dimensions: PropTypes.array,
+      metrics: PropTypes.array
+    }),
     entity: PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string,

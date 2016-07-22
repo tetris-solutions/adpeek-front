@@ -83,7 +83,7 @@ const ReportChart = React.createClass({
   render () {
     const Chart = typeComponent[this.props.type]
 
-    return <Chart {...this.props}/>
+    return <Chart {...this.props} query={this.state.query}/>
   }
 })
 

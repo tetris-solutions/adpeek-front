@@ -39,7 +39,7 @@ const style = csjs`
 
 const {PropTypes} = React
 
-const Li = ({id, name, selected, add, remove, fixed}) => {
+function Li ({id, name, selected, add, remove, fixed}) {
   const onClick = selected
     ? () => remove(id)
     : () => add(id)
@@ -68,12 +68,37 @@ Li.propTypes = {
 
 const editableFields = ['type', 'dimensions', 'filters', 'metrics']
 
+function TypeSelect ({onChange, value}, {messages}) {
+  return (
+    <Select label='moduleType' name='type' onChange={onChange} value={value}>
+      <option value='column'>
+        {messages.columnChart}
+      </option>
+      <option value='line'>
+        {messages.lineChart}
+      </option>
+      <option value='pie'>
+        {messages.pieChart}
+      </option>
+      <option value='table'>
+        {messages.table}
+      </option>
+    </Select>
+  )
+}
+
+TypeSelect.displayName = 'Type-Select'
+TypeSelect.contextTypes = {
+  messages: PropTypes.object
+}
+TypeSelect.propTypes = {
+  onChange: PropTypes.func,
+  value: PropTypes.string
+}
+
 const ModuleEdit = React.createClass({
   displayName: 'Edit-Module',
   mixins: [styled(style)],
-  contextTypes: {
-    messages: PropTypes.object
-  },
   propTypes: assign({
     metaData: PropTypes.shape({
       metrics: PropTypes.array,
@@ -133,7 +158,6 @@ const ModuleEdit = React.createClass({
     })
   },
   render () {
-    const {messages} = this.context
     const {metaData, entity, id, reportParams} = this.props
     const {type, filters, metrics, dimensions} = this.state
     const canCancel = !isEmpty(this.props.metrics)
@@ -145,26 +169,20 @@ const ModuleEdit = React.createClass({
           <div className='mdl-cell mdl-cell--4-col'>
             <h5 className={`${style.listTitle}`}>{entity.name}</h5>
             <ul className={`${style.list}`}>
-              {map(entity.list, item => {
-                const isSelected = includes(filters.id, item.id)
-
-                return (
-                  <Li
-                    {...item}
-                    add={this.addEntity}
-                    fixed={isSelected && filters.id.length === 1}
-                    remove={this.removeEntity}
-                    selected={isSelected}
-                    key={item.id}/>
-                )
-              })}
+              {map(entity.list, item => (
+                <Li
+                  {...item}
+                  add={this.addEntity}
+                  remove={this.removeEntity}
+                  selected={includes(filters.id, item.id)}
+                  key={item.id}/>
+              ))}
             </ul>
 
             <h5 className={`${style.listTitle}`}>Metrics</h5>
             <ul className={`${style.list}`}>
               {map(metaData.metrics, item => {
                 const isSelected = includes(metrics, item)
-
                 return (
                   <Li
                     id={item}
@@ -197,24 +215,7 @@ const ModuleEdit = React.createClass({
           </div>
 
           <div className='mdl-cell mdl-cell--8-col'>
-            <Select
-              label='moduleType'
-              name='type'
-              onChange={this.onChangeType}
-              value={type || ''}>
-              <option value='column'>
-                {messages.columnChart}
-              </option>
-              <option value='line'>
-                {messages.lineChart}
-              </option>
-              <option value='pie'>
-                {messages.pieChart}
-              </option>
-              <option value='table'>
-                {messages.table}
-              </option>
-            </Select>
+            <TypeSelect onChange={this.onChangeType} value={type || ''}/>
 
             <ReportChart
               dimensions={dimensions}
@@ -230,6 +231,7 @@ const ModuleEdit = React.createClass({
         <a className='mdl-button' disabled={!canCancel} onClick={canCancel ? this.props.cancel : undefined}>
           <Message>cancel</Message>
         </a>
+
         <button className='mdl-button' disabled={!canSave}>
           <Message>save</Message>
         </button>

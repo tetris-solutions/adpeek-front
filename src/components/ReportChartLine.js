@@ -5,6 +5,9 @@ import Chart from './Highcharts'
 const {PropTypes} = React
 
 function ChartLine ({config}) {
+  config.tooltip = {
+    shared: true
+  }
   return <Chart config={config}/>
 }
 
