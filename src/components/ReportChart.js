@@ -22,7 +22,6 @@ const ReportChart = React.createClass({
   displayName: 'Report-Chart',
   propTypes: assign({
     result: PropTypes.array,
-    query: PropTypes.object,
     dispatch: PropTypes.func,
     reportParams: PropTypes.shape({
       ad_account: PropTypes.string,
@@ -89,6 +88,5 @@ const ReportChart = React.createClass({
 })
 
 export default branch(({id}) => ({
-  result: ['reports', 'modules', id, 'data'],
-  query: ['reports', 'modules', id, 'query']
+  result: ['reports', 'modules', id, 'data']
 }), ReportChart)
