@@ -1,16 +1,15 @@
 import React from 'react'
-import {reportChart} from './higher-order/report-chart'
 import Chart from './Highcharts'
+import {reportToChartConfig} from '../functions/report-to-chart-config'
+import chartType from '../propTypes/report-chart'
 
-const {PropTypes} = React
+function ChartColumn (props) {
+  const config = reportToChartConfig('column', props)
 
-function ChartColumn ({config}) {
   return <Chart config={config}/>
 }
 
-ChartColumn.displayName = 'Chart-Column'
-ChartColumn.propTypes = {
-  config: PropTypes.object
-}
+ChartColumn.displayName = 'Column'
+ChartColumn.propTypes = chartType
 
-export default reportChart(ChartColumn)
+export default ChartColumn

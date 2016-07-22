@@ -17,7 +17,7 @@ const DateRangeModal = ({startDate, endDate, close, onChange}) => (
       endDate={endDate}/>
 
     <button className='mdl-button' onClick={close}>
-      close
+      <Message>close</Message>
     </button>
   </Modal>
 )

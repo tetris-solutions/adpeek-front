@@ -11,6 +11,7 @@ import forEach from 'lodash/forEach'
 import lowerCase from 'lodash/lowerCase'
 import find from 'lodash/find'
 import isEqual from 'lodash/isEqual'
+import merge from 'lodash/merge'
 
 function isUpperCase (letter) {
   return letter !== letter.toLowerCase()
@@ -101,7 +102,7 @@ function parseChildren (child, parent) {
 }
 
 function mapPropsToConfig (props) {
-  if (props.config) return props.config
+  const parentConfig = props.config
   const chart = omit(props, 'tag', 'children', 'className', 'style')
   const config = {isRoot: true}
 
@@ -111,7 +112,7 @@ function mapPropsToConfig (props) {
 
   delete config.isRoot
 
-  return config
+  return merge(config, parentConfig)
 }
 
 export const Chart = createClass({

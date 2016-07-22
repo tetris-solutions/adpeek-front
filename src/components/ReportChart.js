@@ -22,6 +22,7 @@ const ReportChart = React.createClass({
   displayName: 'Report-Chart',
   propTypes: assign({
     result: PropTypes.array,
+    query: PropTypes.object,
     dispatch: PropTypes.func,
     reportParams: PropTypes.shape({
       ad_account: PropTypes.string,
@@ -81,12 +82,15 @@ const ReportChart = React.createClass({
       .then(() => !this.dead && this.setState({isLoading: false}))
   },
   render () {
-    const Chart = typeComponent[this.props.type]
+    const localQuery = this.state.query
+    const {type, result, entity, query} = this.props
+    const Chart = typeComponent[type]
 
-    return <Chart {...this.props} query={this.state.query}/>
+    return <Chart entity={entity} result={result} query={query || localQuery}/>
   }
 })
 
 export default branch(({id}) => ({
-  result: ['reports', 'modules', id, 'data']
+  result: ['reports', 'modules', id, 'data'],
+  query: ['reports', 'modules', id, 'query']
 }), ReportChart)

@@ -65,7 +65,7 @@ module.exports = {
     budgetWithoutCampaigns: '<p>You still did not include any campaign in this budget.</p>',
     newOrderName: '{month}',
     deliveryMethodLabel: 'Delivery method',
-    closeBudget: 'Close',
+    close: 'Close',
 
     calculateBudgetAmountTitle: 'Calculated budget amount',
     calculateAdsetAmountTitle: 'Calculated ad set amount',
@@ -188,7 +188,7 @@ module.exports = {
     budgetWithoutCampaigns: '<p>Você ainda não incluiu nenhuma campanha neste orçamento.</p>',
     newOrderName: 'PI de {month}',
     deliveryMethodLabel: 'Forma de entrega',
-    closeBudget: 'Fechar',
+    close: 'Fechar',
 
     calculateBudgetAmountTitle: 'Calculado valor do orçamento',
     calculateAdsetAmountTitle: 'Calculado orçamento do adset',

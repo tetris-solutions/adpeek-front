@@ -1,19 +1,27 @@
 import React from 'react'
-import {reportChart} from './higher-order/report-chart'
 import Chart from './Highcharts'
+import {reportToChartConfig} from '../functions/report-to-chart-config'
+import chartType from '../propTypes/report-chart'
 
-const {PropTypes} = React
+function ChartLine (props) {
+  const config = reportToChartConfig('line', props)
 
-function ChartLine ({config}) {
-  config.tooltip = {
-    shared: true
-  }
-  return <Chart config={config}/>
+  return (
+    <Chart config={config}>
+      <credits enabled={false}/>
+
+      <plot-options>
+        <line>
+          <marker enabled={false}/>
+        </line>
+      </plot-options>
+
+      <tooltip shared/>
+    </Chart>
+  )
 }
 
-ChartLine.displayName = 'Chart-Line'
-ChartLine.propTypes = {
-  config: PropTypes.object
-}
+ChartLine.displayName = 'Line'
+ChartLine.propTypes = chartType
 
-export default reportChart(ChartLine)
+export default ChartLine

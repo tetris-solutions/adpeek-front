@@ -1,16 +1,15 @@
 import React from 'react'
-import {reportChart} from './higher-order/report-chart'
 import Chart from './Highcharts'
+import {reportToChartConfig} from '../functions/report-to-chart-config'
+import chartType from '../propTypes/report-chart'
 
-const {PropTypes} = React
+function ChartPie (props) {
+  const config = reportToChartConfig('pie', props)
 
-function ChartPie ({config}) {
   return <Chart config={config}/>
 }
 
-ChartPie.displayName = 'Chart-Pie'
-ChartPie.propTypes = {
-  config: PropTypes.object
-}
+ChartPie.displayName = 'Pie'
+ChartPie.propTypes = chartType
 
-export default reportChart(ChartPie)
+export default ChartPie

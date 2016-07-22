@@ -192,7 +192,7 @@ export const BudgetEdit = React.createClass({
             <Message>removeBudget</Message>
           </button>
           <button className='mdl-button mdl-button--colored' onClick={close}>
-            <Message>closeBudget</Message>
+            <Message>close</Message>
           </button>
         </Footer>
       </Card>
