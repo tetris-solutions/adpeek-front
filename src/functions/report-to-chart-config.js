@@ -27,27 +27,39 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
 
   if (xAxisDimension === 'date') {
     result = sortBy(result, xAxisDimension)
-    dimensions = without(dimensions, xAxisDimension)
   }
+
+  dimensions = without(dimensions, xAxisDimension)
 
   const series = []
 
-  function rowIterator (row, index) {
-    const includedDimensions = pick(row, dimensions)
+  function rowIterator (point, index) {
+    const pointDimensions = pick(point, dimensions)
+    const getRefEntity = () => find(entity.list, {id: point.id})
+    let referenceEntity
 
-    if (xAxisDimension !== 'date' && isString(row[xAxisDimension])) {
-      categories.push(row[xAxisDimension])
+    if (xAxisDimension !== 'date') {
+      if (xAxisDimension === 'id') {
+        referenceEntity = getRefEntity()
+
+        categories.push(referenceEntity
+          ? referenceEntity.name
+          : point.id
+        )
+      } else if (isString(point[xAxisDimension])) {
+        categories.push(point[xAxisDimension])
+      }
     }
 
     function metricIterator (metric, yAxisIndex) {
-      const selector = assign({metric}, includedDimensions)
+      const selector = assign({metric}, pointDimensions)
 
-      let pointSeries = find(series, s => isEqual(s.selector, selector))
+      let seriesConfig = find(series, s => isEqual(s.selector, selector))
 
-      if (!pointSeries) {
+      if (!seriesConfig) {
         const descriptors = map(selector, (val, key) => `${key}(${val})`)
 
-        pointSeries = {
+        seriesConfig = {
           type,
           id: join(descriptors, ':'),
           name: join(descriptors, ':'),
@@ -56,33 +68,33 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
           data: []
         }
 
-        if (includedDimensions.id !== undefined) {
-          const refEntity = find(entity.list, {id: includedDimensions.id})
+        if (point.id !== undefined) {
+          referenceEntity = referenceEntity || getRefEntity()
 
-          if (refEntity) {
+          if (referenceEntity) {
             const nameParts = map(omit(selector, 'id'),
               (val, key) => `${key}: ${val}`)
 
-            nameParts.unshift(refEntity.name)
+            nameParts.unshift(referenceEntity.name)
 
-            pointSeries.name = join(nameParts, ' - ')
+            seriesConfig.name = join(nameParts, ' - ')
           }
         }
 
-        series.push(pointSeries)
+        series.push(seriesConfig)
       }
 
-      const y = Number(row[metric])
-      const point = {
+      const y = Number(point[metric])
+      const pointConfig = {
         id: index,
         y: isNaN(y) ? null : y
       }
 
       if (xAxisDimension === 'date') {
-        point.x = new Date(row.date).getTime()
+        pointConfig.x = new Date(point.date).getTime()
       }
 
-      pointSeries.data.push(point)
+      seriesConfig.data.push(pointConfig)
     }
 
     forEach(metrics, metricIterator)
