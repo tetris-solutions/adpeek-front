@@ -145,25 +145,37 @@ const ModuleEdit = React.createClass({
           <div className='mdl-cell mdl-cell--4-col'>
             <h5 className={`${style.listTitle}`}>{entity.name}</h5>
             <ul className={`${style.list}`}>
-              {map(entity.list, item =>
-                <Li
-                  {...item}
-                  add={this.addEntity}
-                  remove={this.removeEntity}
-                  selected={includes(filters.id, item.id)}
-                  key={item.id}/>)}
+              {map(entity.list, item => {
+                const isSelected = includes(filters.id, item.id)
+
+                return (
+                  <Li
+                    {...item}
+                    add={this.addEntity}
+                    fixed={isSelected && filters.id.length === 1}
+                    remove={this.removeEntity}
+                    selected={isSelected}
+                    key={item.id}/>
+                )
+              })}
             </ul>
 
             <h5 className={`${style.listTitle}`}>Metrics</h5>
             <ul className={`${style.list}`}>
-              {map(metaData.metrics, item =>
-                <Li
-                  id={item}
-                  name={item}
-                  add={this.addItem('metrics')}
-                  remove={this.removeItem('metrics')}
-                  selected={includes(metrics, item)}
-                  key={item}/>)}
+              {map(metaData.metrics, item => {
+                const isSelected = includes(metrics, item)
+
+                return (
+                  <Li
+                    id={item}
+                    name={item}
+                    fixed={isSelected && metrics.length === 1}
+                    add={this.addItem('metrics')}
+                    remove={this.removeItem('metrics')}
+                    selected={isSelected}
+                    key={item}/>
+                )
+              })}
             </ul>
 
             <h5 className={`${style.listTitle}`}>Dimensions</h5>

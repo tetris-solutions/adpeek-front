@@ -6,6 +6,7 @@ import queryString from 'query-string'
 import join from 'lodash/join'
 import assign from 'lodash/assign'
 import map from 'lodash/map'
+import isEqual from 'lodash/isEqual'
 
 function loadReport (query, config) {
   query = assign({}, query)
@@ -23,8 +24,12 @@ function loadReport (query, config) {
   return GET(`${process.env.NUMBERS_API_URL}?${queryString.stringify(query)}`, config)
 }
 
-export function loadReportAction (tree, id, query, token) {
+function action (tree, id, query, token) {
   const moduleCursor = tree.select(['reports', 'modules', id])
+
+  if (isEqual(query, moduleCursor.get('query'))) {
+    return Promise.resolve()
+  }
 
   return loadReport(query, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
@@ -37,3 +42,19 @@ export function loadReportAction (tree, id, query, token) {
     })
     .catch(pushResponseErrorToState(tree))
 }
+
+function preventRace (fn) {
+  let lock = Promise.resolve()
+
+  function single (...args) {
+    const fire = () => fn(...args)
+
+    lock = lock.then(fire, fire)
+
+    return lock
+  }
+
+  return single
+}
+
+export const loadReportAction = preventRace(action)

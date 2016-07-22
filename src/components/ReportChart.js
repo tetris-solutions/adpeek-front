@@ -37,14 +37,26 @@ const ReportChart = React.createClass({
       result: []
     }
   },
+  getInitialState () {
+    return {
+      query: this.getChartQuery()
+    }
+  },
   componentDidMount () {
     this.loadReport()
   },
-  componentDidUpdate () {
-    this.loadReport()
+  componentWillReceiveProps (nextProps) {
+    const query = this.getChartQuery(nextProps)
+
+    if (!isEqual(query, this.state.query)) {
+      this.setState({query}, this.loadReport)
+    }
   },
-  getChartQuery () {
-    const {props} = this
+  componentWillUnmount () {
+    this.dead = true
+  },
+  getChartQuery (props) {
+    props = props || this.props
     const {entity} = props
     const filters = assign({}, props.filters)
 
@@ -58,34 +70,16 @@ const ReportChart = React.createClass({
     )
   },
   loadReport () {
-    const query = this.getChartQuery()
+    const {query} = this.state
 
     if (!isvalidReportQuery(query)) return
-    if (isEqual(query, this.props.query)) return
 
-    if (!this.apiPromise) {
-      this.apiPromise = Promise.resolve()
-    }
+    const {dispatch, id} = this.props
 
-    const myCall = this.lastCall = Date.now()
-    const skipIfNotLatestCall = fn => () => {
-      if (this.lastCall === myCall) {
-        return fn()
-      }
-    }
+    this.setState({isLoading: true})
 
-    const onDoneLoading = skipIfNotLatestCall(() =>
-      this.setState({isLoading: false}))
-
-    const makeApiCall = skipIfNotLatestCall(() => {
-      this.setState({isLoading: true})
-
-      return this.props.dispatch(loadReportAction, this.props.id, query)
-        .then(onDoneLoading)
-    })
-
-    this.apiPromise = this.apiPromise
-      .then(makeApiCall, makeApiCall)
+    dispatch(loadReportAction, id, query)
+      .then(() => !this.dead && this.setState({isLoading: false}))
   },
   render () {
     const Chart = typeComponent[this.props.type]
