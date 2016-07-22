@@ -12,6 +12,7 @@ import lowerCase from 'lodash/lowerCase'
 import find from 'lodash/find'
 import isEqual from 'lodash/isEqual'
 import merge from 'lodash/merge'
+import cloneDeep from 'lodash/cloneDeep'
 
 function isUpperCase (letter) {
   return letter !== letter.toLowerCase()
@@ -102,8 +103,9 @@ function parseChildren (child, parent) {
 }
 
 function mapPropsToConfig (props) {
+  props = cloneDeep(props)
   const parentConfig = props.config
-  const chart = omit(props, 'tag', 'children', 'className', 'style')
+  const chart = omit(props, 'config', 'tag', 'children', 'className', 'style')
   const config = {isRoot: true}
 
   if (!isEmpty(chart)) config.chart = chart
@@ -137,7 +139,10 @@ export const Chart = createClass({
     this.draw()
   },
   draw () {
-    this.chart = Highcharts.chart(this.refs.container, this.state.config)
+    this.chart = Highcharts.chart(
+      this.refs.container,
+      cloneDeep(this.state.config)
+    )
   },
   componentWillReceiveProps (props) {
     const newConfig = mapPropsToConfig(props)
