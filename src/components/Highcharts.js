@@ -13,6 +13,7 @@ import find from 'lodash/find'
 import isEqual from 'lodash/isEqual'
 import merge from 'lodash/merge'
 import cloneDeep from 'lodash/cloneDeep'
+import diff from 'lodash/differenceWith'
 
 function isUpperCase (letter) {
   return letter !== letter.toLowerCase()
@@ -117,6 +118,12 @@ function mapPropsToConfig (props) {
   return merge(config, parentConfig)
 }
 
+const isSameSeries = (chartSeries, updated) => chartSeries.options.id === updated.id
+const doNotRedraw = false
+function removeSeries (series) {
+  series.remove(doNotRedraw)
+}
+
 export const Chart = createClass({
   displayName: 'Highcharts',
   propTypes: {
@@ -144,6 +151,15 @@ export const Chart = createClass({
       cloneDeep(this.state.config)
     )
   },
+  updateSeries (series) {
+    const oldSeries = find(this.chart.series, ['options.id', series.id])
+
+    if (!oldSeries) {
+      return this.chart.addSeries(series, doNotRedraw)
+    }
+
+    oldSeries.setData(series.data, doNotRedraw)
+  },
   componentWillReceiveProps (props) {
     const newConfig = mapPropsToConfig(props)
 
@@ -162,15 +178,12 @@ export const Chart = createClass({
     } else {
       this.setState({config: newConfig})
 
-      forEach(newConfig.series, series => {
-        const oldSerie = find(this.chart.series, ['options.id', series.id])
+      const removed = diff(this.chart.series, newConfig.series, isSameSeries)
 
-        if (!oldSerie) {
-          return this.chart.addSeries(series)
-        }
+      forEach(removed, removeSeries)
+      forEach(newConfig.series, this.updateSeries)
 
-        oldSerie.setData(series.data)
-      })
+      this.chart.redraw()
     }
   },
   shouldComponentUpdate () {
