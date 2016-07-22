@@ -11,6 +11,8 @@ import includes from 'lodash/includes'
 import reportType from '../propTypes/report'
 import ReportChart from './ReportChart'
 import isEmpty from 'lodash/isEmpty'
+import filter from 'lodash/filter'
+import find from 'lodash/find'
 
 const style = csjs`
 .listTitle {
@@ -147,21 +149,32 @@ const ModuleEdit = React.createClass({
       })
     })
   },
-  removeItem (name) {
-    return id => this.setState({
-      [name]: this.state[name].filter(i => i !== id)
-    })
+  removeItem (id) {
+    const attribute = find(this.props.metaData.attributes, {id})
+    if (attribute.is_dimension) {
+      this.setState({dimensions: this.state.dimensions.filter(i => i !== id)})
+    }
+
+    if (attribute.is_metric) {
+      this.setState({metrics: this.state.metrics.filter(i => i !== id)})
+    }
   },
-  addItem (name) {
-    return id => this.setState({
-      [name]: this.state[name].concat([id])
-    })
+  addItem (id) {
+    const attribute = find(this.props.metaData.attributes, {id})
+    if (attribute.is_dimension) {
+      this.setState({dimensions: this.state.dimensions.concat([id])})
+    }
+
+    if (attribute.is_metric) {
+      this.setState({metrics: this.state.metrics.concat([id])})
+    }
   },
   render () {
     const {metaData, entity, id, reportParams} = this.props
     const {type, filters, metrics, dimensions} = this.state
     const canCancel = !isEmpty(this.props.metrics)
     const canSave = !isEmpty(metrics)
+    const attributes = filter(metaData.attributes, ({is_dimension, is_metric}) => is_dimension || is_metric)
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -179,36 +192,25 @@ const ModuleEdit = React.createClass({
               ))}
             </ul>
 
-            <h5 className={`${style.listTitle}`}>Metrics</h5>
-            <ul className={`${style.list}`}>
-              {map(metaData.metrics, item => {
-                const isSelected = includes(metrics, item)
-                return (
-                  <Li
-                    id={item}
-                    name={item}
-                    fixed={isSelected && metrics.length === 1}
-                    add={this.addItem('metrics')}
-                    remove={this.removeItem('metrics')}
-                    selected={isSelected}
-                    key={item}/>
-                )
-              })}
-            </ul>
+            <h5 className={`${style.listTitle}`}>
+              <Message>reportAttributes</Message>
+            </h5>
 
-            <h5 className={`${style.listTitle}`}>Dimensions</h5>
             <ul className={`${style.list}`}>
-              {map(metaData.dimensions, item => {
-                const fixed = item === 'id' && entity.id === 'Campaign'
+              {map(attributes, ({id, name}) => {
+                const isSelected = includes(metrics, id) || includes(dimensions, id)
+                const add = () => this.addItem(id)
+                const remove = () => () => this.removeItem(id)
+
                 return (
                   <Li
-                    id={item}
-                    name={item}
-                    fixed={fixed}
-                    add={this.addItem('dimensions')}
-                    remove={this.removeItem('dimensions')}
-                    selected={includes(dimensions, item)}
-                    key={item}/>
+                    id={id}
+                    name={name}
+                    fixed={isSelected && metrics.length === 1}
+                    add={add}
+                    remove={remove}
+                    selected={isSelected}
+                    key={id}/>
                 )
               })}
             </ul>
