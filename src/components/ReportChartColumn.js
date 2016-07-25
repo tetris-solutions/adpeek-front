@@ -6,7 +6,11 @@ import chartType from '../propTypes/report-chart'
 function ChartColumn (props) {
   const config = reportToChartConfig('column', props)
 
-  return <Chart config={config}/>
+  return (
+    <Chart config={config}>
+      <credits enabled={false}/>
+    </Chart>
+  )
 }
 
 ChartColumn.displayName = 'Column'

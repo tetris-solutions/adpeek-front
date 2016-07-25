@@ -6,7 +6,16 @@ import chartType from '../propTypes/report-chart'
 function ChartPie (props) {
   const config = reportToChartConfig('pie', props)
 
-  return <Chart config={config}/>
+  return (
+    <Chart config={config}>
+      <credits enabled={false}/>
+      <plot-options>
+        <pie>
+          <data-labels enabled={false}/>
+        </pie>
+      </plot-options>
+    </Chart>
+  )
 }
 
 ChartPie.displayName = 'Pie'

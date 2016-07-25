@@ -64,7 +64,11 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
     function metricIterator (metric, yAxisIndex) {
       const selector = assign({metric}, pointDimensions)
 
-      let seriesConfig = find(series, s => isEqual(s.selector, selector))
+      let seriesConfig = type === 'pie'
+        ? series[0]
+        : find(series, s => isEqual(s.selector, selector))
+
+      // @todo when pie type, use selector to group and name points instead of series
 
       if (!seriesConfig) {
         const descriptors = map(selector,
@@ -113,6 +117,9 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
   forEach(result, rowIterator)
 
   const config = {
+    title: {
+      text: null
+    },
     yAxis, xAxis: {},
     series
   }

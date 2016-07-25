@@ -10,6 +10,18 @@ import Line from './ReportChartLine'
 import Column from './ReportChartColumn'
 import Pie from './ReportChartPie'
 import isEqual from 'lodash/isEqual'
+import Spinner from './Spinner'
+import {styledFnComponent} from './higher-order/styled-fn-component'
+import csjs from 'csjs'
+
+const style = csjs`
+.wrap {
+  position: absolute;
+  bottom: 1em;
+  right: 1em;
+  width: 40px;
+  height: 40px;
+}`
 
 const typeComponent = {
   line: Line,
@@ -17,6 +29,12 @@ const typeComponent = {
   column: Column
 }
 const {PropTypes} = React
+
+const ChartSpinner = styledFnComponent(() => (
+  <div className={`${style.wrap}`}>
+    <Spinner/>
+  </div>
+), style)
 
 const ReportChart = React.createClass({
   displayName: 'Report-Chart',
@@ -45,6 +63,7 @@ const ReportChart = React.createClass({
   },
   getInitialState () {
     return {
+      isLoading: false,
       query: this.getChartQuery()
     }
   },
@@ -92,7 +111,17 @@ const ReportChart = React.createClass({
     const {type, result, entity, query, metaData: {attributes}} = this.props
     const Chart = typeComponent[type]
 
-    return <Chart attributes={attributes} entity={entity} result={result} query={query || localQuery}/>
+    return (
+      <div>
+        <Chart
+          attributes={attributes}
+          entity={entity}
+          result={result}
+          query={query || localQuery}/>
+
+        {this.state.isLoading && <ChartSpinner/>}
+      </div>
+    )
   }
 })
 
