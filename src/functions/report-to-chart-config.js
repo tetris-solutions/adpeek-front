@@ -25,7 +25,9 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
     ? 'date'
     : dimensions[0]
 
-  if (xAxisDimension === 'date') {
+  const isDateBased = xAxisDimension === 'date'
+
+  if (isDateBased) {
     result = sortBy(result, xAxisDimension)
   }
 
@@ -38,17 +40,15 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
     const getRefEntity = () => find(entity.list, {id: point.id})
     let referenceEntity
 
-    if (xAxisDimension !== 'date') {
-      if (xAxisDimension === 'id') {
-        referenceEntity = getRefEntity()
+    if (xAxisDimension === 'id') {
+      referenceEntity = getRefEntity()
 
-        categories.push(referenceEntity
-          ? referenceEntity.name
-          : point.id
-        )
-      } else if (isString(point[xAxisDimension])) {
-        categories.push(point[xAxisDimension])
-      }
+      categories.push(referenceEntity
+        ? referenceEntity.name
+        : point.id
+      )
+    } else if (!isDateBased && isString(point[xAxisDimension])) {
+      categories.push(point[xAxisDimension])
     }
 
     function formatAttrName (val, key) {
@@ -100,7 +100,7 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
         y: isNaN(y) ? null : y
       }
 
-      if (xAxisDimension === 'date') {
+      if (isDateBased) {
         pointConfig.x = new Date(point.date).getTime()
       }
 
@@ -117,7 +117,7 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
     series
   }
 
-  if (xAxisDimension === 'date') {
+  if (isDateBased) {
     config.xAxis.type = 'datetime'
   }
 
