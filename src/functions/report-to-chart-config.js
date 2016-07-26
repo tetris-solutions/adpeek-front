@@ -49,43 +49,40 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
 
   function rowIterator (point, index) {
     const pointDimensions = pick(point, dimensions)
-    const getRefEntity = () => find(entity.list, {id: point.id})
 
-    let referenceEntity
+    const referenceEntity = (
+        point.id !== undefined &&
+        find(entity.list, {id: point.id})
+      ) || {
+        id: point.id || index,
+        name: point.id || index
+      }
 
     if (isIdBased) {
-      referenceEntity = getRefEntity()
-
-      categories.push(referenceEntity
-        ? referenceEntity.name
-        : point.id)
+      categories.push(referenceEntity.name)
     } else if (!isDateBased && isString(point[xAxisDimension])) {
       categories.push(point[xAxisDimension])
     }
 
     function metricIterator (metric, yAxisIndex) {
-      const selector = assign({metric}, pointDimensions)
+      const seriesSignature = assign({metric}, pointDimensions)
 
       function getNewSeries () {
-        const descriptors = map(selector, (val, key) => `${key}(${val})`)
+        const descriptors = map(seriesSignature, (val, key) => `${key}(${val})`)
 
         const newSeries = {
           type,
           id: join(descriptors, ':'),
           name: join(descriptors, ':'),
-          selector,
+          seriesSignature,
           yAxis: yAxisIndex,
           data: []
         }
 
-        const nameParts = map(omit(selector, 'id'), getSeriesAttributeName)
+        const nameParts = map(omit(seriesSignature, 'id'), getSeriesAttributeName)
 
-        if (selector.id !== undefined) {
-          referenceEntity = referenceEntity || getRefEntity()
-
-          if (referenceEntity) {
-            nameParts.unshift(referenceEntity.name)
-          }
+        if (seriesSignature.id !== undefined) {
+          nameParts.unshift(referenceEntity.name)
         }
 
         if (nameParts.length) {
@@ -97,9 +94,7 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
 
       let seriesConfig = type === 'pie'
         ? series[0] // always one series
-        : find(series, s => isEqual(s.selector, selector))
-
-      // @todo when pie type, use selector to group and name points instead of series
+        : find(series, s => isEqual(s.seriesSignature, seriesSignature))
 
       if (!seriesConfig) {
         seriesConfig = getNewSeries()
@@ -110,6 +105,10 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
       const pointConfig = {
         id: index,
         y: isNaN(y) ? null : y
+      }
+
+      if (type === 'pie') {
+        pointConfig.name = isIdBased ? referenceEntity.name : point[xAxisDimension]
       }
 
       if (isDateBased) {

@@ -78,13 +78,22 @@ const ModuleEdit = React.createClass({
     }
   },
   addItem (id) {
+    const {type} = this.state
     const attribute = find(this.props.metaData.attributes, {id})
+    const add = type === 'pie'
+      ? (ls, val) => [val]
+      : (ls, val) => ls.concat([val])
+
     if (attribute.is_dimension) {
-      this.setState({dimensions: this.state.dimensions.concat([id])})
+      this.setState({
+        dimensions: add(this.state.dimensions, id)
+      })
     }
 
     if (attribute.is_metric) {
-      this.setState({metrics: this.state.metrics.concat([id])})
+      this.setState({
+        metrics: add(this.state.metrics.concat, id)
+      })
     }
   },
   render () {

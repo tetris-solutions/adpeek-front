@@ -11,7 +11,7 @@ function ChartPie (props) {
       <title>{props.name}</title>
       <credits enabled={false}/>
       <plot-options>
-        <pie>
+        <pie allowPointSelect showInLegend>
           <data-labels enabled={false}/>
         </pie>
       </plot-options>
