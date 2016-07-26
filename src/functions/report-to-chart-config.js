@@ -21,11 +21,17 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
   }))
 
   const categories = []
-  const xAxisDimension = includes(dimensions, 'date')
-    ? 'date'
-    : dimensions[0]
+  let xAxisDimension, isDateBased, isIdBased
 
-  const isDateBased = xAxisDimension === 'date'
+  if (includes(dimensions, 'date')) {
+    xAxisDimension = 'date'
+    isDateBased = true
+  } else if (includes(dimensions, 'id')) {
+    xAxisDimension = 'id'
+    isIdBased = true
+  } else {
+    xAxisDimension = dimensions[0] || null
+  }
 
   if (isDateBased) {
     result = sortBy(result, xAxisDimension)
@@ -40,13 +46,12 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
     const getRefEntity = () => find(entity.list, {id: point.id})
     let referenceEntity
 
-    if (xAxisDimension === 'id') {
+    if (isIdBased) {
       referenceEntity = getRefEntity()
 
       categories.push(referenceEntity
         ? referenceEntity.name
-        : point.id
-      )
+        : point.id)
     } else if (!isDateBased && isString(point[xAxisDimension])) {
       categories.push(point[xAxisDimension])
     }
@@ -64,17 +69,10 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
     function metricIterator (metric, yAxisIndex) {
       const selector = assign({metric}, pointDimensions)
 
-      let seriesConfig = type === 'pie'
-        ? series[0]
-        : find(series, s => isEqual(s.selector, selector))
+      function getNewSeries () {
+        const descriptors = map(selector, (val, key) => `${key}(${val})`)
 
-      // @todo when pie type, use selector to group and name points instead of series
-
-      if (!seriesConfig) {
-        const descriptors = map(selector,
-          (val, key) => `${key}(${val})`)
-
-        seriesConfig = {
+        const newSeries = {
           type,
           id: join(descriptors, ':'),
           name: join(descriptors, ':'),
@@ -83,18 +81,31 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
           data: []
         }
 
-        if (point.id !== undefined) {
+        const nameParts = map(omit(selector, 'id'), formatAttrName)
+
+        if (selector.id !== undefined) {
           referenceEntity = referenceEntity || getRefEntity()
 
           if (referenceEntity) {
-            const nameParts = map(omit(selector, 'id'), formatAttrName)
-
             nameParts.unshift(referenceEntity.name)
-
-            seriesConfig.name = join(nameParts, ', ')
           }
         }
 
+        newSeries.name = nameParts.length
+          ? nameParts.join(', ')
+          : `# ${series.length + 1}`
+
+        return newSeries
+      }
+
+      let seriesConfig = type === 'pie'
+        ? series[0] // always one series
+        : find(series, s => isEqual(s.selector, selector))
+
+      // @todo when pie type, use selector to group and name points instead of series
+
+      if (!seriesConfig) {
+        seriesConfig = getNewSeries()
         series.push(seriesConfig)
       }
 
