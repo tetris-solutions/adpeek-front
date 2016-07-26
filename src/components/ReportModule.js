@@ -26,7 +26,7 @@ const ReportModule = React.createClass({
   },
   getInitialState () {
     return {
-      editMode: false
+      editMode: isEmpty(this.props.module.metrics)
     }
   },
   propTypes: {
@@ -56,7 +56,6 @@ const ReportModule = React.createClass({
   render () {
     const {editMode} = this.state
     const {module, editable, entity, reportParams} = this.props
-    const configIsComplete = !isEmpty(module.metrics)
 
     return (
       <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
@@ -84,11 +83,11 @@ const ReportModule = React.createClass({
           </div>
         )}
 
-        {editable && (!configIsComplete || editMode === true) && (
+        {editable && editMode === true && (
           <Modal
             size='large'
             provide={['tree', 'messages', 'locales', 'insertCss']}
-            onEscPress={configIsComplete ? this.closeModal : undefined}>
+            onEscPress={this.closeModal}>
 
             <Edit
               module={module}

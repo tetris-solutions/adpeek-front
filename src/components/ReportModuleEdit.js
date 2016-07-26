@@ -208,7 +208,6 @@ const ModuleEdit = React.createClass({
   render () {
     const {metaData, entity, module, reportParams} = this.props
     const {name, type, filters, metrics, dimensions} = this.state
-    const canCancel = !isEmpty(module.metrics)
     const canSave = !isEmpty(metrics)
     const updatedModule = assign({}, module, pick(this.state, editableFields))
 
@@ -270,7 +269,7 @@ const ModuleEdit = React.createClass({
           </div>
         </div>
 
-        <a className='mdl-button' disabled={!canCancel} onClick={canCancel ? this.props.cancel : undefined}>
+        <a className='mdl-button' onClick={this.props.cancel}>
           <Message>cancel</Message>
         </a>
 
