@@ -2,8 +2,9 @@ import React from 'react'
 import Edit from './ReportModuleEdit'
 import Modal from './Modal'
 import ReportChart from './ReportChart'
-import reportType from '../propTypes/report'
-import assign from 'lodash/assign'
+import reportParamsType from '../propTypes/report-params'
+import reportModuleType from '../propTypes/report-module'
+import reportEntityType from '../propTypes/report-entity'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
 import isEmpty from 'lodash/isEmpty'
@@ -28,18 +29,14 @@ const ReportModule = React.createClass({
       editMode: false
     }
   },
-  propTypes: assign({
+  propTypes: {
     editable: PropTypes.bool,
     remove: PropTypes.func,
     update: PropTypes.func,
-    reportParams: PropTypes.shape({
-      ad_account: PropTypes.string,
-      tetris_account: PropTypes.string,
-      platform: PropTypes.string,
-      from: PropTypes.string,
-      to: PropTypes.string
-    })
-  }, reportType),
+    module: reportModuleType,
+    entity: reportEntityType,
+    reportParams: reportParamsType
+  },
   openModal () {
     this.setState({editMode: true})
   },
@@ -47,30 +44,26 @@ const ReportModule = React.createClass({
     this.setState({editMode: false})
   },
   remove () {
-    this.props.remove(this.props.id)
+    this.props.remove(this.props.module.id)
   },
   save (updatedModule) {
     this.closeModal()
     this.props.update(
-      this.props.id,
+      this.props.module.id,
       updatedModule
     )
   },
   render () {
     const {editMode} = this.state
-    const {id, editable, type, metrics, dimensions, entity, filters, reportParams} = this.props
-    const configIsComplete = !isEmpty(metrics)
+    const {module, editable, entity, reportParams} = this.props
+    const configIsComplete = !isEmpty(module.metrics)
 
     return (
       <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
         <div className={`mdl-card__title mdl-card--expand ${style.content}`}>
           <ReportChart
-            id={id}
-            dimensions={dimensions}
-            metrics={metrics}
-            type={type}
+            module={module}
             entity={entity}
-            filters={filters}
             reportParams={reportParams}/>
         </div>
 
@@ -98,12 +91,8 @@ const ReportModule = React.createClass({
             onEscPress={configIsComplete ? this.closeModal : undefined}>
 
             <Edit
-              dimensions={dimensions}
-              id={id}
-              type={type}
-              metrics={metrics}
+              module={module}
               entity={entity}
-              filters={filters}
               reportParams={reportParams}
               save={this.save}
               cancel={this.closeModal}/>

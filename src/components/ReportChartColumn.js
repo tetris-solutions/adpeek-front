@@ -8,6 +8,7 @@ function ChartColumn (props) {
 
   return (
     <Chart config={config}>
+      <title>{props.name}</title>
       <credits enabled={false}/>
     </Chart>
   )

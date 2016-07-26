@@ -123,7 +123,8 @@ module.exports = {
     pieChart: 'Pie chart',
     table: 'Table',
     metrics: 'Metrics',
-    dimensions: 'Dimensions'
+    dimensions: 'Dimensions',
+    module: 'Module'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -248,6 +249,7 @@ module.exports = {
     pieChart: 'Gráfico de pizza',
     table: 'Tabela',
     metrics: 'Métricas',
-    dimensions: 'Dimensões'
+    dimensions: 'Dimensões',
+    module: 'Módulo'
   }
 }

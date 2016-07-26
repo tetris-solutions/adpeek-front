@@ -6,17 +6,9 @@ import map from 'lodash/map'
 import Module from './ReportModule'
 import uuid from 'uuid'
 import assign from 'lodash/assign'
+import size from 'lodash/size'
 
 const {PropTypes} = React
-const getNewModule = () => ({
-  id: uuid.v4(),
-  type: 'line',
-  metrics: [],
-  dimensions: [],
-  filters: {
-    id: []
-  }
-})
 
 const ReportBuilder = React.createClass({
   displayName: 'Report-Builder',
@@ -32,11 +24,32 @@ const ReportBuilder = React.createClass({
       list: PropTypes.array
     }).isRequired
   },
+  contextTypes: {
+    messages: PropTypes.object
+  },
   getInitialState () {
     return {
       startDate: moment().startOf('week').subtract(7, 'days'),
-      endDate: moment().startOf('week').subtract(1, 'days'),
-      modules: [getNewModule()]
+      endDate: moment().startOf('week').subtract(1, 'days')
+    }
+  },
+  componentWillMount () {
+    this.setState({
+      modules: [this.getNewModule()]
+    })
+  },
+  getNewModule () {
+    const {messages} = this.context
+
+    return {
+      id: uuid.v4(),
+      type: 'line',
+      name: messages.module + ' ' + (size(this.state.modules) + 1),
+      metrics: [],
+      dimensions: [],
+      filters: {
+        id: []
+      }
     }
   },
   onChangeRange ({startDate, endDate}) {
@@ -44,7 +57,7 @@ const ReportBuilder = React.createClass({
   },
   addNewModule () {
     this.setState({
-      modules: this.state.modules.concat([getNewModule()])
+      modules: this.state.modules.concat([this.getNewModule()])
     })
   },
   updateModule (id, updatedModule) {
@@ -87,7 +100,7 @@ const ReportBuilder = React.createClass({
           {map(modules, module => (
             <div key={module.id} className='mdl-cell mdl-cell--4-col'>
               <Module
-                {...module}
+                module={module}
                 editable
                 reportParams={reportParams}
                 entity={this.props.entity}

@@ -1,7 +1,9 @@
 import React from 'react'
 import {branch} from 'baobab-react/higher-order'
 import {loadReportAction} from '../actions/load-report'
-import reportType from '../propTypes/report'
+import reportParamsType from '../propTypes/report-params'
+import reportModuleType from '../propTypes/report-module'
+import reportEntityType from '../propTypes/report-entity'
 import assign from 'lodash/assign'
 import {isvalidReportQuery} from '../functions/is-valid-report-query'
 import isEmpty from 'lodash/isEmpty'
@@ -38,21 +40,17 @@ const ChartSpinner = styledFnComponent(() => (
 
 const ReportChart = React.createClass({
   displayName: 'Report-Chart',
-  propTypes: assign({
+  propTypes: {
+    reportParams: reportParamsType,
+    module: reportModuleType,
+    entity: reportEntityType,
     result: PropTypes.array,
     query: PropTypes.object,
     dispatch: PropTypes.func,
     metaData: PropTypes.shape({
       attributes: PropTypes.object
-    }),
-    reportParams: PropTypes.shape({
-      ad_account: PropTypes.string,
-      tetris_account: PropTypes.string,
-      platform: PropTypes.string,
-      from: PropTypes.string,
-      to: PropTypes.string
-    }).isRequired
-  }, reportType),
+    })
+  },
   getDefaultProps () {
     return {
       result: [],
@@ -83,14 +81,14 @@ const ReportChart = React.createClass({
   getChartQuery (props) {
     props = props || this.props
     const {entity} = props
-    const filters = assign({}, props.filters)
+    const filters = assign({}, props.module.filters)
 
     if (isEmpty(filters.id)) {
       filters.id = entity.list.map(({id}) => id)
     }
 
     return assign({filters, entity: entity.id},
-      pick(props, 'dimensions', 'metrics'),
+      pick(props.module, 'dimensions', 'metrics'),
       pick(props.reportParams, 'ad_account', 'tetris_account', 'platform', 'from', 'to')
     )
   },
@@ -99,21 +97,22 @@ const ReportChart = React.createClass({
 
     if (!isvalidReportQuery(query)) return
 
-    const {dispatch, id} = this.props
+    const {dispatch, module} = this.props
 
     this.setState({isLoading: true})
 
-    dispatch(loadReportAction, id, query)
+    dispatch(loadReportAction, module.id, query)
       .then(() => !this.dead && this.setState({isLoading: false}))
   },
   render () {
     const localQuery = this.state.query
-    const {type, result, entity, query, metaData: {attributes}} = this.props
-    const Chart = typeComponent[type]
+    const {module, result, entity, query, metaData: {attributes}} = this.props
+    const Chart = typeComponent[module.type]
 
     return (
       <div>
         <Chart
+          name={module.name}
           attributes={attributes}
           entity={entity}
           result={result}
@@ -125,7 +124,7 @@ const ReportChart = React.createClass({
   }
 })
 
-export default branch(({id, reportParams, entity}) => ({
+export default branch(({module: {id}, reportParams, entity}) => ({
   metaData: ['reports', 'metaData', reportParams.platform, entity.id],
   result: ['reports', 'modules', id, 'data'],
   query: ['reports', 'modules', id, 'query']

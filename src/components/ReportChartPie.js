@@ -8,6 +8,7 @@ function ChartPie (props) {
 
   return (
     <Chart config={config}>
+      <title>{props.name}</title>
       <credits enabled={false}/>
       <plot-options>
         <pie>

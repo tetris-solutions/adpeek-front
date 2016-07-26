@@ -88,9 +88,9 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
           }
         }
 
-        newSeries.name = nameParts.length
-          ? nameParts.join(', ')
-          : `# ${series.length + 1}`
+        if (nameParts.length) {
+          newSeries.name = nameParts.join(', ')
+        }
 
         return newSeries
       }
@@ -125,9 +125,6 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
   forEach(result, rowIterator)
 
   const config = {
-    title: {
-      text: null
-    },
     yAxis, xAxis: {},
     series
   }

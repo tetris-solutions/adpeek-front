@@ -2,13 +2,17 @@ import React from 'react'
 import {branch} from 'baobab-react/higher-order'
 import pick from 'lodash/pick'
 import Select from './Select'
+import Input from './Input'
 import map from 'lodash/map'
 import {styled} from './mixins/styled'
 import csjs from 'csjs'
 import assign from 'lodash/assign'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import includes from 'lodash/includes'
-import reportType from '../propTypes/report'
+import reportParamsType from '../propTypes/report-params'
+import reportModuleType from '../propTypes/report-module'
+import reportEntityType from '../propTypes/report-entity'
+import reportMetaDataType from '../propTypes/report-meta-data'
 import ReportChart from './ReportChart'
 import isEmpty from 'lodash/isEmpty'
 import filter from 'lodash/filter'
@@ -68,7 +72,7 @@ Li.propTypes = {
   remove: PropTypes.func
 }
 
-const editableFields = ['type', 'dimensions', 'filters', 'metrics']
+const editableFields = ['name', 'type', 'dimensions', 'filters', 'metrics']
 
 function TypeSelect ({onChange, value}, {messages}) {
   return (
@@ -105,14 +109,14 @@ function AttributesToggle ({attributes, selectedAttributes, addItem, removeItem}
 
   return (
     <ul className={`${style.list}`}>
-      {map(attributes, ({id, name, is_metric}) => {
+      {map(attributes, ({id, name}) => {
         const isSelected = includes(selectedAttributes, id)
 
         return (
           <Li
             id={id}
             name={name}
-            fixed={id === 'id' || (isSelected && is_metric && lastSelected)}
+            fixed={isSelected && lastSelected}
             add={add(id)}
             remove={remove(id)}
             selected={isSelected}
@@ -134,17 +138,16 @@ AttributesToggle.propTypes = {
 const ModuleEdit = React.createClass({
   displayName: 'Edit-Module',
   mixins: [styled(style)],
-  propTypes: assign({
-    metaData: PropTypes.shape({
-      metrics: PropTypes.array,
-      dimensions: PropTypes.array,
-      filters: PropTypes.array
-    }),
+  propTypes: {
+    reportParams: reportParamsType,
+    module: reportModuleType,
+    entity: reportEntityType,
+    metaData: reportMetaDataType,
     cancel: PropTypes.func,
     save: PropTypes.func
-  }, reportType),
+  },
   getInitialState () {
-    const state = pick(this.props, editableFields)
+    const state = pick(this.props.module, editableFields)
 
     if (isEmpty(state.dimensions) && this.props.entity.id === 'Campaign') {
       state.dimensions = ['id']
@@ -161,8 +164,8 @@ const ModuleEdit = React.createClass({
       }
     }
   },
-  onChangeType ({target: {value}}) {
-    this.setState({type: value})
+  onChangeInput ({target: {name, value}}) {
+    this.setState({[name]: value})
   },
   handleSubmit (e) {
     e.preventDefault()
@@ -203,10 +206,11 @@ const ModuleEdit = React.createClass({
     }
   },
   render () {
-    const {metaData, entity, id, reportParams} = this.props
-    const {type, filters, metrics, dimensions} = this.state
-    const canCancel = !isEmpty(this.props.metrics)
+    const {metaData, entity, module, reportParams} = this.props
+    const {name, type, filters, metrics, dimensions} = this.state
+    const canCancel = !isEmpty(module.metrics)
     const canSave = !isEmpty(metrics)
+    const updatedModule = assign({}, module, pick(this.state, editableFields))
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -246,15 +250,21 @@ const ModuleEdit = React.createClass({
           </div>
 
           <div className='mdl-cell mdl-cell--8-col'>
-            <TypeSelect onChange={this.onChangeType} value={type || ''}/>
+            <div className='mdl-grid'>
+              <div className='mdl-cell mdl-cell--7-col'>
+                <Input
+                  name='name'
+                  value={name}
+                  onChange={this.onChangeInput}/>
+              </div>
+              <div className='mdl-cell mdl-cell--5-col'>
+                <TypeSelect onChange={this.onChangeInput} value={type}/>
+              </div>
+            </div>
 
             <ReportChart
-              dimensions={dimensions}
-              metrics={metrics}
-              id={id}
-              type={type}
+              module={updatedModule}
               entity={entity}
-              filters={filters}
               reportParams={reportParams}/>
           </div>
         </div>
