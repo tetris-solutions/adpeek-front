@@ -25,24 +25,19 @@ const style = csjs`
 }
 .relativeLayer extends .full {
   position: relative;
+  display: flex;
+  vertical-align: middle
 }
 .content {
   position: relative;
   background: white;
   padding: .5em;
       
-  width: 40%;
-  min-width: 300px;
   height: auto;
   min-height: 300px;
   max-height: 80%;
   
-  margin: 0 auto;
-  top: 50%;
-  
-  transform: translateY(-50%);
-  transition: transform 1s ease;
-  
+  margin: auto;
   overflow-x: hidden;
   overflow-y: auto;
 }
