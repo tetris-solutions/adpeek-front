@@ -11,11 +11,17 @@ import assign from 'lodash/assign'
 import isString from 'lodash/isString'
 import uniq from 'lodash/uniq'
 import omit from 'lodash/omit'
+import get from 'lodash/get'
 
 export function reportToChartConfig (type, {query: {metrics, dimensions}, result, entity, attributes}) {
+  const getAttributeName = attr => get(attributes, [attr, 'name'], attr)
+  const getSeriesAttributeName = (val, key) => key === 'metric'
+    ? getAttributeName(val)
+    : `${getAttributeName(key)}: ${val}`
+
   const yAxis = map(metrics, (metric, index) => ({
     title: {
-      text: metric
+      text: getAttributeName(metric)
     },
     opposite: index % 2 !== 0
   }))
@@ -44,6 +50,7 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
   function rowIterator (point, index) {
     const pointDimensions = pick(point, dimensions)
     const getRefEntity = () => find(entity.list, {id: point.id})
+
     let referenceEntity
 
     if (isIdBased) {
@@ -54,16 +61,6 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
         : point.id)
     } else if (!isDateBased && isString(point[xAxisDimension])) {
       categories.push(point[xAxisDimension])
-    }
-
-    function formatAttrName (val, key) {
-      if (key === 'metric') {
-        return attributes[val].name
-      }
-
-      const name = attributes[key] ? attributes[key].name : key
-
-      return `${name}: ${val}`
     }
 
     function metricIterator (metric, yAxisIndex) {
@@ -81,7 +78,7 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
           data: []
         }
 
-        const nameParts = map(omit(selector, 'id'), formatAttrName)
+        const nameParts = map(omit(selector, 'id'), getSeriesAttributeName)
 
         if (selector.id !== undefined) {
           referenceEntity = referenceEntity || getRefEntity()
