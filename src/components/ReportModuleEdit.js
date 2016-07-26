@@ -47,7 +47,21 @@ const ModuleEdit = React.createClass({
     }
   },
   onChangeInput ({target: {name, value}}) {
-    this.setState({[name]: value})
+    const newState = {[name]: value}
+
+    if (name === 'type' && value === 'pie') {
+      const {dimensions, metrics} = this.state
+
+      if (dimensions.length > 1) {
+        newState.dimensions = [dimensions[0]]
+      }
+
+      if (metrics.length > 1) {
+        newState.metrics = [metrics[0]]
+      }
+    }
+
+    this.setState(newState)
   },
   handleSubmit (e) {
     e.preventDefault()
