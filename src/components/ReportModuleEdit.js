@@ -1,14 +1,9 @@
 import React from 'react'
 import {branch} from 'baobab-react/higher-order'
 import pick from 'lodash/pick'
-import Select from './Select'
 import Input from './Input'
-import map from 'lodash/map'
-import {styled} from './mixins/styled'
-import csjs from 'csjs'
 import assign from 'lodash/assign'
 import Message from '@tetris/front-server/lib/components/intl/Message'
-import includes from 'lodash/includes'
 import reportParamsType from '../propTypes/report-params'
 import reportModuleType from '../propTypes/report-module'
 import reportEntityType from '../propTypes/report-entity'
@@ -17,127 +12,14 @@ import ReportChart from './ReportChart'
 import isEmpty from 'lodash/isEmpty'
 import filter from 'lodash/filter'
 import find from 'lodash/find'
-
-const style = csjs`
-.listTitle {
-  margin: .5em .3em .8em 0;
-  color: rgba(0, 0, 0, 0.4)
-}
-.list {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-.item {
-  text-indent: 1em;
-  border-left: 3px solid #e4e4e4;
-  cursor: pointer;
-  line-height: 1.8em;
-  user-select: none
-}
-.fixed {
-  color: #232363
-}
-.selected {
-  border-left: 3px solid #79cbf3;
-  font-weight: bold
-}`
+import TypeSelect from './ReportModuleEditTypeSelect'
+import Attributes from './ReportModuleEditAttributes'
 
 const {PropTypes} = React
-
-function Li ({id, name, selected, add, remove, fixed}) {
-  const onClick = selected
-    ? () => remove(id)
-    : () => add(id)
-
-  const className = `${style.item} ${selected ? style.selected : ''} ${fixed ? style.fixed : ''}`
-
-  return (
-    <li onClick={fixed ? undefined : onClick} className={className}>
-      {name}
-    </li>
-  )
-}
-
-Li.displayName = 'Item'
-Li.defaultProps = {
-  fixed: false
-}
-Li.propTypes = {
-  id: PropTypes.string,
-  name: PropTypes.string,
-  selected: PropTypes.bool,
-  fixed: PropTypes.bool,
-  add: PropTypes.func,
-  remove: PropTypes.func
-}
-
 const editableFields = ['name', 'type', 'dimensions', 'filters', 'metrics']
-
-function TypeSelect ({onChange, value}, {messages}) {
-  return (
-    <Select label='moduleType' name='type' onChange={onChange} value={value}>
-      <option value='column'>
-        {messages.columnChart}
-      </option>
-      <option value='line'>
-        {messages.lineChart}
-      </option>
-      <option value='pie'>
-        {messages.pieChart}
-      </option>
-      <option value='table'>
-        {messages.table}
-      </option>
-    </Select>
-  )
-}
-
-TypeSelect.displayName = 'Type-Select'
-TypeSelect.contextTypes = {
-  messages: PropTypes.object
-}
-TypeSelect.propTypes = {
-  onChange: PropTypes.func,
-  value: PropTypes.string
-}
-
-function AttributesToggle ({attributes, selectedAttributes, addItem, removeItem}) {
-  const lastSelected = selectedAttributes.length === 1
-  const add = id => () => addItem(id)
-  const remove = id => () => removeItem(id)
-
-  return (
-    <ul className={`${style.list}`}>
-      {map(attributes, ({id, name}) => {
-        const isSelected = includes(selectedAttributes, id)
-
-        return (
-          <Li
-            id={id}
-            name={name}
-            fixed={isSelected && lastSelected}
-            add={add(id)}
-            remove={remove(id)}
-            selected={isSelected}
-            key={id}/>
-        )
-      })}
-    </ul>
-  )
-}
-
-AttributesToggle.displayName = 'Attributes-Toggle'
-AttributesToggle.propTypes = {
-  addItem: PropTypes.func.isRequired,
-  removeItem: PropTypes.func.isRequired,
-  attributes: PropTypes.array.isRequired,
-  selectedAttributes: PropTypes.array.isRequired
-}
 
 const ModuleEdit = React.createClass({
   displayName: 'Edit-Module',
-  mixins: [styled(style)],
   propTypes: {
     reportParams: reportParamsType,
     module: reportModuleType,
@@ -215,36 +97,25 @@ const ModuleEdit = React.createClass({
       <form onSubmit={this.handleSubmit}>
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--4-col'>
-            <h5 className={`${style.listTitle}`}>{entity.name}</h5>
-            <ul className={`${style.list}`}>
-              {map(entity.list, item => (
-                <Li
-                  {...item}
-                  add={this.addEntity}
-                  remove={this.removeEntity}
-                  selected={includes(filters.id, item.id)}
-                  key={item.id}/>
-              ))}
-            </ul>
+            <Attributes
+              title={entity.name}
+              attributes={entity.list}
+              selectedAttributes={filters.id}
+              removeItem={this.removeEntity}
+              addItem={this.addEntity}/>
 
-            <h5 className={`${style.listTitle}`}>
-              <Message>metrics</Message>
-            </h5>
-
-            <AttributesToggle
+            <Attributes
+              title={<Message>metrics</Message>}
               attributes={filter(metaData.attributes, 'is_metric')}
               selectedAttributes={metrics}
-              removeItem={this.removeItem}
+              removeItem={metrics.length > 1 ? this.removeItem : undefined}
               addItem={this.addItem}/>
 
-            <h5 className={`${style.listTitle}`}>
-              <Message>dimensions</Message>
-            </h5>
-
-            <AttributesToggle
+            <Attributes
+              title={<Message>dimensions</Message>}
               attributes={filter(metaData.attributes, 'is_dimension')}
               selectedAttributes={dimensions}
-              removeItem={this.removeItem}
+              removeItem={dimensions.length > 1 ? this.removeItem : undefined}
               addItem={this.addItem}/>
           </div>
 
