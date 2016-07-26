@@ -122,7 +122,8 @@ module.exports = {
     columnChart: 'Column chart',
     pieChart: 'Pie chart',
     table: 'Table',
-    reportAttributes: 'Metrics/Dimensions'
+    metrics: 'Metrics',
+    dimensions: 'Dimensions'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -246,6 +247,7 @@ module.exports = {
     columnChart: 'Gráfico em coluna',
     pieChart: 'Gráfico de pizza',
     table: 'Tabela',
-    reportAttributes: 'Métricas/Dimensões'
+    metrics: 'Métricas',
+    dimensions: 'Dimensões'
   }
 }

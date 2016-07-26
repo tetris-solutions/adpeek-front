@@ -98,6 +98,39 @@ TypeSelect.propTypes = {
   value: PropTypes.string
 }
 
+function AttributesToggle ({attributes, selectedAttributes, addItem, removeItem}) {
+  const lastSelected = selectedAttributes.length === 1
+  const add = id => () => addItem(id)
+  const remove = id => () => removeItem(id)
+
+  return (
+    <ul className={`${style.list}`}>
+      {map(attributes, ({id, name, is_metric}) => {
+        const isSelected = includes(selectedAttributes, id)
+
+        return (
+          <Li
+            id={id}
+            name={name}
+            fixed={id === 'id' || (isSelected && is_metric && lastSelected)}
+            add={add(id)}
+            remove={remove(id)}
+            selected={isSelected}
+            key={id}/>
+        )
+      })}
+    </ul>
+  )
+}
+
+AttributesToggle.displayName = 'Attributes-Toggle'
+AttributesToggle.propTypes = {
+  addItem: PropTypes.func.isRequired,
+  removeItem: PropTypes.func.isRequired,
+  attributes: PropTypes.array.isRequired,
+  selectedAttributes: PropTypes.array.isRequired
+}
+
 const ModuleEdit = React.createClass({
   displayName: 'Edit-Module',
   mixins: [styled(style)],
@@ -174,8 +207,6 @@ const ModuleEdit = React.createClass({
     const {type, filters, metrics, dimensions} = this.state
     const canCancel = !isEmpty(this.props.metrics)
     const canSave = !isEmpty(metrics)
-    const attributes = filter(metaData.attributes, ({is_dimension, is_metric}) => is_dimension || is_metric)
-    const lastSelectedMetric = metrics.length === 1
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -194,27 +225,24 @@ const ModuleEdit = React.createClass({
             </ul>
 
             <h5 className={`${style.listTitle}`}>
-              <Message>reportAttributes</Message>
+              <Message>metrics</Message>
             </h5>
 
-            <ul className={`${style.list}`}>
-              {map(attributes, ({id, name, is_metric}) => {
-                const isSelected = includes(metrics, id) || includes(dimensions, id)
-                const add = () => this.addItem(id)
-                const remove = () => this.removeItem(id)
+            <AttributesToggle
+              attributes={filter(metaData.attributes, 'is_metric')}
+              selectedAttributes={metrics}
+              removeItem={this.removeItem}
+              addItem={this.addItem}/>
 
-                return (
-                  <Li
-                    id={id}
-                    name={name}
-                    fixed={id === 'id' || (isSelected && is_metric && lastSelectedMetric)}
-                    add={add}
-                    remove={remove}
-                    selected={isSelected}
-                    key={id}/>
-                )
-              })}
-            </ul>
+            <h5 className={`${style.listTitle}`}>
+              <Message>dimensions</Message>
+            </h5>
+
+            <AttributesToggle
+              attributes={filter(metaData.attributes, 'is_dimension')}
+              selectedAttributes={dimensions}
+              removeItem={this.removeItem}
+              addItem={this.addItem}/>
           </div>
 
           <div className='mdl-cell mdl-cell--8-col'>
