@@ -6,7 +6,7 @@ import includes from 'lodash/includes'
 import {styledFnComponent} from './higher-order/styled-fn-component'
 
 const style = csjs`
-.listTitle {
+.title {
   margin: .5em .3em .8em 0;
   color: rgba(0, 0, 0, 0.4)
 }
@@ -75,7 +75,7 @@ const Attribute = React.createClass({
 
 const Attributes = ({title, attributes, selectedAttributes, addItem, removeItem}) => (
   <div>
-    <h5 className={`${style.listTitle}`}>
+    <h5 className={`${style.title}`}>
       {title}
     </h5>
 
