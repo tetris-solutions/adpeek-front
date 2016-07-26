@@ -254,6 +254,7 @@ const ModuleEdit = React.createClass({
               <div className='mdl-cell mdl-cell--7-col'>
                 <Input
                   name='name'
+                  label='name'
                   value={name}
                   onChange={this.onChangeInput}/>
               </div>
