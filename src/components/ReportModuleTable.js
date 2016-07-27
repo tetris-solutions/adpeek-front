@@ -11,6 +11,13 @@ import stableSort from 'stable'
 import entityType from '../propTypes/report-entity'
 
 const style = csjs`
+.table {
+  width: 100%;
+}
+.title {
+  text-align: center !important;
+  font-size: large !important;
+}
 .icon {
   float: right;
 }`
@@ -39,6 +46,7 @@ const ReportModuleTable = React.createClass({
   displayName: 'Module-Table',
   mixins: [styled(style)],
   propTypes: {
+    name: PropTypes.string,
     entity: entityType,
     attributes: PropTypes.object.isRequired,
     result: PropTypes.array.isRequired
@@ -59,37 +67,36 @@ const ReportModuleTable = React.createClass({
   },
   render () {
     const {sort} = this.state
-    const {result, attributes, entity: {list}} = this.props
-
-    if (!result.length) {
-      return null
-    }
-
+    const {name, result, attributes, entity: {list}} = this.props
     const headers = map(result[0], this.getHeaderName)
-    const sorter = flow(map(sort, sortWith))
-    const getName = memoize(id => get(find(list, {id}), 'name', id))
-    const rows = sorter(map(result, row => {
-      const parsed = {}
+    let tbody = null
+    let colHeaders = null
 
-      forEach(headers, ({value}) => {
-        parsed[value] = value === 'id'
-          ? getName(row[value])
-          : row[value]
-      })
+    if (result.length) {
+      const sorter = flow(map(sort, sortWith))
+      const getName = memoize(id => get(find(list, {id}), 'name', id))
+      const rows = sorter(map(result, row => {
+        const parsed = {}
 
-      return parsed
-    }))
+        forEach(headers, ({value}) => {
+          parsed[value] = value === 'id'
+            ? getName(row[value])
+            : row[value]
+        })
 
-    return (
-      <table className='mdl-data-table'>
-        <thead>
-          <tr>
-            {map(headers, ({text, value}) =>
-              <th key={value} className={attributes[value].is_metric ? '' : 'mdl-data-table__cell--non-numeric'}>
-                {text}
-              </th>)}
-          </tr>
-        </thead>
+        return parsed
+      }))
+
+      colHeaders = (
+        <tr>
+          {map(headers, ({text, value}) =>
+            <th key={value} className={attributes[value].is_metric ? '' : 'mdl-data-table__cell--non-numeric'}>
+              {text}
+            </th>)}
+        </tr>
+      )
+
+      tbody = (
         <tbody>
           {map(rows, (row, index) =>
             <tr key={index}>
@@ -99,6 +106,20 @@ const ReportModuleTable = React.createClass({
                 </td>)}
             </tr>)}
         </tbody>
+      )
+    }
+
+    return (
+      <table className={`mdl-data-table ${style.table}`}>
+        <thead>
+          <tr>
+            <th className={`mdl-data-table__cell--non-numeric ${style.title}`} colSpan={headers.length}>
+              {name}
+            </th>
+          </tr>
+          {colHeaders}
+        </thead>
+        {tbody}
       </table>
     )
   }
