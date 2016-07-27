@@ -106,7 +106,7 @@ const ModuleEdit = React.createClass({
 
     if (attribute.is_metric) {
       this.setState({
-        metrics: add(this.state.metrics.concat, id)
+        metrics: add(this.state.metrics, id)
       })
     }
   },
