@@ -8,9 +8,10 @@ import assign from 'lodash/assign'
 import {isvalidReportQuery} from '../functions/is-valid-report-query'
 import isEmpty from 'lodash/isEmpty'
 import pick from 'lodash/pick'
-import Line from './ReportChartLine'
-import Column from './ReportChartColumn'
-import Pie from './ReportChartPie'
+import Line from './ReportModuleChartLine'
+import Column from './ReportModuleChartColumn'
+import Pie from './ReportModuleChartPie'
+import Table from './ReportModuleTable'
 import isEqual from 'lodash/isEqual'
 import Spinner from './Spinner'
 import {styledFnComponent} from './higher-order/styled-fn-component'
@@ -28,7 +29,8 @@ const style = csjs`
 const typeComponent = {
   line: Line,
   pie: Pie,
-  column: Column
+  column: Column,
+  table: Table
 }
 const {PropTypes} = React
 
