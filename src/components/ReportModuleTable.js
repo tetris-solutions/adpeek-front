@@ -9,10 +9,22 @@ import memoize from 'lodash/memoize'
 import get from 'lodash/get'
 import stableSort from 'stable'
 import entityType from '../propTypes/report-entity'
+import fromPairs from 'lodash/fromPairs'
+import keys from 'lodash/keys'
+import findIndex from 'lodash/findIndex'
+import cx from 'classnames'
 
 const style = csjs`
 .table {
   width: 100%;
+}
+.th > span {
+  cursor: pointer
+}
+.th > i {
+  font-size: medium;
+  transform: translateY(.2em);
+  padding-left: .3em;
 }
 .title {
   text-align: center !important;
@@ -42,6 +54,38 @@ function sortWith ([field, order]) {
   return sortFn
 }
 
+const Header = React.createClass({
+  displayName: 'Header',
+  propTypes: {
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    is_metric: PropTypes.bool,
+    toggle: PropTypes.func.isRequired,
+    order: PropTypes.oneOf(['asc', 'desc'])
+  },
+  onClick () {
+    this.props.toggle(this.props.id)
+  },
+  render () {
+    const {name, is_metric, order} = this.props
+    const classes = cx({
+      [style.th]: true,
+      'mdl-data-table__cell--non-numeric': !is_metric
+    })
+
+    return (
+      <th className={classes}>
+        <span onClick={this.onClick}>{name}</span>
+
+        {Boolean(order) && (
+          <i className='material-icons'>
+            {order === 'asc' ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}
+          </i>)}
+      </th>
+    )
+  }
+})
+
 const ReportModuleTable = React.createClass({
   displayName: 'Module-Table',
   mixins: [styled(style)],
@@ -65,10 +109,29 @@ const ReportModuleTable = React.createClass({
 
     return {text, value: header}
   },
+  toggleHeader (id) {
+    const sort = this.state.sort.concat()
+    const index = findIndex(sort, ([key, val]) => key === id)
+
+    if (index === -1) {
+      sort.push([id, 'asc'])
+    } else {
+      const currentOrder = sort[index][1]
+
+      if (currentOrder === 'asc') {
+        sort[index] = [id, 'desc']
+      } else {
+        sort.splice(index, 1)
+      }
+    }
+
+    this.setState({sort})
+  },
   render () {
     const {sort} = this.state
+    const sortPairs = fromPairs(sort)
     const {name, result, attributes, entity: {list}} = this.props
-    const headers = map(result[0], this.getHeaderName)
+    const headers = keys(result[0])
     let tbody = null
     let colHeaders = null
 
@@ -78,7 +141,7 @@ const ReportModuleTable = React.createClass({
       const rows = sorter(map(result, row => {
         const parsed = {}
 
-        forEach(headers, ({value}) => {
+        forEach(headers, value => {
           parsed[value] = value === 'id'
             ? getName(row[value])
             : row[value]
@@ -89,10 +152,11 @@ const ReportModuleTable = React.createClass({
 
       colHeaders = (
         <tr>
-          {map(headers, ({text, value}) =>
-            <th key={value} className={attributes[value].is_metric ? '' : 'mdl-data-table__cell--non-numeric'}>
-              {text}
-            </th>)}
+          {map(headers, header =>
+            <Header
+              {...attributes[header]}
+              order={sortPairs[header]}
+              toggle={this.toggleHeader}/>)}
         </tr>
       )
 
@@ -100,9 +164,9 @@ const ReportModuleTable = React.createClass({
         <tbody>
           {map(rows, (row, index) =>
             <tr key={index}>
-              {map(headers, ({value}) =>
-                <td key={value} className={attributes[value].is_metric ? '' : 'mdl-data-table__cell--non-numeric'}>
-                  {row[value]}
+              {map(headers, header =>
+                <td key={header} className={attributes[header].is_metric ? '' : 'mdl-data-table__cell--non-numeric'}>
+                  {row[header]}
                 </td>)}
             </tr>)}
         </tbody>
