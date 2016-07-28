@@ -132,6 +132,13 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
     config.xAxis.type = 'datetime'
   }
 
+  if (xAxisDimension) {
+    config.xAxis.title = {
+      text: getAttributeName(xAxisDimension),
+      align: 'low'
+    }
+  }
+
   if (categories.length) {
     config.xAxis.categories = uniq(categories)
   }
