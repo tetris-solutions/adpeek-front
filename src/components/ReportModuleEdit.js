@@ -10,10 +10,9 @@ import reportEntityType from '../propTypes/report-entity'
 import reportMetaDataType from '../propTypes/report-meta-data'
 import ReportChart from './ReportModuleChart'
 import isEmpty from 'lodash/isEmpty'
-import filter from 'lodash/filter'
 import find from 'lodash/find'
 import TypeSelect from './ReportModuleEditTypeSelect'
-import Attributes from './ReportModuleEditAttributes'
+import Lists from './ReportModuleEditLists'
 
 const {PropTypes} = React
 const editableFields = ['name', 'type', 'dimensions', 'filters', 'metrics']
@@ -40,6 +39,7 @@ const ModuleEdit = React.createClass({
   getDefaultProps () {
     return {
       metaData: {
+        attributes: {},
         metrics: [],
         dimensions: [],
         filters: []
@@ -119,30 +119,22 @@ const ModuleEdit = React.createClass({
     return (
       <form onSubmit={this.handleSubmit}>
         <div className='mdl-grid'>
-          <div className='mdl-cell mdl-cell--4-col'>
-            <Attributes
-              title={entity.name}
-              attributes={entity.list}
-              selectedAttributes={filters.id}
-              removeItem={this.removeEntity}
-              addItem={this.addEntity}/>
+          <div className='mdl-cell mdl-cell--4-col' style={{height: 500, overflowY: 'auto'}}>
 
-            <Attributes
-              title={<Message>metrics</Message>}
-              attributes={filter(metaData.attributes, 'is_metric')}
-              selectedAttributes={metrics}
-              removeItem={metrics.length > 1 ? this.removeItem : undefined}
+            <Lists
+              dimensions={dimensions}
+              metrics={metrics}
+              entity={entity}
+              filters={filters}
+              attributes={metaData.attributes}
+              removeEntity={this.removeEntity}
+              removeItem={this.removeItem}
+              addEntity={this.addEntity}
               addItem={this.addItem}/>
 
-            <Attributes
-              title={<Message>dimensions</Message>}
-              attributes={filter(metaData.attributes, 'is_dimension')}
-              selectedAttributes={dimensions}
-              removeItem={dimensions.length > 1 ? this.removeItem : undefined}
-              addItem={this.addItem}/>
           </div>
 
-          <div className='mdl-cell mdl-cell--8-col'>
+          <div className='mdl-cell mdl-cell--8-col' style={{height: 500, overflowY: 'auto'}}>
             <div className='mdl-grid'>
               <div className='mdl-cell mdl-cell--7-col'>
                 <Input
