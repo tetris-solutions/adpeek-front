@@ -20,7 +20,10 @@ const style = csjs`
   border-left: 3px solid #e4e4e4;
   cursor: pointer;
   line-height: 1.8em;
-  user-select: none
+  user-select: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .fixed {
   color: #232363
@@ -66,7 +69,7 @@ const Attribute = React.createClass({
     })
 
     return (
-      <li onClick={this.onClick} className={className}>
+      <li onClick={this.onClick} className={className} title={name}>
         {name}
       </li>
     )
