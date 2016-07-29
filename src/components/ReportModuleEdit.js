@@ -34,13 +34,7 @@ const ModuleEdit = React.createClass({
     save: PropTypes.func
   },
   getInitialState () {
-    const state = pick(this.props.module, editableFields)
-
-    if (isEmpty(state.dimensions) && this.props.entity.id === 'Campaign') {
-      state.dimensions = ['id']
-    }
-
-    return state
+    return pick(this.props.module, editableFields)
   },
   getDefaultProps () {
     return {
