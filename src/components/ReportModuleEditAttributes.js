@@ -6,6 +6,8 @@ import includes from 'lodash/includes'
 import diff from 'lodash/difference'
 import isEmpty from 'lodash/isEmpty'
 import {styledFnComponent} from './higher-order/styled-fn-component'
+import filter from 'lodash/filter'
+import intersect from 'lodash/intersection'
 
 const style = csjs`
 .title {
@@ -78,32 +80,36 @@ const Attribute = React.createClass({
   }
 })
 
-const Attributes = ({title, attributes, selectedAttributes, addItem, removeItem}) => (
-  <div>
-    <h5 className={`${style.title}`}>
-      {title}
-    </h5>
+function Attributes ({title, attributes, selectedAttributes, addItem, removeItem}) {
+  const selectedBreakdowns = intersect(map(filter(attributes, 'is_breakdown'), 'id'), selectedAttributes)
 
-    <ul className={`${style.list}`}>
-      {map(attributes, ({id, name, pairs_with}) => {
-        const isSelected = includes(selectedAttributes, id)
-        const invalidPermutation = pairs_with && !isEmpty(diff(selectedAttributes, pairs_with))
-        const addMe = invalidPermutation ? undefined : addItem
+  return (
+    <div>
+      <h5 className={`${style.title}`}>
+        {title}
+      </h5>
 
-        return (
-          <Attribute
-            id={id}
-            name={name}
-            fixed={isSelected && !removeItem}
-            disabled={!isSelected && !addMe}
-            selected={isSelected}
-            toggle={isSelected ? removeItem : addMe}
-            key={id}/>
-        )
-      })}
-    </ul>
-  </div>
-)
+      <ul className={`${style.list}`}>
+        {map(attributes, ({id, name, pairs_with}) => {
+          const isSelected = includes(selectedAttributes, id)
+          const invalidPermutation = pairs_with && !isEmpty(diff(selectedBreakdowns, pairs_with))
+          const addMe = invalidPermutation ? undefined : addItem
+
+          return (
+            <Attribute
+              id={id}
+              name={name}
+              fixed={isSelected && !removeItem}
+              disabled={!isSelected && !addMe}
+              selected={isSelected}
+              toggle={isSelected ? removeItem : addMe}
+              key={id}/>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
 
 Attributes.displayName = 'Attributes'
 Attributes.propTypes = {
