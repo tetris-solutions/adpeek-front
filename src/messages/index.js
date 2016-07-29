@@ -124,7 +124,8 @@ module.exports = {
     table: 'Table',
     metrics: 'Metrics',
     dimensions: 'Dimensions',
-    module: 'Module'
+    module: 'Module',
+    invalidAttributePermutation: 'Selection canceled - {inserted} can not be used with {list}'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -250,6 +251,7 @@ module.exports = {
     table: 'Tabela',
     metrics: 'Métricas',
     dimensions: 'Dimensões',
-    module: 'Módulo'
+    module: 'Módulo',
+    invalidAttributePermutation: 'Erro - {inserted} não pode ser selecionado junto com {list}'
   }
 }

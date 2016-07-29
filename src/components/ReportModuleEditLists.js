@@ -83,14 +83,14 @@ const Lists = React.createClass({
           title={<Message>metrics</Message>}
           attributes={metrics}
           selectedAttributes={selectedMetrics}
-          removeItem={selectedMetrics.length > 1 ? removeItem : undefined}
+          removeItem={removeItem}
           addItem={addItem}/>
 
         <Attributes
           title={<Message>dimensions</Message>}
           attributes={dimensions}
           selectedAttributes={selectedDimensions}
-          removeItem={selectedDimensions.length > 1 ? removeItem : undefined}
+          removeItem={removeItem}
           addItem={addItem}/>
       </div>
     )

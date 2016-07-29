@@ -13,13 +13,19 @@ import isEmpty from 'lodash/isEmpty'
 import find from 'lodash/find'
 import TypeSelect from './ReportModuleEditTypeSelect'
 import Lists from './ReportModuleEditLists'
+import includes from 'lodash/includes'
 
 const {PropTypes} = React
 const editableFields = ['name', 'type', 'dimensions', 'filters', 'metrics']
 
 const ModuleEdit = React.createClass({
   displayName: 'Edit-Module',
+  contextTypes: {
+    messages: PropTypes.object,
+    locales: PropTypes.string
+  },
   propTypes: {
+    dispatch: PropTypes.func,
     reportParams: reportParamsType,
     module: reportModuleType,
     entity: reportEntityType,
@@ -83,28 +89,50 @@ const ModuleEdit = React.createClass({
   },
   removeItem (id) {
     const attribute = find(this.props.metaData.attributes, {id})
+
+    function remove (ls, val) {
+      const ids = [val]
+
+      if (attribute.required_by) {
+        ids.splice(ids.length, 0, ...attribute.required_by)
+      }
+
+      return ls.filter(i => !includes(ids, i))
+    }
+
     if (attribute.is_dimension) {
-      this.setState({dimensions: this.state.dimensions.filter(i => i !== id)})
+      this.setState({dimensions: remove(this.state.dimensions, id)})
     }
 
     if (attribute.is_metric) {
-      this.setState({metrics: this.state.metrics.filter(i => i !== id)})
+      this.setState({metrics: remove(this.state.metrics, id)})
     }
   },
   addItem (id) {
+    const {metaData: {attributes}} = this.props
     const {type} = this.state
-    const attribute = find(this.props.metaData.attributes, {id})
-    const add = type === 'pie'
-      ? (ls, val) => [val]
-      : (ls, val) => ls.concat([val])
+    const getAttributeById = value => find(attributes, {id: value})
+    const {requires, is_metric, is_dimension} = getAttributeById(id)
 
-    if (attribute.is_dimension) {
+    function add (ls, val) {
+      if (type === 'pie') {
+        return [val]
+      }
+
+      if (requires) {
+        return ls.concat(requires).concat([val])
+      }
+
+      return ls.concat([val])
+    }
+
+    if (is_dimension) {
       this.setState({
         dimensions: add(this.state.dimensions, id)
       })
     }
 
-    if (attribute.is_metric) {
+    if (is_metric) {
       this.setState({
         metrics: add(this.state.metrics, id)
       })

@@ -3,6 +3,8 @@ import cx from 'classnames'
 import csjs from 'csjs'
 import map from 'lodash/map'
 import includes from 'lodash/includes'
+import diff from 'lodash/difference'
+import isEmpty from 'lodash/isEmpty'
 import {styledFnComponent} from './higher-order/styled-fn-component'
 
 const style = csjs`
@@ -83,17 +85,19 @@ const Attributes = ({title, attributes, selectedAttributes, addItem, removeItem}
     </h5>
 
     <ul className={`${style.list}`}>
-      {map(attributes, ({id, name}) => {
+      {map(attributes, ({id, name, pairs_with}) => {
         const isSelected = includes(selectedAttributes, id)
+        const invalidPermutation = pairs_with && !isEmpty(diff(selectedAttributes, pairs_with))
+        const addMe = invalidPermutation ? undefined : addItem
 
         return (
           <Attribute
             id={id}
             name={name}
             fixed={isSelected && !removeItem}
-            disabled={!isSelected && !addItem}
+            disabled={!isSelected && !addMe}
             selected={isSelected}
-            toggle={isSelected ? removeItem : addItem}
+            toggle={isSelected ? removeItem : addMe}
             key={id}/>
         )
       })}
