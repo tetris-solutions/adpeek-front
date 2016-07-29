@@ -154,6 +154,7 @@ const ReportModuleTable = React.createClass({
         <tr>
           {map(headers, header =>
             <Header
+              key={header}
               {...attributes[header]}
               order={sortPairs[header]}
               toggle={this.toggleHeader}/>)}
