@@ -12,6 +12,10 @@ import isString from 'lodash/isString'
 import uniq from 'lodash/uniq'
 import omit from 'lodash/omit'
 import get from 'lodash/get'
+import negate from 'lodash/negate'
+
+const isEntityId = d => d === 'id' || d === 'name'
+const notEntityId = negate(isEntityId)
 
 export function reportToChartConfig (type, {query: {metrics, dimensions}, result, entity, attributes}) {
   const getAttributeName = attr => get(attributes, [attr, 'name'], attr)
@@ -27,17 +31,20 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
   }))
 
   const categories = []
-  let xAxisDimension, isDateBased, isIdBased
+  let xAxisDimension
 
   if (includes(dimensions, 'date')) {
     xAxisDimension = 'date'
-    isDateBased = true
-  } else if (includes(dimensions, 'id')) {
-    xAxisDimension = 'id'
-    isIdBased = true
   } else {
-    xAxisDimension = dimensions[0] || null
+    const firstOption = type === 'pie'
+      ? find(dimensions, isEntityId)
+      : find(dimensions, notEntityId)
+
+    xAxisDimension = firstOption || dimensions[0] || null
   }
+
+  const isDateBased = xAxisDimension === 'date'
+  const isIdBased = xAxisDimension === 'id'
 
   if (isDateBased) {
     result = sortBy(result, xAxisDimension)
@@ -108,7 +115,9 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
       }
 
       if (type === 'pie') {
-        pointConfig.name = isIdBased ? referenceEntity.name : point[xAxisDimension]
+        pointConfig.name = isIdBased
+          ? referenceEntity.name
+          : point[xAxisDimension]
       }
 
       if (isDateBased) {
