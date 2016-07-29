@@ -70,7 +70,10 @@ const Lists = React.createClass({
 
     return (
       <div ref='wrapper'>
-        <Input name='searchValue' onChange={this.onChangeSearch}/>
+        <Input
+          label='filter'
+          name='searchValue'
+          onChange={this.onChangeSearch}/>
 
         <Attributes
           title={entity.name}
