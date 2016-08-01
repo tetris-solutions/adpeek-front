@@ -76,7 +76,7 @@ const ModuleEdit = React.createClass({
       })
     })
   },
-  selectEntity (id) {
+  addEntity (id) {
     this.setState({
       filters: assign({}, this.state.filters, {
         id: this.state.filters.id.concat([id])
