@@ -67,6 +67,7 @@ const Lists = React.createClass({
     const selectedIds = this.props.filters.id
     const {entity, removeEntity, addEntity, addItem, removeItem} = this.props
     const {dimensions, metrics, list} = this.state
+    const isIdSelected = includes(selectedDimensions, 'id')
 
     return (
       <div ref='wrapper'>
@@ -78,6 +79,7 @@ const Lists = React.createClass({
         <Attributes
           title={entity.name}
           attributes={list}
+          isIdSelected={isIdSelected}
           selectedAttributes={selectedIds}
           removeItem={removeEntity}
           addItem={addEntity}/>
@@ -85,6 +87,7 @@ const Lists = React.createClass({
         <Attributes
           title={<Message>metrics</Message>}
           attributes={metrics}
+          isIdSelected={isIdSelected}
           selectedAttributes={selectedMetrics}
           removeItem={removeItem}
           addItem={addItem}/>
@@ -92,6 +95,7 @@ const Lists = React.createClass({
         <Attributes
           title={<Message>dimensions</Message>}
           attributes={dimensions}
+          isIdSelected={isIdSelected}
           selectedAttributes={selectedDimensions}
           removeItem={removeItem}
           addItem={addItem}/>

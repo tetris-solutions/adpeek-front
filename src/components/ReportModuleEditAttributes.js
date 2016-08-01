@@ -80,7 +80,7 @@ const Attribute = React.createClass({
   }
 })
 
-function Attributes ({title, attributes, selectedAttributes, addItem, removeItem}) {
+function Attributes ({title, attributes, selectedAttributes, addItem, removeItem, isIdSelected}) {
   const selectedBreakdowns = intersect(map(filter(attributes, 'is_breakdown'), 'id'), selectedAttributes)
 
   return (
@@ -90,10 +90,11 @@ function Attributes ({title, attributes, selectedAttributes, addItem, removeItem
       </h5>
 
       <ul className={`${style.list}`}>
-        {map(attributes, ({id, name, pairs_with}) => {
+        {map(attributes, ({id, name, pairs_with, requires_id}) => {
           const isSelected = includes(selectedAttributes, id)
           const invalidPermutation = pairs_with && !isEmpty(diff(selectedBreakdowns, pairs_with))
-          const addMe = invalidPermutation ? undefined : addItem
+          const disabledById = requires_id && !isIdSelected
+          const addMe = disabledById || invalidPermutation ? undefined : addItem
 
           return (
             <Attribute
@@ -117,7 +118,8 @@ Attributes.propTypes = {
   addItem: PropTypes.func,
   removeItem: PropTypes.func,
   attributes: PropTypes.array.isRequired,
-  selectedAttributes: PropTypes.array.isRequired
+  selectedAttributes: PropTypes.array.isRequired,
+  isIdSelected: PropTypes.bool.isRequired
 }
 
 export default styledFnComponent(Attributes, style)

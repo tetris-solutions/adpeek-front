@@ -76,15 +76,19 @@ const ModuleEdit = React.createClass({
       })
     })
   },
-  addEntity (id) {
+  selectEntity (id) {
     this.setState({
       filters: assign({}, this.state.filters, {
         id: this.state.filters.id.concat([id])
       })
     })
   },
-  removeItem (id) {
-    const attribute = find(this.props.metaData.attributes, {id})
+  removeItem (attributeId) {
+    const {attributes} = this.props.metaData
+    const attribute = find(attributes, {id: attributeId})
+    const goesWithoutId = id => !find(attributes, {id}).requires_id
+
+    let {dimensions, metrics} = this.state
 
     function remove (ls, val) {
       const ids = [val]
@@ -93,16 +97,23 @@ const ModuleEdit = React.createClass({
         ids.splice(ids.length, 0, ...attribute.required_by)
       }
 
-      return ls.filter(i => !includes(ids, i))
+      return ls.filter(id => !includes(ids, id))
     }
 
     if (attribute.is_dimension) {
-      this.setState({dimensions: remove(this.state.dimensions, id)})
+      dimensions = remove(dimensions, attributeId)
     }
 
     if (attribute.is_metric) {
-      this.setState({metrics: remove(this.state.metrics, id)})
+      metrics = remove(metrics, attributeId)
     }
+
+    if (attributeId === 'id') {
+      dimensions = dimensions.filter(goesWithoutId)
+      metrics = metrics.filter(goesWithoutId)
+    }
+
+    this.setState({metrics, dimensions})
   },
   addItem (id) {
     const {metaData: {attributes}} = this.props
