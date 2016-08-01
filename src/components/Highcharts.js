@@ -14,6 +14,9 @@ import isEqual from 'lodash/isEqual'
 import merge from 'lodash/merge'
 import cloneDeep from 'lodash/cloneDeep'
 import diff from 'lodash/differenceWith'
+import window from 'global/window'
+
+window.Highcharts = Highcharts
 
 function isUpperCase (letter) {
   return letter !== letter.toLowerCase()

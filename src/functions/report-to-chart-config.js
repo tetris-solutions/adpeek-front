@@ -17,6 +17,55 @@ import negate from 'lodash/negate'
 const isEntityId = d => d === 'id' || d === 'name'
 const notEntityId = negate(isEntityId)
 
+const types = {
+  linear: {
+    type: 'linear'
+  },
+  datetime: {
+    type: 'datetime',
+    sortable: true,
+    parse: d => new Date(d).getTime()
+  },
+  time: {
+    type: 'datetime',
+    format: '%H:%M',
+    sortable: true,
+    parse (str) {
+      const parts = str.substr(0, '00:00:00'.length)
+        .split(':')
+        .slice(0, 3)
+        .map(Number)
+      const d = new Date()
+
+      d.setHours(...parts)
+
+      return d.getTime()
+    }
+  }
+}
+
+function detectXAxis (result, xAxisDimensions) {
+  /**
+   * first x axis point
+   * @type {String}
+   */
+  const first = get(result, [0, xAxisDimensions])
+
+  if (!isString(first)) {
+    return types.linear
+  }
+
+  if (xAxisDimensions === 'date') {
+    return types.datetime
+  }
+
+  if (first.match(/^\d{2}:\d{2}:\d{2}/)) {
+    return types.time
+  }
+
+  return types.linear
+}
+
 export function reportToChartConfig (type, {query: {metrics, dimensions}, result, entity, attributes}) {
   const getAttributeName = attr => get(attributes, [attr, 'name'], attr)
   const getSeriesAttributeName = (val, key) => key === 'metric'
@@ -43,18 +92,18 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
     xAxisDimension = firstOption || dimensions[0] || null
   }
 
-  const isDateBased = xAxisDimension === 'date'
+  const xAxis = detectXAxis(result, xAxisDimension)
   const isIdBased = xAxisDimension === 'id'
 
-  if (isDateBased) {
-    result = sortBy(result, xAxisDimension)
+  if (xAxis.sortable) {
+    result = sortBy(result, p => xAxis.parse(p[xAxisDimension]))
   }
 
   dimensions = without(dimensions, xAxisDimension)
 
   const series = []
 
-  function rowIterator (point, index) {
+  function pointIterator (point, index) {
     const pointDimensions = pick(point, dimensions)
 
     const referenceEntity = (
@@ -65,10 +114,12 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
         name: point.id || index
       }
 
-    if (isIdBased) {
-      categories.push(referenceEntity.name)
-    } else if (!isDateBased && isString(point[xAxisDimension])) {
-      categories.push(point[xAxisDimension])
+    if (!xAxis.parse) {
+      if (isIdBased) {
+        categories.push(referenceEntity.name)
+      } else if (isString(point[xAxisDimension])) {
+        categories.push(point[xAxisDimension])
+      }
     }
 
     function metricIterator (metric, yAxisIndex) {
@@ -120,8 +171,8 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
           : point[xAxisDimension]
       }
 
-      if (isDateBased) {
-        pointConfig.x = new Date(point.date).getTime()
+      if (xAxis.parse) {
+        pointConfig.x = xAxis.parse(point[xAxisDimension])
       }
 
       seriesConfig.data.push(pointConfig)
@@ -130,15 +181,12 @@ export function reportToChartConfig (type, {query: {metrics, dimensions}, result
     forEach(metrics, metricIterator)
   }
 
-  forEach(result, rowIterator)
+  forEach(result, pointIterator)
 
   const config = {
-    yAxis, xAxis: {},
+    yAxis,
+    xAxis: pick(xAxis, 'type', 'format'),
     series
-  }
-
-  if (isDateBased) {
-    config.xAxis.type = 'datetime'
   }
 
   if (xAxisDimension) {
