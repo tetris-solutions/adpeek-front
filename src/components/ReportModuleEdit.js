@@ -8,15 +8,17 @@ import reportParamsType from '../propTypes/report-params'
 import reportModuleType from '../propTypes/report-module'
 import reportEntityType from '../propTypes/report-entity'
 import reportMetaDataType from '../propTypes/report-meta-data'
-import ReportChart from './ReportModuleChart'
+import _ReportChart from './ReportModuleChart'
 import isEmpty from 'lodash/isEmpty'
 import find from 'lodash/find'
 import TypeSelect from './ReportModuleEditTypeSelect'
 import Lists from './ReportModuleEditLists'
 import includes from 'lodash/includes'
+import {debouncedProps} from './higher-order/debounced-props'
 
 const {PropTypes} = React
 const editableFields = ['name', 'type', 'dimensions', 'filters', 'metrics']
+const ReportChart = debouncedProps(_ReportChart)
 
 const ModuleEdit = React.createClass({
   displayName: 'Edit-Module',

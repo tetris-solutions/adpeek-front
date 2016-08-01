@@ -24,6 +24,8 @@ function loadReport (query, config) {
   return GET(`${process.env.NUMBERS_API_URL}?${queryString.stringify(query)}`, config)
 }
 
+const lastCall = {}
+
 function action (tree, id, query, token) {
   const moduleCursor = tree.select(['reports', 'modules', id])
 
@@ -31,16 +33,25 @@ function action (tree, id, query, token) {
     return Promise.resolve()
   }
 
+  const myCall = lastCall[id] = Date.now()
+
+  function onSuccess (response) {
+    if (lastCall[id] !== myCall) {
+      throw new Error('Report API call has been canceled')
+    }
+
+    moduleCursor.set('query', query)
+    moduleCursor.set('data', response.data)
+    tree.commit()
+
+    return response
+  }
+
+  const onFailure = pushResponseErrorToState(tree)
+
   return loadReport(query, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
-    .then(response => {
-      moduleCursor.set('query', query)
-      moduleCursor.set('data', response.data)
-      tree.commit()
-
-      return response
-    })
-    .catch(pushResponseErrorToState(tree))
+    .then(onSuccess, onFailure)
 }
 
 function preventRace (fn) {
