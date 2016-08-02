@@ -14,11 +14,14 @@ import Pie from './ReportModuleChartPie'
 import Table from './ReportModuleTable'
 import isEqual from 'lodash/isEqual'
 import Spinner from './Spinner'
-import {styledFnComponent} from './higher-order/styled-fn-component'
+import {styled} from './mixins/styled'
 import csjs from 'csjs'
 
 const style = csjs`
 .wrap {
+  overflow-y: auto;
+}
+.spinner {
   position: absolute;
   bottom: 1em;
   right: 1em;
@@ -34,14 +37,15 @@ const typeComponent = {
 }
 const {PropTypes} = React
 
-const ChartSpinner = styledFnComponent(() => (
-  <div className={`${style.wrap}`}>
+const ChartSpinner = () => (
+  <div className={`${style.spinner}`}>
     <Spinner/>
   </div>
-), style)
+)
 
 const ReportChart = React.createClass({
   displayName: 'Report-Chart',
+  mixins: [styled(style)],
   propTypes: {
     reportParams: reportParamsType,
     module: reportModuleType,
@@ -112,7 +116,7 @@ const ReportChart = React.createClass({
     const Chart = typeComponent[module.type]
 
     return (
-      <div>
+      <div className={`${style.wrap}`} style={{height: module.rows * 200}}>
         <Chart
           name={module.name}
           attributes={attributes}

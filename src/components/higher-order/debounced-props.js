@@ -1,7 +1,7 @@
 import React from 'react'
 import assign from 'lodash/assign'
 
-const WAIT_FOR = 5 * 1000
+const WAIT_FOR = 1000
 
 export function debouncedProps (Component, time = WAIT_FOR) {
   let timeout

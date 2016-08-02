@@ -47,6 +47,8 @@ const ReportBuilder = React.createClass({
       name: messages.module + ' ' + (size(this.state.modules) + 1),
       metrics: [],
       dimensions: [],
+      cols: 6,
+      rows: 2,
       filters: {
         id: []
       }
@@ -98,7 +100,10 @@ const ReportBuilder = React.createClass({
         </header>
         <div className='mdl-grid'>
           {map(modules, module => (
-            <div key={module.id} className='mdl-cell mdl-cell--4-col'>
+            <div
+              key={module.id}
+              className={`mdl-cell mdl-cell--${module.cols}-col`}>
+
               <Module
                 module={module}
                 editable
