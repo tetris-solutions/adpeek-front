@@ -48,7 +48,7 @@ const ReportBuilder = React.createClass({
       metrics: [],
       dimensions: [],
       cols: 6,
-      rows: 2,
+      rows: 4,
       filters: {
         id: []
       }

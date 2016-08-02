@@ -19,7 +19,10 @@ import csjs from 'csjs'
 
 const style = csjs`
 .wrap {
-  overflow-y: auto;
+  overflow: hidden
+}
+.wrap > div[data-highcharts-chart] {
+  height: 100%
 }
 .spinner {
   position: absolute;
@@ -116,7 +119,7 @@ const ReportChart = React.createClass({
     const Chart = typeComponent[module.type]
 
     return (
-      <div className={`${style.wrap}`} style={{height: module.rows * 200}}>
+      <div className={`${style.wrap}`} style={{height: module.rows * 100}}>
         <Chart
           name={module.name}
           attributes={attributes}

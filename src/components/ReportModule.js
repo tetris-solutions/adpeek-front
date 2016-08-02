@@ -37,6 +37,20 @@ const ReportModule = React.createClass({
     entity: reportEntityType,
     reportParams: reportParamsType
   },
+  componentWillReceiveProps ({module: {cols, rows}}) {
+    const {module} = this.props
+
+    this.repaintChart = cols !== module.cols || rows !== module.rows
+  },
+  componentDidUpdate () {
+    const resizedChart = this.repaintChart
+      ? this.refs.chartWrapper.querySelector('div[data-highcharts-chart]')
+      : null
+
+    if (resizedChart) {
+      resizedChart.HCharts.reflow()
+    }
+  },
   openModal () {
     this.setState({editMode: true})
   },
@@ -46,12 +60,12 @@ const ReportModule = React.createClass({
   remove () {
     this.props.remove(this.props.module.id)
   },
-  save (updatedModule) {
-    this.closeModal()
-    this.props.update(
-      this.props.module.id,
-      updatedModule
-    )
+  save (updatedModule, closeAfterSaving = false) {
+    this.props.update(this.props.module.id, updatedModule)
+
+    if (closeAfterSaving) {
+      this.closeModal()
+    }
   },
   render () {
     const {editMode} = this.state
@@ -59,7 +73,7 @@ const ReportModule = React.createClass({
 
     return (
       <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
-        <div className={`mdl-card__title mdl-card--expand ${style.content}`}>
+        <div ref='chartWrapper' className={`mdl-card__title mdl-card--expand ${style.content}`}>
           <ReportChart
             module={module}
             entity={entity}
@@ -94,7 +108,7 @@ const ReportModule = React.createClass({
               entity={entity}
               reportParams={reportParams}
               save={this.save}
-              cancel={this.closeModal}/>
+              close={this.closeModal}/>
 
           </Modal>
         )}

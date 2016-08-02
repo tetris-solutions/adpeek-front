@@ -130,7 +130,7 @@ module.exports = {
     invalidAttributePermutation: 'Selection canceled - {inserted} can not be used with {list}',
     filterLabel: 'Filter',
     moduleContent: 'Setup Module Report',
-    moduleSize: 'Module Layout'
+    moduleSize: 'Module Size'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -262,6 +262,6 @@ module.exports = {
     invalidAttributePermutation: 'Erro - {inserted} não pode ser selecionado junto com {list}',
     filterLabel: 'Filtrar',
     moduleContent: 'Configurar Report',
-    moduleSize: 'Configurar Layout'
+    moduleSize: 'Configurar Tamanho'
   }
 }

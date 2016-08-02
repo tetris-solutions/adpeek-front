@@ -1,6 +1,7 @@
 import React from 'react'
 import {Tabs, Tab} from './Tabs'
 import Form from './ReportModuleForm'
+import Sizing from './ReportModuleSizing'
 
 const {PropTypes} = React
 
@@ -11,10 +12,7 @@ function ReportModuleEdit (props, {messages: {moduleContent, moduleSize}}) {
         <Form {...props}/>
       </Tab>
       <Tab id='module-size' title={moduleSize}>
-        <div>
-          <h3>NOPE</h3>
-          <img src='http://vignette1.wikia.nocookie.net/meme/images/8/8e/Nope.jpg/revision/latest?cb=20110913050049'/>
-        </div>
+        <Sizing {...props} />
       </Tab>
     </Tabs>
   )

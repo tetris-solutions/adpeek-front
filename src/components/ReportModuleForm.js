@@ -32,7 +32,7 @@ const ModuleEdit = React.createClass({
     module: reportModuleType,
     entity: reportEntityType,
     metaData: reportMetaDataType,
-    cancel: PropTypes.func,
+    close: PropTypes.func,
     save: PropTypes.func
   },
   getInitialState () {
@@ -67,7 +67,7 @@ const ModuleEdit = React.createClass({
   },
   handleSubmit (e) {
     e.preventDefault()
-    this.props.save(pick(this.state, editableFields))
+    this.props.save(pick(this.state, editableFields), true)
   },
   removeEntity (id) {
     this.setState({
@@ -190,7 +190,7 @@ const ModuleEdit = React.createClass({
           </div>
         </div>
 
-        <a className='mdl-button' onClick={this.props.cancel}>
+        <a className='mdl-button' onClick={this.props.close}>
           <Message>cancel</Message>
         </a>
 

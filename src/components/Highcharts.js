@@ -149,7 +149,7 @@ export const Chart = createClass({
     this.draw()
   },
   draw () {
-    this.chart = Highcharts.chart(
+    this.refs.container.HCharts = this.chart = Highcharts.chart(
       this.refs.container,
       cloneDeep(this.state.config)
     )
