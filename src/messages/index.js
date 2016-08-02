@@ -128,7 +128,9 @@ module.exports = {
     dimensions: 'Dimensions',
     module: 'Module',
     invalidAttributePermutation: 'Selection canceled - {inserted} can not be used with {list}',
-    filterLabel: 'Filter'
+    filterLabel: 'Filter',
+    moduleContent: 'Setup Module Report',
+    moduleSize: 'Module Layout'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -258,6 +260,8 @@ module.exports = {
     dimensions: 'Dimensões',
     module: 'Módulo',
     invalidAttributePermutation: 'Erro - {inserted} não pode ser selecionado junto com {list}',
-    filterLabel: 'Filtrar'
+    filterLabel: 'Filtrar',
+    moduleContent: 'Configurar Report',
+    moduleSize: 'Configurar Layout'
   }
 }
