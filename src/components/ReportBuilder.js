@@ -9,6 +9,7 @@ import size from 'lodash/size'
 import {contextualize} from './higher-order/contextualize'
 import {createModuleReportAction} from '../actions/create-module'
 import reportType from '../propTypes/report'
+import sortBy from 'lodash/sortBy'
 
 const {PropTypes} = React
 
@@ -102,7 +103,7 @@ const ReportBuilder = React.createClass({
           </div>
         </header>
         <div className='mdl-grid'>
-          {map(modules, module => (
+          {map(sortBy(modules, 'index'), module => (
             <div
               key={module.id}
               className={`mdl-cell mdl-cell--${module.cols}-col`}>
