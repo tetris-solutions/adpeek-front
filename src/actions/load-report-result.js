@@ -68,4 +68,4 @@ function preventRace (fn) {
   return single
 }
 
-export const loadReportAction = preventRace(action)
+export const loadReportResultAction = preventRace(action)

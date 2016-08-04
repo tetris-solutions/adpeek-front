@@ -32,6 +32,7 @@ import CompanyOrdersCloning from '../components/CompanyOrdersCloning'
 import WorkspaceOrdersCloning from '../components/WorkspaceOrdersCloning'
 import CompanyAside from '../components/CompanyAside'
 import FolderReportBuilder from '../components/FolderReportBuilder'
+import FolderReports from '../components/FolderReports'
 
 import App from '../components/App'
 import {loadUserCompaniesActionRouterAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
@@ -48,6 +49,8 @@ import {loadOrdersActionRouterAdaptor as orders} from '../actions/load-orders'
 import {loadBudgetsActionRouterAdaptor as budgets} from '../actions/load-budgets'
 import {loadDeliveryMethodsActionRouterAdaptor as deliveryMethods} from '../actions/load-delivery-methods'
 import {loadAutoBudgetLogsActionRouterAdaptor as autoBudgetLogs} from '../actions/load-autobudget-logs'
+import {loadFolderReportsActionRouterAdaptor as reports} from '../actions/load-folder-reports'
+import {loadFolderReportActionRouterAdaptor as report} from '../actions/load-folder-report'
 import bind from 'lodash/bind'
 
 /**
@@ -61,6 +64,7 @@ import bind from 'lodash/bind'
 export function getRoutes (tree, protectRoute, preload, createRoot) {
   const _ = bind.placeholder
   const campaignsWithAdsets = bind(campaigns, null, _, _, true)
+  const defaultFolderReport = bind(reports, null, _, _, true)
 
   return (
     <Route path='/' component={root(tree, createRoot())}>
@@ -125,11 +129,33 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
               path='folder/:folder'
               aside={FolderAside}
               breadcrumb={FolderBreadcrumb}
-              onEnter={preload(folder)}>
+              onEnter={preload(folder, defaultFolderReport)}>
 
-              <Route
-                component={FolderReportBuilder}
-                path='report/builder'/>
+              <Route path='report/:report' onEnter={preload(report)}>
+                <IndexRoute component={FolderReportBuilder}/>
+                <Route path='edit' component={FolderReportBuilder}/>
+              </Route>
+
+              <Route path='reports' component={FolderReports} onEnter={preload(reports)}>
+                <Route path='new' component={(() => {
+                  const Modal = require('../components/Modal').default
+                  const Input = require('../components/Input').default
+
+                  // @todo actually just spawn an action
+
+                  const CreateReport = () => (
+                    <Modal provide={['messages', 'locales']}>
+                      <h1>This is where you create a report</h1>
+                      <form>
+                        <Input name='name' label='name'/>
+                      </form>
+                    </Modal>
+                  )
+                  CreateReport.displayName = 'Create-Report'
+
+                  return CreateReport
+                })()}/>
+              </Route>
 
               <Route
                 path='campaign/:campaign'

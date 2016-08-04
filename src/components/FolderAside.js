@@ -3,6 +3,7 @@ import ContextMenu from './ContextMenu'
 import {contextualize} from './higher-order/contextualize'
 import {Link} from 'react-router'
 import {deleteFolderAction} from '../actions/delete-folder'
+import isEmpty from 'lodash/isEmpty'
 
 const {PropTypes} = React
 
@@ -17,6 +18,7 @@ export function FolderAside ({
         router.replace(`/company/${company}/workspace/${workspace}`)
       })
   }
+
   const baseUrl = `/company/${company}/workspace/${workspace}/folder/${folder.id}`
   return (
     <ContextMenu title={folder.name} icon='folder'>
@@ -34,7 +36,7 @@ export function FolderAside ({
 
       <Link
         className='mdl-button mdl-js-button mdl-button--icon'
-        to={`${baseUrl}/report/builder`}>
+        to={`${baseUrl}/${isEmpty(folder.reports) ? 'reports' : 'report/' + folder.reports[0].id}`}>
         <i className='material-icons'>show_chart</i>
       </Link>
 

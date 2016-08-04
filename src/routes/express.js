@@ -14,11 +14,14 @@ import {loadOrdersActionServerAdaptor as orders} from '../actions/load-orders'
 import {loadBudgetsActionServerAdaptor as budgets} from '../actions/load-budgets'
 import {loadDeliveryMethodsActionServerAdaptor as deliveryMethods} from '../actions/load-delivery-methods'
 import {loadAutoBudgetLogsActionServerAdaptor as autoBudgetLogs} from '../actions/load-autobudget-logs'
+import {loadFolderReportsActionServerAdaptor as reports} from '../actions/load-folder-reports'
+import {loadFolderReportActionServerAdaptor as report} from '../actions/load-folder-report'
 import bind from 'lodash/bind'
 
 export function setAppRoutes (app, render) {
   const _ = bind.placeholder
   const campaignsWithAdsets = bind(campaigns, null, _, _, true)
+  const defaultFolderReport = bind(reports, null, _, _, true)
 
   app.get('/', render)
 
@@ -67,14 +70,37 @@ export function setAppRoutes (app, render) {
     preload(medias, companies, workspace, accounts),
     render)
 
+  const subFolderActions = [statuses, companies, workspace, folder, campaigns, defaultFolderReport]
+
   app.get('/company/:company/workspace/:workspace/folder/:folder',
     protect,
-    preload(statuses, companies, workspace, folder, campaigns),
+    preload(...subFolderActions),
     render)
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/report/builder',
+  subFolderActions.pop()
+  subFolderActions.push(reports)
+
+  app.get('/company/:company/workspace/:workspace/folder/:folder/reports',
     protect,
-    preload(statuses, companies, workspace, folder, campaigns),
+    preload(...subFolderActions),
+    render)
+
+  app.get('/company/:company/workspace/:workspace/folder/:folder/reports/new',
+    protect,
+    preload(...subFolderActions),
+    render)
+
+  subFolderActions.pop()
+  subFolderActions.push(report)
+
+  app.get('/company/:company/workspace/:workspace/folder/:folder/report/:report',
+    protect,
+    preload(...subFolderActions),
+    render)
+
+  app.get('/company/:company/workspace/:workspace/folder/:folder/report/:report/edit',
+    protect,
+    preload(...subFolderActions),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/adgroups',

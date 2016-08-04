@@ -1,6 +1,6 @@
 import React from 'react'
 import {branch} from 'baobab-react/higher-order'
-import {loadReportAction} from '../actions/load-report'
+import {loadReportResultAction} from '../actions/load-report-result'
 import reportParamsType from '../propTypes/report-params'
 import reportModuleType from '../propTypes/report-module'
 import reportEntityType from '../propTypes/report-entity'
@@ -110,7 +110,7 @@ const ReportChart = React.createClass({
 
     this.setState({isLoading: true})
 
-    dispatch(loadReportAction, module.id, query)
+    dispatch(loadReportResultAction, module.id, query)
       .then(() => !this.dead && this.setState({isLoading: false}))
   },
   render () {
