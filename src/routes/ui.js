@@ -33,6 +33,7 @@ import WorkspaceOrdersCloning from '../components/WorkspaceOrdersCloning'
 import CompanyAside from '../components/CompanyAside'
 import FolderReportBuilder from '../components/FolderReportBuilder'
 import FolderReports from '../components/FolderReports'
+import CreateReport from '../components/FolderReportCreate'
 
 import App from '../components/App'
 import {loadUserCompaniesActionRouterAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
@@ -136,25 +137,9 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 <Route path='edit' component={FolderReportBuilder}/>
               </Route>
 
-              <Route path='reports' component={FolderReports} onEnter={preload(reports)}>
-                <Route path='new' component={(() => {
-                  const Modal = require('../components/Modal').default
-                  const Input = require('../components/Input').default
-
-                  // @todo actually just spawn an action
-
-                  const CreateReport = () => (
-                    <Modal provide={['messages', 'locales']}>
-                      <h1>This is where you create a report</h1>
-                      <form>
-                        <Input name='name' label='name'/>
-                      </form>
-                    </Modal>
-                  )
-                  CreateReport.displayName = 'Create-Report'
-
-                  return CreateReport
-                })()}/>
+              <Route path='reports'>
+                <IndexRoute onEnter={preload(reports)} component={FolderReports}/>
+                <Route path='new' component={CreateReport}/>
               </Route>
 
               <Route

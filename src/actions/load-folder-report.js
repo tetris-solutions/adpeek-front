@@ -5,7 +5,7 @@ import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-
 import {saveResponseData} from '../functions/save-response-data'
 
 export function loadFolderReport (folder, report, config) {
-  return GET(`${process.env.ADPEEK_API_URL}/folder/${folder}/report/${folder}`, config)
+  return GET(`${process.env.ADPEEK_API_URL}/folder/${folder}/report/${report}`, config)
 }
 
 export function loadFolderReportAction (tree, company, workspace, folder, report, token = null) {

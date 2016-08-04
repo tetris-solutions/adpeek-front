@@ -22,7 +22,6 @@ Report.propTypes = {
 export const Reports = React.createClass({
   displayName: 'Reports',
   propTypes: {
-    children: PropTypes.node,
     params: PropTypes.shape({
       company: PropTypes.string,
       workspace: PropTypes.string
@@ -30,7 +29,7 @@ export const Reports = React.createClass({
     folder: PropTypes.object
   },
   render () {
-    const {children, folder: {id, reports}, params: {company, workspace}} = this.props
+    const {folder: {id, reports}, params: {company, workspace}} = this.props
 
     return (
       <div>
@@ -47,7 +46,6 @@ export const Reports = React.createClass({
             label={<Message>newReportCallToAction</Message>}
             to={`/company/${company}/workspace/${workspace}/folder/${id}/reports/new`}/>
         </div>
-        {children || null}
       </div>
     )
   }
