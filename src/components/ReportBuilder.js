@@ -4,16 +4,20 @@ import moment from 'moment'
 import ReportDateRange from './ReportDateRange'
 import map from 'lodash/map'
 import Module from './ReportModule'
-import uuid from 'uuid'
 import assign from 'lodash/assign'
 import size from 'lodash/size'
 import {contextualize} from './higher-order/contextualize'
+import {createModuleReportAction} from '../actions/create-module'
+import reportType from '../propTypes/report'
 
 const {PropTypes} = React
 
 const ReportBuilder = React.createClass({
   displayName: 'Report-Builder',
   propTypes: {
+    report: reportType,
+    dispatch: PropTypes.func,
+    params: PropTypes.object,
     reportParams: PropTypes.shape({
       ad_account: PropTypes.string,
       plaftorm: PropTypes.string,
@@ -34,35 +38,31 @@ const ReportBuilder = React.createClass({
       endDate: moment().startOf('week').subtract(1, 'days')
     }
   },
-  componentWillMount () {
-    this.setState({
-      modules: [this.getNewModule()]
-    })
-  },
   getNewModule () {
     const {messages} = this.context
+    const index = size(this.props.report.modules)
 
     return {
-      id: uuid.v4(),
       type: 'line',
-      name: messages.module + ' ' + (size(this.state.modules) + 1),
-      metrics: [],
-      dimensions: [],
-      cols: 6,
-      rows: 4,
-      filters: {
-        id: []
-      }
+      name: messages.module + ' ' + (index + 1),
+      index
     }
   },
   onChangeRange ({startDate, endDate}) {
     this.setState({startDate, endDate})
   },
   addNewModule () {
-    this.setState({
-      modules: this.state.modules.concat([this.getNewModule()])
+    const {report, params, dispatch} = this.props
+    const {messages} = this.context
+    const index = size(report.modules)
+
+    dispatch(createModuleReportAction, params, {
+      type: 'line',
+      name: messages.module + ' ' + (index + 1),
+      index
     })
   },
+  // @todo use actions
   updateModule (id, updatedModule) {
     this.setState({
       modules: this.state.modules
@@ -71,13 +71,15 @@ const ReportBuilder = React.createClass({
           : m)
     })
   },
+  // @todo use actions
   removeModule (id) {
     this.setState({
       modules: this.state.modules.filter(m => m.id !== id)
     })
   },
   render () {
-    const {modules, startDate, endDate} = this.state
+    const {report: {modules}} = this.props
+    const {startDate, endDate} = this.state
     const reportParams = assign({
       from: startDate.format('YYYY-MM-DD'),
       to: endDate.format('YYYY-MM-DD')

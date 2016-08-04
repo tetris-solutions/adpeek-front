@@ -43,7 +43,10 @@ const FolderReactBuilder = React.createClass({
     }
 
     return (
-      <ReportBuilder reportParams={reportParams} entity={campaignEntity}/>
+      <ReportBuilder
+        {...this.props}
+        reportParams={reportParams}
+        entity={campaignEntity}/>
     )
   }
 })
