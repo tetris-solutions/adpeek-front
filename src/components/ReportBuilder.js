@@ -7,6 +7,7 @@ import Module from './ReportModule'
 import uuid from 'uuid'
 import assign from 'lodash/assign'
 import size from 'lodash/size'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
@@ -120,4 +121,4 @@ const ReportBuilder = React.createClass({
   }
 })
 
-export default ReportBuilder
+export default contextualize(ReportBuilder, 'report')

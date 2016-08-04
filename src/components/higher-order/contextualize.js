@@ -12,6 +12,7 @@ const isRouteParam = {
   workspace: true,
   folder: true,
   order: true,
+  report: true,
   campaign: true
 }
 const searchPath = {
@@ -23,6 +24,9 @@ searchPath.folder = searchPath.workspace.concat([['folder', 'folders']])
 
 searchPath.campaign = searchPath.folder.concat([['campaign', 'campaigns']])
 searchPath.order = searchPath.folder.concat([['order', 'orders']])
+
+// @todo dynamic path, because a report can be at any point in the tree
+searchPath.report = searchPath.folder.concat([['report', 'reports']])
 
 /**
  * nope

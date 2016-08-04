@@ -34,6 +34,8 @@ import CompanyAside from '../components/CompanyAside'
 import FolderReportBuilder from '../components/FolderReportBuilder'
 import FolderReports from '../components/FolderReports'
 import CreateReport from '../components/FolderReportCreate'
+import ReportsBread from '../components/ReportsBreadcrumb'
+import ReportBread from '../components/ReportBreadcrumb'
 
 import App from '../components/App'
 import {loadUserCompaniesActionRouterAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
@@ -67,141 +69,80 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
   const campaignsWithAdsets = bind(campaigns, null, _, _, true)
   const defaultFolderReport = bind(reports, null, _, _, true)
 
+  /* eslint-disable react/jsx-indent-props */
   return (
     <Route path='/' component={root(tree, createRoot())}>
       <IndexRoute component={Home}/>
       <Route onEnter={protectRoute}>
 
-        <Route
-          path='company/:company'
-          breadcrumb={CompanyBreadcrumb}
-          aside={CompanyAside}
-          component={App}
-          onEnter={preload(companies)}>
+        <Route path='company/:company' breadcrumb={CompanyBreadcrumb} aside={CompanyAside} component={App}
+               onEnter={preload(companies)}>
 
-          <IndexRoute
-            component={Workspaces}
-            onEnter={preload(workspaces)}/>
+          <IndexRoute component={Workspaces} onEnter={preload(workspaces)}/>
 
-          <Route
-            path='orders'
-            breadcrumb={OrdersBreadCrumb}
-            onEnter={preload(orders)}>
-
+          <Route path='orders' breadcrumb={OrdersBreadCrumb} onEnter={preload(orders)}>
             <IndexRoute component={CompanyOrders}/>
             <Route path='clone' component={CompanyOrdersCloning}/>
           </Route>
 
-          <Route
-            path='create/workspace'
-            component={CreateWorkspace}
-            onEnter={preload(roles)}/>
+          <Route path='create/workspace' component={CreateWorkspace} onEnter={preload(roles)}/>
 
-          <Route
-            path='workspace/:workspace'
-            breadcrumb={WorkspaceBreadcrumb}
-            onEnter={preload(workspace)}
-            aside={WorkspaceAside}>
+          <Route path='workspace/:workspace' breadcrumb={WorkspaceBreadcrumb} onEnter={preload(workspace)}
+                 aside={WorkspaceAside}>
 
-            <IndexRoute
-              component={Folders}
-              onEnter={preload(folders)}/>
+            <IndexRoute component={Folders} onEnter={preload(folders)}/>
 
-            <Route
-              path='orders'
-              breadcrumb={OrdersBreadCrumb}
-              onEnter={preload(orders)}>
-
+            <Route path='orders' breadcrumb={OrdersBreadCrumb} onEnter={preload(orders)}>
               <IndexRoute component={WorkspaceOrders}/>
               <Route path='clone' component={WorkspaceOrdersCloning}/>
             </Route>
 
-            <Route
-              path='edit'
-              onEnter={preload(roles)}
-              component={WorkspaceEdit}/>
+            <Route path='edit' onEnter={preload(roles)} component={WorkspaceEdit}/>
 
-            <Route
-              path='create/folder'
-              component={CreateFolder}
-              onEnter={preload(medias, accounts)}/>
+            <Route path='create/folder' component={CreateFolder} onEnter={preload(medias, accounts)}/>
 
-            <Route
-              path='folder/:folder'
-              aside={FolderAside}
-              breadcrumb={FolderBreadcrumb}
-              onEnter={preload(folder, defaultFolderReport)}>
+            <Route path='folder/:folder'
+                   aside={FolderAside}
+                   breadcrumb={FolderBreadcrumb}
+                   onEnter={preload(folder, defaultFolderReport)}>
 
-              <Route path='report/:report' onEnter={preload(report)}>
-                <IndexRoute component={FolderReportBuilder}/>
-                <Route path='edit' component={FolderReportBuilder}/>
-              </Route>
+              <IndexRoute component={Campaigns} onEnter={preload(statuses, campaigns)}/>
+              <Route path='adgroups' component={FolderAdGroups} onEnter={preload(statuses, campaigns)}/>
 
-              <Route path='reports'>
-                <IndexRoute onEnter={preload(reports)} component={FolderReports}/>
-                <Route path='new' component={CreateReport}/>
-              </Route>
-
-              <Route
-                path='campaign/:campaign'
-                aside={CampaignAside}
-                breadcrumb={CampaignBreadcrumb}>
-
+              <Route path='campaign/:campaign' aside={CampaignAside} breadcrumb={CampaignBreadcrumb}>
                 <IndexRoute component={Campaign}/>
               </Route>
 
-              <IndexRoute
-                component={Campaigns}
-                onEnter={preload(statuses, campaigns)}/>
+              <Route onEnter={preload(campaigns)} breadcrumb={ReportsBread}>
+                <Route path='report/:report' breadcrumb={ReportBread} onEnter={preload(report)}>
+                  <IndexRoute component={FolderReportBuilder}/>
+                  <Route path='edit' component={FolderReportBuilder}/>
+                </Route>
 
-              <Route
-                path='adgroups'
-                component={FolderAdGroups}
-                onEnter={preload(statuses, campaigns)}/>
+                <Route path='reports'>
+                  <IndexRoute onEnter={preload(reports)} component={FolderReports}/>
+                  <Route path='new' component={CreateReport}/>
+                </Route>
+              </Route>
 
-              <Route
-                path='orders'
-                breadcrumb={OrdersBreadCrumb}
-                onEnter={preload(orders)}>
-
+              <Route path='orders' breadcrumb={OrdersBreadCrumb} onEnter={preload(orders)}>
                 <IndexRoute component={FolderOrders}/>
                 <Route path='clone' component={FolderOrdersCloning}/>
               </Route>
 
-              <Route
-                breadcrumb={OrdersBreadCrumb}
-                onEnter={preload(deliveryMethods, statuses, campaignsWithAdsets, orders)}>
+              <Route breadcrumb={OrdersBreadCrumb}
+                     onEnter={preload(deliveryMethods, statuses, campaignsWithAdsets, orders)}>
 
-                <Route
-                  aside={OrderAside}
-                  path='order/:order'
-                  breadcrumb={OrderBreadCrumb}>
-
-                  <IndexRoute
-                    onEnter={preload(budgets)}
-                    component={Order}/>
-
-                  <Route
-                    path='autobudget'
-                    onEnter={preload(autoBudgetLogs)}
-                    component={OrderAutoBudget}/>
-
-                  <Route
-                    path='autobudget/:day'
-                    onEnter={preload(autoBudgetLogs)}
-                    component={OrderAutoBudget}/>
+                <Route aside={OrderAside} path='order/:order' breadcrumb={OrderBreadCrumb}>
+                  <IndexRoute onEnter={preload(budgets)} component={Order}/>
+                  <Route path='autobudget' onEnter={preload(autoBudgetLogs)} component={OrderAutoBudget}/>
+                  <Route path='autobudget/:day' onEnter={preload(autoBudgetLogs)} component={OrderAutoBudget}/>
                 </Route>
 
-                <Route
-                  path='create/order'
-                  component={Order}/>
+                <Route path='create/order' component={Order}/>
               </Route>
 
-              <Route
-                path='edit'
-                onEnter={preload(medias, accounts)}
-                component={FolderEdit}/>
-
+              <Route path='edit' onEnter={preload(medias, accounts)} component={FolderEdit}/>
               <Route path='create/campaign' component={CreateCampaign}/>
             </Route>
           </Route>
@@ -209,4 +150,5 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
       </Route>
     </Route>
   )
+  /* eslint-enable react/jsx-indent-props */
 }
