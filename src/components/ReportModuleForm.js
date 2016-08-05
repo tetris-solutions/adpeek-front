@@ -1,6 +1,5 @@
 import React from 'react'
 import {branch} from 'baobab-react/higher-order'
-import pick from 'lodash/pick'
 import Input from './Input'
 import assign from 'lodash/assign'
 import Message from '@tetris/front-server/lib/components/intl/Message'
@@ -8,17 +7,14 @@ import reportParamsType from '../propTypes/report-params'
 import reportModuleType from '../propTypes/report-module'
 import reportEntityType from '../propTypes/report-entity'
 import reportMetaDataType from '../propTypes/report-meta-data'
-import _ReportChart from './ReportModuleChart'
+import ReportChart from './ReportModuleChart'
 import isEmpty from 'lodash/isEmpty'
 import find from 'lodash/find'
 import TypeSelect from './ReportModuleEditTypeSelect'
 import Lists from './ReportModuleEditLists'
 import includes from 'lodash/includes'
-import {debouncedProps} from './higher-order/debounced-props'
 
 const {PropTypes} = React
-const editableFields = ['name', 'type', 'dimensions', 'filters', 'metrics']
-const ReportChart = debouncedProps(_ReportChart)
 
 const ModuleEdit = React.createClass({
   displayName: 'Edit-Module',
@@ -35,9 +31,6 @@ const ModuleEdit = React.createClass({
     close: PropTypes.func,
     save: PropTypes.func
   },
-  getInitialState () {
-    return pick(this.props.module, editableFields)
-  },
   getDefaultProps () {
     return {
       metaData: {
@@ -52,7 +45,7 @@ const ModuleEdit = React.createClass({
     const newState = {[name]: value}
 
     if (name === 'type' && value === 'pie') {
-      const {dimensions, metrics} = this.state
+      const {dimensions, metrics} = this.props.module
 
       if (dimensions.length > 1) {
         newState.dimensions = [dimensions[0]]
@@ -63,23 +56,19 @@ const ModuleEdit = React.createClass({
       }
     }
 
-    this.setState(newState)
-  },
-  handleSubmit (e) {
-    e.preventDefault()
-    this.props.save(pick(this.state, editableFields), true)
+    this.props.save(newState)
   },
   removeEntity (id) {
-    this.setState({
-      filters: assign({}, this.state.filters, {
-        id: this.state.filters.id.filter(m => m !== id)
+    this.props.save({
+      filters: assign({}, this.props.module.filters, {
+        id: this.props.module.filters.id.filter(m => m !== id)
       })
     })
   },
   addEntity (id) {
-    this.setState({
-      filters: assign({}, this.state.filters, {
-        id: this.state.filters.id.concat([id])
+    this.props.save({
+      filters: assign({}, this.props.module.filters, {
+        id: this.props.module.filters.id.concat([id])
       })
     })
   },
@@ -88,7 +77,7 @@ const ModuleEdit = React.createClass({
     const attribute = find(attributes, {id: attributeId})
     const goesWithoutId = id => !find(attributes, {id}).requires_id
 
-    let {dimensions, metrics} = this.state
+    let {dimensions, metrics} = this.props.module
 
     function remove (ls, val) {
       const ids = [val]
@@ -113,13 +102,14 @@ const ModuleEdit = React.createClass({
       metrics = metrics.filter(goesWithoutId)
     }
 
-    this.setState({metrics, dimensions})
+    this.props.save({metrics, dimensions})
   },
   addItem (id) {
     const {metaData: {attributes}} = this.props
-    const {type} = this.state
+    const {type} = this.props.module
     const getAttributeById = value => find(attributes, {id: value})
     const {requires, is_metric, is_dimension} = getAttributeById(id)
+    const changes = {}
 
     function add (ls, val) {
       if (type === 'pie') {
@@ -134,25 +124,22 @@ const ModuleEdit = React.createClass({
     }
 
     if (is_dimension) {
-      this.setState({
-        dimensions: add(this.state.dimensions, id)
-      })
+      changes.dimensions = add(this.props.module.dimensions, id)
     }
 
     if (is_metric) {
-      this.setState({
-        metrics: add(this.state.metrics, id)
-      })
+      changes.metrics = add(this.props.module.metrics, id)
     }
+
+    this.props.save(changes)
   },
   render () {
     const {metaData, entity, module, reportParams} = this.props
-    const {name, type, filters, metrics, dimensions} = this.state
+    const {name, type, filters, metrics, dimensions} = module
     const canSave = !isEmpty(metrics)
-    const updatedModule = assign({}, module, pick(this.state, editableFields))
 
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form>
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--4-col' style={{height: 500, overflowY: 'auto'}}>
 
@@ -183,20 +170,13 @@ const ModuleEdit = React.createClass({
               </div>
             </div>
 
-            <ReportChart
-              module={updatedModule}
-              entity={entity}
-              reportParams={reportParams}/>
+            <ReportChart module={module} entity={entity} reportParams={reportParams}/>
           </div>
         </div>
 
-        <a className='mdl-button' onClick={this.props.close}>
-          <Message>cancel</Message>
+        <a className='mdl-button' disabled={!canSave} onClick={this.props.close}>
+          <Message>close</Message>
         </a>
-
-        <button className='mdl-button' disabled={!canSave}>
-          <Message>save</Message>
-        </button>
       </form>
     )
   }

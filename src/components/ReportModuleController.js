@@ -5,7 +5,6 @@ import isEmpty from 'lodash/isEmpty'
 import {getDeepCursor} from '../functions/get-deep-cursor'
 import debounce from 'lodash/debounce'
 import {loadReportModuleResultAction} from '../actions/load-report-result'
-import {isvalidReportQuery} from '../functions/is-valid-report-query'
 import pick from 'lodash/pick'
 import assign from 'lodash/assign'
 import Module from './ReportModule'
@@ -39,26 +38,23 @@ const ReportModule = React.createClass({
 
     // @todo adapt for other report locations (e.g. workspace)
 
-    const modulePath = getDeepCursor(tree, [
+    this.cursor = tree.select(getDeepCursor(tree, [
       'user',
       ['companies', params.company],
       ['workspaces', params.workspace],
       ['folders', params.folder],
       ['reports', params.report],
       ['modules', this.props.id]
-    ])
+    ]))
 
     this.fetchResult = debounce(query => {
-      loadReportModuleResultAction(tree, params, this.props.id, query)
+      loadReportModuleResultAction(this.cursor, this.props.id, query)
     }, 1000)
 
-    this.cursor = tree.select(modulePath)
-
-    this.cursor.on('update', () => {
+    this.cursor.on('update', () =>
       this.setState({
         lastUpdate: Date.now()
-      })
-    })
+      }))
 
     if (!this.props.editable) {
       this.save = null
@@ -66,7 +62,10 @@ const ReportModule = React.createClass({
     }
   },
   componentDidMount () {
-    this.load()
+    this.fetchResult(this.getChartQuery())
+  },
+  componentDidUpdate () {
+    this.fetchResult(this.getChartQuery())
   },
   componentWillUnmount () {
     this.cursor.release()
@@ -92,13 +91,6 @@ const ReportModule = React.createClass({
       pick(module, 'dimensions', 'metrics'),
       pick(reportParams, 'ad_account', 'tetris_account', 'platform', 'from', 'to')
     )
-  },
-  load () {
-    const query = this.getChartQuery()
-
-    if (isvalidReportQuery(query)) {
-      this.fetchResult(query)
-    }
   },
   remove () {
     // this.props.remove(this.props.module.id)

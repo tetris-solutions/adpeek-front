@@ -34,6 +34,7 @@ export function getDeepCursor (tree, path) {
 
     if (!data) {
       tree.set(cursor, [])
+      tree.commit()
     }
 
     const innerIndex = findIndex(data, {[idField]: id})

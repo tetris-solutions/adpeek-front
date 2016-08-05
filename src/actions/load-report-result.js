@@ -2,52 +2,32 @@ import {GET} from '@tetris/http'
 import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save-token-as-cookie'
 import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetch-config'
 import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
-import queryString from 'query-string'
-import join from 'lodash/join'
-import assign from 'lodash/assign'
-import map from 'lodash/map'
-import {getDeepCursor} from '../functions/get-deep-cursor'
+import isEqual from 'lodash/isEqual'
+import {assembleReportQuery} from '../functions/assemble-report-query'
+import {isvalidReportQuery} from '../functions/is-valid-report-query'
 
 function loadReportModuleResult (query, config) {
-  query = assign({}, query)
-
-  query.dimensions = join(query.dimensions, ',')
-  query.metrics = join(query.metrics, ',')
-
-  query.filters = map(query.filters,
-    (values, attributeName) => `${attributeName}(${join(values, '|')})`)
-
-  if (!query.dimensions) delete query.dimensions
-
-  query.filters = join(query.filters, ',')
-
-  return GET(`${process.env.NUMBERS_API_URL}?${queryString.stringify(query)}`, config)
+  return GET(`${process.env.NUMBERS_API_URL}?${assembleReportQuery(query)}`, config)
 }
 
 const lastCall = {}
 
-export function loadReportModuleResultAction (tree, {company, workspace, folder, report}, id, query, token) {
-  // @todo make module path dynamic
-  const modulePath = getDeepCursor(tree, [
-    'user',
-    ['companies', company],
-    ['workspaces', workspace],
-    ['folders', folder],
-    ['reports', report],
-    ['modules', id]
-  ])
+export function loadReportModuleResultAction (moduleCursor, id, query, token) {
+  if (isEqual(query, moduleCursor.get('query'))) {
+    return
+  }
 
-  let moduleCursor = tree.select(modulePath)
+  const {tree} = moduleCursor
   let isLoadingCursor = moduleCursor.select('isLoading')
 
-  const myCall = lastCall[id] = Date.now()
-
   function releaseCursor () {
-    moduleCursor.release()
+    tree.commit()
     isLoadingCursor.release()
     isLoadingCursor = null
     moduleCursor = null
   }
+
+  const myCall = lastCall[id] = Date.now()
 
   function onSuccess (response) {
     isLoadingCursor.set(false)
@@ -56,7 +36,6 @@ export function loadReportModuleResultAction (tree, {company, workspace, folder,
       moduleCursor.set('result', response.data)
     }
 
-    tree.commit()
     releaseCursor()
 
     return response
@@ -64,6 +43,13 @@ export function loadReportModuleResultAction (tree, {company, workspace, folder,
 
   function makeTheCall () {
     moduleCursor.set('query', query)
+
+    if (!isvalidReportQuery(query)) {
+      moduleCursor.set('result', [])
+      releaseCursor()
+      return
+    }
+
     isLoadingCursor.set(true)
     tree.commit()
 
