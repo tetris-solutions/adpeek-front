@@ -14,4 +14,4 @@ export default PropTypes.shape({
   is_private: PropTypes.bool,
   is_user_selected: PropTypes.bool,
   is_folder_report: PropTypes.bool
-}).isRequired
+})

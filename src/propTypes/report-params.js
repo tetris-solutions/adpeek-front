@@ -8,4 +8,4 @@ export default PropTypes.shape({
   platform: PropTypes.string.isRequired,
   from: PropTypes.string.isRequired,
   to: PropTypes.string.isRequired
-}).isRequired
+})

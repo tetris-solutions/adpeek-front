@@ -13,40 +13,31 @@ function loadReportModuleResult (query, config) {
 const lastCall = {}
 
 export function loadReportModuleResultAction (moduleCursor, id, query, token) {
-  if (isEqual(query, moduleCursor.get('query'))) {
-    return
-  }
-
   const {tree} = moduleCursor
-  let isLoadingCursor = moduleCursor.select('isLoading')
-
-  function releaseCursor () {
-    tree.commit()
-    isLoadingCursor.release()
-    isLoadingCursor = null
-    moduleCursor = null
-  }
+  const isLoadingCursor = moduleCursor.select('isLoading')
 
   const myCall = lastCall[id] = Date.now()
 
   function onSuccess (response) {
     isLoadingCursor.set(false)
 
-    if (lastCall[id] === myCall) {
-      moduleCursor.set('result', response.data)
-    }
+    moduleCursor.set('result', response.data)
 
-    releaseCursor()
+    tree.commit()
 
     return response
   }
 
   function makeTheCall () {
+    if (isEqual(query, moduleCursor.get('query'))) {
+      return
+    }
+
     moduleCursor.set('query', query)
 
     if (!isvalidReportQuery(query)) {
       moduleCursor.set('result', [])
-      releaseCursor()
+      tree.commit()
       return
     }
 
@@ -55,24 +46,16 @@ export function loadReportModuleResultAction (moduleCursor, id, query, token) {
 
     loadReportModuleResult(query, getApiFetchConfig(tree, token))
       .then(saveResponseTokenAsCookie)
-      .then(onSuccess, error => {
-        releaseCursor()
-        // pass error ahead
-        throw error
-      })
+      .then(onSuccess)
       .catch(pushResponseErrorToState(tree))
   }
 
-  function waitThenCall () {
-    if (lastCall[id] !== myCall) {
-      releaseCursor()
-    } else {
-      makeTheCall()
-    }
-  }
-
   if (isLoadingCursor.get()) {
-    isLoadingCursor.once('update', waitThenCall)
+    isLoadingCursor.once('update', () => {
+      if (lastCall[id] === myCall) {
+        makeTheCall()
+      }
+    })
   } else {
     makeTheCall()
   }

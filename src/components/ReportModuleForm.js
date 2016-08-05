@@ -1,5 +1,4 @@
 import React from 'react'
-import {branch} from 'baobab-react/higher-order'
 import Input from './Input'
 import assign from 'lodash/assign'
 import Message from '@tetris/front-server/lib/components/intl/Message'
@@ -30,16 +29,6 @@ const ModuleEdit = React.createClass({
     metaData: reportMetaDataType,
     close: PropTypes.func,
     save: PropTypes.func
-  },
-  getDefaultProps () {
-    return {
-      metaData: {
-        attributes: {},
-        metrics: [],
-        dimensions: [],
-        filters: []
-      }
-    }
   },
   onChangeInput ({target: {name, value}}) {
     const newState = {[name]: value}
@@ -162,7 +151,7 @@ const ModuleEdit = React.createClass({
                 <Input
                   name='name'
                   label='name'
-                  value={name}
+                  defaultValue={name}
                   onChange={this.onChangeInput}/>
               </div>
               <div className='mdl-cell mdl-cell--5-col'>
@@ -170,7 +159,7 @@ const ModuleEdit = React.createClass({
               </div>
             </div>
 
-            <ReportChart module={module} entity={entity} reportParams={reportParams}/>
+            <ReportChart metaData={metaData} module={module} entity={entity} reportParams={reportParams}/>
           </div>
         </div>
 
@@ -182,6 +171,4 @@ const ModuleEdit = React.createClass({
   }
 })
 
-export default branch(({entity, reportParams}) => ({
-  metaData: ['reports', 'metaData', reportParams.platform, entity.id]
-}), ModuleEdit)
+export default ModuleEdit

@@ -1,5 +1,5 @@
 import React from 'react'
-import {branch} from 'baobab-react/higher-order'
+import reportMetaDataType from '../propTypes/report-meta-data'
 import reportParamsType from '../propTypes/report-params'
 import reportModuleType from '../propTypes/report-module'
 import reportEntityType from '../propTypes/report-entity'
@@ -51,13 +51,10 @@ const ReportChart = React.createClass({
   mixins: [styled(style)],
   propTypes: {
     reportParams: reportParamsType,
+    metaData: reportMetaDataType.isRequired,
     module: reportModuleType,
     entity: reportEntityType,
-    query: PropTypes.object,
-    dispatch: PropTypes.func,
-    metaData: PropTypes.shape({
-      attributes: PropTypes.object
-    })
+    dispatch: PropTypes.func
   },
   getDefaultProps () {
     return {
@@ -72,7 +69,8 @@ const ReportChart = React.createClass({
 
     return (
       newModule.isLoading !== oldModule.isLoading ||
-      newModule.result !== oldModule.result
+      newModule.result !== oldModule.result ||
+      newModule.name !== oldModule.name
     )
   },
   render () {
@@ -94,8 +92,4 @@ const ReportChart = React.createClass({
   }
 })
 
-export default branch(({module: {id}, reportParams, entity}) => ({
-  metaData: ['reports', 'metaData', reportParams.platform, entity.id],
-  result: ['reports', 'modules', id, 'data'],
-  query: ['reports', 'modules', id, 'query']
-}), ReportChart)
+export default ReportChart

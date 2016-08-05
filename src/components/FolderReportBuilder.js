@@ -13,6 +13,7 @@ const FolderReactBuilder = React.createClass({
     messages: PropTypes.object
   },
   propTypes: {
+    params: PropTypes.object.isRequired,
     dispatch: PropTypes.func,
     folder: PropTypes.shape({
       campaigns: PropTypes.array,
@@ -26,20 +27,22 @@ const FolderReactBuilder = React.createClass({
   componentDidMount () {
     this.props.dispatch(
       loadReportMetaDataAction,
+      this.props.params,
       this.props.folder.account.platform,
       'Campaign'
     )
   },
   render () {
+    const {folder} = this.props
     const reportParams = {
-      ad_account: this.props.folder.account.external_id,
-      platform: this.props.folder.account.platform,
-      tetris_account: this.props.folder.account.tetris_id
+      ad_account: folder.account.external_id,
+      platform: folder.account.platform,
+      tetris_account: folder.account.tetris_id
     }
     const campaignEntity = {
       id: 'Campaign',
       name: this.context.messages.campaigns,
-      list: map(this.props.folder.campaigns, c => assign({}, c, {id: c.external_id}))
+      list: map(folder.campaigns, c => assign({}, c, {id: c.external_id}))
     }
 
     return (

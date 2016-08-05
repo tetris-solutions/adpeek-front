@@ -5,6 +5,7 @@ import ReportChart from './ReportModuleChart'
 import reportParamsType from '../propTypes/report-params'
 import reportModuleType from '../propTypes/report-module'
 import reportEntityType from '../propTypes/report-entity'
+import reportMetaDataType from '../propTypes/report-meta-data'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
 import isEmpty from 'lodash/isEmpty'
@@ -25,6 +26,7 @@ const Module = React.createClass({
     }
   },
   propTypes: {
+    metaData: reportMetaDataType.isRequired,
     remove: PropTypes.func,
     update: PropTypes.func,
     module: reportModuleType,
@@ -53,12 +55,12 @@ const Module = React.createClass({
   },
   render () {
     const {editMode} = this.state
-    const {module, update, remove, entity, reportParams} = this.props
+    const {module, metaData, update, remove, entity, reportParams} = this.props
 
     return (
       <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
         <div ref='chartWrapper' className={`mdl-card__title mdl-card--expand ${style.content}`}>
-          <ReportChart module={module} entity={entity} reportParams={reportParams}/>
+          <ReportChart metaData={metaData} module={module} entity={entity} reportParams={reportParams}/>
         </div>
 
         <div className='mdl-card__menu'>
@@ -80,6 +82,7 @@ const Module = React.createClass({
             onEscPress={this.closeModal}>
 
             <Edit
+              metaData={metaData}
               module={module}
               entity={entity}
               reportParams={reportParams}

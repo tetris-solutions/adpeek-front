@@ -63,23 +63,8 @@ const ReportBuilder = React.createClass({
       index
     })
   },
-  // @todo use actions
-  updateModule (id, updatedModule) {
-    this.setState({
-      modules: this.state.modules
-        .map(m => m.id === id
-          ? assign({}, m, updatedModule)
-          : m)
-    })
-  },
-  // @todo use actions
-  removeModule (id) {
-    this.setState({
-      modules: this.state.modules.filter(m => m.id !== id)
-    })
-  },
   render () {
-    const {report: {modules}} = this.props
+    const {report: {modules, metaData}} = this.props
     const {startDate, endDate} = this.state
     const reportParams = assign({
       from: startDate.format('YYYY-MM-DD'),
@@ -111,10 +96,9 @@ const ReportBuilder = React.createClass({
               <Module
                 id={module.id}
                 editable
+                metaData={metaData}
                 reportParams={reportParams}
-                entity={this.props.entity}
-                update={this.updateModule}
-                remove={this.removeModule}/>
+                entity={this.props.entity}/>
             </div>
           ))}
 

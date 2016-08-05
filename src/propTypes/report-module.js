@@ -18,4 +18,4 @@ export default PropTypes.shape({
   filters: PropTypes.shape({
     id: PropTypes.arrayOf(PropTypes.string)
   }).isRequired
-}).isRequired
+})

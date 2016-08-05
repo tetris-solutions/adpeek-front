@@ -5,6 +5,7 @@ import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-
 import omit from 'lodash/omit'
 import without from 'lodash/without'
 import set from 'lodash/set'
+import {getDeepCursor} from '../functions/get-deep-cursor'
 
 function loadReportMetaData (platform, entity, config) {
   return GET(`${process.env.NUMBERS_API_URL}/meta?platform=${platform}&entity=${entity}`, config)
@@ -96,7 +97,16 @@ const excluded = [
   'product_id'
 ]
 
-export function loadReportMetaDataAction (tree, platform, entity, token) {
+export function loadReportMetaDataAction (tree, params, platform, entity, token) {
+  const pathToReport = getDeepCursor(tree, [
+    'user',
+    ['companies', params.company],
+    ['workspaces', params.workspace],
+    ['folders', params.folder],
+    ['reports', params.report],
+    'metaData'
+  ])
+
   return loadReportMetaData(platform, entity, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
     .then(response => {
@@ -110,7 +120,7 @@ export function loadReportMetaDataAction (tree, platform, entity, token) {
 
       metaData.dimensions = without(metaData.dimensions, excluded)
 
-      tree.set(['reports', 'metaData', platform, entity], metaData)
+      tree.set(pathToReport, metaData)
       tree.commit()
 
       return response

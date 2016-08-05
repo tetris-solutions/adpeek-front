@@ -1,6 +1,7 @@
 import React from 'react'
 import reportParamsType from '../propTypes/report-params'
 import reportEntityType from '../propTypes/report-entity'
+import reportMetaDataType from '../propTypes/report-meta-data'
 import isEmpty from 'lodash/isEmpty'
 import {getDeepCursor} from '../functions/get-deep-cursor'
 import debounce from 'lodash/debounce'
@@ -12,14 +13,21 @@ import Module from './ReportModule'
 const {PropTypes} = React
 
 const ReportModule = React.createClass({
-  displayName: 'Report-Module',
+  displayName: 'Report-Module-Controller',
   getDefaultProps () {
     return {
-      editable: false
+      editable: false,
+      metaData: {
+        attributes: {},
+        metrics: [],
+        dimensions: [],
+        filters: []
+      }
     }
   },
   propTypes: {
     editable: PropTypes.bool,
+    metaData: reportMetaDataType,
     id: PropTypes.string.isRequired,
     entity: reportEntityType,
     reportParams: reportParamsType
@@ -51,10 +59,11 @@ const ReportModule = React.createClass({
       loadReportModuleResultAction(this.cursor, this.props.id, query)
     }, 1000)
 
-    this.cursor.on('update', () =>
-      this.setState({
-        lastUpdate: Date.now()
-      }))
+    const onUpdate = debounce(() => this.setState({
+      lastUpdate: Date.now()
+    }), 300)
+
+    this.cursor.on('update', onUpdate)
 
     if (!this.props.editable) {
       this.save = null
