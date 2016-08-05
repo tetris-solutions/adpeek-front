@@ -16,23 +16,19 @@ const style = csjs`
 
 const {PropTypes} = React
 
-const ReportModule = React.createClass({
+const Module = React.createClass({
   displayName: 'Report-Module',
   mixins: [styled(style)],
-  getDefaultProps () {
-    return {
-      editable: false
-    }
-  },
   getInitialState () {
     return {
       editMode: isEmpty(this.props.module.metrics)
     }
   },
   propTypes: {
-    editable: PropTypes.bool,
-    remove: PropTypes.func,
-    update: PropTypes.func,
+    editable: PropTypes.bool.isRequired,
+    remove: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired,
     module: reportModuleType,
     entity: reportEntityType,
     reportParams: reportParamsType
@@ -57,16 +53,6 @@ const ReportModule = React.createClass({
   closeModal () {
     this.setState({editMode: false})
   },
-  remove () {
-    this.props.remove(this.props.module.id)
-  },
-  save (updatedModule, closeAfterSaving = false) {
-    this.props.update(this.props.module.id, updatedModule)
-
-    if (closeAfterSaving) {
-      this.closeModal()
-    }
-  },
   render () {
     const {editMode} = this.state
     const {module, editable, entity, reportParams} = this.props
@@ -90,7 +76,7 @@ const ReportModule = React.createClass({
             </button>
             <button
               className='mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect'
-              onClick={this.remove}>
+              onClick={this.props.remove}>
 
               <i className='material-icons'>clear</i>
             </button>
@@ -107,7 +93,7 @@ const ReportModule = React.createClass({
               module={module}
               entity={entity}
               reportParams={reportParams}
-              save={this.save}
+              save={this.props.update}
               close={this.closeModal}/>
 
           </Modal>
@@ -117,4 +103,4 @@ const ReportModule = React.createClass({
   }
 })
 
-export default ReportModule
+export default Module

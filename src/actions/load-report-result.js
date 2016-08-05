@@ -6,9 +6,9 @@ import queryString from 'query-string'
 import join from 'lodash/join'
 import assign from 'lodash/assign'
 import map from 'lodash/map'
-import isEqual from 'lodash/isEqual'
+import {getDeepCursor} from '../functions/get-deep-cursor'
 
-function loadReport (query, config) {
+function loadReportModuleResult (query, config) {
   query = assign({}, query)
 
   query.dimensions = join(query.dimensions, ',')
@@ -26,46 +26,68 @@ function loadReport (query, config) {
 
 const lastCall = {}
 
-function action (tree, id, query, token) {
-  const moduleCursor = tree.select(['reports', 'modules', id])
+export function loadReportModuleResultAction (tree, {company, workspace, folder, report}, id, query, token) {
+  // @todo make module path dynamic
+  const modulePath = getDeepCursor(tree, [
+    'user',
+    ['companies', company],
+    ['workspaces', workspace],
+    ['folders', folder],
+    ['reports', report],
+    ['modules', id]
+  ])
 
-  if (isEqual(query, moduleCursor.get('query'))) {
-    return Promise.resolve()
-  }
+  let moduleCursor = tree.select(modulePath)
+  let isLoadingCursor = moduleCursor.select('isLoading')
 
   const myCall = lastCall[id] = Date.now()
 
+  function releaseCursor () {
+    moduleCursor.release()
+    isLoadingCursor.release()
+    isLoadingCursor = null
+    moduleCursor = null
+  }
+
   function onSuccess (response) {
-    if (lastCall[id] !== myCall) {
-      throw new Error('Report API call has been canceled')
+    isLoadingCursor.set(false)
+
+    if (lastCall[id] === myCall) {
+      moduleCursor.set('result', response.data)
     }
 
-    moduleCursor.set('query', query)
-    moduleCursor.set('data', response.data)
     tree.commit()
+    releaseCursor()
 
     return response
   }
 
-  const onFailure = pushResponseErrorToState(tree)
+  function makeTheCall () {
+    moduleCursor.set('query', query)
+    isLoadingCursor.set(true)
+    tree.commit()
 
-  return loadReport(query, getApiFetchConfig(tree, token))
-    .then(saveResponseTokenAsCookie)
-    .then(onSuccess, onFailure)
-}
-
-function preventRace (fn) {
-  let lock = Promise.resolve()
-
-  function single (...args) {
-    const fire = () => fn(...args)
-
-    lock = lock.then(fire, fire)
-
-    return lock
+    loadReportModuleResult(query, getApiFetchConfig(tree, token))
+      .then(saveResponseTokenAsCookie)
+      .then(onSuccess, error => {
+        releaseCursor()
+        // pass error ahead
+        throw error
+      })
+      .catch(pushResponseErrorToState(tree))
   }
 
-  return single
-}
+  function waitThenCall () {
+    if (lastCall[id] !== myCall) {
+      releaseCursor()
+    } else {
+      makeTheCall()
+    }
+  }
 
-export const loadReportResultAction = preventRace(action)
+  if (isLoadingCursor.get()) {
+    isLoadingCursor.once('update', waitThenCall)
+  } else {
+    makeTheCall()
+  }
+}

@@ -1,18 +1,12 @@
 import React from 'react'
 import {branch} from 'baobab-react/higher-order'
-import {loadReportResultAction} from '../actions/load-report-result'
 import reportParamsType from '../propTypes/report-params'
 import reportModuleType from '../propTypes/report-module'
 import reportEntityType from '../propTypes/report-entity'
-import assign from 'lodash/assign'
-import {isvalidReportQuery} from '../functions/is-valid-report-query'
-import isEmpty from 'lodash/isEmpty'
-import pick from 'lodash/pick'
 import Line from './ReportModuleChartLine'
 import Column from './ReportModuleChartColumn'
 import Pie from './ReportModuleChartPie'
 import Table from './ReportModuleTable'
-import isEqual from 'lodash/isEqual'
 import Spinner from './Spinner'
 import {styled} from './mixins/styled'
 import csjs from 'csjs'
@@ -46,6 +40,12 @@ const ChartSpinner = () => (
   </div>
 )
 
+const emptyQuery = {
+  metrics: [],
+  dimensions: []
+}
+const emptyResult = []
+
 const ReportChart = React.createClass({
   displayName: 'Report-Chart',
   mixins: [styled(style)],
@@ -53,7 +53,6 @@ const ReportChart = React.createClass({
     reportParams: reportParamsType,
     module: reportModuleType,
     entity: reportEntityType,
-    result: PropTypes.array,
     query: PropTypes.object,
     dispatch: PropTypes.func,
     metaData: PropTypes.shape({
@@ -62,60 +61,22 @@ const ReportChart = React.createClass({
   },
   getDefaultProps () {
     return {
-      result: [],
       metaData: {
         attributes: {}
       }
     }
   },
-  getInitialState () {
-    return {
-      isLoading: false,
-      query: this.getChartQuery()
-    }
-  },
-  componentDidMount () {
-    this.loadReport()
-  },
-  componentWillReceiveProps (nextProps) {
-    const query = this.getChartQuery(nextProps)
+  shouldComponentUpdate (nextProps) {
+    const newModule = nextProps.module
+    const oldModule = this.props.module
 
-    if (!isEqual(query, this.state.query)) {
-      this.setState({query}, this.loadReport)
-    }
-  },
-  componentWillUnmount () {
-    this.dead = true
-  },
-  getChartQuery (props) {
-    props = props || this.props
-    const {entity} = props
-    const filters = assign({}, props.module.filters)
-
-    if (isEmpty(filters.id)) {
-      filters.id = entity.list.map(({id}) => id)
-    }
-
-    return assign({filters, entity: entity.id},
-      pick(props.module, 'dimensions', 'metrics'),
-      pick(props.reportParams, 'ad_account', 'tetris_account', 'platform', 'from', 'to')
+    return (
+      newModule.isLoading !== oldModule.isLoading ||
+      newModule.result !== oldModule.result
     )
   },
-  loadReport () {
-    const {query} = this.state
-
-    if (!isvalidReportQuery(query)) return
-
-    const {dispatch, module} = this.props
-
-    this.setState({isLoading: true})
-
-    dispatch(loadReportResultAction, module.id, query)
-      .then(() => !this.dead && this.setState({isLoading: false}))
-  },
   render () {
-    const localQuery = this.state.query
-    const {module, result, entity, query, metaData: {attributes}} = this.props
+    const {module, entity, metaData: {attributes}} = this.props
     const Chart = typeComponent[module.type]
 
     return (
@@ -124,10 +85,10 @@ const ReportChart = React.createClass({
           name={module.name}
           attributes={attributes}
           entity={entity}
-          result={result}
-          query={query || localQuery}/>
+          result={module.result || emptyResult}
+          query={module.query || emptyQuery}/>
 
-        {this.state.isLoading && <ChartSpinner/>}
+        {module.isLoading && <ChartSpinner/>}
       </div>
     )
   }

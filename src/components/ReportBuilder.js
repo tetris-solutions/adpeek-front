@@ -3,7 +3,7 @@ import Message from '@tetris/front-server/lib/components/intl/Message'
 import moment from 'moment'
 import ReportDateRange from './ReportDateRange'
 import map from 'lodash/map'
-import Module from './ReportModule'
+import Module from './ReportModuleController'
 import assign from 'lodash/assign'
 import size from 'lodash/size'
 import {contextualize} from './higher-order/contextualize'
@@ -109,7 +109,7 @@ const ReportBuilder = React.createClass({
               className={`mdl-cell mdl-cell--${module.cols}-col`}>
 
               <Module
-                module={module}
+                id={module.id}
                 editable
                 reportParams={reportParams}
                 entity={this.props.entity}
