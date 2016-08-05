@@ -25,10 +25,8 @@ const Module = React.createClass({
     }
   },
   propTypes: {
-    editable: PropTypes.bool.isRequired,
-    remove: PropTypes.func.isRequired,
-    update: PropTypes.func.isRequired,
-    id: PropTypes.string.isRequired,
+    remove: PropTypes.func,
+    update: PropTypes.func,
     module: reportModuleType,
     entity: reportEntityType,
     reportParams: reportParamsType
@@ -55,35 +53,27 @@ const Module = React.createClass({
   },
   render () {
     const {editMode} = this.state
-    const {module, editable, entity, reportParams} = this.props
+    const {module, update, remove, entity, reportParams} = this.props
 
     return (
       <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
         <div ref='chartWrapper' className={`mdl-card__title mdl-card--expand ${style.content}`}>
-          <ReportChart
-            module={module}
-            entity={entity}
-            reportParams={reportParams}/>
+          <ReportChart module={module} entity={entity} reportParams={reportParams}/>
         </div>
 
-        {editable && (
-          <div className='mdl-card__menu'>
-            <button
-              className='mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect'
-              onClick={this.openModal}>
-
+        <div className='mdl-card__menu'>
+          {update && (
+            <button className='mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect' onClick={this.openModal}>
               <i className='material-icons'>create</i>
-            </button>
-            <button
-              className='mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect'
-              onClick={this.props.remove}>
+            </button>)}
 
+          {remove && (
+            <button className='mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect' onClick={remove}>
               <i className='material-icons'>clear</i>
-            </button>
-          </div>
-        )}
+            </button>)}
+        </div>
 
-        {editable && editMode === true && (
+        {editMode === true && (
           <Modal
             size='large'
             provide={['tree', 'messages', 'locales', 'insertCss']}
@@ -93,7 +83,7 @@ const Module = React.createClass({
               module={module}
               entity={entity}
               reportParams={reportParams}
-              save={this.props.update}
+              save={update}
               close={this.closeModal}/>
 
           </Modal>

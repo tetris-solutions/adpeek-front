@@ -59,6 +59,11 @@ const ReportModule = React.createClass({
         lastUpdate: Date.now()
       })
     })
+
+    if (!this.props.editable) {
+      this.save = null
+      this.update = null
+    }
   },
   componentDidMount () {
     this.load()
