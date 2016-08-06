@@ -68,6 +68,7 @@ const ReportChart = React.createClass({
     const oldModule = this.props.module
 
     return (
+      newModule.rows !== oldModule.rows ||
       newModule.isLoading !== oldModule.isLoading ||
       newModule.result !== oldModule.result ||
       newModule.name !== oldModule.name

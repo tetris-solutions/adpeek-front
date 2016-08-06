@@ -9,6 +9,7 @@ import {loadReportModuleResultAction} from '../actions/load-report-result'
 import pick from 'lodash/pick'
 import assign from 'lodash/assign'
 import Module from './ReportModule'
+import {updateModuleAction} from '../actions/update-module'
 
 const {PropTypes} = React
 
@@ -101,11 +102,18 @@ const ReportModule = React.createClass({
       pick(reportParams, 'ad_account', 'tetris_account', 'platform', 'from', 'to')
     )
   },
+  // @todo implement remove
   remove () {
     // this.props.remove(this.props.module.id)
   },
   save (updatedModule) {
     this.cursor.merge(updatedModule)
+
+    // @todo some kind of debounce
+    updateModuleAction(
+      this.context.tree,
+      assign({id: this.props.id}, updatedModule)
+    )
   },
   render () {
     return (

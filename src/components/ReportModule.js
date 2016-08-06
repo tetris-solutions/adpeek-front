@@ -16,6 +16,7 @@ const style = csjs`
 }`
 
 const {PropTypes} = React
+const editFormRequiredContext = ['tree', 'messages', 'locales', 'insertCss']
 
 const Module = React.createClass({
   displayName: 'Report-Module',
@@ -75,12 +76,8 @@ const Module = React.createClass({
             </button>)}
         </div>
 
-        {editMode === true && (
-          <Modal
-            size='large'
-            provide={['tree', 'messages', 'locales', 'insertCss']}
-            onEscPress={this.closeModal}>
-
+        {editMode && (
+          <Modal size='large' provide={editFormRequiredContext} onEscPress={this.closeModal}>
             <Edit
               metaData={metaData}
               module={module}
@@ -88,7 +85,6 @@ const Module = React.createClass({
               reportParams={reportParams}
               save={update}
               close={this.closeModal}/>
-
           </Modal>
         )}
       </div>

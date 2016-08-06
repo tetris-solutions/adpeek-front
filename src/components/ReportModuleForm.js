@@ -7,7 +7,6 @@ import reportModuleType from '../propTypes/report-module'
 import reportEntityType from '../propTypes/report-entity'
 import reportMetaDataType from '../propTypes/report-meta-data'
 import ReportChart from './ReportModuleChart'
-import isEmpty from 'lodash/isEmpty'
 import find from 'lodash/find'
 import TypeSelect from './ReportModuleEditTypeSelect'
 import Lists from './ReportModuleEditLists'
@@ -125,7 +124,6 @@ const ModuleEdit = React.createClass({
   render () {
     const {metaData, entity, module, reportParams} = this.props
     const {name, type, filters, metrics, dimensions} = module
-    const canSave = !isEmpty(metrics)
 
     return (
       <form>
@@ -163,7 +161,7 @@ const ModuleEdit = React.createClass({
           </div>
         </div>
 
-        <a className='mdl-button' disabled={!canSave} onClick={this.props.close}>
+        <a className='mdl-button' onClick={this.props.close}>
           <Message>close</Message>
         </a>
       </form>
