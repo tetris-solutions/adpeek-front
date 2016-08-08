@@ -13,7 +13,9 @@ function loadReportModuleResult (query, config) {
 const lastCall = {}
 
 export function loadReportModuleResultAction (moduleCursor, id, query, token) {
-  if (!moduleCursor) return
+  const isCursorOk = () => moduleCursor && moduleCursor.tree
+
+  if (!isCursorOk()) return
 
   const {tree} = moduleCursor
   const isLoadingCursor = moduleCursor.select('isLoading')
@@ -23,8 +25,10 @@ export function loadReportModuleResultAction (moduleCursor, id, query, token) {
   function onSuccess (response) {
     isLoadingCursor.set(false)
 
-    moduleCursor.set('query', query)
-    moduleCursor.set('result', response.data)
+    if (isCursorOk()) {
+      moduleCursor.set('query', query)
+      moduleCursor.set('result', response.data)
+    }
 
     tree.commit()
 
@@ -32,6 +36,8 @@ export function loadReportModuleResultAction (moduleCursor, id, query, token) {
   }
 
   function makeTheCall () {
+    if (!isCursorOk()) return
+
     if (isEqual(query, moduleCursor.get('query'))) {
       return
     }

@@ -15,8 +15,6 @@ export function loadFolderReports (id, limitToFirst = false, config) {
 }
 
 export function loadFolderReportsAction (tree, company, workspace, folder, limitToFirst = false, token = null) {
-  const replace = (newReportList, oldReportList) => newReportList
-
   return loadFolderReports(folder, limitToFirst, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
     .then(saveResponseData(tree, [
@@ -25,7 +23,7 @@ export function loadFolderReportsAction (tree, company, workspace, folder, limit
       ['workspaces', workspace],
       ['folders', folder],
       'reports'
-    ], replace))
+    ]))
     .catch(pushResponseErrorToState(tree))
 }
 
