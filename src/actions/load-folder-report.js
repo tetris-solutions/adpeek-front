@@ -4,7 +4,7 @@ import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetc
 import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
 import {saveResponseData} from '../functions/save-response-data'
 
-export function loadFolderReport (folder, report, config) {
+function loadFolderReport (folder, report, config) {
   return GET(`${process.env.ADPEEK_API_URL}/folder/${folder}/report/${report}`, config)
 }
 

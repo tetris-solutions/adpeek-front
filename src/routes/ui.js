@@ -36,6 +36,7 @@ import FolderReports from '../components/FolderReports'
 import CreateReport from '../components/FolderReportCreate'
 import ReportsBread from '../components/ReportsBreadcrumb'
 import ReportBread from '../components/ReportBreadcrumb'
+import ReportAside from '../components/ReportAside'
 
 import App from '../components/App'
 import {loadUserCompaniesActionRouterAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
@@ -114,7 +115,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
               </Route>
 
               <Route onEnter={preload(campaigns)} breadcrumb={ReportsBread}>
-                <Route path='report/:report' breadcrumb={ReportBread} onEnter={preload(report)}>
+                <Route path='report/:report' aside={ReportAside} breadcrumb={ReportBread} onEnter={preload(report)}>
                   <IndexRoute component={FolderReportBuilder}/>
                   <Route path='edit' component={FolderReportBuilder}/>
                 </Route>
