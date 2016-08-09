@@ -8,8 +8,11 @@ import assign from 'lodash/assign'
 import size from 'lodash/size'
 import {contextualize} from './higher-order/contextualize'
 import {createModuleReportAction} from '../actions/create-module'
+import {updateReportAction} from '../actions/update-report'
 import reportType from '../propTypes/report'
 import sortBy from 'lodash/sortBy'
+import Input from './Input'
+import debounce from 'lodash/debounce'
 
 const {PropTypes} = React
 
@@ -39,6 +42,13 @@ const ReportBuilder = React.createClass({
       endDate: moment().startOf('week').subtract(1, 'days')
     }
   },
+  componentWillMount () {
+    const {dispatch, params, report: {id}} = this.props
+    const getName = () => this.refs.form.elements.name.value
+
+    this.onChangeName = debounce(() =>
+      dispatch(updateReportAction, params, {id, name: getName()}), 1000)
+  },
   getNewModule () {
     const {messages} = this.context
     const index = size(this.props.report.modules)
@@ -64,7 +74,7 @@ const ReportBuilder = React.createClass({
     })
   },
   render () {
-    const {report: {modules, metaData}} = this.props
+    const {report: {name, modules, metaData}} = this.props
     const {startDate, endDate} = this.state
     const reportParams = assign({
       from: startDate.format('YYYY-MM-DD'),
@@ -74,18 +84,20 @@ const ReportBuilder = React.createClass({
     return (
       <div>
         <header className='mdl-layout__header'>
-          <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
+          <form ref='form' className='mdl-layout__header-row mdl-color--blue-grey-500'>
+            <Input name='name' onChange={this.onChangeName} defaultValue={name}/>
+
+            <div className='mdl-layout-spacer'/>
+
             <ReportDateRange
               onChange={this.onChangeRange}
               startDate={startDate}
               endDate={endDate}/>
 
-            <div className='mdl-layout-spacer'/>
-
             <button className='mdl-button mdl-color-text--grey-100' onClick={this.addNewModule}>
               <Message>newModule</Message>
             </button>
-          </div>
+          </form>
         </header>
         <div className='mdl-grid'>
           {map(sortBy(modules, 'index'), module => (
