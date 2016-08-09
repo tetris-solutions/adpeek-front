@@ -3,14 +3,19 @@ import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save
 import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetch-config'
 import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
 
-export function deleteModule (module, config) {
+function deleteModule (module, config) {
   return DELETE(`${process.env.ADPEEK_API_URL}/module/${module}`, config)
 }
 
-export function deleteModuleAction (tree, module) {
-  return deleteModule(module, getApiFetchConfig(tree))
+export function deleteModuleAction (moduleCursor) {
+  return deleteModule(moduleCursor.get('id'), getApiFetchConfig(moduleCursor.tree))
     .then(saveResponseTokenAsCookie)
-    .catch(pushResponseErrorToState(tree))
+    .then(response => {
+      moduleCursor.unset()
+
+      return response
+    })
+    .catch(pushResponseErrorToState(moduleCursor.tree))
 }
 
 export default deleteModuleAction

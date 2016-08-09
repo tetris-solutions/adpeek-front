@@ -6,6 +6,7 @@ import isEmpty from 'lodash/isEmpty'
 import {getDeepCursor} from '../functions/get-deep-cursor'
 import debounce from 'lodash/debounce'
 import {loadReportModuleResultAction} from '../actions/load-report-result'
+import {deleteModuleAction} from '../actions/delete-module'
 import pick from 'lodash/pick'
 import assign from 'lodash/assign'
 import Module from './ReportModule'
@@ -102,16 +103,12 @@ const ReportModule = React.createClass({
       pick(reportParams, 'ad_account', 'tetris_account', 'platform', 'from', 'to')
     )
   },
-  // @todo implement remove
   remove () {
-    // this.props.remove(this.props.module.id)
+    deleteModuleAction(this.cursor)
   },
   save (updatedModule) {
-    this.cursor.merge(updatedModule)
-
-    // @todo some kind of debounce
     updateModuleAction(
-      this.context.tree,
+      this.cursor,
       assign({id: this.props.id}, updatedModule)
     )
   },

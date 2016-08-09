@@ -9,7 +9,7 @@ export const CompanyAside = ({company}) => (
   <ContextMenu title={company.name} icon='account_balance'>
     <a
       className='mdl-button mdl-js-button mdl-button--icon'
-      href={`${process.env.FRONT_URL}/dashboard/company/${company.id}`}>
+      href={`${process.env.FRONT_URL}/dashboard/company/${company.id}/info`}>
       <i className='material-icons'>info_outline</i>
     </a>
 
