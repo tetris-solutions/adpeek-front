@@ -1,18 +1,20 @@
 import React from 'react'
-import ReportBuilder from './ReportBuilder'
+import Report from './Report'
 import {contextualize} from './higher-order/contextualize'
 import map from 'lodash/map'
 import assign from 'lodash/assign'
 import {loadReportMetaDataAction} from '../actions/load-report-meta-data'
+import endsWith from 'lodash/endsWith'
 
 const {PropTypes} = React
 
-const FolderReactBuilder = React.createClass({
-  displayName: 'Folder-Report-Builder',
+const FolderReport = React.createClass({
+  displayName: 'Folder-Report',
   contextTypes: {
     messages: PropTypes.object
   },
   propTypes: {
+    location: PropTypes.object,
     params: PropTypes.object.isRequired,
     dispatch: PropTypes.func,
     folder: PropTypes.shape({
@@ -33,7 +35,7 @@ const FolderReactBuilder = React.createClass({
     )
   },
   render () {
-    const {folder} = this.props
+    const {folder, location} = this.props
     const reportParams = {
       ad_account: folder.account.external_id,
       platform: folder.account.platform,
@@ -46,12 +48,13 @@ const FolderReactBuilder = React.createClass({
     }
 
     return (
-      <ReportBuilder
+      <Report
         {...this.props}
+        editMode={endsWith(location.pathname, '/edit')}
         reportParams={reportParams}
         entity={campaignEntity}/>
     )
   }
 })
 
-export default contextualize(FolderReactBuilder, 'folder')
+export default contextualize(FolderReport, 'folder')

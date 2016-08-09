@@ -17,9 +17,10 @@ import debounce from 'lodash/debounce'
 const {PropTypes} = React
 
 const ReportBuilder = React.createClass({
-  displayName: 'Report-Builder',
+  displayName: 'Report',
   propTypes: {
     report: reportType,
+    editMode: PropTypes.bool.isRequired,
     dispatch: PropTypes.func,
     params: PropTypes.object,
     reportParams: PropTypes.shape({
@@ -44,7 +45,7 @@ const ReportBuilder = React.createClass({
   },
   componentWillMount () {
     const {dispatch, params, report: {id}} = this.props
-    const getName = () => this.refs.form.elements.name.value
+    const getName = () => this.refs.header.querySelector('input[name="name"]').value
 
     this.onChangeName = debounce(() =>
       dispatch(updateReportAction, params, {id, name: getName()}), 1000)
@@ -74,7 +75,7 @@ const ReportBuilder = React.createClass({
     })
   },
   render () {
-    const {report: {name, modules, metaData}} = this.props
+    const {editMode, report: {name, modules, metaData}} = this.props
     const {startDate, endDate} = this.state
     const reportParams = assign({
       from: startDate.format('YYYY-MM-DD'),
@@ -84,8 +85,10 @@ const ReportBuilder = React.createClass({
     return (
       <div>
         <header className='mdl-layout__header'>
-          <form ref='form' className='mdl-layout__header-row mdl-color--blue-grey-500'>
-            <Input name='name' onChange={this.onChangeName} defaultValue={name}/>
+          <div ref='header' className='mdl-layout__header-row mdl-color--blue-grey-500'>
+            {editMode
+              ? <Input name='name' onChange={this.onChangeName} defaultValue={name}/>
+              : name}
 
             <div className='mdl-layout-spacer'/>
 
@@ -94,10 +97,11 @@ const ReportBuilder = React.createClass({
               startDate={startDate}
               endDate={endDate}/>
 
-            <button className='mdl-button mdl-color-text--grey-100' onClick={this.addNewModule}>
-              <Message>newModule</Message>
-            </button>
-          </form>
+            {editMode && (
+              <button className='mdl-button mdl-color-text--grey-100' onClick={this.addNewModule}>
+                <Message>newModule</Message>
+              </button>)}
+          </div>
         </header>
         <div className='mdl-grid'>
           {map(sortBy(modules, 'index'), module => (
@@ -107,7 +111,7 @@ const ReportBuilder = React.createClass({
 
               <Module
                 id={module.id}
-                editable
+                editable={editMode}
                 metaData={metaData}
                 reportParams={reportParams}
                 entity={this.props.entity}/>

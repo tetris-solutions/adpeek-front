@@ -38,11 +38,6 @@ const ReportModule = React.createClass({
     tree: PropTypes.object,
     params: PropTypes.object
   },
-  getInitialState () {
-    return {
-      lastUpdate: Date.now()
-    }
-  },
   componentWillMount () {
     const {tree, params} = this.context
 
@@ -61,16 +56,9 @@ const ReportModule = React.createClass({
       loadReportModuleResultAction(this.cursor, this.props.id, query)
     }, 1000)
 
-    const onUpdate = debounce(() => this.setState({
-      lastUpdate: Date.now()
-    }), 300)
+    const onUpdate = debounce(() => this.forceUpdate(), 300)
 
     this.cursor.on('update', onUpdate)
-
-    if (!this.props.editable) {
-      this.save = null
-      this.update = null
-    }
   },
   componentDidMount () {
     this.fetchResult(this.getChartQuery())
@@ -81,13 +69,6 @@ const ReportModule = React.createClass({
   componentWillUnmount () {
     this.cursor.release()
     this.cursor = null
-  },
-  shouldComponentUpdate (nextProps, nextState) {
-    return (
-      nextState.lastUpdate !== this.state.lastUpdate ||
-      nextProps.reportParams.from !== this.props.reportParams.from ||
-      nextProps.reportParams.to !== this.props.reportParams.to
-    )
   },
   getChartQuery () {
     const {entity, reportParams} = this.props
@@ -114,11 +95,13 @@ const ReportModule = React.createClass({
     )
   },
   render () {
+    const {editable} = this.props
+
     return (
       <Module
         {...this.props}
-        update={this.save}
-        remove={this.remove}
+        update={editable ? this.save : undefined}
+        remove={editable ? this.remove : undefined}
         module={this.cursor.get()}/>
     )
   }
