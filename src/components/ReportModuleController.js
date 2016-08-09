@@ -109,6 +109,7 @@ const ReportModule = React.createClass({
   save (updatedModule) {
     updateModuleAction(
       this.cursor,
+      this.context.params.folder,
       assign({id: this.props.id}, updatedModule)
     )
   },
