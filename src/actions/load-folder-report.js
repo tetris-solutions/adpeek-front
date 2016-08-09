@@ -8,6 +8,14 @@ function loadFolderReport (folder, report, config) {
   return GET(`${process.env.ADPEEK_API_URL}/folder/${folder}/report/${report}`, config)
 }
 
+function keepOldReportMetaData (newReport, oldReport) {
+  if (oldReport && oldReport.metaData && !newReport.metaData) {
+    newReport.metaData = oldReport.metaData
+  }
+
+  return newReport
+}
+
 export function loadFolderReportAction (tree, company, workspace, folder, report, token = null) {
   return loadFolderReport(folder, report, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
@@ -17,7 +25,7 @@ export function loadFolderReportAction (tree, company, workspace, folder, report
       ['workspaces', workspace],
       ['folders', folder],
       ['reports', report]
-    ]))
+    ], keepOldReportMetaData))
     .catch(pushResponseErrorToState(tree))
 }
 
