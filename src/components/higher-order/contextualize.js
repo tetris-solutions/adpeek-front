@@ -124,6 +124,11 @@ export function contextualize (Component, baseCursors, ...names) {
     const user = tree.get('user')
 
     forEach(names, name => {
+      if (name === 'user') {
+        cursors[name] = ['user']
+        return
+      }
+
       const cursor = getCursorToEntity(name, user, params)
 
       if (cursor) {
