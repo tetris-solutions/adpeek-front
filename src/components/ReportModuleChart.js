@@ -13,7 +13,8 @@ import csjs from 'csjs'
 
 const style = csjs`
 .wrap {
-  overflow: hidden
+  overflow-x: hidden
+  overflow-y: auto;
 }
 .wrap > div[data-highcharts-chart] {
   height: 100%

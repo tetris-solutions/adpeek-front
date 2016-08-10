@@ -117,7 +117,6 @@ const ReportBuilder = React.createClass({
                 entity={this.props.entity}/>
             </div>
           ))}
-
         </div>
       </div>
     )
