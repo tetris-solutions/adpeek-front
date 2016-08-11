@@ -18,8 +18,10 @@ import cloneDeep from 'lodash/cloneDeep'
 import diff from 'lodash/differenceWith'
 import window from 'global/window'
 
-injectExporting(Highcharts)
-injectOfflineExporting(Highcharts)
+if (typeof document !== undefined) {
+  injectExporting(Highcharts)
+  injectOfflineExporting(Highcharts)
+}
 
 window.Highcharts = Highcharts
 
