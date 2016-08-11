@@ -52,7 +52,7 @@ const CreateReport = React.createClass({
         const reportId = response.data.id
 
         this.context.router.push(
-          `/company/${company}/workspace/${workspace}/folder/${folder}/report/${reportId}`
+          `/company/${company}/workspace/${workspace}/folder/${folder}/report/${reportId}/edit`
         )
       })
       .catch(this.handleSubmitException)
