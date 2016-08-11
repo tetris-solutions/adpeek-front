@@ -1,5 +1,7 @@
 import React from 'react'
-import Highcharts from 'highcharts/highcharts.src'
+import Highcharts from 'highcharts'
+import injectExporting from 'highcharts/modules/exporting'
+import injectOfflineExporting from 'highcharts/modules/offline-exporting'
 import omit from 'lodash/omit'
 import isEmpty from 'lodash/isEmpty'
 import isObject from 'lodash/isObject'
@@ -16,7 +18,16 @@ import cloneDeep from 'lodash/cloneDeep'
 import diff from 'lodash/differenceWith'
 import window from 'global/window'
 
+injectExporting(Highcharts)
+injectOfflineExporting(Highcharts)
+
 window.Highcharts = Highcharts
+
+const defaultConfig = {
+  exporting: {
+    fallbackToExportServer: false
+  }
+}
 
 function isUpperCase (letter) {
   return letter !== letter.toLowerCase()
@@ -118,7 +129,7 @@ function mapPropsToConfig (props) {
 
   delete config.isRoot
 
-  return merge(config, parentConfig)
+  return merge({}, defaultConfig, config, parentConfig)
 }
 
 const isSameSeries = (chartSeries, updated) => chartSeries.options.id === updated.id
