@@ -13,6 +13,7 @@ import reportType from '../propTypes/report'
 import sortBy from 'lodash/sortBy'
 import Input from './Input'
 import debounce from 'lodash/debounce'
+import toArray from 'lodash/toArray'
 
 const {PropTypes} = React
 
@@ -74,6 +75,59 @@ const ReportBuilder = React.createClass({
       index
     })
   },
+  downloadReport () {
+    /**
+     * @type {HTMLDivElement}
+     */
+    const {URL} = window
+    const gridDiv = this.refs.grid
+    const modules = toArray(gridDiv.querySelectorAll('div[data-report-module]'))
+    const createURL = URL.createObjectURL
+    const exportedModules = []
+
+    /**
+     * capture chart image
+     * @param {HTMLDivElement} moduleEl report module container
+     * @returns {undefined}
+     */
+    function exportChart (moduleEl) {
+      URL.createObjectURL = createURL
+
+      const highChart = moduleEl.querySelector('div[data-highcharts-chart]')
+
+      if (highChart) {
+        URL.createObjectURL = (...args) => {
+          const img = createURL.apply(URL, args)
+
+          exportedModules.push({
+            img,
+            moduleEl
+          })
+
+          return img
+        }
+
+        highChart.HCharts.exportChartLocal()
+      } else {
+        /**
+         *
+         * @type {HTMLTableElement}
+         */
+        const table = moduleEl.querySelector('table')
+
+        exportedModules.push({
+          html: table.outerHTML,
+          moduleEl
+        })
+      }
+    }
+
+    modules.forEach(exportChart)
+
+    URL.createObjectURL = createURL
+
+    // console.log(exportedModules)
+  },
   render () {
     const {editMode, report: {name, modules, metaData}} = this.props
     const {startDate, endDate} = this.state
@@ -97,15 +151,20 @@ const ReportBuilder = React.createClass({
               startDate={startDate}
               endDate={endDate}/>
 
+            <button className='mdl-button mdl-color-text--grey-100' onClick={this.downloadReport}>
+              <Message>extractReport</Message>
+            </button>
+
             {editMode && (
               <button className='mdl-button mdl-color-text--grey-100' onClick={this.addNewModule}>
                 <Message>newModule</Message>
               </button>)}
           </div>
         </header>
-        <div className='mdl-grid'>
+        <div className='mdl-grid' ref='grid'>
           {map(sortBy(modules, 'index'), module => (
             <div
+              data-report-module={module.id}
               key={module.id}
               className={`mdl-cell mdl-cell--${module.cols}-col`}>
 

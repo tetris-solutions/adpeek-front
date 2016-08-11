@@ -23,12 +23,6 @@ if (typeof document !== 'undefined') {
 
 window.Highcharts = Highcharts
 
-const defaultConfig = {
-  exporting: {
-    fallbackToExportServer: false
-  }
-}
-
 function isUpperCase (letter) {
   return letter !== letter.toLowerCase()
 }
@@ -129,7 +123,7 @@ function mapPropsToConfig (props) {
 
   delete config.isRoot
 
-  return merge({}, defaultConfig, config, parentConfig)
+  return merge(config, parentConfig)
 }
 
 const isSameSeries = (chartSeries, updated) => chartSeries.options.id === updated.id
