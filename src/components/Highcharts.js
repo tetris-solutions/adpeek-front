@@ -1,7 +1,5 @@
 import React from 'react'
 import Highcharts from 'highcharts'
-import injectExporting from 'highcharts/modules/exporting'
-import injectOfflineExporting from 'highcharts/modules/offline-exporting'
 import omit from 'lodash/omit'
 import isEmpty from 'lodash/isEmpty'
 import isObject from 'lodash/isObject'
@@ -18,9 +16,9 @@ import cloneDeep from 'lodash/cloneDeep'
 import diff from 'lodash/differenceWith'
 import window from 'global/window'
 
-if (typeof document !== undefined) {
-  injectExporting(Highcharts)
-  injectOfflineExporting(Highcharts)
+if (typeof document !== 'undefined') {
+  require('highcharts/modules/exporting')(Highcharts)
+  require('highcharts/modules/offline-exporting')(Highcharts)
 }
 
 window.Highcharts = Highcharts
