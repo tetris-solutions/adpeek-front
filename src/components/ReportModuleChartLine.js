@@ -19,7 +19,6 @@ function ChartLine (props) {
           <marker enabled={false}/>
         </line>
       </plot-options>
-
       <tooltip shared/>
     </Chart>
   )

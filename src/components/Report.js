@@ -85,12 +85,7 @@ const ReportBuilder = React.createClass({
     const createURL = URL.createObjectURL
     const exportedModules = []
 
-    /**
-     * capture chart image
-     * @param {HTMLDivElement} moduleEl report module container
-     * @returns {undefined}
-     */
-    function exportChart (moduleEl) {
+    const exportChart = moduleEl => new Promise(resolve => {
       URL.createObjectURL = createURL
 
       const highChart = moduleEl.querySelector('div[data-highcharts-chart]')
@@ -99,7 +94,7 @@ const ReportBuilder = React.createClass({
         URL.createObjectURL = (...args) => {
           const img = createURL.apply(URL, args)
 
-          exportedModules.push({
+          resolve({
             img,
             moduleEl
           })
@@ -115,18 +110,24 @@ const ReportBuilder = React.createClass({
          */
         const table = moduleEl.querySelector('table')
 
-        exportedModules.push({
+        resolve({
           html: table.outerHTML,
           moduleEl
         })
       }
-    }
+    })
 
-    modules.forEach(exportChart)
+    let promise = Promise.resolve()
 
-    URL.createObjectURL = createURL
+    modules.forEach(el => {
+      promise = promise.then(() => exportChart(el))
+        .then(i => exportedModules.push(i))
+    })
 
-    // console.log(exportedModules)
+    promise.then(() => {
+      // console.log(exportedModules)
+      URL.createObjectURL = createURL
+    })
   },
   render () {
     const {editMode, report: {name, modules, metaData}} = this.props
@@ -151,14 +152,14 @@ const ReportBuilder = React.createClass({
               startDate={startDate}
               endDate={endDate}/>
 
-            <button className='mdl-button mdl-color-text--grey-100' onClick={this.downloadReport}>
-              <Message>extractReport</Message>
-            </button>
-
             {editMode && (
               <button className='mdl-button mdl-color-text--grey-100' onClick={this.addNewModule}>
                 <Message>newModule</Message>
               </button>)}
+
+            <button className='mdl-button mdl-color-text--grey-100' onClick={this.downloadReport}>
+              <Message>extractReport</Message>
+            </button>
           </div>
         </header>
         <div className='mdl-grid' ref='grid'>
