@@ -13,7 +13,7 @@ import reportType from '../propTypes/report'
 import sortBy from 'lodash/sortBy'
 import Input from './Input'
 import debounce from 'lodash/debounce'
-import toArray from 'lodash/toArray'
+import {exportReportGrid} from '../functions/export-report-grid'
 
 const {PropTypes} = React
 
@@ -76,58 +76,10 @@ const ReportBuilder = React.createClass({
     })
   },
   downloadReport () {
-    /**
-     * @type {HTMLDivElement}
-     */
-    const {URL} = window
-    const gridDiv = this.refs.grid
-    const modules = toArray(gridDiv.querySelectorAll('div[data-report-module]'))
-    const createURL = URL.createObjectURL
-    const exportedModules = []
-
-    const exportChart = moduleEl => new Promise(resolve => {
-      URL.createObjectURL = createURL
-
-      const highChart = moduleEl.querySelector('div[data-highcharts-chart]')
-
-      if (highChart) {
-        URL.createObjectURL = (...args) => {
-          const img = createURL.apply(URL, args)
-
-          resolve({
-            img,
-            moduleEl
-          })
-
-          return img
-        }
-
-        highChart.HCharts.exportChartLocal()
-      } else {
-        /**
-         *
-         * @type {HTMLTableElement}
-         */
-        const table = moduleEl.querySelector('table')
-
-        resolve({
-          html: table.outerHTML,
-          moduleEl
-        })
-      }
-    })
-
-    let promise = Promise.resolve()
-
-    modules.forEach(el => {
-      promise = promise.then(() => exportChart(el))
-        .then(i => exportedModules.push(i))
-    })
-
-    promise.then(() => {
-      // console.log(exportedModules)
-      URL.createObjectURL = createURL
-    })
+    exportReportGrid(this.refs.grid)
+      // .then(arrayOfCharts => {
+      //   console.log(arrayOfCharts)
+      // })
   },
   render () {
     const {editMode, report: {name, modules, metaData}} = this.props
@@ -166,6 +118,8 @@ const ReportBuilder = React.createClass({
           {map(sortBy(modules, 'index'), module => (
             <div
               data-report-module={module.id}
+              data-report-module-cols={module.cols}
+              data-report-module-rows={module.rows}
               key={module.id}
               className={`mdl-cell mdl-cell--${module.cols}-col`}>
 
