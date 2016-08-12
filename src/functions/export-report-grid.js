@@ -1,12 +1,17 @@
 import toArray from 'lodash/toArray'
 import {blobToDataUrl} from './blob-to-data-url'
 
+function removeEl (el) {
+  el.parentNode.removeChild(el)
+}
+
 /**
  * serializes a array of report module
  * @param {HTMLDivElement} gridDiv report grid el
  * @returns {Promise.<Array.<Object>>} promise that resolves to a series of files
  */
 export function exportReportGrid (gridDiv) {
+  const auxDiv = document.createElement('div')
   const {URL} = window
   const modules = toArray(gridDiv.querySelectorAll('div[data-report-module]'))
   const createURL = URL.createObjectURL
@@ -25,7 +30,11 @@ export function exportReportGrid (gridDiv) {
     if (highChart) {
       URL.createObjectURL = blob => {
         blobToDataUrl(blob)
-          .then(img => resolve({img, moduleEl}))
+          .then(img => resolve({
+            cols: moduleEl.dataset.reportModuleCols,
+            rows: moduleEl.dataset.reportModuleRows,
+            img
+          }))
 
         return createURL.call(URL, blob)
       }
@@ -38,9 +47,16 @@ export function exportReportGrid (gridDiv) {
        */
       const table = moduleEl.querySelector('table')
 
+      auxDiv.innerHTML = table.outerHTML
+
+      const icons = toArray(auxDiv.querySelectorAll('.material-icons'))
+
+      icons.forEach(removeEl)
+
       resolve({
-        html: table.outerHTML,
-        moduleEl
+        cols: moduleEl.dataset.reportModuleCols,
+        rows: moduleEl.dataset.reportModuleRows,
+        html: auxDiv.innerHTML
       })
     }
   })

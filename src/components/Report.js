@@ -14,6 +14,7 @@ import sortBy from 'lodash/sortBy'
 import Input from './Input'
 import debounce from 'lodash/debounce'
 import {exportReportGrid} from '../functions/export-report-grid'
+import {createReportPdfAction} from '../actions/create-report-pdf'
 
 const {PropTypes} = React
 
@@ -76,10 +77,17 @@ const ReportBuilder = React.createClass({
     })
   },
   downloadReport () {
+    const {dispatch, report: {name}} = this.props
+
     exportReportGrid(this.refs.grid)
-      // .then(arrayOfCharts => {
-      //   console.log(arrayOfCharts)
-      // })
+      .then(modules => dispatch(createReportPdfAction, {
+        name: name,
+        modules
+      }))
+      .then(response => {
+        window.location.href = response.data.url
+        window.open(response.data.source)
+      })
   },
   render () {
     const {editMode, report: {name, modules, metaData}} = this.props
