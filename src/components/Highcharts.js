@@ -32,6 +32,20 @@ function looksLikeAnEventHandler (name) {
 }
 
 const {createElement, createClass, Children, PropTypes} = React
+const defaultConfig = {
+  credits: {
+    enabled: false
+  },
+  exporting: {
+    fallbackToExportServer: false,
+    type: 'image/jpeg'
+  },
+  navigation: {
+    buttonOptions: {
+      enabled: false
+    }
+  }
+}
 
 const seriesTypes = [
   'area',
@@ -123,7 +137,7 @@ function mapPropsToConfig (props) {
 
   delete config.isRoot
 
-  return merge(config, parentConfig)
+  return merge({}, defaultConfig, config, parentConfig)
 }
 
 const isSameSeries = (chartSeries, updated) => chartSeries.options.id === updated.id

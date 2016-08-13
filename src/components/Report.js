@@ -13,7 +13,7 @@ import reportType from '../propTypes/report'
 import sortBy from 'lodash/sortBy'
 import Input from './Input'
 import debounce from 'lodash/debounce'
-import {exportReportGrid} from '../functions/export-report-grid'
+import {exportReportModules} from '../functions/export-report-modules'
 import {createReportPdfAction} from '../actions/create-report-pdf'
 
 const {PropTypes} = React
@@ -79,14 +79,19 @@ const ReportBuilder = React.createClass({
   downloadReport () {
     const {dispatch, report: {name}} = this.props
 
-    exportReportGrid(this.refs.grid)
+    const modules = map(this.props.report.modules, ({id, name, rows, cols}) => {
+      const el = this.refs.grid.querySelector(`div[data-report-module="${id}"]`)
+
+      return {id, el, name, rows, cols}
+    })
+
+    exportReportModules(modules)
       .then(modules => dispatch(createReportPdfAction, {
         name: name,
         modules
       }))
       .then(response => {
         window.location.href = response.data.url
-        window.open(response.data.source)
       })
   },
   render () {
@@ -126,8 +131,6 @@ const ReportBuilder = React.createClass({
           {map(sortBy(modules, 'index'), module => (
             <div
               data-report-module={module.id}
-              data-report-module-cols={module.cols}
-              data-report-module-rows={module.rows}
               key={module.id}
               className={`mdl-cell mdl-cell--${module.cols}-col`}>
 
