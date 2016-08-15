@@ -38,7 +38,7 @@ const defaultConfig = {
   },
   exporting: {
     fallbackToExportServer: false,
-    type: 'image/jpeg'
+    type: 'image/svg+xml'
   },
   navigation: {
     buttonOptions: {
