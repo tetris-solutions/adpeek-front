@@ -41,6 +41,7 @@ const ReportBuilder = React.createClass({
   },
   getInitialState () {
     return {
+      isLoading: false,
       startDate: moment().startOf('week').subtract(7, 'days'),
       endDate: moment().startOf('week').subtract(1, 'days')
     }
@@ -85,6 +86,8 @@ const ReportBuilder = React.createClass({
       return {id, el, name, rows, cols}
     })
 
+    this.setState({isLoading: true})
+
     exportReportModules(modules)
       .then(modules => dispatch(createReportPdfAction, {
         name: name,
@@ -92,11 +95,13 @@ const ReportBuilder = React.createClass({
       }))
       .then(response => {
         window.location.href = response.data.url
+
+        this.setState({isLoading: false})
       })
   },
   render () {
     const {editMode, report: {name, modules, metaData}} = this.props
-    const {startDate, endDate} = this.state
+    const {isLoading, startDate, endDate} = this.state
     const reportParams = assign({
       from: startDate.format('YYYY-MM-DD'),
       to: endDate.format('YYYY-MM-DD')
@@ -122,8 +127,10 @@ const ReportBuilder = React.createClass({
                 <Message>newModule</Message>
               </button>)}
 
-            <button className='mdl-button mdl-color-text--grey-100' onClick={this.downloadReport}>
-              <Message>extractReport</Message>
+            <button disabled={isLoading} className='mdl-button mdl-color-text--grey-100' onClick={this.downloadReport}>
+              {isLoading
+                ? <Message>creatingReport</Message>
+                : <Message>extractReport</Message>}
             </button>
           </div>
         </header>
