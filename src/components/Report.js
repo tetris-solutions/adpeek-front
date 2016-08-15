@@ -91,7 +91,7 @@ const ReportBuilder = React.createClass({
         modules
       }))
       .then(response => {
-        window.open(response.data.url)
+        window.location.href = response.data.url
       })
   },
   render () {
