@@ -10,6 +10,7 @@ import Table from './ReportModuleTable'
 import Spinner from './Spinner'
 import {styled} from './mixins/styled'
 import csjs from 'csjs'
+import floor from 'lodash/floor'
 
 const style = csjs`
 .wrap {
@@ -47,6 +48,8 @@ const emptyQuery = {
 }
 const emptyResult = []
 
+const A4Ratio = 595 / 842
+
 const ReportChart = React.createClass({
   displayName: 'Report-Chart',
   mixins: [styled(style)],
@@ -83,6 +86,8 @@ const ReportChart = React.createClass({
     return (
       <div className={`${style.wrap}`} style={{height: module.rows * 100}}>
         <Chart
+          sourceWidth={floor(800 * (module.cols / 12))}
+          sourceHeight={floor(800 * A4Ratio * (module.rows / 6))}
           name={module.name}
           attributes={attributes}
           entity={entity}

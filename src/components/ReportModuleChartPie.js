@@ -9,7 +9,10 @@ function ChartPie (props) {
   return (
     <Chart config={config}>
       <title>{props.name}</title>
-      <exporting filename={props.name}/>
+      <exporting
+        sourceWidth={props.sourceWidth}
+        sourceHeight={props.sourceHeight}
+        filename={props.name}/>
       <plot-options>
         <pie allowPointSelect showInLegend>
           <data-labels enabled={false}/>

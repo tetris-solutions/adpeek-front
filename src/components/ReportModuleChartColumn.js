@@ -9,7 +9,10 @@ function ChartColumn (props) {
   return (
     <Chart config={config}>
       <title>{props.name}</title>
-      <exporting filename={props.name}/>
+      <exporting
+        sourceWidth={props.sourceWidth}
+        sourceHeight={props.sourceHeight}
+        filename={props.name}/>
     </Chart>
   )
 }
