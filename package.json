@@ -54,7 +54,6 @@
     "react-intl": "^1.2.2",
     "react-router": "^2.5.2",
     "stable": "^0.1.5",
-    "uuid": "^2.0.2",
     "winston": "^2.2.0",
     "winston-logstash": "^0.2.11"
   },
