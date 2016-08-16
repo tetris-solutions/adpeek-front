@@ -12,6 +12,7 @@ export function deleteModuleAction (moduleCursor) {
     .then(saveResponseTokenAsCookie)
     .then(response => {
       moduleCursor.unset()
+      moduleCursor.tree.commit()
 
       return response
     })

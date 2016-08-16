@@ -52,9 +52,10 @@ const ReportModule = React.createClass({
       ['modules', this.props.id]
     ]))
 
-    this.fetchResult = debounce(query => {
-      loadReportModuleResultAction(this.cursor, this.props.id, query)
-    }, 1000)
+    this.fetchResult = debounce(
+      query => query && loadReportModuleResultAction(this.cursor, this.props.id, query),
+      1000
+    )
 
     const onUpdate = debounce(() => this.forceUpdate(), 300)
 
@@ -73,6 +74,9 @@ const ReportModule = React.createClass({
   getChartQuery () {
     const {entity, reportParams} = this.props
     const module = this.cursor.get()
+
+    if (!module) return
+
     const filters = assign({}, module.filters)
 
     if (isEmpty(filters.id)) {
@@ -96,13 +100,16 @@ const ReportModule = React.createClass({
   },
   render () {
     const {editable} = this.props
+    const module = this.cursor.get()
+
+    if (!module) return null
 
     return (
       <Module
         {...this.props}
         update={editable ? this.save : undefined}
         remove={editable ? this.remove : undefined}
-        module={this.cursor.get()}/>
+        module={module}/>
     )
   }
 })

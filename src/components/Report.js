@@ -15,6 +15,7 @@ import Input from './Input'
 import debounce from 'lodash/debounce'
 import {exportReportModules} from '../functions/export-report-modules'
 import {createReportPdfAction} from '../actions/create-report-pdf'
+import max from 'lodash/max'
 
 const {PropTypes} = React
 
@@ -69,7 +70,7 @@ const ReportBuilder = React.createClass({
   addNewModule () {
     const {report, params, dispatch} = this.props
     const {messages} = this.context
-    const index = size(report.modules)
+    const index = max(map(report.modules, 'index')) + 1
 
     dispatch(createModuleReportAction, params, {
       type: 'line',
@@ -135,10 +136,10 @@ const ReportBuilder = React.createClass({
           </div>
         </header>
         <div className='mdl-grid' ref='grid'>
-          {map(sortBy(modules, 'index'), module => (
+          {map(sortBy(modules, 'index'), (module, index) => (
             <div
               data-report-module={module.id}
-              key={module.id}
+              key={`${module.id}::${index}`}
               className={`mdl-cell mdl-cell--${module.cols}-col`}>
 
               <Module
