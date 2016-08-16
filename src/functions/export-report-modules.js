@@ -1,4 +1,5 @@
 import toArray from 'lodash/toArray'
+import includes from 'lodash/includes'
 
 export const blobToDataUrl = blob => new Promise(resolve => {
   const f = new window.FileReader()
@@ -13,7 +14,10 @@ export const blobToDataUrl = blob => new Promise(resolve => {
  */
 function serializeTableCell (td) {
   const el = td.querySelector('span') || td
-  return el.innerText
+  return {
+    align: includes(td.className, 'non-numeric') ? 'left' : 'right',
+    text: el.innerText
+  }
 }
 
 /**
