@@ -17,6 +17,7 @@ import debounce from 'lodash/debounce'
 import {exportReportModules} from '../functions/export-report-modules'
 import {createReportPdfAction} from '../actions/create-report-pdf'
 import max from 'lodash/max'
+import get from 'lodash/get'
 
 const {PropTypes} = React
 
@@ -104,6 +105,7 @@ const ReportBuilder = React.createClass({
       from: startDate.format('YYYY-MM-DD'),
       to: endDate.format('YYYY-MM-DD')
     }, this.props.reportParams)
+    const {platform} = reportParams
 
     return (
       <div>
@@ -142,7 +144,7 @@ const ReportBuilder = React.createClass({
               <Module
                 id={module.id}
                 editable={editMode}
-                metaData={metaData}
+                metaData={get(metaData, [platform, module.entity])}
                 reportParams={reportParams}
                 entities={this.props.entities}/>
             </div>

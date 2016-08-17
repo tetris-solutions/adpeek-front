@@ -106,7 +106,9 @@ export function loadReportMetaDataAction (tree, params, platform, entity, token)
     ['workspaces', params.workspace],
     ['folders', params.folder],
     ['reports', params.report],
-    'metaData'
+    'metaData',
+    platform,
+    entity
   ])
 
   return loadReportMetaData(platform, entity, getApiFetchConfig(tree, token))

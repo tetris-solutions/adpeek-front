@@ -30,12 +30,14 @@ const FolderReport = React.createClass({
     })
   },
   componentDidMount () {
-    this.props.dispatch(
-      loadReportMetaDataAction,
-      this.props.params,
-      this.props.folder.account.platform,
-      'Campaign'
-    )
+    const {params, folder, dispatch} = this.props
+
+    map(this.getEntities(), ({id}) =>
+      dispatch(loadReportMetaDataAction,
+        params,
+        folder.account.platform,
+        id
+      ))
   },
   getEntities () {
     const {messages} = this.context
