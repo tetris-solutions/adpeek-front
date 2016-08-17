@@ -18,7 +18,7 @@ import window from 'global/window'
 
 if (typeof document !== 'undefined') {
   require('highcharts/modules/exporting')(Highcharts)
-  require('highcharts/modules/offline-exporting')(Highcharts)
+  require('highcharts/modules/offline-exporting.src')(Highcharts)
 }
 
 window.Highcharts = Highcharts
@@ -38,7 +38,7 @@ const defaultConfig = {
   },
   exporting: {
     fallbackToExportServer: false,
-    type: 'image/svg+xml'
+    type: 'image/jpeg'
   },
   navigation: {
     buttonOptions: {

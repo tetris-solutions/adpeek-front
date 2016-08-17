@@ -35,23 +35,19 @@ function serializeTr (tr) {
  * @returns {Promise.<Array.<Object>>} promise that resolves to a series of files
  */
 export function exportReportModules (modules) {
-  const {URL} = window
-  const createURL = URL.createObjectURL
+  const {Highcharts} = window
+  const HDownload = Highcharts.downloadURL
   const exportedModules = []
+  const unhack = () => {
+    Highcharts.downloadURL = HDownload
+  }
 
   const exportChart = ({id, name, el, rows, cols}) => new Promise(resolve => {
-    URL.createObjectURL = createURL
-
     const highChart = el.querySelector('div[data-highcharts-chart]')
 
     if (highChart) {
-      URL.createObjectURL = blob => {
-        blobToDataUrl(blob)
-          .then(img => resolve({cols, rows, img}))
-
-        return createURL.call(URL, blob)
-      }
-
+      // hack highcharts download method
+      Highcharts.downloadURL = img => resolve({cols, rows, img})
       highChart.HCharts.exportChartLocal()
     } else {
       /**
@@ -92,10 +88,10 @@ export function exportReportModules (modules) {
   })
 
   return promise.then(() => {
-    URL.createObjectURL = createURL
+    unhack()
     return exportedModules
   }, err => {
-    URL.createObjectURL = createURL
+    unhack()
     throw err
   })
 }
