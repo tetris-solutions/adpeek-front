@@ -35,7 +35,7 @@ const style = csjs`
       
   height: auto;
   min-height: 300px;
-  max-height: 80%;
+  max-height: 98%;
   
   margin: auto;
   overflow-x: hidden;
@@ -49,8 +49,13 @@ const style = csjs`
 }
 .large {
   width: 1024px
+}
+.huge {
+  width: 94%;
 }`
-const sizeType = PropTypes.oneOf(['small', 'medium', 'large'])
+
+const sizeType = PropTypes.oneOf(['small', 'medium', 'large', 'huge'])
+
 const createPortal = contextAttributes => {
   if (typeof window === 'undefined') return () => null
 

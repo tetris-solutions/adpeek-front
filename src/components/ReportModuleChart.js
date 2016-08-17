@@ -54,6 +54,7 @@ const ReportChart = React.createClass({
   displayName: 'Report-Chart',
   mixins: [styled(style)],
   propTypes: {
+    height: PropTypes.number.isRequired,
     reportParams: reportParamsType,
     metaData: reportMetaDataType.isRequired,
     module: reportModuleType,
@@ -72,7 +73,7 @@ const ReportChart = React.createClass({
     const oldModule = this.props.module
 
     return (
-      newModule.rows !== oldModule.rows ||
+      nextProps.height !== this.props.height ||
       newModule.cols !== oldModule.cols ||
       newModule.isLoading !== oldModule.isLoading ||
       newModule.result !== oldModule.result ||
@@ -81,11 +82,11 @@ const ReportChart = React.createClass({
     )
   },
   render () {
-    const {module, entity, metaData: {attributes}} = this.props
+    const {height, module, entity, metaData: {attributes}} = this.props
     const Chart = typeComponent[module.type]
 
     return (
-      <div className={`${style.wrap}`} style={{height: module.rows * 100}}>
+      <div className={`${style.wrap}`} style={{height}}>
         <Chart
           sourceWidth={floor(1200 * (module.cols / 12))}
           sourceHeight={floor(1200 * A4Ratio * (module.rows / 6))}

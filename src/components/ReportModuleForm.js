@@ -1,18 +1,22 @@
 import React from 'react'
 import Input from './Input'
 import assign from 'lodash/assign'
+import Select from './Select'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import reportParamsType from '../propTypes/report-params'
 import reportModuleType from '../propTypes/report-module'
 import reportEntityType from '../propTypes/report-entity'
 import reportMetaDataType from '../propTypes/report-meta-data'
-import ReportChart from './ReportModuleChart'
+import _ReportChart from './ReportModuleChart'
 import find from 'lodash/find'
 import TypeSelect from './ReportModuleEditTypeSelect'
 import Lists from './ReportModuleEditLists'
 import includes from 'lodash/includes'
+import map from 'lodash/map'
+import {expandVertically} from './higher-order/expand-vertically'
 
 const {PropTypes} = React
+const ReportChart = expandVertically(_ReportChart)
 
 const ModuleEdit = React.createClass({
   displayName: 'Edit-Module',
@@ -24,6 +28,7 @@ const ModuleEdit = React.createClass({
     dispatch: PropTypes.func,
     reportParams: reportParamsType,
     module: reportModuleType,
+    entities: PropTypes.arrayOf(reportEntityType),
     entity: reportEntityType,
     metaData: reportMetaDataType,
     close: PropTypes.func,
@@ -122,14 +127,13 @@ const ModuleEdit = React.createClass({
     this.props.save(changes)
   },
   render () {
-    const {metaData, entity, module, reportParams} = this.props
+    const {metaData, entities, entity, module, reportParams} = this.props
     const {name, type, filters, metrics, dimensions} = module
 
     return (
       <form>
         <div className='mdl-grid'>
-          <div className='mdl-cell mdl-cell--4-col' style={{height: 500, overflowY: 'auto'}}>
-
+          <div className='mdl-cell mdl-cell--3-col' style={{height: '80vh', overflowY: 'auto'}}>
             <Lists
               dimensions={dimensions}
               metrics={metrics}
@@ -140,24 +144,30 @@ const ModuleEdit = React.createClass({
               removeItem={this.removeItem}
               addEntity={this.addEntity}
               addItem={this.addItem}/>
-
           </div>
-
-          <div className='mdl-cell mdl-cell--8-col' style={{height: 500, overflowY: 'auto'}}>
+          <div className='mdl-cell mdl-cell--9-col' style={{height: '80vh', overflowY: 'auto'}}>
             <div className='mdl-grid'>
-              <div className='mdl-cell mdl-cell--7-col'>
-                <Input
-                  name='name'
-                  label='name'
-                  defaultValue={name}
-                  onChange={this.onChangeInput}/>
-              </div>
               <div className='mdl-cell mdl-cell--5-col'>
+                <Input name='name' label='name' defaultValue={name} onChange={this.onChangeInput}/>
+              </div>
+              <div className='mdl-cell mdl-cell--4-col'>
+                <Select label='entity' name='entity' onChange={this.onChangeInput} value={entity.id}>
+                  {map(entities, ({id, name}) =>
+                    <option key={id} value={id}>
+                      {name}
+                    </option>)}
+                </Select>
+              </div>
+              <div className='mdl-cell mdl-cell--3-col'>
                 <TypeSelect onChange={this.onChangeInput} value={type}/>
               </div>
             </div>
 
-            <ReportChart metaData={metaData} module={module} entity={entity} reportParams={reportParams}/>
+            <ReportChart
+              metaData={metaData}
+              module={module}
+              entity={entity}
+              reportParams={reportParams}/>
           </div>
         </div>
 

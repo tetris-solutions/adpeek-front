@@ -32,6 +32,7 @@ const Module = React.createClass({
     update: PropTypes.func,
     module: reportModuleType,
     entity: reportEntityType,
+    entities: PropTypes.arrayOf(reportEntityType),
     reportParams: reportParamsType
   },
   componentWillReceiveProps ({module: {cols, rows}}) {
@@ -56,12 +57,17 @@ const Module = React.createClass({
   },
   render () {
     const {editMode} = this.state
-    const {module, metaData, update, remove, entity, reportParams} = this.props
+    const {module, entities, metaData, update, remove, entity, reportParams} = this.props
 
     return (
       <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
         <div ref='chartWrapper' className={`mdl-card__title mdl-card--expand ${style.content}`}>
-          <ReportChart metaData={metaData} module={module} entity={entity} reportParams={reportParams}/>
+          <ReportChart
+            height={module.rows * 100}
+            metaData={metaData}
+            module={module}
+            entity={entity}
+            reportParams={reportParams}/>
         </div>
 
         <div className='mdl-card__menu'>
@@ -77,8 +83,9 @@ const Module = React.createClass({
         </div>
 
         {editMode && (
-          <Modal size='large' provide={editFormRequiredContext} onEscPress={this.closeModal}>
+          <Modal size='huge' provide={editFormRequiredContext} onEscPress={this.closeModal}>
             <Edit
+              entities={entities}
               metaData={metaData}
               module={module}
               entity={entity}
