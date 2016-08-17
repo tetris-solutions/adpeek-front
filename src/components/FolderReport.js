@@ -19,6 +19,9 @@ const FolderReport = React.createClass({
     dispatch: PropTypes.func,
     folder: PropTypes.shape({
       campaigns: PropTypes.array,
+      adSets: PropTypes.array,
+      adGroups: PropTypes.array,
+      ads: PropTypes.array,
       account: PropTypes.shape({
         external_id: PropTypes.string,
         tetris_id: PropTypes.string,
@@ -34,6 +37,33 @@ const FolderReport = React.createClass({
       'Campaign'
     )
   },
+  getEntities () {
+    const {messages} = this.context
+    const {account: {platform}, campaigns, adSets, adGroups, ads} = this.props.folder
+    const useExternalId = c => assign({}, c, {id: c.external_id})
+
+    return [
+      {
+        id: 'Campaign',
+        name: messages.campaigns,
+        list: map(campaigns, useExternalId)
+      },
+      platform === 'adwords' ? {
+        id: 'AdGroup',
+        name: messages.adGroups,
+        list: map(adGroups, useExternalId)
+      } : {
+        id: 'AdSet',
+        name: messages.adSets,
+        list: map(adSets, useExternalId)
+      },
+      {
+        id: 'Ad',
+        name: messages.ads,
+        list: map(ads, useExternalId)
+      }
+    ]
+  },
   render () {
     const {folder, location} = this.props
     const reportParams = {
@@ -41,18 +71,13 @@ const FolderReport = React.createClass({
       platform: folder.account.platform,
       tetris_account: folder.account.tetris_id
     }
-    const campaignEntity = {
-      id: 'Campaign',
-      name: this.context.messages.campaigns,
-      list: map(folder.campaigns, c => assign({}, c, {id: c.external_id}))
-    }
 
     return (
       <Report
         {...this.props}
         editMode={endsWith(location.pathname, '/edit')}
         reportParams={reportParams}
-        entity={campaignEntity}/>
+        entities={this.getEntities()}/>
     )
   }
 })

@@ -10,6 +10,7 @@ import {contextualize} from './higher-order/contextualize'
 import {createModuleReportAction} from '../actions/create-module'
 import {updateReportAction} from '../actions/update-report'
 import reportType from '../propTypes/report'
+import entityType from '../propTypes/report-entity'
 import sortBy from 'lodash/sortBy'
 import Input from './Input'
 import debounce from 'lodash/debounce'
@@ -31,11 +32,7 @@ const ReportBuilder = React.createClass({
       plaftorm: PropTypes.string,
       tetris_account: PropTypes.string
     }),
-    entity: PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-      list: PropTypes.array
-    }).isRequired
+    entities: PropTypes.arrayOf(entityType).isRequired
   },
   contextTypes: {
     messages: PropTypes.object
@@ -147,7 +144,7 @@ const ReportBuilder = React.createClass({
                 editable={editMode}
                 metaData={metaData}
                 reportParams={reportParams}
-                entity={this.props.entity}/>
+                entities={this.props.entities}/>
             </div>
           ))}
         </div>

@@ -11,6 +11,7 @@ import pick from 'lodash/pick'
 import assign from 'lodash/assign'
 import Module from './ReportModule'
 import {updateModuleAction} from '../actions/update-module'
+import find from 'lodash/find'
 
 const {PropTypes} = React
 
@@ -31,7 +32,7 @@ const ReportModule = React.createClass({
     editable: PropTypes.bool,
     metaData: reportMetaDataType,
     id: PropTypes.string.isRequired,
-    entity: reportEntityType,
+    entities: PropTypes.arrayOf(reportEntityType).isRequired,
     reportParams: reportParamsType
   },
   contextTypes: {
@@ -71,9 +72,13 @@ const ReportModule = React.createClass({
     this.cursor.release()
     this.cursor = null
   },
+  getEntity () {
+    return find(this.props.entities, {id: this.cursor.get('entity')})
+  },
   getChartQuery () {
-    const {entity, reportParams} = this.props
+    const {reportParams} = this.props
     const module = this.cursor.get()
+    const entity = this.getEntity()
 
     if (!module) return
 
@@ -107,6 +112,7 @@ const ReportModule = React.createClass({
     return (
       <Module
         {...this.props}
+        entity={this.getEntity()}
         update={editable ? this.save : undefined}
         remove={editable ? this.remove : undefined}
         module={module}/>
