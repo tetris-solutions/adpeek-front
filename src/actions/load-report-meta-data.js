@@ -115,7 +115,7 @@ export function loadReportMetaDataAction (tree, params, platform, entity, token)
     .then(saveResponseTokenAsCookie)
     .then(response => {
       const metaData = response.data
-      const entityNameMessage = `${entity.toLowerCase()}Entity`
+      const entityNameMessage = `${entity[0].toLowerCase() + entity.slice(1)}Entity`
 
       metaData.attributes = omit(metaData.attributes, excluded)
 
