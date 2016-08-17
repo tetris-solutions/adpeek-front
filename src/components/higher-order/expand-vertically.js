@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 
 export function expandVertically (Component) {
   return React.createClass({
+    displayName: `ExpandVertically(${Component.displayName})`,
     getInitialState () {
       return {height: null}
     },
