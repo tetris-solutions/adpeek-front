@@ -11,23 +11,23 @@ import trim from 'lodash/trim'
 const {PropTypes} = React
 
 function normalizeAd (ad) {
-  const normalizedAd = assign({}, ad)
+  ad = assign({}, ad)
 
   if (ad.description_1) {
-    normalizedAd.description = (
+    ad.description = (
       trim(ad.description_1) + ' ' +
       trim(ad.description_2)
     )
   }
 
   if (ad.headline_part_1) {
-    normalizedAd.headline = (
+    ad.headline = (
       trim(ad.headline_part_1) + ' ' +
       trim(ad.headline_part_2)
     )
   }
 
-  return normalizedAd
+  return ad
 }
 
 const FolderReport = React.createClass({

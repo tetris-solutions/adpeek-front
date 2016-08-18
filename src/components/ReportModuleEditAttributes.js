@@ -38,7 +38,8 @@ const style = csjs`
 }
 .selected {
   border-left: 3px solid #79cbf3;
-  font-weight: bold
+  font-weight: bold;
+  color: #004465
 }`
 
 const {PropTypes} = React
