@@ -92,11 +92,10 @@ const ReportBuilder = React.createClass({
         name: name,
         modules
       }))
-      .then(response => {
-        window.location.href = response.data.url
-
-        this.setState({isLoading: false})
-      })
+      .then(response =>
+        this.setState({isLoading: false}, () => {
+          window.location.href = response.data.url
+        }))
   },
   render () {
     const {editMode, report: {name, modules, metaData}} = this.props
