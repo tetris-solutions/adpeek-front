@@ -37,6 +37,12 @@ const ModuleEdit = React.createClass({
   onChangeInput ({target: {name, value}}) {
     const newState = {[name]: value}
 
+    if (name === 'entity') {
+      newState.dimensions = []
+      newState.metrics = []
+      newState.filters = {id: []}
+    }
+
     if (name === 'type' && value === 'pie') {
       const {dimensions, metrics} = this.props.module
 
