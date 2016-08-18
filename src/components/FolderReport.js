@@ -48,27 +48,26 @@ const FolderReport = React.createClass({
   getEntities () {
     const {messages} = this.context
     const {account: {platform}, campaigns, adSets, adGroups, ads} = this.props.folder
-    const useExternalId = c => assign({}, c, {id: c.external_id})
 
     return [
       {
         id: 'Campaign',
         name: messages.campaigns,
-        list: map(campaigns, useExternalId)
+        list: map(campaigns, c => assign({}, c, {id: c.external_id}))
       },
       platform === 'adwords' ? {
         id: 'AdGroup',
         name: messages.adGroups,
-        list: map(adGroups, useExternalId)
+        list: adGroups || []
       } : {
         id: 'AdSet',
         name: messages.adSets,
-        list: map(adSets, useExternalId)
+        list: adSets || []
       },
       {
         id: 'Ad',
         name: messages.ads,
-        list: map(ads, useExternalId)
+        list: ads || []
       }
     ]
   },

@@ -14,12 +14,12 @@ const lastCall = {}
 
 export function loadReportModuleResultAction (moduleCursor, id, query, token) {
   const isCursorOk = () => moduleCursor && moduleCursor.tree
+  const sameQuery = () => isEqual(query, moduleCursor.get('query'))
 
-  if (!isCursorOk()) return
+  if (!isCursorOk() || !isvalidReportQuery(query) || sameQuery()) return
 
   const {tree} = moduleCursor
   const isLoadingCursor = moduleCursor.select('isLoading')
-
   const myCall = lastCall[id] = Date.now()
 
   function onSuccess (response) {
@@ -36,15 +36,7 @@ export function loadReportModuleResultAction (moduleCursor, id, query, token) {
   }
 
   function makeTheCall () {
-    if (!isCursorOk()) return
-
-    if (isEqual(query, moduleCursor.get('query'))) {
-      return
-    }
-
-    if (!isvalidReportQuery(query)) {
-      moduleCursor.set('result', [])
-      tree.commit()
+    if (!isCursorOk() || sameQuery()) {
       return
     }
 
