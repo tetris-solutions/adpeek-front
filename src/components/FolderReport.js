@@ -4,6 +4,7 @@ import {contextualize} from './higher-order/contextualize'
 import map from 'lodash/map'
 import assign from 'lodash/assign'
 import {loadReportMetaDataAction} from '../actions/load-report-meta-data'
+import {loadFolderEntitiesAction} from '../actions/load-folder-entities'
 import endsWith from 'lodash/endsWith'
 
 const {PropTypes} = React
@@ -31,6 +32,11 @@ const FolderReport = React.createClass({
   },
   componentDidMount () {
     const {params, folder, dispatch} = this.props
+
+    dispatch(loadFolderEntitiesAction,
+      params.company,
+      params.workspace,
+      params.folder)
 
     map(this.getEntities(), ({id}) =>
       dispatch(loadReportMetaDataAction,
