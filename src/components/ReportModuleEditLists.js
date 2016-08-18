@@ -14,8 +14,15 @@ import trim from 'lodash/trim'
 const {PropTypes} = React
 const clean = str => trim(lowerCase(deburr(str)))
 
+const containsSearchvalue = searchValue =>
+  ({name, headline, description}) => (
+    includes(clean(name), searchValue) ||
+    includes(clean(description), searchValue) ||
+    includes(clean(headline), searchValue)
+  )
+
 const matching = (ls, searchValue) => searchValue
-  ? filter(ls, ({name}) => includes(clean(name), searchValue))
+  ? filter(ls, containsSearchvalue(searchValue))
   : ls
 
 const sorted = ls => sortBy(ls, 'name')

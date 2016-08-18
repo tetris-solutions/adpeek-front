@@ -20,7 +20,7 @@ const style = csjs`
   list-style: none;
 }
 .item {
-  text-indent: 1em;
+  padding-left: 1em;
   border-left: 3px solid #e4e4e4;
   cursor: pointer;
   line-height: 1.8em;
@@ -52,7 +52,9 @@ const Attribute = React.createClass({
   },
   propTypes: {
     id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    headline: PropTypes.string,
+    description: PropTypes.string,
     selected: PropTypes.bool.isRequired,
     toggle: PropTypes.func
   },
@@ -64,7 +66,7 @@ const Attribute = React.createClass({
     }
   },
   render () {
-    const {name, selected, toggle} = this.props
+    const {headline, description, name, selected, toggle} = this.props
     const className = cx({
       [style.item]: true,
       [style.selected]: selected,
@@ -74,7 +76,15 @@ const Attribute = React.createClass({
 
     return (
       <li onClick={this.onClick} className={className} title={name}>
-        {name}
+        {headline ? (
+          <div>
+            <strong>{headline}</strong>
+            <br/>
+            <small>{description}</small>
+          </div>
+        ) : (
+          name
+        )}
       </li>
     )
   }
@@ -90,7 +100,8 @@ function Attributes ({title, attributes, selectedAttributes, addItem, removeItem
       </h5>
 
       <ul className={`${style.list}`}>
-        {map(attributes, ({id, name, pairs_with, requires_id}) => {
+        {map(attributes, item => {
+          const {id, pairs_with, requires_id} = item
           const isSelected = includes(selectedAttributes, id)
           const invalidPermutation = pairs_with && !isEmpty(diff(selectedBreakdowns, pairs_with))
           const disabledById = requires_id && !isIdSelected
@@ -98,8 +109,7 @@ function Attributes ({title, attributes, selectedAttributes, addItem, removeItem
 
           return (
             <Attribute
-              id={id}
-              name={name}
+              {...item}
               fixed={isSelected && !removeItem}
               disabled={!isSelected && !addMe}
               selected={isSelected}

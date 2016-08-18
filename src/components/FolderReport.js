@@ -6,8 +6,29 @@ import assign from 'lodash/assign'
 import {loadReportMetaDataAction} from '../actions/load-report-meta-data'
 import {loadFolderEntitiesAction} from '../actions/load-folder-entities'
 import endsWith from 'lodash/endsWith'
+import trim from 'lodash/trim'
 
 const {PropTypes} = React
+
+function normalizeAd (ad) {
+  const normalizedAd = assign({}, ad)
+
+  if (ad.description_1) {
+    normalizedAd.description = (
+      trim(ad.description_1) + ' ' +
+      trim(ad.description_2)
+    )
+  }
+
+  if (ad.headline_part_1) {
+    normalizedAd.headline = (
+      trim(ad.headline_part_1) + ' ' +
+      trim(ad.headline_part_2)
+    )
+  }
+
+  return normalizedAd
+}
 
 const FolderReport = React.createClass({
   displayName: 'Folder-Report',
@@ -67,7 +88,7 @@ const FolderReport = React.createClass({
       {
         id: 'Ad',
         name: messages.ads,
-        list: ads || []
+        list: map(ads, normalizeAd)
       }
     ]
   },
