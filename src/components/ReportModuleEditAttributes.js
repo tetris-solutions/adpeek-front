@@ -8,6 +8,8 @@ import isEmpty from 'lodash/isEmpty'
 import {styledFnComponent} from './higher-order/styled-fn-component'
 import filter from 'lodash/filter'
 import intersect from 'lodash/intersection'
+import find from 'lodash/find'
+import get from 'lodash/get'
 
 const style = csjs`
 .title {
@@ -44,6 +46,65 @@ const style = csjs`
 
 const {PropTypes} = React
 
+function TextAd ({onClick, className, headline, description}) {
+  return (
+    <li onClick={onClick} className={className}>
+      <div>
+        <strong>{headline}</strong>
+        <br/>
+        <small>{description}</small>
+      </div>
+    </li>
+  )
+}
+
+TextAd.displayName = 'Text-Ad'
+TextAd.propTypes = {
+  className: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  headline: PropTypes.string,
+  description: PropTypes.string
+}
+
+function ImageAd ({onClick, className, name, urls}) {
+  return (
+    <li onClick={onClick} className={className}>
+      <figure>
+
+        <img src={get(find(urls, 'key', 'PREVIEW'), 'value',
+          'http://placehold.it/150x150')}/>
+
+        <figcaption>{name}</figcaption>
+      </figure>
+    </li>
+  )
+}
+
+ImageAd.displayName = 'Image-Ad'
+ImageAd.propTypes = {
+  className: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  name: PropTypes.string,
+  urls: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string,
+    value: PropTypes.string
+  }))
+}
+
+const GenericItem = ({onClick, className, id, name}) => (
+  <li onClick={onClick} className={className} title={name || id}>
+    {name || id}
+  </li>
+)
+
+GenericItem.displayName = 'Generic-Item'
+GenericItem.propTypes = {
+  className: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  name: PropTypes.string,
+  id: PropTypes.string.isRequired
+}
+
 const Attribute = React.createClass({
   displayName: 'Attribute',
   getDefaultProps () {
@@ -54,6 +115,8 @@ const Attribute = React.createClass({
   propTypes: {
     id: PropTypes.string.isRequired,
     name: PropTypes.string,
+    type: PropTypes.string,
+    urls: PropTypes.array,
     headline: PropTypes.string,
     description: PropTypes.string,
     selected: PropTypes.bool.isRequired,
@@ -67,26 +130,28 @@ const Attribute = React.createClass({
     }
   },
   render () {
-    const {headline, description, name, selected, toggle} = this.props
+    const {type, selected, toggle} = this.props
     const className = cx({
       [style.item]: true,
       [style.selected]: selected,
       [style.fixed]: selected && !toggle,
       [style.disabled]: !selected && !toggle
     })
+    let Component = GenericItem
+
+    if (this.props.headline) {
+      Component = TextAd
+    }
+
+    if (!isEmpty(this.props.urls) && type === 'IMAGE_AD') {
+      Component = ImageAd
+    }
 
     return (
-      <li onClick={this.onClick} className={className} title={name}>
-        {headline ? (
-          <div>
-            <strong>{headline}</strong>
-            <br/>
-            <small>{description}</small>
-          </div>
-        ) : (
-          name
-        )}
-      </li>
+      <Component
+        {...this.props}
+        onClick={this.onClick}
+        className={className}/>
     )
   }
 })
