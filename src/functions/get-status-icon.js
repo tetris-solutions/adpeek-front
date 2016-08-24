@@ -1,4 +1,4 @@
-import upperCase from 'lodash/upperCase'
+import upperCase from 'lodash/toUpper'
 
 export function getStatusIcon ({is_active, name}) {
   if (is_active) return 'play_circle_filled'

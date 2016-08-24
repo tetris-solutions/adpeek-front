@@ -126,9 +126,9 @@ function Attributes ({title, attributes, selectedAttributes, addItem, removeItem
 
   return (
     <div>
-      <h5 className={`${style.title}`}>
-        {title}
-      </h5>
+      {title
+        ? <h5 className={`${style.title}`}>{title}</h5>
+        : null}
 
       <ul className={`${style.list}`}>
         {map(attributes, item => {
@@ -155,7 +155,7 @@ function Attributes ({title, attributes, selectedAttributes, addItem, removeItem
 
 Attributes.displayName = 'Attributes'
 Attributes.propTypes = {
-  title: PropTypes.node.isRequired,
+  title: PropTypes.node,
   addItem: PropTypes.func,
   removeItem: PropTypes.func,
   attributes: PropTypes.array.isRequired,

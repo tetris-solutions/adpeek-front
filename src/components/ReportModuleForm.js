@@ -1,18 +1,21 @@
-import React from 'react'
-import Input from './Input'
 import assign from 'lodash/assign'
-import Select from './Select'
+import find from 'lodash/find'
+import includes from 'lodash/includes'
+import isArray from 'lodash/isArray'
+import map from 'lodash/map'
+import uniq from 'lodash/uniq'
 import Message from '@tetris/front-server/lib/components/intl/Message'
-import reportParamsType from '../propTypes/report-params'
-import reportModuleType from '../propTypes/report-module'
+import React from 'react'
+
+import _ReportChart from './ReportModuleChart'
 import reportEntityType from '../propTypes/report-entity'
 import reportMetaDataType from '../propTypes/report-meta-data'
-import _ReportChart from './ReportModuleChart'
-import find from 'lodash/find'
-import TypeSelect from './ReportModuleEditTypeSelect'
+import reportModuleType from '../propTypes/report-module'
+import reportParamsType from '../propTypes/report-params'
+import Input from './Input'
 import Lists from './ReportModuleEditLists'
-import includes from 'lodash/includes'
-import map from 'lodash/map'
+import Select from './Select'
+import TypeSelect from './ReportModuleEditTypeSelect'
 import {expandVertically} from './higher-order/expand-vertically'
 
 const {PropTypes} = React
@@ -58,16 +61,20 @@ const ModuleEdit = React.createClass({
     this.props.save(newState)
   },
   removeEntity (id) {
+    const ids = isArray(id) ? id : [id]
+
     this.props.save({
       filters: assign({}, this.props.module.filters, {
-        id: this.props.module.filters.id.filter(m => m !== id)
+        id: this.props.module.filters.id.filter(currentId => !includes(ids, currentId))
       })
     })
   },
   addEntity (id) {
+    const ids = isArray(id) ? id : [id]
+
     this.props.save({
       filters: assign({}, this.props.module.filters, {
-        id: this.props.module.filters.id.concat([id])
+        id: uniq(this.props.module.filters.id.concat(ids))
       })
     })
   },
@@ -141,6 +148,7 @@ const ModuleEdit = React.createClass({
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--3-col' style={{height: '80vh', overflowY: 'auto'}}>
             <Lists
+              entities={entities}
               dimensions={dimensions}
               metrics={metrics}
               entity={entity}

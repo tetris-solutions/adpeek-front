@@ -1,12 +1,13 @@
-import React from 'react'
-import {render, unmountComponentAtNode} from 'react-dom'
-import {styled} from './mixins/styled'
+import assign from 'lodash/assign'
 import csjs from 'csjs'
-import pick from 'lodash/pick'
 import forEach from 'lodash/forEach'
 import isEmpty from 'lodash/isEmpty'
-import assign from 'lodash/assign'
-import upperCase from 'lodash/upperCase'
+import pick from 'lodash/pick'
+import upperCase from 'lodash/toUpper'
+import React from 'react'
+import {render, unmountComponentAtNode} from 'react-dom'
+
+import {styled} from './mixins/styled'
 
 const notInput = el => !el || (upperCase(el.tagName) !== 'INPUT' && upperCase(el.tagName) !== 'TEXTAREA')
 

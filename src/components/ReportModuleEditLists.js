@@ -1,15 +1,17 @@
-import React from 'react'
-import Attributes from './ReportModuleEditAttributes'
-import reportEntityType from '../propTypes/report-entity'
-import includes from 'lodash/includes'
 import debounce from 'lodash/debounce'
 import deburr from 'lodash/deburr'
-import lowerCase from 'lodash/lowerCase'
-import sortBy from 'lodash/sortBy'
 import filter from 'lodash/filter'
-import Message from '@tetris/front-server/lib/components/intl/Message'
-import Input from './Input'
+import includes from 'lodash/includes'
+import lowerCase from 'lodash/toLower'
+import sortBy from 'lodash/sortBy'
 import trim from 'lodash/trim'
+import Message from '@tetris/front-server/lib/components/intl/Message'
+import React from 'react'
+
+import reportEntityType from '../propTypes/report-entity'
+import Attributes from './ReportModuleEditAttributes'
+import EntityList from './ReportModuleEditEntityList'
+import Input from './Input'
 
 const {PropTypes} = React
 const clean = str => trim(lowerCase(deburr(str)))
@@ -30,6 +32,7 @@ const sorted = ls => sortBy(ls, 'name')
 const Lists = React.createClass({
   displayName: 'Lists',
   propTypes: {
+    entities: PropTypes.array,
     attributes: PropTypes.object.isRequired,
     metrics: PropTypes.array.isRequired,
     dimensions: PropTypes.array.isRequired,
@@ -83,7 +86,9 @@ const Lists = React.createClass({
           name='searchValue'
           onChange={this.onChangeSearch}/>
 
-        <Attributes
+        <EntityList
+          entity={entity}
+          entities={this.props.entities}
           title={entity.name}
           attributes={list}
           isIdSelected={isIdSelected}
