@@ -1,10 +1,11 @@
-import {GET} from '@tetris/http'
-import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save-token-as-cookie'
+import omit from 'lodash/omit'
+import set from 'lodash/set'
+import without from 'lodash/without'
 import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetch-config'
 import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
-import omit from 'lodash/omit'
-import without from 'lodash/without'
-import set from 'lodash/set'
+import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save-token-as-cookie'
+import {GET} from '@tetris/http'
+
 import {getDeepCursor} from '../functions/get-deep-cursor'
 
 function loadReportMetaData (platform, entity, config) {
@@ -96,7 +97,28 @@ const excluded = [
   'photo_view',
   'place_page_id',
   'place_page_name',
-  'product_id'
+  'product_id',
+  // ad fields
+  'headline',
+  'creativefinalappurls',
+  'description',
+  'description1',
+  'description2',
+  'creativedestinationurl',
+  'displayurl',
+  'creativefinalurls',
+  'headlinepart1',
+  'headlinepart2',
+  'imageadurl',
+  'imagecreativeimageheight',
+  'imagecreativeimagewidth',
+  'imagecreativename',
+  'longheadline',
+  'creativefinalmobileurls',
+  'path1',
+  'path2',
+  'shortheadline',
+  'creativetrackingurltemplate'
 ]
 
 export function loadReportMetaDataAction (tree, params, platform, entity, token) {
