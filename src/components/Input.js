@@ -1,12 +1,13 @@
-import React from 'react'
 import cx from 'classnames'
-import pick from 'lodash/pick'
-import Message from '@tetris/front-server/lib/components/intl/Message'
 import isNumber from 'lodash/isNumber'
 import isString from 'lodash/isString'
+import pick from 'lodash/pick'
+import Message from '@tetris/front-server/lib/components/intl/Message'
+import React from 'react'
 
 const {PropTypes} = React
 const inputFields = [
+  'disabled',
   'name',
   'type',
   'required',

@@ -1,12 +1,14 @@
-import React from 'react'
-import Report from './Report'
-import {contextualize} from './higher-order/contextualize'
-import map from 'lodash/map'
 import assign from 'lodash/assign'
-import {loadReportMetaDataAction} from '../actions/load-report-meta-data'
-import {loadFolderEntitiesAction} from '../actions/load-folder-entities'
 import endsWith from 'lodash/endsWith'
+import flatten from 'lodash/flatten'
+import map from 'lodash/map'
 import trim from 'lodash/trim'
+import React from 'react'
+
+import Report from './Report'
+import {loadFolderEntitiesAction} from '../actions/load-folder-entities'
+import {loadReportMetaDataAction} from '../actions/load-report-meta-data'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
@@ -51,20 +53,28 @@ const FolderReport = React.createClass({
       })
     })
   },
+  getInitialState () {
+    return {
+      isLoading: true
+    }
+  },
   componentDidMount () {
     const {params, folder, dispatch} = this.props
 
-    dispatch(loadFolderEntitiesAction,
+    const loadEntitiesPromise = dispatch(loadFolderEntitiesAction,
       params.company,
       params.workspace,
       params.folder)
 
-    map(this.getEntities(), ({id}) =>
+    const loadMetaDataPromise = map(this.getEntities(), ({id}) =>
       dispatch(loadReportMetaDataAction,
         params,
         folder.account.platform,
         id
       ))
+
+    Promise.all(flatten([loadEntitiesPromise, loadMetaDataPromise]))
+      .then(() => this.setState({isLoading: false}))
   },
   getEntities () {
     const {messages} = this.context
@@ -103,6 +113,7 @@ const FolderReport = React.createClass({
     return (
       <Report
         {...this.props}
+        isLoading={this.state.isLoading}
         editMode={endsWith(location.pathname, '/edit')}
         reportParams={reportParams}
         entities={this.getEntities()}/>

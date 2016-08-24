@@ -1,30 +1,33 @@
-import React from 'react'
-import Message from '@tetris/front-server/lib/components/intl/Message'
-import moment from 'moment'
-import ReportDateRange from './ReportDateRange'
-import map from 'lodash/map'
-import Module from './ReportModuleController'
 import assign from 'lodash/assign'
-import size from 'lodash/size'
-import {contextualize} from './higher-order/contextualize'
-import {createModuleReportAction} from '../actions/create-module'
-import {updateReportAction} from '../actions/update-report'
-import reportType from '../propTypes/report'
-import entityType from '../propTypes/report-entity'
-import sortBy from 'lodash/sortBy'
-import Input from './Input'
 import debounce from 'lodash/debounce'
-import {exportReportModules} from '../functions/export-report-modules'
-import {createReportPdfAction} from '../actions/create-report-pdf'
-import max from 'lodash/max'
 import get from 'lodash/get'
+import map from 'lodash/map'
+import max from 'lodash/max'
+import moment from 'moment'
+import size from 'lodash/size'
+import sortBy from 'lodash/sortBy'
+import Message from '@tetris/front-server/lib/components/intl/Message'
+import React from 'react'
+
+import entityType from '../propTypes/report-entity'
+import reportType from '../propTypes/report'
+import Input from './Input'
+import LoadingHorizontal from './LoadingHorizontal'
+import Module from './ReportModuleController'
+import ReportDateRange from './ReportDateRange'
+import {createModuleReportAction} from '../actions/create-module'
+import {createReportPdfAction} from '../actions/create-report-pdf'
+import {updateReportAction} from '../actions/update-report'
+import {exportReportModules} from '../functions/export-report-modules'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
-const ReportBuilder = React.createClass({
+const Report = React.createClass({
   displayName: 'Report',
   propTypes: {
     report: reportType,
+    isLoading: PropTypes.bool.isRequired,
     editMode: PropTypes.bool.isRequired,
     dispatch: PropTypes.func,
     params: PropTypes.object,
@@ -40,7 +43,7 @@ const ReportBuilder = React.createClass({
   },
   getInitialState () {
     return {
-      isLoading: false,
+      isCreatingReport: false,
       startDate: moment().startOf('week').subtract(7, 'days'),
       endDate: moment().startOf('week').subtract(1, 'days')
     }
@@ -85,7 +88,7 @@ const ReportBuilder = React.createClass({
       return {id, el, name, rows, cols}
     })
 
-    this.setState({isLoading: true})
+    this.setState({isCreatingReport: true})
 
     exportReportModules(modules)
       .then(modules => dispatch(createReportPdfAction, {
@@ -93,13 +96,13 @@ const ReportBuilder = React.createClass({
         modules
       }))
       .then(response =>
-        this.setState({isLoading: false}, () => {
+        this.setState({isCreatingReport: false}, () => {
           window.location.href = response.data.url
         }))
   },
   render () {
-    const {editMode, report: {name, modules, metaData}} = this.props
-    const {isLoading, startDate, endDate} = this.state
+    const {isLoading, editMode, report: {name, modules, metaData}} = this.props
+    const {isCreatingReport, startDate, endDate} = this.state
     const reportParams = assign({
       from: startDate.format('YYYY-MM-DD'),
       to: endDate.format('YYYY-MM-DD')
@@ -111,7 +114,7 @@ const ReportBuilder = React.createClass({
         <header className='mdl-layout__header'>
           <div ref='header' className='mdl-layout__header-row mdl-color--blue-grey-500'>
             {editMode
-              ? <Input name='name' onChange={this.onChangeName} defaultValue={name}/>
+              ? <Input disabled={isLoading} name='name' onChange={this.onChangeName} defaultValue={name}/>
               : name}
 
             <div className='mdl-layout-spacer'/>
@@ -122,19 +125,23 @@ const ReportBuilder = React.createClass({
               endDate={endDate}/>
 
             {editMode && (
-              <button className='mdl-button mdl-color-text--grey-100' onClick={this.addNewModule}>
+              <button disabled={isLoading} className='mdl-button mdl-color-text--grey-100' onClick={this.addNewModule}>
                 <Message>newModule</Message>
               </button>)}
 
-            <button disabled={isLoading} className='mdl-button mdl-color-text--grey-100' onClick={this.downloadReport}>
-              {isLoading
+            <button disabled={isLoading || isCreatingReport} className='mdl-button mdl-color-text--grey-100' onClick={this.downloadReport}>
+              {isCreatingReport
                 ? <Message>creatingReport</Message>
                 : <Message>extractReport</Message>}
             </button>
           </div>
         </header>
         <div className='mdl-grid' ref='grid'>
-          {map(sortBy(modules, 'index'), (module, index) => (
+          {isLoading ? (
+            <LoadingHorizontal>
+              <Message>loadingReport</Message>
+            </LoadingHorizontal>
+          ) : map(sortBy(modules, 'index'), (module, index) => (
             <div
               data-report-module={module.id}
               key={`${module.id}::${index}`}
@@ -146,12 +153,11 @@ const ReportBuilder = React.createClass({
                 metaData={get(metaData, [platform, module.entity])}
                 reportParams={reportParams}
                 entities={this.props.entities}/>
-            </div>
-          ))}
+            </div>))}
         </div>
       </div>
     )
   }
 })
 
-export default contextualize(ReportBuilder, 'report')
+export default contextualize(Report, 'report')
