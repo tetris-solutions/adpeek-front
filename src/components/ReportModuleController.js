@@ -1,17 +1,18 @@
+import assign from 'lodash/assign'
+import debounce from 'lodash/debounce'
+import find from 'lodash/find'
+import isEmpty from 'lodash/isEmpty'
+import pick from 'lodash/pick'
 import React from 'react'
-import reportParamsType from '../propTypes/report-params'
+
 import reportEntityType from '../propTypes/report-entity'
 import reportMetaDataType from '../propTypes/report-meta-data'
-import isEmpty from 'lodash/isEmpty'
-import {getDeepCursor} from '../functions/get-deep-cursor'
-import debounce from 'lodash/debounce'
-import {loadReportModuleResultAction} from '../actions/load-report-result'
-import {deleteModuleAction} from '../actions/delete-module'
-import pick from 'lodash/pick'
-import assign from 'lodash/assign'
+import reportParamsType from '../propTypes/report-params'
 import Module from './ReportModule'
+import {deleteModuleAction} from '../actions/delete-module'
+import {loadReportModuleResultAction} from '../actions/load-report-result'
 import {updateModuleAction} from '../actions/update-module'
-import find from 'lodash/find'
+import {getDeepCursor} from '../functions/get-deep-cursor'
 
 const {PropTypes} = React
 

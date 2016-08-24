@@ -6,3 +6,4 @@ node_modules
 /public/js/client.js.map
 /public/js/client.js
 .env
+.vscode

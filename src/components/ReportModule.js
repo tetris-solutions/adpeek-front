@@ -1,14 +1,15 @@
+import csjs from 'csjs'
+import isEmpty from 'lodash/isEmpty'
 import React from 'react'
+
+import reportEntityType from '../propTypes/report-entity'
+import reportMetaDataType from '../propTypes/report-meta-data'
+import reportModuleType from '../propTypes/report-module'
+import reportParamsType from '../propTypes/report-params'
 import Edit from './ReportModuleEdit'
 import Modal from './Modal'
 import ReportChart from './ReportModuleChart'
-import reportParamsType from '../propTypes/report-params'
-import reportModuleType from '../propTypes/report-module'
-import reportEntityType from '../propTypes/report-entity'
-import reportMetaDataType from '../propTypes/report-meta-data'
-import csjs from 'csjs'
 import {styled} from './mixins/styled'
-import isEmpty from 'lodash/isEmpty'
 
 const style = csjs`
 .card, .content, .content > div {

@@ -1,15 +1,14 @@
-import React from 'react'
-import cx from 'classnames'
 import csjs from 'csjs'
-import map from 'lodash/map'
-import includes from 'lodash/includes'
+import cx from 'classnames'
 import diff from 'lodash/difference'
-import isEmpty from 'lodash/isEmpty'
-import {styledFnComponent} from './higher-order/styled-fn-component'
 import filter from 'lodash/filter'
+import includes from 'lodash/includes'
 import intersect from 'lodash/intersection'
-import find from 'lodash/find'
-import get from 'lodash/get'
+import isEmpty from 'lodash/isEmpty'
+import map from 'lodash/map'
+import React from 'react'
+
+import {styledFnComponent} from './higher-order/styled-fn-component'
 
 const style = csjs`
 .title {
@@ -66,31 +65,6 @@ TextAd.propTypes = {
   description: PropTypes.string
 }
 
-function ImageAd ({onClick, className, name, urls}) {
-  return (
-    <li onClick={onClick} className={className}>
-      <figure>
-
-        <img src={get(find(urls, 'key', 'PREVIEW'), 'value',
-          'http://placehold.it/150x150')}/>
-
-        <figcaption>{name}</figcaption>
-      </figure>
-    </li>
-  )
-}
-
-ImageAd.displayName = 'Image-Ad'
-ImageAd.propTypes = {
-  className: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
-  name: PropTypes.string,
-  urls: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.string,
-    value: PropTypes.string
-  }))
-}
-
 const GenericItem = ({onClick, className, id, name}) => (
   <li onClick={onClick} className={className} title={name || id}>
     {name || id}
@@ -130,28 +104,19 @@ const Attribute = React.createClass({
     }
   },
   render () {
-    const {type, selected, toggle} = this.props
+    const {selected, toggle, headline} = this.props
     const className = cx({
       [style.item]: true,
       [style.selected]: selected,
       [style.fixed]: selected && !toggle,
       [style.disabled]: !selected && !toggle
     })
-    let Component = GenericItem
-
-    if (this.props.headline) {
-      Component = TextAd
-    }
-
-    if (!isEmpty(this.props.urls) && type === 'IMAGE_AD') {
-      Component = ImageAd
-    }
+    const Component = headline
+      ? TextAd
+      : GenericItem
 
     return (
-      <Component
-        {...this.props}
-        onClick={this.onClick}
-        className={className}/>
+      <Component {...this.props} onClick={this.onClick} className={className}/>
     )
   }
 })
