@@ -1,18 +1,18 @@
-import React from 'react'
-import {styled} from './mixins/styled'
 import csjs from 'csjs'
-import map from 'lodash/map'
-import forEach from 'lodash/forEach'
-import flow from 'lodash/flow'
+import cx from 'classnames'
 import find from 'lodash/find'
-import memoize from 'lodash/memoize'
-import get from 'lodash/get'
-import stableSort from 'stable'
-import entityType from '../propTypes/report-entity'
+import findIndex from 'lodash/findIndex'
+import flow from 'lodash/flow'
+import forEach from 'lodash/forEach'
 import fromPairs from 'lodash/fromPairs'
 import keys from 'lodash/keys'
-import findIndex from 'lodash/findIndex'
-import cx from 'classnames'
+import map from 'lodash/map'
+import stableSort from 'stable'
+import React from 'react'
+
+import entityType from '../propTypes/report-entity'
+import Ad from './ReportModuleTableAd'
+import {styled} from './mixins/styled'
 
 const style = csjs`
 .table {
@@ -130,14 +130,25 @@ const ReportModuleTable = React.createClass({
   render () {
     const {sort} = this.state
     const sortPairs = fromPairs(sort)
-    const {name, result, attributes, entity: {list}} = this.props
+    const {name, result, attributes, entity: {id: entityId, list}} = this.props
     const headers = keys(result[0])
     let tbody = null
     let colHeaders = null
 
     if (result.length) {
       const sorter = flow(map(sort, sortWith))
-      const getName = memoize(id => get(find(list, {id}), 'name', id))
+      const getName = id => {
+        const item = find(list, {id})
+
+        if (!item) return id
+
+        if (entityId === 'Ad') {
+          return <Ad {...item}/>
+        }
+
+        return item.name || id
+      }
+
       const rows = sorter(map(result, row => {
         const parsed = {}
 
