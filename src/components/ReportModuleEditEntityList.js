@@ -76,7 +76,7 @@ const EntityList = React.createClass({
 
     if (entityId === 'campaign') {
       return (
-        <Attributes title={entity.name} attributes={attributes} {...this.props}/>
+        <Attributes {...this.props}/>
       )
     }
 
@@ -96,7 +96,7 @@ const EntityList = React.createClass({
           parent: adGroup.campaign_id,
           content: (
             <EntityGroup key={adGroup.id} name={adGroup.name} ids={ids} select={addItem} unselect={removeItem}>
-              <Attributes attributes={ls} {...this.props}/>
+              <Attributes {...this.props} attributes={ls} title={null}/>
             </EntityGroup>
           )
         }
