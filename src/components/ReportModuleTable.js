@@ -5,7 +5,7 @@ import findIndex from 'lodash/findIndex'
 import flow from 'lodash/flow'
 import forEach from 'lodash/forEach'
 import fromPairs from 'lodash/fromPairs'
-import get from 'lodash/get'
+import isObject from 'lodash/isObject'
 import keys from 'lodash/keys'
 import map from 'lodash/map'
 import stableSort from 'stable'
@@ -40,9 +40,8 @@ const {PropTypes} = React
 function sortWith ([field, order]) {
   function sortFn (ls) {
     function compare (a, b) {
-      const valuePath = [field, 'sortKey']
-      const aValue = get(a, valuePath, a[field])
-      const bValue = get(b, valuePath, b[field])
+      const aValue = isObject(a[field]) ? a[field].sortKey : a[field]
+      const bValue = isObject(b[field]) ? b[field].sortKey : b[field]
 
       if (aValue === bValue) return 0
 
@@ -191,7 +190,7 @@ const ReportModuleTable = React.createClass({
             <tr key={index}>
               {map(headers, header =>
                 <td key={header} className={attributes[header].is_metric ? '' : 'mdl-data-table__cell--non-numeric'}>
-                  {row[header].content}
+                  {isObject(row[header]) ? row[header].content : row[header]}
                 </td>)}
             </tr>)}
         </tbody>
