@@ -5,6 +5,7 @@ import findIndex from 'lodash/findIndex'
 import flow from 'lodash/flow'
 import forEach from 'lodash/forEach'
 import fromPairs from 'lodash/fromPairs'
+import get from 'lodash/get'
 import keys from 'lodash/keys'
 import map from 'lodash/map'
 import stableSort from 'stable'
@@ -39,12 +40,16 @@ const {PropTypes} = React
 function sortWith ([field, order]) {
   function sortFn (ls) {
     function compare (a, b) {
-      if (a[field] === b[field]) return 0
+      const valuePath = [field, 'sortKey']
+      const aValue = get(a, valuePath, a[field])
+      const bValue = get(b, valuePath, b[field])
+
+      if (aValue === bValue) return 0
 
       if (order === 'asc') {
-        return a[field] < b[field] ? -1 : 1
+        return aValue < bValue ? -1 : 1
       } else {
-        return a[field] < b[field] ? 1 : -1
+        return aValue < bValue ? 1 : -1
       }
     }
 
@@ -136,20 +141,28 @@ const ReportModuleTable = React.createClass({
     let colHeaders = null
 
     if (result.length) {
-      const sorter = flow(map(sort, sortWith))
+      const customSort = flow(map(sort, sortWith))
       const getName = id => {
         const item = find(list, {id})
+        let sortKey = id
 
-        if (!item) return id
-
-        if (entityId === 'Ad') {
-          return <Ad {...item}/>
+        if (!item) {
+          return {content: id, sortKey}
         }
 
-        return item.name || id
+        sortKey = item.name || item.headline || id
+
+        if (entityId === 'Ad') {
+          return {
+            content: <Ad {...item}/>,
+            sortKey
+          }
+        }
+
+        return {content: item.name || id, sortKey}
       }
 
-      const rows = sorter(map(result, row => {
+      const rows = customSort(map(result, row => {
         const parsed = {}
 
         forEach(headers, value => {
@@ -178,7 +191,7 @@ const ReportModuleTable = React.createClass({
             <tr key={index}>
               {map(headers, header =>
                 <td key={header} className={attributes[header].is_metric ? '' : 'mdl-data-table__cell--non-numeric'}>
-                  {row[header]}
+                  {row[header].content}
                 </td>)}
             </tr>)}
         </tbody>
