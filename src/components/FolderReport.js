@@ -44,6 +44,7 @@ const FolderReport = React.createClass({
     folder: PropTypes.shape({
       campaigns: PropTypes.array,
       adSets: PropTypes.array,
+      keywords: PropTypes.array,
       adGroups: PropTypes.array,
       ads: PropTypes.array,
       account: PropTypes.shape({
@@ -78,29 +79,42 @@ const FolderReport = React.createClass({
   },
   getEntities () {
     const {messages} = this.context
-    const {account: {platform}, campaigns, adSets, adGroups, ads} = this.props.folder
+    const {account: {platform}, campaigns, adSets, adGroups, ads, keywords} = this.props.folder
 
-    return [
-      {
-        id: 'Campaign',
-        name: messages.campaigns,
-        list: map(campaigns, c => assign({}, c, {id: c.external_id}))
-      },
-      platform === 'adwords' ? {
+    const entities = [{
+      id: 'Campaign',
+      name: messages.campaigns,
+      list: map(campaigns, c => assign({}, c, {id: c.external_id}))
+    }]
+
+    if (platform === 'adwords') {
+      entities.push({
         id: 'AdGroup',
         name: messages.adGroups,
         list: adGroups || []
-      } : {
+      })
+      entities.push({
+        id: 'Keyword',
+        name: messages.keywords,
+        list: keywords || []
+      })
+    }
+
+    if (platform === 'facebook') {
+      entities.push({
         id: 'AdSet',
         name: messages.adSets,
         list: adSets || []
-      },
-      {
-        id: 'Ad',
-        name: messages.ads,
-        list: map(ads, normalizeAd)
-      }
-    ]
+      })
+    }
+
+    entities.push({
+      id: 'Ad',
+      name: messages.ads,
+      list: map(ads, normalizeAd)
+    })
+
+    return entities
   },
   render () {
     const {folder, location} = this.props

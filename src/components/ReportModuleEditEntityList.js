@@ -102,7 +102,7 @@ const EntityList = React.createClass({
 
     let nodes
 
-    if (entityId === 'adgroup' || entityId === 'adset' || entityId === 'keyword') {
+    if (entityId === 'adgroup' || entityId === 'adset') {
       nodes = map(groupBy(attributes, 'campaign_id'), (ls, campaignId) => {
         const campaign = find(entities.campaign.list, {id: campaignId})
         const ids = map(ls, 'id')
@@ -115,7 +115,7 @@ const EntityList = React.createClass({
       })
     }
 
-    if (entityId === 'ad') {
+    if (entityId === 'ad' || entityId === 'keyword') {
       const adGroups = map(groupBy(attributes, 'adgroup_id'), (ls, adGroupId) => {
         const adGroup = find(entities.adgroup.list, {id: adGroupId})
         const ids = map(ls, 'id')
