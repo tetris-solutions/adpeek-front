@@ -83,7 +83,16 @@ const EntityList = React.createClass({
     let nodes
 
     if (entityId === 'adgroup' || entityId === 'adset' || entityId === 'keyword') {
-      nodes = null
+      nodes = map(groupBy(attributes, 'campaign_id'), (ls, campaignId) => {
+        const campaign = find(entities.campaign.list, {id: campaignId})
+        const ids = map(ls, 'id')
+
+        return (
+          <EntityGroup key={campaign.id} name={campaign.name} ids={ids} select={addItem} unselect={removeItem}>
+            <Attributes {...this.props} attributes={ls} title={null}/>
+          </EntityGroup>
+        )
+      })
     }
 
     if (entityId === 'ad') {
