@@ -71,7 +71,7 @@ const Report = React.createClass({
   addNewModule () {
     const {report, params, dispatch} = this.props
     const {messages} = this.context
-    const index = max(map(report.modules, 'index')) + 1
+    const index = max(map(report.modules, 'index')) || 0
 
     dispatch(createModuleReportAction, params, {
       type: 'line',
