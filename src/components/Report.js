@@ -135,7 +135,7 @@ const Report = React.createClass({
           ) : map(sortBy(modules, 'index'), (module, index) => (
             <div
               data-report-module={module.id}
-              key={`${module.id}::${index}`}
+              key={module.id}
               className={`mdl-cell mdl-cell--${module.cols}-col`}>
 
               <Module

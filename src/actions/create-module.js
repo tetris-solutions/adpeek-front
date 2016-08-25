@@ -1,9 +1,10 @@
-import {POST} from '@tetris/http'
 import assign from 'lodash/assign'
-import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save-token-as-cookie'
 import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetch-config'
 import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
-import {saveResponseData} from '../functions/save-response-data'
+import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save-token-as-cookie'
+import {POST} from '@tetris/http'
+
+import {getDeepCursor} from '../functions/get-deep-cursor'
 
 function createModule (report, module, config) {
   return POST(`${process.env.ADPEEK_API_URL}/report/${report}/module`,
@@ -19,11 +20,18 @@ export function createModuleReportAction (tree, {company, workspace, folder, rep
   path.push(['reports', report])
   path.push('modules')
 
-  const push = (newModule, ls) => ls.concat([newModule])
-
   return createModule(report, module, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
-    .then(saveResponseData(tree, path, push))
+    .then(response => {
+      path.push(response.data.id)
+
+      const cursor = getDeepCursor(tree, path)
+
+      tree.set(cursor, response.data)
+      tree.commit()
+
+      return response
+    })
     .catch(pushResponseErrorToState(tree))
 }
 

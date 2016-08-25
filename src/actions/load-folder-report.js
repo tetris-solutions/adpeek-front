@@ -1,7 +1,9 @@
-import {GET} from '@tetris/http'
-import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save-token-as-cookie'
+import keyBy from 'lodash/keyBy'
 import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetch-config'
 import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
+import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save-token-as-cookie'
+import {GET} from '@tetris/http'
+
 import {saveResponseData} from '../functions/save-response-data'
 
 function loadFolderReport (folder, report, config) {
@@ -12,6 +14,8 @@ function keepOldReportMetaData (newReport, oldReport) {
   if (oldReport && oldReport.metaData && !newReport.metaData) {
     newReport.metaData = oldReport.metaData
   }
+
+  newReport.modules = keyBy(newReport.modules, 'id')
 
   return newReport
 }

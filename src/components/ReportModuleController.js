@@ -41,6 +41,22 @@ const ReportModule = React.createClass({
     params: PropTypes.object
   },
   componentWillMount () {
+    this.setupCursor()
+  },
+  componentDidMount () {
+    this.fetchResult(this.getChartQuery())
+  },
+  componentDidUpdate () {
+    this.fetchResult(this.getChartQuery())
+  },
+  componentWillUnmount () {
+    this.unsetCursor()
+  },
+  unsetCursor () {
+    this.cursor.release()
+    this.cursor = null
+  },
+  setupCursor () {
     const {tree, params} = this.context
 
     // @todo adapt for other report locations (e.g. workspace)
@@ -51,7 +67,8 @@ const ReportModule = React.createClass({
       ['workspaces', params.workspace],
       ['folders', params.folder],
       ['reports', params.report],
-      ['modules', this.props.id]
+      'modules',
+      this.props.id
     ]))
 
     this.fetchResult = debounce(
@@ -62,16 +79,6 @@ const ReportModule = React.createClass({
     const onUpdate = debounce(() => this.forceUpdate(), 300)
 
     this.cursor.on('update', onUpdate)
-  },
-  componentDidMount () {
-    this.fetchResult(this.getChartQuery())
-  },
-  componentDidUpdate () {
-    this.fetchResult(this.getChartQuery())
-  },
-  componentWillUnmount () {
-    this.cursor.release()
-    this.cursor = null
   },
   getEntity () {
     return find(this.props.entities, {id: this.cursor.get('entity')})
