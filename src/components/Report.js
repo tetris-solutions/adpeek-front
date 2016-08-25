@@ -4,7 +4,6 @@ import get from 'lodash/get'
 import map from 'lodash/map'
 import max from 'lodash/max'
 import moment from 'moment'
-import size from 'lodash/size'
 import sortBy from 'lodash/sortBy'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
@@ -55,23 +54,13 @@ const Report = React.createClass({
     this.onChangeName = debounce(() =>
       dispatch(updateReportAction, params, {id, name: getName()}), 1000)
   },
-  getNewModule () {
-    const {messages} = this.context
-    const index = size(this.props.report.modules)
-
-    return {
-      type: 'line',
-      name: messages.module + ' ' + (index + 1),
-      index
-    }
-  },
   onChangeRange ({startDate, endDate}) {
     this.setState({startDate, endDate})
   },
   addNewModule () {
     const {report, params, dispatch} = this.props
     const {messages} = this.context
-    const index = max(map(report.modules, 'index')) || 0
+    const index = (max(map(report.modules, 'index')) || -1) + 1
 
     dispatch(createModuleReportAction, params, {
       type: 'line',
