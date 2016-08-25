@@ -116,8 +116,9 @@ const EntityList = React.createClass({
     }
 
     if (entityId === 'ad' || entityId === 'keyword') {
-      const adGroups = map(groupBy(attributes, 'adgroup_id'), (ls, adGroupId) => {
-        const adGroup = find(entities.adgroup.list, {id: adGroupId})
+      const parentEntity = entities.adgroup ? 'adgroup' : 'adset'
+      const adGroups = map(groupBy(attributes, `${parentEntity}_id`), (ls, adGroupId) => {
+        const adGroup = find(entities[parentEntity].list, {id: adGroupId})
         const ids = map(ls, 'id')
 
         return {
