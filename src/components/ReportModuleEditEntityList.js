@@ -1,3 +1,4 @@
+import csjs from 'csjs'
 import find from 'lodash/find'
 import flatten from 'lodash/flatten'
 import groupBy from 'lodash/groupBy'
@@ -8,9 +9,26 @@ import React from 'react'
 
 import reportEntityType from '../propTypes/report-entity'
 import Attributes from './ReportModuleEditAttributes'
+import {styled} from './mixins/styled'
 
 const {PropTypes} = React
 const lowerCaseId = ({id}) => lowerCase(id)
+const style = csjs`
+.list {
+  list-style: none;
+  padding-left: 0;
+}
+.item > strong {
+  cursor: pointer
+}
+.item > i {
+  cursor: pointer;
+  float: left;
+  padding-right: .3em
+}
+.item > div {
+  margin-left: .7em;
+}`
 
 const EntityGroup = React.createClass({
   displayName: 'Entity-Group',
@@ -42,19 +60,20 @@ const EntityGroup = React.createClass({
     this.setState({isSelected: !isSelected})
   },
   render () {
+    const {isOpen} = this.state
     const {children, name} = this.props
 
     return (
-      <li>
-        <p>
-          <small>
-            <i onClick={this.toggleVisibility} className='material-icons'>keyboard_arrow_right</i>
-          </small>
-          <strong onClick={this.toggleSelection}>
-            {name}
-          </strong>
-        </p>
-        {this.state.isOpen ? children : null}
+      <li className={String(style.item)}>
+        <i onClick={this.toggleVisibility} className='material-icons'>{
+          isOpen ? 'keyboard_arrow_down' : 'keyboard_arrow_right'
+        }</i>
+        <strong onClick={this.toggleSelection}>
+          {name}
+        </strong>
+        <div>
+          {isOpen ? children : null}
+        </div>
       </li>
     )
   }
@@ -62,6 +81,7 @@ const EntityGroup = React.createClass({
 
 const EntityList = React.createClass({
   displayName: 'Entity-List',
+  mixins: [styled(style)],
   propTypes: {
     attributes: PropTypes.array.isRequired,
     entity: reportEntityType.isRequired,
@@ -117,7 +137,7 @@ const EntityList = React.createClass({
 
         return (
           <EntityGroup key={campaign.id} name={campaign.name} ids={ids} select={addItem} unselect={removeItem}>
-            <ul>
+            <ul className={String(style.list)}>
               {map(ls, ({content}) => content)}
             </ul>
           </EntityGroup>
@@ -126,7 +146,7 @@ const EntityList = React.createClass({
     }
 
     return (
-      <ul>
+      <ul className={String(style.list)}>
         {nodes}
       </ul>
     )
