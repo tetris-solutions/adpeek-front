@@ -1,6 +1,7 @@
 import assign from 'lodash/assign'
 import debounce from 'lodash/debounce'
 import get from 'lodash/get'
+import isNumber from 'lodash/isNumber'
 import map from 'lodash/map'
 import max from 'lodash/max'
 import moment from 'moment'
@@ -60,7 +61,8 @@ const Report = React.createClass({
   addNewModule () {
     const {report, params, dispatch} = this.props
     const {messages} = this.context
-    const index = (max(map(report.modules, 'index')) || -1) + 1
+    const lastIndex = max(map(report.modules, 'index'))
+    const index = (isNumber(lastIndex) ? lastIndex : -1) + 1
 
     dispatch(createModuleReportAction, params, {
       type: 'line',
