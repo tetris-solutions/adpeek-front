@@ -24,7 +24,10 @@ const Module = React.createClass({
   mixins: [styled(style)],
   getInitialState () {
     return {
-      editMode: isEmpty(this.props.module.metrics)
+      editMode: (
+        Boolean(this.props.update) &&
+        isEmpty(this.props.module.metrics)
+      )
     }
   },
   propTypes: {
