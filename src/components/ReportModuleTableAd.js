@@ -3,6 +3,8 @@ import find from 'lodash/find'
 import get from 'lodash/get'
 import React from 'react'
 
+import AdCreative from './ReportModuleTableAdCreative'
+
 const {PropTypes} = React
 const TextAd = ({description, headline}) => (
   <div>
@@ -67,6 +69,10 @@ TemplateAd.propTypes = {
 const ReportModuleTableAd = props => {
   const {id, name, type} = props
 
+  if (props.creative_id) {
+    return <AdCreative {...props} />
+  }
+
   if (endsWith(type, 'TEXT_AD')) {
     return <TextAd {...props} />
   }
@@ -89,6 +95,7 @@ const ReportModuleTableAd = props => {
 ReportModuleTableAd.displayName = 'Report-Module-Table-Ad'
 ReportModuleTableAd.propTypes = {
   id: PropTypes.string.isRequired,
+  creative_id: PropTypes.string,
   name: PropTypes.string,
   type: PropTypes.string,
   description: PropTypes.string,

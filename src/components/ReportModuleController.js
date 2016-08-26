@@ -87,15 +87,13 @@ const ReportModule = React.createClass({
     )
   },
   render () {
-    const {editable, module} = this.props
+    const {editable} = this.props
 
     return (
-      <Module
-        {...this.props}
+      <Module {...this.props}
         entity={this.getEntity()}
         update={editable ? this.save : undefined}
-        remove={editable ? this.remove : undefined}
-        module={module}/>
+        remove={editable ? this.remove : undefined}/>
     )
   }
 })

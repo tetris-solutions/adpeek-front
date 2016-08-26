@@ -1,10 +1,10 @@
-import React from 'react'
-import forEach from 'lodash/forEach'
-import findIndex from 'lodash/findIndex'
-import {branch} from 'baobab-react/higher-order'
-import isObject from 'lodash/isObject'
 import assign from 'lodash/assign'
+import findIndex from 'lodash/findIndex'
+import forEach from 'lodash/forEach'
+import isObject from 'lodash/isObject'
 import keys from 'lodash/keys'
+import React from 'react'
+import {branch} from 'baobab-react/higher-order'
 
 const {PropTypes} = React
 const isRouteParam = {

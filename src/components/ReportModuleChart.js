@@ -1,16 +1,17 @@
-import React from 'react'
-import reportMetaDataType from '../propTypes/report-meta-data'
-import reportParamsType from '../propTypes/report-params'
-import reportModuleType from '../propTypes/report-module'
-import reportEntityType from '../propTypes/report-entity'
-import Line from './ReportModuleChartLine'
-import Column from './ReportModuleChartColumn'
-import Pie from './ReportModuleChartPie'
-import Table from './ReportModuleTable'
-import Spinner from './Spinner'
-import {styled} from './mixins/styled'
 import csjs from 'csjs'
 import floor from 'lodash/floor'
+import React from 'react'
+
+import reportEntityType from '../propTypes/report-entity'
+import reportMetaDataType from '../propTypes/report-meta-data'
+import reportModuleType from '../propTypes/report-module'
+import reportParamsType from '../propTypes/report-params'
+import Column from './ReportModuleChartColumn'
+import Line from './ReportModuleChartLine'
+import Pie from './ReportModuleChartPie'
+import Spinner from './Spinner'
+import Table from './ReportModuleTable'
+import {styled} from './mixins/styled'
 
 const style = csjs`
 .wrap {
@@ -82,12 +83,13 @@ const ReportChart = React.createClass({
     )
   },
   render () {
-    const {height, module, entity, metaData: {attributes}} = this.props
+    const {height, reportParams, module, entity, metaData: {attributes}} = this.props
     const Chart = typeComponent[module.type]
 
     return (
       <div className={`${style.wrap}`} style={{height}}>
         <Chart
+          reportParams={reportParams}
           sourceWidth={floor(1200 * (module.cols / 12))}
           sourceHeight={floor(1200 * A4Ratio * (module.rows / 6))}
           name={module.name}

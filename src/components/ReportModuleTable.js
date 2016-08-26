@@ -12,6 +12,7 @@ import stableSort from 'stable'
 import React from 'react'
 
 import entityType from '../propTypes/report-entity'
+import reportParamsType from '../propTypes/report-params'
 import Ad from './ReportModuleTableAd'
 import {styled} from './mixins/styled'
 
@@ -95,6 +96,7 @@ const ReportModuleTable = React.createClass({
   mixins: [styled(style)],
   propTypes: {
     name: PropTypes.string,
+    reportParams: reportParamsType,
     entity: entityType,
     attributes: PropTypes.object.isRequired,
     result: PropTypes.array.isRequired
@@ -134,7 +136,7 @@ const ReportModuleTable = React.createClass({
   render () {
     const {sort} = this.state
     const sortPairs = fromPairs(sort)
-    const {name, result, attributes, entity: {id: entityId, list}} = this.props
+    const {name, reportParams, result, attributes, entity: {id: entityId, list}} = this.props
     const headers = keys(result[0])
     let tbody = null
     let colHeaders = null
@@ -153,7 +155,7 @@ const ReportModuleTable = React.createClass({
 
         if (entityId === 'Ad') {
           return {
-            content: <Ad {...item}/>,
+            content: <Ad {...item} reportParams={reportParams}/>,
             sortKey
           }
         }
@@ -190,7 +192,9 @@ const ReportModuleTable = React.createClass({
             <tr key={index}>
               {map(headers, header =>
                 <td key={header} className={attributes[header].is_metric ? '' : 'mdl-data-table__cell--non-numeric'}>
-                  {isObject(row[header]) ? row[header].content : row[header]}
+                  {isObject(row[header])
+                    ? row[header].content
+                    : row[header]}
                 </td>)}
             </tr>)}
         </tbody>
