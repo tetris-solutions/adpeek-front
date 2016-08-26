@@ -9,13 +9,26 @@ function loadCreative (account, creative, config) {
   return GET(`${process.env.ADPEEK_API_URL}/account/${account}/creative/${creative}`, config)
 }
 
-export function loadCreativeAction (tree, company, account, creative) {
-  return loadCreative(account, creative, getApiFetchConfig(tree))
+function one (action) {
+  let promise = Promise.resolve()
+
+  function exec (...args) {
+    const run = () => action(...args)
+
+    promise = promise.then(run, run)
+
+    return promise
+  }
+
+  return exec
+}
+
+export const loadCreativeAction = one((tree, company, account, creative) =>
+  loadCreative(account, creative, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .then(saveResponseData(tree, [
       'user',
       ['companies', company],
       ['creatives', creative]
     ]))
-    .catch(pushResponseErrorToState(tree))
-}
+    .catch(pushResponseErrorToState(tree)))
