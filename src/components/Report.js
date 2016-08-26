@@ -139,7 +139,7 @@ const Report = React.createClass({
               className={`mdl-cell mdl-cell--${module.cols}-col`}>
 
               <Module
-                id={module.id}
+                module={module}
                 editable={editMode}
                 metaData={get(metaData, [platform, module.entity])}
                 reportParams={reportParams}

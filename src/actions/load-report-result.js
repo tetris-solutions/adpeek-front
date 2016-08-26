@@ -1,9 +1,11 @@
-import {GET} from '@tetris/http'
-import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save-token-as-cookie'
+import isEqual from 'lodash/isEqual'
 import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetch-config'
 import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
-import isEqual from 'lodash/isEqual'
+import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save-token-as-cookie'
+import {GET} from '@tetris/http'
+
 import {assembleReportQuery} from '../functions/assemble-report-query'
+import {getDeepCursor} from '../functions/get-deep-cursor'
 import {isvalidReportQuery} from '../functions/is-valid-report-query'
 
 function loadReportModuleResult (query, config) {
@@ -12,13 +14,21 @@ function loadReportModuleResult (query, config) {
 
 const lastCall = {}
 
-export function loadReportModuleResultAction (moduleCursor, id, query, token) {
+export function loadReportModuleResultAction (tree, params, id, query) {
+  const moduleCursor = tree.select(getDeepCursor(tree, [
+    'user',
+    ['companies', params.company],
+    ['workspaces', params.workspace],
+    ['folders', params.folder],
+    ['reports', params.report],
+    'modules',
+    id
+  ]))
   const isCursorOk = () => moduleCursor && moduleCursor.tree
   const sameQuery = () => isEqual(query, moduleCursor.get('query'))
 
   if (!isCursorOk() || !isvalidReportQuery(query) || sameQuery()) return
 
-  const {tree} = moduleCursor
   const isLoadingCursor = moduleCursor.select('isLoading')
   const myCall = lastCall[id] = Date.now()
 
@@ -43,7 +53,7 @@ export function loadReportModuleResultAction (moduleCursor, id, query, token) {
     isLoadingCursor.set(true)
     tree.commit()
 
-    loadReportModuleResult(query, getApiFetchConfig(tree, token))
+    loadReportModuleResult(query, getApiFetchConfig(tree))
       .then(saveResponseTokenAsCookie)
       .then(onSuccess)
       .catch(pushResponseErrorToState(tree))

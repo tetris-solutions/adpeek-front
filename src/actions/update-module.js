@@ -1,26 +1,51 @@
-import {PUT} from '@tetris/http'
 import assign from 'lodash/assign'
-import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save-token-as-cookie'
-import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetch-config'
-import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
 import debounce from 'lodash/debounce'
 import omit from 'lodash/omit'
+import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetch-config'
+import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
+import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save-token-as-cookie'
+import {PUT} from '@tetris/http'
+
+import {getDeepCursor} from '../functions/get-deep-cursor'
 
 function updateModule (module, folder, config) {
   return PUT(`${process.env.ADPEEK_API_URL}/module/${module.id}?folder=${folder}`,
     assign({body: module}, config))
 }
 
-const persist = debounce((moduleCursor, folder) =>
-  updateModule(omit(moduleCursor.get(), 'result', 'query', 'isLoading'), folder, getApiFetchConfig(moduleCursor.tree))
+const persist = debounce((tree, params, moduleId) => {
+  const cursorPath = getDeepCursor(tree, [
+    'user',
+    ['companies', params.company],
+    ['workspaces', params.workspace],
+    ['folders', params.folder],
+    ['reports', params.report],
+    'modules',
+    moduleId
+  ])
+
+  const moduleChanges = omit(tree.get(cursorPath), 'result', 'query', 'isLoading')
+
+  updateModule(moduleChanges, params.folder, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
-    .catch(pushResponseErrorToState(moduleCursor.tree)), 1000)
+    .catch(pushResponseErrorToState(tree))
+}, 1000)
 
-export function updateModuleAction (moduleCursor, folder, updatedModule) {
-  moduleCursor.merge(updatedModule)
-  moduleCursor.tree.commit()
+export function updateModuleAction (tree, params, moduleId, moduleChanges) {
+  const cursorPath = getDeepCursor(tree, [
+    'user',
+    ['companies', params.company],
+    ['workspaces', params.workspace],
+    ['folders', params.folder],
+    ['reports', params.report],
+    'modules',
+    moduleId
+  ])
 
-  persist(moduleCursor, folder)
+  tree.merge(cursorPath, moduleChanges)
+  tree.commit()
+
+  persist(tree, params, moduleId)
 }
 
 export default updateModuleAction
