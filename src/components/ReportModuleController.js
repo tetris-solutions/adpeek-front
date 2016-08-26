@@ -60,9 +60,6 @@ const ReportModule = React.createClass({
     const {reportParams} = this.props
     const {module} = this.props
     const entity = this.getEntity()
-
-    if (!module) return
-
     const filters = assign({}, module.filters)
 
     if (isEmpty(filters.id)) {
