@@ -15,7 +15,7 @@ const style = csjs`
   border-radius: 3px;
   padding: 1em;
   border: 1px solid rgb(200, 200, 200);
-  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.1);
 }
 .post > h2 {
   color: #365899;
