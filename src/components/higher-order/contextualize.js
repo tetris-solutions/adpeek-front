@@ -98,7 +98,7 @@ export function contextualize (Component, baseCursors, ...names) {
 
     ParamsInjector.displayName = `Contextualize(${Component.displayName}, ${propsNames})`
     ParamsInjector.contextTypes = {
-      params: PropTypes.object
+      params: PropTypes.object.isRequired
     }
 
     return ParamsInjector

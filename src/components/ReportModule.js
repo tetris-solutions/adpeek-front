@@ -17,7 +17,7 @@ const style = csjs`
 }`
 
 const {PropTypes} = React
-const editFormRequiredContext = ['tree', 'messages', 'locales', 'insertCss']
+const editFormRequiredContext = ['tree', 'messages', 'locales', 'insertCss', 'params']
 
 const Module = React.createClass({
   displayName: 'Report-Module',
