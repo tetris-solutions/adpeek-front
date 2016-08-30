@@ -85,7 +85,7 @@ export const FolderCampaigns = React.createClass({
     const {folder, params: {company, workspace}} = this.props
     const filterValid = this.state.filterActiveCampaigns ? filterActive : identity
     const match = ({external_id, name}) => !value || includes(external_id, value) || includes(cleanStr(name), value)
-    const linked = filter(filterValid(folder.campaigns), match)
+    const linked = filter(folder.campaigns, match)
     const loose = filter(filterValid(folder.looseCampaigns), match)
 
     return (

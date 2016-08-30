@@ -1,6 +1,5 @@
 import React from 'react'
-import Message from '@tetris/front-server/lib/components/intl/Message'
-import {Link} from 'react-router'
+
 import HeaderSearchBox from './HeaderSearchBox'
 import Switch from './Switch'
 
@@ -24,11 +23,6 @@ export function FolderCampaignsHeader ({
           <Switch label={filterActiveCampaigns} checked onChange={onChange(onSwitch)}/>
         </span>
         <div className='mdl-layout-spacer'/>
-        <Link
-          className='mdl-button mdl-color-text--grey-100'
-          to={`/company/${company}/workspace/${workspace}/folder/${folder}/create/campaign`}>
-          <Message>newCampaignCallToAction</Message>
-        </Link>
         <HeaderSearchBox onEnter={onEnter}/>
       </div>
     </header>
