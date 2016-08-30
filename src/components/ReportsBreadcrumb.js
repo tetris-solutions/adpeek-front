@@ -1,6 +1,6 @@
+import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 import {Link} from 'react-router'
-import Message from '@tetris/front-server/lib/components/intl/Message'
 
 const {PropTypes} = React
 
@@ -17,6 +17,7 @@ export function ReportsBreadcrumb ({params: {company, workspace, folder}}) {
 
   return (
     <Link to={url}>
+      <i className='material-icons'>list</i>
       <Message>reports</Message>
     </Link>
   )

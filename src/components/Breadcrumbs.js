@@ -1,14 +1,20 @@
-import React from 'react'
-import filter from 'lodash/filter'
-import map from 'lodash/map'
-import has from 'lodash/fp/has'
 import csjs from 'csjs'
+import filter from 'lodash/filter'
+import has from 'lodash/fp/has'
+import map from 'lodash/map'
+import React from 'react'
+
 import {styledFnComponent} from './higher-order/styled-fn-component'
 
 const style = csjs`
 .breadcrumb {
   display: inline-block;
   padding: 0 1em;
+}
+.breadcrumb i {
+  float: left;
+  margin-top: -.1em;
+  margin-right: .3em;
 }`
 
 const {PropTypes} = React

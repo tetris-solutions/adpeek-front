@@ -1,12 +1,14 @@
 import React from 'react'
 import {Link} from 'react-router'
+
 import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
-export function CampaignBreadcrumb ({params: {company, workspace, folder}, campaign}) {
+export function CampaignBreadcrumb ({params: {company, workspace, folder}, campaign}, {messages: {campaignBreadcrumb}}) {
   return (
-    <Link to={`/company/${company}/workspace/${workspace}/folder/${folder}/campaign/${campaign.id}`}>
+    <Link to={`/company/${company}/workspace/${workspace}/folder/${folder}/campaign/${campaign.id}`} title={campaignBreadcrumb}>
+      <i className='material-icons'>format_shapes</i>
       {campaign.name}
     </Link>
   )
@@ -22,6 +24,9 @@ CampaignBreadcrumb.propTypes = {
     company: PropTypes.string,
     workspace: PropTypes.string
   })
+}
+CampaignBreadcrumb.contextTypes = {
+  messages: PropTypes.object
 }
 
 export default contextualize(CampaignBreadcrumb, 'campaign')

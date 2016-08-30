@@ -143,7 +143,14 @@ module.exports = {
     filterLabel: 'Filter',
     moduleContent: 'Setup Module Report',
     moduleSize: 'Module Size',
-    reports: 'Reports'
+    reports: 'Reports',
+    // breadcrumbs
+    companyBreadcrumb: 'Company',
+    workspaceBreadcrumb: 'Workspace',
+    folderBreadcrumb: 'Folder',
+    campaignBreadcrumb: 'Campaign',
+    orderBreadcrumb: 'Order',
+    reportBreadcrumb: 'Report'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -288,6 +295,13 @@ module.exports = {
     filterLabel: 'Filtrar',
     moduleContent: 'Configurar Report',
     moduleSize: 'Configurar Tamanho',
-    reports: 'Relatórios'
+    reports: 'Relatórios',
+    // breadcrumbs
+    companyBreadcrumb: 'Compania',
+    workspaceBreadcrumb: 'Área de trabalho',
+    folderBreadcrumb: 'Pasta',
+    campaignBreadcrumb: 'Campanha',
+    orderBreadcrumb: 'Pedido',
+    reportBreadcrumb: 'Relatório'
   }
 }
