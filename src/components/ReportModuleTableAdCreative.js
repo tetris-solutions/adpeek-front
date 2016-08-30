@@ -37,6 +37,23 @@ const style = csjs`
   white-space: normal;
 }`
 
+function Creative ({title, thumbnail, body}) {
+  return (
+    <div className={`${style.post}`}>
+      <h2>{title}</h2>
+      <img src={thumbnail} />
+      <p>{body}</p>
+    </div>
+  )
+}
+
+Creative.displayName = 'Creative'
+Creative.propTypes = {
+  title: PropTypes.string,
+  thumbnail: PropTypes.string,
+  body: PropTypes.string
+}
+
 const AdCreative = React.createClass({
   displayName: 'Ad-Creative',
   mixins: [styled(style)],
@@ -80,13 +97,7 @@ const AdCreative = React.createClass({
       return <span>{name}</span>
     }
 
-    return (
-      <div className={`${style.post}`}>
-        <h2>{creative.title}</h2>
-        <img src={creative.thumbnail} />
-        <p>{creative.body}</p>
-      </div>
-    )
+    return <Creative {...creative} />
   }
 })
 
