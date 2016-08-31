@@ -118,7 +118,9 @@ const excluded = [
   'path1',
   'path2',
   'shortheadline',
-  'creativetrackingurltemplate'
+  'creativetrackingurltemplate',
+  // keyword
+  'criteria'
 ]
 
 export function loadReportMetaDataAction (tree, params, platform, entity, token) {
