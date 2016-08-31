@@ -1,8 +1,10 @@
 import React from 'react'
-import ContextMenu from './ContextMenu'
-import {contextualize} from './higher-order/contextualize'
 import {Link} from 'react-router'
+
+import ContextMenu from './ContextMenu'
+import DeleteButton from './DeleteButton'
 import {deleteOrderAction} from '../actions/delete-order'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
@@ -30,11 +32,12 @@ export function OrderAside ({params: {company, workspace, folder}, order, dispat
 
         <i className='material-icons'>today</i>
       </Link>
-      <button
+      <DeleteButton
+        entityName={order.name}
         className='mdl-button mdl-js-button mdl-button--icon'
         onClick={onClick}>
         <i className='material-icons'>delete</i>
-      </button>
+      </DeleteButton>
     </ContextMenu>
   )
 }

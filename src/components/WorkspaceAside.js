@@ -1,8 +1,10 @@
 import React from 'react'
-import ContextMenu from './ContextMenu'
-import {contextualize} from './higher-order/contextualize'
 import {Link} from 'react-router'
+
+import ContextMenu from './ContextMenu'
+import DeleteButton from './DeleteButton'
 import {deleteWorkspaceAction} from '../actions/delete-workspace'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
@@ -26,11 +28,12 @@ export function WorkspaceAside ({params: {company}, workspace, dispatch}, {route
         to={`/company/${company}/workspace/${workspace.id}/orders`}>
         <i className='material-icons'>attach_money</i>
       </Link>
-      <button
+      <DeleteButton
+        entityName={workspace.name}
         className='mdl-button mdl-js-button mdl-button--icon'
         onClick={onClick}>
         <i className='material-icons'>delete</i>
-      </button>
+      </DeleteButton>
     </ContextMenu>
   )
 }

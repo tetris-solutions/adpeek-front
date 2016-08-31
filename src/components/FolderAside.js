@@ -1,9 +1,11 @@
-import React from 'react'
-import ContextMenu from './ContextMenu'
-import {contextualize} from './higher-order/contextualize'
-import {Link} from 'react-router'
-import {deleteFolderAction} from '../actions/delete-folder'
 import isEmpty from 'lodash/isEmpty'
+import React from 'react'
+import {Link} from 'react-router'
+
+import ContextMenu from './ContextMenu'
+import DeleteButton from './DeleteButton'
+import {deleteFolderAction} from '../actions/delete-folder'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
@@ -46,11 +48,12 @@ export function FolderAside ({
         <i className='material-icons'>mode_edit</i>
       </Link>
 
-      <button
+      <DeleteButton
+        entityName={folder.name}
         className='mdl-button mdl-js-button mdl-button--icon'
         onClick={onClick}>
         <i className='material-icons'>delete</i>
-      </button>
+      </DeleteButton>
     </ContextMenu>
   )
 }
