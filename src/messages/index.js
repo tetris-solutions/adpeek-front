@@ -324,7 +324,7 @@ module.exports = {
     moduleSize: 'Configurar Tamanho',
     reports: 'Relatórios',
     // breadcrumbs
-    companyBreadcrumb: 'Compania',
+    companyBreadcrumb: 'Empresa',
     workspaceBreadcrumb: 'Área de trabalho',
     folderBreadcrumb: 'Pasta',
     campaignBreadcrumb: 'Campanha',
@@ -336,7 +336,7 @@ module.exports = {
     confirm: 'Sim',
     // asides
     makeReportGlobal: 'Abrir Globalmente',
-    makeReportPublic: 'Abrir pra Compania',
+    makeReportPublic: 'Abrir pra Empresa',
     favoriteReport: 'Favoritar Relatório',
     editReport: 'Editar Relatório',
     deleteReport: 'Remover Relatório',
@@ -353,7 +353,7 @@ module.exports = {
     editWorkspace: 'Editar',
     workspaceOrders: 'Pedidos',
     deleteWorkspace: 'Remover',
-    manageCompany: 'Gerenciar Compania',
+    manageCompany: 'Gerenciar Empresa',
     companyOrders: 'Pedidos'
   }
 }
