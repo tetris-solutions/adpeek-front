@@ -1,3 +1,4 @@
+import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 import {Link} from 'react-router'
 
@@ -18,21 +19,17 @@ export function WorkspaceAside ({params: {company}, workspace, dispatch}, {route
 
   return (
     <ContextMenu title={workspace.name} icon='domain'>
-      <Link
-        className='mdl-button mdl-js-button mdl-button--icon'
-        to={`/company/${company}/workspace/${workspace.id}/edit`}>
+      <Link className='mdl-navigation__link' to={`/company/${company}/workspace/${workspace.id}/edit`}>
         <i className='material-icons'>mode_edit</i>
+        <Message>editWorkspace</Message>
       </Link>
-      <Link
-        className='mdl-button mdl-js-button mdl-button--icon'
-        to={`/company/${company}/workspace/${workspace.id}/orders`}>
+      <Link className='mdl-navigation__link' to={`/company/${company}/workspace/${workspace.id}/orders`}>
         <i className='material-icons'>attach_money</i>
+        <Message>workspaceOrders</Message>
       </Link>
-      <DeleteButton
-        entityName={workspace.name}
-        className='mdl-button mdl-js-button mdl-button--icon'
-        onClick={onClick}>
+      <DeleteButton entityName={workspace.name} className='mdl-navigation__link' onClick={onClick}>
         <i className='material-icons'>delete</i>
+        <Message>deleteWorkspace</Message>
       </DeleteButton>
     </ContextMenu>
   )

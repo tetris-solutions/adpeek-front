@@ -1,3 +1,4 @@
+import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 import {Link} from 'react-router'
 
@@ -20,23 +21,17 @@ export function OrderAside ({params: {company, workspace, folder}, order, dispat
 
   return (
     <ContextMenu title={order.name} icon='monetization_on'>
-      <Link
-        className='mdl-button mdl-js-button mdl-button--icon'
-        to={`${folderUrl}/order/${order.id}`}>
-
+      <Link className='mdl-navigation__link' to={`${folderUrl}/order/${order.id}`}>
         <i className='material-icons'>mode_edit</i>
+        <Message>editOrder</Message>
       </Link>
-      <Link
-        className='mdl-button mdl-js-button mdl-button--icon'
-        to={`${folderUrl}/order/${order.id}/autobudget`}>
-
+      <Link className='mdl-navigation__link' to={`${folderUrl}/order/${order.id}/autobudget`}>
         <i className='material-icons'>today</i>
+        <Message>autoBudgetLog</Message>
       </Link>
-      <DeleteButton
-        entityName={order.name}
-        className='mdl-button mdl-js-button mdl-button--icon'
-        onClick={onClick}>
+      <DeleteButton entityName={order.name} className='mdl-navigation__link' onClick={onClick}>
         <i className='material-icons'>delete</i>
+        <Message>deleteOrder</Message>
       </DeleteButton>
     </ContextMenu>
   )

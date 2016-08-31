@@ -56,9 +56,13 @@ export function ReportAside ({report, dispatch, user}, {router, location: {pathn
       ) : (
         <a className='mdl-navigation__link' onClick={setAsFolderDefault}>
           <i className='material-icons'>
-            {report.is_folder_report ? 'check_box' : 'indeterminate_check_box'}
-            <Message>makeFolderReport</Message>
+            {report.is_folder_report ? 'indeterminate_check_box' : 'check_box'}
           </i>
+          <Message>{
+            report.is_folder_report
+              ? 'uncheckFolderReport'
+              : 'checkFolderReport'
+          }</Message>
         </a>
       )}
 
@@ -74,7 +78,7 @@ export function ReportAside ({report, dispatch, user}, {router, location: {pathn
         </Link>
       )}
 
-      <DeleteButton anchor entityName={report.name} className='mdl-navigation__link' onClick={deleteReport}>
+      <DeleteButton entityName={report.name} className='mdl-navigation__link' onClick={deleteReport}>
         <i className='material-icons'>delete</i>
         <Message>deleteReport</Message>
       </DeleteButton>

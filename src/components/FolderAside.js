@@ -1,4 +1,5 @@
 import isEmpty from 'lodash/isEmpty'
+import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 import {Link} from 'react-router'
 
@@ -24,35 +25,29 @@ export function FolderAside ({
   const baseUrl = `/company/${company}/workspace/${workspace}/folder/${folder.id}`
   return (
     <ContextMenu title={folder.name} icon='folder'>
-      <Link
-        className='mdl-button mdl-js-button mdl-button--icon'
-        to={`${baseUrl}/adgroups`}>
+      <Link className='mdl-navigation__link' to={`${baseUrl}/adgroups`}>
         <i className='material-icons'>receipt</i>
+        <Message>folderAds</Message>
       </Link>
 
-      <Link
-        className='mdl-button mdl-js-button mdl-button--icon'
-        to={`${baseUrl}/orders`}>
+      <Link className='mdl-navigation__link' to={`${baseUrl}/orders`}>
         <i className='material-icons'>attach_money</i>
+        <Message>folderOrders</Message>
       </Link>
 
-      <Link
-        className='mdl-button mdl-js-button mdl-button--icon'
-        to={`${baseUrl}/${isEmpty(folder.reports) ? 'reports' : 'report/' + folder.reports[0].id}`}>
+      <Link className='mdl-navigation__link' to={`${baseUrl}/${isEmpty(folder.reports) ? 'reports' : 'report/' + folder.reports[0].id}`}>
         <i className='material-icons'>show_chart</i>
+        <Message>folderReport</Message>
       </Link>
 
-      <Link
-        className='mdl-button mdl-js-button mdl-button--icon'
-        to={`${baseUrl}/edit`}>
+      <Link className='mdl-navigation__link' to={`${baseUrl}/edit`}>
         <i className='material-icons'>mode_edit</i>
+        <Message>editFolder</Message>
       </Link>
 
-      <DeleteButton
-        entityName={folder.name}
-        className='mdl-button mdl-js-button mdl-button--icon'
-        onClick={onClick}>
+      <DeleteButton entityName={folder.name} className='mdl-navigation__link' onClick={onClick}>
         <i className='material-icons'>delete</i>
+        <Message>deleteFolder</Message>
       </DeleteButton>
     </ContextMenu>
   )
