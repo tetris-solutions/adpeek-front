@@ -14,6 +14,7 @@ import {loadCompanyAccountsAction} from '../actions/load-company-accounts'
 import {contextualize} from './higher-order/contextualize'
 import {styled} from './mixins/styled'
 
+const yes = () => true
 const {PropTypes} = React
 const getSuggestionValue = property('name')
 
@@ -83,7 +84,7 @@ const style = csjs`
   margin: 0;
   padding: 0;
   list-style-type: none;
-  border-top: 1px solid rgb(220, 220, 220);
+  border: 1px solid rgb(220, 220, 220);
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
   background-color: #fff;
   font-weight: 300;
@@ -95,6 +96,7 @@ const style = csjs`
 }
 
 .suggestionsList {
+  margin: 0;
   padding: 0;
 }
 
@@ -246,6 +248,7 @@ export const WorkspaceAccountSelector = React.createClass({
         <Autosuggest
           theme={theme}
           suggestions={suggestions}
+          shouldRenderSuggestions={yes}
           onSuggestionSelected={this.onSuggestionSelected}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
