@@ -1,17 +1,18 @@
+import filter from 'lodash/filter'
+import map from 'lodash/map'
+import size from 'lodash/size'
+import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
+import {branch} from 'baobab-react/higher-order'
+
 import budgetType from '../propTypes/budget'
+import campaignType from '../propTypes/campaign'
+import Input from './Input'
+import Select from './Select'
 import Slide from './Slide'
 import Switch from './Switch'
-import Input from './Input'
 import VerticalAlign from './VerticalAlign'
 import {Card, Content, Header, Footer} from './Card'
-import map from 'lodash/map'
-import Message from '@tetris/front-server/lib/components/intl/Message'
-import campaignType from '../propTypes/campaign'
-import size from 'lodash/size'
-import Select from './Select'
-import {branch} from 'baobab-react/higher-order'
-import filter from 'lodash/filter'
 import {Tabs, Tab} from './Tabs'
 
 const {PropTypes} = React
@@ -189,7 +190,7 @@ export const BudgetEdit = React.createClass({
         </Content>
         <Footer multipleButtons>
           <button className='mdl-button mdl-button--colored' onClick={remove}>
-            <Message>removeBudget</Message>
+            <Message>remove</Message>
           </button>
           <button className='mdl-button mdl-button--colored' onClick={close}>
             <Message>close</Message>

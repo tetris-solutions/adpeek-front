@@ -96,7 +96,7 @@ module.exports = {
     setCampaignBudgetTitle: 'Changed campaign budget',
     updateBudgetTitle: 'Updated budget',
     updateAdsetTitle: 'Updated Ad Set',
-    removeBudget: 'Remove',
+    remove: 'Remove',
     campaignAdsTitle: 'Campaign "{campaign}" Ads',
     finalUrl: 'Final URL',
     folderAdsTitle: 'Folder "{folder}" Ads',
@@ -150,7 +150,11 @@ module.exports = {
     folderBreadcrumb: 'Folder',
     campaignBreadcrumb: 'Campaign',
     orderBreadcrumb: 'Order',
-    reportBreadcrumb: 'Report'
+    reportBreadcrumb: 'Report',
+    // delete button modal
+    deletePromptTitle: 'Delete prompt',
+    deletePromptBody: 'You are trying to remove <strong>{entityName}</strong>. <br/> Are you sure about this?',
+    confirm: 'Yes'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -248,7 +252,7 @@ module.exports = {
     setCampaignBudgetTitle: 'Alterado orçamento da campanha',
     updateBudgetTitle: 'Orçamento atualizado',
     updateAdsetTitle: 'Ad Set atualizado',
-    removeBudget: 'Remover',
+    remove: 'Remover',
     campaignAdsTitle: 'Criativos da campanha "{campaign}"',
     finalUrl: 'URL de destino',
     folderAdsTitle: 'Criativos da pasta "{folder}"',
@@ -302,6 +306,10 @@ module.exports = {
     folderBreadcrumb: 'Pasta',
     campaignBreadcrumb: 'Campanha',
     orderBreadcrumb: 'Pedido',
-    reportBreadcrumb: 'Relatório'
+    reportBreadcrumb: 'Relatório',
+    // delete button modal
+    deletePromptTitle: 'Confirmar remoção',
+    deletePromptBody: 'Você está prestes a remover <strong>{entityName}</strong>. <br/> Tem certeza que deseja continuar?',
+    confirm: 'Sim'
   }
 }

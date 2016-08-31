@@ -1,13 +1,15 @@
-import React from 'react'
-import ContextMenu from './ContextMenu'
-import {contextualize} from './higher-order/contextualize'
-import {deleteReportAction} from '../actions/delete-report'
-import {setFolderReportAction} from '../actions/set-folder-report'
-import {loadFolderReportAction} from '../actions/load-folder-report'
-import {updateReportAction} from '../actions/update-report'
-import {openReportAction} from '../actions/open-report'
-import {Link} from 'react-router'
 import endsWith from 'lodash/endsWith'
+import React from 'react'
+import {Link} from 'react-router'
+
+import ContextMenu from './ContextMenu'
+import DeleteButton from './DeleteButton'
+import {deleteReportAction} from '../actions/delete-report'
+import {loadFolderReportAction} from '../actions/load-folder-report'
+import {openReportAction} from '../actions/open-report'
+import {setFolderReportAction} from '../actions/set-folder-report'
+import {updateReportAction} from '../actions/update-report'
+import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
@@ -72,11 +74,12 @@ export function ReportAside ({report, dispatch, user}, {router, location: {pathn
         </Link>
       )}
 
-      <button
+      <DeleteButton
+        entityName={report.name}
         className='mdl-button mdl-js-button mdl-button--icon'
         onClick={deleteReport}>
         <i className='material-icons'>delete</i>
-      </button>
+      </DeleteButton>
     </ContextMenu>
   )
 }
