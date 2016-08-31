@@ -83,11 +83,19 @@ const style = csjs`
   margin: 0;
   padding: 0;
   list-style-type: none;
-  border: 1px solid #aaa;
+  border-top: 1px solid rgb(220, 220, 220);
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
   background-color: #fff;
   font-weight: 300;
   font-size: medium;
   z-index: 2;
+}
+.suggestionsContainer:empty {
+  visibility: hidden;
+}
+
+.suggestionsList {
+  padding: 0;
 }
 
 .suggestion {
@@ -117,7 +125,7 @@ const theme = {}
 // assemble `theme` object, required by ReactAutosuggest
 Object.keys(style)
   .forEach(className => {
-    theme[className] = '' + style[className]
+    theme[className] = String(style[className])
   })
 
 function Suggestion ({name}) {
@@ -185,11 +193,11 @@ export const WorkspaceAccountSelector = React.createClass({
     })
   },
   componentDidMount () {
-    this.onSuggestionsUpdateRequested = debounce(this.onSuggestionsUpdateRequested, 300)
+    this.onSuggestionsFetchRequested = debounce(this.onSuggestionsFetchRequested, 300)
     this.props.dispatch(loadCompanyAccountsAction, this.props.company.id, this.props.platform)
       .then(() => {
         if (this.hasUnmounted) return
-        const updateSuggestions = () => this.onSuggestionsUpdateRequested(this.state)
+        const updateSuggestions = () => this.onSuggestionsFetchRequested(this.state)
         this.setState({isLoading: false}, updateSuggestions)
       })
   },
@@ -201,13 +209,18 @@ export const WorkspaceAccountSelector = React.createClass({
     if (!newState.value) newState.account = null
     this.setState(newState)
   },
-  onSuggestionsUpdateRequested ({value}) {
+  onSuggestionsFetchRequested ({value}) {
     this.setState({
       suggestions: getSuggestions(
         this.props.company.accounts,
         this.props.platform,
         value
       )
+    })
+  },
+  onSuggestionsClearRequested () {
+    this.setState({
+      suggestions: []
     })
   },
   onSuggestionSelected (event, {suggestion}) {
@@ -234,7 +247,8 @@ export const WorkspaceAccountSelector = React.createClass({
           theme={theme}
           suggestions={suggestions}
           onSuggestionSelected={this.onSuggestionSelected}
-          onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           getSuggestionValue={getSuggestionValue}
           renderSuggestion={Suggestion}
           inputProps={inputProps}/>

@@ -1,8 +1,9 @@
-import React from 'react'
+import csjs from 'csjs'
 import cx from 'classnames'
 import pick from 'lodash/pick'
 import Message from '@tetris/front-server/lib/components/intl/Message'
-import csjs from 'csjs'
+import React from 'react'
+
 import {styled} from './mixins/styled'
 
 const style = csjs`
@@ -12,6 +13,7 @@ const style = csjs`
 
 const {PropTypes} = React
 const selectFields = [
+  'disabled',
   'name',
   'type',
   'required',
@@ -24,6 +26,7 @@ export const Select = React.createClass({
   mixins: [styled(style)],
   propTypes: {
     children: PropTypes.node,
+    disabled: PropTypes.bool,
     value: PropTypes.any,
     defaultValue: PropTypes.any,
     error: PropTypes.string,

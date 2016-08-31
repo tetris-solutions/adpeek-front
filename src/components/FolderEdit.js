@@ -1,18 +1,19 @@
-import React from 'react'
-import FormMixin from '@tetris/front-server/lib/mixins/FormMixin'
-import Message from '@tetris/front-server/lib/components/intl/Message'
-import Input from './Input'
-import {updateFolderAction} from '../actions/update-folder'
-import {pushSuccessMessageAction} from '../actions/push-success-message-action'
-import Select from './Select'
+import find from 'lodash/find'
+import get from 'lodash/get'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
 import pick from 'lodash/pick'
-import find from 'lodash/find'
-import get from 'lodash/get'
+import FormMixin from '@tetris/front-server/lib/mixins/FormMixin'
+import Message from '@tetris/front-server/lib/components/intl/Message'
+import React from 'react'
+
+import Checkbox from './Checkbox'
+import Input from './Input'
+import Select from './Select'
+import {pushSuccessMessageAction} from '../actions/push-success-message-action'
+import {updateFolderAction} from '../actions/update-folder'
 import {Form, Content, Header, Footer} from './Card'
 import {contextualize} from './higher-order/contextualize'
-import Checkbox from './Checkbox'
 
 const {PropTypes} = React
 
@@ -108,6 +109,7 @@ export const EditFolder = React.createClass({
             onChange={this.saveAndDismiss('name')}/>
 
           <Select
+            disabled
             name='workspace_account'
             label='externalAccount'
             error={errors.workspace_account}
