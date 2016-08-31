@@ -1,4 +1,5 @@
 import endsWith from 'lodash/endsWith'
+import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 import {Link} from 'react-router'
 
@@ -42,43 +43,40 @@ export function ReportAside ({report, dispatch, user}, {router, location: {pathn
   return (
     <ContextMenu title={report.name} icon='trending_up'>
       {!report.is_global && user.is_admin ? (
-        <button
-          className='mdl-button mdl-js-button mdl-button--icon'
-          onClick={makePublic}>
+        <a className='mdl-navigation__link' onClick={makePublic}>
           <i className='material-icons'>public</i>
-        </button>) : null}
+          <Message>makeReportGlobal</Message>
+        </a>) : null}
 
       {report.is_private ? (
-        <button className='mdl-button mdl-js-button mdl-button--icon' onClick={unlock}>
+        <a className='mdl-navigation__link' onClick={unlock}>
           <i className='material-icons'>lock_outline</i>
-        </button>
+          <Message>makeReportPublic</Message>
+        </a>
       ) : (
-        <button className='mdl-button mdl-js-button mdl-button--icon' onClick={setAsFolderDefault}>
+        <a className='mdl-navigation__link' onClick={setAsFolderDefault}>
           <i className='material-icons'>
             {report.is_folder_report ? 'check_box' : 'indeterminate_check_box'}
+            <Message>makeFolderReport</Message>
           </i>
-        </button>
+        </a>
       )}
 
-      <button
-        className='mdl-button mdl-js-button mdl-button--icon'
-        onClick={favorite}>
+      <a className='mdl-navigation__link' onClick={favorite}>
         <i className='material-icons'>{report.is_user_selected ? 'star' : 'star_border'}</i>
-      </button>
+        <Message>favoriteReport</Message>
+      </a>
 
       {endsWith(pathname, '/edit') ? null : (
-        <Link
-          className='mdl-button mdl-js-button mdl-button--icon'
-          to={`${folderUrl}/report/${report.id}/edit`}>
+        <Link className='mdl-navigation__link' to={`${folderUrl}/report/${report.id}/edit`}>
           <i className='material-icons'>create</i>
+          <Message>editReport</Message>
         </Link>
       )}
 
-      <DeleteButton
-        entityName={report.name}
-        className='mdl-button mdl-js-button mdl-button--icon'
-        onClick={deleteReport}>
+      <DeleteButton anchor entityName={report.name} className='mdl-navigation__link' onClick={deleteReport}>
         <i className='material-icons'>delete</i>
+        <Message>deleteReport</Message>
       </DeleteButton>
     </ContextMenu>
   )

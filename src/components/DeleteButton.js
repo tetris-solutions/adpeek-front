@@ -45,6 +45,7 @@ const DeleteButton = React.createClass({
     }
   },
   propTypes: {
+    anchor: PropTypes.bool,
     className: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,
     children: PropTypes.node.isRequired,
@@ -60,18 +61,31 @@ const DeleteButton = React.createClass({
     this.setState({showPrompt: false}, this.props.onClick)
   },
   render () {
-    const {className, children, entityName} = this.props
+    const {className, children, anchor, entityName} = this.props
 
-    return (
-      <button type='button' className={className} onClick={this.open}>
-        {children}
-        {this.state.showPrompt ? (
-          <Modal size='small' provide={requiredContext} onEscPress={this.close}>
-            <Prompt entityName={entityName} onConfirm={this.confirm} onCancel={this.close}/>
-          </Modal>
-        ) : null}
-      </button>
-    )
+    if (anchor) {
+      return (
+        <a className={className} onClick={this.open}>
+          {children}
+          {this.state.showPrompt ? (
+            <Modal size='small' provide={requiredContext} onEscPress={this.close}>
+              <Prompt entityName={entityName} onConfirm={this.confirm} onCancel={this.close}/>
+            </Modal>
+          ) : null}
+        </a>
+      )
+    } else {
+      return (
+        <button type='button' className={className} onClick={this.open}>
+          {children}
+          {this.state.showPrompt ? (
+            <Modal size='small' provide={requiredContext} onEscPress={this.close}>
+              <Prompt entityName={entityName} onConfirm={this.confirm} onCancel={this.close}/>
+            </Modal>
+          ) : null}
+        </button>
+      )
+    }
   }
 })
 

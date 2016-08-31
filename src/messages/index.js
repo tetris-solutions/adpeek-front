@@ -155,7 +155,13 @@ module.exports = {
     // delete button modal
     deletePromptTitle: 'Delete prompt',
     deletePromptBody: 'You are trying to remove <strong>{entityName}</strong>. <br/> Are you sure about this?',
-    confirm: 'Yes'
+    confirm: 'Yes',
+    makeReportGlobal: 'Make global',
+    makeReportPublic: 'Make public',
+    favoriteReport: 'Favorite',
+    editReport: 'Edit',
+    deleteReport: 'Delete',
+    makeFolderReport: 'Make folder default'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
