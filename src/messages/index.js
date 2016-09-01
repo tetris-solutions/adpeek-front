@@ -338,8 +338,8 @@ module.exports = {
     deletePromptBody: 'Você está prestes a remover <strong>{entityName}</strong>. <br/> Tem certeza que deseja continuar?',
     confirm: 'Sim',
     // asides
-    makeReportGlobal: 'Abrir Globalmente',
-    makeReportPublic: 'Abrir pra Empresa',
+    makeReportGlobal: 'Expor Globalmente',
+    makeReportPublic: 'Expor pra Empresa',
     favoriteReport: 'Favoritar Relatório',
     editReport: 'Editar Relatório',
     deleteReport: 'Remover Relatório',
