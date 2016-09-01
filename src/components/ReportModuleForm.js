@@ -2,6 +2,7 @@ import assign from 'lodash/assign'
 import find from 'lodash/find'
 import includes from 'lodash/includes'
 import isArray from 'lodash/isArray'
+import isEmpty from 'lodash/isEmpty'
 import map from 'lodash/map'
 import uniq from 'lodash/uniq'
 import Message from '@tetris/front-server/lib/components/intl/Message'
@@ -188,6 +189,12 @@ const ModuleEdit = React.createClass({
         <a className='mdl-button' onClick={this.props.close}>
           <Message>close</Message>
         </a>
+
+        {isEmpty(dimensions) || isEmpty(metrics) ? (
+          <em className='mdl-color-text--red-600' style={{float: 'right', marginRight: '2em'}}>
+            <Message>invalidModuleConfig</Message>
+          </em>
+        ) : null}
       </form>
     )
   }

@@ -138,7 +138,7 @@ module.exports = {
     pieChart: 'Pie chart',
     table: 'Table',
     metrics: 'Metrics',
-    dimensions: 'Dimensions',
+    dimensions: 'Segments',
     module: 'Module',
     invalidAttributePermutation: 'Selection canceled - {inserted} can not be used with {list}',
     filterLabel: 'Filter',
@@ -180,7 +180,8 @@ module.exports = {
     // entity list headers
     workspaceList: 'Workspaces',
     folderList: 'Folders',
-    emptyReportResult: 'Empty Report'
+    emptyReportResult: 'Empty Report',
+    invalidModuleConfig: 'It\'s required to pick at least one Segment and one Metric'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -362,6 +363,7 @@ module.exports = {
     // entity list headers
     workspaceList: 'Áreas de Trabalho',
     folderList: 'Pastas',
-    emptyReportResult: 'Relatório Vazio'
+    emptyReportResult: 'Relatório Vazio',
+    invalidModuleConfig: 'É necessário selecionar ao menos uma Dimensão e uma Métrica'
   }
 }
