@@ -44,8 +44,8 @@ const Report = React.createClass({
   getInitialState () {
     return {
       isCreatingReport: false,
-      startDate: moment().startOf('week').subtract(7, 'days'),
-      endDate: moment().startOf('week').subtract(1, 'days')
+      startDate: moment().subtract(30, 'days'),
+      endDate: moment()
     }
   },
   componentWillMount () {
