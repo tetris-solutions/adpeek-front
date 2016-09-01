@@ -62,7 +62,7 @@ const Report = React.createClass({
   },
   ensureRange (context = this.context) {
     if (!context.location.query.from) {
-      this.navigateToNewRange(this.getCurrentRange(context), 'replace', context)
+      this.navigateToNewRange(this.getCurrentRange(), 'replace', context)
     }
   },
   getCurrentRange () {
