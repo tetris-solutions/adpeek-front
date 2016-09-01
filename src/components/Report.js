@@ -60,9 +60,9 @@ const Report = React.createClass({
   componentWillReceiveProps (nextProps, nextContext) {
     this.ensureRange(nextContext)
   },
-  ensureRange (context = this.props) {
+  ensureRange (context = this.context) {
     if (!context.location.query.from) {
-      this.navigateToNewRange(this.getCurrentRange(), 'replace')
+      this.navigateToNewRange(this.getCurrentRange(context), 'replace', context)
     }
   },
   getCurrentRange () {
@@ -79,8 +79,8 @@ const Report = React.createClass({
       to: endDate.format('YYYY-MM-DD')
     })
   },
-  navigateToNewRange ({from, to}, method = 'push') {
-    const {location: {pathname}, router} = this.context
+  navigateToNewRange ({from, to}, method = 'push', context = this.context) {
+    const {location: {pathname}, router} = context
 
     router[method](`${pathname}?from=${from}&to=${to}`)
   },
