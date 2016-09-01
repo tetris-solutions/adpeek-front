@@ -39,13 +39,13 @@ const Report = React.createClass({
     entities: PropTypes.arrayOf(entityType).isRequired
   },
   contextTypes: {
-    messages: PropTypes.object
+    router: PropTypes.object,
+    messages: PropTypes.object,
+    location: PropTypes.object
   },
   getInitialState () {
     return {
-      isCreatingReport: false,
-      startDate: moment().subtract(30, 'days'),
-      endDate: moment()
+      isCreatingReport: false
     }
   },
   componentWillMount () {
@@ -54,9 +54,35 @@ const Report = React.createClass({
 
     this.onChangeName = debounce(() =>
       dispatch(updateReportAction, params, {id, name: getName()}), 1000)
+
+    this.ensureRange()
+  },
+  componentWillReceiveProps (nextProps, nextContext) {
+    this.ensureRange(nextContext)
+  },
+  ensureRange (context = this.props) {
+    if (!context.location.query.from) {
+      this.navigateToNewRange(this.getCurrentRange(), 'replace')
+    }
+  },
+  getCurrentRange () {
+    let {location: {query: {from, to}}} = this.context
+
+    from = from || moment().subtract(30, 'days').format('YYYY-MM-DD')
+    to = to || moment().format('YYYY-MM-DD')
+
+    return {from, to}
   },
   onChangeRange ({startDate, endDate}) {
-    this.setState({startDate, endDate})
+    this.navigateToNewRange({
+      from: startDate.format('YYYY-MM-DD'),
+      to: endDate.format('YYYY-MM-DD')
+    })
+  },
+  navigateToNewRange ({from, to}, method = 'push') {
+    const {location: {pathname}, router} = this.context
+
+    router[method](`${pathname}?from=${from}&to=${to}`)
   },
   addNewModule () {
     const {report, params, dispatch} = this.props
@@ -93,11 +119,9 @@ const Report = React.createClass({
   },
   render () {
     const {isLoading, editMode, report: {name, modules, metaData}} = this.props
-    const {isCreatingReport, startDate, endDate} = this.state
-    const reportParams = assign({
-      from: startDate.format('YYYY-MM-DD'),
-      to: endDate.format('YYYY-MM-DD')
-    }, this.props.reportParams)
+    const {isCreatingReport} = this.state
+    const {from, to} = this.getCurrentRange()
+    const reportParams = assign({from, to}, this.props.reportParams)
     const {platform} = reportParams
 
     return (
@@ -112,8 +136,8 @@ const Report = React.createClass({
 
             <ReportDateRange
               onChange={this.onChangeRange}
-              startDate={startDate}
-              endDate={endDate}/>
+              startDate={moment(from)}
+              endDate={moment(to)}/>
 
             {editMode && (
               <button disabled={isLoading} className='mdl-button mdl-color-text--grey-100' onClick={this.addNewModule}>
