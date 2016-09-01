@@ -99,10 +99,13 @@ const Header = React.createClass({
   }
 })
 
+const crop = (ls, n) => n ? ls.slice(0, n) : ls
+
 const ReportModuleTable = React.createClass({
   displayName: 'Module-Table',
   mixins: [styled(style)],
   propTypes: {
+    limit: PropTypes.number,
     isLoading: PropTypes.bool,
     name: PropTypes.string,
     reportParams: reportParamsType,
@@ -145,7 +148,20 @@ const ReportModuleTable = React.createClass({
   render () {
     const {sort} = this.state
     const sortPairs = fromPairs(sort)
-    const {isLoading, name, reportParams, result, attributes, entity: {id: entityId, list}} = this.props
+
+    const {
+      limit,
+      isLoading,
+      name,
+      reportParams,
+      result,
+      attributes,
+      entity: {
+        id: entityId,
+        list
+      }
+    } = this.props
+
     const headers = keys(result[0])
     let tbody = null
     let colHeaders = null
@@ -172,7 +188,7 @@ const ReportModuleTable = React.createClass({
         return {content: item.name || id, sortKey}
       }
 
-      const rows = customSort(map(result, row => {
+      const rows = crop(customSort(map(result, row => {
         const parsed = {}
 
         forEach(headers, value => {
@@ -182,7 +198,7 @@ const ReportModuleTable = React.createClass({
         })
 
         return parsed
-      }))
+      })), limit)
 
       colHeaders = (
         <tr>

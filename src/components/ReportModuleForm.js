@@ -1,4 +1,5 @@
 import assign from 'lodash/assign'
+import debounce from 'lodash/debounce'
 import find from 'lodash/find'
 import includes from 'lodash/includes'
 import isArray from 'lodash/isArray'
@@ -38,7 +39,22 @@ const ModuleEdit = React.createClass({
     close: PropTypes.func,
     save: PropTypes.func
   },
-  onChangeInput ({target: {name, value}}) {
+  componentWillMount () {
+    this.updateQueue = []
+    this.persist = debounce(() => {
+      this.props.save(assign({}, ...this.updateQueue))
+      this.updateQueue = []
+    }, 500)
+  },
+  enqueueUpdate (update) {
+    this.updateQueue.push(update)
+    this.persist()
+  },
+  onChangeInput ({target: {type, name, value}}) {
+    if (type === 'number') {
+      value = isNaN(Number(value)) ? 0 : Number(value)
+    }
+
     const newState = {[name]: value}
 
     if (name === 'entity') {
@@ -59,7 +75,7 @@ const ModuleEdit = React.createClass({
       }
     }
 
-    this.props.save(newState)
+    this.enqueueUpdate(newState)
   },
   removeEntity (id) {
     const ids = isArray(id) ? id : [id]
@@ -142,7 +158,7 @@ const ModuleEdit = React.createClass({
   },
   render () {
     const {metaData, entities, entity, module, reportParams} = this.props
-    const {name, type, filters, metrics, dimensions} = module
+    const {name, type, filters, limit, metrics, dimensions} = module
 
     return (
       <form>
@@ -162,10 +178,10 @@ const ModuleEdit = React.createClass({
           </div>
           <div className='mdl-cell mdl-cell--9-col' style={{height: '80vh', overflowY: 'auto'}}>
             <div className='mdl-grid'>
-              <div className='mdl-cell mdl-cell--5-col'>
+              <div className='mdl-cell mdl-cell--3-col'>
                 <Input name='name' label='name' defaultValue={name} onChange={this.onChangeInput}/>
               </div>
-              <div className='mdl-cell mdl-cell--4-col'>
+              <div className='mdl-cell mdl-cell--3-col'>
                 <Select label='entity' name='entity' onChange={this.onChangeInput} value={entity.id}>
                   {map(entities, ({id, name}) =>
                     <option key={id} value={id}>
@@ -175,6 +191,9 @@ const ModuleEdit = React.createClass({
               </div>
               <div className='mdl-cell mdl-cell--3-col'>
                 <TypeSelect onChange={this.onChangeInput} value={type}/>
+              </div>
+              <div className='mdl-cell mdl-cell--3-col'>
+                <Input type='number' name='limit' label='resultLimit' defaultValue={limit} onChange={this.onChangeInput}/>
               </div>
             </div>
 

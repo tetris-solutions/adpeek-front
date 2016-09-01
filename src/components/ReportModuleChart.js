@@ -77,6 +77,7 @@ const ReportChart = React.createClass({
 
     return (
       nextProps.height !== this.props.height ||
+      newModule.limit !== oldModule.limit ||
       newModule.cols !== oldModule.cols ||
       newModule.isLoading !== oldModule.isLoading ||
       newModule.result !== oldModule.result ||
@@ -91,6 +92,7 @@ const ReportChart = React.createClass({
     return (
       <div className={`${style.wrap}`} style={{height}}>
         <Chart
+          limit={module.limit}
           isLoading={module.isLoading}
           reportParams={reportParams}
           sourceWidth={floor(1200 * (module.cols / 12))}

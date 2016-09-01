@@ -181,7 +181,8 @@ module.exports = {
     workspaceList: 'Workspaces',
     folderList: 'Folders',
     emptyReportResult: 'Empty Report',
-    invalidModuleConfig: 'It\'s required to pick at least one Segment and one Metric'
+    invalidModuleConfig: 'It\'s required to pick at least one Segment and one Metric',
+    resultLimitLabel: 'Limit to first'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -364,6 +365,7 @@ module.exports = {
     workspaceList: 'Áreas de Trabalho',
     folderList: 'Pastas',
     emptyReportResult: 'Relatório Vazio',
-    invalidModuleConfig: 'É necessário selecionar ao menos uma Dimensão e uma Métrica'
+    invalidModuleConfig: 'É necessário selecionar ao menos uma Dimensão e uma Métrica',
+    resultLimitLabel: 'Limite de linhas'
   }
 }
