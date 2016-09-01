@@ -90,14 +90,12 @@ export const FolderCampaigns = React.createClass({
 
     return (
       <div>
-
         <CampaignsHeader
           company={company}
           workspace={workspace}
           folder={folder.id}
           onSwitch={this.switchActiveFilter}
-          onEnter={this.setFilterValue}/>
-
+          onChange={this.setFilterValue}/>
         <div className='mdl-grid'>
 
           <div className='mdl-cell mdl-cell--7-col'>

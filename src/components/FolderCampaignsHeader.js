@@ -5,10 +5,10 @@ import Switch from './Switch'
 
 const {PropTypes} = React
 
-const onChange = onSwitch => ({target: {checked}}) => onSwitch(checked)
+const wrapOnSwitch = onSwitch => ({target: {checked}}) => onSwitch(checked)
 
 export function FolderCampaignsHeader ({
-  onEnter,
+  onChange,
   company,
   workspace,
   folder,
@@ -20,10 +20,10 @@ export function FolderCampaignsHeader ({
     <header className='mdl-layout__header'>
       <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
         <span>
-          <Switch label={filterActiveCampaigns} checked onChange={onChange(onSwitch)}/>
+          <Switch label={filterActiveCampaigns} checked onChange={wrapOnSwitch(onSwitch)}/>
         </span>
         <div className='mdl-layout-spacer'/>
-        <HeaderSearchBox onEnter={onEnter}/>
+        <HeaderSearchBox onChange={onChange}/>
       </div>
     </header>
   )
@@ -35,7 +35,7 @@ FolderCampaignsHeader.propTypes = {
   workspace: PropTypes.string,
   folder: PropTypes.string,
   onSwitch: PropTypes.func,
-  onEnter: PropTypes.func
+  onChange: PropTypes.func
 }
 FolderCampaignsHeader.contextTypes = {
   messages: PropTypes.object

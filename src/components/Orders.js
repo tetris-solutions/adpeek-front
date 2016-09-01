@@ -1,10 +1,18 @@
-import React from 'react'
-import {ThumbLink, ThumbButton} from './ThumbLink'
+import deburr from 'lodash/deburr'
+import filter from 'lodash/filter'
+import includes from 'lodash/includes'
+import lowerCase from 'lodash/toLower'
 import map from 'lodash/map'
+import trim from 'lodash/trim'
 import Message from '@tetris/front-server/lib/components/intl/Message'
+import React from 'react'
 import {Link} from 'react-router'
 
+import SearchBox from './HeaderSearchBox'
+import {ThumbLink, ThumbButton} from './ThumbLink'
+
 const {PropTypes} = React
+const cleanStr = str => trim(deburr(lowerCase(str)))
 
 function Order ({company, workspace, folder, id, name}) {
   return <ThumbLink to={`/company/${company}/workspace/${workspace}/folder/${folder}/order/${id}`} title={name}/>
@@ -32,9 +40,21 @@ export const Orders = React.createClass({
   propTypes: {
     orders: PropTypes.array
   },
+  getInitialState () {
+    return {
+      searchValue: ''
+    }
+  },
+  onChange (searchValue) {
+    this.setState({searchValue})
+  },
   render () {
+    const searchValue = cleanStr(this.state.searchValue)
     const {location, params} = this.context
     const {orders} = this.props
+    const matchingOrders = searchValue
+      ? filter(orders, ({name}) => includes(cleanStr(name), searchValue))
+      : orders
 
     return (
       <div>
@@ -45,11 +65,12 @@ export const Orders = React.createClass({
             <Link className='mdl-button mdl-color-text--grey-100' to={`${location.pathname}/clone`}>
               <Message>cloneOrders</Message>
             </Link>
+            <SearchBox onChange={this.onChange}/>
           </div>
         </header>
         <div className='mdl-grid'>
 
-          {map(orders, (order, index) =>
+          {map(matchingOrders, (order, index) =>
             <Order {...order} key={index}/>)}
 
           {params.folder && (

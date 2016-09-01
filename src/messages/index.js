@@ -176,7 +176,10 @@ module.exports = {
     workspaceOrders: 'Workspace Orders',
     deleteWorkspace: 'Delete Workspace',
     manageCompany: 'Manage Company',
-    companyOrders: 'Company Orders'
+    companyOrders: 'Company Orders',
+    // entity list headers
+    workspaceList: 'Workspaces',
+    folderList: 'Folders'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -354,6 +357,9 @@ module.exports = {
     workspaceOrders: 'Pedidos',
     deleteWorkspace: 'Remover',
     manageCompany: 'Gerenciar Empresa',
-    companyOrders: 'Pedidos'
+    companyOrders: 'Pedidos',
+    // entity list headers
+    workspaceList: 'Áreas de Trabalho',
+    folderList: 'Pastas'
   }
 }

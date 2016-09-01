@@ -1,6 +1,6 @@
-import React from 'react'
 import cx from 'classnames'
 import debounce from 'lodash/debounce'
+import React from 'react'
 
 const {PropTypes} = React
 
@@ -10,7 +10,7 @@ export const HeaderSearchBox = React.createClass({
     className: PropTypes.string,
     value: PropTypes.any,
     defaultValue: PropTypes.any,
-    onEnter: PropTypes.func
+    onChange: PropTypes.func
   },
   getInitialState () {
     return {
@@ -19,7 +19,7 @@ export const HeaderSearchBox = React.createClass({
     }
   },
   componentWillMount () {
-    this.save = debounce(value => this.props.onEnter(value), 300)
+    this.save = debounce(value => this.props.onChange(value), 300)
   },
   manuallySetFocus () {
     this.setState({isFocused: true}, () => {

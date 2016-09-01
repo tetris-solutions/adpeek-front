@@ -1,8 +1,17 @@
-import React from 'react'
-import {ThumbLink, ThumbButton} from './ThumbLink'
+import deburr from 'lodash/deburr'
+import filter from 'lodash/filter'
+import includes from 'lodash/includes'
+import lowerCase from 'lodash/toLower'
 import map from 'lodash/map'
+import trim from 'lodash/trim'
 import Message from '@tetris/front-server/lib/components/intl/Message'
+import React from 'react'
+
+import SearchBox from './HeaderSearchBox'
 import {contextualize} from './higher-order/contextualize'
+import {ThumbLink, ThumbButton} from './ThumbLink'
+
+const cleanStr = str => trim(deburr(lowerCase(str)))
 
 const {PropTypes} = React
 
@@ -27,12 +36,32 @@ export const Folders = React.createClass({
     company: PropTypes.object,
     workspace: PropTypes.object
   },
+  getInitialState () {
+    return {
+      searchValue: ''
+    }
+  },
+  onChange (searchValue) {
+    this.setState({searchValue})
+  },
   render () {
+    const searchValue = cleanStr(this.state.searchValue)
     const {company, workspace: {id, folders}} = this.props
+    const matchingFolders = searchValue
+      ? filter(folders, ({name}) => includes(cleanStr(name), searchValue))
+      : folders
+
     return (
       <div>
+        <header className='mdl-layout__header'>
+          <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
+            <Message>folderList</Message>
+            <div className='mdl-layout-spacer'/>
+            <SearchBox onChange={this.onChange}/>
+          </div>
+        </header>
         <div className='mdl-grid'>
-          {map(folders, (folder, index) =>
+          {map(matchingFolders, (folder, index) =>
             <Folder key={index} {...folder} workspace={id} company={company.id}/>)}
 
           <ThumbButton
