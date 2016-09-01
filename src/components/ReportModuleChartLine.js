@@ -1,7 +1,8 @@
 import React from 'react'
+
+import chartType from '../propTypes/report-chart'
 import Chart from './Highcharts'
 import {reportToChartConfig} from '../functions/report-to-chart-config'
-import chartType from '../propTypes/report-chart'
 
 function ChartLine (props) {
   const config = reportToChartConfig('line', props)

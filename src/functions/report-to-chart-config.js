@@ -1,18 +1,19 @@
-import forEach from 'lodash/forEach'
-import includes from 'lodash/includes'
-import isEqual from 'lodash/isEqual'
-import without from 'lodash/without'
-import pick from 'lodash/pick'
-import find from 'lodash/find'
-import map from 'lodash/map'
-import join from 'lodash/join'
-import sortBy from 'lodash/sortBy'
 import assign from 'lodash/assign'
-import isString from 'lodash/isString'
-import uniq from 'lodash/uniq'
-import omit from 'lodash/omit'
+import find from 'lodash/find'
+import forEach from 'lodash/forEach'
 import get from 'lodash/get'
+import includes from 'lodash/includes'
+import isEmpty from 'lodash/isEmpty'
+import isEqual from 'lodash/isEqual'
+import isString from 'lodash/isString'
+import join from 'lodash/join'
+import map from 'lodash/map'
 import negate from 'lodash/negate'
+import omit from 'lodash/omit'
+import pick from 'lodash/pick'
+import sortBy from 'lodash/sortBy'
+import uniq from 'lodash/uniq'
+import without from 'lodash/without'
 
 const isEntityId = d => d === 'id' || d === 'name'
 const notEntityId = negate(isEntityId)
@@ -66,7 +67,41 @@ function detectXAxis (result, xAxisDimensions) {
   return types.linear
 }
 
-export function reportToChartConfig (type, {query: {metrics, dimensions}, result, entity, attributes}) {
+const emptyResultChart = ({isLoading, messages: {loadingReport, emptyReportResult}}) => ({
+  chart: {
+    events: {
+      load () {
+        const x = (this.chartWidth / 2) - 50
+        const y = (this.chartHeight / 2) - 20
+
+        this.renderer
+          .label(
+            isLoading ? loadingReport : emptyReportResult,
+            x,
+            y
+          )
+          .css({fontStyle: 'italic', fontSize: '12pt'})
+          .add()
+      }
+    },
+    title: {
+      style: {
+        color: '#8a8a8a'
+      }
+    }
+  }
+})
+
+export function reportToChartConfig (type, props) {
+  const {query, entity, attributes} = props
+  const {metrics} = query
+  let {result} = props
+  let {dimensions} = query
+
+  if (isEmpty(result)) {
+    return emptyResultChart(props)
+  }
+
   const getAttributeName = attr => get(attributes, [attr, 'name'], attr)
   const getSeriesAttributeName = (val, key) => key === 'metric'
     ? getAttributeName(val)

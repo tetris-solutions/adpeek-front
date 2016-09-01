@@ -179,7 +179,8 @@ module.exports = {
     companyOrders: 'Company Orders',
     // entity list headers
     workspaceList: 'Workspaces',
-    folderList: 'Folders'
+    folderList: 'Folders',
+    emptyReportResult: 'Empty Report'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -360,6 +361,7 @@ module.exports = {
     companyOrders: 'Pedidos',
     // entity list headers
     workspaceList: 'Áreas de Trabalho',
-    folderList: 'Pastas'
+    folderList: 'Pastas',
+    emptyReportResult: 'Relatório Vazio'
   }
 }

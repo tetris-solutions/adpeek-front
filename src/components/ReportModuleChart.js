@@ -62,6 +62,9 @@ const ReportChart = React.createClass({
     entity: reportEntityType,
     dispatch: PropTypes.func
   },
+  contextTypes: {
+    messages: PropTypes.object
+  },
   getDefaultProps () {
     return {
       metaData: {
@@ -89,10 +92,12 @@ const ReportChart = React.createClass({
     return (
       <div className={`${style.wrap}`} style={{height}}>
         <Chart
+          isLoading={module.isLoading}
           reportParams={reportParams}
           sourceWidth={floor(1200 * (module.cols / 12))}
           sourceHeight={floor(1200 * A4Ratio * (module.rows / 6))}
           name={module.name}
+          messages={this.context.messages}
           attributes={attributes}
           entity={entity}
           result={module.result || emptyResult}

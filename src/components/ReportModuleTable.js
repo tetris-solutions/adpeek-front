@@ -9,6 +9,7 @@ import isObject from 'lodash/isObject'
 import keys from 'lodash/keys'
 import map from 'lodash/map'
 import stableSort from 'stable'
+import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 
 import entityType from '../propTypes/report-entity'
@@ -34,6 +35,13 @@ const style = csjs`
 }
 .icon {
   float: right;
+}
+.placeholder {
+  line-height: 4em !important;
+  color: #8a8a8a !important;
+  font-size: medium !important;
+  font-style: italic !important;
+  text-align: center !important;
 }`
 
 const {PropTypes} = React
@@ -95,6 +103,7 @@ const ReportModuleTable = React.createClass({
   displayName: 'Module-Table',
   mixins: [styled(style)],
   propTypes: {
+    isLoading: PropTypes.bool,
     name: PropTypes.string,
     reportParams: reportParamsType,
     entity: entityType,
@@ -136,7 +145,7 @@ const ReportModuleTable = React.createClass({
   render () {
     const {sort} = this.state
     const sortPairs = fromPairs(sort)
-    const {name, reportParams, result, attributes, entity: {id: entityId, list}} = this.props
+    const {isLoading, name, reportParams, result, attributes, entity: {id: entityId, list}} = this.props
     const headers = keys(result[0])
     let tbody = null
     let colHeaders = null
@@ -199,13 +208,23 @@ const ReportModuleTable = React.createClass({
             </tr>)}
         </tbody>
       )
+    } else {
+      tbody = (
+        <tbody>
+          <tr>
+            <td className={`${style.placeholder}`} colSpan={headers.length || 1}>
+              <Message>{isLoading ? 'loadingReport' : 'emptyReportResult'}</Message>
+            </td>
+          </tr>
+        </tbody>
+      )
     }
 
     return (
       <table className={`mdl-data-table ${style.table}`}>
         <thead>
           <tr>
-            <th className={`mdl-data-table__cell--non-numeric ${style.title}`} colSpan={headers.length}>
+            <th className={`mdl-data-table__cell--non-numeric ${style.title}`} colSpan={headers.length || 1}>
               {name}
             </th>
           </tr>
