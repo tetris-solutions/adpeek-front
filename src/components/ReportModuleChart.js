@@ -15,8 +15,7 @@ import {styled} from './mixins/styled'
 
 const style = csjs`
 .wrap {
-  overflow-x: hidden
-  overflow-y: auto;
+  overflow: auto;
 }
 .wrap > div[data-highcharts-chart] {
   height: 100%
