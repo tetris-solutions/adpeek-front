@@ -68,6 +68,9 @@ const style = csjs`
   border-bottom: 1px solid rgba(0,0,0,.12);
 }
 
+.input[disabled] {
+  background: rgba(250, 250, 250, 0.6) !important;
+}
 .input:focus {
   outline: none;
 }
@@ -163,6 +166,7 @@ export const WorkspaceAccountSelector = React.createClass({
     messages: PropTypes.object
   },
   propTypes: {
+    disabled: PropTypes.bool,
     company: PropTypes.shape({
       id: PropTypes.string,
       accounts: PropTypes.array
@@ -231,7 +235,7 @@ export const WorkspaceAccountSelector = React.createClass({
   render () {
     const {locales, messages: {accountSelectorPlaceholder}} = this.context
     const {isLoading, suggestions, value, account} = this.state
-    const {platform} = this.props
+    const {platform, disabled, account: savedAccount} = this.props
     const inputProps = {
       value,
       placeholder: isLoading
@@ -239,7 +243,7 @@ export const WorkspaceAccountSelector = React.createClass({
         : new Message(accountSelectorPlaceholder, locales).format({platform: upperFirst(platform)}),
       onChange: this.onChange,
       onKeyDown: preventSubmit,
-      readOnly: isLoading
+      disabled: isLoading || (disabled && savedAccount)
     }
 
     return (

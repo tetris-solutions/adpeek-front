@@ -1,12 +1,13 @@
-import React from 'react'
 import omit from 'lodash/omit'
 import FormMixin from '@tetris/front-server/lib/mixins/FormMixin'
-import Input from './Input'
-import AccountSelector from './WorkspaceAccountSelector'
-import RolesSelector from './WorkspaceRolesSelector'
 import Message from '@tetris/front-server/lib/components/intl/Message'
-import {updateWorkspaceAction} from '../actions/update-workspace'
+import React from 'react'
+
+import AccountSelector from './WorkspaceAccountSelector'
+import Input from './Input'
+import RolesSelector from './WorkspaceRolesSelector'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
+import {updateWorkspaceAction} from '../actions/update-workspace'
 import {serializeWorkspaceForm} from '../functions/serialize-workspace-form'
 import {Form, Content, Header, Footer} from './Card'
 import {contextualize} from './higher-order/contextualize'
@@ -78,11 +79,13 @@ export const WorkspaceEdit = React.createClass({
             value={name}/>
 
           <AccountSelector
+            disabled
             account={facebook}
             value={facebook ? facebook.name : ''}
             platform='facebook'/>
 
           <AccountSelector
+            disabled
             account={adwords}
             value={adwords ? adwords.name : ''}
             platform='adwords'/>
