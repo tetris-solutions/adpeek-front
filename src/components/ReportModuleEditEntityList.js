@@ -56,23 +56,20 @@ const EntityGroup = React.createClass({
   },
   getInitialState () {
     return {
-      isOpen: true,
-      isSelected: false
+      isOpen: true
     }
   },
   toggleVisibility () {
     this.setState({isOpen: !this.state.isOpen})
   },
   toggleSelection () {
-    const {isSelected} = this.state
+    const {selection} = this.props
 
-    if (isSelected) {
+    if (selection === 'total') {
       this.props.unselect(this.props.ids)
     } else {
       this.props.select(this.props.ids)
     }
-
-    this.setState({isSelected: !isSelected})
   },
   render () {
     const {isOpen} = this.state
@@ -209,7 +206,9 @@ const EntityList = React.createClass({
           ids={ids}
           select={addItem}
           unselect={removeItem}>
-          {subList}
+          <ul className={String(style.list)}>
+            {subList}
+          </ul>
         </EntityGroup>
       </ul>
     )

@@ -33,6 +33,7 @@ const ReportModule = React.createClass({
     module: moduleType,
     editable: PropTypes.bool,
     metaData: reportMetaDataType,
+    entity: reportEntityType,
     entities: PropTypes.arrayOf(reportEntityType).isRequired,
     reportParams: reportParamsType
   },
@@ -53,18 +54,10 @@ const ReportModule = React.createClass({
   componentDidUpdate () {
     this.fetchResult(this.getChartQuery())
   },
-  getEntity () {
-    return find(this.props.entities, {id: this.props.module.entity})
-  },
   getChartQuery () {
     const {reportParams} = this.props
-    const {module} = this.props
-    const entity = this.getEntity()
+    const {module, entity} = this.props
     const filters = assign({}, module.filters)
-
-    if (isEmpty(filters.id)) {
-      filters.id = entity.list.map(({id}) => id)
-    }
 
     return assign({filters, entity: entity.id},
       pick(module, 'dimensions', 'metrics'),
@@ -91,11 +84,30 @@ const ReportModule = React.createClass({
 
     return (
       <Module {...this.props}
-        entity={this.getEntity()}
         update={editable ? this.save : undefined}
         remove={editable ? this.remove : undefined}/>
     )
   }
 })
 
-export default ReportModule
+function ModuleWrapper (props) {
+  const module = assign({}, props.module)
+  const filters = assign({}, module.filters)
+  const entity = find(props.entities, {id: module.entity})
+
+  if (isEmpty(filters.id)) {
+    filters.id = entity.list.map(({id}) => id)
+  }
+
+  module.filters = filters
+
+  return <ReportModule {...props} module={module} entity={entity}/>
+}
+
+ModuleWrapper.displayName = 'Module-Wrapper'
+ModuleWrapper.propTypes = {
+  module: moduleType,
+  entities: PropTypes.arrayOf(reportEntityType).isRequired
+}
+
+export default ModuleWrapper

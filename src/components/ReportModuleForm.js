@@ -1,5 +1,6 @@
 import assign from 'lodash/assign'
 import debounce from 'lodash/debounce'
+import diff from 'lodash/difference'
 import find from 'lodash/find'
 import includes from 'lodash/includes'
 import isArray from 'lodash/isArray'
@@ -88,12 +89,16 @@ const ModuleEdit = React.createClass({
   },
   addEntity (id) {
     const ids = isArray(id) ? id : [id]
-
-    this.props.save({
-      filters: assign({}, this.props.module.filters, {
-        id: uniq(this.props.module.filters.id.concat(ids))
-      })
+    const filters = assign({}, this.props.module.filters, {
+      id: uniq(this.props.module.filters.id.concat(ids))
     })
+    const allIds = map(this.props.entity.list, 'id')
+
+    if (diff(allIds, filters.id).length === 0) {
+      filters.id = []
+    }
+
+    this.props.save({filters})
   },
   removeItem (attributeId) {
     const {attributes} = this.props.metaData
