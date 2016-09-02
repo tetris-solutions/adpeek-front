@@ -124,10 +124,13 @@ const EntityList = React.createClass({
         const campaign = find(entities.campaign.list, {id: campaignId})
         const ids = map(ls, 'id')
         const localSelection = intersec(ids, selectedAttributes)
-
+        let selection
+        if (localSelection.length) {
+          selection = localSelection.length === ids.length ? 'total' : 'partial'
+        }
         return (
           <EntityGroup
-            selection={localSelection.length && (localSelection.length === ids.length ? 'total' : 'partial')}
+            selection={selection}
             key={campaign.id}
             name={campaign.name}
             ids={ids}
@@ -146,13 +149,16 @@ const EntityList = React.createClass({
         const adGroup = find(entities[parentEntity].list, {id: adGroupId})
         const ids = map(ls, 'id')
         const localSelection = intersec(ids, selectedAttributes)
-
+        let selection
+        if (localSelection.length) {
+          selection = localSelection.length === ids.length ? 'total' : 'partial'
+        }
         return {
           ids,
           parent: adGroup.campaign_id,
           content: (
             <EntityGroup
-              selection={localSelection.length && (localSelection.length === ids.length ? 'total' : 'partial')}
+              selection={selection}
               key={adGroup.id}
               name={adGroup.name}
               ids={ids}
@@ -169,10 +175,13 @@ const EntityList = React.createClass({
         const campaign = find(entities.campaign.list, {id: campaignId})
         const ids = flatten(map(ls, 'ids'))
         const localSelection = intersec(ids, selectedAttributes)
-
+        let selection
+        if (localSelection.length) {
+          selection = localSelection.length === ids.length ? 'total' : 'partial'
+        }
         return (
           <EntityGroup
-            selection={localSelection.length && (localSelection.length === ids.length ? 'total' : 'partial')}
+            selection={selection}
             key={campaign.id}
             name={campaign.name}
             ids={ids}
