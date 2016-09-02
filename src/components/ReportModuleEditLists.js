@@ -12,6 +12,7 @@ import reportEntityType from '../propTypes/report-entity'
 import Attributes from './ReportModuleEditAttributes'
 import EntityList from './ReportModuleEditEntityList'
 import Input from './Input'
+import {Tabs, Tab} from './Tabs'
 
 const {PropTypes} = React
 const clean = str => trim(lowerCase(deburr(str)))
@@ -47,7 +48,8 @@ const Lists = React.createClass({
   },
   getInitialState () {
     return {
-      searchValue: ''
+      searchValue: '',
+      activeTab: 'entity'
     }
   },
   componentWillMount () {
@@ -68,15 +70,18 @@ const Lists = React.createClass({
     this.setState({list, dimensions, metrics, searchValue})
   },
   onChangeSearch () {
-    const input = this.refs.wrapper.querySelector('input')
+    const input = this.refs.wrapper.querySelector('input[name="searchValue"]')
     this.updateLists(this.props, clean(input.value))
+  },
+  onChangeTab (activeTab) {
+    this.setState({activeTab})
   },
   render () {
     const selectedMetrics = this.props.metrics
     const selectedDimensions = this.props.dimensions
     const selectedIds = this.props.filters.id
     const {entity, removeEntity, addEntity, addItem, removeItem} = this.props
-    const {dimensions, metrics, list} = this.state
+    const {dimensions, metrics, list, activeTab} = this.state
     const isIdSelected = includes(selectedDimensions, 'id')
 
     return (
@@ -86,31 +91,37 @@ const Lists = React.createClass({
           name='searchValue'
           onChange={this.onChangeSearch}/>
 
-        <EntityList
-          entity={entity}
-          entities={this.props.entities}
-          title={entity.name}
-          attributes={list}
-          isIdSelected={isIdSelected}
-          selectedAttributes={selectedIds}
-          removeItem={removeEntity}
-          addItem={addEntity}/>
-
-        <Attributes
-          title={<Message>metrics</Message>}
-          attributes={metrics}
-          isIdSelected={isIdSelected}
-          selectedAttributes={selectedMetrics}
-          removeItem={removeItem}
-          addItem={addItem}/>
-
-        <Attributes
-          title={<Message>dimensions</Message>}
-          attributes={dimensions}
-          isIdSelected={isIdSelected}
-          selectedAttributes={selectedDimensions}
-          removeItem={removeItem}
-          addItem={addItem}/>
+        <Tabs onChangeTab={this.onChangeTab}>
+          <Tab id='entity' title={entity.name} active={activeTab === 'entity'}>
+            <EntityList
+              entity={entity}
+              entities={this.props.entities}
+              title={entity.name}
+              attributes={list}
+              isIdSelected={isIdSelected}
+              selectedAttributes={selectedIds}
+              removeItem={removeEntity}
+              addItem={addEntity}/>
+          </Tab>
+          <Tab id='metric' title={<Message>metrics</Message>} active={activeTab === 'metric'}>
+            <Attributes
+              title={<Message>metrics</Message>}
+              attributes={metrics}
+              isIdSelected={isIdSelected}
+              selectedAttributes={selectedMetrics}
+              removeItem={removeItem}
+              addItem={addItem}/>
+          </Tab>
+          <Tab id='dimension' title={<Message>dimensions</Message>} active={activeTab === 'dimension'}>
+            <Attributes
+              title={<Message>dimensions</Message>}
+              attributes={dimensions}
+              isIdSelected={isIdSelected}
+              selectedAttributes={selectedDimensions}
+              removeItem={removeItem}
+              addItem={addItem}/>
+          </Tab>
+        </Tabs>
       </div>
     )
   }

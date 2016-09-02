@@ -90,6 +90,6 @@ export function Tab ({children, id}) {
 Tab.displayName = 'Tab-Content'
 Tab.propTypes = {
   id: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.node.isRequired,
   children: PropTypes.node.isRequired
 }
