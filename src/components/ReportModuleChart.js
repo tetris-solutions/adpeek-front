@@ -54,6 +54,7 @@ const ReportChart = React.createClass({
   displayName: 'Report-Chart',
   mixins: [styled(style)],
   propTypes: {
+    save: PropTypes.func,
     height: PropTypes.number.isRequired,
     reportParams: reportParamsType,
     metaData: reportMetaDataType.isRequired,
@@ -77,6 +78,7 @@ const ReportChart = React.createClass({
 
     return (
       nextProps.height !== this.props.height ||
+      newModule.sort !== oldModule.sort ||
       newModule.limit !== oldModule.limit ||
       newModule.cols !== oldModule.cols ||
       newModule.isLoading !== oldModule.isLoading ||
@@ -86,12 +88,14 @@ const ReportChart = React.createClass({
     )
   },
   render () {
-    const {height, reportParams, module, entity, metaData: {attributes}} = this.props
+    const {save, height, reportParams, module, entity, metaData: {attributes}} = this.props
     const Chart = typeComponent[module.type]
 
     return (
       <div className={`${style.wrap}`} style={{height}}>
         <Chart
+          save={save}
+          sort={module.sort}
           limit={module.limit}
           isLoading={module.isLoading}
           reportParams={reportParams}

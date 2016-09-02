@@ -21,7 +21,7 @@ const style = csjs`
 .table {
   width: 100%;
 }
-.th > span {
+.clickable {
   cursor: pointer
 }
 .th > i {
@@ -73,14 +73,14 @@ const Header = React.createClass({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     is_metric: PropTypes.bool,
-    toggle: PropTypes.func.isRequired,
+    toggle: PropTypes.func,
     order: PropTypes.oneOf(['asc', 'desc'])
   },
   onClick () {
     this.props.toggle(this.props.id)
   },
   render () {
-    const {name, is_metric, order} = this.props
+    const {toggle, name, is_metric, order} = this.props
     const classes = cx({
       [style.th]: true,
       'mdl-data-table__cell--non-numeric': !is_metric
@@ -88,7 +88,9 @@ const Header = React.createClass({
 
     return (
       <th className={classes}>
-        <span onClick={this.onClick}>{name}</span>
+        <span className={toggle ? `${style.clickable}` : undefined} onClick={toggle ? this.onClick : undefined}>
+          {name}
+        </span>
 
         {Boolean(order) && (
           <i className='material-icons'>
@@ -105,6 +107,8 @@ const ReportModuleTable = React.createClass({
   displayName: 'Module-Table',
   mixins: [styled(style)],
   propTypes: {
+    sort: PropTypes.array,
+    save: PropTypes.func,
     limit: PropTypes.number,
     isLoading: PropTypes.bool,
     name: PropTypes.string,
@@ -112,11 +116,6 @@ const ReportModuleTable = React.createClass({
     entity: entityType,
     attributes: PropTypes.object.isRequired,
     result: PropTypes.array.isRequired
-  },
-  getInitialState () {
-    return {
-      sort: [['id', 'asc'], ['date', 'asc']]
-    }
   },
   getHeaderName (_, header) {
     const {attributes} = this.props
@@ -128,28 +127,26 @@ const ReportModuleTable = React.createClass({
     return {text, value: header}
   },
   toggleHeader (id) {
-    const sort = this.state.sort.concat()
+    const sort = this.props.sort.concat()
     const index = findIndex(sort, ([key, val]) => key === id)
 
     if (index === -1) {
-      sort.push([id, 'asc'])
+      sort.push([id, 'desc'])
     } else {
       const currentOrder = sort[index][1]
 
-      if (currentOrder === 'asc') {
-        sort[index] = [id, 'desc']
+      if (currentOrder === 'desc') {
+        sort[index] = [id, 'asc']
       } else {
         sort.splice(index, 1)
       }
     }
 
-    this.setState({sort})
+    this.props.save({sort})
   },
   render () {
-    const {sort} = this.state
-    const sortPairs = fromPairs(sort)
-
     const {
+      sort,
       limit,
       isLoading,
       name,
@@ -161,7 +158,7 @@ const ReportModuleTable = React.createClass({
         list
       }
     } = this.props
-
+    const sortPairs = fromPairs(sort)
     const headers = keys(result[0])
     let tbody = null
     let colHeaders = null
@@ -207,7 +204,7 @@ const ReportModuleTable = React.createClass({
               key={header}
               {...attributes[header]}
               order={sortPairs[header]}
-              toggle={this.toggleHeader}/>)}
+              toggle={this.props.save ? this.toggleHeader : null}/>)}
         </tr>
       )
 

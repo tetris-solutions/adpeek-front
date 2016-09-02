@@ -157,7 +157,7 @@ const ModuleEdit = React.createClass({
     this.props.save(changes)
   },
   render () {
-    const {metaData, entities, entity, module, reportParams} = this.props
+    const {save, metaData, entities, entity, module, reportParams} = this.props
     const {name, type, filters, limit, metrics, dimensions} = module
 
     return (
@@ -198,6 +198,7 @@ const ModuleEdit = React.createClass({
             </div>
 
             <ReportChart
+              save={save}
               metaData={metaData}
               module={module}
               entity={entity}
