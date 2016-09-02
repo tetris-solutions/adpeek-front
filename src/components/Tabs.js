@@ -1,11 +1,17 @@
+import find from 'lodash/find'
+import map from 'lodash/map'
 import React from 'react'
-import window from 'global/window'
 
 const {Children, PropTypes} = React
 
-function TabHeader ({children, href}) {
+function TabHeader ({children, switchTab, id, active}) {
+  function onClick (e) {
+    e.preventDefault()
+    switchTab(id)
+  }
+
   return (
-    <a className='mdl-tabs__tab' href={href}>
+    <a className={'mdl-tabs__tab' + (active ? ' is-active' : '')} href='' onClick={onClick}>
       {children}
     </a>
   )
@@ -13,46 +19,61 @@ function TabHeader ({children, href}) {
 
 TabHeader.displayName = 'Tab-Header'
 TabHeader.propTypes = {
-  href: PropTypes.string.isRequired,
+  active: PropTypes.bool.isRequired,
+  id: PropTypes.string.isRequired,
+  switchTab: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired
 }
 
 export const Tabs = React.createClass({
   displayName: 'Tabs',
   propTypes: {
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
+    onChangeTab: PropTypes.func
   },
-  componentDidMount () {
-    /**
-     * @var {HTMLDivElement} el
-     */
-    const el = this.refs.wrapper
-    const firstPanel = el.querySelector('.mdl-tabs__panel')
-
-    if (firstPanel) {
-      el.querySelector('.mdl-tabs__tab').className += ' is-active'
-
-      firstPanel.className += ' is-active'
+  getInitialState () {
+    return {
+      activeTab: this.findActiveTab()
     }
+  },
+  componentWillReceiveProps (nextProps) {
+    // abort if not on controlled mode
+    if (!nextProps.onChangeTab) return
 
-    window.componentHandler.upgradeElement(el)
+    const newActiveTab = this.findActiveTab(nextProps)
+
+    if (newActiveTab !== this.state.activeTab) {
+      this.setState({activeTab: newActiveTab})
+    }
+  },
+  findActiveTab (props = this.props) {
+    const children = Children.toArray(props.children)
+    const activeOne = find(children, ({props: {active}}) => active) || children[0]
+
+    return activeOne ? activeOne.props.id : null
+  },
+  switchTab (activeTab) {
+    if (this.props.onChangeTab) {
+      this.props.onChangeTab(activeTab)
+    }
+    this.setState({activeTab})
   },
   render () {
-    const {children} = this.props
-
-    const headers = Children.map(children,
-      ({props: {id, title, active}}) => (
-        <TabHeader key={id} href={'#' + id}>
-          {title}
-        </TabHeader>
-      ))
+    const {activeTab} = this.state
+    const children = Children.toArray(this.props.children)
 
     return (
-      <div className='mdl-tabs mdl-js-tabs mdl-js-ripple-effect' ref='wrapper'>
+      <div className='mdl-tabs is-upgraded' ref='wrapper'>
         <div className='mdl-tabs__tab-bar'>
-          {headers}
+          {map(children, ({props: {id, title}}) =>
+            <TabHeader key={id} id={id} active={activeTab === id} switchTab={this.switchTab}>
+              {title}
+            </TabHeader>)}
         </div>
-        {children}
+
+        {find(children,
+          ({props: {id}}) => id === activeTab)}
+
       </div>
     )
   }
@@ -60,7 +81,7 @@ export const Tabs = React.createClass({
 
 export function Tab ({children, id}) {
   return (
-    <div id={id} className='mdl-tabs__panel'>
+    <div id={id} className='mdl-tabs__panel is-active'>
       {children}
     </div>
   )
@@ -69,5 +90,6 @@ export function Tab ({children, id}) {
 Tab.displayName = 'Tab-Content'
 Tab.propTypes = {
   id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired
 }
