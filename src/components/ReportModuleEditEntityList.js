@@ -2,6 +2,7 @@ import csjs from 'csjs'
 import find from 'lodash/find'
 import flatten from 'lodash/flatten'
 import groupBy from 'lodash/groupBy'
+import intersec from 'lodash/intersection'
 import keyBy from 'lodash/keyBy'
 import lowerCase from 'lodash/toLower'
 import map from 'lodash/map'
@@ -18,21 +19,34 @@ const style = csjs`
   list-style: none;
   padding-left: 0;
 }
+.total {
+  color: #004465
+}
+.partial {
+  color: #4650a0
+}
+.item {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 .item > strong {
-  cursor: pointer
+  cursor: pointer;
 }
 .item > i {
   cursor: pointer;
   float: left;
   padding-right: .3em
 }
-.item > div {
+.subTree {
   margin-left: .7em;
 }`
 
 const EntityGroup = React.createClass({
   displayName: 'Entity-Group',
   propTypes: {
+    selection: PropTypes.string,
     ids: PropTypes.array,
     name: PropTypes.string,
     children: PropTypes.node,
@@ -61,17 +75,19 @@ const EntityGroup = React.createClass({
   },
   render () {
     const {isOpen} = this.state
-    const {children, name} = this.props
+    const {children, name, selection} = this.props
 
     return (
-      <li className={String(style.item)}>
-        <i onClick={this.toggleVisibility} className='material-icons'>{
-          isOpen ? 'keyboard_arrow_down' : 'keyboard_arrow_right'
-        }</i>
-        <strong onClick={this.toggleSelection}>
-          {name}
-        </strong>
-        <div>
+      <li>
+        <header className={`${style.item} ${selection ? style[selection] : ''}`}>
+          <i onClick={this.toggleVisibility} className='material-icons'>{
+            isOpen ? 'keyboard_arrow_down' : 'keyboard_arrow_right'
+          }</i>
+          <strong onClick={this.toggleSelection}>
+            {name}
+          </strong>
+        </header>
+        <div className={`${style.subTree}`}>
           {isOpen ? children : null}
         </div>
       </li>
@@ -83,6 +99,7 @@ const EntityList = React.createClass({
   displayName: 'Entity-List',
   mixins: [styled(style)],
   propTypes: {
+    selectedAttributes: PropTypes.array,
     attributes: PropTypes.array.isRequired,
     entity: reportEntityType.isRequired,
     entities: PropTypes.arrayOf(reportEntityType).isRequired,
@@ -90,7 +107,7 @@ const EntityList = React.createClass({
     removeItem: PropTypes.func.isRequired
   },
   render () {
-    const {addItem, removeItem, entity, attributes} = this.props
+    const {selectedAttributes, addItem, removeItem, entity, attributes} = this.props
     const entityId = lowerCase(entity.id)
     const entities = keyBy(this.props.entities, lowerCaseId)
 
@@ -106,9 +123,17 @@ const EntityList = React.createClass({
       nodes = map(groupBy(attributes, 'campaign_id'), (ls, campaignId) => {
         const campaign = find(entities.campaign.list, {id: campaignId})
         const ids = map(ls, 'id')
+        const localSelection = intersec(ids, selectedAttributes)
 
         return (
-          <EntityGroup key={campaign.id} name={campaign.name} ids={ids} select={addItem} unselect={removeItem}>
+          <EntityGroup
+            selection={localSelection.length && (localSelection.length === ids.length ? 'total' : 'partial')}
+            key={campaign.id}
+            name={campaign.name}
+            ids={ids}
+            select={addItem}
+            unselect={removeItem}>
+
             <Attributes {...this.props} attributes={ls}/>
           </EntityGroup>
         )
@@ -120,12 +145,20 @@ const EntityList = React.createClass({
       const adGroups = map(groupBy(attributes, `${parentEntity}_id`), (ls, adGroupId) => {
         const adGroup = find(entities[parentEntity].list, {id: adGroupId})
         const ids = map(ls, 'id')
+        const localSelection = intersec(ids, selectedAttributes)
 
         return {
           ids,
           parent: adGroup.campaign_id,
           content: (
-            <EntityGroup key={adGroup.id} name={adGroup.name} ids={ids} select={addItem} unselect={removeItem}>
+            <EntityGroup
+              selection={localSelection.length && (localSelection.length === ids.length ? 'total' : 'partial')}
+              key={adGroup.id}
+              name={adGroup.name}
+              ids={ids}
+              select={addItem}
+              unselect={removeItem}>
+
               <Attributes {...this.props} attributes={ls}/>
             </EntityGroup>
           )
@@ -135,9 +168,17 @@ const EntityList = React.createClass({
       nodes = map(groupBy(adGroups, 'parent'), (ls, campaignId) => {
         const campaign = find(entities.campaign.list, {id: campaignId})
         const ids = flatten(map(ls, 'ids'))
+        const localSelection = intersec(ids, selectedAttributes)
 
         return (
-          <EntityGroup key={campaign.id} name={campaign.name} ids={ids} select={addItem} unselect={removeItem}>
+          <EntityGroup
+            selection={localSelection.length && (localSelection.length === ids.length ? 'total' : 'partial')}
+            key={campaign.id}
+            name={campaign.name}
+            ids={ids}
+            select={addItem}
+            unselect={removeItem}>
+
             <ul className={String(style.list)}>
               {map(ls, ({content}) => content)}
             </ul>
