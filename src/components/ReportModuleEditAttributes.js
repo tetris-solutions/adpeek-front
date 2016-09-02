@@ -11,10 +11,6 @@ import React from 'react'
 import {styledFnComponent} from './higher-order/styled-fn-component'
 
 const style = csjs`
-.title {
-  margin: .5em .3em .8em 0;
-  color: rgba(0, 0, 0, 0.4)
-}
 .list {
   padding: 0;
   margin: 0;
@@ -121,15 +117,11 @@ const Attribute = React.createClass({
   }
 })
 
-function Attributes ({title, attributes, selectedAttributes, addItem, removeItem, isIdSelected}) {
+function Attributes ({attributes, selectedAttributes, addItem, removeItem, isIdSelected}) {
   const selectedBreakdowns = intersect(map(filter(attributes, 'is_breakdown'), 'id'), selectedAttributes)
 
   return (
     <div>
-      {title
-        ? <h5 className={`${style.title}`}>{title}</h5>
-        : null}
-
       <ul className={`${style.list}`}>
         {map(attributes, item => {
           const {id, pairs_with, requires_id} = item
@@ -155,7 +147,6 @@ function Attributes ({title, attributes, selectedAttributes, addItem, removeItem
 
 Attributes.displayName = 'Attributes'
 Attributes.propTypes = {
-  title: PropTypes.node,
   addItem: PropTypes.func,
   removeItem: PropTypes.func,
   attributes: PropTypes.array.isRequired,

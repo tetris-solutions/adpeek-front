@@ -109,7 +109,7 @@ const EntityList = React.createClass({
 
         return (
           <EntityGroup key={campaign.id} name={campaign.name} ids={ids} select={addItem} unselect={removeItem}>
-            <Attributes {...this.props} attributes={ls} title={null}/>
+            <Attributes {...this.props} attributes={ls}/>
           </EntityGroup>
         )
       })
@@ -126,7 +126,7 @@ const EntityList = React.createClass({
           parent: adGroup.campaign_id,
           content: (
             <EntityGroup key={adGroup.id} name={adGroup.name} ids={ids} select={addItem} unselect={removeItem}>
-              <Attributes {...this.props} attributes={ls} title={null}/>
+              <Attributes {...this.props} attributes={ls}/>
             </EntityGroup>
           )
         }
