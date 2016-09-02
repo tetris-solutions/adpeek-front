@@ -93,10 +93,10 @@ const Lists = React.createClass({
 
         <Tabs onChangeTab={this.onChangeTab}>
           <Tab id='entity' title={entity.name} active={activeTab === 'entity'}>
+            <br/>
             <EntityList
               entity={entity}
               entities={this.props.entities}
-              title={entity.name}
               attributes={list}
               isIdSelected={isIdSelected}
               selectedAttributes={selectedIds}
@@ -104,8 +104,8 @@ const Lists = React.createClass({
               addItem={addEntity}/>
           </Tab>
           <Tab id='metric' title={<Message>metrics</Message>} active={activeTab === 'metric'}>
+            <br/>
             <Attributes
-              title={<Message>metrics</Message>}
               attributes={metrics}
               isIdSelected={isIdSelected}
               selectedAttributes={selectedMetrics}
@@ -113,8 +113,8 @@ const Lists = React.createClass({
               addItem={addItem}/>
           </Tab>
           <Tab id='dimension' title={<Message>dimensions</Message>} active={activeTab === 'dimension'}>
+            <br/>
             <Attributes
-              title={<Message>dimensions</Message>}
               attributes={dimensions}
               isIdSelected={isIdSelected}
               selectedAttributes={selectedDimensions}

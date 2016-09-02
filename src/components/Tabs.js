@@ -37,7 +37,7 @@ export const Tabs = React.createClass({
     }
   },
   componentWillReceiveProps (nextProps) {
-    // abort if not on controlled mode
+    // abort if not in controlled mode
     if (!nextProps.onChangeTab) return
 
     const newActiveTab = this.findActiveTab(nextProps)
@@ -73,7 +73,6 @@ export const Tabs = React.createClass({
 
         {find(children,
           ({props: {id}}) => id === activeTab)}
-
       </div>
     )
   }
