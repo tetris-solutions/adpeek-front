@@ -182,7 +182,8 @@ module.exports = {
     folderList: 'Folders',
     emptyReportResult: 'Empty Report',
     invalidModuleConfig: 'It\'s required to pick at least one Segment and one Metric',
-    resultLimitLabel: 'Limit to first'
+    resultLimitLabel: 'Limit to first',
+    all: 'All'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -366,6 +367,7 @@ module.exports = {
     folderList: 'Pastas',
     emptyReportResult: 'Relatório Vazio',
     invalidModuleConfig: 'É necessário selecionar ao menos uma Dimensão e uma Métrica',
-    resultLimitLabel: 'Limite de linhas'
+    resultLimitLabel: 'Limite de linhas',
+    all: 'Todos'
   }
 }

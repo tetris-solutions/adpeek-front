@@ -6,6 +6,7 @@ import intersec from 'lodash/intersection'
 import keyBy from 'lodash/keyBy'
 import lowerCase from 'lodash/toLower'
 import map from 'lodash/map'
+import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 
 import reportEntityType from '../propTypes/report-entity'
@@ -48,7 +49,7 @@ const EntityGroup = React.createClass({
   propTypes: {
     selection: PropTypes.string,
     ids: PropTypes.array,
-    name: PropTypes.string,
+    name: PropTypes.node,
     children: PropTypes.node,
     select: PropTypes.func,
     unselect: PropTypes.func
@@ -110,17 +111,15 @@ const EntityList = React.createClass({
     const {selectedAttributes, addItem, removeItem, entity, attributes} = this.props
     const entityId = lowerCase(entity.id)
     const entities = keyBy(this.props.entities, lowerCaseId)
+    const ids = map(attributes, 'id')
+    let subList
 
     if (entityId === 'campaign') {
-      return (
-        <Attributes {...this.props}/>
-      )
+      subList = <Attributes {...this.props}/>
     }
 
-    let nodes
-
     if (entityId === 'adgroup' || entityId === 'adset') {
-      nodes = map(groupBy(attributes, 'campaign_id'), (ls, campaignId) => {
+      subList = map(groupBy(attributes, 'campaign_id'), (ls, campaignId) => {
         const campaign = find(entities.campaign.list, {id: campaignId})
         const ids = map(ls, 'id')
         const localSelection = intersec(ids, selectedAttributes)
@@ -171,7 +170,7 @@ const EntityList = React.createClass({
         }
       })
 
-      nodes = map(groupBy(adGroups, 'parent'), (ls, campaignId) => {
+      subList = map(groupBy(adGroups, 'parent'), (ls, campaignId) => {
         const campaign = find(entities.campaign.list, {id: campaignId})
         const ids = flatten(map(ls, 'ids'))
         const localSelection = intersec(ids, selectedAttributes)
@@ -196,9 +195,22 @@ const EntityList = React.createClass({
       })
     }
 
+    const localSelection = intersec(ids, selectedAttributes)
+    let selection
+    if (localSelection.length) {
+      selection = localSelection.length === ids.length ? 'total' : 'partial'
+    }
+
     return (
       <ul className={String(style.list)}>
-        {nodes}
+        <EntityGroup
+          selection={selection}
+          name={<Message>all</Message>}
+          ids={ids}
+          select={addItem}
+          unselect={removeItem}>
+          {subList}
+        </EntityGroup>
       </ul>
     )
   }
