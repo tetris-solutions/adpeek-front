@@ -182,7 +182,7 @@ module.exports = {
     folderList: 'Folders',
     emptyReportResult: 'Empty Report',
     invalidModuleConfig: 'It\'s required to pick at least one Segment and one Metric',
-    resultLimitLabel: 'Limit to first',
+    resultLimitLabel: 'Limit',
     all: 'All'
   },
   'pt-BR': {
