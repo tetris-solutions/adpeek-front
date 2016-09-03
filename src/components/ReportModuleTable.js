@@ -127,7 +127,7 @@ const ReportModuleTable = React.createClass({
     return {text, value: header}
   },
   toggleHeader (id) {
-    const sort = this.props.sort.concat()
+    const sort = this.props.sort ? sort.concat() : []
     const index = findIndex(sort, ([key, val]) => key === id)
 
     if (index === -1) {
