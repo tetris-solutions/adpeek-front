@@ -36,6 +36,7 @@ const ReportDateRange = React.createClass({
     return {isModalOpen: false}
   },
   propTypes: {
+    buttonClassName: PropTypes.string,
     onChange: PropTypes.func,
     startDate: PropTypes.object,
     endDate: PropTypes.object
@@ -47,10 +48,10 @@ const ReportDateRange = React.createClass({
     this.setState({isModalOpen: false})
   },
   render () {
-    const {startDate, endDate, onChange} = this.props
+    const {startDate, endDate, onChange, buttonClassName} = this.props
 
     return (
-      <button className='mdl-button mdl-color-text--grey-100' onClick={this.openModal}>
+      <button type='button' className={buttonClassName} onClick={this.openModal}>
         <Message startDate={startDate.format('ddd D, MMM')} endDate={endDate.format('ddd D, MMM - YYYY')}>
           dateRangeLabel
         </Message>

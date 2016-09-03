@@ -17,7 +17,7 @@ const style = csjs`
 }`
 
 const {PropTypes} = React
-const editFormRequiredContext = ['tree', 'messages', 'locales', 'insertCss', 'params']
+const editFormRequiredContext = ['tree', 'messages', 'locales', 'insertCss', 'params', 'moment']
 
 const Module = React.createClass({
   displayName: 'Report-Module',
@@ -31,6 +31,7 @@ const Module = React.createClass({
     }
   },
   propTypes: {
+    changeDateRange: PropTypes.func.isRequired,
     metaData: reportMetaDataType.isRequired,
     remove: PropTypes.func,
     update: PropTypes.func,
@@ -61,7 +62,7 @@ const Module = React.createClass({
   },
   render () {
     const {editMode} = this.state
-    const {module, entities, metaData, update, remove, entity, reportParams} = this.props
+    const {changeDateRange, module, entities, metaData, update, remove, entity, reportParams} = this.props
 
     return (
       <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
@@ -89,6 +90,7 @@ const Module = React.createClass({
         {editMode && (
           <Modal size='huge' provide={editFormRequiredContext} onEscPress={this.closeModal}>
             <Edit
+              changeDateRange={changeDateRange}
               entities={entities}
               metaData={metaData}
               module={module}

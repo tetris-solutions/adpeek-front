@@ -20,6 +20,7 @@ import Lists from './ReportModuleEditLists'
 import Select from './Select'
 import TypeSelect from './ReportModuleEditTypeSelect'
 import {expandVertically} from './higher-order/expand-vertically'
+import ReportDateRange from './ReportDateRange'
 
 const {PropTypes} = React
 const ReportChart = expandVertically(_ReportChart)
@@ -28,9 +29,11 @@ const ModuleEdit = React.createClass({
   displayName: 'Edit-Module',
   contextTypes: {
     messages: PropTypes.object,
-    locales: PropTypes.string
+    locales: PropTypes.string,
+    moment: PropTypes.func
   },
   propTypes: {
+    changeDateRange: PropTypes.func.isRequired,
     dispatch: PropTypes.func,
     reportParams: reportParamsType,
     module: reportModuleType,
@@ -162,8 +165,9 @@ const ModuleEdit = React.createClass({
     this.props.save(changes)
   },
   render () {
-    const {save, metaData, entities, entity, module, reportParams} = this.props
+    const {changeDateRange, save, metaData, entities, entity, module, reportParams} = this.props
     const {name, type, filters, limit, metrics, dimensions} = module
+    const {moment} = this.context
 
     return (
       <form>
@@ -214,6 +218,11 @@ const ModuleEdit = React.createClass({
         <a className='mdl-button' onClick={this.props.close}>
           <Message>close</Message>
         </a>
+        <ReportDateRange
+          buttonClassName='mdl-button'
+          onChange={changeDateRange}
+          startDate={moment(reportParams.from)}
+          endDate={moment(reportParams.to)}/>
 
         {isEmpty(dimensions) || isEmpty(metrics) ? (
           <em className='mdl-color-text--red-600' style={{float: 'right', marginRight: '2em'}}>

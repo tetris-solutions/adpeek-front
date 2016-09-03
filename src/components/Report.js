@@ -54,7 +54,8 @@ const Report = React.createClass({
 
     this.onChangeName = debounce(() =>
       dispatch(updateReportAction, params, {id, name: getName()}), 1000)
-
+  },
+  componentDidMount () {
     this.ensureRange()
   },
   componentWillReceiveProps (nextProps, nextContext) {
@@ -135,6 +136,7 @@ const Report = React.createClass({
             <div className='mdl-layout-spacer'/>
 
             <ReportDateRange
+              buttonClassName='mdl-button mdl-color-text--grey-100'
               onChange={this.onChangeRange}
               startDate={moment(from)}
               endDate={moment(to)}/>
@@ -163,6 +165,7 @@ const Report = React.createClass({
               className={`mdl-cell mdl-cell--${module.cols}-col`}>
 
               <Module
+                changeDateRange={this.onChangeRange}
                 module={module}
                 editable={editMode}
                 metaData={get(metaData, [platform, module.entity])}
