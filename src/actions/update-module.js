@@ -31,7 +31,7 @@ const persist = debounce((tree, params, moduleId) => {
     .catch(pushResponseErrorToState(tree))
 }, 1000)
 
-export function updateModuleAction (tree, params, moduleId, moduleChanges) {
+export function updateModuleAction (tree, params, moduleId, moduleChanges, persistChanges = false) {
   const cursorPath = getDeepCursor(tree, [
     'user',
     ['companies', params.company],
@@ -45,7 +45,9 @@ export function updateModuleAction (tree, params, moduleId, moduleChanges) {
   tree.merge(cursorPath, moduleChanges)
   tree.commit()
 
-  persist(tree, params, moduleId)
+  if (persistChanges) {
+    persist(tree, params, moduleId)
+  }
 }
 
 export default updateModuleAction

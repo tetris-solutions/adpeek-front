@@ -1,7 +1,8 @@
 import React from 'react'
-import {Tabs, Tab} from './Tabs'
-import Form from './ReportModuleForm'
+
+import Form from './ReportModuleEditForm'
 import Sizing from './ReportModuleSizing'
+import {Tabs, Tab} from './Tabs'
 
 const {PropTypes} = React
 

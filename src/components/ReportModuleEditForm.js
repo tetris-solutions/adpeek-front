@@ -6,6 +6,7 @@ import includes from 'lodash/includes'
 import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
 import map from 'lodash/map'
+import pick from 'lodash/pick'
 import uniq from 'lodash/uniq'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
@@ -17,13 +18,14 @@ import reportModuleType from '../propTypes/report-module'
 import reportParamsType from '../propTypes/report-params'
 import Input from './Input'
 import Lists from './ReportModuleEditLists'
+import ReportDateRange from './ReportDateRange'
 import Select from './Select'
 import TypeSelect from './ReportModuleEditTypeSelect'
 import {expandVertically} from './higher-order/expand-vertically'
-import ReportDateRange from './ReportDateRange'
 
 const {PropTypes} = React
 const ReportChart = expandVertically(_ReportChart)
+const editableFields = ['name', 'type', 'dimensions', 'metrics', 'rows', 'cols', 'entity', 'limit', 'sort', 'filters']
 
 const ModuleEdit = React.createClass({
   displayName: 'Edit-Module',
@@ -46,9 +48,18 @@ const ModuleEdit = React.createClass({
   componentWillMount () {
     this.updateQueue = []
     this.persist = debounce(() => {
-      this.props.save(assign({}, ...this.updateQueue))
+      this.update(assign({}, ...this.updateQueue))
       this.updateQueue = []
     }, 500)
+  },
+  getInitialState () {
+    const snapshot = pick(this.props.module, editableFields)
+
+    return {
+      oldModule: snapshot,
+      newModule: snapshot,
+      pendingChanges: false
+    }
   },
   enqueueUpdate (update) {
     this.updateQueue.push(update)
@@ -60,6 +71,7 @@ const ModuleEdit = React.createClass({
     }
 
     const newState = {[name]: value}
+    const module = this.getModule()
 
     if (name === 'entity') {
       newState.dimensions = []
@@ -68,7 +80,7 @@ const ModuleEdit = React.createClass({
     }
 
     if (name === 'type' && value === 'pie') {
-      const {dimensions, metrics} = this.props.module
+      const {dimensions, metrics} = module
 
       if (dimensions.length > 1) {
         newState.dimensions = [dimensions[0]]
@@ -83,32 +95,33 @@ const ModuleEdit = React.createClass({
   },
   removeEntity (id) {
     const ids = isArray(id) ? id : [id]
+    const module = this.getModule()
 
-    this.props.save({
-      filters: assign({}, this.props.module.filters, {
-        id: this.props.module.filters.id.filter(currentId => !includes(ids, currentId))
+    this.update({
+      filters: assign({}, module.filters, {
+        id: module.filters.id.filter(currentId => !includes(ids, currentId))
       })
     })
   },
   addEntity (id) {
     const ids = isArray(id) ? id : [id]
-    const filters = assign({}, this.props.module.filters, {
-      id: uniq(this.props.module.filters.id.concat(ids))
+    const filters = assign({}, module.filters, {
+      id: uniq(module.filters.id.concat(ids))
     })
-    const allIds = map(this.props.entity.list, 'id')
+    const allIds = map(this.getEntity().list, 'id')
 
     if (diff(allIds, filters.id).length === 0) {
       filters.id = []
     }
 
-    this.props.save({filters})
+    this.update({filters})
   },
   removeItem (attributeId) {
     const {attributes} = this.props.metaData
     const attribute = find(attributes, {id: attributeId})
     const goesWithoutId = id => !find(attributes, {id}).requires_id
 
-    let {dimensions, metrics} = this.props.module
+    let {dimensions, metrics} = this.getModule()
 
     function remove (ls, val) {
       const ids = [val]
@@ -133,17 +146,17 @@ const ModuleEdit = React.createClass({
       metrics = metrics.filter(goesWithoutId)
     }
 
-    this.props.save({metrics, dimensions})
+    this.update({metrics, dimensions})
   },
   addItem (id) {
     const {metaData: {attributes}} = this.props
-    const {type} = this.props.module
+    const module = this.getModule()
     const getAttributeById = value => find(attributes, {id: value})
     const {requires, is_metric, is_dimension} = getAttributeById(id)
     const changes = {}
 
     function add (ls, val) {
-      if (type === 'pie') {
+      if (module.type === 'pie') {
         return [val]
       }
 
@@ -155,30 +168,57 @@ const ModuleEdit = React.createClass({
     }
 
     if (is_dimension) {
-      changes.dimensions = add(this.props.module.dimensions, id)
+      changes.dimensions = add(module.dimensions, id)
     }
 
     if (is_metric) {
-      changes.metrics = add(this.props.module.metrics, id)
+      changes.metrics = add(module.metrics, id)
     }
 
-    this.props.save(changes)
+    this.update(changes)
+  },
+  update (changes) {
+    this.setState({
+      newModule: assign({}, this.state.newModule, changes)
+    })
+  },
+  cancel () {
+    if (this.state.pendingChanges) {
+      this.props.save(assign({}, this.state.oldModule, {result: []}))
+    }
+    this.props.close()
+  },
+  save () {
+    this.props.save(this.state.newModule, true)
+    this.props.close()
+  },
+  reload () {
+    this.props.save(this.state.newModule)
+    this.setState({pendingChanges: true})
+  },
+  getModule () {
+    return assign({}, this.props.module, this.state.newModule)
+  },
+  getEntity () {
+    return find(this.props.entities, {id: this.state.newModule.entity})
   },
   render () {
-    const {changeDateRange, save, metaData, entities, entity, module, reportParams} = this.props
-    const {name, type, filters, limit, metrics, dimensions} = module
+    const draftModule = this.getModule()
+    const draftEntity = this.getEntity()
+    const savedModule = this.props.module
+    const savedEntity = this.props.entity
+    const {changeDateRange, metaData, entities, reportParams} = this.props
     const {moment} = this.context
+    const isInvalidModule = isEmpty(draftModule.dimensions) || isEmpty(draftModule.metrics)
 
     return (
       <form>
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--3-col' style={{height: '80vh', overflowY: 'auto'}}>
             <Lists
+              {...draftModule}
+              entity={draftEntity}
               entities={entities}
-              dimensions={dimensions}
-              metrics={metrics}
-              entity={entity}
-              filters={filters}
               attributes={metaData.attributes}
               removeEntity={this.removeEntity}
               removeItem={this.removeItem}
@@ -187,48 +227,65 @@ const ModuleEdit = React.createClass({
           </div>
           <div className='mdl-cell mdl-cell--9-col' style={{height: '80vh', overflowY: 'auto'}}>
             <div className='mdl-grid'>
-              <div className='mdl-cell mdl-cell--3-col'>
-                <Input name='name' label='name' defaultValue={name} onChange={this.onChangeInput}/>
+              <div className='mdl-cell mdl-cell--4-col'>
+                <Input name='name' label='name' defaultValue={draftModule.name} onChange={this.onChangeInput}/>
               </div>
+
               <div className='mdl-cell mdl-cell--3-col'>
-                <Select label='entity' name='entity' onChange={this.onChangeInput} value={entity.id}>
+                <Select label='entity' name='entity' onChange={this.onChangeInput} value={draftEntity.id}>
                   {map(entities, ({id, name}) =>
                     <option key={id} value={id}>
                       {name}
                     </option>)}
                 </Select>
               </div>
+
               <div className='mdl-cell mdl-cell--3-col'>
-                <TypeSelect onChange={this.onChangeInput} value={type}/>
+                <TypeSelect onChange={this.onChangeInput} value={draftModule.type}/>
               </div>
-              <div className='mdl-cell mdl-cell--3-col'>
-                <Input type='number' name='limit' label='resultLimit' defaultValue={limit} onChange={this.onChangeInput}/>
+
+              <div className='mdl-cell mdl-cell--2-col'>
+                <Input type='number' name='limit' label='resultLimit' defaultValue={draftModule.limit} onChange={this.onChangeInput}/>
               </div>
             </div>
 
             <ReportChart
-              save={save}
+              save={this.update}
               metaData={metaData}
-              module={module}
-              entity={entity}
+              module={savedModule}
+              entity={savedEntity}
               reportParams={reportParams}/>
           </div>
         </div>
 
-        <a className='mdl-button' onClick={this.props.close}>
-          <Message>close</Message>
-        </a>
-        <ReportDateRange
-          buttonClassName='mdl-button'
-          onChange={changeDateRange}
-          startDate={moment(reportParams.from)}
-          endDate={moment(reportParams.to)}/>
-
-        {isEmpty(dimensions) || isEmpty(metrics) ? (
-          <em className='mdl-color-text--red-600' style={{float: 'right', marginRight: '2em'}}>
+        {isInvalidModule ? (
+          <em className='mdl-color-text--red-600' style={{marginLeft: '1em'}}>
             <Message>invalidModuleConfig</Message>
           </em>
-        ) : null}
+        ) : (
+          <span>
+            <button type='button' className='mdl-button' onClick={this.save}>
+              <Message>save</Message>
+            </button>
+
+            {!savedModule.isLoading && (
+              <button type='button' className='mdl-button' onClick={this.reload}>
+                <Message>update</Message>
+              </button>)}
+          </span>
+        )}
+
+        <span style={{float: 'right', marginRight: '1em'}}>
+          <a className='mdl-button' onClick={this.cancel}>
+            <Message>cancel</Message>
+          </a>
+
+          <ReportDateRange
+            buttonClassName='mdl-button'
+            onChange={changeDateRange}
+            startDate={moment(reportParams.from)}
+            endDate={moment(reportParams.to)}/>
+        </span>
       </form>
     )
   }

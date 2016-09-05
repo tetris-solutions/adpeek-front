@@ -1,9 +1,11 @@
-import React from 'react'
-import map from 'lodash/map'
-import {styled} from './mixins/styled'
 import csjs from 'csjs'
-import reportModuleType from '../propTypes/report-module'
+import map from 'lodash/map'
 import Message from '@tetris/front-server/lib/components/intl/Message'
+import React from 'react'
+
+import reportModuleType from '../propTypes/report-module'
+import VerticalAlign from './VerticalAlign'
+import {styled} from './mixins/styled'
 
 const {PropTypes} = React
 const style = csjs`
@@ -60,38 +62,40 @@ const ReportModuleSizing = React.createClass({
 
     return (
       <div>
-        <div className={`mdl-grid ${style.grid}`}>
-          <div className='mdl-cell mdl-cell--2-col'/>
-          {map(availableColSizes, ([cols, label]) =>
-            <div key={cols} className='mdl-cell mdl-cell--2-col'>
-              <div className={String(style.col)}>
-                <small>
-                  {label}
-                </small>
-              </div>
+        <VerticalAlign style={{height: 'calc(80vh + 10px)', width: '100%'}}>
+          <div>
+            <div className={`mdl-grid ${style.grid}`}>
+              <div className='mdl-cell mdl-cell--2-col'/>
+              {map(availableColSizes, ([cols, label]) =>
+                <div key={cols} className='mdl-cell mdl-cell--2-col'>
+                  <div className={String(style.col)}>
+                    <small>
+                      {label}
+                    </small>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        {map(availableRowSizes, rows =>
-          <div key={rows} className={`mdl-grid ${style.grid}`}>
-            <div className='mdl-cell mdl-cell--2-col'>
-              <div className={String(style.row)}>
-                <small>
-                  {rows * 100}px
-                </small>
-              </div>
-            </div>
-            {map(availableColSizes, ([cols, label]) =>
-              <div key={cols} className={'mdl-cell mdl-cell--2-col'}>
-                <a href='' onClick={this.onSelect(cols, rows)} className={`${getColor(cols, rows)} ${style.block}`}>
-                  &zwnj;
-                </a>
-              </div>
-            )}
-          </div>
-        )}
 
-        <br/>
+            {map(availableRowSizes, rows =>
+              <div key={rows} className={`mdl-grid ${style.grid}`}>
+                <div className='mdl-cell mdl-cell--2-col'>
+                  <div className={String(style.row)}>
+                    <small>
+                      {rows * 100}px
+                    </small>
+                  </div>
+                </div>
+                {map(availableColSizes, ([cols, label]) =>
+                  <div key={cols} className={'mdl-cell mdl-cell--2-col'}>
+                    <a href='' onClick={this.onSelect(cols, rows)} className={`${getColor(cols, rows)} ${style.block}`}>
+                      &zwnj;
+                    </a>
+                  </div>
+                )}
+              </div>)}
+          </div>
+        </VerticalAlign>
 
         <a className='mdl-button' onClick={this.props.close}>
           <Message>close</Message>

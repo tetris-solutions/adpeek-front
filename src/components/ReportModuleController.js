@@ -71,12 +71,13 @@ const ReportModule = React.createClass({
       this.props.module.id
     )
   },
-  save (moduleChanges) {
+  save (moduleChanges, persistChanges) {
     updateModuleAction(
       this.context.tree,
       this.context.params,
       this.props.module.id,
-      moduleChanges
+      moduleChanges,
+      persistChanges
     )
   },
   render () {
