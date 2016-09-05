@@ -185,11 +185,12 @@ const ModuleEdit = React.createClass({
     this.props.close()
   },
   save () {
-    const draftModule = this.state.newModule
+    const draftModule = assign({}, this.state.newModule)
     const ids = map(this.getEntity().list, 'id')
     const fullSelection = diff(ids, draftModule.filters.id).length === 0
 
     if (fullSelection) {
+      draftModule.filters = assign({}, draftModule.filters)
       draftModule.filters.id = []
     }
 
