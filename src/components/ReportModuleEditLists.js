@@ -1,11 +1,12 @@
+import cx from 'classnames'
 import debounce from 'lodash/debounce'
 import deburr from 'lodash/deburr'
 import filter from 'lodash/filter'
 import includes from 'lodash/includes'
+import isEmpty from 'lodash/isEmpty'
 import lowerCase from 'lodash/toLower'
 import sortBy from 'lodash/sortBy'
 import trim from 'lodash/trim'
-import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 
 import reportEntityType from '../propTypes/report-entity'
@@ -46,6 +47,9 @@ const Lists = React.createClass({
       id: PropTypes.array
     }).isRequired
   },
+  contextTypes: {
+    messages: PropTypes.object
+  },
   getInitialState () {
     return {
       searchValue: '',
@@ -83,6 +87,16 @@ const Lists = React.createClass({
     const {entity, removeEntity, addEntity, addItem, removeItem} = this.props
     const {dimensions, metrics, list, activeTab} = this.state
     const isIdSelected = includes(selectedDimensions, 'id')
+    const {messages} = this.context
+    const entityTitle = (
+      <i className={cx('material-icons', isEmpty(selectedIds) && 'mdl-color-text--red-A700')} title={entity.name}>list</i>
+    )
+    const metrictTitle = (
+      <i className={cx('material-icons', isEmpty(selectedMetrics) && 'mdl-color-text--red-A700')} title={messages.metrics}>trending_up</i>
+    )
+    const dimensionTitle = (
+      <i className={cx('material-icons', isEmpty(selectedDimensions) && 'mdl-color-text--red-A700')} title={messages.dimensions}>view_column</i>
+    )
 
     return (
       <div ref='wrapper'>
@@ -92,7 +106,7 @@ const Lists = React.createClass({
           onChange={this.onChangeSearch}/>
 
         <Tabs onChangeTab={this.onChangeTab}>
-          <Tab id='entity' title={entity.name} active={activeTab === 'entity'}>
+          <Tab id='entity' title={entityTitle} active={activeTab === 'entity'}>
             <br/>
             <EntityList
               entity={entity}
@@ -103,7 +117,7 @@ const Lists = React.createClass({
               removeItem={removeEntity}
               addItem={addEntity}/>
           </Tab>
-          <Tab id='metric' title={<Message>metrics</Message>} active={activeTab === 'metric'}>
+          <Tab id='metric' title={metrictTitle} active={activeTab === 'metric'}>
             <br/>
             <Attributes
               attributes={metrics}
@@ -112,7 +126,7 @@ const Lists = React.createClass({
               removeItem={removeItem}
               addItem={addItem}/>
           </Tab>
-          <Tab id='dimension' title={<Message>dimensions</Message>} active={activeTab === 'dimension'}>
+          <Tab id='dimension' title={dimensionTitle} active={activeTab === 'dimension'}>
             <br/>
             <Attributes
               attributes={dimensions}

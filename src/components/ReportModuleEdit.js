@@ -50,7 +50,7 @@ const ModuleEdit = React.createClass({
   componentWillMount () {
     this.updateQueue = []
     this.persist = debounce(() => {
-      this.update(assign({}, ...this.updateQueue))
+      this.update(assign({}, ...this.updateQueue), true)
       this.updateQueue = []
     }, 500)
   },
@@ -173,11 +173,11 @@ const ModuleEdit = React.createClass({
 
     this.update(changes)
   },
-  update (changes) {
+  update (changes, forceReload = false) {
     const newModule = assign({}, this.state.newModule, changes)
 
     this.setState({newModule}, () => {
-      if (changes.sort) {
+      if (forceReload || changes.sort) {
         this.reload()
       }
     })
@@ -279,14 +279,20 @@ const ModuleEdit = React.createClass({
         <a className='mdl-button' onClick={this.cancel}>
           <Message>cancel</Message>
         </a>
+
         <button disabled={isInvalidModule} type='button' className='mdl-button' onClick={this.save}>
           <Message>save</Message>
         </button>
 
         <span style={{float: 'right', marginRight: '1em'}}>
-          <button disabled={isInvalidModule || savedModule.isLoading} type='button' className='mdl-button' onClick={this.reload}>
-            <Message>update</Message>
-          </button>
+          {isInvalidModule ? (
+            <em className='mdl-color-text--red-A700'>
+              <Message entity={draftEntity.name}>invalidModuleConfig</Message>
+            </em>
+          ) : (
+            <button disabled={savedModule.isLoading} type='button' className='mdl-button' onClick={this.reload}>
+              <Message>update</Message>
+            </button>)}
 
           <ReportDateRange
             buttonClassName='mdl-button'
