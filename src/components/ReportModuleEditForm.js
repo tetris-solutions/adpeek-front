@@ -57,8 +57,7 @@ const ModuleEdit = React.createClass({
 
     return {
       oldModule: snapshot,
-      newModule: snapshot,
-      pendingChanges: false
+      newModule: snapshot
     }
   },
   enqueueUpdate (update) {
@@ -178,14 +177,16 @@ const ModuleEdit = React.createClass({
     this.update(changes)
   },
   update (changes) {
-    this.setState({
-      newModule: assign({}, this.state.newModule, changes)
+    const newModule = assign({}, this.state.newModule, changes)
+
+    this.setState({newModule}, () => {
+      if (changes.sort) {
+        this.reload()
+      }
     })
   },
   cancel () {
-    if (this.state.pendingChanges) {
-      this.props.save(assign({}, this.state.oldModule, {result: []}))
-    }
+    this.props.save(this.state.oldModule)
     this.props.close()
   },
   save () {
@@ -194,7 +195,6 @@ const ModuleEdit = React.createClass({
   },
   reload () {
     this.props.save(this.state.newModule)
-    this.setState({pendingChanges: true})
   },
   getModule () {
     return assign({}, this.props.module, this.state.newModule)
