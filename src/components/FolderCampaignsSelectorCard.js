@@ -1,7 +1,9 @@
+import csjs from 'csjs'
+import forEach from 'lodash/forEach'
+import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import forEach from 'lodash/forEach'
-import csjs from 'csjs'
+
 import {Form, Content, Header, Footer} from './Card'
 import {styled} from './mixins/styled'
 
@@ -16,6 +18,7 @@ export const FolderCampaignsSelector = React.createClass({
   displayName: 'Campaigns-Selector',
   mixins: [styled(style)],
   propTypes: {
+    isLoading: PropTypes.bool,
     headerColor: PropTypes.string,
     headerTextColor: PropTypes.string,
     title: PropTypes.node,
@@ -73,7 +76,7 @@ export const FolderCampaignsSelector = React.createClass({
   render () {
     const {selected} = this.state
     const {messages: {selectAllCampaigns, deselectAllCampaigns}} = this.context
-    const {headerColor, headerTextColor, title, children, label} = this.props
+    const {isLoading, headerColor, headerTextColor, title, children, label} = this.props
 
     return (
       <Form ref='form' size='large' onSubmit={this.handleSubmit}>
@@ -86,13 +89,20 @@ export const FolderCampaignsSelector = React.createClass({
         </Content>
 
         <Footer multipleButtons>
-          <button type='submit' className='mdl-button mdl-button--colored'>
-            {label}
-          </button>
+          {isLoading && (
+            <button type='button' disabled className='mdl-button mdl-button--colored mdl-color-text--grey-600'>
+              <Message>loadingCampaigns</Message>
+            </button>)}
 
-          <a onClick={this.toggleAll} className='mdl-button mdl-button--colored'>
-            {selected ? deselectAllCampaigns : selectAllCampaigns}
-          </a>
+          {!isLoading && (
+            <button type='submit' className='mdl-button mdl-button--colored'>
+              {label}
+            </button>)}
+
+          {!isLoading && (
+            <a onClick={this.toggleAll} className='mdl-button mdl-button--colored'>
+              {selected ? deselectAllCampaigns : selectAllCampaigns}
+            </a>)}
         </Footer>
       </Form>
     )

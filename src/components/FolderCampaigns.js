@@ -11,7 +11,7 @@ import React from 'react'
 import Campaign from './FolderCampaignLi'
 import CampaignLoose from './FolderCampaignLooseLi'
 import CampaignsHeader from './FolderCampaignsHeader'
-import CampaignsToggle from './FolderCampaignsSelectorCard'
+import CampaignsSelectorCard from './FolderCampaignsSelectorCard'
 import {linkCampaignAction} from '../actions/link-campaign'
 import {loadCampaignsAction} from '../actions/load-campaigns'
 import {loadLooseCampaignsAction} from '../actions/load-loose-campaigns'
@@ -44,13 +44,25 @@ export const FolderCampaigns = React.createClass({
   },
   getInitialState () {
     return {
-      filterActiveCampaigns: true
+      filterActiveCampaigns: true,
+      isLoading: false
     }
   },
-  componentWillMount () {
+  componentDidMount () {
     const {dispatch, params: {folder, company, workspace}} = this.props
 
-    const loadLoose = () => dispatch(loadLooseCampaignsAction, company, workspace, folder)
+    const loadLoose = () => {
+      this.setState({isLoading: true})
+
+      return dispatch(loadLooseCampaignsAction, company, workspace, folder)
+        .then(r => {
+          this.setState({isLoading: false})
+          return r
+        }, err => {
+          this.setState({isLoading: false})
+          throw err
+        })
+    }
 
     function reload () {
       return Promise.all([
@@ -80,10 +92,11 @@ export const FolderCampaigns = React.createClass({
     this.setState({filterActiveCampaigns})
   },
   render () {
-    const value = cleanStr(this.state.filterValue)
+    const {filterValue, isLoading, filterActiveCampaigns} = this.state
+    const value = cleanStr(filterValue)
     const {messages} = this.context
     const {folder, params: {company, workspace}} = this.props
-    const filterValid = this.state.filterActiveCampaigns ? filterActive : identity
+    const filterValid = filterActiveCampaigns ? filterActive : identity
     const match = ({external_id, name}) => !value || includes(external_id, value) || includes(cleanStr(name), value)
     const linked = filter(folder.campaigns, match)
     const loose = filter(filterValid(folder.looseCampaigns), match)
@@ -99,7 +112,7 @@ export const FolderCampaigns = React.createClass({
         <div className='mdl-grid'>
 
           <div className='mdl-cell mdl-cell--7-col'>
-            <CampaignsToggle
+            <CampaignsSelectorCard
               onSelected={this.unlink}
               title={<Message n={String(linked.length)}>nCampaigns</Message>}
               label={messages.unlinkCampaignsCallToAction}>
@@ -107,12 +120,13 @@ export const FolderCampaigns = React.createClass({
               {map(linked, (campaign, index) =>
                 <Campaign key={campaign.id} {...campaign}/>)}
 
-            </CampaignsToggle>
+            </CampaignsSelectorCard>
 
           </div>
           <div className='mdl-cell mdl-cell--5-col'>
 
-            <CampaignsToggle
+            <CampaignsSelectorCard
+              isLoading={isLoading}
               headerColor='grey-600'
               onSelected={this.link}
               title={<Message n={String(loose.length)}>nLooseCampaigns</Message>}
@@ -121,7 +135,7 @@ export const FolderCampaigns = React.createClass({
               {map(loose, (campaign, index) =>
                 <CampaignLoose key={campaign.external_id} {...campaign}/>)}
 
-            </CampaignsToggle>
+            </CampaignsSelectorCard>
 
           </div>
         </div>
