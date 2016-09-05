@@ -104,15 +104,10 @@ const ModuleEdit = React.createClass({
   },
   addEntity (id) {
     const ids = isArray(id) ? id : [id]
+    const module = this.getModule()
     const filters = assign({}, module.filters, {
       id: uniq(module.filters.id.concat(ids))
     })
-    const allIds = map(this.getEntity().list, 'id')
-
-    if (diff(allIds, filters.id).length === 0) {
-      filters.id = []
-    }
-
     this.update({filters})
   },
   removeItem (attributeId) {
@@ -190,7 +185,15 @@ const ModuleEdit = React.createClass({
     this.props.close()
   },
   save () {
-    this.props.save(this.state.newModule, true)
+    const draftModule = this.state.newModule
+    const ids = map(this.getEntity().list, 'id')
+    const fullSelection = diff(ids, draftModule.filters.id).length === 0
+
+    if (fullSelection) {
+      draftModule.filters.id = []
+    }
+
+    this.props.save(draftModule, true)
     this.props.close()
   },
   reload () {
@@ -209,7 +212,9 @@ const ModuleEdit = React.createClass({
     const savedEntity = this.props.entity
     const {changeDateRange, metaData, entities, reportParams} = this.props
     const {moment} = this.context
-    const isInvalidModule = isEmpty(draftModule.dimensions) || isEmpty(draftModule.metrics)
+    const isInvalidModule = isEmpty(draftModule.dimensions) ||
+      isEmpty(draftModule.metrics) ||
+      isEmpty(draftModule.filters.id)
 
     return (
       <form>
@@ -258,27 +263,17 @@ const ModuleEdit = React.createClass({
           </div>
         </div>
 
-        {isInvalidModule ? (
-          <em className='mdl-color-text--red-600' style={{marginLeft: '1em'}}>
-            <Message>invalidModuleConfig</Message>
-          </em>
-        ) : (
-          <span>
-            <button type='button' className='mdl-button' onClick={this.save}>
-              <Message>save</Message>
-            </button>
-
-            {!savedModule.isLoading && (
-              <button type='button' className='mdl-button' onClick={this.reload}>
-                <Message>update</Message>
-              </button>)}
-          </span>
-        )}
+        <a className='mdl-button' onClick={this.cancel}>
+          <Message>cancel</Message>
+        </a>
+        <button disabled={isInvalidModule} type='button' className='mdl-button' onClick={this.save}>
+          <Message>save</Message>
+        </button>
 
         <span style={{float: 'right', marginRight: '1em'}}>
-          <a className='mdl-button' onClick={this.cancel}>
-            <Message>cancel</Message>
-          </a>
+          <button disabled={isInvalidModule || savedModule.isLoading} type='button' className='mdl-button' onClick={this.reload}>
+            <Message>update</Message>
+          </button>
 
           <ReportDateRange
             buttonClassName='mdl-button'
