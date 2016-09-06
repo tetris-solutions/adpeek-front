@@ -1,14 +1,15 @@
 import csjs from 'csjs'
 import cx from 'classnames'
 import find from 'lodash/find'
-import findIndex from 'lodash/findIndex'
 import flow from 'lodash/flow'
 import forEach from 'lodash/forEach'
 import fromPairs from 'lodash/fromPairs'
 import isObject from 'lodash/isObject'
 import keys from 'lodash/keys'
 import map from 'lodash/map'
+import pick from 'lodash/pick'
 import stableSort from 'stable'
+import toPairs from 'lodash/toPairs'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 
@@ -47,6 +48,10 @@ const style = csjs`
 const {PropTypes} = React
 
 function sortWith ([field, order]) {
+  if (field === '_fields_') {
+    return ls => ls
+  }
+
   function sortFn (ls) {
     function compare (a, b) {
       const aValue = isObject(a[field]) ? a[field].sortKey : a[field]
@@ -127,22 +132,15 @@ const ReportModuleTable = React.createClass({
     return {text, value: header}
   },
   toggleHeader (id) {
-    const sort = this.props.sort ? this.props.sort.concat() : []
-    const index = findIndex(sort, ([key, val]) => key === id)
+    const sortObj = pick(fromPairs(this.props.sort), id, '_fields_')
 
-    if (index === -1) {
-      sort.push([id, 'desc'])
+    if (sortObj[id] === 'desc') {
+      sortObj[id] = 'asc'
     } else {
-      const currentOrder = sort[index][1]
-
-      if (currentOrder === 'desc') {
-        sort[index] = [id, 'asc']
-      } else {
-        sort.splice(index, 1)
-      }
+      sortObj[id] = 'desc'
     }
 
-    this.props.save({sort})
+    this.props.save({sort: toPairs(sortObj)})
   },
   render () {
     const {
@@ -158,7 +156,11 @@ const ReportModuleTable = React.createClass({
         list
       }
     } = this.props
+
     const sortPairs = fromPairs(sort)
+
+    delete sortPairs._fields_
+
     const headers = keys(result[0])
     let tbody = null
     let colHeaders = null

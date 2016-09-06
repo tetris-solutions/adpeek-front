@@ -16,6 +16,7 @@ import reportEntityType from '../propTypes/report-entity'
 import reportMetaDataType from '../propTypes/report-meta-data'
 import reportModuleType from '../propTypes/report-module'
 import reportParamsType from '../propTypes/report-params'
+import Fields from './ReportModuleEditFields'
 import Input from './Input'
 import Lists from './ReportModuleEditLists'
 import ReportDateRange from './ReportDateRange'
@@ -112,7 +113,7 @@ const ModuleEdit = React.createClass({
     })
     this.update({filters})
   },
-  removeItem (attributeId) {
+  removeItem (attributeId, forceReload = false) {
     const {attributes} = this.props.metaData
     const attribute = find(attributes, {id: attributeId})
     const goesWithoutId = id => !find(attributes, {id}).requires_id
@@ -142,7 +143,7 @@ const ModuleEdit = React.createClass({
       metrics = metrics.filter(goesWithoutId)
     }
 
-    this.update({metrics, dimensions})
+    this.update({metrics, dimensions}, forceReload)
   },
   addItem (id) {
     const {metaData: {attributes}} = this.props
@@ -258,6 +259,11 @@ const ModuleEdit = React.createClass({
                     <div className='mdl-cell mdl-cell--2-col'>
                       <Input type='number' name='limit' label='resultLimit' defaultValue={draftModule.limit} onChange={this.onChangeInput}/>
                     </div>
+                    <Fields
+                      module={draftModule}
+                      attributes={metaData.attributes}
+                      save={this.update}
+                      remove={this.removeItem}/>
                   </div>
 
                   <ReportChart
