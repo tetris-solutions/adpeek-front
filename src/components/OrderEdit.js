@@ -1,14 +1,15 @@
-import React from 'react'
 import Message from '@tetris/front-server/lib/components/intl/Message'
-import OrderSelector from './OrdersSelector'
+import React from 'react'
+import {Link} from 'react-router'
+
+import budgetType from '../propTypes/budget'
 import campaignType from '../propTypes/campaign'
 import orderType from '../propTypes/order'
-import budgetType from '../propTypes/budget'
-import OrderHeader from './OrderHeader'
 import BudgetEdit from './BudgetEdit'
-import OrderPie from './OrderPie'
 import EmptySelectionCard from './BudgetEmptySelection'
-import {Link} from 'react-router'
+import OrderHeader from './OrderHeader'
+import OrderPie from './OrderPie'
+import OrderSelector from './OrdersSelector'
 
 const {PropTypes} = React
 
@@ -53,8 +54,8 @@ export function OrderEdit ({
       </header>
 
       <section>
-
         <OrderHeader
+          min={Math.max(1, order.amount - remainingValue)}
           change={changeOrderField}
           order={order}/>
 

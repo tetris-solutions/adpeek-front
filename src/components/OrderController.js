@@ -1,21 +1,22 @@
-import React from 'react'
+import assign from 'lodash/assign'
+import cloneDeep from 'lodash/cloneDeep'
+import filter from 'lodash/filter'
 import find from 'lodash/find'
 import flatten from 'lodash/flatten'
 import includes from 'lodash/includes'
-import filter from 'lodash/filter'
-import orderType from '../propTypes/order'
-import cloneDeep from 'lodash/cloneDeep'
 import isNumber from 'lodash/isNumber'
-import assign from 'lodash/assign'
 import map from 'lodash/map'
-import OrderEdit from './OrderEdit'
-import sum from 'lodash/sum'
 import round from 'lodash/round'
+import sum from 'lodash/sum'
 import without from 'lodash/without'
+import React from 'react'
+
+import orderType from '../propTypes/order'
+import OrderEdit from './OrderEdit'
 import {loadBudgetsAction} from '../actions/load-budgets'
-import {saveOrderAction} from '../actions/save-order'
-import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import {loadOrdersAction} from '../actions/load-orders'
+import {pushSuccessMessageAction} from '../actions/push-success-message-action'
+import {saveOrderAction} from '../actions/save-order'
 
 const {PropTypes} = React
 const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
@@ -184,7 +185,7 @@ export const OrderController = React.createClass({
       isNewBudget: true,
       id: `NewBudget::${Math.random().toString(36).substr(2)}`,
       name: defaultBudgetName(this.context.messages, order.budgets.length + 1),
-      amount: round(remainingAmount / 2),
+      amount: remainingAmount,
       delivery_method: find(deliveryMethods, ({id}) => id !== 'UNKNOWN').id,
       campaigns: []
     })

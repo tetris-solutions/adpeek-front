@@ -1,9 +1,10 @@
+import csjs from 'csjs'
 import React from 'react'
+
 import orderType from '../propTypes/order'
 import Input from './Input'
 import Switch from './Switch'
 import VerticalAlign from './VerticalAlign'
-import csjs from 'csjs'
 import {styled} from './mixins/styled'
 
 const style = csjs`
@@ -21,6 +22,7 @@ export const OrderHeader = React.createClass({
   displayName: 'Order-Header',
   mixins: [styled(style)],
   propTypes: {
+    min: React.PropTypes.number.isRequired,
     change: React.PropTypes.func,
     order: orderType
   },
@@ -31,7 +33,7 @@ export const OrderHeader = React.createClass({
     this.onChangeBoolean = ({target: {checked, name}}) => change(name, checked)
   },
   render () {
-    const {order: {name, auto_budget, amount, start, end}} = this.props
+    const {min, order: {name, auto_budget, amount, start, end}} = this.props
     return (
       <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
         <div className={`mdl-card__supporting-text ${style.inner}`}>
@@ -73,6 +75,7 @@ export const OrderHeader = React.createClass({
                 value={amount}
                 type='number'
                 label='investment'
+                min={min}
                 onChange={this.onChangeNumber}
                 name='amount'/>
             </div>

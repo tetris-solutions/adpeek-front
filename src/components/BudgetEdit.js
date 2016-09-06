@@ -67,8 +67,8 @@ export const BudgetEdit = React.createClass({
   onChangeMode ({target: {checked}}) {
     this.props.change('mode', checked ? 'percentage' : 'amount')
   },
-  onChangeValue ({target: {value}}) {
-    this.props.change('value', Number(value))
+  onChangeValue ({target: input}) {
+    return this.props.change('value', Number(input.value))
   },
   onChangeName ({target: {value}}) {
     this.props.change('name', value)
@@ -151,7 +151,9 @@ export const BudgetEdit = React.createClass({
                 value={value}
                 type='number'
                 label='value'
-                name='value'/>
+                name='value'
+                max={max}
+                min={1}/>
             </div>
           </div>
 

@@ -1,5 +1,6 @@
-import React from 'react'
 import Message from '@tetris/front-server/lib/components/intl/Message'
+import React from 'react'
+
 import {Form, Content, Header, Footer} from './Card'
 
 const {PropTypes} = React
@@ -19,16 +20,19 @@ function BudgetEmptySelection ({
       <Header color='blue-grey-500'>
         <Message>emptyBudgetSelectionTitle</Message>
       </Header>
-      <Content>
 
+      <Content>
         <Message
           available={available.toFixed(2).toString()}
           amount={amount.toFixed(2).toString()}
           html>emptyBudgetSelectionBody</Message>
-
       </Content>
-      <Footer>
-        <Message>createBudget</Message>
+
+      <Footer multipleButtons={available < 1}>
+        {available >= 1 ? <Message>createBudget</Message> : (
+          <button type='button' className='mdl-button' disabled>
+            <Message>noBudgetRemaining</Message>
+          </button>)}
       </Footer>
     </Form>
   )

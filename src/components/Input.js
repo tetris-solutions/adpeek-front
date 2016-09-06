@@ -1,9 +1,9 @@
 import cx from 'classnames'
-import isNumber from 'lodash/isNumber'
-import isString from 'lodash/isString'
 import pick from 'lodash/pick'
+import trim from 'lodash/trim'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
+import TextMessage from 'intl-messageformat'
 
 const {PropTypes} = React
 const inputFields = [
@@ -11,14 +11,12 @@ const inputFields = [
   'name',
   'type',
   'required',
-  'defaultValue',
-  'value'
+  'max',
+  'min'
 ]
 
 function notEmptyString (value) {
-  return isString(value) || isNumber(value)
-    ? String(value).length > 0
-    : false
+  return value !== '' && value !== undefined && value !== null
 }
 
 export const Input = React.createClass({
@@ -33,25 +31,84 @@ export const Input = React.createClass({
     name: PropTypes.string.isRequired,
     onChange: PropTypes.func
   },
+  contextTypes: {
+    messages: PropTypes.object,
+    locales: PropTypes.string
+  },
   getDefaultProps () {
     return {
       type: 'text'
     }
   },
   getInitialState () {
+    const value = this.props.value || this.props.defaultValue
+
     return {
-      isDirty: notEmptyString(this.props.value || this.props.defaultValue),
+      value,
+      isDirty: notEmptyString(value),
       isFocused: false
     }
   },
-  onChange (e) {
-    this.setState({
-      isDirty: notEmptyString(e.target.value)
-    })
+  getNumberError (input) {
+    const {messages: {invalidInput, greaterThanMax, lessThanMin}, locales} = this.context
 
-    if (this.props.onChange) {
-      this.props.onChange(e)
+    let cleanValue = input.value.replace(/[^\d.,-]/g, '')
+
+    let str = ''
+
+    for (let i = 0; i < cleanValue.length; i++) {
+      const char = cleanValue[i]
+      const canIgnore = (char === '.' || char === ',' || char === '-') && char === str[i - 1]
+
+      if (!canIgnore) {
+        str += char
+      }
     }
+
+    cleanValue = str.replace(/\D$/g, '')
+
+    if (input.value !== cleanValue || String(Number(cleanValue)) !== cleanValue) {
+      return invalidInput
+    }
+
+    const number = Number(cleanValue)
+
+    if (input.max && number > Number(input.max)) {
+      return new TextMessage(greaterThanMax, locales).format({max: input.max})
+    }
+
+    if (input.min && number < Number(input.min)) {
+      return new TextMessage(lessThanMin, locales).format({min: input.min})
+    }
+  },
+  getGenericError (input) {
+    if (input.required && !trim(input.value)) {
+      return this.context.messages.requiredInput
+    }
+  },
+  handleNewValue (input, fn) {
+    let error = this.getGenericError(input)
+
+    if (!error && input.type === 'number') {
+      error = this.getNumberError(input)
+    }
+
+    error = error || null
+
+    this.setState({
+      error,
+      value: input.value,
+      isDirty: notEmptyString(input.value)
+    }, fn)
+  },
+  onChange (e) {
+    e.persist()
+
+    this.handleNewValue(e.target, () => {
+      if (!this.state.error && this.props.onChange) {
+        this.props.onChange(e)
+      }
+    })
   },
   onFocus (e) {
     this.setState({isFocused: true})
@@ -60,14 +117,15 @@ export const Input = React.createClass({
     this.setState({isFocused: false})
   },
   componentWillReceiveProps ({value}) {
-    if (value === undefined) return
-    this.setState({
-      isDirty: notEmptyString(value)
-    })
+    if (value !== this.props.value) {
+      this.refs.input.value = value
+      this.handleNewValue(this.refs.input)
+    }
   },
   render () {
     const {isDirty, isFocused} = this.state
-    const {error, label} = this.props
+    const error = this.state.error || this.props.error
+    const {label} = this.props
     const wrapperClasses = cx('mdl-textfield',
       label && 'mdl-textfield--floating-label',
       error && 'is-invalid',
@@ -78,6 +136,8 @@ export const Input = React.createClass({
       <div className={wrapperClasses}>
 
         <input {...pick(this.props, inputFields)}
+          ref='input'
+          value={this.state.value}
           className='mdl-textfield__input'
           onChange={this.onChange}
           onBlur={this.onBlur}

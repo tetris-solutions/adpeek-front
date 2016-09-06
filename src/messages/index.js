@@ -185,7 +185,13 @@ module.exports = {
     emptyReportResult: 'Empty Report',
     invalidModuleConfig: 'Please select at least 1 item from: {entity}, Segments and Metrics',
     resultLimitLabel: 'Limit',
-    all: 'All'
+    all: 'All',
+    // input errors
+    requiredInput: 'Required field',
+    invalidInput: 'Invalid input',
+    greaterThanMax: 'Max value is {max}',
+    lessThanMin: 'Min value is {min}',
+    noBudgetRemaining: 'No budget remaining'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -372,6 +378,12 @@ module.exports = {
     emptyReportResult: 'Relatório Vazio',
     invalidModuleConfig: 'Selecione ao menos 1 de cada: {entity}, Dimensões e Métricas',
     resultLimitLabel: 'Limite de linhas',
-    all: 'Todos'
+    all: 'Todos',
+    // input errors
+    requiredInput: 'Campo obrigatório',
+    invalidInput: 'Valor inválido',
+    greaterThanMax: 'O valor máximo é {max}',
+    lessThanMin: 'O valor mínimo é {min}',
+    noBudgetRemaining: 'Não há orçamento restante'
   }
 }
