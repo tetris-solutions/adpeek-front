@@ -1,13 +1,16 @@
+import concat from 'lodash/concat'
 import csjs from 'csjs'
 import cx from 'classnames'
 import find from 'lodash/find'
 import flow from 'lodash/flow'
 import forEach from 'lodash/forEach'
 import fromPairs from 'lodash/fromPairs'
+import indexOf from 'lodash/indexOf'
 import isObject from 'lodash/isObject'
 import keys from 'lodash/keys'
 import map from 'lodash/map'
 import pick from 'lodash/pick'
+import sortBy from 'lodash/sortBy'
 import stableSort from 'stable'
 import toPairs from 'lodash/toPairs'
 import Message from '@tetris/front-server/lib/components/intl/Message'
@@ -72,6 +75,10 @@ function sortWith ([field, order]) {
   return sortFn
 }
 
+function sortHeaders (headers, fieldSort) {
+  return map(sortBy(map(headers, field => ({field, index: indexOf(fieldSort, field)})), 'index'), 'field')
+}
+
 const Header = React.createClass({
   displayName: 'Header',
   propTypes: {
@@ -118,6 +125,7 @@ const ReportModuleTable = React.createClass({
     isLoading: PropTypes.bool,
     name: PropTypes.string,
     reportParams: reportParamsType,
+    query: PropTypes.object,
     entity: entityType,
     attributes: PropTypes.object.isRequired,
     result: PropTypes.array.isRequired
@@ -150,6 +158,7 @@ const ReportModuleTable = React.createClass({
       name,
       reportParams,
       result,
+      query,
       attributes,
       entity: {
         id: entityId,
@@ -158,10 +167,11 @@ const ReportModuleTable = React.createClass({
     } = this.props
 
     const sortPairs = fromPairs(sort)
+    const fieldSort = sortPairs._fields_ || concat(query.dimensions, query.metrics)
 
     delete sortPairs._fields_
 
-    const headers = keys(result[0])
+    const headers = sortHeaders(keys(result[0]), fieldSort)
     let tbody = null
     let colHeaders = null
 
