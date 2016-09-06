@@ -13,6 +13,7 @@ import {styled} from './mixins/styled'
 
 const style = csjs`
 .list {
+  user-select: none;
   width: 100%;
   overflow-x: auto;
   white-space: nowrap;
@@ -47,20 +48,14 @@ Field.propTypes = {
 }
 
 function mountFields (attributes, dimensions, metrics, fieldSort) {
-  const extendWithAttribute = isMetric => id => ({
-    id,
-    isMetric,
-    name: attributes[id].name
-  })
-
-  dimensions = map(dimensions, extendWithAttribute(false))
-  metrics = map(metrics, extendWithAttribute(true))
-
-  return sortBy(
-    map(concat(dimensions, metrics), field => {
-      const foundIndex = indexOf(fieldSort, field.id)
-      return assign(field, {index: foundIndex === -1 ? Infinity : foundIndex})
-    }), ['index', 'isMetric'])
+  return sortBy(map(concat(dimensions, metrics), field => {
+    const foundIndex = indexOf(fieldSort, field)
+    return {
+      id: field,
+      name: attributes[field].name,
+      index: foundIndex >= 0 ? foundIndex : Infinity
+    }
+  }), 'index')
 }
 
 const Fields = React.createClass({
@@ -94,6 +89,7 @@ const Fields = React.createClass({
         <Reorder
           itemKey='id'
           lock='vertical'
+          holdTime={300}
           list={list}
           listClass={`${style.list}`}
           itemClass={`${style.item}`}

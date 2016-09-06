@@ -76,7 +76,13 @@ function sortWith ([field, order]) {
 }
 
 function sortHeaders (headers, fieldSort) {
-  return map(sortBy(map(headers, field => ({field, index: indexOf(fieldSort, field)})), 'index'), 'field')
+  return map(sortBy(map(headers, field => {
+    const foundIndex = indexOf(fieldSort, field)
+    return {
+      field,
+      index: foundIndex >= 0 ? foundIndex : Infinity
+    }
+  }), 'index'), 'field')
 }
 
 const Header = React.createClass({
