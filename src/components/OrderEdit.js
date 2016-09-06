@@ -1,3 +1,4 @@
+import some from 'lodash/some'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 import {Link} from 'react-router'
@@ -12,6 +13,7 @@ import OrderPie from './OrderPie'
 import OrderSelector from './OrdersSelector'
 
 const {PropTypes} = React
+const notPercentage = budget => budget && budget.mode === 'amount'
 
 export function OrderEdit ({
   save,
@@ -55,7 +57,7 @@ export function OrderEdit ({
 
       <section>
         <OrderHeader
-          min={Math.max(1, order.amount - remainingValue)}
+          min={some(order.budgets, notPercentage) ? Math.max(1, order.amount - remainingValue) : 1}
           change={changeOrderField}
           order={order}/>
 

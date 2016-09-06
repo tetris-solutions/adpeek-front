@@ -3,10 +3,10 @@ import cloneDeep from 'lodash/cloneDeep'
 import filter from 'lodash/filter'
 import find from 'lodash/find'
 import flatten from 'lodash/flatten'
+import floor from 'lodash/floor'
 import includes from 'lodash/includes'
 import isNumber from 'lodash/isNumber'
 import map from 'lodash/map'
-import round from 'lodash/round'
 import sum from 'lodash/sum'
 import without from 'lodash/without'
 import React from 'react'
@@ -20,8 +20,8 @@ import {saveOrderAction} from '../actions/save-order'
 
 const {PropTypes} = React
 const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
-const toPercentage = (value, total) => round((value / total) * 100, 2)
-const fromPercentage = (value, total) => round((value / 100) * total, 2)
+const toPercentage = (value, total) => floor((value / total) * 100, 2)
+const fromPercentage = (value, total) => floor((value / 100) * total, 2)
 
 function looseCampaigns (campaigns, budgets, unlockedCampaigns) {
   const takenCampaigns = flatten(map(budgets, getCampaignIds))
@@ -45,7 +45,7 @@ function availableAmount (total, budgets) {
   const exactAmount = ({mode, value}) => mode === 'percentage'
     ? fromPercentage(value, total)
     : value
-  return round(total - sum(map(budgets, exactAmount)), 2)
+  return floor(total - sum(map(budgets, exactAmount)), 2)
 }
 
 function defaultBudgetName ({budgetLabel}, index) {

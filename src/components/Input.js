@@ -23,6 +23,8 @@ export const Input = React.createClass({
   displayName: 'Input',
   propTypes: {
     type: PropTypes.string,
+    min: PropTypes.number,
+    max: PropTypes.number,
     className: PropTypes.string,
     value: PropTypes.any,
     defaultValue: PropTypes.any,
@@ -116,9 +118,11 @@ export const Input = React.createClass({
   onBlur (e) {
     this.setState({isFocused: false})
   },
-  componentWillReceiveProps ({value}) {
-    if (value !== this.props.value) {
+  componentWillReceiveProps ({value, min, max}) {
+    if (value !== this.props.value || min !== this.props.min || max !== this.props.max) {
       this.refs.input.value = value
+      this.refs.input.min = min
+      this.refs.input.max = max
       this.handleNewValue(this.refs.input)
     }
   },
