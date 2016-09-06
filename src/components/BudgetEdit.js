@@ -139,6 +139,7 @@ export const BudgetEdit = React.createClass({
 
             <VerticalAlign className='mdl-cell mdl-cell--6-col'>
               <Slide
+                step={0.1}
                 onChange={this.onChangeValue}
                 value={value}
                 max={max}
