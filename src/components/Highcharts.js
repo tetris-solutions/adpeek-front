@@ -112,9 +112,10 @@ function parseChildren (child, parent) {
 
   if (parent.isRoot && includes(seriesTypes, type)) {
     node.type = type
+    node.isSeries = true
     parent.series = parent.series || []
     parent.series.push(node)
-  } else if (type === 'point') {
+  } else if (parent.isSeries && type === 'point') {
     parent.data = parent.data || []
     parent.data.push(node)
   } else {

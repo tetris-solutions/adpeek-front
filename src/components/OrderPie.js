@@ -1,13 +1,14 @@
+import csjs from 'csjs'
+import find from 'lodash/find'
+import isNumber from 'lodash/isNumber'
+import map from 'lodash/map'
+import round from 'lodash/round'
+import size from 'lodash/size'
 import React from 'react'
+
 import orderType from '../propTypes/order'
 import Highcharts from './Highcharts'
-import map from 'lodash/map'
-import csjs from 'csjs'
-import isNumber from 'lodash/isNumber'
-import size from 'lodash/size'
 import {styled} from './mixins/styled'
-import round from 'lodash/round'
-import find from 'lodash/find'
 
 const {PropTypes} = React
 const style = csjs`
@@ -27,8 +28,15 @@ export const OrderPie = React.createClass({
   contextTypes: {
     messages: PropTypes.object
   },
-  onBudgetClick ({point: {options: {index, id}}}) {
+  selectPoint (index, id) {
     this.props.selectBudget(id === 'remaining' ? null : index)
+  },
+  onBudgetClick ({point: {options: {index, id}}}) {
+    this.selectPoint(index, id)
+  },
+  onLegendClick (e) {
+    e.preventDefault()
+    this.selectPoint(e.target.options.index, e.target.options.id)
   },
   componentWillReceiveProps ({selectedBudgetId, order: {budgets}}) {
     const {chart} = this.refs.chart
@@ -74,6 +82,9 @@ export const OrderPie = React.createClass({
           <pie showInLegend allowPointSelect onClick={this.onBudgetClick}>
             <cursor>pointer</cursor>
             <data-labels enabled={false}/>
+            <point>
+              <events legendItemClick={this.onLegendClick}/>
+            </point>
           </pie>
         </plot-options>
 
