@@ -69,6 +69,8 @@ export const Input = React.createClass({
 
     cleanValue = str.replace(/\D$/g, '')
 
+    if (!input.value) return
+
     if (input.value !== cleanValue || String(Number(cleanValue)) !== cleanValue) {
       return invalidInput
     }
