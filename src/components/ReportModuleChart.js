@@ -48,7 +48,7 @@ const emptyQuery = {
 }
 const emptyResult = []
 
-const A4Ratio = (6 / 8) * (674 / 1032)
+const A4Ratio = 674 / 1032
 
 const ReportChart = React.createClass({
   displayName: 'Report-Chart',
@@ -99,8 +99,8 @@ const ReportChart = React.createClass({
           limit={module.limit}
           isLoading={module.isLoading}
           reportParams={reportParams}
-          sourceWidth={floor(1200 * (module.cols / 12))}
-          sourceHeight={floor(1200 * A4Ratio * (module.rows / 6))}
+          sourceWidth={1200}
+          sourceHeight={floor(1200 * A4Ratio)}
           name={module.name}
           messages={this.context.messages}
           attributes={attributes}
