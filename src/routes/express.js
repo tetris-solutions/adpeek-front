@@ -1,26 +1,27 @@
-import {protectedRouteMiddleware as protect} from '@tetris/front-server/lib/middlewares/protected'
-import {performActionsMiddleware as preload} from '@tetris/front-server/lib/middlewares/perform-actions'
-import {loadUserCompaniesActionServerAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
-import {loadCompanyWorkspacesActionServerAdaptor as workspaces} from '../actions/load-company-workspaces'
-import {loadCompanyRolesActionServerAdaptor as roles} from '../actions/load-company-roles'
-import {loadWorkspaceFoldersActionServerAdaptor as folders} from '../actions/load-folders'
-import {loadFolderActionServerAdaptor as folder} from '../actions/load-folder'
-import {loadWorkspaceAccountsActionServerAdaptor as accounts} from '../actions/load-accounts'
-import {loadMediasActionServerAdaptor as medias} from '../actions/load-medias'
-import {loadWorkspaceActionServerAdaptor as workspace} from '../actions/load-workspace'
-import {loadCampaignsActionServerAdaptor as campaigns} from '../actions/load-campaigns'
-import {loadStatusesActionServerAdaptor as statuses} from '../actions/load-statuses'
-import {loadOrdersActionServerAdaptor as orders} from '../actions/load-orders'
-import {loadBudgetsActionServerAdaptor as budgets} from '../actions/load-budgets'
-import {loadDeliveryMethodsActionServerAdaptor as deliveryMethods} from '../actions/load-delivery-methods'
-import {loadAutoBudgetLogsActionServerAdaptor as autoBudgetLogs} from '../actions/load-autobudget-logs'
-import {loadFolderReportsActionServerAdaptor as reports} from '../actions/load-folder-reports'
-import {loadFolderReportActionServerAdaptor as report} from '../actions/load-folder-report'
 import bind from 'lodash/bind'
+import {loadUserCompaniesActionServerAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
+import {performActionsMiddleware as preload} from '@tetris/front-server/lib/middlewares/perform-actions'
+import {protectedRouteMiddleware as protect} from '@tetris/front-server/lib/middlewares/protected'
+
+import {loadWorkspaceAccountsActionServerAdaptor as accounts} from '../actions/load-accounts'
+import {loadAutoBudgetLogsActionServerAdaptor as autoBudgetLogs} from '../actions/load-autobudget-logs'
+import {loadBudgetsActionServerAdaptor as budgets} from '../actions/load-budgets'
+import {loadCampaignsActionServerAdaptor as campaigns} from '../actions/load-campaigns'
+import {loadCompanyRolesActionServerAdaptor as roles} from '../actions/load-company-roles'
+import {loadCompanyWorkspacesActionServerAdaptor as workspaces} from '../actions/load-company-workspaces'
+import {loadDeliveryMethodsActionServerAdaptor as deliveryMethods} from '../actions/load-delivery-methods'
+import {loadFolderActionServerAdaptor as folder} from '../actions/load-folder'
+import {loadFolderReportActionServerAdaptor as report} from '../actions/load-folder-report'
+import {loadFolderReportsActionServerAdaptor as reports} from '../actions/load-folder-reports'
+import {loadWorkspaceFoldersActionServerAdaptor as folders} from '../actions/load-folders'
+import {loadMediasActionServerAdaptor as medias} from '../actions/load-medias'
+import {loadOrdersActionServerAdaptor as orders} from '../actions/load-orders'
+import {loadStatusesActionServerAdaptor as statuses} from '../actions/load-statuses'
+import {loadWorkspaceActionServerAdaptor as workspace} from '../actions/load-workspace'
 
 export function setAppRoutes (app, render) {
   const _ = bind.placeholder
-  const campaignsWithAdsets = bind(campaigns, null, _, _, true)
+  const campaignsWithAdsets = bind(campaigns, null, _, _, 'include-adsets')
   const defaultFolderReport = bind(reports, null, _, _, true)
 
   app.get('/', render)

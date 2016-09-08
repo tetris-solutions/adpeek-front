@@ -191,7 +191,8 @@ module.exports = {
     invalidInput: 'Invalid input',
     greaterThanMax: 'Max value is {max}',
     lessThanMin: 'Min value is {min}',
-    noBudgetRemaining: 'Not enough budget'
+    noBudgetRemaining: 'Not enough budget',
+    refreshCampaigns: 'Update Campaigns'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -384,6 +385,7 @@ module.exports = {
     invalidInput: 'Valor inválido',
     greaterThanMax: 'O valor máximo é {max}',
     lessThanMin: 'O valor mínimo é {min}',
-    noBudgetRemaining: 'Não há orçamento suficiente restante'
+    noBudgetRemaining: 'Não há orçamento suficiente restante',
+    refreshCampaigns: 'Atualizar campanhas'
   }
 }

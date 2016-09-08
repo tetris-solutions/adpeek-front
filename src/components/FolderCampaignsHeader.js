@@ -1,3 +1,4 @@
+import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 
 import HeaderSearchBox from './HeaderSearchBox'
@@ -12,7 +13,9 @@ export function FolderCampaignsHeader ({
   company,
   workspace,
   folder,
-  onSwitch
+  onSwitch,
+  isLoading,
+  onClickRefresh
 }, {
   messages: {filterActiveCampaigns}
 }) {
@@ -23,6 +26,11 @@ export function FolderCampaignsHeader ({
           <Switch label={filterActiveCampaigns} checked onChange={wrapOnSwitch(onSwitch)}/>
         </span>
         <div className='mdl-layout-spacer'/>
+
+        <button type='button' className='mdl-button mdl-color-text--grey-100' onClick={onClickRefresh} disabled={isLoading}>
+          <Message>{isLoading ? 'loadingCampaigns' : 'refreshCampaigns'}</Message>
+        </button>
+
         <HeaderSearchBox onChange={onChange}/>
       </div>
     </header>
@@ -31,10 +39,12 @@ export function FolderCampaignsHeader ({
 
 FolderCampaignsHeader.displayName = 'Campaigns-Header'
 FolderCampaignsHeader.propTypes = {
+  isLoading: PropTypes.bool,
   company: PropTypes.string,
   workspace: PropTypes.string,
   folder: PropTypes.string,
   onSwitch: PropTypes.func,
+  onClickRefresh: PropTypes.func,
   onChange: PropTypes.func
 }
 FolderCampaignsHeader.contextTypes = {

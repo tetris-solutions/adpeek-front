@@ -91,8 +91,21 @@ export const FolderCampaigns = React.createClass({
   switchActiveFilter (filterActiveCampaigns) {
     this.setState({filterActiveCampaigns})
   },
+  refreshCampaigns () {
+    const {dispatch, params: {folder, company, workspace}} = this.props
+
+    this.setState({isRefreshing: true})
+
+    return dispatch(loadCampaignsAction, company, workspace, folder, 'refresh-campaigns')
+      .then(() => {
+        this.setState({isRefreshing: false})
+      }, err => {
+        this.setState({isRefreshing: false})
+        throw err
+      })
+  },
   render () {
-    const {filterValue, isLoading, filterActiveCampaigns} = this.state
+    const {isRefreshing, filterValue, isLoading, filterActiveCampaigns} = this.state
     const value = cleanStr(filterValue)
     const {messages} = this.context
     const {folder, params: {company, workspace}} = this.props
@@ -107,6 +120,8 @@ export const FolderCampaigns = React.createClass({
           company={company}
           workspace={workspace}
           folder={folder.id}
+          onClickRefresh={this.refreshCampaigns}
+          isLoading={isRefreshing}
           onSwitch={this.switchActiveFilter}
           onChange={this.setFilterValue}/>
         <div className='mdl-grid'>
