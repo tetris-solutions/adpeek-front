@@ -7,8 +7,58 @@ import intersect from 'lodash/intersection'
 import isEmpty from 'lodash/isEmpty'
 import map from 'lodash/map'
 import React from 'react'
-
+import ReactDOM from 'react-dom'
 import {styledFnComponent} from './higher-order/styled-fn-component'
+
+/**
+ * finds the root list
+ * @param {HTMLLIElement} li list item element
+ * @return {HTMLUListElement} the top most ul
+ */
+function getTopUl (li) {
+  let currentLevel
+  let parentLevel = li
+
+  do {
+    currentLevel = parentLevel.parentNode
+    parentLevel = currentLevel.closest('ul')
+  } while (parentLevel)
+
+  return currentLevel
+}
+
+function getIdsBetween (topUl, first, last) {
+  if (!first || first === last) return
+
+  const lis = topUl.querySelectorAll('li[data-selectable]')
+
+  let lastIndex = null
+  let firstIndex = null
+  let i
+
+  for (i = 0; i < lis.length; i++) {
+    const li = lis[i]
+
+    if (li === first) firstIndex = i
+    if (li === last) lastIndex = i
+
+    if (firstIndex !== null && lastIndex !== null) break
+  }
+
+  const ids = []
+
+  if (firstIndex > lastIndex) {
+    for (i = firstIndex; i >= lastIndex; i--) {
+      ids.push(lis[i]._getId())
+    }
+  } else {
+    for (i = firstIndex; i <= lastIndex; i++) {
+      ids.push(lis[i]._getId())
+    }
+  }
+
+  return ids
+}
 
 const style = csjs`
 .list {
@@ -41,9 +91,9 @@ const style = csjs`
 
 const {PropTypes} = React
 
-function TextAd ({onClick, className, headline, description}) {
+function TextAd ({onClick, className, headline, description, selectable}) {
   return (
-    <li onClick={onClick} className={className}>
+    <li onClick={onClick} className={className} data-selectable={selectable ? true : undefined}>
       <div>
         <strong>{headline}</strong>
         <br/>
@@ -58,11 +108,12 @@ TextAd.propTypes = {
   className: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
   headline: PropTypes.string,
-  description: PropTypes.string
+  description: PropTypes.string,
+  selectable: PropTypes.bool
 }
 
-const GenericItem = ({onClick, className, id, name}) => (
-  <li onClick={onClick} className={className} title={name || id}>
+const GenericItem = ({onClick, className, id, name, selectable}) => (
+  <li onClick={onClick} className={className} title={name || id} data-selectable={selectable ? true : undefined}>
     {name || id}
   </li>
 )
@@ -72,7 +123,8 @@ GenericItem.propTypes = {
   className: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
   name: PropTypes.string,
-  id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
+  selectable: PropTypes.bool
 }
 
 const Attribute = React.createClass({
@@ -92,12 +144,34 @@ const Attribute = React.createClass({
     selected: PropTypes.bool.isRequired,
     toggle: PropTypes.func
   },
-  onClick () {
+  onClick (e) {
+    e.persist()
+    const {currentTarget: li, nativeEvent: {shiftKey, ctrlKey}} = e
     const {toggle, id} = this.props
 
-    if (toggle) {
-      toggle(id)
+    if (!toggle) return
+
+    // if (toggle) {
+    //   toggle(id)
+    // }
+
+    let ids = [id]
+    const topUl = getTopUl(li)
+
+    if (!topUl) return
+
+    if (shiftKey || ctrlKey) {
+      ids = ids.concat(getIdsBetween(topUl, topUl._lastChecked, li))
     }
+
+    topUl._lastChecked = li
+    toggle(ids)
+  },
+  componentDidMount () {
+    const el = ReactDOM.findDOMNode(this)
+
+    el._getId = () => this.props.id
+    el._isSelected = () => this.props.selected
   },
   render () {
     const {selected, toggle, headline} = this.props
@@ -112,7 +186,11 @@ const Attribute = React.createClass({
       : GenericItem
 
     return (
-      <Component {...this.props} onClick={this.onClick} className={className}/>
+      <Component
+        {...this.props}
+        onClick={this.onClick}
+        className={className}
+        selectable={Boolean(toggle)}/>
     )
   }
 })

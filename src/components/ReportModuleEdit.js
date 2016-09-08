@@ -10,7 +10,6 @@ import pick from 'lodash/pick'
 import uniq from 'lodash/uniq'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
-
 import _ReportChart from './ReportModuleChart'
 import reportEntityType from '../propTypes/report-entity'
 import reportMetaDataType from '../propTypes/report-meta-data'
@@ -113,15 +112,19 @@ const ModuleEdit = React.createClass({
     })
     this.update({filters})
   },
-  removeItem (attributeId, forceReload = false) {
+  removeItem (_attribute_, forceReload = false) {
     const {attributes} = this.props.metaData
-    const attribute = find(attributes, {id: attributeId})
+    const removedAttributesIds = isArray(_attribute_) ? _attribute_ : [_attribute_]
+    const module = this.getModule()
     const goesWithoutId = id => !find(attributes, {id}).requires_id
 
-    let {dimensions, metrics} = this.getModule()
+    const changes = {
+      dimensions: module.dimensions.concat(),
+      metrics: module.metrics.concat()
+    }
 
-    function remove (ls, val) {
-      const ids = [val]
+    function remove (attribute, ls) {
+      const ids = [attribute.id]
 
       if (attribute.required_by) {
         ids.splice(ids.length, 0, ...attribute.required_by)
@@ -130,47 +133,64 @@ const ModuleEdit = React.createClass({
       return ls.filter(id => !includes(ids, id))
     }
 
-    if (attribute.is_dimension) {
-      dimensions = remove(dimensions, attributeId)
-    }
+    removedAttributesIds.forEach(attributeId => {
+      const attribute = find(attributes, {id: attributeId})
 
-    if (attribute.is_metric) {
-      metrics = remove(metrics, attributeId)
-    }
+      if (attribute.is_dimension) {
+        changes.dimensions = remove(attribute, changes.dimensions)
+      }
 
-    if (attributeId === 'id') {
-      dimensions = dimensions.filter(goesWithoutId)
-      metrics = metrics.filter(goesWithoutId)
-    }
+      if (attribute.is_metric) {
+        changes.metrics = remove(attribute, changes.metrics)
+      }
 
-    this.update({metrics, dimensions}, forceReload)
+      if (attributeId === 'id') {
+        changes.dimensions = changes.dimensions.filter(goesWithoutId)
+        changes.metrics = changes.metrics.filter(goesWithoutId)
+      }
+    })
+
+    changes.dimensions = uniq(changes.dimensions)
+    changes.metrics = uniq(changes.metrics)
+
+    this.update(changes, forceReload)
   },
-  addItem (id) {
+  addItem (_attribute_) {
     const {metaData: {attributes}} = this.props
+    const selectedAttributeIds = isArray(_attribute_) ? _attribute_ : [_attribute_]
     const module = this.getModule()
     const getAttributeById = value => find(attributes, {id: value})
-    const {requires, is_metric, is_dimension} = getAttributeById(id)
-    const changes = {}
+    const changes = {
+      dimensions: module.dimensions.concat(),
+      metrics: module.metrics.concat()
+    }
 
-    function add (ls, val) {
+    function add (attribute, ls) {
       if (module.type === 'pie') {
-        return [val]
+        return [attribute.id]
       }
 
-      if (requires) {
-        return ls.concat(requires).concat([val])
+      if (attribute.requires) {
+        return ls.concat(attribute.requires).concat([attribute.id])
       }
 
-      return ls.concat([val])
+      return ls.concat([attribute.id])
     }
 
-    if (is_dimension) {
-      changes.dimensions = add(module.dimensions, id)
-    }
+    selectedAttributeIds.forEach(attributeId => {
+      const attribute = getAttributeById(attributeId)
 
-    if (is_metric) {
-      changes.metrics = add(module.metrics, id)
-    }
+      if (attribute.is_dimension) {
+        changes.dimensions = add(attribute, changes.dimensions)
+      }
+
+      if (attribute.is_metric) {
+        changes.metrics = add(attribute, changes.metrics)
+      }
+    })
+
+    changes.dimensions = uniq(changes.dimensions)
+    changes.metrics = uniq(changes.metrics)
 
     this.update(changes)
   },
@@ -257,7 +277,12 @@ const ModuleEdit = React.createClass({
                     </div>
 
                     <div className='mdl-cell mdl-cell--2-col'>
-                      <Input type='number' name='limit' label='resultLimit' defaultValue={draftModule.limit} onChange={this.onChangeInput}/>
+                      <Input
+                        type='number'
+                        name='limit'
+                        label='resultLimit'
+                        defaultValue={draftModule.limit}
+                        onChange={this.onChangeInput}/>
                     </div>
                     <Fields
                       module={draftModule}
@@ -276,7 +301,7 @@ const ModuleEdit = React.createClass({
               </Tab>
               <Tab id='module-size' title={messages.moduleSize}>
                 <br/>
-                <Sizing module={draftModule} save={this.update} />
+                <Sizing module={draftModule} save={this.update}/>
               </Tab>
             </Tabs>
           </div>
