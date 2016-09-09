@@ -151,20 +151,16 @@ const Attribute = React.createClass({
 
     if (!toggle) return
 
-    // if (toggle) {
-    //   toggle(id)
-    // }
-
     let ids = [id]
     const topUl = getTopUl(li)
 
-    if (!topUl) return
-
-    if (shiftKey || ctrlKey) {
-      ids = ids.concat(getIdsBetween(topUl, topUl._lastChecked, li))
+    if (topUl) {
+      if (topUl._lastChecked && shiftKey || ctrlKey) {
+        ids = ids.concat(getIdsBetween(topUl, topUl._lastChecked, li))
+      }
+      topUl._lastChecked = li
     }
 
-    topUl._lastChecked = li
     toggle(ids)
   },
   componentDidMount () {
