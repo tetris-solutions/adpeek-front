@@ -3,10 +3,11 @@ import Checkbox from './Checkbox'
 
 const {PropTypes} = React
 
-export function FolderCampaignLooseLi ({external_id, name, status, platform}) {
+export function FolderCampaignLooseLi ({external_id, name, status, platform, is_adwords_video}) {
   const serialized = JSON.stringify({
     name,
     external_id,
+    is_adwords_video,
     status: status.status,
     sub_status: status.sub_status,
     platform
@@ -28,10 +29,14 @@ export function FolderCampaignLooseLi ({external_id, name, status, platform}) {
 }
 
 FolderCampaignLooseLi.displayName = 'Loose-Campaign'
+FolderCampaignLooseLi.defaultProps = {
+  is_adwords_video: false
+}
 FolderCampaignLooseLi.propTypes = {
   platform: PropTypes.string,
   external_id: PropTypes.string,
   name: PropTypes.string,
+  is_adwords_video: PropTypes.bool,
   status: PropTypes.shape({
     icon: PropTypes.string,
     description: PropTypes.string

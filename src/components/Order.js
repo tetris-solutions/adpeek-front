@@ -6,14 +6,16 @@ import upperFirst from 'lodash/upperFirst'
 import flatten from 'lodash/flatten'
 import map from 'lodash/map'
 import assign from 'lodash/assign'
+import filter from 'lodash/filter'
 
 const {PropTypes} = React
+const notAdwordsVideo = ({is_adwords_video}) => !is_adwords_video
 
 function normalizeAdset (adset) {
   return assign({id: `external::${adset.external_id}`}, adset)
 }
 
-function normalizeCampaign (campaign) {
+function getCampaignAdsets (campaign) {
   return map(campaign.adsets, normalizeAdset)
 }
 
@@ -32,9 +34,10 @@ export function Order ({deliveryMethods, dispatch, params, order, folder, status
 
   order = order || defaultOrder()
   const adsetMode = folder.account.platform === 'facebook'
+  const folderCampaigns = filter(folder.campaigns, notAdwordsVideo)
   const campaigns = adsetMode
-    ? flatten(map(folder.campaigns, normalizeCampaign))
-    : folder.campaigns
+    ? flatten(map(folderCampaigns, getCampaignAdsets))
+    : folderCampaigns
 
   return (
     <OrderController
