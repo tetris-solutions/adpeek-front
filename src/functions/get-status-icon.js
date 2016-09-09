@@ -8,6 +8,7 @@ export function getStatusIcon ({is_active, name}) {
       return 'play_circle_filled'
     case 'PAUSED':
       return 'pause_circle_filled'
+    case 'DISABLED':
     case 'ENDED':
     case 'ARCHIVED':
       return 'remove_circle'
