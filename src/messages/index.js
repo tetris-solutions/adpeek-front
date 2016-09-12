@@ -192,7 +192,9 @@ module.exports = {
     greaterThanMax: 'Max value is {max}',
     lessThanMin: 'Min value is {min}',
     noBudgetRemaining: 'Not enough budget',
-    refreshCampaigns: 'Update Campaigns'
+    refreshCampaigns: 'Update Campaigns',
+    takenCampaign: 'The campaign is already linked to another folder',
+    openFolderName: 'Go to folder "{name}"'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -386,6 +388,8 @@ module.exports = {
     greaterThanMax: 'O valor máximo é {max}',
     lessThanMin: 'O valor mínimo é {min}',
     noBudgetRemaining: 'Não há orçamento suficiente restante',
-    refreshCampaigns: 'Atualizar campanhas'
+    refreshCampaigns: 'Atualizar campanhas',
+    takenCampaign: 'A campanha já foi associada a uma pasta',
+    openFolderName: 'Abrir pasta "{name}"'
   }
 }

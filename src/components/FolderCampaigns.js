@@ -7,6 +7,7 @@ import map from 'lodash/map'
 import settle from 'promise-settle'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
+import sortBy from 'lodash/sortBy'
 
 import Campaign from './FolderCampaignLi'
 import CampaignLoose from './FolderCampaignLooseLi'
@@ -21,6 +22,7 @@ import {contextualize} from './higher-order/contextualize'
 const cleanStr = str => deburr(lowerCase(str))
 const {PropTypes} = React
 const filterActive = ls => filter(ls, ({status: {is_active}}) => is_active)
+const hasFolder = ({folder}) => folder ? 1 : 0
 
 export const FolderCampaigns = React.createClass({
   displayName: 'Folder-Campaigns',
@@ -147,9 +149,8 @@ export const FolderCampaigns = React.createClass({
               title={<Message n={String(loose.length)}>nLooseCampaigns</Message>}
               label={messages.linkCampaignsCallToAction}>
 
-              {map(loose, (campaign, index) =>
+              {map(sortBy(loose, hasFolder), (campaign, index) =>
                 <CampaignLoose key={campaign.external_id} {...campaign}/>)}
-
             </CampaignsSelectorCard>
 
           </div>
