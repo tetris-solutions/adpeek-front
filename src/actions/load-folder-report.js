@@ -3,6 +3,9 @@ import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetc
 import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
 import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save-token-as-cookie'
 import {GET} from '@tetris/http'
+import assign from 'lodash/assign'
+import get from 'lodash/get'
+import map from 'lodash/map'
 
 import {saveResponseData} from '../functions/save-response-data'
 
@@ -15,7 +18,9 @@ function keepOldReportMetaData (newReport, oldReport) {
     newReport.metaData = oldReport.metaData
   }
 
-  newReport.modules = keyBy(newReport.modules, 'id')
+  const mergeOldModule = module => assign({}, get(oldReport, ['modules', module.id]), module)
+
+  newReport.modules = keyBy(map(newReport.modules, mergeOldModule), 'id')
 
   return newReport
 }
