@@ -201,7 +201,7 @@ module.exports = {
     linkCampaignsCallToAction: 'Associar',
     unlinkCampaignsCallToAction: 'Desassociar',
     nCampaigns: '{n} campanhas nesta pasta',
-    nLooseCampaigns: '{n} campanhas soltas',
+    nLooseCampaigns: '{n} campanhas fora da pasta',
     filterActiveCampaigns: 'Filtrar campanhas ativas',
     selectAllCampaigns: 'Selecionar todas',
     deselectAllCampaigns: 'Deselecionar todas',
