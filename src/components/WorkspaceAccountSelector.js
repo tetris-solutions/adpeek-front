@@ -9,6 +9,7 @@ import upperFirst from 'lodash/upperFirst'
 import Autosuggest from 'react-autosuggest'
 import Message from 'intl-messageformat'
 import React from 'react'
+import trimStart from 'lodash/trimStart'
 
 import {loadCompanyAccountsAction} from '../actions/load-company-accounts'
 import {contextualize} from './higher-order/contextualize'
@@ -185,7 +186,7 @@ export const WorkspaceAccountSelector = React.createClass({
   getInitialState () {
     return {
       account: this.props.account,
-      value: this.props.value,
+      value: this.addValuePrefix(this.props.value),
       isLoading: true
     }
   },
@@ -194,7 +195,9 @@ export const WorkspaceAccountSelector = React.createClass({
       suggestions: getSuggestions(
         this.props.company.accounts,
         this.props.platform,
-        this.state.account ? this.state.account.external_id : this.state.value
+        this.state.account
+          ? this.state.account.external_id
+          : this.removeValuePrefix(this.state.value)
       )
     })
   },
@@ -210,8 +213,17 @@ export const WorkspaceAccountSelector = React.createClass({
   componentWillUnmount () {
     this.hasUnmounted = true
   },
+  platformPrefix () {
+    return `${upperFirst(this.props.platform)} :: `
+  },
+  addValuePrefix (value) {
+    return value ? `${this.platformPrefix()}${this.removeValuePrefix(value)}` : value
+  },
+  removeValuePrefix (value) {
+    return trimStart(value, this.platformPrefix())
+  },
   onChange (e, {newValue}) {
-    const newState = {value: newValue}
+    const newState = {value: this.addValuePrefix(newValue)}
     if (!newState.value) newState.account = null
     this.setState(newState)
   },
@@ -220,7 +232,7 @@ export const WorkspaceAccountSelector = React.createClass({
       suggestions: getSuggestions(
         this.props.company.accounts,
         this.props.platform,
-        value
+        this.removeValuePrefix(value)
       )
     })
   },
