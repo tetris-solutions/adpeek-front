@@ -16,6 +16,8 @@ export function updateFolder (folder, config) {
     assign({body: folder}, config))
 }
 
+const mergeUpdatedFolder = (newFolder, oldFolder) => assign({}, oldFolder, newFolder)
+
 /**
  * updates given folder
  * @param {Baobab} tree state tree
@@ -32,7 +34,7 @@ export function updateFolderAction (tree, company, workspace, folder) {
       ['companies', company],
       ['workspaces', workspace],
       ['folders', folder.id]
-    ]))
+    ]), mergeUpdatedFolder)
     .catch(pushResponseErrorToState(tree))
 }
 
