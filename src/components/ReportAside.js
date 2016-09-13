@@ -27,9 +27,9 @@ export function ReportAside ({report, dispatch, user}, {messages, router, locati
 
   return (
     <ContextMenu title={report.name} icon='trending_up'>
-      <a className='mdl-navigation__link' onClick={favorite} title={messages.favoriteReportDescription}>
+      <a className='mdl-navigation__link' onClick={favorite} title={report.is_user_selected ? messages.unfavoriteReportDescription : messages.favoriteReportDescription}>
         <i className='material-icons'>{report.is_user_selected ? 'star' : 'star_border'}</i>
-        <Message>favoriteReport</Message>
+        <Message>{report.is_user_selected ? 'unfavoriteReport' : 'favoriteReport'}</Message>
       </a>
 
       <ReportAccessControl dispatch={dispatch} reload={reload} params={params} report={report} user={user}/>
