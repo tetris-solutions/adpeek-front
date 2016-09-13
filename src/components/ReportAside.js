@@ -14,7 +14,7 @@ import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
-export function ReportAside ({report, dispatch, user}, {router, location: {pathname}, params: {company, workspace, folder}}) {
+export function ReportAside ({report, dispatch, user}, {messages, router, location: {pathname}, params: {company, workspace, folder}}) {
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${folder}`
   const reload = () =>
     dispatch(loadFolderReportAction, company, workspace, folder, report.id)
@@ -66,7 +66,7 @@ export function ReportAside ({report, dispatch, user}, {router, location: {pathn
         </a>
       )}
 
-      <a className='mdl-navigation__link' onClick={favorite}>
+      <a className='mdl-navigation__link' onClick={favorite} title={messages.favoriteReportDescription}>
         <i className='material-icons'>{report.is_user_selected ? 'star' : 'star_border'}</i>
         <Message>favoriteReport</Message>
       </a>
@@ -96,6 +96,7 @@ ReportAside.propTypes = {
   })
 }
 ReportAside.contextTypes = {
+  messages: PropTypes.object,
   router: PropTypes.object,
   location: PropTypes.object,
   params: PropTypes.object
