@@ -47,11 +47,19 @@ export const FolderCampaigns = React.createClass({
   getInitialState () {
     return {
       filterActiveCampaigns: true,
-      isLoading: false
+      isLoading: true
     }
   },
   componentDidMount () {
-    const {dispatch, params: {folder, company, workspace}} = this.props
+    this.setupActions()
+  },
+  componentWillReceiveProps (nextProps) {
+    if (this.props.folder !== nextProps.params.folder) {
+      this.setupActions(nextProps)
+    }
+  },
+  setupActions (props = this.props) {
+    const {dispatch, params: {folder, company, workspace}} = props
 
     const loadLoose = () => {
       this.setState({isLoading: true})
