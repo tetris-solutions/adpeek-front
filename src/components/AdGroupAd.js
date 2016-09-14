@@ -20,17 +20,21 @@ const style = csjs`
 .box {
   margin-top: 1em;
   padding: .7em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.box a {
+  white-space: normal;
 }
 .box > h6 {
+  margin: 0 0 .5em;
   font-weight: 500;
 }
-.box > h5, .box > h6 {
+.box > h5 {
   margin: .7em 0 .5em;
 }`
 
 const {PropTypes} = React
-
-const doNothing = e => e.preventDefault()
 
 function inferDisplayUrl (final_urls, path_1, path_2) {
   if (!final_urls || !final_urls[0]) return null
@@ -45,7 +49,6 @@ function inferDisplayUrl (final_urls, path_1, path_2) {
 }
 
 const AdGroupAd = ({
-  id,
   headline,
   headline_part_1,
   headline_part_2,
@@ -56,40 +59,44 @@ const AdGroupAd = ({
   path_1,
   path_2,
   final_urls
-}) => (
-  <div className={`${style.wrapper}`}>
-    <div className={`mdl-color--yellow-200 ${style.box}`}>
-      {headline
-        ? <h5>{headline}</h5>
-        : <h6>{headline_part_1} - {headline_part_2}</h6>}
+}) => {
+  display_url = display_url || inferDisplayUrl(final_urls, path_1, path_2)
 
-      <a href='#' onClick={doNothing}>
-        {display_url || inferDisplayUrl(final_urls, path_1, path_2)}
-      </a>
+  return (
+    <div className={`${style.wrapper}`}>
+      <div className={`mdl-color--yellow-200 ${style.box}`}>
+        {headline
+          ? <h5>{headline}</h5>
+          : <h6>{headline_part_1} - {headline_part_2}</h6>}
 
-      <div>{description || description_1}</div>
+        <a href={display_url} target='_blank'>
+          {display_url}
+        </a>
 
-      {description_2
-        ? <div>{description_2}</div>
-        : null}
-    </div>
+        <div>{description || description_1}</div>
 
-    {map(final_urls,
-      (url, index) => (
-        <div className={`mdl-color--yellow-200 ${style.box}`} key={index}>
-          <strong>
-            <Message>finalUrl</Message>
-          </strong>
-          <br/>
-          <div className={`${style.finalUrl}`}>
-            <a href={url} target='_blank'>
-              {url}
-            </a>
+        {description_2
+          ? <div>{description_2}</div>
+          : null}
+      </div>
+
+      {map(final_urls,
+        (url, index) => (
+          <div className={`mdl-color--yellow-200 ${style.box}`} key={index}>
+            <strong>
+              <Message>finalUrl</Message>
+            </strong>
+            <br/>
+            <div className={`${style.finalUrl}`}>
+              <a href={url} target='_blank'>
+                {url}
+              </a>
+            </div>
           </div>
-        </div>
-      ))}
-  </div>
-)
+        ))}
+    </div>
+  )
+}
 
 AdGroupAd.displayName = 'AdGroup-Ad'
 AdGroupAd.propTypes = {
