@@ -21,7 +21,10 @@ const style = csjs`
   margin-top: 1em;
   padding: .7em;
 }
-.box > h5 {
+.box > h6 {
+  font-weight: 500;
+}
+.box > h5, .box > h6 {
   margin: .7em 0 .5em;
 }`
 
