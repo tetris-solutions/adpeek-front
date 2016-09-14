@@ -69,7 +69,7 @@ const AdGroupAd = ({
           ? <h5>{headline}</h5>
           : <h6>{headline_part_1} - {headline_part_2}</h6>}
 
-        <a href={display_url} target='_blank'>
+        <a href={`http://${display_url}`} target='_blank'>
           {display_url}
         </a>
 
