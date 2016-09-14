@@ -10,6 +10,7 @@ import {loadFolderReportAction} from '../actions/load-folder-report'
 import {setFolderReportAction} from '../actions/set-folder-report'
 import {contextualize} from './higher-order/contextualize'
 import ReportAccessControl from './ReportAccessControl'
+import ReportEditPrompt from './ReportEditPrompt'
 
 const {PropTypes} = React
 
@@ -25,21 +26,33 @@ export function ReportAside ({report, dispatch, user}, {messages, router, locati
         router.push(`${folderUrl}/reports`)
       })
 
+  const inEditMode = endsWith(pathname, '/edit')
+
   return (
     <ContextMenu title={report.name} icon='trending_up'>
-      <a className='mdl-navigation__link' onClick={favorite} title={report.is_user_selected ? messages.unfavoriteReportDescription : messages.favoriteReportDescription}>
+      <a
+        className='mdl-navigation__link'
+        onClick={favorite}
+        title={report.is_user_selected ? messages.unfavoriteReportDescription : messages.favoriteReportDescription}>
         <i className='material-icons'>{report.is_user_selected ? 'star' : 'star_border'}</i>
         <Message>{report.is_user_selected ? 'unfavoriteReport' : 'favoriteReport'}</Message>
       </a>
 
       <ReportAccessControl dispatch={dispatch} reload={reload} params={params} report={report} user={user}/>
 
-      {endsWith(pathname, '/edit') ? null : (
+      <Link className='mdl-navigation__link' to={`${folderUrl}/reports/new?clone=${report.id}&name=${report.name}`}>
+        <i className='material-icons'>content_copy</i>
+        <Message>cloneReport</Message>
+      </Link>
+
+      {!inEditMode && report.is_private && (
         <Link className='mdl-navigation__link' to={`${folderUrl}/report/${report.id}/edit`}>
           <i className='material-icons'>create</i>
           <Message>editReport</Message>
-        </Link>
-      )}
+        </Link>)}
+
+      {!inEditMode && !report.is_private && (
+        <ReportEditPrompt report={report} params={params}/>)}
 
       <DeleteButton entityName={report.name} className='mdl-navigation__link' onClick={deleteReport}>
         <i className='material-icons'>delete</i>

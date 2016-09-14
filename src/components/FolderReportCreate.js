@@ -66,14 +66,12 @@ const CreateReport = React.createClass({
         </Header>
 
         <Content>
-
           <Input
             required
             label='name'
             name='name'
             error={errors.name}
             onChange={this.dismissError}/>
-
         </Content>
 
         <Footer>
