@@ -3,6 +3,7 @@ import Input from './Input'
 import FormMixin from '@tetris/front-server/lib/mixins/FormMixin'
 import {contextualize} from './higher-order/contextualize'
 import {createFolderReportAction} from '../actions/create-folder-report'
+import {cloneFolderReportAction} from '../actions/clone-folder-report'
 import {Form, Content, Header, Footer} from './Card'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 
@@ -15,6 +16,9 @@ const CreateReport = React.createClass({
     router: PropTypes.object
   },
   propTypes: {
+    location: PropTypes.shape({
+      query: PropTypes.object
+    }).isRequired,
     params: PropTypes.shape({
       company: PropTypes.string,
       workspace: PropTypes.string,
@@ -32,11 +36,13 @@ const CreateReport = React.createClass({
     e.preventDefault()
     const {target: {elements}} = e
     const {
+      location: {query},
       folder: {account: {platform}}, dispatch,
       params: {folder, company, workspace}
     } = this.props
 
     const report = {
+      id: query.clone || null,
       name: elements.name.value,
       level: 'folder',
       platform,
@@ -45,7 +51,9 @@ const CreateReport = React.createClass({
 
     this.preSubmit()
 
-    dispatch(createFolderReportAction, company, workspace, folder, report)
+    const action = report.id ? cloneFolderReportAction : createFolderReportAction
+
+    dispatch(action, company, workspace, folder, report)
       .then(response => {
         const reportId = response.data.id
 
@@ -57,6 +65,7 @@ const CreateReport = React.createClass({
       .then(this.posSubmit)
   },
   render () {
+    const {location: {query}} = this.props
     const {errors} = this.state
 
     return (
@@ -71,6 +80,7 @@ const CreateReport = React.createClass({
             label='name'
             name='name'
             error={errors.name}
+            defaultValue={query.name}
             onChange={this.dismissError}/>
         </Content>
 

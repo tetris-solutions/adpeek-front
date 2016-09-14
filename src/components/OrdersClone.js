@@ -63,7 +63,7 @@ export const OrdersClone = React.createClass({
     location: PropTypes.object,
     router: PropTypes.object,
     messages: PropTypes.shape({
-      copyOfOrderName: PropTypes.string
+      copyOfName: PropTypes.string
     }),
     locales: PropTypes.any
   },
@@ -86,12 +86,12 @@ export const OrdersClone = React.createClass({
     })
   },
   getCopyOf (order) {
-    const {locales, messages: {copyOfOrderName}} = this.context
+    const {locales, messages: {copyOfName}} = this.context
 
     return assign({}, order, {
       id: null,
       clonedOrderId: order.id,
-      name: new MessageFormat(copyOfOrderName, locales).format({name: order.name})
+      name: new MessageFormat(copyOfName, locales).format({name: order.name})
     })
   },
   /**

@@ -2,6 +2,7 @@ import React from 'react'
 import Modal from './Modal'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import isFunction from 'lodash/isFunction'
+import TextMessage from 'intl-messageformat'
 
 const requiredContext = ['tree', 'messages', 'locales']
 const {PropTypes} = React
@@ -18,6 +19,8 @@ const ReportEditPrompt = React.createClass({
     params: PropTypes.object.isRequired
   },
   contextTypes: {
+    messages: PropTypes.string,
+    locales: PropTypes.string,
     router: PropTypes.object
   },
   open () {
@@ -29,9 +32,11 @@ const ReportEditPrompt = React.createClass({
   },
   cloneInstead () {
     this.close(() => {
+      const {router, messages, locales} = this.context
       const {report, params: {company, workspace, folder}} = this.props
+      const cloneName = new TextMessage(messages.copyOfName, locales).format({name: report.name})
 
-      this.context.router.push(`/company/${company}/workspace/${workspace}/folder/${folder}/reports/new?clone=${report.id}&name=${report.name}`)
+      router.push(`/company/${company}/workspace/${workspace}/folder/${folder}/reports/new?clone=${report.id}&name=${cloneName}`)
     })
   },
   confirm () {

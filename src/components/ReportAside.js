@@ -2,6 +2,7 @@ import endsWith from 'lodash/endsWith'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 import {Link} from 'react-router'
+import TextMessage from 'intl-messageformat'
 
 import ContextMenu from './ContextMenu'
 import DeleteButton from './DeleteButton'
@@ -14,7 +15,7 @@ import ReportEditPrompt from './ReportEditPrompt'
 
 const {PropTypes} = React
 
-export function ReportAside ({report, dispatch, user}, {messages, router, location: {pathname}, params}) {
+export function ReportAside ({report, dispatch, user}, {messages, locales, router, location: {pathname}, params}) {
   const {company, workspace, folder} = params
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${folder}`
   const reload = () => dispatch(loadFolderReportAction, company, workspace, folder, report.id)
@@ -27,6 +28,7 @@ export function ReportAside ({report, dispatch, user}, {messages, router, locati
       })
 
   const inEditMode = endsWith(pathname, '/edit')
+  const cloneName = new TextMessage(messages.copyOfName, locales).format({name: report.name})
 
   return (
     <ContextMenu title={report.name} icon='trending_up'>
@@ -40,7 +42,7 @@ export function ReportAside ({report, dispatch, user}, {messages, router, locati
 
       <ReportAccessControl dispatch={dispatch} reload={reload} params={params} report={report} user={user}/>
 
-      <Link className='mdl-navigation__link' to={`${folderUrl}/reports/new?clone=${report.id}&name=${report.name}`}>
+      <Link className='mdl-navigation__link' to={`${folderUrl}/reports/new?clone=${report.id}&name=${cloneName}`}>
         <i className='material-icons'>content_copy</i>
         <Message>cloneReport</Message>
       </Link>
@@ -73,6 +75,7 @@ ReportAside.propTypes = {
 }
 ReportAside.contextTypes = {
   messages: PropTypes.object,
+  locales: PropTypes.string,
   router: PropTypes.object,
   location: PropTypes.object,
   params: PropTypes.object

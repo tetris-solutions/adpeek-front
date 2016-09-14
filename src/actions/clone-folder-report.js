@@ -1,18 +1,18 @@
-import {POST} from '@tetris/http'
+import {PUT} from '@tetris/http'
 import assign from 'lodash/assign'
 import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save-token-as-cookie'
 import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetch-config'
 import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
 
-function createFolderReport (company, report, config) {
-  return POST(`${process.env.ADPEEK_API_URL}/company/${company}/report`,
+function cloneFolderReport (company, folder, report, config) {
+  return PUT(`${process.env.ADPEEK_API_URL}/company/${company}/folder/${folder}/report/${report.id}/clone`,
     assign({body: report}, config))
 }
 
-export function createFolderReportAction (tree, company, workspace, folder, report) {
-  return createFolderReport(company, report, getApiFetchConfig(tree))
+export function cloneFolderReportAction (tree, company, workspace, folder, report) {
+  return cloneFolderReport(company, folder, report, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
 
-export default createFolderReportAction
+export default cloneFolderReportAction
