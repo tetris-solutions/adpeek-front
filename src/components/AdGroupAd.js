@@ -32,14 +32,14 @@ const {PropTypes} = React
 
 const doNothing = e => e.preventDefault()
 
-function inferDisplayUrl (final_urls, path1, path2) {
+function inferDisplayUrl (final_urls, path_1, path_2) {
   if (!final_urls || !final_urls[0]) return null
 
-  const path0 = final_urls[0]
+  const path_0 = final_urls[0]
     .replace(/.*?:\/\//g, '')
     .split('/')[0]
 
-  const url = `www.${path0}/${path1}/${path2}`
+  const url = `www.${path_0}/${path_1}/${path_2}`
 
   return url.replace(/\/$/g, '')
 }
@@ -53,8 +53,8 @@ const AdGroupAd = ({
   description,
   description_1,
   description_2,
-  path1,
-  path2,
+  path_1,
+  path_2,
   final_urls
 }) => (
   <div className={`${style.wrapper}`}>
@@ -64,7 +64,7 @@ const AdGroupAd = ({
         : <h6>{headline_part_1} - {headline_part_2}</h6>}
 
       <a href='#' onClick={doNothing}>
-        {display_url || inferDisplayUrl(final_urls, path1, path2)}
+        {display_url || inferDisplayUrl(final_urls, path_1, path_2)}
       </a>
 
       <div>{description || description_1}</div>
@@ -102,8 +102,8 @@ AdGroupAd.propTypes = {
   description_1: PropTypes.string,
   description_2: PropTypes.string,
   final_urls: PropTypes.array,
-  path1: PropTypes.string,
-  path2: PropTypes.string
+  path_1: PropTypes.string,
+  path_2: PropTypes.string
 }
 
 export default styledFnComponent(AdGroupAd, style)
