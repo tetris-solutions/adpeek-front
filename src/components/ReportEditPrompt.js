@@ -3,6 +3,7 @@ import Modal from './Modal'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import isFunction from 'lodash/isFunction'
 import TextMessage from 'intl-messageformat'
+import Checkbox from './Checkbox'
 
 const requiredContext = ['tree', 'messages', 'locales']
 const {PropTypes} = React
@@ -19,7 +20,7 @@ const ReportEditPrompt = React.createClass({
     params: PropTypes.object.isRequired
   },
   contextTypes: {
-    messages: PropTypes.string,
+    messages: PropTypes.object,
     locales: PropTypes.string,
     router: PropTypes.object
   },
@@ -39,12 +40,25 @@ const ReportEditPrompt = React.createClass({
       router.push(`/company/${company}/workspace/${workspace}/folder/${folder}/reports/new?clone=${report.id}&name=${cloneName}`)
     })
   },
+  remember () {
+    try {
+      const {form: {elements}} = this.refs
+
+      if (elements.doNotAskAgain.checked) {
+        window.localStorage.skipReportEditPrompt = true
+      }
+    } catch (e) {
+      // console.error(e)
+    }
+  },
   confirm () {
     this.close(() => {
       const {params: {company, workspace, folder, report}} = this.props
 
       this.context.router.push(`/company/${company}/workspace/${workspace}/folder/${folder}/report/${report}/edit`)
     })
+
+    this.remember()
   },
   render () {
     const {report} = this.props
@@ -55,7 +69,7 @@ const ReportEditPrompt = React.createClass({
         <Message>editReport</Message>
         {this.state.isModalOpen ? (
           <Modal provide={requiredContext} onEscPress={this.close}>
-            <div className='mdl-grid'>
+            <form ref='form' className='mdl-grid'>
               <div className='mdl-cell mdl-cell--12-col'>
                 <h2>
                   <Message>editReportPromptTitle</Message>
@@ -64,6 +78,9 @@ const ReportEditPrompt = React.createClass({
                 <p style={{maxWidth: '20em', margin: '2em auto', textAlign: 'center'}}>
                   <Message html name={report.name}>editReportPromptBody</Message>
                 </p>
+
+                <Checkbox name='doNotAskAgain' label={<Message>doNotAskAgain</Message>}/>
+
                 <br/>
                 <hr/>
 
@@ -82,7 +99,7 @@ const ReportEditPrompt = React.createClass({
                   <Message>editReport</Message>
                 </button>
               </div>
-            </div>
+            </form>
           </Modal>
         ) : null}
       </a>

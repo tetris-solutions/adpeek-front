@@ -205,7 +205,8 @@ module.exports = {
     noBudgetRemaining: 'Not enough budget',
     refreshCampaigns: 'Update Campaigns',
     takenCampaign: 'The campaign is already linked to another folder',
-    openFolderName: 'Go to folder "{name}"'
+    openFolderName: 'Go to folder "{name}"',
+    doNotAskAgain: 'Do not ask again'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -412,6 +413,7 @@ module.exports = {
     noBudgetRemaining: 'Não há orçamento suficiente restante',
     refreshCampaigns: 'Atualizar campanhas',
     takenCampaign: 'A campanha já foi associada a uma pasta',
-    openFolderName: 'Abrir pasta "{name}"'
+    openFolderName: 'Abrir pasta "{name}"',
+    doNotAskAgain: 'Não perguntar novamente'
   }
 }

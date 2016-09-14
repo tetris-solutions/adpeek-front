@@ -15,6 +15,16 @@ import ReportEditPrompt from './ReportEditPrompt'
 
 const {PropTypes} = React
 
+function canSkipReportEditPrompt () {
+  if (typeof window === 'undefined') return false
+
+  try {
+    return Boolean(window.localStorage.skipReportEditPrompt)
+  } catch (e) {
+    return false
+  }
+}
+
 export function ReportAside ({report, dispatch, user}, {messages, locales, router, location: {pathname}, params}) {
   const {company, workspace, folder} = params
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${folder}`
@@ -29,6 +39,7 @@ export function ReportAside ({report, dispatch, user}, {messages, locales, route
 
   const inEditMode = endsWith(pathname, '/edit')
   const cloneName = new TextMessage(messages.copyOfName, locales).format({name: report.name})
+  const shouldSkipEditPrompt = report.is_private || canSkipReportEditPrompt()
 
   return (
     <ContextMenu title={report.name} icon='trending_up'>
@@ -47,13 +58,13 @@ export function ReportAside ({report, dispatch, user}, {messages, locales, route
         <Message>cloneReport</Message>
       </Link>
 
-      {!inEditMode && report.is_private && (
+      {!inEditMode && shouldSkipEditPrompt && (
         <Link className='mdl-navigation__link' to={`${folderUrl}/report/${report.id}/edit`}>
           <i className='material-icons'>create</i>
           <Message>editReport</Message>
         </Link>)}
 
-      {!inEditMode && !report.is_private && (
+      {!inEditMode && !shouldSkipEditPrompt && (
         <ReportEditPrompt report={report} params={params}/>)}
 
       <DeleteButton entityName={report.name} className='mdl-navigation__link' onClick={deleteReport}>
