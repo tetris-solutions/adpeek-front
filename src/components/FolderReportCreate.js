@@ -1,5 +1,4 @@
 import React from 'react'
-import Switch from './Switch'
 import Input from './Input'
 import FormMixin from '@tetris/front-server/lib/mixins/FormMixin'
 import {contextualize} from './higher-order/contextualize'
@@ -39,7 +38,6 @@ const CreateReport = React.createClass({
 
     const report = {
       name: elements.name.value,
-      is_private: elements.isPrivate.checked,
       level: 'folder',
       platform,
       company
@@ -75,10 +73,6 @@ const CreateReport = React.createClass({
             name='name'
             error={errors.name}
             onChange={this.dismissError}/>
-
-          <Switch
-            label={<Message>isPrivateReport</Message>}
-            name='isPrivate'/>
 
         </Content>
 
