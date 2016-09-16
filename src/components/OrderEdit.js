@@ -1,8 +1,6 @@
 import some from 'lodash/some'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
-import {Link} from 'react-router'
-
 import budgetType from '../propTypes/budget'
 import campaignType from '../propTypes/campaign'
 import orderType from '../propTypes/order'
@@ -30,7 +28,7 @@ export function OrderEdit ({
   budget,
   order,
   folderCampaigns
-}, {params}) {
+}) {
   function closeBudget () {
     selectBudget(null)
   }
@@ -43,12 +41,6 @@ export function OrderEdit ({
             <OrderSelector/>
           </span>
           <div className='mdl-layout-spacer'/>
-          {params.order && (
-            <Link
-              className='mdl-button mdl-color-text--grey-100'
-              to={`/company/${params.company}/workspace/${params.workspace}/folder/${params.folder}/orders/clone?order=${params.order}`}>
-              <Message>cloneSingleOrder</Message>
-            </Link>)}
           <button onClick={save} className='mdl-button mdl-color-text--grey-100'>
             <Message>save</Message>
           </button>
@@ -115,9 +107,6 @@ OrderEdit.propTypes = {
   budget: budgetType,
   order: orderType,
   folderCampaigns: PropTypes.arrayOf(campaignType)
-}
-OrderEdit.contextTypes = {
-  params: PropTypes.object
 }
 
 export default OrderEdit

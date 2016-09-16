@@ -25,6 +25,10 @@ export function OrderAside ({params: {company, workspace, folder}, order, dispat
         <i className='material-icons'>mode_edit</i>
         <Message>editOrder</Message>
       </Link>
+      <Link className='mdl-navigation__link' to={`${folderUrl}/orders/clone?order=${order.id}`}>
+        <i className='material-icons'>content_copy</i>
+        <Message>cloneSingleOrder</Message>
+      </Link>
       <Link className='mdl-navigation__link' to={`${folderUrl}/order/${order.id}/autobudget`}>
         <i className='material-icons'>today</i>
         <Message>autoBudgetLog</Message>
