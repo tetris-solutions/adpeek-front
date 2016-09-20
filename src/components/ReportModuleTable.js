@@ -85,6 +85,58 @@ function sortHeaders (headers, fieldSort) {
   }), 'index'), 'field')
 }
 
+const THeader = ({columns, attributes, sortPairs, toggle}) => (
+  <tr>
+    {map(columns, header =>
+      <Header key={header} {...attributes[header]} order={sortPairs[header]} toggle={toggle}/>)}
+  </tr>
+)
+
+THeader.displayName = 'Report-Result-THeader'
+THeader.propTypes = {
+  columns: PropTypes.array,
+  sortPairs: PropTypes.object,
+  toggle: PropTypes.func,
+  attributes: PropTypes.object
+}
+
+const TBody = ({rows, columns, attributes}) => (
+  <tbody>
+    {map(rows, (row, index) =>
+      <tr key={index}>
+        {map(columns, column =>
+          <td key={column} className={attributes[column].is_metric ? '' : 'mdl-data-table__cell--non-numeric'}>
+            {isObject(row[column])
+              ? row[column].content
+              : row[column]}
+          </td>)}
+      </tr>)}
+  </tbody>
+)
+
+TBody.displayName = 'Report-Result-TBody'
+TBody.propTypes = {
+  rows: PropTypes.arrayOf(PropTypes.object),
+  columns: PropTypes.array,
+  attributes: PropTypes.object
+}
+
+const EmptyTBody = ({isLoading, columns}) => (
+  <tbody>
+    <tr>
+      <td className={`${style.placeholder}`} colSpan={columns.length || 1}>
+        <Message>{isLoading ? 'loadingReport' : 'emptyReportResult'}</Message>
+      </td>
+    </tr>
+  </tbody>
+)
+
+EmptyTBody.displayName = 'Report-Result-Empty-TBody'
+EmptyTBody.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+  columns: PropTypes.array.isRequired
+}
+
 const Header = React.createClass({
   displayName: 'Header',
   propTypes: {
@@ -156,20 +208,38 @@ const ReportModuleTable = React.createClass({
 
     this.props.save({sort: toPairs(sortObj)})
   },
+  getFieldName (id) {
+    const {entity: {id: entityId, list}, reportParams} = this.props
+    const item = find(list, {id})
+    let sortKey = id
+
+    if (!item) {
+      return {content: id, sortKey}
+    }
+
+    sortKey = item.name || item.headline || id
+
+    if (entityId === 'Ad') {
+      return {
+        content: <Ad {...item} reportParams={reportParams}/>,
+        sortKey
+      }
+    }
+
+    return {
+      sortKey,
+      content: item.name || id
+    }
+  },
   render () {
     const {
       sort,
       limit,
       isLoading,
       name,
-      reportParams,
       result,
       query,
-      attributes,
-      entity: {
-        id: entityId,
-        list
-      }
+      attributes
     } = this.props
 
     const sortPairs = fromPairs(sort)
@@ -177,38 +247,19 @@ const ReportModuleTable = React.createClass({
 
     delete sortPairs._fields_
 
-    const headers = sortHeaders(keys(result[0]), fieldSort)
+    const columns = sortHeaders(keys(result[0]), fieldSort)
     let tbody = null
     let colHeaders = null
 
     if (result.length) {
       const customSort = flow(map(sort, sortWith))
-      const getName = id => {
-        const item = find(list, {id})
-        let sortKey = id
-
-        if (!item) {
-          return {content: id, sortKey}
-        }
-
-        sortKey = item.name || item.headline || id
-
-        if (entityId === 'Ad') {
-          return {
-            content: <Ad {...item} reportParams={reportParams}/>,
-            sortKey
-          }
-        }
-
-        return {content: item.name || id, sortKey}
-      }
 
       const rows = crop(customSort(map(result, row => {
         const parsed = {}
 
-        forEach(headers, value => {
+        forEach(columns, value => {
           parsed[value] = value === 'id'
-            ? getName(row[value])
+            ? this.getFieldName(row[value])
             : row[value]
         })
 
@@ -216,46 +267,23 @@ const ReportModuleTable = React.createClass({
       })), limit)
 
       colHeaders = (
-        <tr>
-          {map(headers, header =>
-            <Header
-              key={header}
-              {...attributes[header]}
-              order={sortPairs[header]}
-              toggle={this.props.save ? this.toggleHeader : null}/>)}
-        </tr>
+        <THeader
+          columns={columns}
+          attributes={attributes}
+          sortPairs={sortPairs}
+          toggle={this.props.save ? this.toggleHeader : null}/>
       )
 
-      tbody = (
-        <tbody>
-          {map(rows, (row, index) =>
-            <tr key={index}>
-              {map(headers, header =>
-                <td key={header} className={attributes[header].is_metric ? '' : 'mdl-data-table__cell--non-numeric'}>
-                  {isObject(row[header])
-                    ? row[header].content
-                    : row[header]}
-                </td>)}
-            </tr>)}
-        </tbody>
-      )
+      tbody = <TBody rows={rows} columns={columns} attributes={attributes}/>
     } else {
-      tbody = (
-        <tbody>
-          <tr>
-            <td className={`${style.placeholder}`} colSpan={headers.length || 1}>
-              <Message>{isLoading ? 'loadingReport' : 'emptyReportResult'}</Message>
-            </td>
-          </tr>
-        </tbody>
-      )
+      tbody = <EmptyTBody isLoading={isLoading} columns={columns}/>
     }
 
     return (
       <table className={`mdl-data-table ${style.table}`}>
         <thead>
           <tr>
-            <th className={`mdl-data-table__cell--non-numeric ${style.title}`} colSpan={headers.length || 1}>
+            <th className={`mdl-data-table__cell--non-numeric ${style.title}`} colSpan={columns.length || 1}>
               {name}
             </th>
           </tr>
