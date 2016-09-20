@@ -100,17 +100,32 @@ THeader.propTypes = {
   attributes: PropTypes.object
 }
 
+const Cell = ({attribute: {is_metric, metric_type}, value}) => (
+  <td className={is_metric ? '' : 'mdl-data-table__cell--non-numeric'}>
+    {value}
+  </td>
+)
+
+Cell.displayName = 'Report-Result-Cell'
+Cell.propTypes = {
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
+  attribute: PropTypes.shape({
+    is_metric: PropTypes.bool.isRequired,
+    metric_type: PropTypes.string
+  }).isRequired
+}
+
 const TBody = ({rows, columns, attributes}) => (
-  <tbody>
-    {map(rows, (row, index) =>
-      <tr key={index}>
-        {map(columns, column =>
-          <td key={column} className={attributes[column].is_metric ? '' : 'mdl-data-table__cell--non-numeric'}>
-            {isObject(row[column])
-              ? row[column].content
-              : row[column]}
-          </td>)}
-      </tr>)}
+  <tbody>{map(rows, (row, index) =>
+    <tr key={index}>{map(columns, column =>
+      <Cell
+        key={column}
+        attribute={attributes[column]}
+        value={isObject(row[column]) ? row[column].content : row[column]}/>)}
+    </tr>)}
   </tbody>
 )
 
