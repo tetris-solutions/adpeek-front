@@ -16,6 +16,7 @@ import toPairs from 'lodash/toPairs'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 
+import {prettyNumber} from '../functions/pretty-number'
 import entityType from '../propTypes/report-entity'
 import reportParamsType from '../propTypes/report-params'
 import Ad from './ReportModuleTableAd'
@@ -100,12 +101,22 @@ THeader.propTypes = {
   attributes: PropTypes.object
 }
 
-const Cell = ({attribute: {is_metric, metric_type}, value}) => (
+const Cell = ({attribute: {is_metric, metric_type}, value}, {locales}) => (
   <td className={is_metric ? '' : 'mdl-data-table__cell--non-numeric'}>
-    {value}
+    {is_metric
+      ? prettyNumber(value, metric_type, locales)
+      : value}
   </td>
 )
 
+Cell.defaultProps = {
+  attribute: {
+    is_metric: false
+  }
+}
+Cell.contextTypes = {
+  locales: PropTypes.string
+}
 Cell.displayName = 'Report-Result-Cell'
 Cell.propTypes = {
   value: PropTypes.oneOfType([
