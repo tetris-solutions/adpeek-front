@@ -33,9 +33,7 @@ const ClonableRow = ({name, id, start, end, amount}) => (
       {name}
     </td>
     <td className='mdl-data-table__cell--non-numeric'>
-      {start}
-    </td>
-    <td className='mdl-data-table__cell--non-numeric'>
+      {start}<br/>
       {end}
     </td>
     <td>{amount.toFixed(2)}</td>
@@ -73,7 +71,7 @@ export const OrdersClone = React.createClass({
     }
   },
   componentWillMount () {
-    const orderId = this.context.location.query.order
+    const orderId = this.context.location.query.id
     if (!orderId) return
 
     const {orders} = this.props
@@ -184,7 +182,7 @@ export const OrdersClone = React.createClass({
           </div>
         </header>
         <div className='mdl-grid'>
-          <div className='mdl-cell--12-col'>
+          <div className='mdl-cell--12-col' style={{overflowX: 'auto'}}>
             {hasSelected && selectedOrders.length > 1 && (
               <EditableHeader/>
             )}
@@ -199,8 +197,7 @@ export const OrdersClone = React.createClass({
                   </th>
                   <th className='mdl-data-table__cell--non-numeric'>
                     <Message>startDateLabel</Message>
-                  </th>
-                  <th className='mdl-data-table__cell--non-numeric'>
+                    {' / '}
                     <Message>endDateLabel</Message>
                   </th>
                   <th className={hasSelected ? 'mdl-data-table__cell--non-numeric' : ''}>

@@ -17,7 +17,6 @@ const style = csjs`
 }`
 
 const {PropTypes} = React
-const editFormRequiredContext = ['tree', 'messages', 'locales', 'insertCss', 'params', 'moment']
 
 const Module = React.createClass({
   displayName: 'Report-Module',
@@ -88,7 +87,7 @@ const Module = React.createClass({
         </div>
 
         {editMode && (
-          <Modal size='huge' provide={editFormRequiredContext} onEscPress={this.closeModal}>
+          <Modal size='huge' onEscPress={this.closeModal}>
             <Edit
               changeDateRange={changeDateRange}
               entities={entities}

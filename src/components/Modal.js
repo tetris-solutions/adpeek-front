@@ -6,6 +6,7 @@ import pick from 'lodash/pick'
 import upperCase from 'lodash/toUpper'
 import React from 'react'
 import {render, unmountComponentAtNode} from 'react-dom'
+import concat from 'lodash/concat'
 
 import {styled} from './mixins/styled'
 
@@ -149,6 +150,7 @@ const createPortal = contextAttributes => {
   })
 }
 
+const baseContext = ['tree', 'messages', 'locales', 'insertCss', 'params', 'moment']
 const ModalSpawner = React.createClass({
   displayName: 'Modal-Spawner',
   mixins: [styled(style)],
@@ -159,7 +161,7 @@ const ModalSpawner = React.createClass({
     provide: PropTypes.array
   },
   componentWillMount () {
-    this.Portal = createPortal(this.props.provide)
+    this.Portal = createPortal(concat(baseContext, this.props.provide))
   },
   render () {
     const {Portal} = this

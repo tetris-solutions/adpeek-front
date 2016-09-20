@@ -35,8 +35,6 @@ Prompt.propTypes = {
   onCancel: PropTypes.func.isRequired
 }
 
-const requiredContext = ['tree', 'messages', 'locales']
-
 const DeleteButton = React.createClass({
   displayName: 'Delete-Button',
   getInitialState () {
@@ -65,7 +63,7 @@ const DeleteButton = React.createClass({
       <a className={className} onClick={this.open}>
         {children}
         {this.state.showPrompt ? (
-          <Modal size='small' provide={requiredContext} onEscPress={this.close}>
+          <Modal size='small' onEscPress={this.close}>
             <Prompt entityName={entityName} onConfirm={this.confirm} onCancel={this.close}/>
           </Modal>
         ) : null}

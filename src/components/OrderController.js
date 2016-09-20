@@ -17,6 +17,7 @@ import {loadBudgetsAction} from '../actions/load-budgets'
 import {loadOrdersAction} from '../actions/load-orders'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import {saveOrderAction} from '../actions/save-order'
+import {spawnAutoBudgetAction} from '../actions/spawn-auto-budget'
 
 const {PropTypes} = React
 const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
@@ -203,6 +204,11 @@ export const OrderController = React.createClass({
       selectedBudgetIndex: null
     })
   },
+  run () {
+    const {params, dispatch} = this.props
+
+    dispatch(spawnAutoBudgetAction, params.order)
+  },
   save () {
     const {router} = this.context
     const {dispatch, params} = this.props
@@ -253,6 +259,7 @@ export const OrderController = React.createClass({
     return (
       <OrderEdit
         save={this.save}
+        runAutoBudget={this.run}
         removeBudget={this.removeBudget}
         createBudget={this.createBudget}
         addCampaigns={this.addCampaigns}

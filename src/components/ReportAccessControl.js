@@ -30,7 +30,6 @@ const style = csjs`
   text-align: left;
 }`
 
-const requiredContext = ['tree', 'messages', 'locales']
 const {PropTypes} = React
 
 function CardButton ({callToAction, onClick, icon, description}) {
@@ -102,7 +101,7 @@ const ReportAccessControl = React.createClass({
         <i className='material-icons'>share</i>
         <Message>reportAccessControl</Message>
         {this.state.isModalOpen ? (
-          <Modal size='large' provide={requiredContext} onEscPress={this.close}>
+          <Modal size='large' onEscPress={this.close}>
             <div className='mdl-grid'>
               <div className='mdl-cell mdl-cell--12-col'>
                 <h2>

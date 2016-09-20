@@ -5,7 +5,6 @@ import isFunction from 'lodash/isFunction'
 import TextMessage from 'intl-messageformat'
 import Checkbox from './Checkbox'
 
-const requiredContext = ['tree', 'messages', 'locales']
 const {PropTypes} = React
 
 const ReportEditPrompt = React.createClass({
@@ -68,7 +67,7 @@ const ReportEditPrompt = React.createClass({
         <i className='material-icons'>create</i>
         <Message>editReport</Message>
         {this.state.isModalOpen ? (
-          <Modal provide={requiredContext} onEscPress={this.close}>
+          <Modal onEscPress={this.close}>
             <form ref='form' className='mdl-grid'>
               <div className='mdl-cell mdl-cell--12-col'>
                 <h2>

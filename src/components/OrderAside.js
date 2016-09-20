@@ -25,7 +25,7 @@ export function OrderAside ({params: {company, workspace, folder}, order, dispat
         <i className='material-icons'>mode_edit</i>
         <Message>editOrder</Message>
       </Link>
-      <Link className='mdl-navigation__link' to={`${folderUrl}/orders/clone?order=${order.id}`}>
+      <Link className='mdl-navigation__link' to={`${folderUrl}/orders/clone?id=${order.id}`}>
         <i className='material-icons'>content_copy</i>
         <Message>cloneSingleOrder</Message>
       </Link>

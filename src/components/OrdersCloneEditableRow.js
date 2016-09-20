@@ -34,9 +34,7 @@ export const Editable = React.createClass({
           <Input name={`${index}.name`} defaultValue={name}/>
         </td>
         <td className='mdl-data-table__cell--non-numeric'>
-          <Input type='date' name={`${index}.start`} defaultValue={start}/>
-        </td>
-        <td className='mdl-data-table__cell--non-numeric'>
+          <Input type='date' name={`${index}.start`} defaultValue={start}/><br/>
           <Input type='date' name={`${index}.end`} defaultValue={end}/>
         </td>
         <td className='mdl-data-table__cell--non-numeric'>

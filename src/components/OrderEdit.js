@@ -9,12 +9,14 @@ import EmptySelectionCard from './BudgetEmptySelection'
 import OrderHeader from './OrderHeader'
 import OrderPie from './OrderPie'
 import OrderSelector from './OrdersSelector'
+import OrderSpawnAutoBudget from './OrderSpawnAutoBudget'
 
 const {PropTypes} = React
 const notPercentage = budget => budget && budget.mode === 'amount'
 
 export function OrderEdit ({
   save,
+  runAutoBudget,
   showFolderCampaigns,
   createBudget,
   removeBudget,
@@ -41,6 +43,8 @@ export function OrderEdit ({
             <OrderSelector/>
           </span>
           <div className='mdl-layout-spacer'/>
+          {order.id && (
+            <OrderSpawnAutoBudget runAutoBudget={runAutoBudget}/>)}
           <button onClick={save} className='mdl-button mdl-color-text--grey-100'>
             <Message>save</Message>
           </button>
@@ -94,6 +98,7 @@ export function OrderEdit ({
 OrderEdit.displayName = 'Order-Edit'
 OrderEdit.propTypes = {
   showFolderCampaigns: PropTypes.bool,
+  runAutoBudget: PropTypes.func,
   save: PropTypes.func,
   createBudget: PropTypes.func,
   removeBudget: PropTypes.func,

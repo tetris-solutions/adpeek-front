@@ -6,7 +6,7 @@ import Modal from './Modal'
 const {PropTypes} = React
 
 const DateRangeModal = ({startDate, endDate, close, onChange}) => (
-  <Modal provide={['messages', 'locales']} onEscPress={close}>
+  <Modal onEscPress={close}>
     <h4>
       <Message>reportRangeTitle</Message>
     </h4>

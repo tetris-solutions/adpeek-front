@@ -206,7 +206,12 @@ module.exports = {
     refreshCampaigns: 'Update Campaigns',
     takenCampaign: 'The campaign is already linked to another folder',
     openFolderName: 'Go to folder "{name}"',
-    doNotAskAgain: 'Do not ask again'
+    doNotAskAgain: 'Do not ask again',
+    manuallyRunAutoBudget: 'Run Auto-Budget',
+    spawnAutoBudgetPromptTitle: 'Confirm Auto Budget execution',
+    spawnAutoBudgetPromptBody: `You are about to manually run the Auto Budget.<br/>
+        The routine will be started and by the end of it your team will receive an email informing about the new budgets.
+        Are you sure about this?`
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -414,6 +419,11 @@ module.exports = {
     refreshCampaigns: 'Atualizar campanhas',
     takenCampaign: 'A campanha já foi associada a uma pasta',
     openFolderName: 'Abrir pasta "{name}"',
-    doNotAskAgain: 'Não perguntar novamente'
+    doNotAskAgain: 'Não perguntar novamente',
+    manuallyRunAutoBudget: 'Executar Auto-Budget',
+    spawnAutoBudgetPromptTitle: 'Confirmar execução',
+    spawnAutoBudgetPromptBody: `Você está prestes a executar manualmente o Auto Budget.<br/>
+        A rotina será iniciada agora e ao término da execução você e seu time receberão um email informando dos novos orçamentos.<br/>
+        Deseja prosseguir?`
   }
 }
