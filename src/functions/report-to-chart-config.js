@@ -14,6 +14,8 @@ import pick from 'lodash/pick'
 import sortBy from 'lodash/sortBy'
 import uniq from 'lodash/uniq'
 import without from 'lodash/without'
+import {prettyNumber} from './pretty-number'
+import set from 'lodash/set'
 
 const isEntityId = d => d === 'id' || d === 'name'
 const notEntityId = negate(isEntityId)
@@ -111,6 +113,12 @@ export function reportToChartConfig (type, props) {
     title: {
       text: getAttributeName(metric)
     },
+    labels: {
+      formatter () {
+        const attribute = attributes[metric]
+        return prettyNumber(this.value, attribute.metric_type, props.locales)
+      }
+    },
     opposite: index % 2 !== 0
   }))
 
@@ -196,6 +204,7 @@ export function reportToChartConfig (type, props) {
 
       const y = Number(point[metric])
       const pointConfig = {
+        metric,
         id: index,
         y: isNaN(y) ? null : y
       }
@@ -234,6 +243,14 @@ export function reportToChartConfig (type, props) {
   if (categories.length) {
     config.xAxis.categories = uniq(categories)
   }
+
+  function pointFormatter () {
+    const attribute = attributes[this.options.metric]
+    const value = prettyNumber(this.y, attribute.metric_type, props.locales)
+    return `<span style="color: ${this.color}">${attribute.name}:</span> <b>${value}</b><br/>`
+  }
+
+  set(config, ['plotOptions', 'series', 'tooltip', 'pointFormatter'], pointFormatter)
 
   return config
 }

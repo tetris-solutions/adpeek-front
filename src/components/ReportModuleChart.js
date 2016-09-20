@@ -63,7 +63,8 @@ const ReportChart = React.createClass({
     dispatch: PropTypes.func
   },
   contextTypes: {
-    messages: PropTypes.object
+    messages: PropTypes.object,
+    locales: PropTypes.string
   },
   getDefaultProps () {
     return {
@@ -94,6 +95,7 @@ const ReportChart = React.createClass({
     return (
       <div className={`${style.wrap}`} style={{height}}>
         <Chart
+          locales={this.context.locales}
           save={save}
           sort={module.sort}
           limit={module.limit}
