@@ -40,7 +40,7 @@ const style = csjs`
 function Creative ({title, thumbnail, body}) {
   return (
     <div className={`${style.post}`}>
-      <h2>{title}</h2>
+      {title ? <h2>{title}</h2> : null}
       <img src={thumbnail} />
       <p>{body}</p>
     </div>
