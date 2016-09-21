@@ -37,10 +37,9 @@ const style = csjs`
   white-space: normal;
 }`
 
-function Creative ({title, thumbnail, body}) {
+function Creative ({thumbnail, body}) {
   return (
     <div className={`${style.post}`}>
-      {title ? <h2>{title}</h2> : null}
       <img src={thumbnail} />
       <p>{body}</p>
     </div>
@@ -49,7 +48,6 @@ function Creative ({title, thumbnail, body}) {
 
 Creative.displayName = 'Creative'
 Creative.propTypes = {
-  title: PropTypes.string,
   thumbnail: PropTypes.string,
   body: PropTypes.string
 }

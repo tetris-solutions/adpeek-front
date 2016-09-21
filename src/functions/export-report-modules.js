@@ -1,23 +1,41 @@
 import toArray from 'lodash/toArray'
 import includes from 'lodash/includes'
-
-export const blobToDataUrl = blob => new Promise(resolve => {
-  const f = new window.FileReader()
-  f.onload = e => resolve(e.target.result)
-  f.readAsDataURL(blob)
-})
+import trim from 'lodash/trim'
+import startsWith from 'lodash/startsWith'
 
 /**
  * get cell text content
  * @param {HTMLTableCellElement} td table cell
- * @return {String} the cell content
+ * @return {Object} the cell content
  */
 function serializeTableCell (td) {
-  const el = td.querySelector('span') || td
-  return {
+  const content = {
     align: includes(td.className, 'non-numeric') ? 'left' : 'right',
-    text: el.innerText
+    text: trim(td.innerText)
   }
+  const img = td.querySelector('img')
+  const title = td.querySelector('strong')
+  const anchor = td.querySelector('a')
+
+  if (img) {
+    content.img = img.src
+  }
+
+  if (title) {
+    content.title = trim(title.innerText)
+    content.text = startsWith(content.text, content.title)
+      ? trim(content.text.substr(content.title.length))
+      : content.text
+  }
+
+  if (anchor) {
+    content.link = {
+      url: anchor.href,
+      text: trim(anchor.innerText)
+    }
+  }
+
+  return content
 }
 
 /**

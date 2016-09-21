@@ -22,7 +22,7 @@ TextAd.propTypes = {
 
 const ImageAd = ({urls, name}) => (
   <figure>
-    <img src={get(find(urls, {key: 'PREVIEW'}), 'value', 'http://placehold.it/120x120')} />
+    <img src={get(find(urls, {key: 'PREVIEW'}), 'value', 'http://placehold.it/120x120')}/>
     <figcaption>{name}</figcaption>
   </figure>
 )
@@ -36,20 +36,15 @@ ImageAd.propTypes = {
   }))
 }
 
-const TemplateAd = ({urls, name, __source__}) => {
-  let templateDownloadUrl = get(
-    __source__,
-    ['ad', 'templateElements', 0, 'fields', 2, 'fieldMedia', 'mediaBundleUrl']
-  )
+const TemplateAd = ({urls, name}) => {
+  let templateDownloadUrl
 
-  if (!templateDownloadUrl) {
-    const htmlUrl = get(find(urls, {key: 'FULL'}), 'value')
+  const htmlUrl = get(find(urls, {key: 'FULL'}), 'value')
 
-    if (htmlUrl) {
-      templateDownloadUrl = htmlUrl
-        .replace('/sadbundle/', '/simgad/')
-        .replace('/index.html', '')
-    }
+  if (htmlUrl) {
+    templateDownloadUrl = htmlUrl
+      .replace('/sadbundle/', '/simgad/')
+      .replace('/index.html', '')
   }
 
   return (
@@ -61,7 +56,6 @@ const TemplateAd = ({urls, name, __source__}) => {
 
 TemplateAd.displayName = 'Template-Ad'
 TemplateAd.propTypes = {
-  __source__: PropTypes.object,
   urls: PropTypes.array,
   name: PropTypes.string.isRequired
 }
