@@ -74,18 +74,18 @@ const ReportAccessControl = React.createClass({
     user: PropTypes.object.isRequired
   },
   componentWillMount () {
-    const {dispatch, reload, report, params: {folder}} = this.props
+    const {dispatch, reload, report, params} = this.props
 
     this.makePublic = () =>
       dispatch(openReportAction, report.id)
         .then(reload)
 
     this.setAsFolderDefault = () =>
-      dispatch(setFolderReportAction, folder, report.id)
+      dispatch(setFolderReportAction, params.folder, report.id)
         .then(reload)
 
     this.unlock = () =>
-      dispatch(updateReportAction, {id: report.id, is_private: false})
+      dispatch(updateReportAction, params, {id: report.id, is_private: false})
   },
   open () {
     this.setState({isModalOpen: true})

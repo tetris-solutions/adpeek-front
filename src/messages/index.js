@@ -375,7 +375,7 @@ module.exports = {
     reportAccessControl: 'Controle de Acesso',
     makeReportGlobal: 'Compartilhar Globalmente',
     makeReportGlobalDescription: 'Compartilhar relatório para todas empresas',
-    makeReportPublic: 'Expor pra Empresa',
+    makeReportPublic: 'Compartilhar com Empresa',
     makeReportPublicDescription: 'Compartilhar relatório com colegas de trabalho',
     favoriteReport: 'Favoritar Relatório',
     favoriteReportDescription: 'Seleciona relatório como o padrão da pasta (apenas para seu usuário)',
