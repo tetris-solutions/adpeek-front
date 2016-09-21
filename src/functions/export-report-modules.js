@@ -9,13 +9,27 @@ import startsWith from 'lodash/startsWith'
  * @return {Object} the cell content
  */
 function serializeTableCell (td) {
-  const content = {
-    align: includes(td.className, 'non-numeric') ? 'left' : 'right',
-    text: trim(td.innerText)
+  let tableCell = td
+
+  const hasIcons = tableCell
+      .querySelectorAll('.material-icons')
+      .length > 0
+
+  if (hasIcons) {
+    tableCell = tableCell.cloneNode(true)
+    const icons = tableCell.querySelectorAll('.material-icons')
+    for (let i = 0; i < icons.length; i++) {
+      icons[i].parentElement.removeChild(icons[i])
+    }
   }
-  const img = td.querySelector('img')
-  const title = td.querySelector('strong')
-  const anchor = td.querySelector('a')
+
+  const content = {
+    align: includes(tableCell.className, 'non-numeric') ? 'left' : 'right',
+    text: trim(tableCell.innerText)
+  }
+  const img = tableCell.querySelector('img')
+  const title = tableCell.querySelector('strong')
+  const anchor = tableCell.querySelector('a')
 
   if (img) {
     content.img = img.src
@@ -29,10 +43,7 @@ function serializeTableCell (td) {
   }
 
   if (anchor) {
-    content.link = {
-      url: anchor.href,
-      text: trim(anchor.innerText)
-    }
+    content.link = anchor.href
   }
 
   return content
