@@ -29,6 +29,7 @@ export const FolderCampaigns = React.createClass({
   propTypes: {
     dispatch: PropTypes.func,
     folder: PropTypes.shape({
+      id: PropTypes.string,
       looseCampaigns: PropTypes.array,
       campaigns: PropTypes.array
     }),
@@ -54,7 +55,7 @@ export const FolderCampaigns = React.createClass({
     this.setupActions()
   },
   componentWillReceiveProps (nextProps) {
-    if (this.props.folder !== nextProps.params.folder) {
+    if (this.props.params.folder !== nextProps.params.folder) {
       this.setupActions(nextProps)
     }
   },
