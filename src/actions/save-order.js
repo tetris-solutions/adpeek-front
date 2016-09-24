@@ -5,7 +5,7 @@ import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetc
 import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
 
 function createOrder (order, config) {
-  return POST(`${process.env.ADPEEK_API_URL}/order`, assign({body: order}, config))
+  return POST(`${process.env.ADPEEK_API_URL}/folder/${order.folder}/order`, assign({body: order}, config))
 }
 
 function updateOrder (order, config) {

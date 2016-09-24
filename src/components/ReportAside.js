@@ -32,7 +32,7 @@ export function ReportAside ({report, dispatch, user}, {messages, locales, route
   const favorite = () => dispatch(setFolderReportAction, folder, report.id, true).then(reload)
 
   const deleteReport = () =>
-    dispatch(deleteReportAction, report.id)
+    dispatch(deleteReportAction, params, report.id)
       .then(() => {
         router.push(`${folderUrl}/reports`)
       })
