@@ -211,7 +211,8 @@ module.exports = {
     spawnAutoBudgetPromptTitle: 'Confirm Auto Budget execution',
     spawnAutoBudgetPromptBody: `You are about to manually run the Auto Budget.<br/>
         The routine will be started and by the end of it your team will receive an email informing about the new budgets.
-        Are you sure about this?`
+        Are you sure about this?`,
+    dashCampaignLabel: 'Campanha Dash'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -424,6 +425,7 @@ module.exports = {
     spawnAutoBudgetPromptTitle: 'Confirmar execução',
     spawnAutoBudgetPromptBody: `Você está prestes a executar manualmente o Auto Budget.<br/>
         A rotina será iniciada agora e ao término da execução você e seu time receberão um email informando dos novos orçamentos.<br/>
-        Deseja prosseguir?`
+        Deseja prosseguir?`,
+    dashCampaignLabel: 'Campanha Dash'
   }
 }

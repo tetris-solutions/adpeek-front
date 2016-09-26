@@ -2,7 +2,9 @@ import omit from 'lodash/omit'
 import FormMixin from '@tetris/front-server/lib/mixins/FormMixin'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
+import map from 'lodash/map'
 
+import Select from './Select'
 import AccountSelector from './WorkspaceAccountSelector'
 import Input from './Input'
 import RolesSelector from './WorkspaceRolesSelector'
@@ -11,6 +13,7 @@ import {updateWorkspaceAction} from '../actions/update-workspace'
 import {serializeWorkspaceForm} from '../functions/serialize-workspace-form'
 import {Form, Content, Header, Footer} from './Card'
 import {contextualize} from './higher-order/contextualize'
+import {loadDashCampaignsAction} from '../actions/load-dash-campaigns'
 
 const {PropTypes} = React
 
@@ -26,15 +29,22 @@ export const WorkspaceEdit = React.createClass({
       workspace: PropTypes.string,
       company: PropTypes.string
     }),
+    company: PropTypes.object,
     workspace: PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string
     })
   },
   componentWillMount () {
+    const {workspace, company, dispatch} = this.props
+
     this.setState({
-      name: this.props.workspace.name
+      name: workspace.name
     })
+
+    if (!company.dashCampaigns) {
+      dispatch(loadDashCampaignsAction, company.id)
+    }
   },
   handleSubmit (e) {
     e.preventDefault()
@@ -60,7 +70,7 @@ export const WorkspaceEdit = React.createClass({
   },
   render () {
     const {errors, name} = this.state
-    const {workspace} = this.props
+    const {company, workspace} = this.props
     const roles = workspace.roles
     const {accounts: {facebook, adwords}} = workspace
 
@@ -90,6 +100,14 @@ export const WorkspaceEdit = React.createClass({
             value={adwords ? adwords.name : ''}
             platform='adwords'/>
 
+          <Select name='dash_campaign' label='dashCampaign'>
+            <option value=''/>
+            {map(company.dashCampaigns, ({id, name}) =>
+              <option key={id} value={id}>
+                {name}
+              </option>)}
+          </Select>
+
           <RolesSelector roles={roles}/>
         </Content>
 
@@ -101,4 +119,4 @@ export const WorkspaceEdit = React.createClass({
   }
 })
 
-export default contextualize(WorkspaceEdit, 'workspace')
+export default contextualize(WorkspaceEdit, 'workspace', 'company')

@@ -9,6 +9,9 @@ import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import {serializeWorkspaceForm} from '../functions/serialize-workspace-form'
 import {Form, Content, Header, Footer} from './Card'
 import {contextualize} from './higher-order/contextualize'
+import {loadDashCampaignsAction} from '../actions/load-dash-campaigns'
+import Select from './Select'
+import map from 'lodash/map'
 
 const {PropTypes} = React
 
@@ -21,6 +24,13 @@ export const CreateWorkspace = React.createClass({
   },
   contextTypes: {
     router: PropTypes.object
+  },
+  componentWillMount () {
+    const {company, dispatch} = this.props
+
+    if (!company.dashCampaigns) {
+      dispatch(loadDashCampaignsAction, company.id)
+    }
   },
   /**
    * handles submit event
@@ -43,7 +53,9 @@ export const CreateWorkspace = React.createClass({
       .then(this.posSubmit)
   },
   render () {
+    const {company} = this.props
     const {errors} = this.state
+
     return (
       <Form onSubmit={this.handleSubmit}>
         <Header>
@@ -54,7 +66,13 @@ export const CreateWorkspace = React.createClass({
           <Input label='name' name='name' error={errors.name} onChange={this.dismissError}/>
           <AccountSelector platform='facebook'/>
           <AccountSelector platform='adwords'/>
-          {/* <AccountSelector platform='twitter'/> */}
+          <Select name='dash_campaign' label='dashCampaign'>
+            <option value=''/>
+            {map(company.dashCampaigns, ({id, name}) =>
+              <option key={id} value={id}>
+                {name}
+              </option>)}
+          </Select>
           <RolesSelector/>
         </Content>
 
