@@ -206,6 +206,7 @@ export function reportToChartConfig (type, props) {
       const pointConfig = {
         metric,
         id: index,
+        // @todo maybe cast string values somehow?
         y: isNaN(y) ? null : y
       }
 

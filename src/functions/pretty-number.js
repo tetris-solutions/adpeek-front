@@ -1,3 +1,5 @@
+import isNumber from 'lodash/isNumber'
+
 const localeReplaceMap = {
   en: 'en-US',
   'en-US': 'en-US',
@@ -5,7 +7,6 @@ const localeReplaceMap = {
 }
 const typeToNumberStyle = {
   percentage: 'percent',
-  quantity: 'decimal',
   currency: 'currency'
 }
 const naiveCurrency = {
@@ -14,10 +15,18 @@ const naiveCurrency = {
 }
 
 export function prettyNumber (value, type = 'decimal', locale = 'en-US') {
+  if (!isNumber(value)) return value
+
   const style = typeToNumberStyle[type] || 'decimal'
   const options = {style}
 
   locale = localeReplaceMap[locale] || 'en-US'
+
+  if (type === 'integer') {
+    options.minimumFractionDigits = options.maximumFractionDigits = 0
+  } else {
+    options.maximumFractionDigits = options.minimumFractionDigits = 2
+  }
 
   if (options.style === 'currency') {
     options.currency = naiveCurrency[locale]

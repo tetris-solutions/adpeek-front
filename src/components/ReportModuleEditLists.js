@@ -8,6 +8,7 @@ import lowerCase from 'lodash/toLower'
 import sortBy from 'lodash/sortBy'
 import trim from 'lodash/trim'
 import React from 'react'
+import size from 'lodash/size'
 
 import reportEntityType from '../propTypes/report-entity'
 import Attributes from './ReportModuleEditAttributes'
@@ -86,7 +87,7 @@ const Lists = React.createClass({
     const selectedIds = this.props.filters.id
     const {entity, removeEntity, addEntity, addItem, removeItem} = this.props
     const {dimensions, metrics, list, activeTab} = this.state
-    const isIdSelected = includes(selectedDimensions, 'id')
+    const isIdSelected = size(selectedIds) === 1 || includes(selectedDimensions, 'id')
     const {messages} = this.context
     const entityTitle = (
       <i className={cx('material-icons', isEmpty(selectedIds) && 'mdl-color-text--red-A700')} title={entity.name}>list</i>
