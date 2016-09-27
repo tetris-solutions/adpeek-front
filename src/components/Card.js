@@ -10,6 +10,7 @@ const style = csjs`
 }
 .small extends .card {
   width: 35%;
+  min-width: 320px;
   overflow: visible;
 }
 .large extends .card {
@@ -43,7 +44,7 @@ export const Card = React.createClass({
   propTypes: {
     size: PropTypes.oneOf(['small', 'large']),
     tag: PropTypes.string,
-    children: PropTypes.node
+    children: PropTypes.node.isRequired
   },
   render () {
     const {children, size, tag} = this.props
@@ -81,7 +82,7 @@ Content.displayName = 'Content'
 Content.propTypes = {
   tag: PropTypes.string,
   className: PropTypes.string,
-  children: PropTypes.node
+  children: PropTypes.node.isRequired
 }
 
 export function Header ({children, color, textColor}) {
@@ -102,7 +103,7 @@ Header.displayName = 'Header'
 Header.propTypes = {
   color: PropTypes.string,
   textColor: PropTypes.string,
-  children: PropTypes.node
+  children: PropTypes.node.isRequired
 }
 
 export function Footer ({children, multipleButtons}) {

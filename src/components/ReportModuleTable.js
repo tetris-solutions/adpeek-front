@@ -89,7 +89,7 @@ function sortHeaders (headers, fieldSort) {
 const THeader = ({columns, attributes, sortPairs, toggle}) => (
   <tr>
     {map(columns, header =>
-      <Header key={header} {...attributes[header]} order={sortPairs[header]} toggle={toggle}/>)}
+      <ReportModuleTableTH key={header} {...attributes[header]} order={sortPairs[header]} toggle={toggle}/>)}
   </tr>
 )
 
@@ -163,7 +163,7 @@ EmptyTBody.propTypes = {
   columns: PropTypes.array.isRequired
 }
 
-const Header = React.createClass({
+const ReportModuleTableTH = React.createClass({
   displayName: 'Header',
   propTypes: {
     id: PropTypes.string.isRequired,

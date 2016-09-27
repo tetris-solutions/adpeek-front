@@ -212,7 +212,15 @@ module.exports = {
     spawnAutoBudgetPromptBody: `You are about to manually run the Auto Budget.<br/>
         The routine will be started and by the end of it your team will receive an email informing about the new budgets.
         Are you sure about this?`,
-    dashCampaignLabel: 'Campanha Dash'
+    dashCampaignLabel: 'Campanha Dash',
+    errorScreenTitle: 'Ops... we got an error!',
+    errorScreenBody: `
+      It was not possible to display the page you we\'re looking for.<br/>
+      It could be anything really, you can contact support or try again later.`,
+    errorScreenAuthTitle: 'Access Forbidden',
+    errorScreenAuthBody: 'You are trying to access an area your user has no access to.<br/> You may want to check the URL or contact your administrator.',
+    errorScreenExit: 'Ok, take me back!',
+    messageFromServer: 'Message from server'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -426,6 +434,15 @@ module.exports = {
     spawnAutoBudgetPromptBody: `Você está prestes a executar manualmente o Auto Budget.<br/>
         A rotina será iniciada agora e ao término da execução você e seu time receberão um email informando dos novos orçamentos.<br/>
         Deseja prosseguir?`,
-    dashCampaignLabel: 'Campanha Dash'
+    dashCampaignLabel: 'Campanha Dash',
+    errorScreenTitle: 'Ops... encontramos um erro!',
+    errorScreenBody: `
+      Não foi possível exibir a tela que você estava tentando acessar.<br/>
+      Você pode contatar o suporte ou tentar novamente mais tarde.`,
+    errorScreenAuthTitle: 'Acesso Negado',
+    errorScreenAuthBody: `Você está tentando acessar uma área do sistema a qual seu usuário não tem acesso.<br/>
+        Certifique-se que você tem a URL correta ou contate seu administrador.`,
+    errorScreenExit: 'OK, voltar!',
+    messageFromServer: 'Mensagem do servidor'
   }
 }
