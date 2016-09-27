@@ -12,7 +12,6 @@ import negate from 'lodash/negate'
 import omit from 'lodash/omit'
 import pick from 'lodash/pick'
 import sortBy from 'lodash/sortBy'
-import uniq from 'lodash/uniq'
 import without from 'lodash/without'
 import {prettyNumber} from './pretty-number'
 import set from 'lodash/set'
@@ -149,13 +148,14 @@ export function reportToChartConfig (type, props) {
   function pointIterator (point, index) {
     const pointDimensions = pick(point, dimensions)
 
-    const referenceEntity = (
-        point.id !== undefined &&
-        find(entity.list, {id: point.id})
-      ) || {
-        id: point.id || index,
-        name: point.id || index
-      }
+    let referenceEntity = {
+      id: point.id || index,
+      name: point.id || index
+    }
+
+    if (point.id !== undefined) {
+      referenceEntity = find(entity.list, {id: point.id}) || referenceEntity
+    }
 
     if (!xAxis.parse) {
       if (isIdBased) {
@@ -242,7 +242,7 @@ export function reportToChartConfig (type, props) {
   }
 
   if (categories.length) {
-    config.xAxis.categories = uniq(categories)
+    config.xAxis.categories = categories
   }
 
   function pointFormatter () {
