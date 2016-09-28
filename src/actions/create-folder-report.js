@@ -4,13 +4,13 @@ import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save
 import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetch-config'
 import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
 
-function createFolderReport (company, report, config) {
-  return POST(`${process.env.ADPEEK_API_URL}/company/${company}/report`,
+function createFolderReport (folder, report, config) {
+  return POST(`${process.env.ADPEEK_API_URL}/folder/${folder}/report`,
     assign({body: report}, config))
 }
 
 export function createFolderReportAction (tree, company, workspace, folder, report) {
-  return createFolderReport(company, report, getApiFetchConfig(tree))
+  return createFolderReport(folder, report, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
