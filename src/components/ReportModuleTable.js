@@ -120,6 +120,7 @@ Cell.contextTypes = {
 Cell.displayName = 'Report-Result-Cell'
 Cell.propTypes = {
   value: PropTypes.oneOfType([
+    PropTypes.node,
     PropTypes.string,
     PropTypes.number
   ]),
@@ -161,6 +162,9 @@ EmptyTBody.displayName = 'Report-Result-Empty-TBody'
 EmptyTBody.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   columns: PropTypes.array.isRequired
+}
+EmptyTBody.defaultProps = {
+  isLoading: false
 }
 
 const ReportModuleTableTH = React.createClass({
