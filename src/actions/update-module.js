@@ -9,7 +9,7 @@ import {PUT} from '@tetris/http'
 import {getDeepCursor} from '../functions/get-deep-cursor'
 
 function updateModule (module, folder, config) {
-  return PUT(`${process.env.ADPEEK_API_URL}/module/${module.id}?folder=${folder}`,
+  return PUT(`${process.env.ADPEEK_API_URL}/folder/${folder}/module/${module.id}`,
     assign({body: module}, config))
 }
 

@@ -5,7 +5,7 @@ import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-
 import assign from 'lodash/assign'
 
 function setFolderReport (folder, report, favorite, config) {
-  return PUT(`${process.env.ADPEEK_API_URL}/folder/${folder}/report/${report}${favorite ? '/favorite' : ''}`,
+  return PUT(`${process.env.ADPEEK_API_URL}/folder/${folder}/report/${report}${favorite ? '/favorite' : '/default'}`,
     assign({body: {}}, config))
 }
 
