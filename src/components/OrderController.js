@@ -24,9 +24,9 @@ const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
 const toPercentage = (value, total) => floor((value / total) * 100, 2)
 const fromPercentage = (value, total) => floor((value / 100) * total, 2)
 
-function looseCampaigns (campaigns, budgets, unlockedCampaigns) {
+function looseCampaigns (campaigns, budgets) {
   const takenCampaigns = flatten(map(budgets, getCampaignIds))
-  const notTaken = ({id, budget}) => !(budget && !includes(unlockedCampaigns, id)) && !includes(takenCampaigns, id)
+  const notTaken = ({id, budget}) => !includes(takenCampaigns, id)
 
   return filter(campaigns, notTaken)
 }
@@ -74,7 +74,6 @@ export const OrderController = React.createClass({
   },
   getInitialState () {
     return {
-      unlockedCampaigns: [],
       order: normalizeOrder(cloneDeep(this.props.order)),
       selectedBudgetIndex: null
     }
@@ -162,17 +161,7 @@ export const OrderController = React.createClass({
 
     this.setCurrentBudget(budget)
   },
-  unlockCampaign (id) {
-    const {unlockedCampaigns} = this.state
-
-    if (includes(unlockedCampaigns, id)) return
-
-    this.setState({
-      unlockedCampaigns: unlockedCampaigns.concat([id])
-    })
-  },
   removeCampaign (campaign) {
-    this.unlockCampaign(campaign.id)
     this.changeCurrentBudget({
       campaigns: without(this.getCurrentBudget().campaigns, campaign)
     })
@@ -238,7 +227,7 @@ export const OrderController = React.createClass({
   },
   render () {
     const {campaigns, maxCampaignsPerBudget} = this.props
-    const {order, selectedBudgetIndex, unlockedCampaigns} = this.state
+    const {order, selectedBudgetIndex} = this.state
     const budget = isNumber(selectedBudgetIndex)
       ? order.budgets[selectedBudgetIndex]
       : null
@@ -253,7 +242,7 @@ export const OrderController = React.createClass({
     let folderCampaigns = []
 
     if (showFolderCampaigns && budget) {
-      folderCampaigns = looseCampaigns(campaigns, order.budgets, unlockedCampaigns)
+      folderCampaigns = looseCampaigns(campaigns, order.budgets)
     }
 
     return (
