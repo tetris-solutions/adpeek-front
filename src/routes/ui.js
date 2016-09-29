@@ -5,6 +5,7 @@ import {root} from 'baobab-react/higher-order'
 import {IndexRoute, Route} from 'react-router'
 
 import App from '../components/App'
+import DocTitle from '../components/DocTitle'
 import Campaign from '../components/Campaign'
 import CampaignAside from '../components/CampaignAside'
 import CampaignBreadcrumb from '../components/CampaignBreadcrumb'
@@ -74,7 +75,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
   /* eslint-disable react/jsx-indent-props */
   return (
-    <Route path='/' component={root(tree, createRoot(null, ErrorScreen))}>
+    <Route path='/' component={root(tree, createRoot(DocTitle, ErrorScreen))}>
       <IndexRoute component={Home}/>
       <Route onEnter={protectRoute}>
 
