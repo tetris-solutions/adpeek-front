@@ -26,6 +26,8 @@ const paceCss = `
   height: 2px;
 }`
 
+const revSuffix = process.env.BUILD_PROD ? `.${revision.short()}` : ''
+
 export const HTML = ({documentTitle = 'Tetris Solutions', payload, children, css}) => {
   const heads = Helmet.rewind()
 
@@ -49,7 +51,7 @@ export const HTML = ({documentTitle = 'Tetris Solutions', payload, children, css
         <script
           id='state-injection'
           dangerouslySetInnerHTML={{__html: `var backendPayload = ${JSON.stringify(payload)}`}}/>
-        <script src={process.env.BUILD_PROD ? `/js/client.${revision.short()}.js` : '/js/client.js'} defer/>
+        <script src={`/js/client${revSuffix}.js`} defer/>
       </head>
       <body>
 
