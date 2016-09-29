@@ -5,8 +5,8 @@ import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetc
 import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
 import {getDeepCursor} from '../functions/get-deep-cursor'
 
-function updateReport (report, config) {
-  return PUT(`${process.env.ADPEEK_API_URL}/report/${report.id}`,
+function updateReport (folder, report, config) {
+  return PUT(`${process.env.ADPEEK_API_URL}/folder/${folder}/report/${report.id}`,
     assign({body: report}, config))
 }
 
@@ -21,7 +21,7 @@ export function updateReportAction (tree, {company, workspace, folder}, report) 
 
   tree.merge(path, report)
 
-  return updateReport(report, getApiFetchConfig(tree))
+  return updateReport(folder, report, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }

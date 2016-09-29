@@ -77,7 +77,7 @@ const ReportAccessControl = React.createClass({
     const {dispatch, reload, report, params} = this.props
 
     this.makePublic = () =>
-      dispatch(openReportAction, report.id)
+      dispatch(openReportAction, params, report.id)
         .then(reload)
 
     this.setAsFolderDefault = () =>
