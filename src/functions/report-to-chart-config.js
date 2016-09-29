@@ -11,7 +11,7 @@ import map from 'lodash/map'
 import negate from 'lodash/negate'
 import omit from 'lodash/omit'
 import pick from 'lodash/pick'
-import sortBy from 'lodash/sortBy'
+import orderBy from 'lodash/orderBy'
 import without from 'lodash/without'
 import {prettyNumber} from './pretty-number'
 import set from 'lodash/set'
@@ -138,7 +138,13 @@ export function reportToChartConfig (type, props) {
   const isIdBased = xAxisDimension === 'id'
 
   if (xAxis.sortable) {
-    result = sortBy(result, p => xAxis.parse(p[xAxisDimension]))
+    result = orderBy(result, p => xAxis.parse(p[xAxisDimension]))
+  } else {
+    result = orderBy(result, metrics[0], 'desc')
+  }
+
+  if ((type === 'pie' || type === 'column') && props.limit) {
+    result = result.slice(0, props.limit)
   }
 
   dimensions = without(dimensions, xAxisDimension)
