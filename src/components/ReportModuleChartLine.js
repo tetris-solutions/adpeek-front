@@ -8,7 +8,7 @@ function ChartLine (props) {
   const config = reportToChartConfig('line', props)
 
   return (
-    <Chart config={config}>
+    <Chart config={config} zoomType='x'>
       <title>{props.name}</title>
       <exporting
         sourceWidth={props.sourceWidth}
