@@ -1,5 +1,6 @@
 import React from 'react'
 import Helmet from 'react-helmet'
+import revision from 'git-rev-sync'
 
 const paceCss = `
 .pace {
@@ -48,7 +49,7 @@ export const HTML = ({documentTitle = 'Tetris Solutions', payload, children, css
         <script
           id='state-injection'
           dangerouslySetInnerHTML={{__html: `var backendPayload = ${JSON.stringify(payload)}`}}/>
-        <script src='/js/client.js' defer/>
+        <script src={process.env.BUILD_PROD ? `/js/client.${revision.short()}.js` : '/js/client.js'} defer/>
       </head>
       <body>
 

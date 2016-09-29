@@ -1,6 +1,7 @@
 var webpack = require('webpack')
 var path = require('path')
 var passEnv = require('./functions/pass-env')
+var revision = require('git-rev-sync')
 
 module.exports = {
   devtool: 'source-map',
@@ -10,16 +11,14 @@ module.exports = {
   ],
   output: {
     path: path.resolve(__dirname, '..', 'public', 'js'),
-    filename: 'client.js',
+    filename: 'client.' + revision.short() + '.js',
     publicPath: '/'
   },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': passEnv()
     }),
-    new webpack.optimize.UglifyJsPlugin({
-
-    })
+    new webpack.optimize.UglifyJsPlugin({})
   ],
   module: {
     loaders: [{

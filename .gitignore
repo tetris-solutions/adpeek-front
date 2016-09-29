@@ -3,7 +3,7 @@ lib
 node_modules
 *.log
 .nyc_output
-/public/js/client.js.map
-/public/js/client.js
+/public/js/client*.js.map
+/public/js/client*.js
 .env
 .vscode
