@@ -17,7 +17,6 @@ import omit from 'lodash/omit'
 import window from 'global/window'
 import Highcharts from 'highcharts'
 import React from 'react'
-import unset from 'lodash/unset'
 
 if (typeof document !== 'undefined') {
   require('highcharts/modules/exporting')(Highcharts)
@@ -150,8 +149,11 @@ function removeSeries (series) {
   series.remove(doNotRedraw)
 }
 
-function customComparison (a, b) {
+function customComparison (a, b, key) {
   if (isFunction(a) && isFunction(b)) {
+    return true
+  }
+  if (key === 'categories') {
     return true
   }
 }
@@ -159,12 +161,6 @@ function customComparison (a, b) {
 function hasChanged (configA, configB) {
   const newOptionsForComparision = omit(configA, 'series', 'title')
   const oldOptionsForComparison = omit(configB, 'series', 'title')
-
-  unset(oldOptionsForComparison, ['xAxis', 'categories'])
-  unset(newOptionsForComparision, ['xAxis', 'categories'])
-
-  unset(oldOptionsForComparison, ['xAxis', 0, 'categories'])
-  unset(newOptionsForComparision, ['xAxis', 0, 'categories'])
 
   return !isEqualWith(newOptionsForComparision, oldOptionsForComparison, customComparison)
 }
