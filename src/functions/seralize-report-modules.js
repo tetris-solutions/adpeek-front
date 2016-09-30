@@ -71,12 +71,12 @@ export function serializeReportModules (modules) {
     Highcharts.downloadURL = HDownload
   }
 
-  const exportChart = ({id, name, el, rows, cols}) => new Promise(resolve => {
+  const exportChart = ({id, name, el}) => new Promise(resolve => {
     const highChart = el.querySelector('div[data-highcharts-chart]')
 
     function exportHC () {
       // hack highcharts download method
-      Highcharts.downloadURL = img => resolve({cols, rows, img})
+      Highcharts.downloadURL = img => resolve({name, img})
       highChart.HCharts.exportChartLocal()
     }
 
@@ -86,15 +86,14 @@ export function serializeReportModules (modules) {
        * @type {HTMLTableElement}
        */
       const table = el.querySelector('table')
-
-      const serializedTable = {
-        title: name,
-        head: [],
-        body: []
+      const module = {
+        name,
+        headers: [],
+        rows: []
       }
 
       if (table.tHead.rows.length > 1) {
-        serializedTable.head = serializeTr(table.tHead.rows[1])
+        module.headers = serializeTr(table.tHead.rows[1])
 
         /**
          *
@@ -103,11 +102,11 @@ export function serializeReportModules (modules) {
         const tbody = table.tBodies[0]
 
         for (let i = 0; i < tbody.rows.length; i++) {
-          serializedTable.body.push(serializeTr(tbody.rows[i]))
+          module.rows.push(serializeTr(tbody.rows[i]))
         }
       }
 
-      resolve({cols, rows, table: serializedTable})
+      resolve(module)
     }
 
     if (highChart) {

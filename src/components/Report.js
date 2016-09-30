@@ -101,15 +101,14 @@ const Report = React.createClass({
   downloadReport (type = 'pdf') {
     const {dispatch, params, report} = this.props
 
-    const modules = map(report.modules, ({id, name, rows, cols}) => {
+    const modules = map(report.modules, ({id, name}) => {
       const el = this.refs.grid.querySelector(`div[data-report-module="${id}"]`)
 
-      return {id, el, name, rows, cols}
+      return {id, el, name}
     })
 
     this.setState({isCreatingReport: true})
 
-    // @todo user selected type
     serializeReportModules(modules)
       .then(modules => dispatch(exportReportAction, params, type, {
         id: report.id,
