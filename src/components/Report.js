@@ -16,9 +16,9 @@ import LoadingHorizontal from './LoadingHorizontal'
 import Module from './ReportModuleController'
 import ReportDateRange from './ReportDateRange'
 import {createModuleReportAction} from '../actions/create-module'
-import {createReportPdfAction} from '../actions/create-report-pdf'
+import {exportReportAction} from '../actions/export-report'
 import {updateReportAction} from '../actions/update-report'
-import {exportReportModules} from '../functions/export-report-modules'
+import {serializeReportModules} from '../functions/seralize-report-modules'
 import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
@@ -98,9 +98,9 @@ const Report = React.createClass({
     })
   },
   downloadReport () {
-    const {dispatch, report: {name}} = this.props
+    const {dispatch, params, report} = this.props
 
-    const modules = map(this.props.report.modules, ({id, name, rows, cols}) => {
+    const modules = map(report.modules, ({id, name, rows, cols}) => {
       const el = this.refs.grid.querySelector(`div[data-report-module="${id}"]`)
 
       return {id, el, name, rows, cols}
@@ -108,9 +108,11 @@ const Report = React.createClass({
 
     this.setState({isCreatingReport: true})
 
-    exportReportModules(modules)
-      .then(modules => dispatch(createReportPdfAction, {
-        name: name,
+    // @todo user selected type
+    serializeReportModules(modules)
+      .then(modules => dispatch(exportReportAction, params, 'pdf', {
+        id: report.id,
+        name: report.name,
         modules
       }))
       .then(response =>
@@ -146,7 +148,11 @@ const Report = React.createClass({
                 <Message>newModule</Message>
               </button>)}
 
-            <button disabled={isLoading || isCreatingReport} className='mdl-button mdl-color-text--grey-100' onClick={this.downloadReport}>
+            <button
+              disabled={isLoading || isCreatingReport}
+              className='mdl-button mdl-color-text--grey-100'
+              onClick={this.downloadReport}>
+
               {isCreatingReport
                 ? <Message>creatingReport</Message>
                 : <Message>extractReport</Message>}

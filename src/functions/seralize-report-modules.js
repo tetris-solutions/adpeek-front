@@ -63,7 +63,7 @@ function serializeTr (tr) {
  * @param {Array} modules module list
  * @returns {Promise.<Array.<Object>>} promise that resolves to a series of files
  */
-export function exportReportModules (modules) {
+export function serializeReportModules (modules) {
   const {Highcharts} = window
   const HDownload = Highcharts.downloadURL
   const exportedModules = []

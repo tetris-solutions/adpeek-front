@@ -4,13 +4,13 @@ import {getApiFetchConfig} from '@tetris/front-server/lib/functions/get-api-fetc
 import {saveResponseTokenAsCookie} from '@tetris/front-server/lib/functions/save-token-as-cookie'
 import {pushResponseErrorToState} from '@tetris/front-server/lib/functions/push-response-error-to-state'
 
-function createReportPdf (report, config) {
-  return POST(`${process.env.ADPEEK_API_URL}/create-report-pdf`,
+function exportReport (workspace, type, report, config) {
+  return POST(`${process.env.ADPEEK_API_URL}/workspace/${workspace}/report/${report.id}/export?type=${type}`,
     assign({body: report}, config))
 }
 
-export function createReportPdfAction (tree, report) {
-  return createReportPdf(report, getApiFetchConfig(tree))
+export function exportReportAction (tree, {workspace}, type, report) {
+  return exportReport(workspace, type, report, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
