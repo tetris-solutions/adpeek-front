@@ -74,11 +74,13 @@ export function serializeReportModules (modules) {
   const exportChart = ({id, name, el, rows, cols}) => new Promise(resolve => {
     const highChart = el.querySelector('div[data-highcharts-chart]')
 
-    if (highChart) {
+    function exportHC () {
       // hack highcharts download method
       Highcharts.downloadURL = img => resolve({cols, rows, img})
       highChart.HCharts.exportChartLocal()
-    } else {
+    }
+
+    function exportTable () {
       /**
        *
        * @type {HTMLTableElement}
@@ -106,6 +108,12 @@ export function serializeReportModules (modules) {
       }
 
       resolve({cols, rows, table: serializedTable})
+    }
+
+    if (highChart) {
+      exportHC()
+    } else {
+      exportTable()
     }
   })
 

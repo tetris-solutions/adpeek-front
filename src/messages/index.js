@@ -220,7 +220,10 @@ module.exports = {
     errorScreenAuthTitle: 'Access Forbidden',
     errorScreenAuthBody: 'You are trying to access an area your user has no access to.<br/> You may want to check the URL or contact your administrator.',
     errorScreenExit: 'Ok, take me back!',
-    messageFromServer: 'Message from server'
+    messageFromServer: 'Message from server',
+    pickReportTypePromptTitle: 'Choose a format for your report',
+    reportTypeSpreadsheet: 'Spreadsheet',
+    reportTypePdf: 'PDF'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -443,6 +446,9 @@ module.exports = {
     errorScreenAuthBody: `Você está tentando acessar uma área do sistema a qual seu usuário não tem acesso.<br/>
         Certifique-se que você tem a URL correta ou contate seu administrador.`,
     errorScreenExit: 'OK, voltar!',
-    messageFromServer: 'Mensagem do servidor'
+    messageFromServer: 'Mensagem do servidor',
+    pickReportTypePromptTitle: 'Escolha o formato do relatório',
+    reportTypeSpreadsheet: 'Planilha',
+    reportTypePdf: 'PDF'
   }
 }

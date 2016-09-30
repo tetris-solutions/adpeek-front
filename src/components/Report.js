@@ -9,6 +9,7 @@ import sortBy from 'lodash/sortBy'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 
+import ReportExportButton from './ReportExportButton'
 import entityType from '../propTypes/report-entity'
 import reportType from '../propTypes/report'
 import Input from './Input'
@@ -97,7 +98,7 @@ const Report = React.createClass({
       index
     })
   },
-  downloadReport () {
+  downloadReport (type = 'pdf') {
     const {dispatch, params, report} = this.props
 
     const modules = map(report.modules, ({id, name, rows, cols}) => {
@@ -110,7 +111,7 @@ const Report = React.createClass({
 
     // @todo user selected type
     serializeReportModules(modules)
-      .then(modules => dispatch(exportReportAction, params, 'pdf', {
+      .then(modules => dispatch(exportReportAction, params, type, {
         id: report.id,
         name: report.name,
         modules
@@ -148,15 +149,10 @@ const Report = React.createClass({
                 <Message>newModule</Message>
               </button>)}
 
-            <button
-              disabled={isLoading || isCreatingReport}
-              className='mdl-button mdl-color-text--grey-100'
-              onClick={this.downloadReport}>
-
-              {isCreatingReport
-                ? <Message>creatingReport</Message>
-                : <Message>extractReport</Message>}
-            </button>
+            <ReportExportButton
+              create={this.downloadReport}
+              isCreatingReport={isCreatingReport}
+              isLoading={isLoading}/>
           </div>
         </header>
         <div className='mdl-grid' ref='grid'>
