@@ -57,13 +57,13 @@ function serializeTableCell (td) {
 function serializeTr (tr) {
   return toArray(tr.cells).map(serializeTableCell)
 }
-
 /**
- * serializes a array of report module
- * @param {Array} modules module list
- * @returns {Promise.<Array.<Object>>} promise that resolves to a series of files
+ * serializes modules
+ * @param {Array} modules the modules to be exported
+ * @param {Boolean} [forceTableExport] whether modules ought to be exported as table regardless of type
+ * @return {*|Promise|Promise.<Array>} a promise that resolves to the array of serialized modules
  */
-export function serializeReportModules (modules) {
+export function serializeReportModules (modules, forceTableExport = false) {
   const {Highcharts} = window
   const HDownload = Highcharts.downloadURL
   const exportedModules = []
@@ -109,10 +109,18 @@ export function serializeReportModules (modules) {
       resolve(module)
     }
 
-    if (highChart) {
-      exportHC()
-    } else {
+    function renderAsTableThenExport () {
+      el.querySelector('div[data-interface]')
+        .renderAsTable()
+        .then(exportTable)
+    }
+
+    if (!highChart) {
       exportTable()
+    } else if (forceTableExport) {
+      renderAsTableThenExport()
+    } else {
+      exportHC()
     }
   })
 

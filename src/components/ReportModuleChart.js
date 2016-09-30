@@ -73,11 +73,29 @@ const ReportChart = React.createClass({
       }
     }
   },
-  shouldComponentUpdate (nextProps) {
+  getInitialState () {
+    return {
+      renderHiddenTable: false
+    }
+  },
+  renderAsTable () {
+    const unlock = () => this.setState({renderHiddenTable: false})
+
+    return new Promise(resolve =>
+      this.setState({renderHiddenTable: true}, () => {
+        resolve()
+        setTimeout(unlock, 300)
+      }))
+  },
+  componentDidMount () {
+    this.refs.interface.renderAsTable = this.renderAsTable
+  },
+  shouldComponentUpdate (nextProps, nextState) {
     const newModule = nextProps.module
     const oldModule = this.props.module
 
     return (
+      nextState.renderHiddenTable !== this.state.renderHiddenTable ||
       nextProps.height !== this.props.height ||
       newModule.sort !== oldModule.sort ||
       newModule.limit !== oldModule.limit ||
@@ -89,27 +107,34 @@ const ReportChart = React.createClass({
     )
   },
   render () {
+    const {renderHiddenTable} = this.state
     const {save, height, reportParams, module, entity, metaData: {attributes}} = this.props
     const Chart = typeComponent[module.type]
+    const config = {
+      locales: this.context.locales,
+      save: save,
+      sort: module.sort,
+      limit: module.limit,
+      isLoading: module.isLoading,
+      reportParams: reportParams,
+      sourceWidth: 1200,
+      sourceHeight: floor(1200 * A4Ratio),
+      name: module.name,
+      messages: this.context.messages,
+      attributes: attributes,
+      entity: entity,
+      result: module.result || emptyResult,
+      query: module.query || emptyQuery
+    }
 
     return (
       <div className={`${style.wrap}`} style={{height}}>
-        <Chart
-          locales={this.context.locales}
-          save={save}
-          sort={module.sort}
-          limit={module.limit}
-          isLoading={module.isLoading}
-          reportParams={reportParams}
-          sourceWidth={1200}
-          sourceHeight={floor(1200 * A4Ratio)}
-          name={module.name}
-          messages={this.context.messages}
-          attributes={attributes}
-          entity={entity}
-          result={module.result || emptyResult}
-          query={module.query || emptyQuery}/>
-
+        <Chart {...config}/>
+        <div ref='interface' style={{display: 'none'}} data-interface>
+          {renderHiddenTable
+            ? <Table {...config}/>
+            : null}
+        </div>
         {module.isLoading && <ChartSpinner/>}
       </div>
     )

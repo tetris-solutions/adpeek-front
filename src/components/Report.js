@@ -109,7 +109,7 @@ const Report = React.createClass({
 
     this.setState({isCreatingReport: true})
 
-    serializeReportModules(modules)
+    serializeReportModules(modules, type === 'xls')
       .then(modules => dispatch(exportReportAction, params, type, {
         id: report.id,
         name: report.name,
