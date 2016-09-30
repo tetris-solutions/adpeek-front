@@ -1,12 +1,14 @@
 import camelCase from 'lodash/camelCase'
 import cloneDeep from 'lodash/cloneDeep'
 import diff from 'lodash/differenceWith'
+import isFunction from 'lodash/isFunction'
 import find from 'lodash/find'
 import forEach from 'lodash/forEach'
 import includes from 'lodash/includes'
 import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
+import isEqualWith from 'lodash/isEqualWith'
 import isObject from 'lodash/isObject'
 import isString from 'lodash/isString'
 import lowerCase from 'lodash/toLower'
@@ -15,6 +17,7 @@ import omit from 'lodash/omit'
 import window from 'global/window'
 import Highcharts from 'highcharts'
 import React from 'react'
+import unset from 'lodash/unset'
 
 if (typeof document !== 'undefined') {
   require('highcharts/modules/exporting')(Highcharts)
@@ -147,6 +150,25 @@ function removeSeries (series) {
   series.remove(doNotRedraw)
 }
 
+function customComparison (a, b) {
+  if (isFunction(a) && isFunction(b)) {
+    return true
+  }
+}
+
+function hasChanged (configA, configB) {
+  const newOptionsForComparision = omit(configA, 'series', 'title')
+  const oldOptionsForComparison = omit(configB, 'series', 'title')
+
+  unset(oldOptionsForComparison, ['xAxis', 'categories'])
+  unset(newOptionsForComparision, ['xAxis', 'categories'])
+
+  unset(oldOptionsForComparison, ['xAxis', 0, 'categories'])
+  unset(newOptionsForComparision, ['xAxis', 0, 'categories'])
+
+  return !isEqualWith(newOptionsForComparision, oldOptionsForComparison, customComparison)
+}
+
 export const Chart = createClass({
   displayName: 'Highcharts',
   propTypes: {
@@ -190,10 +212,7 @@ export const Chart = createClass({
       this.chart.setTitle(newConfig.title)
     }
 
-    const options = omit(newConfig, 'series', 'title')
-    const oldOptions = omit(this.state.config, 'series', 'title')
-
-    if (!isEqual(options, oldOptions)) {
+    if (hasChanged(newConfig, this.state.config)) {
       this.setState({config: newConfig}, () => {
         this.chart.destroy()
         this.draw()
