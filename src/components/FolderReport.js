@@ -61,11 +61,9 @@ const FolderReport = React.createClass({
   },
   componentDidMount () {
     const {params, folder, dispatch} = this.props
-
-    const loadEntitiesPromise = dispatch(loadFolderEntitiesAction,
-      params.company,
-      params.workspace,
-      params.folder)
+    const loadEntitiesPromise = folder.ads
+      ? Promise.resolve()
+      : dispatch(loadFolderEntitiesAction, params.company, params.workspace, params.folder)
 
     const loadMetaDataPromise = map(this.getEntities(), ({id}) =>
       dispatch(loadReportMetaDataAction,
