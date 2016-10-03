@@ -221,7 +221,7 @@ module.exports = {
     errorScreenAuthBody: 'You are trying to access an area your user has no access to.<br/> You may want to check the URL or contact your administrator.',
     errorScreenExit: 'Ok, take me back!',
     messageFromServer: 'Message from server',
-    pickReportTypePromptTitle: 'Choose a format for your report',
+    pickReportTypePromptTitle: 'Pick an export format',
     reportTypeSpreadsheet: 'Spreadsheet',
     reportTypePdf: 'PDF'
   },
@@ -447,7 +447,7 @@ module.exports = {
         Certifique-se que você tem a URL correta ou contate seu administrador.`,
     errorScreenExit: 'OK, voltar!',
     messageFromServer: 'Mensagem do servidor',
-    pickReportTypePromptTitle: 'Escolha o formato do relatório',
+    pickReportTypePromptTitle: 'Escolha o formato',
     reportTypeSpreadsheet: 'Planilha',
     reportTypePdf: 'PDF'
   }
