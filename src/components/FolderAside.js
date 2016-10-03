@@ -2,6 +2,7 @@ import isEmpty from 'lodash/isEmpty'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 import {Link} from 'react-router'
+import endsWith from 'lodash/endsWith'
 
 import ContextMenu from './ContextMenu'
 import DeleteButton from './DeleteButton'
@@ -14,7 +15,7 @@ export function FolderAside ({
   dispatch,
   folder,
   params: {company, workspace}
-}, {router}) {
+}, {router, location}) {
   function onClick () {
     dispatch(deleteFolderAction, folder.id)
       .then(() => {
@@ -23,6 +24,11 @@ export function FolderAside ({
   }
 
   const baseUrl = `/company/${company}/workspace/${workspace}/folder/${folder.id}`
+  const reportUrl = `${baseUrl}/${isEmpty(folder.reports) ? 'reports' : 'report/' + folder.reports[0].id}`
+  const backspaceUrl = endsWith(location.pathname, folder.id)
+    ? `/company/${company}/workspace/${workspace}`
+    : baseUrl
+
   return (
     <ContextMenu title={folder.name} icon='folder'>
       <Link className='mdl-navigation__link' to={`${baseUrl}/adgroups`}>
@@ -35,7 +41,7 @@ export function FolderAside ({
         <Message>folderOrders</Message>
       </Link>
 
-      <Link className='mdl-navigation__link' to={`${baseUrl}/${isEmpty(folder.reports) ? 'reports' : 'report/' + folder.reports[0].id}`}>
+      <Link className='mdl-navigation__link' to={reportUrl}>
         <i className='material-icons'>show_chart</i>
         <Message>folderReport</Message>
       </Link>
@@ -49,13 +55,19 @@ export function FolderAside ({
         <i className='material-icons'>delete</i>
         <Message>deleteFolder</Message>
       </DeleteButton>
+
+      <Link className='mdl-navigation__link' to={backspaceUrl}>
+        <i className='material-icons'>close</i>
+        <Message>oneLevelUpNavigation</Message>
+      </Link>
     </ContextMenu>
   )
 }
 
 FolderAside.displayName = 'Folder-Aside'
 FolderAside.contextTypes = {
-  router: PropTypes.object
+  router: PropTypes.object,
+  location: PropTypes.object
 }
 FolderAside.propTypes = {
   dispatch: PropTypes.func,

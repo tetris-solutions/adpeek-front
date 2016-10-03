@@ -223,7 +223,8 @@ module.exports = {
     messageFromServer: 'Message from server',
     pickReportTypePromptTitle: 'Pick an export format',
     reportTypeSpreadsheet: 'Spreadsheet',
-    reportTypePdf: 'PDF'
+    reportTypePdf: 'PDF',
+    oneLevelUpNavigation: 'Back'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -449,6 +450,7 @@ module.exports = {
     messageFromServer: 'Mensagem do servidor',
     pickReportTypePromptTitle: 'Escolha o formato',
     reportTypeSpreadsheet: 'Planilha',
-    reportTypePdf: 'PDF'
+    reportTypePdf: 'PDF',
+    oneLevelUpNavigation: 'Fechar'
   }
 }

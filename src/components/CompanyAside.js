@@ -18,6 +18,11 @@ export const CompanyAside = ({company}) => (
       <i className='material-icons'>attach_money</i>
       <Message>companyOrders</Message>
     </Link>
+
+    <Link className='mdl-navigation__link' to='/'>
+      <i className='material-icons'>close</i>
+      <Message>oneLevelUpNavigation</Message>
+    </Link>
   </ContextMenu>
 )
 

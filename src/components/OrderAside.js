@@ -37,6 +37,10 @@ export function OrderAside ({params: {company, workspace, folder}, order, dispat
         <i className='material-icons'>delete</i>
         <Message>deleteOrder</Message>
       </DeleteButton>
+      <Link className='mdl-navigation__link' to={`${folderUrl}/orders`}>
+        <i className='material-icons'>close</i>
+        <Message>oneLevelUpNavigation</Message>
+      </Link>
     </ContextMenu>
   )
 }

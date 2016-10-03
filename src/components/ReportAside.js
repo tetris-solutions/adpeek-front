@@ -71,6 +71,11 @@ export function ReportAside ({report, dispatch, user}, {messages, locales, route
         <i className='material-icons'>delete</i>
         <Message>deleteReport</Message>
       </DeleteButton>
+
+      <Link className='mdl-navigation__link' to={`${folderUrl}/reports`}>
+        <i className='material-icons'>close</i>
+        <Message>oneLevelUpNavigation</Message>
+      </Link>
     </ContextMenu>
   )
 }

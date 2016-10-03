@@ -31,6 +31,10 @@ export function WorkspaceAside ({params: {company}, workspace, dispatch}, {route
         <i className='material-icons'>delete</i>
         <Message>deleteWorkspace</Message>
       </DeleteButton>
+      <Link className='mdl-navigation__link' to={`/company/${company}`}>
+        <i className='material-icons'>close</i>
+        <Message>oneLevelUpNavigation</Message>
+      </Link>
     </ContextMenu>
   )
 }
