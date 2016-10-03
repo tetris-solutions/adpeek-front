@@ -119,6 +119,7 @@ const Report = React.createClass({
         this.setState({isCreatingReport: false}, () => {
           window.location.href = response.data.url
         }))
+      .catch(() => this.setState({isCreatingReport: false}))
   },
   render () {
     const {isLoading, editMode, report: {name, modules, metaData}} = this.props
