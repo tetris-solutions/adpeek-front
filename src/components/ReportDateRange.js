@@ -1,6 +1,6 @@
 import React from 'react'
 import Message from '@tetris/front-server/lib/components/intl/Message'
-import DateRange from './DateRange'
+import DateRangePicker from './DateRangePicker'
 import ButtonWithPrompt from './ButtonWithPrompt'
 
 const {PropTypes} = React
@@ -12,7 +12,7 @@ const DateRangeModal = ({startDate, endDate, close, onChange}) => (
         <Message>reportRangeTitle</Message>
       </h4>
 
-      <DateRange
+      <DateRangePicker
         onChange={onChange}
         startDate={startDate}
         endDate={endDate}/>
