@@ -8,7 +8,7 @@ const ButtonWithPrompt = React.createClass({
   propTypes: {
     children: PropTypes.func.isRequired,
     className: PropTypes.string.isRequired,
-    label: PropTypes.node,
+    label: PropTypes.node.isRequired,
     size: PropTypes.string
   },
   getInitialState () {

@@ -70,13 +70,7 @@ const DateRange = React.createClass({
   render () {
     const {startDate, endDate, onChange} = this.props
 
-    return (
-      <DTRangePicker
-        startDate={startDate}
-        endDate={endDate}
-        onChange={onChange}
-        ranges={this.ranges}/>
-    )
+    return <DTRangePicker startDate={startDate} endDate={endDate} onChange={onChange} ranges={this.ranges}/>
   }
 })
 
