@@ -1,5 +1,5 @@
 import React from 'react'
-import {DateRange as DTRangePicker} from 'react-date-range'
+import {DateRange} from 'react-date-range'
 
 const {PropTypes} = React
 
@@ -45,29 +45,25 @@ const calculateRanges = ({today, yesterday, pastWeek, currentMonth, pastMonth}) 
     }
   }
 })
+let defaultRanges
 
-const DateRangePicker = React.createClass({
-  displayName: 'Date-Range',
-  contextTypes: {
-    messages: PropTypes.object
-  },
-  propTypes: {
-    calculateRanges: PropTypes.func,
-    startDate: PropTypes.object,
-    endDate: PropTypes.object,
-    onChange: PropTypes.func.isRequired
-  },
-  getDefaultProps () {
-    return {calculateRanges}
-  },
-  componentWillMount () {
-    this.ranges = this.props.calculateRanges(this.context.messages)
-  },
-  render () {
-    const {startDate, endDate, onChange} = this.props
+const DateRangePicker = (props, {messages}) => {
+  defaultRanges = defaultRanges || calculateRanges(messages)
 
-    return <DTRangePicker startDate={startDate} endDate={endDate} onChange={onChange} ranges={this.ranges}/>
-  }
-})
+  return (
+    <DateRange {...props} ranges={props.ranges || defaultRanges}/>
+  )
+}
+
+DateRangePicker.displayName = 'Date-Range-Picker'
+DateRangePicker.propTypes = {
+  ranges: PropTypes.object,
+  startDate: PropTypes.object,
+  endDate: PropTypes.object,
+  onChange: PropTypes.func.isRequired
+}
+DateRangePicker.contextTypes = {
+  messages: PropTypes.object
+}
 
 export default DateRangePicker

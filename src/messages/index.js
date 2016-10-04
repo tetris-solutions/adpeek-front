@@ -114,11 +114,19 @@ module.exports = {
     loadingCampaigns: 'Loading Campaigns...',
     extractReport: 'Download Report',
     creatingReport: 'Creating Report...',
+
+    // date ranges
     today: 'Today',
     yesterday: 'Yesterday',
     pastWeek: 'Past week',
     currentMonth: 'Current month',
     pastMonth: 'Past month',
+    nextWeek: 'Next week',
+    nextMonth: 'Next month',
+    nextSemester: 'Next semester',
+    nextYear: 'Next year',
+
+    orderRangeTitle: 'Order Period',
     reportBuilder: 'Report Builder',
     dateRangeLabel: 'from {startDate} until {endDate}',
     reportRangeTitle: 'Report date range',
@@ -340,11 +348,19 @@ module.exports = {
     loadingCampaigns: 'Carregando campanhas...',
     extractReport: 'Extrair Relatório',
     creatingReport: 'Gerando Relatório...',
+
+    // date ranges
     today: 'Hoje',
     yesterday: 'Ontém',
     pastWeek: 'Semana passada',
     currentMonth: 'Mês atual',
     pastMonth: 'Mês passado',
+    nextWeek: 'Próxima semana',
+    nextMonth: 'Próximo mês',
+    nextSemester: 'Próximo semestre',
+    nextYear: 'Próximo ano',
+
+    orderRangeTitle: 'Período do Pedido',
     reportBuilder: 'Criação de Relatórios',
     dateRangeLabel: 'de {startDate} até {endDate}',
     reportRangeTitle: 'Intervalo do relatório',

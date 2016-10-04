@@ -1,6 +1,6 @@
 import csjs from 'csjs'
 import React from 'react'
-
+import OrderDateRange from './OrderDateRange'
 import orderType from '../propTypes/order'
 import Input from './Input'
 import Switch from './Switch'
@@ -18,6 +18,7 @@ const style = csjs`
   margin: .3em auto;
   padding: 0
 }`
+
 export const OrderHeader = React.createClass({
   displayName: 'Order-Header',
   mixins: [styled(style)],
@@ -26,13 +27,23 @@ export const OrderHeader = React.createClass({
     change: React.PropTypes.func,
     order: orderType
   },
+  contextTypes: {
+    moment: React.PropTypes.func
+  },
   componentWillMount () {
     const {change} = this.props
     this.onChangeValue = ({target: {name, value}}) => change(name, value)
     this.onChangeNumber = ({target: {name, value}}) => change(name, Number(value))
     this.onChangeBoolean = ({target: {checked, name}}) => change(name, checked)
   },
+  onChangeRange ({startDate, endDate}) {
+    this.props.change({
+      start: startDate.format('YYYY-MM-DD'),
+      end: endDate.format('YYYY-MM-DD')
+    })
+  },
   render () {
+    const {moment} = this.context
     const {min, order: {name, auto_budget, amount, start, end}} = this.props
     return (
       <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
@@ -45,23 +56,16 @@ export const OrderHeader = React.createClass({
                 label='orderName'
                 onChange={this.onChangeValue}/>
             </div>
-            <div className='mdl-cell mdl-cell--2-col'>
-              <Input
-                type='date'
-                value={start}
-                label='startDate'
-                onChange={this.onChangeValue}
-                name='start'/>
-            </div>
-            <div className='mdl-cell mdl-cell--2-col'>
-              <Input
-                value={end}
-                type='date'
-                label='endDate'
-                onChange={this.onChangeValue}
-                name='end'/>
-            </div>
-            <VerticalAlign className='mdl-cell mdl-cell--1-offset mdl-cell--2-col'>
+            <VerticalAlign className='mdl-cell mdl-cell--4-col'>
+              <div>
+                <OrderDateRange
+                  startDate={moment(start)}
+                  endDate={moment(end)}
+                  buttonClassName='mdl-button'
+                  onChange={this.onChangeRange}/>
+              </div>
+            </VerticalAlign>
+            <VerticalAlign className='mdl-cell mdl-cell--2-col'>
               <div>
                 <Switch
                   onChange={this.onChangeBoolean}
@@ -70,7 +74,7 @@ export const OrderHeader = React.createClass({
                   label='Auto Budget'/>
               </div>
             </VerticalAlign>
-            <div className='mdl-cell mdl-cell--1-col'>
+            <div className='mdl-cell mdl-cell--2-col'>
               <Input
                 value={amount}
                 type='number'

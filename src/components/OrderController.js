@@ -10,7 +10,7 @@ import map from 'lodash/map'
 import sum from 'lodash/sum'
 import without from 'lodash/without'
 import React from 'react'
-
+import isObject from 'lodash/isObject'
 import orderType from '../propTypes/order'
 import OrderEdit from './OrderEdit'
 import {loadBudgetsAction} from '../actions/load-budgets'
@@ -119,10 +119,14 @@ export const OrderController = React.createClass({
 
     this.changeCurrentBudget(changes)
   },
-  changeOrderField (field, value) {
-    this.setState({
-      order: assign({}, this.state.order, {[field]: value})
-    })
+  changeOrderField (fieldOrChanges, value) {
+    const changes = isObject(fieldOrChanges)
+      ? fieldOrChanges
+      : {[fieldOrChanges]: value}
+
+    const order = assign({}, this.state.order, changes)
+
+    this.setState({order})
   },
   changeBudgetField (field, value) {
     if (field === 'mode') {

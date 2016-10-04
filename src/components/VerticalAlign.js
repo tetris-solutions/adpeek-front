@@ -28,7 +28,7 @@ VerticalAlign.defaultProps = {
 VerticalAlign.displayName = 'Vertical-Align'
 VerticalAlign.propTypes = {
   style: PropTypes.object,
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
   className: PropTypes.string
 }
 
