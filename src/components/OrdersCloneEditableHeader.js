@@ -1,6 +1,5 @@
 import React from 'react'
 import Switch from './Switch'
-import Input from './Input'
 import {styled} from './mixins/styled'
 import csjs from 'csjs'
 import moment from 'moment'
@@ -9,6 +8,7 @@ import filter from 'lodash/filter'
 import find from 'lodash/find'
 import endsWith from 'lodash/endsWith'
 import Message from '@tetris/front-server/lib/components/intl/Message'
+import OrderDateRange from './OrderDateRange'
 
 const style = csjs`
 .card {
@@ -35,12 +35,14 @@ function setValue (name, value, tr) {
 
   if (!input) return
 
-  if (input.type === 'checkbox') {
+  if (input.programaticallyCheck) {
     if (value) {
       input.programaticallyCheck()
     } else {
       input.programaticallyUncheck()
     }
+  } else if (input.programaticallySetValue) {
+    input.programaticallySetValue(value)
   } else {
     input.value = value
   }
@@ -67,6 +69,9 @@ function replicateValue (form, name, value) {
 export const EditableHeader = React.createClass({
   displayName: 'Editable-Header',
   mixins: [styled(style)],
+  contextTypes: {
+    moment: React.PropTypes.func
+  },
   getInitialState () {
     return {
       start: moment().date(1).format('YYYY-MM-DD'),
@@ -76,46 +81,47 @@ export const EditableHeader = React.createClass({
   },
   apply (e) {
     e.preventDefault()
-    const {wrapper} = this.refs
+    const {wrapper, start: startInput, end: endInput} = this.refs
 
     const autoBudgetInput = wrapper.querySelector('[name=autoBudget]')
-    const startInput = wrapper.querySelector('[name=start]')
-    const endInput = wrapper.querySelector('[name=end]')
 
     replicateValue(autoBudgetInput.form, 'autoBudget', autoBudgetInput.checked)
     replicateValue(startInput.form, 'start', startInput.value)
     replicateValue(endInput.form, 'end', endInput.value)
   },
-  onChangeDate ({target: {value, name, form}}) {
-    this.setState({[name]: value})
-    replicateValue(form, name, value)
-  },
   onChangeAutoBudget ({target: {checked, form}}) {
     this.setState({autoBudget: checked})
     replicateValue(form, 'autoBudget', checked)
   },
+  hasChangedDate () {
+    const {start: startInput, end: endInput} = this.refs
+
+    replicateValue(startInput.form, 'start', startInput.value)
+    replicateValue(endInput.form, 'end', endInput.value)
+  },
+  onChangeRange ({startDate, endDate}) {
+    this.setState({
+      start: startDate.format('YYYY-MM-DD'),
+      end: endDate.format('YYYY-MM-DD')
+    }, this.hasChangedDate)
+  },
   render () {
+    const {moment} = this.context
     const {start, end, autoBudget} = this.state
 
     return (
       <div className={`mdl-card mdl-shadow--2dp ${style.card}`} ref='wrapper'>
         <div className={`mdl-card__supporting-text ${style.inner}`}>
           <div className='mdl-grid'>
-            <div className='mdl-cell mdl-cell--1-offset mdl-cell--3-col'>
-              <Input
-                type='date'
-                value={start}
-                label='startDate'
-                onChange={this.onChangeDate}
-                name='start'/>
-            </div>
-            <div className='mdl-cell mdl-cell--3-col'>
-              <Input
-                value={end}
-                type='date'
-                label='endDate'
-                onChange={this.onChangeDate}
-                name='end'/>
+            <div className='mdl-cell mdl-cell--2-offset mdl-cell--4-col'>
+              <OrderDateRange
+                buttonClassName='mdl-button'
+                onChange={this.onChangeRange}
+                startDate={moment(start)}
+                endDate={moment(end)}/>
+
+              <input type='hidden' name='start' value={start} ref='start'/>
+              <input type='hidden' name='end' value={end} ref='end'/>
             </div>
             <VerticalAlign className='mdl-cell mdl-cell--1-offset  mdl-cell--2-col'>
               <div>
