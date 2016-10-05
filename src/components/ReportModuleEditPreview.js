@@ -18,7 +18,7 @@ const ReportModuleEditPreview = props => (
         <Input name='name' label='name' defaultValue={props.draftModule.name} onChange={props.onChangeInput}/>
       </div>
 
-      <div className='mdl-cell mdl-cell--3-col'>
+      <div className='mdl-cell mdl-cell--4-col'>
         <Select label='entity' name='entity' onChange={props.onChangeInput} value={props.draftEntity.id}>
           {map(props.entities, ({id, name}) =>
             <option key={id} value={id}>
@@ -27,18 +27,10 @@ const ReportModuleEditPreview = props => (
         </Select>
       </div>
 
-      <div className='mdl-cell mdl-cell--3-col'>
+      <div className='mdl-cell mdl-cell--4-col'>
         <TypeSelect onChange={props.onChangeInput} value={props.draftModule.type}/>
       </div>
 
-      <div className='mdl-cell mdl-cell--2-col'>
-        <Input
-          type='number'
-          name='limit'
-          label='resultLimit'
-          defaultValue={props.draftModule.limit}
-          onChange={props.onChangeInput}/>
-      </div>
       <Fields
         module={props.draftModule}
         attributes={props.metaData.attributes}

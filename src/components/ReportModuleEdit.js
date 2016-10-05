@@ -15,6 +15,7 @@ import reportMetaDataType from '../propTypes/report-meta-data'
 import reportModuleType from '../propTypes/report-module'
 import reportParamsType from '../propTypes/report-params'
 import ReportModuleEditPreview from './ReportModuleEditPreview'
+import ReportModuleEditFilters from './ReportModuleEditFilters'
 import Lists from './ReportModuleEditLists'
 import ReportDateRange from './ReportDateRange'
 import Sizing from './ReportModuleSizing'
@@ -263,6 +264,15 @@ const ModuleEdit = React.createClass({
               <Tab id='module-size' title={messages.moduleSize}>
                 <br/>
                 <Sizing module={draftModule} save={this.update}/>
+              </Tab>
+              <Tab id='module-filters' title={messages.filterModuleResult}>
+                <ReportModuleEditFilters
+                  filters={draftModule.filters}
+                  limit={draftModule.limit}
+                  dimensions={draftModule.dimensions}
+                  metrics={draftModule.metrics}
+                  attributes={metaData.attributes}
+                  update={this.update}/>
               </Tab>
             </Tabs>
           </div>

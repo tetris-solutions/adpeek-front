@@ -152,8 +152,9 @@ module.exports = {
     module: 'Module',
     invalidAttributePermutation: 'Selection canceled - {inserted} can not be used with {list}',
     filterLabel: 'Filter',
-    moduleContent: 'Setup Module Report',
+    moduleContent: 'Report Options',
     moduleSize: 'Module Size',
+    filterModuleResult: 'Filter Result',
     reports: 'Reports',
     // breadcrumbs
     companyBreadcrumb: 'Company',
@@ -232,7 +233,13 @@ module.exports = {
     pickReportTypePromptTitle: 'Pick an export format',
     reportTypeSpreadsheet: 'Spreadsheet',
     reportTypePdf: 'PDF',
-    oneLevelUpNavigation: 'Back'
+    oneLevelUpNavigation: 'Back',
+    containsOperator: 'Contains',
+    equalsOperator: 'Equals',
+    lessThanOperator: 'Less than',
+    greaterThanOperator: 'Greater than',
+    betweenOperator: 'Between',
+    newFilter: 'Add filter'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -388,6 +395,7 @@ module.exports = {
     filterLabel: 'Filtrar',
     moduleContent: 'Configurar Relatório',
     moduleSize: 'Configurar Tamanho',
+    filterModuleResult: 'Filtrar Resultado',
     reports: 'Relatórios',
     // breadcrumbs
     companyBreadcrumb: 'Empresa',
@@ -467,6 +475,12 @@ module.exports = {
     pickReportTypePromptTitle: 'Escolha o formato',
     reportTypeSpreadsheet: 'Planilha',
     reportTypePdf: 'PDF',
-    oneLevelUpNavigation: 'Fechar'
+    oneLevelUpNavigation: 'Fechar',
+    containsOperator: 'Contém',
+    equalsOperator: 'Igual',
+    lessThanOperator: 'Menor ou igual',
+    greaterThanOperator: 'Maior ou igual',
+    betweenOperator: 'Entre',
+    newFilter: 'Adicionar filtro'
   }
 }
