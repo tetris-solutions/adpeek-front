@@ -176,10 +176,12 @@ const ReportModuleEditFilters = React.createClass({
   },
   removeFilter (index) {
     const filters = concat(this.state.filters)
+    const filterName = filters[index].attribute
 
     filters.splice(index, 1)
-
     this.setState({filters})
+
+    this.props.update({filters: omit(this.props.filters, filterName)})
   },
   componentWillMount () {
     this.onChange = curry((index, name, {target: {value, type}}) => {
