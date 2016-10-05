@@ -163,7 +163,7 @@ const ReportModuleEditFilters = React.createClass({
       : this.getAttributes(attribute)
     const metaData = attribute === 'limit'
       ? {type: 'integer'}
-      : find(attributes, 'id', attribute) || {type: 'string'}
+      : find(attributes, {id: attribute}) || {type: 'string'}
 
     return {
       attribute,
