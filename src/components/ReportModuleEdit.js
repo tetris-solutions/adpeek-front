@@ -10,23 +10,18 @@ import pick from 'lodash/pick'
 import uniq from 'lodash/uniq'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
-import _ReportChart from './ReportModuleChart'
 import reportEntityType from '../propTypes/report-entity'
 import reportMetaDataType from '../propTypes/report-meta-data'
 import reportModuleType from '../propTypes/report-module'
 import reportParamsType from '../propTypes/report-params'
-import Fields from './ReportModuleEditFields'
-import Input from './Input'
+import ReportModuleEditPreview from './ReportModuleEditPreview'
 import Lists from './ReportModuleEditLists'
 import ReportDateRange from './ReportDateRange'
-import Select from './Select'
 import Sizing from './ReportModuleSizing'
-import TypeSelect from './ReportModuleEditTypeSelect'
-import {expandVertically} from './higher-order/expand-vertically'
 import {Tabs, Tab} from './Tabs'
 
 const {PropTypes} = React
-const ReportChart = expandVertically(_ReportChart)
+
 const editableFields = ['name', 'type', 'dimensions', 'metrics', 'rows', 'cols', 'entity', 'limit', 'sort', 'filters']
 
 const ModuleEdit = React.createClass({
@@ -240,6 +235,8 @@ const ModuleEdit = React.createClass({
       isEmpty(draftModule.metrics) ||
       isEmpty(draftModule.filters.id)
 
+    const previewProps = {metaData, savedModule, savedEntity, draftModule, draftEntity, reportParams, entities}
+
     return (
       <form>
         <div className='mdl-grid'>
@@ -257,47 +254,11 @@ const ModuleEdit = React.createClass({
           <div className='mdl-cell mdl-cell--9-col'>
             <Tabs>
               <Tab id='module-content' title={messages.moduleContent}>
-                <section style={{height: '80vh', overflowY: 'auto'}}>
-                  <div className='mdl-grid'>
-                    <div className='mdl-cell mdl-cell--4-col'>
-                      <Input name='name' label='name' defaultValue={draftModule.name} onChange={this.onChangeInput}/>
-                    </div>
-
-                    <div className='mdl-cell mdl-cell--3-col'>
-                      <Select label='entity' name='entity' onChange={this.onChangeInput} value={draftEntity.id}>
-                        {map(entities, ({id, name}) =>
-                          <option key={id} value={id}>
-                            {name}
-                          </option>)}
-                      </Select>
-                    </div>
-
-                    <div className='mdl-cell mdl-cell--3-col'>
-                      <TypeSelect onChange={this.onChangeInput} value={draftModule.type}/>
-                    </div>
-
-                    <div className='mdl-cell mdl-cell--2-col'>
-                      <Input
-                        type='number'
-                        name='limit'
-                        label='resultLimit'
-                        defaultValue={draftModule.limit}
-                        onChange={this.onChangeInput}/>
-                    </div>
-                    <Fields
-                      module={draftModule}
-                      attributes={metaData.attributes}
-                      save={this.update}
-                      remove={this.removeItem}/>
-                  </div>
-
-                  <ReportChart
-                    save={this.update}
-                    metaData={metaData}
-                    module={savedModule}
-                    entity={savedEntity}
-                    reportParams={reportParams}/>
-                </section>
+                <ReportModuleEditPreview
+                  update={this.update}
+                  removeItem={this.removeItem}
+                  onChangeInput={this.onChangeInput}
+                  {...previewProps}/>
               </Tab>
               <Tab id='module-size' title={messages.moduleSize}>
                 <br/>
