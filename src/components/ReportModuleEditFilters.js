@@ -33,7 +33,7 @@ const Filter = ({id, attribute, operator, value, secondary, attributes, drop, ch
     <div className='mdl-cell mdl-cell--3-col'>
       <Select name={`filters.${id}.operator`} value={operator} onChange={change('operator')}>
         {map(attribute === 'limit' ? limitOperators : operators, op =>
-          <option value={op}>
+          <option key={op} value={op}>
             {messages[`${camelCase(op)}Operator`]}
           </option>)}
       </Select>
