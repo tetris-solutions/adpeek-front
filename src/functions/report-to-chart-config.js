@@ -115,7 +115,7 @@ export function reportToChartConfig (type, props) {
     labels: {
       formatter () {
         const attribute = attributes[metric]
-        return prettyNumber(this.value, attribute.metric_type, props.locales)
+        return prettyNumber(this.value, attribute.type, props.locales)
       }
     },
     opposite: index % 2 !== 0
@@ -253,7 +253,7 @@ export function reportToChartConfig (type, props) {
 
   function pointFormatter () {
     const attribute = attributes[this.options.metric]
-    const value = prettyNumber(this.y, attribute.metric_type, props.locales)
+    const value = prettyNumber(this.y, attribute.type, props.locales)
     return `<span style="color: ${this.color}">${attribute.name}:</span> <b>${value}</b><br/>`
   }
 

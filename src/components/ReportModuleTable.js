@@ -101,10 +101,10 @@ THeader.propTypes = {
   attributes: PropTypes.object
 }
 
-const Cell = ({attribute: {is_metric, metric_type}, value}, {locales}) => (
+const Cell = ({attribute: {is_metric, type}, value}, {locales}) => (
   <td className={is_metric ? '' : 'mdl-data-table__cell--non-numeric'}>
     {is_metric
-      ? prettyNumber(value, metric_type, locales)
+      ? prettyNumber(value, type, locales)
       : value}
   </td>
 )
@@ -126,7 +126,7 @@ Cell.propTypes = {
   ]),
   attribute: PropTypes.shape({
     is_metric: PropTypes.bool.isRequired,
-    metric_type: PropTypes.string
+    type: PropTypes.string
   }).isRequired
 }
 

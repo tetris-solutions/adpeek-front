@@ -19,8 +19,26 @@ const {PropTypes} = React
 const operators = ['contains', 'equals', 'less than', 'greater than', 'between']
 const limitOperators = ['equals']
 const notId = name => name !== 'id'
+const numTypes = [
+  'integer',
+  'decimal',
+  'percentage',
+  'currency'
+]
 
-const Filter = ({id, attribute, operator, value, secondary, attributes, drop, change}, {messages}) => (
+function inputType (type) {
+  if (includes(numTypes, type)) {
+    return 'number'
+  }
+
+  if (type === 'date') {
+    return 'date'
+  }
+
+  return 'text'
+}
+
+const Filter = ({id, attribute, operator, value, secondary, attributes, drop, change, metaData}, {messages}) => (
   <div className='mdl-grid'>
     <div className='mdl-cell mdl-cell--4-col'>
       <Select name={`filters.${id}.attribute`} value={attribute} onChange={change('attribute')}>
@@ -40,12 +58,14 @@ const Filter = ({id, attribute, operator, value, secondary, attributes, drop, ch
     </div>
     <div className='mdl-cell mdl-cell--2-col'>
       <Input
+        type={inputType(metaData.type)}
         name={`filters.${id}.value`}
         value={value}
         onChange={change('value')}/>
     </div>
     <div className='mdl-cell mdl-cell--2-col'>
       <Input
+        type={inputType(metaData.type)}
         name={`filters.${id}.secondary`}
         disabled={operator !== 'between'}
         value={secondary}
@@ -70,7 +90,10 @@ Filter.propTypes = {
   secondary: PropTypes.any,
   attributes: PropTypes.array.isRequired,
   drop: PropTypes.func.isRequired,
-  change: PropTypes.func.isRequired
+  change: PropTypes.func.isRequired,
+  metaData: PropTypes.shape({
+    type: PropTypes.string
+  }).isRequired
 }
 
 Filter.contextTypes = {
@@ -134,12 +157,22 @@ const ReportModuleEditFilters = React.createClass({
 
     return concat([{id: '', name: ''}], compact(map(ls, id => find(attributes, {id}))))
   },
-  getConfigForFilter ({attribute, operator, value, secondary}) {
+  getFilterProps ({attribute, operator, value, secondary}) {
     const attributes = attribute === 'limit'
-      ? [{id: 'limit', name: this.context.messages.resultLimitLabel}]
+      ? [{id: 'limit', name: this.context.messages.resultLimitLabel, type: 'integer'}]
       : this.getAttributes(attribute)
+    const metaData = attribute === 'limit'
+      ? {type: 'integer'}
+      : find(attributes, 'id', attribute) || {type: 'string'}
 
-    return {attribute, operator, value, secondary, attributes}
+    return {
+      attribute,
+      operator,
+      value,
+      secondary,
+      attributes,
+      metaData
+    }
   },
   removeFilter (index) {
     const filters = concat(this.state.filters)
@@ -187,7 +220,7 @@ const ReportModuleEditFilters = React.createClass({
             <Filter
               key={index}
               change={this.onChange(index)}
-              id={index} {...this.getConfigForFilter(filter)}
+              id={index} {...this.getFilterProps(filter)}
               drop={bind(this.removeFilter, null, index)}/>)}
         </div>
         <button className='mdl-button' type='button' onClick={this.newFilter}>
