@@ -71,13 +71,14 @@ const Filter = ({id, attribute, operator, value, secondary, attributes, drop, ch
         value={secondary}
         onChange={change('secondary')}/>
     </div>
-    <VerticalAlign className='mdl-cell mdl-cell--1-col'>
-      <div>
-        <button type='button' className='mdl-button mdl-js-button mdl-button--icon' onClick={drop}>
-          <i className='material-icons'>close</i>
-        </button>
-      </div>
-    </VerticalAlign>
+    {attribute !== 'limit' && (
+      <VerticalAlign className='mdl-cell mdl-cell--1-col'>
+        <div>
+          <button type='button' className='mdl-button mdl-js-button mdl-button--icon' onClick={drop}>
+            <i className='material-icons'>close</i>
+          </button>
+        </div>
+      </VerticalAlign>)}
   </div>
 )
 
