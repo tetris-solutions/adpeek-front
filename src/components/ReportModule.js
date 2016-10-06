@@ -10,6 +10,7 @@ import Edit from './ReportModuleEdit'
 import Modal from './Modal'
 import ReportChart from './ReportModuleChart'
 import {styled} from './mixins/styled'
+import DeleteButton from './DeleteButton'
 
 const style = csjs`
 .card, .content, .content > div {
@@ -39,6 +40,9 @@ const Module = React.createClass({
     entities: PropTypes.arrayOf(reportEntityType),
     reportParams: reportParamsType
   },
+  contextTypes: {
+    messages: PropTypes.object.isRequired
+  },
   componentWillReceiveProps ({module: {cols, rows}}) {
     const {module} = this.props
 
@@ -60,6 +64,7 @@ const Module = React.createClass({
     this.setState({editMode: false})
   },
   render () {
+    const {messages} = this.context
     const {editMode} = this.state
     const {changeDateRange, module, entities, metaData, update, remove, entity, reportParams} = this.props
 
@@ -81,9 +86,9 @@ const Module = React.createClass({
             </button>)}
 
           {remove && (
-            <button className='mdl-button mdl-button--icon' onClick={remove}>
+            <DeleteButton className='mdl-button mdl-button--icon' onClick={remove} entityName={module.name || messages.untitledModule}>
               <i className='material-icons'>clear</i>
-            </button>)}
+            </DeleteButton>)}
         </div>
 
         {editMode && (

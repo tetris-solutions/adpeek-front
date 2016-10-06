@@ -239,7 +239,8 @@ module.exports = {
     lessThanOperator: 'Less than',
     greaterThanOperator: 'Greater than',
     betweenOperator: 'Between',
-    newFilter: 'Add filter'
+    newFilter: 'Add filter',
+    untitledModule: '[ untitled module ] '
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -481,6 +482,7 @@ module.exports = {
     lessThanOperator: 'Menor ou igual',
     greaterThanOperator: 'Maior ou igual',
     betweenOperator: 'Entre',
-    newFilter: 'Adicionar filtro'
+    newFilter: 'Adicionar filtro',
+    untitledModule: '[ módulo sem nome ] '
   }
 }
