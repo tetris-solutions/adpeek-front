@@ -83,18 +83,18 @@ const ReportEditPrompt = React.createClass({
                 <br/>
                 <hr/>
 
-                <button className='mdl-button mdl-js-button mdl-button--accent' type='button' onClick={this.close}>
+                <button className='mdl-button mdl-button--accent' type='button' onClick={this.close}>
                   <Message>cancel</Message>
                 </button>
 
                 <button
                   type='button'
-                  className='mdl-button mdl-js-button mdl-button--primary'
+                  className='mdl-button mdl-button--primary'
                   onClick={this.cloneInstead}>
                   <Message>cloneReport</Message>
                 </button>
 
-                <button type='button' className='mdl-button mdl-js-button' onClick={this.confirm}>
+                <button type='button' className='mdl-button' onClick={this.confirm}>
                   <Message>editReport</Message>
                 </button>
               </div>

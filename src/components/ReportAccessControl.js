@@ -134,7 +134,7 @@ const ReportAccessControl = React.createClass({
                 )}
                 <br/>
                 <hr/>
-                <button className='mdl-button mdl-js-button mdl-button--accent' type='button' onClick={this.close}>
+                <button className='mdl-button mdl-button--accent' type='button' onClick={this.close}>
                   <Message>cancel</Message>
                 </button>
               </div>

@@ -38,7 +38,7 @@ const Home = React.createClass({
                 <ThumbLink key={id} title={name} to={`/company/${id}`}>
                   {name}
                 </ThumbLink>) : (
-                <a className='mdl-button mdl-js-button mdl-button--raised mdl-button--colored' href={`${FRONT_URL}/login?next=${ADPEEK_URL}`}>Login</a>
+                <a className='mdl-button mdl-button--raised mdl-button--colored' href={`${FRONT_URL}/login?next=${ADPEEK_URL}`}>Login</a>
               )}
             </div>
           </div>

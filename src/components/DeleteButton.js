@@ -17,10 +17,10 @@ const Prompt = ({entityName, onConfirm, onCancel}) => (
       </p>
       <br/>
       <hr/>
-      <button className='mdl-button mdl-js-button mdl-button--accent' type='button' onClick={onCancel}>
+      <button className='mdl-button mdl-button--accent' type='button' onClick={onCancel}>
         <Message>cancel</Message>
       </button>
-      <button className='mdl-button mdl-js-button mdl-button--primary' type='button' onClick={onConfirm}>
+      <button className='mdl-button mdl-button--primary' type='button' onClick={onConfirm}>
         <Message>remove</Message>
       </button>
     </div>

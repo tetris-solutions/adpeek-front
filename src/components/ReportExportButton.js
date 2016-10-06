@@ -57,7 +57,7 @@ const ExportOptions = ({pdf, xls, cancel}) => (
       </div>
       <br/>
       <hr/>
-      <button className='mdl-button mdl-js-button mdl-button--accent' type='button' onClick={cancel}>
+      <button className='mdl-button mdl-button--accent' type='button' onClick={cancel}>
         <Message>cancel</Message>
       </button>
     </div>

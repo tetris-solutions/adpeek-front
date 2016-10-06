@@ -76,12 +76,12 @@ const Module = React.createClass({
 
         <div className='mdl-card__menu'>
           {update && (
-            <button className='mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect' onClick={this.openModal}>
+            <button className='mdl-button mdl-button--icon' onClick={this.openModal}>
               <i className='material-icons'>create</i>
             </button>)}
 
           {remove && (
-            <button className='mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect' onClick={remove}>
+            <button className='mdl-button mdl-button--icon' onClick={remove}>
               <i className='material-icons'>clear</i>
             </button>)}
         </div>
