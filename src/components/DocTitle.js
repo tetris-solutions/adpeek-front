@@ -2,7 +2,7 @@ import React from 'react'
 import {contextualize} from './higher-order/contextualize'
 import Helmet from 'react-helmet'
 import join from 'lodash/join'
-import filter from 'lodash/filter'
+import compact from 'lodash/compact'
 
 const {PropTypes} = React
 
@@ -18,7 +18,7 @@ function DocTitle ({report, order, campaign, folder, workspace, company}) {
     report && report.name
   ].reverse()
 
-  return <Helmet title={join(filter(parts), ' < ')}/>
+  return <Helmet title={join(compact(parts), ' < ')}/>
 }
 
 DocTitle.displayName = 'Title'
