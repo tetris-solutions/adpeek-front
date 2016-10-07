@@ -1,7 +1,7 @@
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 import {Link} from 'react-router'
-
+import Fence from './Fence'
 import ContextMenu from './ContextMenu'
 import DeleteButton from './DeleteButton'
 import {deleteWorkspaceAction} from '../actions/delete-workspace'
@@ -18,24 +18,32 @@ export function WorkspaceAside ({params: {company}, workspace, dispatch}, {route
   }
 
   return (
-    <ContextMenu title={workspace.name} icon='domain'>
-      <Link className='mdl-navigation__link' to={`/company/${company}/workspace/${workspace.id}/edit`}>
-        <i className='material-icons'>mode_edit</i>
-        <Message>editWorkspace</Message>
-      </Link>
-      <Link className='mdl-navigation__link' to={`/company/${company}/workspace/${workspace.id}/orders`}>
-        <i className='material-icons'>attach_money</i>
-        <Message>workspaceOrders</Message>
-      </Link>
-      <DeleteButton entityName={workspace.name} className='mdl-navigation__link' onClick={onClick}>
-        <i className='material-icons'>delete</i>
-        <Message>deleteWorkspace</Message>
-      </DeleteButton>
-      <Link className='mdl-navigation__link' to={`/company/${company}`}>
-        <i className='material-icons'>close</i>
-        <Message>oneLevelUpNavigation</Message>
-      </Link>
-    </ContextMenu>
+    <Fence APEditWorkspace>{({allow: canEditWorkspace}) =>
+      <ContextMenu title={workspace.name} icon='domain'>
+
+        {canEditWorkspace && (
+          <Link className='mdl-navigation__link' to={`/company/${company}/workspace/${workspace.id}/edit`}>
+            <i className='material-icons'>mode_edit</i>
+            <Message>editWorkspace</Message>
+          </Link>)}
+
+        <Link className='mdl-navigation__link' to={`/company/${company}/workspace/${workspace.id}/orders`}>
+          <i className='material-icons'>attach_money</i>
+          <Message>workspaceOrders</Message>
+        </Link>
+
+        {canEditWorkspace && (
+          <DeleteButton entityName={workspace.name} className='mdl-navigation__link' onClick={onClick}>
+            <i className='material-icons'>delete</i>
+            <Message>deleteWorkspace</Message>
+          </DeleteButton>)}
+
+        <Link className='mdl-navigation__link' to={`/company/${company}`}>
+          <i className='material-icons'>close</i>
+          <Message>oneLevelUpNavigation</Message>
+        </Link>
+      </ContextMenu>}
+    </Fence>
   )
 }
 
