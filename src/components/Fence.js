@@ -1,5 +1,4 @@
 import React from 'react'
-import {contextualize} from './higher-order/contextualize'
 import diff from 'lodash/difference'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
@@ -8,7 +7,19 @@ import map from 'lodash/map'
 const {PropTypes} = React
 const none = []
 
-function Fence (props) {
+const Gate = ({passenger, permissions}) => passenger(permissions)
+
+Gate.displayName = 'Gate'
+Gate.propTypes = {
+  passenger: PropTypes.func.isRequired,
+  permissions: PropTypes.shape({
+    allow: PropTypes.bool.isRequired,
+    granted: PropTypes.array.isRequired,
+    required: PropTypes.array.isRequired
+  }).isRequired
+}
+
+function Fence (props, context) {
   const required = []
 
   for (const key in props) {
@@ -17,19 +28,20 @@ function Fence (props) {
     }
   }
 
-  const granted = map(get(props, ['company', 'permissions'], none), 'id')
+  const granted = map(get(context, ['company', 'permissions'], none), 'id')
   const missing = diff(required, granted)
   const allow = isEmpty(missing)
+  const permissions = {allow, missing, granted, required}
 
-  return props.children({allow, missing, granted, required})
+  return <Gate passenger={props.children} permissions={permissions}/>
 }
 
 Fence.displayName = 'Fence'
 Fence.propTypes = {
-  children: PropTypes.func.isRequired,
-  company: PropTypes.shape({
-    permissions: PropTypes.array
-  })
+  children: PropTypes.func.isRequired
+}
+Fence.contextTypes = {
+  company: PropTypes.object.isRequired
 }
 
-export default contextualize(Fence, 'company')
+export default Fence
