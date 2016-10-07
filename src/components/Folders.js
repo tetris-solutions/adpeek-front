@@ -66,12 +66,10 @@ export const Folders = React.createClass({
             <Folder key={index} {...folder} workspace={id} company={company.id}/>)}
 
           <Fence APEditFolders>
-            {({allow}) => allow ? (
-              <ThumbButton
-                title={<Message>newFolderHeader</Message>}
-                label={<Message>newFolderCallToAction</Message>}
-                to={`/company/${company.id}/workspace/${id}/create/folder`}/>
-            ) : null}
+            <ThumbButton
+              title={<Message>newFolderHeader</Message>}
+              label={<Message>newFolderCallToAction</Message>}
+              to={`/company/${company.id}/workspace/${id}/create/folder`}/>
           </Fence>
         </div>
       </div>

@@ -3,15 +3,28 @@ import diff from 'lodash/difference'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import map from 'lodash/map'
+import isFunction from 'lodash/isFunction'
 
 const {PropTypes} = React
 const none = []
+const passengerType = PropTypes.oneOfType([
+  PropTypes.func,
+  PropTypes.node
+]).isRequired
 
-const Gate = ({passenger, permissions}) => passenger(permissions)
+function Gate ({passenger, permissions}) {
+  if (isFunction(passenger)) {
+    return passenger(permissions)
+  }
+
+  return permissions.allow
+    ? passenger
+    : null
+}
 
 Gate.displayName = 'Gate'
 Gate.propTypes = {
-  passenger: PropTypes.func.isRequired,
+  passenger: passengerType,
   permissions: PropTypes.shape({
     allow: PropTypes.bool.isRequired,
     granted: PropTypes.array.isRequired,
@@ -38,7 +51,7 @@ function Fence (props, context) {
 
 Fence.displayName = 'Fence'
 Fence.propTypes = {
-  children: PropTypes.func.isRequired
+  children: passengerType
 }
 Fence.contextTypes = {
   company: PropTypes.object.isRequired
