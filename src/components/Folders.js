@@ -6,6 +6,7 @@ import map from 'lodash/map'
 import trim from 'lodash/trim'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
+import Fence from './Fence'
 
 import SearchBox from './HeaderSearchBox'
 import {contextualize} from './higher-order/contextualize'
@@ -64,10 +65,14 @@ export const Folders = React.createClass({
           {map(matchingFolders, (folder, index) =>
             <Folder key={index} {...folder} workspace={id} company={company.id}/>)}
 
-          <ThumbButton
-            title={<Message>newFolderHeader</Message>}
-            label={<Message>newFolderCallToAction</Message>}
-            to={`/company/${company.id}/workspace/${id}/create/folder`}/>
+          <Fence APEditFolders>
+            {({allowed}) => allowed ? (
+              <ThumbButton
+                title={<Message>newFolderHeader</Message>}
+                label={<Message>newFolderCallToAction</Message>}
+                to={`/company/${company.id}/workspace/${id}/create/folder`}/>
+            ) : null}
+          </Fence>
         </div>
       </div>
     )
