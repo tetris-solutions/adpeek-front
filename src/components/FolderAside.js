@@ -3,6 +3,7 @@ import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 import {Link} from 'react-router'
 import endsWith from 'lodash/endsWith'
+import Fence from './Fence'
 
 import ContextMenu from './ContextMenu'
 import DeleteButton from './DeleteButton'
@@ -30,37 +31,39 @@ export function FolderAside ({
     : baseUrl
 
   return (
-    <ContextMenu title={folder.name} icon='folder'>
-      <Link className='mdl-navigation__link' to={`${baseUrl}/adgroups`}>
-        <i className='material-icons'>receipt</i>
-        <Message>folderAds</Message>
-      </Link>
+    <Fence APEditFolders>{({allow: canEditFolder}) =>
+      <ContextMenu title={folder.name} icon='folder'>
+        <Link className='mdl-navigation__link' to={`${baseUrl}/adgroups`}>
+          <i className='material-icons'>receipt</i>
+          <Message>folderAds</Message>
+        </Link>
 
-      <Link className='mdl-navigation__link' to={`${baseUrl}/orders`}>
-        <i className='material-icons'>attach_money</i>
-        <Message>folderOrders</Message>
-      </Link>
+        <Link className='mdl-navigation__link' to={`${baseUrl}/orders`}>
+          <i className='material-icons'>attach_money</i>
+          <Message>folderOrders</Message>
+        </Link>
 
-      <Link className='mdl-navigation__link' to={reportUrl}>
-        <i className='material-icons'>show_chart</i>
-        <Message>folderReport</Message>
-      </Link>
+        <Link className='mdl-navigation__link' to={reportUrl}>
+          <i className='material-icons'>show_chart</i>
+          <Message>folderReport</Message>
+        </Link>
 
-      <Link className='mdl-navigation__link' to={`${baseUrl}/edit`}>
-        <i className='material-icons'>mode_edit</i>
-        <Message>editFolder</Message>
-      </Link>
+        {canEditFolder && <Link className='mdl-navigation__link' to={`${baseUrl}/edit`}>
+          <i className='material-icons'>mode_edit</i>
+          <Message>editFolder</Message>
+        </Link>}
 
-      <DeleteButton entityName={folder.name} className='mdl-navigation__link' onClick={onClick}>
-        <i className='material-icons'>delete</i>
-        <Message>deleteFolder</Message>
-      </DeleteButton>
+        {canEditFolder && <DeleteButton entityName={folder.name} className='mdl-navigation__link' onClick={onClick}>
+          <i className='material-icons'>delete</i>
+          <Message>deleteFolder</Message>
+        </DeleteButton>}
 
-      <Link className='mdl-navigation__link' to={backspaceUrl}>
-        <i className='material-icons'>close</i>
-        <Message>oneLevelUpNavigation</Message>
-      </Link>
-    </ContextMenu>
+        <Link className='mdl-navigation__link' to={backspaceUrl}>
+          <i className='material-icons'>close</i>
+          <Message>oneLevelUpNavigation</Message>
+        </Link>
+      </ContextMenu>}
+    </Fence>
   )
 }
 
