@@ -1,7 +1,7 @@
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 import {Link} from 'react-router'
-
+import Fence from './Fence'
 import ContextMenu from './ContextMenu'
 import DeleteButton from './DeleteButton'
 import {deleteOrderAction} from '../actions/delete-order'
@@ -20,28 +20,34 @@ export function OrderAside ({params: {company, workspace, folder}, order, dispat
   }
 
   return (
-    <ContextMenu title={order.name} icon='monetization_on'>
-      <Link className='mdl-navigation__link' to={`${folderUrl}/order/${order.id}`}>
-        <i className='material-icons'>mode_edit</i>
-        <Message>editOrder</Message>
-      </Link>
-      <Link className='mdl-navigation__link' to={`${folderUrl}/orders/clone?id=${order.id}`}>
-        <i className='material-icons'>content_copy</i>
-        <Message>cloneSingleOrder</Message>
-      </Link>
-      <Link className='mdl-navigation__link' to={`${folderUrl}/order/${order.id}/autobudget`}>
-        <i className='material-icons'>today</i>
-        <Message>autoBudgetLog</Message>
-      </Link>
-      <DeleteButton entityName={order.name} className='mdl-navigation__link' onClick={onClick}>
-        <i className='material-icons'>delete</i>
-        <Message>deleteOrder</Message>
-      </DeleteButton>
-      <Link className='mdl-navigation__link' to={`${folderUrl}/orders`}>
-        <i className='material-icons'>close</i>
-        <Message>oneLevelUpNavigation</Message>
-      </Link>
-    </ContextMenu>
+    <Fence APEditOrders>{({allow: canEditOrder}) =>
+      <ContextMenu title={order.name} icon='monetization_on'>
+        {canEditOrder && <Link className='mdl-navigation__link' to={`${folderUrl}/order/${order.id}`}>
+          <i className='material-icons'>mode_edit</i>
+          <Message>editOrder</Message>
+        </Link>}
+
+        {canEditOrder && <Link className='mdl-navigation__link' to={`${folderUrl}/orders/clone?id=${order.id}`}>
+          <i className='material-icons'>content_copy</i>
+          <Message>cloneSingleOrder</Message>
+        </Link>}
+
+        <Link className='mdl-navigation__link' to={`${folderUrl}/order/${order.id}/autobudget`}>
+          <i className='material-icons'>today</i>
+          <Message>autoBudgetLog</Message>
+        </Link>
+
+        {canEditOrder && <DeleteButton entityName={order.name} className='mdl-navigation__link' onClick={onClick}>
+          <i className='material-icons'>delete</i>
+          <Message>deleteOrder</Message>
+        </DeleteButton>}
+
+        <Link className='mdl-navigation__link' to={`${folderUrl}/orders`}>
+          <i className='material-icons'>close</i>
+          <Message>oneLevelUpNavigation</Message>
+        </Link>
+      </ContextMenu>}
+    </Fence>
   )
 }
 

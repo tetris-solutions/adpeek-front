@@ -10,6 +10,7 @@ import OrderHeader from './OrderHeader'
 import OrderPie from './OrderPie'
 import OrderSelector from './OrdersSelector'
 import OrderSpawnAutoBudget from './OrderSpawnAutoBudget'
+import Fence from './Fence'
 
 const {PropTypes} = React
 const notPercentage = budget => budget && budget.mode === 'amount'
@@ -37,19 +38,21 @@ export function OrderEdit ({
 
   return (
     <div>
-      <header className='mdl-layout__header'>
-        <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
-          <span>
-            <OrderSelector/>
-          </span>
-          <div className='mdl-layout-spacer'/>
-          {order.id && (
-            <OrderSpawnAutoBudget runAutoBudget={runAutoBudget}/>)}
-          <button onClick={save} className='mdl-button mdl-color-text--grey-100'>
-            <Message>save</Message>
-          </button>
-        </div>
-      </header>
+      <Fence APEditOrders>{({allow: canEditOrder}) =>
+        <header className='mdl-layout__header'>
+          <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
+            <span><OrderSelector/></span>
+            <div className='mdl-layout-spacer'/>
+
+            {canEditOrder && Boolean(order.id) && (
+              <OrderSpawnAutoBudget runAutoBudget={runAutoBudget}/>)}
+
+            {canEditOrder && <button onClick={save} className='mdl-button mdl-color-text--grey-100'>
+              <Message>save</Message>
+            </button>}
+          </div>
+        </header>}
+      </Fence>
 
       <section>
         <OrderHeader

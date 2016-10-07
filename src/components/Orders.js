@@ -7,7 +7,7 @@ import trim from 'lodash/trim'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 import {Link} from 'react-router'
-
+import Fence from './Fence'
 import SearchBox from './HeaderSearchBox'
 import {ThumbLink, ThumbButton} from './ThumbLink'
 
@@ -57,30 +57,34 @@ export const Orders = React.createClass({
       : orders
 
     return (
-      <div>
-        <header className='mdl-layout__header'>
-          <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
-            <Message>orders</Message>
-            <div className='mdl-layout-spacer'/>
-            <Link className='mdl-button mdl-color-text--grey-100' to={`${location.pathname}/clone`}>
-              <Message>cloneOrders</Message>
-            </Link>
-            <SearchBox onChange={this.onChange}/>
+      <Fence APEditOrders>{({allow: canEditOrders}) =>
+        <div>
+          <header className='mdl-layout__header'>
+            <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
+              <Message>orders</Message>
+              <div className='mdl-layout-spacer'/>
+
+              {canEditOrders && (
+                <Link className='mdl-button mdl-color-text--grey-100' to={`${location.pathname}/clone`}>
+                  <Message>cloneOrders</Message>
+                </Link>)}
+
+              <SearchBox onChange={this.onChange}/>
+            </div>
+          </header>
+          <div className='mdl-grid'>
+
+            {map(matchingOrders, (order, index) =>
+              <Order {...order} key={index}/>)}
+
+            {canEditOrders && Boolean(params.folder) && (
+              <ThumbButton
+                title={<Message>newOrderHeader</Message>}
+                label={<Message>newOrderCallToAction</Message>}
+                to={`/company/${params.company}/workspace/${params.workspace}/folder/${params.folder}/create/order`}/>)}
           </div>
-        </header>
-        <div className='mdl-grid'>
-
-          {map(matchingOrders, (order, index) =>
-            <Order {...order} key={index}/>)}
-
-          {params.folder && (
-            <ThumbButton
-              title={<Message>newOrderHeader</Message>}
-              label={<Message>newOrderCallToAction</Message>}
-              to={`/company/${params.company}/workspace/${params.workspace}/folder/${params.folder}/create/order`}/>)}
-
-        </div>
-      </div>
+        </div>}
+      </Fence>
     )
   }
 })
