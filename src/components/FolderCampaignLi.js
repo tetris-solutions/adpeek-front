@@ -4,7 +4,7 @@ import {Link} from 'react-router'
 
 const {PropTypes} = React
 
-export function FolderCampaignLi ({id, name, status}, {params}) {
+export function FolderCampaignLi ({id, name, status, readOnly}, {params}) {
   const campaignUri = `/company/${params.company}/workspace/${params.workspace}/folder/${params.folder}/campaign/${id}`
 
   return (
@@ -18,7 +18,7 @@ export function FolderCampaignLi ({id, name, status}, {params}) {
         </Link>
       </span>
       <span className='mdl-list__item-secondary-action'>
-        <Checkbox name={id} value={JSON.stringify(id)}/>
+        {!readOnly && <Checkbox name={id} value={JSON.stringify(id)}/>}
       </span>
     </li>
   )
@@ -26,6 +26,7 @@ export function FolderCampaignLi ({id, name, status}, {params}) {
 
 FolderCampaignLi.displayName = 'Campaign-Li'
 FolderCampaignLi.propTypes = {
+  readOnly: PropTypes.bool,
   id: PropTypes.string,
   name: PropTypes.string,
   status: PropTypes.shape({

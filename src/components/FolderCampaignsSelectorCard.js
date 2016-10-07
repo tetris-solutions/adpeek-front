@@ -3,6 +3,7 @@ import forEach from 'lodash/forEach'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import Fence from './Fence'
 
 import {Form, Content, Header, Footer} from './Card'
 import {styled} from './mixins/styled'
@@ -87,23 +88,24 @@ export const FolderCampaignsSelector = React.createClass({
         <Content className={`mdl-list ${style.content}`} tag='ul'>
           {children}
         </Content>
+        <Fence APEditCampaigns>
+          <Footer multipleButtons>
+            {isLoading && (
+              <button type='button' disabled className='mdl-button mdl-button--colored mdl-color-text--grey-600'>
+                <Message>loadingCampaigns</Message>
+              </button>)}
 
-        <Footer multipleButtons>
-          {isLoading && (
-            <button type='button' disabled className='mdl-button mdl-button--colored mdl-color-text--grey-600'>
-              <Message>loadingCampaigns</Message>
-            </button>)}
+            {!isLoading && (
+              <button type='submit' className='mdl-button mdl-button--colored'>
+                {label}
+              </button>)}
 
-          {!isLoading && (
-            <button type='submit' className='mdl-button mdl-button--colored'>
-              {label}
-            </button>)}
-
-          {!isLoading && (
-            <a onClick={this.toggleAll} className='mdl-button mdl-button--colored'>
-              {selected ? deselectAllCampaigns : selectAllCampaigns}
-            </a>)}
-        </Footer>
+            {!isLoading && (
+              <a onClick={this.toggleAll} className='mdl-button mdl-button--colored'>
+                {selected ? deselectAllCampaigns : selectAllCampaigns}
+              </a>)}
+          </Footer>
+        </Fence>
       </Form>
     )
   }

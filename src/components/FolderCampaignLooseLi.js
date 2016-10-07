@@ -4,7 +4,7 @@ import TextMessage from 'intl-messageformat'
 import {Link} from 'react-router'
 const {PropTypes} = React
 
-export function FolderCampaignLooseLi ({external_id, name, status, platform, is_adwords_video, folder}, {locales, messages, params}) {
+export function FolderCampaignLooseLi ({external_id, name, status, platform, is_adwords_video, folder, readOnly}, {locales, messages, params}) {
   const serialized = JSON.stringify({
     name,
     external_id,
@@ -44,7 +44,7 @@ export function FolderCampaignLooseLi ({external_id, name, status, platform, is_
         {name}
       </span>
       <span className='mdl-list__item-secondary-action'>
-        <Checkbox name={external_id} value={serialized}/>
+        {!readOnly && <Checkbox name={external_id} value={serialized}/>}
       </span>
     </li>
   )
@@ -60,6 +60,7 @@ FolderCampaignLooseLi.contextTypes = {
   locales: PropTypes.string
 }
 FolderCampaignLooseLi.propTypes = {
+  readOnly: PropTypes.bool,
   platform: PropTypes.string,
   external_id: PropTypes.string,
   name: PropTypes.string,

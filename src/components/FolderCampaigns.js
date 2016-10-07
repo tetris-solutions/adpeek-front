@@ -8,7 +8,7 @@ import settle from 'promise-settle'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 import sortBy from 'lodash/sortBy'
-
+import Fence from './Fence'
 import Campaign from './FolderCampaignLi'
 import CampaignLoose from './FolderCampaignLooseLi'
 import CampaignsHeader from './FolderCampaignsHeader'
@@ -135,35 +135,38 @@ export const FolderCampaigns = React.createClass({
           isLoading={isRefreshing}
           onSwitch={this.switchActiveFilter}
           onChange={this.setFilterValue}/>
-        <div className='mdl-grid'>
 
-          <div className='mdl-cell mdl-cell--7-col'>
-            <CampaignsSelectorCard
-              onSelected={this.unlink}
-              title={<Message n={String(linked.length)}>nCampaigns</Message>}
-              label={messages.unlinkCampaignsCallToAction}>
+        <Fence APEditCampaigns>{({allow: canEditCampaigns}) =>
+          <div className='mdl-grid'>
 
-              {map(linked, (campaign, index) =>
-                <Campaign key={campaign.id} {...campaign}/>)}
+            <div className='mdl-cell mdl-cell--7-col'>
 
-            </CampaignsSelectorCard>
+              <CampaignsSelectorCard
+                onSelected={this.unlink}
+                title={<Message n={String(linked.length)}>nCampaigns</Message>}
+                label={messages.unlinkCampaignsCallToAction}>
 
-          </div>
-          <div className='mdl-cell mdl-cell--5-col'>
+                {map(linked, (campaign, index) =>
+                  <Campaign key={campaign.id} {...campaign} readOnly={!canEditCampaigns}/>)}
 
-            <CampaignsSelectorCard
-              isLoading={isLoading}
-              headerColor='grey-600'
-              onSelected={this.link}
-              title={<Message n={String(loose.length)}>nLooseCampaigns</Message>}
-              label={messages.linkCampaignsCallToAction}>
+              </CampaignsSelectorCard>
 
-              {map(sortBy(loose, hasFolder), (campaign, index) =>
-                <CampaignLoose key={campaign.external_id} {...campaign}/>)}
-            </CampaignsSelectorCard>
+            </div>
+            <div className='mdl-cell mdl-cell--5-col'>
 
-          </div>
-        </div>
+              <CampaignsSelectorCard
+                isLoading={isLoading}
+                headerColor='grey-600'
+                onSelected={this.link}
+                title={<Message n={String(loose.length)}>nLooseCampaigns</Message>}
+                label={messages.linkCampaignsCallToAction}>
+
+                {map(sortBy(loose, hasFolder), (campaign, index) =>
+                  <CampaignLoose key={campaign.external_id} {...campaign} readOnly={!canEditCampaigns}/>)}
+              </CampaignsSelectorCard>
+            </div>
+          </div>}
+        </Fence>
       </div>
     )
   }
