@@ -150,7 +150,7 @@ const createPortal = contextAttributes => {
   })
 }
 
-const baseContext = ['tree', 'messages', 'locales', 'insertCss', 'params', 'moment']
+const baseContext = ['tree', 'messages', 'locales', 'insertCss', 'params', 'moment', 'company']
 const ModalSpawner = React.createClass({
   displayName: 'Modal-Spawner',
   mixins: [styled(style)],
