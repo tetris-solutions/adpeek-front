@@ -57,14 +57,14 @@ export const Orders = React.createClass({
       : orders
 
     return (
-      <Fence APEditOrders>{({allow: canEditOrders}) =>
+      <Fence canEditOrder>{({canEditOrder}) =>
         <div>
           <header className='mdl-layout__header'>
             <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
               <Message>orders</Message>
               <div className='mdl-layout-spacer'/>
 
-              {canEditOrders && (
+              {canEditOrder && (
                 <Link className='mdl-button mdl-color-text--grey-100' to={`${location.pathname}/clone`}>
                   <Message>cloneOrders</Message>
                 </Link>)}
@@ -77,7 +77,7 @@ export const Orders = React.createClass({
             {map(matchingOrders, (order, index) =>
               <Order {...order} key={index}/>)}
 
-            {canEditOrders && Boolean(params.folder) && (
+            {canEditOrder && Boolean(params.folder) && (
               <ThumbButton
                 title={<Message>newOrderHeader</Message>}
                 label={<Message>newOrderCallToAction</Message>}

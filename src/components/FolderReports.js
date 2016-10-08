@@ -42,7 +42,7 @@ export const Reports = React.createClass({
               workspace={workspace}
               company={company}/>)}
 
-          <Fence APEditReports>
+          <Fence canEditReport>
             <ThumbButton
               title={<Message>newReportHeader</Message>}
               label={<Message>newReportCallToAction</Message>}

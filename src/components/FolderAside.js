@@ -33,7 +33,7 @@ export function FolderAside ({
     : baseUrl
 
   return (
-    <Fence APEditFolders='canEditFolder' APBrowseReports='canBrowseReports'>
+    <Fence canEditFolder canBrowseReports>
       {({canEditFolder, canBrowseReports}) =>
         <ContextMenu title={folder.name} icon='folder'>
           <Link className='mdl-navigation__link' to={`${baseUrl}/adgroups`}>

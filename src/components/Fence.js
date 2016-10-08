@@ -4,8 +4,21 @@ import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import map from 'lodash/map'
 import isFunction from 'lodash/isFunction'
-import isString from 'lodash/isString'
 import includes from 'lodash/includes'
+import keys from 'lodash/keys'
+import invert from 'lodash/invert'
+import compact from 'lodash/compact'
+
+const permissionNames = {
+  canEditWorkspace: 'APEditWorkspaces',
+  canEditFolder: 'APEditFolders',
+  canEditCampaign: 'APEditCampaigns',
+  canEditOrder: 'APEditOrders',
+  canEditReport: 'APEditReports',
+  canBrowseReports: 'APBrowseReports'
+}
+const permissionAliases = invert(permissionNames)
+const getPermissionName = id => permissionNames[id]
 
 const {PropTypes} = React
 const none = []
@@ -34,36 +47,37 @@ Gate.propTypes = {
   }).isRequired
 }
 
-function Fence (props, context) {
-  const required = []
+const Fence = React.createClass({
+  displayName: 'Fence',
+  contextTypes: {
+    company: PropTypes.object.isRequired
+  },
+  propTypes: {
+    children: passengerType,
+    canEditWorkspace: PropTypes.bool,
+    canEditFolder: PropTypes.bool,
+    canEditCampaign: PropTypes.bool,
+    canEditOrder: PropTypes.bool,
+    canEditReport: PropTypes.bool,
+    canBrowseReports: PropTypes.bool
+  },
+  render () {
+    const {props, context} = this
+    const required = compact(map(keys(props), getPermissionName))
+    const granted = map(get(context, ['company', 'permissions'], none), 'id')
+    const missing = diff(required, granted)
+    const allow = isEmpty(missing)
+    const permissions = {allow, missing, granted, required}
 
-  for (const key in props) {
-    if (key !== 'children' && props.hasOwnProperty(key)) {
-      required.push(key)
+    for (let i = 0; i < required.length; i++) {
+      const name = required[i]
+      const alias = permissionAliases[name]
+
+      permissions[alias] = includes(granted, name)
     }
+
+    return <Gate passenger={props.children} permissions={permissions}/>
   }
-
-  const granted = map(get(context, ['company', 'permissions'], none), 'id')
-  const missing = diff(required, granted)
-  const allow = isEmpty(missing)
-  const permissions = {allow, missing, granted, required}
-
-  for (let i = 0; i < required.length; i++) {
-    const name = required[i]
-    const alias = isString(props[name]) ? props[name] : name
-
-    permissions[alias] = includes(granted, name)
-  }
-
-  return <Gate passenger={props.children} permissions={permissions}/>
-}
-
-Fence.displayName = 'Fence'
-Fence.propTypes = {
-  children: passengerType
-}
-Fence.contextTypes = {
-  company: PropTypes.object.isRequired
-}
+})
 
 export default Fence

@@ -175,7 +175,7 @@ const ReportAccessControl = React.createClass({
         <Message>reportAccessControl</Message>
         {this.state.isModalOpen ? (
           <Modal size='large' onEscPress={this.close}>
-            <Fence APEditFolders>{({allow: canEditFolder}) => (
+            <Fence canEditFolder>{({canEditFolder}) => (
               <Options
                 canEditFolder={canEditFolder}
                 setAsFolderDefault={this.setAsFolderDefault}

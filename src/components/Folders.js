@@ -65,7 +65,7 @@ export const Folders = React.createClass({
           {map(matchingFolders, (folder, index) =>
             <Folder key={index} {...folder} workspace={id} company={company.id}/>)}
 
-          <Fence APEditFolders>
+          <Fence canEditFolder>
             <ThumbButton
               title={<Message>newFolderHeader</Message>}
               label={<Message>newFolderCallToAction</Message>}

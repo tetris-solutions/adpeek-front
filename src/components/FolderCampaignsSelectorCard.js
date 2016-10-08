@@ -88,7 +88,7 @@ export const FolderCampaignsSelector = React.createClass({
         <Content className={`mdl-list ${style.content}`} tag='ul'>
           {children}
         </Content>
-        <Fence APEditCampaigns>
+        <Fence canEditCampaign>
           <Footer multipleButtons>
             {isLoading && (
               <button type='button' disabled className='mdl-button mdl-button--colored mdl-color-text--grey-600'>

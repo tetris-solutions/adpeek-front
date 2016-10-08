@@ -136,7 +136,7 @@ export const FolderCampaigns = React.createClass({
           onSwitch={this.switchActiveFilter}
           onChange={this.setFilterValue}/>
 
-        <Fence APEditCampaigns>{({allow: canEditCampaigns}) =>
+        <Fence canEditCampaign>{({canEditCampaign}) =>
           <div className='mdl-grid'>
 
             <div className='mdl-cell mdl-cell--7-col'>
@@ -147,7 +147,7 @@ export const FolderCampaigns = React.createClass({
                 label={messages.unlinkCampaignsCallToAction}>
 
                 {map(linked, (campaign, index) =>
-                  <Campaign key={campaign.id} {...campaign} readOnly={!canEditCampaigns}/>)}
+                  <Campaign key={campaign.id} {...campaign} readOnly={!canEditCampaign}/>)}
 
               </CampaignsSelectorCard>
 
@@ -162,7 +162,7 @@ export const FolderCampaigns = React.createClass({
                 label={messages.linkCampaignsCallToAction}>
 
                 {map(sortBy(loose, hasFolder), (campaign, index) =>
-                  <CampaignLoose key={campaign.external_id} {...campaign} readOnly={!canEditCampaigns}/>)}
+                  <CampaignLoose key={campaign.external_id} {...campaign} readOnly={!canEditCampaign}/>)}
               </CampaignsSelectorCard>
             </div>
           </div>}

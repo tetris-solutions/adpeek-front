@@ -38,7 +38,7 @@ export function OrderEdit ({
 
   return (
     <div>
-      <Fence APEditOrders>{({allow: canEditOrder}) =>
+      <Fence canEditOrder>{({canEditOrder}) =>
         <header className='mdl-layout__header'>
           <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
             <span><OrderSelector/></span>

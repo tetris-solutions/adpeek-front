@@ -20,7 +20,7 @@ export function OrderAside ({params: {company, workspace, folder}, order, dispat
   }
 
   return (
-    <Fence APEditOrders>{({allow: canEditOrder}) =>
+    <Fence canEditOrder>{({canEditOrder}) =>
       <ContextMenu title={order.name} icon='monetization_on'>
         {canEditOrder && <Link className='mdl-navigation__link' to={`${folderUrl}/order/${order.id}`}>
           <i className='material-icons'>mode_edit</i>

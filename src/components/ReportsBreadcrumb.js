@@ -17,7 +17,7 @@ export function ReportsBreadcrumb ({params: {company, workspace, folder}}) {
   url += '/reports'
 
   return (
-    <Fence APBrowseReports>
+    <Fence canBrowseReports>
       <Link to={url}>
         <i className='material-icons'>list</i>
         <Message>reports</Message>

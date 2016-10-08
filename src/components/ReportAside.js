@@ -44,7 +44,7 @@ export function ReportAside ({report, dispatch, user}, {messages, locales, route
   const cloneUrl = `${folderUrl}/reports/new?clone=${report.id}&name=${cloneName}`
 
   return (
-    <Fence APEditReports='canEditReport' APBrowseReports='canBrowseReports'>
+    <Fence canEditReport canBrowseReports>
       {({canEditReport, canBrowseReports}) =>
         <ContextMenu title={report.name} icon='trending_up'>
           {canBrowseReports && <a className='mdl-navigation__link' onClick={favorite} title={favTitle}>
