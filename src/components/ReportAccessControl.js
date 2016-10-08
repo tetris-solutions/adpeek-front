@@ -6,6 +6,7 @@ import {setFolderReportAction} from '../actions/set-folder-report'
 import {updateReportAction} from '../actions/update-report'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
+import Fence from './Fence'
 
 const style = csjs`
 .card {
@@ -58,6 +59,78 @@ CardButton.propTypes = {
   description: PropTypes.node.isRequired
 }
 
+function Options ({user, report, makePublic, unlock, setAsFolderDefault, close, canEditFolder}) {
+  const setAsDefaultDescription = report.is_folder_report
+    ? <Message>uncheckFolderReportDescription</Message>
+    : <Message>checkFolderReportDescription</Message>
+
+  const setAsDefaultCallToAction = report.is_folder_report
+    ? <Message>uncheckFolderReport</Message>
+    : <Message>checkFolderReport</Message>
+
+  const showMakeGlobal = user.is_admin && !report.is_global
+  const showMakePublic = report.is_private
+  const showMakeDefault = canEditFolder && !report.is_private
+  const noPossibleOptions = !(showMakeGlobal || showMakeDefault || showMakePublic)
+
+  return (
+    <div className='mdl-grid'>
+      <div className='mdl-cell mdl-cell--12-col'>
+        <h2>
+          <Message>reportAccessControl</Message>
+        </h2>
+
+        <br/>
+
+        {noPossibleOptions && (
+          <p style={{fontSize: 'large', textAlign: 'center', margin: '2em auto', width: '20em'}}>
+            <Message>emptyAccessControlOptions</Message>
+          </p>)}
+
+        {showMakeGlobal && (
+          <CardButton
+            description={<Message>makeReportGlobalDescription</Message>}
+            icon='public'
+            callToAction={<Message>makeReportGlobal</Message>}
+            onClick={makePublic}/>)}
+
+        {showMakePublic && (
+          <CardButton
+            disabled={!report.is_private}
+            description={<Message>makeReportPublicDescription</Message>}
+            icon='lock_outline'
+            callToAction={<Message>makeReportPublic</Message>}
+            onClick={unlock}/>)}
+
+        {showMakeDefault && (
+          <CardButton
+            description={setAsDefaultDescription}
+            icon={report.is_folder_report ? 'indeterminate_check_box' : 'check_box'}
+            callToAction={setAsDefaultCallToAction}
+            onClick={setAsFolderDefault}/>)}
+
+        <br/>
+        <hr/>
+
+        <button className='mdl-button mdl-button--accent' type='button' onClick={close}>
+          <Message>cancel</Message>
+        </button>
+      </div>
+    </div>
+  )
+}
+
+Options.displayName = 'Options'
+Options.propTypes = {
+  user: PropTypes.object.isRequired,
+  report: PropTypes.object.isRequired,
+  makePublic: PropTypes.func.isRequired,
+  unlock: PropTypes.func.isRequired,
+  setAsFolderDefault: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
+  canEditFolder: PropTypes.bool.isRequired
+}
+
 const ReportAccessControl = React.createClass({
   displayName: 'Report-Access-Control',
   mixins: [styled(style)],
@@ -102,43 +175,16 @@ const ReportAccessControl = React.createClass({
         <Message>reportAccessControl</Message>
         {this.state.isModalOpen ? (
           <Modal size='large' onEscPress={this.close}>
-            <div className='mdl-grid'>
-              <div className='mdl-cell mdl-cell--12-col'>
-                <h2>
-                  <Message>reportAccessControl</Message>
-                </h2>
-                <br/>
-
-                {!report.is_global && user.is_admin ? (
-                  <CardButton
-                    description={<Message>makeReportGlobalDescription</Message>}
-                    icon='public'
-                    callToAction={<Message>makeReportGlobal</Message>}
-                    onClick={this.makePublic}/>
-                ) : null}
-
-                {report.is_private ? (
-                  <CardButton
-                    description={<Message>makeReportPublicDescription</Message>}
-                    icon='lock_outline'
-                    callToAction={<Message>makeReportPublic</Message>}
-                    onClick={this.unlock}/>
-                ) : (
-                  <CardButton
-                    description={
-                      <Message>{report.is_folder_report ? 'uncheckFolderReportDescription' : 'checkFolderReportDescription'}</Message>}
-                    icon={report.is_folder_report ? 'indeterminate_check_box' : 'check_box'}
-                    callToAction={
-                      <Message>{report.is_folder_report ? 'uncheckFolderReport' : 'checkFolderReport'}</Message>}
-                    onClick={this.setAsFolderDefault}/>
-                )}
-                <br/>
-                <hr/>
-                <button className='mdl-button mdl-button--accent' type='button' onClick={this.close}>
-                  <Message>cancel</Message>
-                </button>
-              </div>
-            </div>
+            <Fence APEditFolders>{({allow: canEditFolder}) => (
+              <Options
+                canEditFolder={canEditFolder}
+                setAsFolderDefault={this.setAsFolderDefault}
+                unlock={this.unlock}
+                makePublic={this.makePublic}
+                close={this.close}
+                report={report}
+                user={user}/>)}
+            </Fence>
           </Modal>
         ) : null}
       </a>

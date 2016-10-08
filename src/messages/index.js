@@ -240,7 +240,8 @@ module.exports = {
     greaterThanOperator: 'Greater than',
     betweenOperator: 'Between',
     newFilter: 'Add filter',
-    untitledModule: '[ untitled module ] '
+    untitledModule: '[ untitled module ] ',
+    emptyAccessControlOptions: 'Unfortunately, your user is not allowed to edit the access options for the current report.'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -483,6 +484,7 @@ module.exports = {
     greaterThanOperator: 'Maior ou igual',
     betweenOperator: 'Entre',
     newFilter: 'Adicionar filtro',
-    untitledModule: '[ módulo sem nome ] '
+    untitledModule: '[ módulo sem nome ] ',
+    emptyAccessControlOptions: 'Infelizmente, seu usuário não tem permissões para alterar as opções de acesso deste relatório.'
   }
 }
