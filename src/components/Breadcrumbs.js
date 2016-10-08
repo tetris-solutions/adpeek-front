@@ -11,6 +11,9 @@ const style = csjs`
   display: inline-block;
   padding: 0 1em;
 }
+.breadcrumb:empty {
+  display: none;
+}
 .breadcrumb i {
   float: left;
   margin-top: -.1em;

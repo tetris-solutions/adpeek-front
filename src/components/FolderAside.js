@@ -25,44 +25,48 @@ export function FolderAside ({
   }
 
   const baseUrl = `/company/${company}/workspace/${workspace}/folder/${folder.id}`
-  const reportUrl = `${baseUrl}/${isEmpty(folder.reports) ? 'reports' : 'report/' + folder.reports[0].id}`
+  const linkToReportList = isEmpty(folder.reports)
+
+  const reportUrl = `${baseUrl}/${linkToReportList ? 'reports' : 'report/' + folder.reports[0].id}`
   const backspaceUrl = endsWith(location.pathname, folder.id)
     ? `/company/${company}/workspace/${workspace}`
     : baseUrl
 
   return (
-    <Fence APEditFolders>{({allow: canEditFolder}) =>
-      <ContextMenu title={folder.name} icon='folder'>
-        <Link className='mdl-navigation__link' to={`${baseUrl}/adgroups`}>
-          <i className='material-icons'>receipt</i>
-          <Message>folderAds</Message>
-        </Link>
+    <Fence APEditFolders='canEditFolder' APBrowseReports='canBrowseReports'>
+      {({canEditFolder, canBrowseReports}) =>
+        <ContextMenu title={folder.name} icon='folder'>
+          <Link className='mdl-navigation__link' to={`${baseUrl}/adgroups`}>
+            <i className='material-icons'>receipt</i>
+            <Message>folderAds</Message>
+          </Link>
 
-        <Link className='mdl-navigation__link' to={`${baseUrl}/orders`}>
-          <i className='material-icons'>attach_money</i>
-          <Message>folderOrders</Message>
-        </Link>
+          <Link className='mdl-navigation__link' to={`${baseUrl}/orders`}>
+            <i className='material-icons'>attach_money</i>
+            <Message>folderOrders</Message>
+          </Link>
 
-        <Link className='mdl-navigation__link' to={reportUrl}>
-          <i className='material-icons'>show_chart</i>
-          <Message>folderReport</Message>
-        </Link>
+          {(canBrowseReports || !linkToReportList) && (
+            <Link className='mdl-navigation__link' to={reportUrl}>
+              <i className='material-icons'>show_chart</i>
+              <Message>folderReport</Message>
+            </Link>)}
 
-        {canEditFolder && <Link className='mdl-navigation__link' to={`${baseUrl}/edit`}>
-          <i className='material-icons'>mode_edit</i>
-          <Message>editFolder</Message>
-        </Link>}
+          {canEditFolder && <Link className='mdl-navigation__link' to={`${baseUrl}/edit`}>
+            <i className='material-icons'>mode_edit</i>
+            <Message>editFolder</Message>
+          </Link>}
 
-        {canEditFolder && <DeleteButton entityName={folder.name} className='mdl-navigation__link' onClick={onClick}>
-          <i className='material-icons'>delete</i>
-          <Message>deleteFolder</Message>
-        </DeleteButton>}
+          {canEditFolder && <DeleteButton entityName={folder.name} className='mdl-navigation__link' onClick={onClick}>
+            <i className='material-icons'>delete</i>
+            <Message>deleteFolder</Message>
+          </DeleteButton>}
 
-        <Link className='mdl-navigation__link' to={backspaceUrl}>
-          <i className='material-icons'>close</i>
-          <Message>oneLevelUpNavigation</Message>
-        </Link>
-      </ContextMenu>}
+          <Link className='mdl-navigation__link' to={backspaceUrl}>
+            <i className='material-icons'>close</i>
+            <Message>oneLevelUpNavigation</Message>
+          </Link>
+        </ContextMenu>}
     </Fence>
   )
 }

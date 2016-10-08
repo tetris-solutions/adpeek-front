@@ -44,46 +44,47 @@ export function ReportAside ({report, dispatch, user}, {messages, locales, route
   const cloneUrl = `${folderUrl}/reports/new?clone=${report.id}&name=${cloneName}`
 
   return (
-    <Fence APEditReports>{({allow: canEditReport}) =>
-      <ContextMenu title={report.name} icon='trending_up'>
-        {canEditReport && <a className='mdl-navigation__link' onClick={favorite} title={favTitle}>
-          <i className='material-icons'>{report.is_user_selected ? 'star' : 'star_border'}</i>
-          <Message>{report.is_user_selected ? 'unfavoriteReport' : 'favoriteReport'}</Message>
-        </a>}
+    <Fence APEditReports='canEditReport' APBrowseReports='canBrowseReports'>
+      {({canEditReport, canBrowseReports}) =>
+        <ContextMenu title={report.name} icon='trending_up'>
+          {canBrowseReports && <a className='mdl-navigation__link' onClick={favorite} title={favTitle}>
+            <i className='material-icons'>{report.is_user_selected ? 'star' : 'star_border'}</i>
+            <Message>{report.is_user_selected ? 'unfavoriteReport' : 'favoriteReport'}</Message>
+          </a>}
 
-        {canEditReport && (
-          <ReportAccessControl
-            dispatch={dispatch}
-            reload={reload}
-            params={params}
-            report={report}
-            user={user}/>)}
+          {canEditReport && (
+            <ReportAccessControl
+              dispatch={dispatch}
+              reload={reload}
+              params={params}
+              report={report}
+              user={user}/>)}
 
-        {canEditReport && <Link className='mdl-navigation__link' to={cloneUrl}>
-          <i className='material-icons'>content_copy</i>
-          <Message>cloneReport</Message>
-        </Link>}
+          {canEditReport && <Link className='mdl-navigation__link' to={cloneUrl}>
+            <i className='material-icons'>content_copy</i>
+            <Message>cloneReport</Message>
+          </Link>}
 
-        {canEditReport && !inEditMode && shouldSkipEditPrompt && (
-          <Link className='mdl-navigation__link' to={`${folderUrl}/report/${report.id}/edit`}>
-            <i className='material-icons'>create</i>
-            <Message>editReport</Message>
-          </Link>)}
+          {canEditReport && !inEditMode && shouldSkipEditPrompt && (
+            <Link className='mdl-navigation__link' to={`${folderUrl}/report/${report.id}/edit`}>
+              <i className='material-icons'>create</i>
+              <Message>editReport</Message>
+            </Link>)}
 
-        {canEditReport && !inEditMode && !shouldSkipEditPrompt && (
-          <ReportEditPrompt report={report} params={params}/>)}
+          {canEditReport && !inEditMode && !shouldSkipEditPrompt && (
+            <ReportEditPrompt report={report} params={params}/>)}
 
-        {canEditReport && (
-          <DeleteButton entityName={report.name} className='mdl-navigation__link' onClick={deleteReport}>
-            <i className='material-icons'>delete</i>
-            <Message>deleteReport</Message>
-          </DeleteButton>)}
+          {canEditReport && (
+            <DeleteButton entityName={report.name} className='mdl-navigation__link' onClick={deleteReport}>
+              <i className='material-icons'>delete</i>
+              <Message>deleteReport</Message>
+            </DeleteButton>)}
 
-        <Link className='mdl-navigation__link' to={`${folderUrl}/reports`}>
-          <i className='material-icons'>close</i>
-          <Message>oneLevelUpNavigation</Message>
-        </Link>
-      </ContextMenu>}
+          <Link className='mdl-navigation__link' to={canBrowseReports ? `${folderUrl}/reports` : folderUrl}>
+            <i className='material-icons'>close</i>
+            <Message>oneLevelUpNavigation</Message>
+          </Link>
+        </ContextMenu>}
     </Fence>
   )
 }
