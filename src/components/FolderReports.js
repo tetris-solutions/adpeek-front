@@ -3,6 +3,7 @@ import {ThumbLink, ThumbButton} from './ThumbLink'
 import map from 'lodash/map'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import {contextualize} from './higher-order/contextualize'
+import Fence from './Fence'
 
 const {PropTypes} = React
 
@@ -41,10 +42,12 @@ export const Reports = React.createClass({
               workspace={workspace}
               company={company}/>)}
 
-          <ThumbButton
-            title={<Message>newReportHeader</Message>}
-            label={<Message>newReportCallToAction</Message>}
-            to={`/company/${company}/workspace/${workspace}/folder/${id}/reports/new`}/>
+          <Fence APEditReports>
+            <ThumbButton
+              title={<Message>newReportHeader</Message>}
+              label={<Message>newReportCallToAction</Message>}
+              to={`/company/${company}/workspace/${workspace}/folder/${id}/reports/new`}/>
+          </Fence>
         </div>
       </div>
     )

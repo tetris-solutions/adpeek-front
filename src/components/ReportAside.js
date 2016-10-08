@@ -3,7 +3,7 @@ import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
 import {Link} from 'react-router'
 import TextMessage from 'intl-messageformat'
-
+import Fence from './Fence'
 import ContextMenu from './ContextMenu'
 import DeleteButton from './DeleteButton'
 import {deleteReportAction} from '../actions/delete-report'
@@ -40,43 +40,51 @@ export function ReportAside ({report, dispatch, user}, {messages, locales, route
   const inEditMode = endsWith(pathname, '/edit')
   const cloneName = new TextMessage(messages.copyOfName, locales).format({name: report.name})
   const shouldSkipEditPrompt = report.is_private || canSkipReportEditPrompt()
+  const favTitle = report.is_user_selected ? messages.unfavoriteReportDescription : messages.favoriteReportDescription
+  const cloneUrl = `${folderUrl}/reports/new?clone=${report.id}&name=${cloneName}`
 
   return (
-    <ContextMenu title={report.name} icon='trending_up'>
-      <a
-        className='mdl-navigation__link'
-        onClick={favorite}
-        title={report.is_user_selected ? messages.unfavoriteReportDescription : messages.favoriteReportDescription}>
-        <i className='material-icons'>{report.is_user_selected ? 'star' : 'star_border'}</i>
-        <Message>{report.is_user_selected ? 'unfavoriteReport' : 'favoriteReport'}</Message>
-      </a>
+    <Fence APEditReports>{({allow: canEditReport}) =>
+      <ContextMenu title={report.name} icon='trending_up'>
+        {canEditReport && <a className='mdl-navigation__link' onClick={favorite} title={favTitle}>
+          <i className='material-icons'>{report.is_user_selected ? 'star' : 'star_border'}</i>
+          <Message>{report.is_user_selected ? 'unfavoriteReport' : 'favoriteReport'}</Message>
+        </a>}
 
-      <ReportAccessControl dispatch={dispatch} reload={reload} params={params} report={report} user={user}/>
+        {canEditReport && (
+          <ReportAccessControl
+            dispatch={dispatch}
+            reload={reload}
+            params={params}
+            report={report}
+            user={user}/>)}
 
-      <Link className='mdl-navigation__link' to={`${folderUrl}/reports/new?clone=${report.id}&name=${cloneName}`}>
-        <i className='material-icons'>content_copy</i>
-        <Message>cloneReport</Message>
-      </Link>
+        {canEditReport && <Link className='mdl-navigation__link' to={cloneUrl}>
+          <i className='material-icons'>content_copy</i>
+          <Message>cloneReport</Message>
+        </Link>}
 
-      {!inEditMode && shouldSkipEditPrompt && (
-        <Link className='mdl-navigation__link' to={`${folderUrl}/report/${report.id}/edit`}>
-          <i className='material-icons'>create</i>
-          <Message>editReport</Message>
-        </Link>)}
+        {canEditReport && !inEditMode && shouldSkipEditPrompt && (
+          <Link className='mdl-navigation__link' to={`${folderUrl}/report/${report.id}/edit`}>
+            <i className='material-icons'>create</i>
+            <Message>editReport</Message>
+          </Link>)}
 
-      {!inEditMode && !shouldSkipEditPrompt && (
-        <ReportEditPrompt report={report} params={params}/>)}
+        {canEditReport && !inEditMode && !shouldSkipEditPrompt && (
+          <ReportEditPrompt report={report} params={params}/>)}
 
-      <DeleteButton entityName={report.name} className='mdl-navigation__link' onClick={deleteReport}>
-        <i className='material-icons'>delete</i>
-        <Message>deleteReport</Message>
-      </DeleteButton>
+        {canEditReport && (
+          <DeleteButton entityName={report.name} className='mdl-navigation__link' onClick={deleteReport}>
+            <i className='material-icons'>delete</i>
+            <Message>deleteReport</Message>
+          </DeleteButton>)}
 
-      <Link className='mdl-navigation__link' to={`${folderUrl}/reports`}>
-        <i className='material-icons'>close</i>
-        <Message>oneLevelUpNavigation</Message>
-      </Link>
-    </ContextMenu>
+        <Link className='mdl-navigation__link' to={`${folderUrl}/reports`}>
+          <i className='material-icons'>close</i>
+          <Message>oneLevelUpNavigation</Message>
+        </Link>
+      </ContextMenu>}
+    </Fence>
   )
 }
 

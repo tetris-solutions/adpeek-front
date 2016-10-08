@@ -18,7 +18,7 @@ export function WorkspaceAside ({params: {company}, workspace, dispatch}, {route
   }
 
   return (
-    <Fence APEditWorkspace>{({allow: canEditWorkspace}) =>
+    <Fence APEditWorkspaces>{({allow: canEditWorkspace}) =>
       <ContextMenu title={workspace.name} icon='domain'>
 
         {canEditWorkspace && (
