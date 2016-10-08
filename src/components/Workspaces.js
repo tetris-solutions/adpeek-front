@@ -6,7 +6,7 @@ import map from 'lodash/map'
 import trim from 'lodash/trim'
 import Message from '@tetris/front-server/lib/components/intl/Message'
 import React from 'react'
-
+import Fence from './Fence'
 import SearchBox from './HeaderSearchBox'
 import {contextualize} from './higher-order/contextualize'
 import {ThumbLink, ThumbButton} from './ThumbLink'
@@ -60,10 +60,12 @@ export const Workspaces = React.createClass({
           {map(matchingWorkspaces, (workspace, index) =>
             <Workspace key={index} {...workspace} company={id}/>)}
 
-          <ThumbButton
-            title={<Message>newWorkspaceHeader</Message>}
-            label={<Message>newWorkspaceCallToAction</Message>}
-            to={`/company/${id}/create/workspace`}/>
+          <Fence canEditWorkspace>
+            <ThumbButton
+              title={<Message>newWorkspaceHeader</Message>}
+              label={<Message>newWorkspaceCallToAction</Message>}
+              to={`/company/${id}/create/workspace`}/>
+          </Fence>
         </div>
       </div>
     )
