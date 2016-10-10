@@ -7,7 +7,7 @@ import VerticalAlign from './VerticalAlign'
 import filter from 'lodash/filter'
 import find from 'lodash/find'
 import endsWith from 'lodash/endsWith'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 import OrderDateRange from './OrderDateRange'
 
 const style = csjs`

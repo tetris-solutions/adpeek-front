@@ -1,6 +1,6 @@
 import omit from 'lodash/omit'
 import FormMixin from '@tetris/front-server/lib/mixins/FormMixin'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 import React from 'react'
 import map from 'lodash/map'
 

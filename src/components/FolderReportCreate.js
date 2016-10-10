@@ -5,7 +5,7 @@ import {contextualize} from './higher-order/contextualize'
 import {createFolderReportAction} from '../actions/create-folder-report'
 import {cloneFolderReportAction} from '../actions/clone-folder-report'
 import {Form, Content, Header, Footer} from './Card'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 
 const {PropTypes} = React
 

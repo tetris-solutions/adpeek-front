@@ -1,4 +1,4 @@
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 import React from 'react'
 
 import {Form, Content, Header, Footer} from './Card'

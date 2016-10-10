@@ -1,7 +1,7 @@
 import csjs from 'csjs'
 import cx from 'classnames'
 import pick from 'lodash/pick'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 import React from 'react'
 
 import {styled} from './mixins/styled'

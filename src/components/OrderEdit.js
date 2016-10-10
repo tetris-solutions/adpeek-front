@@ -1,5 +1,5 @@
 import some from 'lodash/some'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 import React from 'react'
 import budgetType from '../propTypes/budget'
 import campaignType from '../propTypes/campaign'

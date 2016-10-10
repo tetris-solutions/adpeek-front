@@ -1,6 +1,6 @@
 import React from 'react'
 import has from 'lodash/fp/has'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 import map from 'lodash/map'
 import groupBy from 'lodash/groupBy'
 import filter from 'lodash/filter'

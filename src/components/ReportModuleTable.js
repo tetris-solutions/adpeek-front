@@ -13,7 +13,7 @@ import pick from 'lodash/pick'
 import sortBy from 'lodash/sortBy'
 import stableSort from 'stable'
 import toPairs from 'lodash/toPairs'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 import React from 'react'
 
 import {prettyNumber} from '../functions/pretty-number'

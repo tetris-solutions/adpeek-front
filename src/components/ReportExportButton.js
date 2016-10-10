@@ -1,6 +1,6 @@
 import React from 'react'
 import Modal from './Modal'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 import {styledFnComponent} from './higher-order/styled-fn-component'
 import csjs from 'csjs'
 

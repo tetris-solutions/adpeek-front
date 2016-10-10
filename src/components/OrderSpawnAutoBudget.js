@@ -1,6 +1,6 @@
 import React from 'react'
 import Modal from './Modal'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 
 const OrderSpawnAutoBudget = React.createClass({
   displayName: 'Order-Spawn-Auto-Budget',

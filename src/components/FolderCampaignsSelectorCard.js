@@ -1,6 +1,6 @@
 import csjs from 'csjs'
 import forEach from 'lodash/forEach'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Fence from './Fence'

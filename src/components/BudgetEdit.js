@@ -1,7 +1,7 @@
 import filter from 'lodash/filter'
 import map from 'lodash/map'
 import size from 'lodash/size'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 import React from 'react'
 import {branch} from 'baobab-react/higher-order'
 

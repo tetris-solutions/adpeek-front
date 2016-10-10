@@ -5,7 +5,7 @@ import map from 'lodash/map'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
 import groupBy from 'lodash/groupBy'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 
 const style = csjs`
 .header {

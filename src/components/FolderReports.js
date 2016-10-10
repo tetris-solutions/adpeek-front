@@ -1,7 +1,7 @@
 import React from 'react'
 import {ThumbLink, ThumbButton} from './ThumbLink'
 import map from 'lodash/map'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 import {contextualize} from './higher-order/contextualize'
 import Fence from './Fence'
 

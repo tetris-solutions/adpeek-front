@@ -6,7 +6,7 @@ import map from 'lodash/map'
 import max from 'lodash/max'
 import moment from 'moment'
 import sortBy from 'lodash/sortBy'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 import React from 'react'
 
 import ReportExportButton from './ReportExportButton'

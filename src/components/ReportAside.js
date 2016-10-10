@@ -1,5 +1,5 @@
 import endsWith from 'lodash/endsWith'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 import React from 'react'
 import {Link} from 'react-router'
 import TextMessage from 'intl-messageformat'

@@ -1,6 +1,6 @@
 import React from 'react'
 import map from 'lodash/map'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 import csjs from 'csjs'
 import {styledFnComponent} from './higher-order/styled-fn-component'
 

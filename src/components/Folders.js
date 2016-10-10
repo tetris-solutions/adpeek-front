@@ -4,7 +4,7 @@ import includes from 'lodash/includes'
 import lowerCase from 'lodash/toLower'
 import map from 'lodash/map'
 import trim from 'lodash/trim'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 import React from 'react'
 import Fence from './Fence'
 

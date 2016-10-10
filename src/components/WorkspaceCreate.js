@@ -1,6 +1,6 @@
 import React from 'react'
 import FormMixin from '@tetris/front-server/lib/mixins/FormMixin'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 import Input from './Input'
 import AccountSelector from './WorkspaceAccountSelector'
 import RolesSelector from './WorkspaceRolesSelector'

@@ -1,7 +1,7 @@
 import cx from 'classnames'
 import pick from 'lodash/pick'
 import trim from 'lodash/trim'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 import React from 'react'
 import TextMessage from 'intl-messageformat'
 

@@ -2,7 +2,7 @@ import React from 'react'
 import ContextMenu from './ContextMenu'
 import {contextualize} from './higher-order/contextualize'
 import {Link} from 'react-router'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 
 const {PropTypes} = React
 

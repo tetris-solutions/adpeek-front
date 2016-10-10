@@ -4,7 +4,7 @@ import map from 'lodash/map'
 import omit from 'lodash/omit'
 import pick from 'lodash/pick'
 import FormMixin from '@tetris/front-server/lib/mixins/FormMixin'
-import Message from '@tetris/front-server/lib/components/intl/Message'
+import Message from 'tetris-iso/Message'
 import React from 'react'
 
 import Checkbox from './Checkbox'
