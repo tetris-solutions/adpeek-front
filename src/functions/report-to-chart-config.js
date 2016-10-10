@@ -15,6 +15,7 @@ import orderBy from 'lodash/orderBy'
 import without from 'lodash/without'
 import {prettyNumber} from './pretty-number'
 import set from 'lodash/set'
+import isNumber from 'lodash/isNumber'
 
 const isEntityId = d => d === 'id' || d === 'name'
 const notEntityId = negate(isEntityId)
@@ -32,11 +33,18 @@ const types = {
     type: 'datetime',
     format: '%H:%M',
     sortable: true,
-    parse (str) {
-      const parts = str.substr(0, '00:00:00'.length)
-        .split(':')
-        .slice(0, 3)
-        .map(Number)
+    parse (value) {
+      let parts
+
+      if (isNumber(value)) {
+        parts = [value, 0, 0]
+      } else {
+        parts = value.substr(0, '00:00:00'.length)
+          .split(':')
+          .slice(0, 3)
+          .map(Number)
+      }
+
       const d = new Date()
 
       d.setHours(...parts)
@@ -47,18 +55,21 @@ const types = {
 }
 
 function detectXAxis (result, xAxisDimensions) {
+  if (xAxisDimensions === 'date') {
+    return types.datetime
+  }
+
+  if (xAxisDimensions === 'hourofday') {
+    return types.time
+  }
+
   /**
    * first x axis point
    * @type {String}
    */
   const first = get(result, [0, xAxisDimensions])
-
   if (!isString(first)) {
     return types.linear
-  }
-
-  if (xAxisDimensions === 'date') {
-    return types.datetime
   }
 
   if (first.match(/^\d{2}:\d{2}:\d{2}/)) {
