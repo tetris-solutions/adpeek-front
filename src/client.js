@@ -1,4 +1,4 @@
-import {createClient} from '@tetris/front-server/lib/client'
+import {createClient} from 'tetris-iso/client'
 import {getRoutes} from './routes/ui'
 import defaultState from './default-state'
 

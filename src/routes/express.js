@@ -1,7 +1,6 @@
 import bind from 'lodash/bind'
-import {loadUserCompaniesActionServerAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
-import {performActionsMiddleware as preload} from '@tetris/front-server/lib/middlewares/perform-actions'
-import {protectedRouteMiddleware as protect} from '@tetris/front-server/lib/middlewares/protected'
+import {loadUserCompaniesActionServerAdaptor as companies} from 'tetris-iso/actions'
+import {protectedRouteMiddleware as protect, performActionsMiddleware as preload} from 'tetris-iso/server'
 
 import {loadWorkspaceAccountsActionServerAdaptor as accounts} from '../actions/load-accounts'
 import {loadAutoBudgetLogsActionServerAdaptor as autoBudgetLogs} from '../actions/load-autobudget-logs'

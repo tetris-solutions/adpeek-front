@@ -1,7 +1,7 @@
 import React from 'react'
 import {branch} from 'baobab-react/higher-order'
 import {Card, Content, Header, Footer} from './Card'
-import {forgetError} from '@tetris/front-server/lib/actions/forget-error-action'
+import {forgetError} from 'tetris-iso/actions'
 import Message from 'tetris-iso/Message'
 
 const {PropTypes} = React

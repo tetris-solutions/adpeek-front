@@ -1,6 +1,6 @@
 import map from 'lodash/map'
 import React from 'react'
-import {loadUserCompaniesAction} from '@tetris/front-server/lib/actions/load-user-companies-action'
+import {loadUserCompaniesAction} from 'tetris-iso/actions'
 import {branch} from 'baobab-react/higher-order'
 
 import {ThumbLink} from './ThumbLink'

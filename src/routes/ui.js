@@ -1,6 +1,6 @@
 import bind from 'lodash/bind'
 import React from 'react'
-import {loadUserCompaniesActionRouterAdaptor as companies} from '@tetris/front-server/lib/actions/load-user-companies-action'
+import {loadUserCompaniesActionRouterAdaptor as companies} from 'tetris-iso/actions'
 import {root} from 'baobab-react/higher-order'
 import {IndexRoute, Route} from 'react-router'
 

@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
 import pick from 'lodash/pick'
-import FormMixin from '@tetris/front-server/lib/mixins/FormMixin'
+import FormMixin from './mixins/FormMixin'
 import Message from 'tetris-iso/Message'
 import React from 'react'
 

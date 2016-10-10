@@ -1,6 +1,6 @@
 import React from 'react'
 import Input from './Input'
-import FormMixin from '@tetris/front-server/lib/mixins/FormMixin'
+import FormMixin from './mixins/FormMixin'
 import {contextualize} from './higher-order/contextualize'
 import {createFolderReportAction} from '../actions/create-folder-report'
 import {cloneFolderReportAction} from '../actions/clone-folder-report'

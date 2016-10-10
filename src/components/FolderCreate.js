@@ -1,5 +1,5 @@
 import React from 'react'
-import FormMixin from '@tetris/front-server/lib/mixins/FormMixin'
+import FormMixin from './mixins/FormMixin'
 import Message from 'tetris-iso/Message'
 import Input from './Input'
 import {createFolderAction} from '../actions/create-folder'

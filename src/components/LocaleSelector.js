@@ -1,7 +1,7 @@
 import React from 'react'
 import Select from './Select'
 import {branch} from 'baobab-react/higher-order'
-import {changeLocaleAction} from '@tetris/front-server/lib/actions/change-locale-action'
+import {changeLocaleAction} from 'tetris-iso/actions'
 
 const {PropTypes} = React
 

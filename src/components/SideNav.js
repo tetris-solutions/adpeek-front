@@ -2,7 +2,7 @@ import findLast from 'lodash/findLast'
 import has from 'lodash/fp/has'
 import property from 'lodash/property'
 import React from 'react'
-import {logoutAction} from '@tetris/front-server/lib/actions/logout-action'
+import {logoutAction} from 'tetris-iso/actions'
 import {branch} from 'baobab-react/higher-order'
 
 import LocaleSelector from './LocaleSelector'
