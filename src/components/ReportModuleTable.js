@@ -2,6 +2,7 @@ import concat from 'lodash/concat'
 import csjs from 'csjs'
 import cx from 'classnames'
 import find from 'lodash/find'
+import compact from 'lodash/compact'
 import flow from 'lodash/flow'
 import forEach from 'lodash/forEach'
 import fromPairs from 'lodash/fromPairs'
@@ -250,16 +251,15 @@ const ReportModuleTable = React.createClass({
 
     this.props.save({sort: toPairs(sortObj)})
   },
-  getFieldName (id) {
+  getEntityComponentById (id) {
     const {entity: {id: entityId, list}, reportParams} = this.props
     const item = find(list, {id})
-    let sortKey = id
 
     if (!item) {
-      return new Sortable(id, sortKey)
+      return null
     }
 
-    sortKey = item.name || item.headline || id
+    const sortKey = item.name || item.headline || id
 
     if (entityId === 'Ad') {
       return new Sortable(<Ad {...item} reportParams={reportParams}/>, sortKey)
@@ -289,18 +289,18 @@ const ReportModuleTable = React.createClass({
 
     if (result.length) {
       const customSort = flow(map(sort, sortWith))
-
-      const rows = crop(customSort(map(result, row => {
-        const parsed = {}
+      const normalizedResult = map(result, row => {
+        const parsedRow = {}
 
         forEach(columns, value => {
-          parsed[value] = value === 'id'
-            ? this.getFieldName(row[value])
+          parsedRow[value] = value === 'id'
+            ? this.getEntityComponentById(row[value])
             : row[value]
         })
 
-        return parsed
-      })), limit)
+        return parsedRow.id === null ? null : parsedRow
+      })
+      const rows = crop(customSort(compact(normalizedResult)), limit)
 
       colHeaders = (
         <THeader

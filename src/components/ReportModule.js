@@ -86,13 +86,16 @@ const Module = React.createClass({
             </button>)}
 
           {remove && (
-            <DeleteButton className='mdl-button mdl-button--icon' onClick={remove} entityName={module.name || messages.untitledModule}>
+            <DeleteButton
+              className='mdl-button mdl-button--icon'
+              onClick={remove}
+              entityName={module.name || messages.untitledModule}>
               <i className='material-icons'>clear</i>
             </DeleteButton>)}
         </div>
 
         {editMode && (
-          <Modal size='huge' onEscPress={this.closeModal}>
+          <Modal size='huge'>
             <Edit
               changeDateRange={changeDateRange}
               entities={entities}

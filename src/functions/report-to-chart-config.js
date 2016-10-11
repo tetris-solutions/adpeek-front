@@ -142,13 +142,11 @@ export function reportToChartConfig (type, props) {
   function pointIterator (point, index) {
     const pointDimensions = pick(point, dimensions)
 
-    let referenceEntity = {
-      id: point.id || index,
-      name: point.id || index
-    }
+    let referenceEntity
 
     if (point.id !== undefined) {
-      referenceEntity = find(entity.list, {id: point.id}) || referenceEntity
+      referenceEntity = find(entity.list, {id: point.id})
+      if (!referenceEntity) return
     }
 
     if (isIdBased) {

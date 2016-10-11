@@ -11,6 +11,10 @@ function monthNameToIndex (name) {
   return indexOf(months, toLower(name))
 }
 
+function zeroedMoment () {
+  return moment().month(0).date(1).hour(0).minute(0).second(0)
+}
+
 /**
  * @param {Object} attributes attributes for type mapping
  * @param {Array} result result array
@@ -25,6 +29,10 @@ export function normalizeResult (attributes, result) {
     let date
 
     switch (attribute.id) {
+      case 'year':
+        date = zeroedMoment().year(value).toDate()
+        date._format_ = 'YYYY'
+        break
       case 'hourofday':
         date = new Date()
         date.setHours(value, 0, 0)
@@ -35,7 +43,7 @@ export function normalizeResult (attributes, result) {
         date._format_ = 'MMMM, YY'
         break
       case 'monthofyear':
-        date = moment().date(1).hour(0).minute(0).month(monthNameToIndex(value)).toDate()
+        date = zeroedMoment().month(monthNameToIndex(value)).toDate()
         date._format_ = 'MMMM'
         break
       case 'date':
