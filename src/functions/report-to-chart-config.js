@@ -126,7 +126,7 @@ export function reportToChartConfig (type, props) {
   const isIdBased = xAxisDimension === 'id'
 
   if (xAxis.sortable) {
-    result = orderBy(result, 'xAxisDimension')
+    result = orderBy(result, xAxisDimension)
   } else {
     result = orderBy(result, metrics[0], 'desc')
   }
@@ -209,7 +209,7 @@ export function reportToChartConfig (type, props) {
       }
 
       if (isDate(point[xAxisDimension])) {
-        pointConfig.x = point[xAxisDimension].getTime()
+        pointConfig.x = point[xAxisDimension]
       }
 
       seriesConfig.data.push(pointConfig)

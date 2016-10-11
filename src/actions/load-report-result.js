@@ -29,7 +29,7 @@ function normalizeResult (attributes, result) {
     switch (attribute.id) {
       case 'hourofday':
         const hourOfDayDate = new Date()
-        hourOfDayDate.setHours(value)
+        hourOfDayDate.setHours(value, 0, 0)
         hourOfDayDate._format_ = 'HH:mm'
         return hourOfDayDate
       case 'month':
