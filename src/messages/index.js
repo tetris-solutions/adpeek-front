@@ -241,7 +241,9 @@ module.exports = {
     betweenOperator: 'Between',
     newFilter: 'Add filter',
     untitledModule: '[ untitled module ] ',
-    emptyAccessControlOptions: 'Unfortunately, your user is not allowed to edit the access options for the current report.'
+    emptyAccessControlOptions: 'Unfortunately, your user is not allowed to edit the access options for the current report.',
+    hideNCampaigns: 'Hide {count} inactive campaigns',
+    showNCampaigns: 'Show {count} inactive campaigns'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -485,6 +487,8 @@ module.exports = {
     betweenOperator: 'Entre',
     newFilter: 'Adicionar filtro',
     untitledModule: '[ módulo sem nome ] ',
-    emptyAccessControlOptions: 'Infelizmente, seu usuário não tem permissões para alterar as opções de acesso deste relatório.'
+    emptyAccessControlOptions: 'Infelizmente, seu usuário não tem permissões para alterar as opções de acesso deste relatório.',
+    hideNCampaigns: 'Ocultar {count} campanhas inativas',
+    showNCampaigns: 'Exibir {count} campanhas inativas'
   }
 }

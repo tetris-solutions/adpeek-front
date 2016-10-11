@@ -4,9 +4,11 @@ import Message from 'tetris-iso/Message'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Fence from './Fence'
-
+import map from 'lodash/map'
+import size from 'lodash/size'
 import {Form, Content, Header, Footer} from './Card'
 import {styled} from './mixins/styled'
+import groupBy from 'lodash/groupBy'
 
 const style = csjs`
 .content {
@@ -15,16 +17,60 @@ const style = csjs`
 
 const {PropTypes} = React
 
+const InactiveCampaigns = React.createClass({
+  displayName: 'Inactive-Campaigns',
+  propTypes: {
+    campaigns: PropTypes.array.isRequired,
+    renderer: PropTypes.func.isRequired,
+    readOnly: PropTypes.bool.isRequired
+  },
+  getInitialState () {
+    return {
+      isExpanded: false
+    }
+  },
+  toggle () {
+    this.setState({isExpanded: !this.state.isExpanded})
+  },
+  render () {
+    const {isExpanded} = this.state
+    const {campaigns, readOnly, renderer: Component} = this.props
+    const msgName = isExpanded ? 'hideNCampaigns' : 'showNCampaigns'
+    const count = size(campaigns)
+
+    if (!count) return null
+
+    return (
+      <section>
+        <p>
+          <button type='button' className='mdl-button' onClick={this.toggle}>
+            <Message count={String(count)}>{msgName}</Message>
+          </button>
+        </p>
+
+        {map(isExpanded && campaigns, campaign => (
+          <Component
+            {...campaign}
+            key={campaign.id || campaign.external_id}
+            readOnly={readOnly}/>
+        ))}
+      </section>
+    )
+  }
+})
+
 export const FolderCampaignsSelector = React.createClass({
   displayName: 'Campaigns-Selector',
   mixins: [styled(style)],
   propTypes: {
+    campaigns: PropTypes.array.isRequired,
+    renderer: PropTypes.func.isRequired,
+    readOnly: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool,
     headerColor: PropTypes.string,
     headerTextColor: PropTypes.string,
     title: PropTypes.node,
     label: PropTypes.string,
-    children: PropTypes.node,
     onSelected: PropTypes.func
   },
   contextTypes: {
@@ -35,7 +81,8 @@ export const FolderCampaignsSelector = React.createClass({
   },
   getInitialState () {
     return {
-      selected: false
+      selected: false,
+      activeOnly: false
     }
   },
   getDefaultProps () {
@@ -77,7 +124,17 @@ export const FolderCampaignsSelector = React.createClass({
   render () {
     const {selected} = this.state
     const {messages: {selectAllCampaigns, deselectAllCampaigns}} = this.context
-    const {isLoading, headerColor, headerTextColor, title, children, label} = this.props
+    const {
+      readOnly,
+      campaigns,
+      isLoading,
+      headerColor,
+      headerTextColor,
+      title,
+      renderer: Component,
+      label
+    } = this.props
+    const grouped = groupBy(campaigns, 'status.is_active')
 
     return (
       <Form ref='form' size='large' onSubmit={this.handleSubmit}>
@@ -86,7 +143,14 @@ export const FolderCampaignsSelector = React.createClass({
         </Header>
 
         <Content className={`mdl-list ${style.content}`} tag='ul'>
-          {children}
+          {map(grouped.true, campaign => (
+            <Component
+              {...campaign}
+              key={campaign.id || campaign.external_id}
+              readOnly={readOnly}/>
+          ))}
+
+          <InactiveCampaigns campaigns={grouped.false || []} renderer={Component} readOnly={readOnly}/>
         </Content>
         <Fence canEditCampaign>
           <Footer multipleButtons>

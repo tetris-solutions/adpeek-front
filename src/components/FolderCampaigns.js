@@ -1,30 +1,28 @@
 import deburr from 'lodash/deburr'
 import filter from 'lodash/filter'
-import identity from 'lodash/identity'
 import includes from 'lodash/includes'
 import lowerCase from 'lodash/toLower'
-import map from 'lodash/map'
 import settle from 'promise-settle'
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import sortBy from 'lodash/sortBy'
 import Fence from './Fence'
-import Campaign from './FolderCampaignLi'
-import CampaignLoose from './FolderCampaignLooseLi'
-import CampaignsHeader from './FolderCampaignsHeader'
-import CampaignsSelectorCard from './FolderCampaignsSelectorCard'
+import FolderCampaignLi from './FolderCampaignLi'
+import FolderCampaignLooseLi from './FolderCampaignLooseLi'
+import FolderCampaignsHeader from './FolderCampaignsHeader'
+import FolderCampaignsSelector from './FolderCampaignsSelectorCard'
 import {linkCampaignAction} from '../actions/link-campaign'
 import {loadCampaignsAction} from '../actions/load-campaigns'
 import {loadLooseCampaignsAction} from '../actions/load-loose-campaigns'
 import {unlinkCampaignAction} from '../actions/unlink-campaign'
 import {contextualize} from './higher-order/contextualize'
 
-const cleanStr = str => deburr(lowerCase(str))
 const {PropTypes} = React
-const filterActive = ls => filter(ls, ({status: {is_active}}) => is_active)
+
+const cleanStr = str => deburr(lowerCase(str))
 const hasFolder = ({folder}) => folder ? 1 : 0
 
-export const FolderCampaigns = React.createClass({
+const FolderCampaigns = React.createClass({
   displayName: 'Folder-Campaigns',
   propTypes: {
     dispatch: PropTypes.func,
@@ -47,7 +45,6 @@ export const FolderCampaigns = React.createClass({
   },
   getInitialState () {
     return {
-      filterActiveCampaigns: true,
       isLoading: true
     }
   },
@@ -99,9 +96,6 @@ export const FolderCampaigns = React.createClass({
   setFilterValue (filterValue) {
     this.setState({filterValue})
   },
-  switchActiveFilter (filterActiveCampaigns) {
-    this.setState({filterActiveCampaigns})
-  },
   refreshCampaigns () {
     const {dispatch, params: {folder, company, workspace}} = this.props
 
@@ -116,54 +110,45 @@ export const FolderCampaigns = React.createClass({
       })
   },
   render () {
-    const {isRefreshing, filterValue, isLoading, filterActiveCampaigns} = this.state
+    const {isRefreshing, filterValue, isLoading} = this.state
     const value = cleanStr(filterValue)
     const {messages} = this.context
     const {folder, params: {company, workspace}} = this.props
-    const filterValid = filterActiveCampaigns ? filterActive : identity
     const match = ({external_id, name}) => !value || includes(external_id, value) || includes(cleanStr(name), value)
     const linked = filter(folder.campaigns, match)
-    const loose = filter(filterValid(folder.looseCampaigns), match)
+    const loose = filter(folder.looseCampaigns, match)
 
     return (
       <div>
-        <CampaignsHeader
+        <FolderCampaignsHeader
           company={company}
           workspace={workspace}
           folder={folder.id}
           onClickRefresh={this.refreshCampaigns}
           isLoading={isRefreshing}
-          onSwitch={this.switchActiveFilter}
           onChange={this.setFilterValue}/>
 
         <Fence canEditCampaign>{({canEditCampaign}) =>
           <div className='mdl-grid'>
-
             <div className='mdl-cell mdl-cell--7-col'>
-
-              <CampaignsSelectorCard
+              <FolderCampaignsSelector
+                renderer={FolderCampaignLi}
                 onSelected={this.unlink}
+                campaigns={linked}
+                readOnly={!canEditCampaign}
                 title={<Message n={String(linked.length)}>nCampaigns</Message>}
-                label={messages.unlinkCampaignsCallToAction}>
-
-                {map(linked, (campaign, index) =>
-                  <Campaign key={campaign.id} {...campaign} readOnly={!canEditCampaign}/>)}
-
-              </CampaignsSelectorCard>
-
+                label={messages.unlinkCampaignsCallToAction}/>
             </div>
             <div className='mdl-cell mdl-cell--5-col'>
-
-              <CampaignsSelectorCard
+              <FolderCampaignsSelector
                 isLoading={isLoading}
+                renderer={FolderCampaignLooseLi}
                 headerColor='grey-600'
+                campaigns={sortBy(loose, hasFolder)}
+                readOnly={!canEditCampaign}
                 onSelected={this.link}
                 title={<Message n={String(loose.length)}>nLooseCampaigns</Message>}
-                label={messages.linkCampaignsCallToAction}>
-
-                {map(sortBy(loose, hasFolder), (campaign, index) =>
-                  <CampaignLoose key={campaign.external_id} {...campaign} readOnly={!canEditCampaign}/>)}
-              </CampaignsSelectorCard>
+                label={messages.linkCampaignsCallToAction}/>
             </div>
           </div>}
         </Fence>
