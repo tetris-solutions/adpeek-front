@@ -12,18 +12,15 @@ export function FolderCampaignsHeader ({
   return (
     <header className='mdl-layout__header'>
       <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
-        <span/>
-        <div className='mdl-layout-spacer'/>
         <button
           type='button'
           className='mdl-button mdl-color-text--grey-100' onClick={onClickRefresh}
           disabled={isLoading}>
-
           <Message>{isLoading
             ? 'loadingCampaigns'
             : 'refreshCampaigns'}</Message>
         </button>
-
+        <div className='mdl-layout-spacer'/>
         <HeaderSearchBox onChange={onChange}/>
       </div>
     </header>

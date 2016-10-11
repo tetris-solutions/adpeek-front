@@ -42,7 +42,7 @@ const InactiveCampaigns = React.createClass({
 
     return (
       <section>
-        <p>
+        <p style={{textAlign: 'center'}}>
           <button type='button' className='mdl-button' onClick={this.toggle}>
             <Message count={String(count)}>{msgName}</Message>
           </button>
