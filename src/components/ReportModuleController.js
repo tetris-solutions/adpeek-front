@@ -42,12 +42,16 @@ const ReportModule = React.createClass({
     params: PropTypes.object
   },
   componentDidMount () {
-    this.fetchResult = debounce(query =>
-      query && loadReportModuleResultAction(
+    this.fetchResult = debounce(query => {
+      if (!query) return
+
+      loadReportModuleResultAction(
         this.context.tree,
         this.context.params,
         this.props.module.id,
-        query), 1000)
+        query,
+        this.props.metaData.attributes)
+    }, 1000)
 
     this.fetchResult(this.getChartQuery())
   },
@@ -84,7 +88,8 @@ const ReportModule = React.createClass({
     const {editable} = this.props
 
     return (
-      <Module {...this.props}
+      <Module
+        {...this.props}
         update={editable ? this.save : undefined}
         remove={editable ? this.remove : undefined}/>
     )

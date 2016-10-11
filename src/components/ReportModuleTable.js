@@ -6,7 +6,6 @@ import flow from 'lodash/flow'
 import forEach from 'lodash/forEach'
 import fromPairs from 'lodash/fromPairs'
 import indexOf from 'lodash/indexOf'
-import isObject from 'lodash/isObject'
 import keys from 'lodash/keys'
 import map from 'lodash/map'
 import pick from 'lodash/pick'
@@ -15,12 +14,13 @@ import stableSort from 'stable'
 import toPairs from 'lodash/toPairs'
 import Message from 'tetris-iso/Message'
 import React from 'react'
-
+import isNumber from 'lodash/isNumber'
 import {prettyNumber} from '../functions/pretty-number'
 import entityType from '../propTypes/report-entity'
 import reportParamsType from '../propTypes/report-params'
 import Ad from './ReportModuleTableAd'
 import {styled} from './mixins/styled'
+import isDate from 'lodash/isDate'
 
 const style = csjs`
 .table {
@@ -51,6 +51,13 @@ const style = csjs`
 
 const {PropTypes} = React
 
+class Sortable {
+  constructor (content, sortKey) {
+    this.content = content
+    this.sortKey = sortKey
+  }
+}
+
 function sortWith ([field, order]) {
   if (field === '_fields_') {
     return ls => ls
@@ -58,8 +65,8 @@ function sortWith ([field, order]) {
 
   function sortFn (ls) {
     function compare (a, b) {
-      const aValue = isObject(a[field]) ? a[field].sortKey : a[field]
-      const bValue = isObject(b[field]) ? b[field].sortKey : b[field]
+      const aValue = a[field] instanceof Sortable ? a[field].sortKey : a[field]
+      const bValue = b[field] instanceof Sortable ? b[field].sortKey : b[field]
 
       if (aValue === bValue) return 0
 
@@ -101,13 +108,21 @@ THeader.propTypes = {
   attributes: PropTypes.object
 }
 
-const Cell = ({attribute: {is_metric, type}, value}, {locales}) => (
-  <td className={is_metric ? '' : 'mdl-data-table__cell--non-numeric'}>
-    {is_metric
-      ? prettyNumber(value, type, locales)
-      : value}
-  </td>
-)
+const Cell = ({attribute: {is_metric, type}, value}, {locales, moment}) => {
+  if (isNumber(value)) {
+    value = prettyNumber(value, type, locales)
+  }
+
+  if (isDate(value)) {
+    value = moment(value).format(value._format_)
+  }
+
+  return (
+    <td className={is_metric ? '' : 'mdl-data-table__cell--non-numeric'}>
+      {value}
+    </td>
+  )
+}
 
 Cell.defaultProps = {
   attribute: {
@@ -115,15 +130,12 @@ Cell.defaultProps = {
   }
 }
 Cell.contextTypes = {
-  locales: PropTypes.string
+  locales: PropTypes.string.isRequired,
+  moment: PropTypes.func.isRequired
 }
 Cell.displayName = 'Report-Result-Cell'
 Cell.propTypes = {
-  value: PropTypes.oneOfType([
-    PropTypes.node,
-    PropTypes.string,
-    PropTypes.number
-  ]),
+  value: PropTypes.any,
   attribute: PropTypes.shape({
     is_metric: PropTypes.bool.isRequired,
     type: PropTypes.string
@@ -136,7 +148,7 @@ const TBody = ({rows, columns, attributes}) => (
       <Cell
         key={column}
         attribute={attributes[column]}
-        value={isObject(row[column]) ? row[column].content : row[column]}/>)}
+        value={row[column] instanceof Sortable ? row[column].content : row[column]}/>)}
     </tr>)}
   </tbody>
 )
@@ -244,22 +256,16 @@ const ReportModuleTable = React.createClass({
     let sortKey = id
 
     if (!item) {
-      return {content: id, sortKey}
+      return new Sortable(id, sortKey)
     }
 
     sortKey = item.name || item.headline || id
 
     if (entityId === 'Ad') {
-      return {
-        content: <Ad {...item} reportParams={reportParams}/>,
-        sortKey
-      }
+      return new Sortable(<Ad {...item} reportParams={reportParams}/>, sortKey)
     }
 
-    return {
-      sortKey,
-      content: item.name || id
-    }
+    return new Sortable(item.name || id, sortKey)
   },
   render () {
     const {

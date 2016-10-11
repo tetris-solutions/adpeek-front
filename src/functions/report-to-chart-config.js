@@ -15,7 +15,7 @@ import orderBy from 'lodash/orderBy'
 import without from 'lodash/without'
 import {prettyNumber} from './pretty-number'
 import set from 'lodash/set'
-import isNumber from 'lodash/isNumber'
+import isDate from 'lodash/isDate'
 
 const isEntityId = d => d === 'id' || d === 'name'
 const notEntityId = negate(isEntityId)
@@ -26,41 +26,21 @@ const types = {
   },
   datetime: {
     type: 'datetime',
-    sortable: true,
-    parse: d => new Date(d).getTime()
+    sortable: true
   },
   time: {
     type: 'datetime',
     format: '%H:%M',
-    sortable: true,
-    parse (value) {
-      let parts
-
-      if (isNumber(value)) {
-        parts = [value, 0, 0]
-      } else {
-        parts = value.substr(0, '00:00:00'.length)
-          .split(':')
-          .slice(0, 3)
-          .map(Number)
-      }
-
-      const d = new Date()
-
-      d.setHours(...parts)
-
-      return d.getTime()
-    }
+    sortable: true
   }
 }
 
 function detectXAxis (result, xAxisDimensions) {
-  if (xAxisDimensions === 'date') {
-    return types.datetime
-  }
-
-  if (xAxisDimensions === 'hourofday') {
-    return types.time
+  switch (xAxisDimensions) {
+    case 'hourofday':
+    case 'hourly_stats_aggregated_by_advertiser_time_zone':
+    case 'hourly_stats_aggregated_by_audience_time_zone':
+      return types.time
   }
 
   /**
@@ -68,12 +48,9 @@ function detectXAxis (result, xAxisDimensions) {
    * @type {String}
    */
   const first = get(result, [0, xAxisDimensions])
-  if (!isString(first)) {
-    return types.linear
-  }
 
-  if (first.match(/^\d{2}:\d{2}:\d{2}/)) {
-    return types.time
+  if (isDate(first)) {
+    return types.datetime
   }
 
   return types.linear
@@ -149,7 +126,7 @@ export function reportToChartConfig (type, props) {
   const isIdBased = xAxisDimension === 'id'
 
   if (xAxis.sortable) {
-    result = orderBy(result, p => xAxis.parse(p[xAxisDimension]))
+    result = orderBy(result, 'xAxisDimension')
   } else {
     result = orderBy(result, metrics[0], 'desc')
   }
@@ -174,12 +151,10 @@ export function reportToChartConfig (type, props) {
       referenceEntity = find(entity.list, {id: point.id}) || referenceEntity
     }
 
-    if (!xAxis.parse) {
-      if (isIdBased) {
-        categories.push(referenceEntity.name)
-      } else if (isString(point[xAxisDimension])) {
-        categories.push(point[xAxisDimension])
-      }
+    if (isIdBased) {
+      categories.push(referenceEntity.name)
+    } else if (isString(point[xAxisDimension])) {
+      categories.push(point[xAxisDimension])
     }
 
     function metricIterator (metric, yAxisIndex) {
@@ -233,8 +208,8 @@ export function reportToChartConfig (type, props) {
           : point[xAxisDimension]
       }
 
-      if (xAxis.parse) {
-        pointConfig.x = xAxis.parse(point[xAxisDimension])
+      if (isDate(point[xAxisDimension])) {
+        pointConfig.x = point[xAxisDimension].getTime()
       }
 
       seriesConfig.data.push(pointConfig)

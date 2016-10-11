@@ -1,4 +1,5 @@
 import isNumber from 'lodash/isNumber'
+import floor from 'lodash/floor'
 
 const localeReplaceMap = {
   en: 'en-US',
@@ -19,10 +20,11 @@ export function prettyNumber (value, type = 'decimal', locale = 'en-US') {
 
   const style = typeToNumberStyle[type] || 'decimal'
   const options = {style}
+  const notHardTyped = !typeToNumberStyle[type]
 
   locale = localeReplaceMap[locale] || 'en-US'
 
-  if (type === 'integer') {
+  if (type === 'integer' || (notHardTyped && floor(value) === value)) {
     options.minimumFractionDigits = options.maximumFractionDigits = 0
   } else {
     options.maximumFractionDigits = options.minimumFractionDigits = 2
