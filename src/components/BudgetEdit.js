@@ -4,9 +4,7 @@ import size from 'lodash/size'
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import {branch} from 'baobab-react/higher-order'
-
 import budgetType from '../propTypes/budget'
-import campaignType from '../propTypes/campaign'
 import Input from './Input'
 import Select from './Select'
 import Slide from './Slide'
@@ -14,36 +12,10 @@ import Switch from './Switch'
 import VerticalAlign from './VerticalAlign'
 import {Card, Content, Header, Footer} from './Card'
 import {Tabs, Tab} from './Tabs'
+import BudgetCampaign from './BudgetCampaign'
+import BudgetEditFolderCampaigns from './BudgetEditFolderCampaigns'
 
 const {PropTypes} = React
-
-function Campaign ({campaign, actionIcon, onClick}) {
-  function onIconClick (e) {
-    e.preventDefault()
-    onClick(campaign)
-  }
-
-  return (
-    <div className='mdl-list__item'>
-      <span className='mdl-list__item-primary-content'>
-        <i className='material-icons mdl-list__item-avatar' title={campaign.status.description}>
-          {campaign.status.icon}
-        </i>
-        <span>{campaign.name}</span>
-      </span>
-      <a className='mdl-list__item-secondary-action' onClick={onIconClick}>
-        <i className='material-icons'>{actionIcon}</i>
-      </a>
-    </div>
-  )
-}
-
-Campaign.displayName = 'Campaign'
-Campaign.propTypes = {
-  campaign: campaignType,
-  actionIcon: PropTypes.string,
-  onClick: PropTypes.func
-}
 
 const notUnknown = ({id}) => id !== 'UNKNOWN'
 
@@ -166,7 +138,7 @@ export const BudgetEdit = React.createClass({
               ) : (
                 <div className='mdl-list'>
                   {map(campaigns, campaign => (
-                    <Campaign
+                    <BudgetCampaign
                       key={campaign.id}
                       campaign={campaign}
                       actionIcon='clear'
@@ -179,15 +151,10 @@ export const BudgetEdit = React.createClass({
               {!showFolderCampaigns ? (
                 <Message html>maxCampaignsPerBudgetReached</Message>
               ) : (
-                <div className='mdl-list'>
-                  {map(folderCampaigns, campaign => (
-                    <Campaign
-                      key={campaign.id}
-                      campaign={campaign}
-                      actionIcon='add'
-                      onClick={includeCampaign}/>
-                  ))}
-                </div>)}
+                <BudgetEditFolderCampaigns
+                  campaigns={folderCampaigns}
+                  add={includeCampaign}/>
+              )}
             </Tab>
           </Tabs>
         </Content>
