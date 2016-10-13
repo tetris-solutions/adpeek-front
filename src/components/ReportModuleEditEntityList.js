@@ -8,11 +8,14 @@ import lowerCase from 'lodash/toLower'
 import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
 import React from 'react'
-
+import get from 'lodash/get'
+import filter from 'lodash/filter'
 import reportEntityType from '../propTypes/report-entity'
 import Attributes from './ReportModuleEditAttributes'
 import {styled} from './mixins/styled'
+import compact from 'lodash/compact'
 
+const isCampaignActive = campaign => get(campaign, 'status.is_active')
 const {PropTypes} = React
 const lowerCaseId = ({id}) => lowerCase(id)
 const style = csjs`
@@ -52,11 +55,17 @@ const EntityGroup = React.createClass({
     name: PropTypes.node,
     children: PropTypes.node,
     select: PropTypes.func,
-    unselect: PropTypes.func
+    unselect: PropTypes.func,
+    openByDefault: PropTypes.bool
+  },
+  getDefaultProps () {
+    return {
+      openByDefault: false
+    }
   },
   getInitialState () {
     return {
-      isOpen: true
+      isOpen: this.props.openByDefault
     }
   },
   toggleVisibility () {
@@ -104,21 +113,40 @@ const EntityList = React.createClass({
     addItem: PropTypes.func.isRequired,
     removeItem: PropTypes.func.isRequired
   },
+  getInitialState () {
+    return {
+      activeOnly: true
+    }
+  },
+  toggle () {
+    this.setState({activeOnly: !this.state.activeOnly})
+  },
   render () {
+    const {activeOnly} = this.state
     const {selectedAttributes, addItem, removeItem, entity, attributes} = this.props
     const entityId = lowerCase(entity.id)
     const entities = keyBy(this.props.entities, lowerCaseId)
     const ids = map(attributes, 'id')
-    let subList
+    let innerList
 
     if (entityId === 'campaign') {
-      subList = <Attributes {...this.props}/>
+      innerList = (
+        <Attributes
+          {...this.props}
+          attributes={activeOnly ? filter(attributes, isCampaignActive) : attributes}
+        />
+      )
     }
 
     if (entityId === 'adgroup' || entityId === 'adset') {
-      const renderCampaignEntityGroup = (ls, campaignId) => {
+      const renderCampaignEntityGroup = (adGroupList, campaignId) => {
         const campaign = find(entities.campaign.list, {id: campaignId})
-        const ids = map(ls, 'id')
+
+        if (activeOnly && !isCampaignActive(campaign)) {
+          return null
+        }
+
+        const ids = map(adGroupList, 'id')
         const localSelection = intersec(ids, selectedAttributes)
         let selection
         if (localSelection.length) {
@@ -126,6 +154,7 @@ const EntityList = React.createClass({
         }
         return (
           <EntityGroup
+            openByDefault
             selection={selection}
             key={campaign.id}
             name={campaign.name}
@@ -133,19 +162,19 @@ const EntityList = React.createClass({
             select={addItem}
             unselect={removeItem}>
 
-            <Attributes {...this.props} attributes={ls}/>
+            <Attributes {...this.props} attributes={adGroupList}/>
           </EntityGroup>
         )
       }
 
-      subList = map(groupBy(attributes, 'campaign_id'), renderCampaignEntityGroup)
+      innerList = compact(map(groupBy(attributes, 'campaign_id'), renderCampaignEntityGroup))
     }
 
     if (entityId === 'ad' || entityId === 'keyword') {
       const parentEntity = entities.adgroup ? 'adgroup' : 'adset'
-      const renderAdGroupEntityGroup = (ls, adGroupId) => {
+      const renderAdGroupEntityGroup = (adOrKeywordList, adGroupId) => {
         const adGroup = find(entities[parentEntity].list, {id: adGroupId})
-        const ids = map(ls, 'id')
+        const ids = map(adOrKeywordList, 'id')
         const localSelection = intersec(ids, selectedAttributes)
         let selection
         if (localSelection.length) {
@@ -163,15 +192,20 @@ const EntityList = React.createClass({
               select={addItem}
               unselect={removeItem}>
 
-              <Attributes {...this.props} attributes={ls}/>
+              <Attributes {...this.props} attributes={adOrKeywordList}/>
             </EntityGroup>
           )
         }
       }
       const adGroups = map(groupBy(attributes, `${parentEntity}_id`), renderAdGroupEntityGroup)
-      const renderSubCampaignEntityGroup = (ls, campaignId) => {
+      const renderSubCampaignEntityGroup = (adGroupList, campaignId) => {
         const campaign = find(entities.campaign.list, {id: campaignId})
-        const ids = flatten(map(ls, 'ids'))
+
+        if (activeOnly && !isCampaignActive(campaign)) {
+          return null
+        }
+
+        const ids = flatten(map(adGroupList, 'ids'))
         const localSelection = intersec(ids, selectedAttributes)
         let selection
         if (localSelection.length) {
@@ -187,34 +221,43 @@ const EntityList = React.createClass({
             unselect={removeItem}>
 
             <ul className={String(style.list)}>
-              {map(ls, ({content}) => content)}
+              {map(adGroupList, 'content')}
             </ul>
           </EntityGroup>
         )
       }
 
-      subList = map(groupBy(adGroups, 'parent'), renderSubCampaignEntityGroup)
+      innerList = compact(map(groupBy(adGroups, 'parent'), renderSubCampaignEntityGroup))
     }
 
     const localSelection = intersec(ids, selectedAttributes)
     let selection
+
     if (localSelection.length) {
       selection = localSelection.length === ids.length ? 'total' : 'partial'
     }
 
     return (
-      <ul className={String(style.list)}>
-        <EntityGroup
-          selection={selection}
-          name={<Message>all</Message>}
-          ids={ids}
-          select={addItem}
-          unselect={removeItem}>
-          <ul className={String(style.list)}>
-            {subList}
-          </ul>
-        </EntityGroup>
-      </ul>
+      <div>
+        <p style={{textAlign: 'right'}}>
+          <button type='button' className='mdl-button' onClick={this.toggle}>
+            <Message>{activeOnly ? 'showAllInactiveCampaigns' : 'hideAllInactiveCampaigns'}</Message>
+          </button>
+        </p>
+        <ul className={String(style.list)}>
+          <EntityGroup
+            openByDefault
+            selection={selection}
+            name={<Message>all</Message>}
+            ids={ids}
+            select={addItem}
+            unselect={removeItem}>
+            <ul className={String(style.list)}>
+              {innerList}
+            </ul>
+          </EntityGroup>
+        </ul>
+      </div>
     )
   }
 })
