@@ -65,77 +65,81 @@ function serializeTr (tr) {
  */
 export function serializeReportModules (modules, forceTableExport = false) {
   const {Highcharts} = window
-  const HDownload = Highcharts.downloadURL
+  const originalDownloadMethod = Highcharts.downloadURL
   const exportedModules = []
-  const unhack = () => {
-    Highcharts.downloadURL = HDownload
+
+  function restoreOriginalDownloadMethod () {
+    Highcharts.downloadURL = originalDownloadMethod
   }
 
-  const exportChart = ({id, name, el}) => new Promise(resolve => {
-    const highChart = el.querySelector('div[data-highcharts-chart]')
+  const exportChart = ({id, name, el}) =>
+    new Promise(function resolveSerializedModule (resolve) {
+      const highChart = el.querySelector('div[data-highcharts-chart]')
 
-    function exportHC () {
-      // hack highcharts download method
-      Highcharts.downloadURL = img => resolve({name, img})
-      highChart.HCharts.exportChartLocal()
-    }
-
-    function exportTable () {
-      /**
-       *
-       * @type {HTMLTableElement}
-       */
-      const table = el.querySelector('table')
-      const module = {
-        name,
-        headers: [],
-        rows: []
+      function exportHC () {
+        // hack highcharts download method
+        Highcharts.downloadURL = img => resolve({name, img})
+        highChart.HCharts.exportChartLocal()
       }
 
-      if (table.tHead.rows.length > 1) {
-        module.headers = serializeTr(table.tHead.rows[1])
-
+      function exportTable () {
         /**
          *
-         * @type {HTMLTableSectionElement}
+         * @type {HTMLTableElement}
          */
-        const tbody = table.tBodies[0]
-
-        for (let i = 0; i < tbody.rows.length; i++) {
-          module.rows.push(serializeTr(tbody.rows[i]))
+        const table = el.querySelector('table')
+        const module = {
+          name,
+          headers: [],
+          rows: []
         }
+
+        if (table.tHead.rows.length > 1) {
+          module.headers = serializeTr(table.tHead.rows[1])
+
+          /**
+           *
+           * @type {HTMLTableSectionElement}
+           */
+          const tbody = table.tBodies[0]
+
+          for (let i = 0; i < tbody.rows.length; i++) {
+            module.rows.push(serializeTr(tbody.rows[i]))
+          }
+        }
+
+        resolve(module)
       }
 
-      resolve(module)
-    }
+      function renderAsTableThenExport () {
+        el.querySelector('div[data-interface]')
+          .renderAsTable()
+          .then(exportTable)
+      }
 
-    function renderAsTableThenExport () {
-      el.querySelector('div[data-interface]')
-        .renderAsTable()
-        .then(exportTable)
-    }
-
-    if (!highChart) {
-      exportTable()
-    } else if (forceTableExport) {
-      renderAsTableThenExport()
-    } else {
-      exportHC()
-    }
-  })
+      if (!highChart) {
+        exportTable()
+      } else if (forceTableExport) {
+        renderAsTableThenExport()
+      } else {
+        exportHC()
+      }
+    })
 
   let promise = Promise.resolve()
 
-  modules.forEach(m => {
+  function enqueueModuleSerialization (m) {
     promise = promise.then(() => exportChart(m))
       .then(i => exportedModules.push(i))
-  })
+  }
 
-  return promise.then(() => {
-    unhack()
+  modules.forEach(enqueueModuleSerialization)
+
+  return promise.then(function onSuccess () {
+    restoreOriginalDownloadMethod()
     return exportedModules
-  }, err => {
-    unhack()
+  }, function onFailure (err) {
+    restoreOriginalDownloadMethod()
     throw err
   })
 }

@@ -43,7 +43,7 @@ export const OrderPie = React.createClass({
     const points = chart.series[0].data
 
     if (budgets.length === points.length) {
-      setTimeout(() => {
+      setTimeout(function sliceSelectedBudget () {
         const point = find(chart.series[0].data, ['options.id', selectedBudgetId])
         point.select()
         chart.redraw()

@@ -34,7 +34,7 @@ DateRangeModal.propTypes = {
   endDate: PropTypes.object
 }
 
-const ReportDateRange = ({startDate, endDate, onChange, buttonClassName}) => {
+function ReportDateRange ({startDate, endDate, onChange, buttonClassName}) {
   const label = (
     <Message startDate={startDate.format('ddd D, MMM')} endDate={endDate.format('ddd D, MMM - YYYY')}>
       dateRangeLabel

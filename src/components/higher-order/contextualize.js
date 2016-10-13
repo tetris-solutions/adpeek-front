@@ -72,7 +72,7 @@ function getCursorToEntity (entity, tree, params, cursor = [], path = null) {
  * @return {Function} the extended react component
  */
 export function contextualize (Component, baseCursors, ...names) {
-  const cached = {}
+  const propsCache = {}
 
   if (!isObject(baseCursors)) {
     names.unshift(baseCursors)
@@ -80,20 +80,22 @@ export function contextualize (Component, baseCursors, ...names) {
   }
 
   function PropsInjector (props) {
-    forEach(names, name => {
+    function updateCacheForProp (name) {
       if (isRouteParam[name] && !props.params[name]) {
-        cached[name] = null
+        propsCache[name] = null
       } else {
-        cached[name] = props[name] || cached[name]
+        propsCache[name] = props[name] || propsCache[name]
       }
-    })
+    }
 
-    return <Component {...props} {...cached} />
+    forEach(names, updateCacheForProp)
+
+    return <Component {...props} {...propsCache} />
   }
 
   const propsNames = keys(baseCursors).concat(names).join(', ')
 
-  const injectParams = Child => {
+  function injectParams (Child) {
     const ParamsInjector = (props, {params}) => <Child {...props} params={params}/>
 
     ParamsInjector.displayName = `Contextualize(${Component.displayName}, ${propsNames})`
@@ -109,21 +111,23 @@ export function contextualize (Component, baseCursors, ...names) {
 
   const paramsShape = {}
 
-  forEach(names, name => {
+  function addToDynamicPropTypes (name) {
     PropsInjector.propTypes[name] = PropTypes.any
+
     if (isRouteParam[name]) {
       paramsShape[name] = PropTypes.string
     }
-  })
+  }
+
+  forEach(names, addToDynamicPropTypes)
 
   PropsInjector.propTypes.params = PropTypes.shape(paramsShape)
 
   function resolveCursors ({params}, {tree}) {
     const cursors = assign({}, baseCursors)
-
     const user = tree.get('user')
 
-    forEach(names, name => {
+    function findCursorFor (name) {
       if (name === 'user') {
         cursors[name] = ['user']
         return
@@ -134,7 +138,9 @@ export function contextualize (Component, baseCursors, ...names) {
       if (cursor) {
         cursors[name] = ['user'].concat(cursor)
       }
-    })
+    }
+
+    forEach(names, findCursorFor)
 
     return cursors
   }

@@ -531,17 +531,19 @@ const actions = {
   'update-adset': UpdateAdset
 }
 
+function budgetAction (entry, index) {
+  const Component = actions[entry.action] || DefaultActionComponent
+
+  return <Component key={index} {...entry} />
+}
+
 const Budget = ({entries}) => (
   <Card size='large'>
     <Header>
       <Message name={entries[0].budget.name}>budgetTitle</Message>
     </Header>
     <Content>
-      {map(entries, (entry, index) => {
-        const Component = actions[entry.action] || DefaultActionComponent
-
-        return <Component key={index} {...entry} />
-      })}
+      {map(entries, budgetAction)}
     </Content>
   </Card>
 )
@@ -551,17 +553,19 @@ Budget.propTypes = {
   entries: PropTypes.array
 }
 
+function campaignAction (entry, index) {
+  const Component = actions[entry.action] || DefaultActionComponent
+
+  return <Component key={index} {...entry} />
+}
+
 const Campaign = ({entries}) => (
   <Card size='large'>
     <Header>
       <Message name={entries[0].campaign.name}>campaignTitle</Message>
     </Header>
     <Content>
-      {map(entries, (entry, index) => {
-        const Component = actions[entry.action] || DefaultActionComponent
-
-        return <Component key={index} {...entry} />
-      })}
+      {map(entries, campaignAction)}
     </Content>
   </Card>
 )
@@ -570,22 +574,25 @@ Campaign.propTypes = {
   entries: PropTypes.array
 }
 
-const Adset = ({entries}) => (
+function adSetAction (entry, index) {
+  const Component = actions[entry.action] || DefaultActionComponent
+
+  return <Component key={index} {...entry} />
+}
+
+const AdSet = ({entries}) => (
   <Card size='large'>
     <Header>
       <Message name={entries[0].adset.name}>adsetTitle</Message>
     </Header>
     <Content>
-      {map(entries, (entry, index) => {
-        const Component = actions[entry.action] || DefaultActionComponent
-
-        return <Component key={index} {...entry} />
-      })}
+      {map(entries, adSetAction)}
     </Content>
   </Card>
 )
-Adset.displayName = 'Adset-Actions'
-Adset.propTypes = {
+
+AdSet.displayName = 'AdSet-Actions'
+AdSet.propTypes = {
   entries: PropTypes.array
 }
 
@@ -596,7 +603,7 @@ function ABLogs ({logs, platform}) {
     return (
       <div>
         {map(adsets, (entries, id) =>
-          <Adset key={id} entries={entries}/>)}
+          <AdSet key={id} entries={entries}/>)}
       </div>
     )
   }

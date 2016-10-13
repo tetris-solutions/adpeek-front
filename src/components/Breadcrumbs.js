@@ -26,14 +26,12 @@ const hasBreadcrumbs = has('breadcrumb')
 export function Breadcrumbs (props, {params, routes}) {
   return (
     <span>
-      {map(filter(routes, hasBreadcrumbs), ({breadcrumb}, index) => {
-        const Breadcrumb = breadcrumb
-        return (
+      {map(filter(routes, hasBreadcrumbs),
+        ({breadcrumb: Breadcrumb}, index) => (
           <span key={index} className={style.breadcrumb}>
             <Breadcrumb params={params}/>
           </span>
-        )
-      })}
+        ))}
     </span>
   )
 }

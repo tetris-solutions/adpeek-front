@@ -58,7 +58,7 @@ const style = csjs`
 
 const sizeType = PropTypes.oneOf(['small', 'medium', 'large', 'huge'])
 
-const createPortal = contextAttributes => {
+function createPortal (contextAttributes) {
   if (typeof window === 'undefined') return () => null
 
   let modalClassCfg, contextTypes
@@ -66,7 +66,7 @@ const createPortal = contextAttributes => {
   if (!isEmpty(contextAttributes)) {
     contextTypes = {}
 
-    forEach(contextAttributes, key => {
+    forEach(contextAttributes, function addToContext (key) {
       contextTypes[key] = PropTypes.any
     })
 

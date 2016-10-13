@@ -185,7 +185,7 @@ const ReportModuleEditFilters = React.createClass({
     this.props.update({filters: omit(this.props.filters, filterName)})
   },
   componentWillMount () {
-    this.onChange = curry((index, name, {target: {value, type}}) => {
+    const updateOnChange = (index, name, {target: {value, type}}) => {
       const filters = concat(this.state.filters)
       const oldFilterConfig = filters[index]
 
@@ -213,7 +213,9 @@ const ReportModuleEditFilters = React.createClass({
       }
 
       this.props.update({filters: parentFilters})
-    })
+    }
+
+    this.onChange = curry(updateOnChange)
   },
   render () {
     return (

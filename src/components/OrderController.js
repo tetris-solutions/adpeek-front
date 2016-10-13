@@ -217,16 +217,18 @@ export const OrderController = React.createClass({
 
     order.folder = params.folder
 
+    function onSuccess (response) {
+      const url = `/company/${params.company}/workspace/${params.workspace}/folder/${params.folder}/order/${response.data.id}`
+
+      const reloadStuff = isNewOrder
+        ? dispatch(loadOrdersAction, params.company, params.workspace, params.folder)
+        : dispatch(loadBudgetsAction, params.company, params.workspace, params.folder, params.order)
+
+      reloadStuff.then(() => router.push(url))
+    }
+
     return dispatch(saveOrderAction, order)
-      .then(response => {
-        const url = `/company/${params.company}/workspace/${params.workspace}/folder/${params.folder}/order/${response.data.id}`
-
-        const reloadStuff = isNewOrder
-          ? dispatch(loadOrdersAction, params.company, params.workspace, params.folder)
-          : dispatch(loadBudgetsAction, params.company, params.workspace, params.folder, params.order)
-
-        reloadStuff.then(() => router.push(url))
-      })
+      .then(onSuccess)
       .then(() => dispatch(pushSuccessMessageAction))
   },
   render () {

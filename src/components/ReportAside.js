@@ -33,9 +33,7 @@ export function ReportAside ({report, dispatch, user}, {messages, locales, route
 
   const deleteReport = () =>
     dispatch(deleteReportAction, params, report.id)
-      .then(() => {
-        router.push(`${folderUrl}/reports`)
-      })
+      .then(() => router.push(`${folderUrl}/reports`))
 
   const inEditMode = endsWith(pathname, '/edit')
   const cloneName = new TextMessage(messages.copyOfName, locales).format({name: report.name})

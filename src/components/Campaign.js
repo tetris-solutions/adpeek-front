@@ -52,22 +52,24 @@ export const Campaign = React.createClass({
       params.campaign)
       .then(() => this.setState({isLoading: false}))
   },
+  onAdGroupsLoaded () {
+    const {campaign, dispatch, params} = this.props
+
+    dispatch(createCampaignAdGroupsReportAction,
+      params.company,
+      params.workspace,
+      params.folder,
+      campaign.id,
+      campaign.adGroups)
+      .then(this.onReportCreated)
+  },
   extractReport () {
     if (!this.isAdwords) return
 
     this.setState({creatingReport: true})
 
-    this.loadingAdGroups.then(() => {
-      const {campaign, dispatch, params} = this.props
-
-      dispatch(createCampaignAdGroupsReportAction,
-        params.company,
-        params.workspace,
-        params.folder,
-        campaign.id,
-        campaign.adGroups)
-        .then(this.onReportCreated)
-    })
+    this.loadingAdGroups
+      .then(this.onAdGroupsLoaded)
   },
   render () {
     const {creatingReport, isLoading} = this.state
@@ -86,7 +88,7 @@ export const Campaign = React.createClass({
             <DownloadReportButton
               loading={creatingReport}
               extract={this.extractReport}
-              report={campaign.adGroupsReport} />
+              report={campaign.adGroupsReport}/>
           </div>
         </header>
 

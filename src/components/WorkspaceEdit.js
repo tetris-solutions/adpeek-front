@@ -50,15 +50,15 @@ export const WorkspaceEdit = React.createClass({
     e.preventDefault()
     const {dispatch, params: {workspace, company}} = this.props
     const data = serializeWorkspaceForm(e.target)
+    const navigateToUpdatedWorkspace = () => this.context.router.push(`/company/${company}/workspace/${workspace}`)
+
     data.id = workspace
 
     this.preSubmit()
 
     return dispatch(updateWorkspaceAction, company, data)
       .then(() => dispatch(pushSuccessMessageAction))
-      .then(() => {
-        this.context.router.push(`/company/${company}/workspace/${workspace}`)
-      })
+      .then(navigateToUpdatedWorkspace)
       .catch(this.handleSubmitException)
       .then(this.posSubmit)
   },

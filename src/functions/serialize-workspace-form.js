@@ -18,8 +18,9 @@ export function serializeWorkspaceForm (form) {
   }
 
   Object.keys(elements)
-    .forEach(name => {
+    .forEach(function parseRole (name) {
       const prefix = 'role_'
+
       if (startsWith(name, prefix) && elements[name].checked) {
         data.roles.push(name.substr(prefix.length))
       }

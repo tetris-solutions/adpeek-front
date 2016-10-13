@@ -192,6 +192,10 @@ export const Chart = createClass({
       cloneDeep(this.state.config)
     )
   },
+  hardRedraw () {
+    this.chart.destroy()
+    this.draw()
+  },
   updateSeries (series) {
     const oldSeries = find(this.chart.series, ['options.id', series.id])
 
@@ -209,10 +213,7 @@ export const Chart = createClass({
     }
 
     if (hasChanged(newConfig, this.state.config)) {
-      this.setState({config: newConfig}, () => {
-        this.chart.destroy()
-        this.draw()
-      })
+      this.setState({config: newConfig}, this.hardRedraw)
     } else {
       this.setState({config: newConfig})
 

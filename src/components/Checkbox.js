@@ -62,23 +62,24 @@ export const Checkbox = React.createClass({
       checked: this.props.checked
     }
   },
+  check () {
+    this.refs.input.parentNode.MaterialCheckbox.check()
+    this.setState({checked: true})
+  },
+  uncheck () {
+    this.refs.input.parentNode.MaterialCheckbox.uncheck()
+    this.setState({checked: false})
+  },
   componentDidMount () {
     const {input, wrapper} = this.refs
 
-    input.programaticallyCheck = () => {
-      input.parentNode.MaterialCheckbox.check()
-      this.setState({checked: true})
-    }
-
-    input.programaticallyUncheck = () => {
-      input.parentNode.MaterialCheckbox.uncheck()
-      this.setState({checked: false})
-    }
+    input.programaticallyCheck = this.check
+    input.programaticallyUncheck = this.uncheck
 
     window.componentHandler.upgradeElement(wrapper)
   },
   onChange ({target, nativeEvent: {shiftKey, ctrlKey}}) {
-    this.setState({checked: target.checked}, () => {
+    function onCheckStateChanged () {
       if (!target.form) return
 
       if (shiftKey || ctrlKey) {
@@ -86,7 +87,9 @@ export const Checkbox = React.createClass({
       }
 
       target.form._lastChecked = target
-    })
+    }
+
+    this.setState({checked: target.checked}, onCheckStateChanged)
   },
   render () {
     const {label, name, value} = this.props

@@ -116,7 +116,7 @@ const EntityList = React.createClass({
     }
 
     if (entityId === 'adgroup' || entityId === 'adset') {
-      subList = map(groupBy(attributes, 'campaign_id'), (ls, campaignId) => {
+      const renderCampaignEntityGroup = (ls, campaignId) => {
         const campaign = find(entities.campaign.list, {id: campaignId})
         const ids = map(ls, 'id')
         const localSelection = intersec(ids, selectedAttributes)
@@ -136,12 +136,14 @@ const EntityList = React.createClass({
             <Attributes {...this.props} attributes={ls}/>
           </EntityGroup>
         )
-      })
+      }
+
+      subList = map(groupBy(attributes, 'campaign_id'), renderCampaignEntityGroup)
     }
 
     if (entityId === 'ad' || entityId === 'keyword') {
       const parentEntity = entities.adgroup ? 'adgroup' : 'adset'
-      const adGroups = map(groupBy(attributes, `${parentEntity}_id`), (ls, adGroupId) => {
+      const renderAdGroupEntityGroup = (ls, adGroupId) => {
         const adGroup = find(entities[parentEntity].list, {id: adGroupId})
         const ids = map(ls, 'id')
         const localSelection = intersec(ids, selectedAttributes)
@@ -165,9 +167,9 @@ const EntityList = React.createClass({
             </EntityGroup>
           )
         }
-      })
-
-      subList = map(groupBy(adGroups, 'parent'), (ls, campaignId) => {
+      }
+      const adGroups = map(groupBy(attributes, `${parentEntity}_id`), renderAdGroupEntityGroup)
+      const renderSubCampaignEntityGroup = (ls, campaignId) => {
         const campaign = find(entities.campaign.list, {id: campaignId})
         const ids = flatten(map(ls, 'ids'))
         const localSelection = intersec(ids, selectedAttributes)
@@ -189,7 +191,9 @@ const EntityList = React.createClass({
             </ul>
           </EntityGroup>
         )
-      })
+      }
+
+      subList = map(groupBy(adGroups, 'parent'), renderSubCampaignEntityGroup)
     }
 
     const localSelection = intersec(ids, selectedAttributes)

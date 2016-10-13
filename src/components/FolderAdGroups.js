@@ -53,21 +53,22 @@ export const FolderAdGroups = React.createClass({
       params.folder)
       .then(() => this.setState({isLoading: false}))
   },
+  onAdGroupsLoaded () {
+    const {folder: {adGroups}, dispatch, params} = this.props
+
+    dispatch(createFolderAdGroupsReportAction,
+      params.company,
+      params.workspace,
+      params.folder,
+      adGroups)
+      .then(this.onReportCreated)
+  },
   extractReport () {
     if (!this.isAdwords()) return
 
     this.setState({creatingReport: true})
 
-    this.loadingAdGroups.then(() => {
-      const {folder: {adGroups}, dispatch, params} = this.props
-
-      dispatch(createFolderAdGroupsReportAction,
-        params.company,
-        params.workspace,
-        params.folder,
-        adGroups)
-        .then(this.onReportCreated)
-    })
+    this.loadingAdGroups.then(this.onAdGroupsLoaded)
   },
   render () {
     const {creatingReport, isLoading} = this.state
@@ -86,7 +87,7 @@ export const FolderAdGroups = React.createClass({
             <DownloadReportButton
               loading={creatingReport}
               extract={this.extractReport}
-              report={folder.adGroupsReport} />
+              report={folder.adGroupsReport}/>
           </div>
         </header>
 

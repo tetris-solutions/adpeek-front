@@ -41,14 +41,13 @@ export const CreateWorkspace = React.createClass({
     e.preventDefault()
     const {router} = this.context
     const {dispatch, company} = this.props
+    const navigateToCompanyView = () => router.push(`/company/${company.id}`)
 
     this.preSubmit()
 
     return dispatch(createWorkspaceAction, company.id, serializeWorkspaceForm(e.target))
       .then(() => dispatch(pushSuccessMessageAction))
-      .then(() => {
-        router.push(`/company/${company.id}`)
-      })
+      .then(navigateToCompanyView)
       .catch(this.handleSubmitException)
       .then(this.posSubmit)
   },

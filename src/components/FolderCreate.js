@@ -61,11 +61,11 @@ export const CreateFolder = React.createClass({
 
     this.preSubmit()
 
+    const navigateToFolderList = () => this.context.router.push(`/company/${company}/workspace/${workspace}`)
+
     return dispatch(createFolderAction, workspace, folder)
       .then(() => dispatch(pushSuccessMessageAction))
-      .then(() => {
-        this.context.router.push(`/company/${company}/workspace/${workspace}`)
-      })
+      .then(navigateToFolderList)
       .catch(this.handleSubmitException)
       .then(this.posSubmit)
   },

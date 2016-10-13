@@ -81,8 +81,8 @@ const ReportChart = React.createClass({
   renderAsTable () {
     const unlock = () => this.setState({renderHiddenTable: false})
 
-    return new Promise(resolve =>
-      this.setState({renderHiddenTable: true}, () => {
+    return new Promise(resolve => this.setState({renderHiddenTable: true},
+      function resolveThenUnlock () {
         resolve()
         setTimeout(unlock, 300)
       }))

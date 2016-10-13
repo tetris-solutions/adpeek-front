@@ -63,10 +63,7 @@ const FolderCampaigns = React.createClass({
       this.setState({isLoading: true})
 
       return dispatch(loadLooseCampaignsAction, company, workspace, folder)
-        .then(r => {
-          this.setState({isLoading: false})
-          return r
-        }, err => {
+        .then(() => this.setState({isLoading: false}), err => {
           this.setState({isLoading: false})
           throw err
         })
@@ -102,9 +99,7 @@ const FolderCampaigns = React.createClass({
     this.setState({isRefreshing: true})
 
     return dispatch(loadCampaignsAction, company, workspace, folder, 'refresh-campaigns')
-      .then(() => {
-        this.setState({isRefreshing: false})
-      }, err => {
+      .then(() => this.setState({isRefreshing: false}), err => {
         this.setState({isRefreshing: false})
         throw err
       })

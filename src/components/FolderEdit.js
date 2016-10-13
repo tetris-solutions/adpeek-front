@@ -76,19 +76,21 @@ export const EditFolder = React.createClass({
 
     this.preSubmit()
 
+    const navigateToUpdatedFolder = () => this.context.router.push(`/company/${company}/workspace/${workspace}/folder/${id}`)
+
     return dispatch(updateFolderAction, company, workspace, folder)
       .then(() => dispatch(pushSuccessMessageAction))
-      .then(() => {
-        this.context.router.push(`/company/${company}/workspace/${workspace}/folder/${id}`)
-      })
+      .then(navigateToUpdatedFolder)
       .catch(this.handleSubmitException)
       .then(this.posSubmit)
   },
   saveAndDismiss (name) {
-    return ({target: {value}}) => {
+    function onChange ({target: {value}}) {
       const errors = omit(this.state.errors, name)
       this.setState({errors, [name]: value})
     }
+
+    return onChange
   },
   render () {
     const {medias, workspace: {accounts}} = this.props

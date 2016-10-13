@@ -50,7 +50,7 @@ const calculateDateRanges = ({nextWeek, nextMonth, nextSemester, nextYear}) => (
 
 let ranges
 
-const DateRangeModal = ({startDate, endDate, close, onChange}, {messages}) => {
+function DateRangeModal ({startDate, endDate, close, onChange}, {messages}) {
   ranges = ranges || calculateDateRanges(messages)
 
   return (
@@ -87,7 +87,7 @@ DateRangeModal.contextTypes = {
   messages: PropTypes.object
 }
 
-const OrderDateRange = ({startDate, endDate, onChange, buttonClassName}) => {
+function OrderDateRange ({startDate, endDate, onChange, buttonClassName}) {
   const label = (
     <Message startDate={startDate.format('ddd D, MMM')} endDate={endDate.format('ddd D, MMM - YYYY')}>
       dateRangeLabel

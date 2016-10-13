@@ -85,13 +85,15 @@ function sortWith ([field, order]) {
 }
 
 function sortHeaders (headers, fieldSort) {
-  return map(sortBy(map(headers, field => {
+  function normalizeHeader (field) {
     const foundIndex = indexOf(fieldSort, field)
     return {
       field,
       index: foundIndex >= 0 ? foundIndex : Infinity
     }
-  }), 'index'), 'field')
+  }
+
+  return map(sortBy(map(headers, normalizeHeader), 'index'), 'field')
 }
 
 const THeader = ({columns, attributes, sortPairs, toggle}) => (
@@ -109,7 +111,7 @@ THeader.propTypes = {
   attributes: PropTypes.object
 }
 
-const Cell = ({attribute: {is_metric, type}, value}, {locales, moment}) => {
+function Cell ({attribute: {is_metric, type}, value}, {locales, moment}) {
   if (isNumber(value)) {
     value = prettyNumber(value, type, locales)
   }
@@ -289,7 +291,7 @@ const ReportModuleTable = React.createClass({
 
     if (result.length) {
       const customSort = flow(map(sort, sortWith))
-      const normalizedResult = map(result, row => {
+      const normalizeRow = row => {
         const parsedRow = {}
 
         forEach(columns, value => {
@@ -299,7 +301,8 @@ const ReportModuleTable = React.createClass({
         })
 
         return parsedRow.id === null ? null : parsedRow
-      })
+      }
+      const normalizedResult = map(result, normalizeRow)
       const rows = crop(customSort(compact(normalizedResult)), limit)
 
       colHeaders = (

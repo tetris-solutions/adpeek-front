@@ -95,11 +95,13 @@ export const FolderCampaignsSelector = React.createClass({
     e.preventDefault()
     const values = []
 
-    forEach(e.target.elements, ({name, checked, value}) => {
+    function serializeValue ({checked, value}) {
       if (checked) {
         values.push(JSON.parse(value))
       }
-    })
+    }
+
+    forEach(e.target.elements, serializeValue)
 
     if (!values.length) return
 
@@ -111,13 +113,17 @@ export const FolderCampaignsSelector = React.createClass({
 
     const form = ReactDOM.findDOMNode(this.refs.form)
     const {selected} = this.state
-    const op = selected ? 'programaticallyUncheck' : 'programaticallyCheck'
+    const methodName = selected
+      ? 'programaticallyUncheck'
+      : 'programaticallyCheck'
 
-    forEach(form.elements, el => {
-      if (typeof el[op] === 'function') {
-        el[op]()
+    function toggleCheckBox (el) {
+      if (typeof el[methodName] === 'function') {
+        el[methodName]()
       }
-    })
+    }
+
+    forEach(form.elements, toggleCheckBox)
 
     this.setState({selected: !selected})
   },

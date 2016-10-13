@@ -4,7 +4,7 @@ import Message from 'tetris-iso/Message'
 const {PropTypes} = React
 const btClass = 'mdl-button mdl-color-text--grey-100'
 
-const DownloadReportButton = ({loading, extract, report}) => {
+function DownloadReportButton ({loading, extract, report}) {
   if (report) {
     return (
       <a href={report.url} className={btClass}>

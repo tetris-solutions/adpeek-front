@@ -129,10 +129,12 @@ const style = csjs`
 const theme = {}
 
 // assemble `theme` object, required by ReactAutosuggest
-Object.keys(style)
-  .forEach(className => {
-    theme[className] = String(style[className])
-  })
+
+function setThemeClassName (className) {
+  theme[className] = String(style[className])
+}
+
+Object.keys(style).forEach(setThemeClassName)
 
 function Suggestion ({name}) {
   return (
@@ -201,14 +203,15 @@ export const WorkspaceAccountSelector = React.createClass({
       )
     })
   },
+  updateSuggestionList () {
+    if (this.hasUnmounted) return
+    const updateSuggestions = () => this.onSuggestionsFetchRequested(this.state)
+    this.setState({isLoading: false}, updateSuggestions)
+  },
   componentDidMount () {
     this.onSuggestionsFetchRequested = debounce(this.onSuggestionsFetchRequested, 300)
     this.props.dispatch(loadCompanyAccountsAction, this.props.company.id, this.props.platform)
-      .then(() => {
-        if (this.hasUnmounted) return
-        const updateSuggestions = () => this.onSuggestionsFetchRequested(this.state)
-        this.setState({isLoading: false}, updateSuggestions)
-      })
+      .then(this.updateSuggestionList)
   },
   componentWillUnmount () {
     this.hasUnmounted = true

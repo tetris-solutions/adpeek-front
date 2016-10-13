@@ -36,7 +36,7 @@ ImageAd.propTypes = {
   }))
 }
 
-const TemplateAd = ({urls, name}) => {
+function TemplateAd ({urls, name}) {
   let templateDownloadUrl
 
   const htmlUrl = get(find(urls, {key: 'FULL'}), 'value')
@@ -60,7 +60,7 @@ TemplateAd.propTypes = {
   name: PropTypes.string.isRequired
 }
 
-const ReportModuleTableAd = props => {
+function ReportModuleTableAd (props) {
   const {id, name, type} = props
 
   if (props.creative_id) {

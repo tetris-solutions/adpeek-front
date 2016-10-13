@@ -48,14 +48,16 @@ Field.propTypes = {
 }
 
 function mountFields (attributes, dimensions, metrics, fieldSort) {
-  return sortBy(map(concat(dimensions, metrics), field => {
+  function normalizeField (field) {
     const foundIndex = indexOf(fieldSort, field)
     return {
       id: field,
       name: attributes[field].name,
       index: foundIndex >= 0 ? foundIndex : Infinity
     }
-  }), 'index')
+  }
+
+  return sortBy(map(concat(dimensions, metrics), normalizeField), 'index')
 }
 
 const Fields = React.createClass({

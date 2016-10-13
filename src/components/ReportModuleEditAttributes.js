@@ -194,26 +194,28 @@ const Attribute = React.createClass({
 function Attributes ({attributes, selectedAttributes, addItem, removeItem, isIdSelected}) {
   const selectedBreakdowns = intersect(map(filter(attributes, 'is_breakdown'), 'id'), selectedAttributes)
 
+  function renderAttribute (item) {
+    const {id, pairs_with, requires_id} = item
+    const isSelected = includes(selectedAttributes, id)
+    const invalidPermutation = pairs_with && !isEmpty(diff(selectedBreakdowns, pairs_with))
+    const disabledById = requires_id && !isIdSelected
+    const addMe = disabledById || invalidPermutation ? undefined : addItem
+
+    return (
+      <Attribute
+        {...item}
+        fixed={isSelected && !removeItem}
+        disabled={!isSelected && !addMe}
+        selected={isSelected}
+        toggle={isSelected ? removeItem : addMe}
+        key={id}/>
+    )
+  }
+
   return (
     <div>
       <ul className={`${style.list}`}>
-        {map(attributes, item => {
-          const {id, pairs_with, requires_id} = item
-          const isSelected = includes(selectedAttributes, id)
-          const invalidPermutation = pairs_with && !isEmpty(diff(selectedBreakdowns, pairs_with))
-          const disabledById = requires_id && !isIdSelected
-          const addMe = disabledById || invalidPermutation ? undefined : addItem
-
-          return (
-            <Attribute
-              {...item}
-              fixed={isSelected && !removeItem}
-              disabled={!isSelected && !addMe}
-              selected={isSelected}
-              toggle={isSelected ? removeItem : addMe}
-              key={id}/>
-          )
-        })}
+        {map(attributes, renderAttribute)}
       </ul>
     </div>
   )

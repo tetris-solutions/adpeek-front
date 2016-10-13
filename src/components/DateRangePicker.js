@@ -47,7 +47,7 @@ const calculateRanges = ({today, yesterday, pastWeek, currentMonth, pastMonth}) 
 })
 let defaultRanges
 
-const DateRangePicker = (props, {messages}) => {
+function DateRangePicker (props, {messages}) {
   defaultRanges = defaultRanges || calculateRanges(messages)
 
   return (

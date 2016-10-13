@@ -43,13 +43,6 @@ const ModuleEdit = React.createClass({
     close: PropTypes.func,
     save: PropTypes.func
   },
-  componentWillMount () {
-    this.updateQueue = []
-    this.persist = debounce(() => {
-      this.update(assign({}, ...this.updateQueue), true)
-      this.updateQueue = []
-    }, 500)
-  },
   getInitialState () {
     const snapshot = pick(this.props.module, editableFields)
 
@@ -57,6 +50,14 @@ const ModuleEdit = React.createClass({
       oldModule: snapshot,
       newModule: snapshot
     }
+  },
+  componentWillMount () {
+    this.updateQueue = []
+    this.persist = debounce(this.flushUpdateQueue, 500)
+  },
+  flushUpdateQueue () {
+    this.update(assign({}, ...this.updateQueue), true)
+    this.updateQueue = []
   },
   enqueueUpdate (update) {
     this.updateQueue.push(update)
@@ -129,7 +130,7 @@ const ModuleEdit = React.createClass({
       return ls.filter(id => !includes(ids, id))
     }
 
-    removedAttributesIds.forEach(attributeId => {
+    function removeAttributeFromSelectionStateAndApplyRules (attributeId) {
       const attribute = find(attributes, {id: attributeId})
 
       if (attribute.is_dimension) {
@@ -144,7 +145,9 @@ const ModuleEdit = React.createClass({
         changes.dimensions = changes.dimensions.filter(goesWithoutId)
         changes.metrics = changes.metrics.filter(goesWithoutId)
       }
-    })
+    }
+
+    removedAttributesIds.forEach(removeAttributeFromSelectionStateAndApplyRules)
 
     changes.dimensions = uniq(changes.dimensions)
     changes.metrics = uniq(changes.metrics)
@@ -173,7 +176,7 @@ const ModuleEdit = React.createClass({
       return ls.concat([attribute.id])
     }
 
-    selectedAttributeIds.forEach(attributeId => {
+    function addAttributeToSelectionState (attributeId) {
       const attribute = getAttributeById(attributeId)
 
       if (attribute.is_dimension) {
@@ -183,7 +186,9 @@ const ModuleEdit = React.createClass({
       if (attribute.is_metric) {
         changes.metrics = add(attribute, changes.metrics)
       }
-    })
+    }
+
+    selectedAttributeIds.forEach(addAttributeToSelectionState)
 
     changes.dimensions = uniq(changes.dimensions)
     changes.metrics = uniq(changes.metrics)
@@ -192,12 +197,13 @@ const ModuleEdit = React.createClass({
   },
   update (changes, forceReload = false) {
     const newModule = assign({}, this.state.newModule, changes)
-
-    this.setState({newModule}, () => {
+    const reloadIfNecessary = () => {
       if (forceReload || changes.sort) {
         this.reload()
       }
-    })
+    }
+
+    this.setState({newModule}, reloadIfNecessary)
   },
   cancel () {
     this.props.save(this.state.oldModule)

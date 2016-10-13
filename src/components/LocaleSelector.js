@@ -5,15 +5,13 @@ import {changeLocaleAction} from 'tetris-iso/actions'
 
 const {PropTypes} = React
 
-function onChange (dispatch) {
-  return ({target: {value}}) => {
-    dispatch(changeLocaleAction, value)
-  }
+const makeChangeEventHandler = dispatch => function onChange ({target: {value}}) {
+  dispatch(changeLocaleAction, value)
 }
 
 export function LocaleSelector ({dispatch, locale, userLocale}) {
   return (
-    <Select name='locale' value={locale || userLocale} onChange={onChange(dispatch)}>
+    <Select name='locale' value={locale || userLocale} onChange={makeChangeEventHandler(dispatch)}>
       <option value='en'>English</option>
       <option value='pt-BR'>Português</option>
     </Select>

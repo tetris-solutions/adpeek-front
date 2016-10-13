@@ -141,7 +141,8 @@ export const Input = React.createClass({
     return (
       <div className={wrapperClasses}>
 
-        <input {...pick(this.props, inputFields)}
+        <input
+          {...pick(this.props, inputFields)}
           ref='input'
           value={this.state.value}
           className='mdl-textfield__input'

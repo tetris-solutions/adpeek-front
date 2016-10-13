@@ -42,21 +42,21 @@ const ReportModule = React.createClass({
     params: PropTypes.object
   },
   componentDidMount () {
-    this.fetchResult = debounce(query => {
-      if (!query) return
-
-      loadReportModuleResultAction(
-        this.context.tree,
-        this.context.params,
-        this.props.module.id,
-        query,
-        this.props.metaData.attributes)
-    }, 1000)
-
+    this.fetchResult = debounce(this.startResultLoadingAction, 1000)
     this.fetchResult(this.getChartQuery())
   },
   componentDidUpdate () {
     this.fetchResult(this.getChartQuery())
+  },
+  startResultLoadingAction (query) {
+    if (!query) return
+
+    loadReportModuleResultAction(
+      this.context.tree,
+      this.context.params,
+      this.props.module.id,
+      query,
+      this.props.metaData.attributes)
   },
   getChartQuery () {
     const {reportParams} = this.props

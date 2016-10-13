@@ -20,7 +20,7 @@ function getCampaignAdsets (campaign) {
 }
 
 export function Order ({deliveryMethods, dispatch, params, order, folder, statuses}, {messages: {newOrderName}, moment, locales}) {
-  const defaultOrder = () => {
+  function defaultOrder () {
     const nextMonth = moment().add(1, 'month')
     return {
       name: new Message(newOrderName, locales).format({month: upperFirst(nextMonth.format('MMMM, YY'))}),

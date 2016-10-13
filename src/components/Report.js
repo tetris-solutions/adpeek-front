@@ -100,12 +100,15 @@ const Report = React.createClass({
   },
   downloadReport (type = 'pdf') {
     const {dispatch, params, report} = this.props
+    const {grid} = this.frefs
 
-    const modules = map(report.modules, ({id, name}) => {
-      const el = this.refs.grid.querySelector(`div[data-report-module="${id}"]`)
+    function getModuleElement ({id, name}) {
+      const el = grid.querySelector(`div[data-report-module="${id}"]`)
 
       return {id, el, name}
-    })
+    }
+
+    const modules = map(report.modules, getModuleElement)
 
     this.setState({isCreatingReport: true})
 
@@ -115,8 +118,8 @@ const Report = React.createClass({
         name: report.name,
         modules
       }))
-      .then(response =>
-        this.setState({isCreatingReport: false}, () => {
+      .then(response => this.setState({isCreatingReport: false},
+        function navigateToReportUrl () {
           window.location.href = response.data.url
         }))
       .catch(() => this.setState({isCreatingReport: false}))

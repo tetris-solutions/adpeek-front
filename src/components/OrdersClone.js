@@ -97,7 +97,7 @@ export const OrdersClone = React.createClass({
    * @return {undefined}
    */
   cloneOrders (form) {
-    const {params} = this.context
+    const {params, router} = this.context
     const {dispatch} = this.props
     const promises = map(this.state.selectedOrders,
       ({clonedOrderId, folder}, index) =>
@@ -110,25 +110,29 @@ export const OrdersClone = React.createClass({
           auto_budget: form.elements[`${index}.autoBudget`].checked
         }))
 
+    function navigateBackToOrderList () {
+      let orderListUrl = `/company/${params.company}`
+      if (params.workspace) {
+        orderListUrl += `/workspace/${params.workspace}`
+        if (params.folder) {
+          orderListUrl += `/folder/${params.folder}`
+        }
+      }
+      orderListUrl += '/orders'
+
+      router.push(orderListUrl)
+    }
+
+    const reloadOrders = () =>
+      dispatch(loadOrdersAction,
+        params.company,
+        params.workspace,
+        params.folder)
+
     return Promise.all(promises)
       .then(() => dispatch(pushSuccessMessageAction))
-      .then(() =>
-        dispatch(loadOrdersAction,
-          params.company,
-          params.workspace,
-          params.folder))
-      .then(() => {
-        let orderListUrl = `/company/${params.company}`
-        if (params.workspace) {
-          orderListUrl += `/workspace/${params.workspace}`
-          if (params.folder) {
-            orderListUrl += `/folder/${params.folder}`
-          }
-        }
-        orderListUrl += '/orders'
-
-        this.context.router.push(orderListUrl)
-      })
+      .then(reloadOrders)
+      .then(navigateBackToOrderList)
   },
   /**
    * @param {HTMLFormElement} form the form el

@@ -22,9 +22,8 @@ export const HeaderSearchBox = React.createClass({
     this.save = debounce(value => this.props.onChange(value), 300)
   },
   manuallySetFocus () {
-    this.setState({isFocused: true}, () => {
-      this.refs.input.focus()
-    })
+    this.setState({isFocused: true},
+      () => this.refs.input.focus())
   },
   onChange (e) {
     this.setState({

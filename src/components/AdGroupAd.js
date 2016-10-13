@@ -48,7 +48,7 @@ function inferDisplayUrl (final_urls, path_1, path_2) {
   return url.replace(/\/$/g, '')
 }
 
-const AdGroupAd = ({
+function AdGroupAd ({
   headline,
   headline_part_1,
   headline_part_2,
@@ -59,7 +59,7 @@ const AdGroupAd = ({
   path_1,
   path_2,
   final_urls
-}) => {
+}) {
   display_url = display_url || inferDisplayUrl(final_urls, path_1, path_2)
 
   return (

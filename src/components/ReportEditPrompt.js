@@ -26,18 +26,19 @@ const ReportEditPrompt = React.createClass({
   open () {
     this.setState({isModalOpen: true})
   },
-  close (fn) {
+  closeModalAnd (fn) {
     this.setState({isModalOpen: false},
       isFunction(fn) ? fn : undefined)
   },
-  cloneInstead () {
-    this.close(() => {
-      const {router, messages, locales} = this.context
-      const {report, params: {company, workspace, folder}} = this.props
-      const cloneName = new TextMessage(messages.copyOfName, locales).format({name: report.name})
+  navigateToCloneForm () {
+    const {router, messages, locales} = this.context
+    const {report, params: {company, workspace, folder}} = this.props
+    const cloneName = new TextMessage(messages.copyOfName, locales).format({name: report.name})
 
-      router.push(`/company/${company}/workspace/${workspace}/folder/${folder}/reports/new?clone=${report.id}&name=${cloneName}`)
-    })
+    router.push(`/company/${company}/workspace/${workspace}/folder/${folder}/reports/new?clone=${report.id}&name=${cloneName}`)
+  },
+  cloneInstead () {
+    this.closeModalAnd(this.navigateToCloneForm)
   },
   remember () {
     try {
@@ -50,12 +51,13 @@ const ReportEditPrompt = React.createClass({
       // console.error(e)
     }
   },
-  confirm () {
-    this.close(() => {
-      const {params: {company, workspace, folder, report}} = this.props
+  navigateToEditMode () {
+    const {params: {company, workspace, folder, report}} = this.props
 
-      this.context.router.push(`/company/${company}/workspace/${workspace}/folder/${folder}/report/${report}/edit`)
-    })
+    this.context.router.push(`/company/${company}/workspace/${workspace}/folder/${folder}/report/${report}/edit`)
+  },
+  confirm () {
+    this.closeModalAnd(this.navigateToEditMode)
 
     this.remember()
   },
@@ -67,7 +69,7 @@ const ReportEditPrompt = React.createClass({
         <i className='material-icons'>create</i>
         <Message>editReport</Message>
         {this.state.isModalOpen ? (
-          <Modal onEscPress={this.close}>
+          <Modal onEscPress={this.closeModalAnd}>
             <form ref='form' className='mdl-grid'>
               <div className='mdl-cell mdl-cell--12-col'>
                 <h2>
@@ -83,7 +85,7 @@ const ReportEditPrompt = React.createClass({
                 <br/>
                 <hr/>
 
-                <button className='mdl-button mdl-button--accent' type='button' onClick={this.close}>
+                <button className='mdl-button mdl-button--accent' type='button' onClick={this.closeModalAnd}>
                   <Message>cancel</Message>
                 </button>
 

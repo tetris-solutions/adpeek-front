@@ -12,9 +12,7 @@ const {PropTypes} = React
 export function WorkspaceAside ({params: {company}, workspace, dispatch}, {router}) {
   function onClick () {
     dispatch(deleteWorkspaceAction, workspace.id)
-      .then(() => {
-        router.replace(`/company/${company}`)
-      })
+      .then(() => router.replace(`/company/${company}`))
   }
 
   return (
