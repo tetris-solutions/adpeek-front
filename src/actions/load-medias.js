@@ -8,7 +8,7 @@ export function loadMedias (config) {
 export function loadMediasAction (tree, token) {
   return loadMedias(getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
-    .then(response => {
+    .then(function onSuccess (response) {
       tree.set(['medias'], response.data)
       tree.commit()
 

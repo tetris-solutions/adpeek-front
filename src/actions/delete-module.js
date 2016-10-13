@@ -10,7 +10,7 @@ function deleteModule (workspace, module, config) {
 export function deleteModuleAction (tree, params, moduleId) {
   return deleteModule(params.workspace, moduleId, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
-    .then(response => {
+    .then(function onSuccess (response) {
       tree.unset(getDeepCursor(tree, [
         'user',
         ['companies', params.company],

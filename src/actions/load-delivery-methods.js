@@ -8,7 +8,7 @@ export function loadDeliveryMethods (config) {
 export function loadDeliveryMethodsAction (tree, token) {
   return loadDeliveryMethods(getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
-    .then(response => {
+    .then(function onSuccess (response) {
       tree.set(['deliveryMethods'], response.data)
       tree.commit()
 

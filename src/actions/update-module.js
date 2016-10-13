@@ -11,7 +11,7 @@ function updateModule (module, folder, config) {
     assign({body: module}, config))
 }
 
-const persist = debounce((tree, params, moduleId) => {
+function sendModuleChanges (tree, params, moduleId) {
   const cursorPath = getDeepCursor(tree, [
     'user',
     ['companies', params.company],
@@ -27,7 +27,9 @@ const persist = debounce((tree, params, moduleId) => {
   updateModule(moduleChanges, params.folder, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
-}, 1000)
+}
+
+const persist = debounce(sendModuleChanges, 1000)
 
 export function updateModuleAction (tree, params, moduleId, moduleChanges, persistChanges = false) {
   const cursorPath = getDeepCursor(tree, [

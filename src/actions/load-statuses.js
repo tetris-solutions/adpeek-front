@@ -8,7 +8,7 @@ export function loadStatuses (config) {
 export function loadStatusesAction (tree, token) {
   return loadStatuses(getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
-    .then(response => {
+    .then(function onSuccess (response) {
       tree.set(['statuses'], response.data)
       tree.commit()
 

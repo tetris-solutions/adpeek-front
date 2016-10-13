@@ -11,7 +11,7 @@ export function loadBudgets (order, config) {
 
 export function loadBudgetsAction (tree, company, workspace, folder, order, token) {
   const setStatus = statusResolver(tree.get('statuses'))
-  const transformCampaigns = ls => map(ls, campaign => {
+  function normalizeCampaign (campaign) {
     campaign = setStatus(campaign)
 
     if (campaign.adsets) {
@@ -19,7 +19,8 @@ export function loadBudgetsAction (tree, company, workspace, folder, order, toke
     }
 
     return campaign
-  })
+  }
+  const transformCampaigns = ls => map(ls, normalizeCampaign)
   const hydrateBudget = budget => assign({}, budget, {campaigns: transformCampaigns(budget.campaigns)})
   const transformBudgets = budgets => map(budgets, hydrateBudget)
 

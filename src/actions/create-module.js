@@ -23,7 +23,7 @@ export function createModuleReportAction (tree, {company, workspace, folder, rep
 
   return createModule(workspace, report, module, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
-    .then(response => {
+    .then(function onSuccess (response) {
       path.push(response.data.id)
 
       const cursor = getDeepCursor(tree, path)

@@ -57,12 +57,14 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
       .catch(pushResponseErrorToState(tree))
   }
 
+  function makeNextCallOnceFinishedLoading () {
+    if (lastCall[id] === myCall) {
+      makeTheCall()
+    }
+  }
+
   if (isLoadingCursor.get()) {
-    isLoadingCursor.once('update', () => {
-      if (lastCall[id] === myCall) {
-        makeTheCall()
-      }
-    })
+    isLoadingCursor.once('update', makeNextCallOnceFinishedLoading)
   } else {
     makeTheCall()
   }

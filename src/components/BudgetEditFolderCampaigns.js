@@ -9,7 +9,7 @@ import groupBy from 'lodash/groupBy'
 const {PropTypes} = React
 const enhance = withState('isExpanded', 'setVisibility', false)
 
-const BudgetEditFolderCampaigns = ({add, isExpanded, setVisibility, campaigns}) => {
+function BudgetEditFolderCampaigns ({add, isExpanded, setVisibility, campaigns}) {
   const msgName = isExpanded ? 'hideNCampaigns' : 'showNCampaigns'
   const grouped = groupBy(campaigns, 'status.is_active')
   const activeCampaigns = grouped.true || []

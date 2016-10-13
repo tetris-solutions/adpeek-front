@@ -135,7 +135,7 @@ export function loadReportMetaDataAction (tree, params, platform, entity, token)
 
   return loadReportMetaData(platform, entity, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
-    .then(response => {
+    .then(function onSuccess (response) {
       const metaData = response.data
       const entityNameMessage = `${entity[0].toLowerCase() + entity.slice(1)}Entity`
 
