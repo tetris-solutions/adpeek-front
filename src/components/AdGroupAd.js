@@ -67,7 +67,7 @@ function AdGroupAd ({
       <div className={`mdl-color--yellow-200 ${style.box}`}>
         {headline
           ? <h5>{headline}</h5>
-          : <h6>{headline_part_1} - {headline_part_2}</h6>}
+          : <h6>{headline_part_1} {headline_part_2}</h6>}
 
         <a href={`http://${display_url}`} target='_blank'>
           {display_url}
