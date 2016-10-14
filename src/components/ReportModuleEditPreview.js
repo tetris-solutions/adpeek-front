@@ -15,7 +15,7 @@ const ReportModuleEditPreview = props => (
   <section style={{height: '80vh', overflowY: 'auto'}}>
     <div className='mdl-grid'>
       <div className='mdl-cell mdl-cell--4-col'>
-        <Input name='name' label='name' defaultValue={props.draftModule.name} onChange={props.onChangeInput}/>
+        <Input name='name' label='name' defaultValue={props.draftModule.name} onChange={props.onChangeInput} required/>
       </div>
 
       <div className='mdl-cell mdl-cell--4-col'>

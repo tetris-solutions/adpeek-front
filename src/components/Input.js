@@ -109,7 +109,12 @@ export const Input = React.createClass({
     e.persist()
 
     this.handleNewValue(e.target, () => {
-      if (!this.state.error && this.props.onChange) {
+      const hasHardError = (
+        this.state.error &&
+        this.state.error !== this.context.messages.requiredInput
+      )
+
+      if (!hasHardError && this.props.onChange) {
         this.props.onChange(e)
       }
     })

@@ -238,7 +238,8 @@ const ModuleEdit = React.createClass({
     const savedEntity = this.props.entity
     const {changeDateRange, metaData, entities, reportParams} = this.props
     const {moment, messages} = this.context
-    const isInvalidModule = isEmpty(draftModule.dimensions) ||
+    const isInvalidModule = isEmpty(draftModule.name) ||
+      isEmpty(draftModule.dimensions) ||
       isEmpty(draftModule.metrics) ||
       isEmpty(draftModule.filters.id)
 
