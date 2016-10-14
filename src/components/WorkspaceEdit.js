@@ -104,7 +104,7 @@ export const WorkspaceEdit = React.createClass({
             <option value=''/>
             {map(company.dashCampaigns, ({id, name}) =>
               <option key={id} value={id}>
-                {name}
+                {`${id} :: ${name}`}
               </option>)}
           </Select>
 
