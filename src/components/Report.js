@@ -100,7 +100,7 @@ const Report = React.createClass({
   },
   downloadReport (type = 'pdf') {
     const {dispatch, params, report} = this.props
-    const {grid} = this.frefs
+    const {grid} = this.refs
 
     function getModuleElement ({id, name}) {
       const el = grid.querySelector(`div[data-report-module="${id}"]`)
