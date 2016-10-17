@@ -1,27 +1,30 @@
 import {DELETE} from '@tetris/http'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {getDeepCursor} from '../functions/get-deep-cursor'
+import assign from 'lodash/assign'
+import filter from 'lodash/filter'
+import includes from 'lodash/includes'
 
-export function unlinkCampaign (campaign, config) {
-  return DELETE(`${process.env.ADPEEK_API_URL}/campaign/${campaign}`, config)
+function unlinkCampaigns (folder, campaigns, config) {
+  return DELETE(`${process.env.ADPEEK_API_URL}/folder/${folder}/campaigns`,
+    assign({body: campaigns}, config))
 }
 
-export function unlinkCampaignAction (tree, company, workspace, folder, campaign) {
+export function unlinkCampaignsAction (tree, company, workspace, folder, campaigns) {
   const cursor = getDeepCursor(tree, [
     'user',
     ['companies', company],
     ['workspaces', workspace],
     ['folders', folder],
-    ['campaigns', campaign]
+    'campaigns'
   ])
-  const index = cursor.pop()
 
-  tree.select(cursor).splice([index, 1])
+  const remainingCampaigns = filter(tree.get(cursor), ({id}) => !includes(campaigns, id))
+  tree.set(cursor, remainingCampaigns)
   tree.commit()
 
-  return unlinkCampaign(campaign, getApiFetchConfig(tree))
+  return unlinkCampaigns(folder, campaigns, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
 
-export default unlinkCampaignAction

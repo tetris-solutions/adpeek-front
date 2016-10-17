@@ -13,7 +13,7 @@ import FolderCampaignsSelector from './FolderCampaignsSelectorCard'
 import {linkCampaignsAction} from '../actions/link-campaigns'
 import {loadCampaignsAction} from '../actions/load-campaigns'
 import {loadLooseCampaignsAction} from '../actions/load-loose-campaigns'
-import {unlinkCampaignAction} from '../actions/unlink-campaign'
+import {unlinkCampaignsAction} from '../actions/unlink-campaign'
 import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
@@ -84,7 +84,7 @@ const FolderCampaigns = React.createClass({
     }
 
     this.link = executeAction(linkCampaignsAction)
-    this.unlink = executeAction(unlinkCampaignAction)
+    this.unlink = executeAction(unlinkCampaignsAction)
 
     loadLoose()
   },
