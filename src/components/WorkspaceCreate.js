@@ -5,58 +5,38 @@ import Input from './Input'
 import AccountSelector from './WorkspaceAccountSelector'
 import RolesSelector from './WorkspaceRolesSelector'
 import {createWorkspaceAction} from '../actions/create-workspace'
-import {pushSuccessMessageAction} from '../actions/push-success-message-action'
-import {serializeWorkspaceForm} from '../functions/serialize-workspace-form'
 import {Form, Content, Header, Footer} from './Card'
 import {contextualize} from './higher-order/contextualize'
-import {loadDashCampaignsAction} from '../actions/load-dash-campaigns'
-import Select from './Select'
 import map from 'lodash/map'
+import WorkspaceForm from './mixins/WorkspaceForm'
+import AutoSelect from './AutoSelect'
+import get from 'lodash/get'
 
 const {PropTypes} = React
 
 export const CreateWorkspace = React.createClass({
   displayName: 'Create-Workspace',
-  mixins: [FormMixin],
+  mixins: [FormMixin, WorkspaceForm],
   propTypes: {
     dispatch: PropTypes.func,
-    company: PropTypes.object
+    company: PropTypes.object,
+    params: PropTypes.object
   },
-  contextTypes: {
-    router: PropTypes.object
-  },
-  componentWillMount () {
-    const {company, dispatch} = this.props
-
-    if (!company.dashCampaigns) {
-      dispatch(loadDashCampaignsAction, company.id)
-    }
-  },
-  /**
-   * handles submit event
-   * @param {Event} e submit event
-   * @returns {Promise} promise that resolves once action is complete
-   */
-  handleSubmit (e) {
+  onSubmit (e) {
     e.preventDefault()
-    const {router} = this.context
-    const {dispatch, company} = this.props
-    const navigateToCompanyView = () => router.push(`/company/${company.id}`)
+    const {params: {company}} = this.props
+    const data = this.serializeWorkspaceForm(e.target)
+    const action = createWorkspaceAction
+    const redirectUrl = `/company/${company}`
 
-    this.preSubmit()
-
-    return dispatch(createWorkspaceAction, company.id, serializeWorkspaceForm(e.target))
-      .then(() => dispatch(pushSuccessMessageAction))
-      .then(navigateToCompanyView)
-      .catch(this.handleSubmitException)
-      .then(this.posSubmit)
+    this.saveWorkspace(data, action, redirectUrl)
   },
   render () {
     const {company} = this.props
-    const {errors} = this.state
+    const {errors, dashCampaign} = this.state
 
     return (
-      <Form onSubmit={this.handleSubmit}>
+      <Form onSubmit={this.onSubmit}>
         <Header>
           <Message>newWorkspaceHeader</Message>
         </Header>
@@ -65,13 +45,13 @@ export const CreateWorkspace = React.createClass({
           <Input label='name' name='name' error={errors.name} onChange={this.dismissError}/>
           <AccountSelector platform='facebook'/>
           <AccountSelector platform='adwords'/>
-          <Select name='dash_campaign' label='dashCampaign'>
-            <option value=''/>
-            {map(company.dashCampaigns, ({id, name}) =>
-              <option key={id} value={id}>
-                {name}
-              </option>)}
-          </Select>
+          <input type='hidden' name='dash_campaign' value={get(dashCampaign, 'id', '')}/>
+
+          <AutoSelect
+            placeholder={this.context.messages.dashCampaignLabel}
+            onChange={this.onChangeDashCampaign}
+            options={map(company.dashCampaigns, this.normalizeDashCampaignOption)}
+            selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}/>
           <RolesSelector/>
         </Content>
 
