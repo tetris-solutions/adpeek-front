@@ -3,8 +3,8 @@ import FormMixin from './mixins/FormMixin'
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import map from 'lodash/map'
-
-import Select from './Select'
+import get from 'lodash/get'
+import find from 'lodash/find'
 import AccountSelector from './WorkspaceAccountSelector'
 import Input from './Input'
 import RolesSelector from './WorkspaceRolesSelector'
@@ -14,14 +14,17 @@ import {serializeWorkspaceForm} from '../functions/serialize-workspace-form'
 import {Form, Content, Header, Footer} from './Card'
 import {contextualize} from './higher-order/contextualize'
 import {loadDashCampaignsAction} from '../actions/load-dash-campaigns'
+import AutoSelect from './AutoSelect'
 
 const {PropTypes} = React
+const normalizeDCampaign = ({id: value, name: text}) => ({text, value})
 
 export const WorkspaceEdit = React.createClass({
   displayName: 'Workspace-Edit',
   mixins: [FormMixin],
   contextTypes: {
-    router: PropTypes.object
+    router: PropTypes.object,
+    messages: PropTypes.object
   },
   propTypes: {
     dispatch: PropTypes.func,
@@ -32,19 +35,36 @@ export const WorkspaceEdit = React.createClass({
     company: PropTypes.object,
     workspace: PropTypes.shape({
       id: PropTypes.string,
-      name: PropTypes.string
+      name: PropTypes.string,
+      dash_campaign: PropTypes.string
     })
   },
+  getInitialState () {
+    return {
+      dashCampaign: this.getCurrentCampaign(),
+      name: this.props.workspace.name
+    }
+  },
   componentWillMount () {
-    const {workspace, company, dispatch} = this.props
-
-    this.setState({
-      name: workspace.name
-    })
+    const {company, dispatch} = this.props
 
     if (!company.dashCampaigns) {
       dispatch(loadDashCampaignsAction, company.id)
     }
+  },
+  componentWillReceiveProps ({company: {dashCampaigns}}) {
+    if (this.props.company.dashCampaigns !== dashCampaigns) {
+      this.setState({
+        dashCampaign: this.getCurrentCampaign(dashCampaigns)
+      })
+    }
+  },
+  getCurrentCampaign (dashCampaigns = this.props.company.dashCampaigns) {
+    const campaignId = get(this.state, 'dashCampaign.id', this.props.workspace.dash_campaign)
+
+    if (!campaignId) return null
+
+    return find(dashCampaigns, {id: campaignId}) || {id: campaignId, name: campaignId}
   },
   handleSubmit (e) {
     e.preventDefault()
@@ -68,8 +88,19 @@ export const WorkspaceEdit = React.createClass({
       this.setState({errors, [name]: value})
     }
   },
+  onChangeDashCampaign (dashCampaign) {
+    if (dashCampaign) {
+      this.setState({
+        dashCampaign: find(this.props.company.dashCampaigns, {
+          id: dashCampaign.value
+        })
+      })
+    } else {
+      this.setState({dashCampaign: null})
+    }
+  },
   render () {
-    const {errors, name} = this.state
+    const {errors, name, dashCampaign} = this.state
     const {company, workspace} = this.props
     const roles = workspace.roles
     const {accounts: {facebook, adwords}} = workspace
@@ -100,13 +131,13 @@ export const WorkspaceEdit = React.createClass({
             value={adwords ? adwords.name : ''}
             platform='adwords'/>
 
-          <Select name='dash_campaign' label='dashCampaign'>
-            <option value=''/>
-            {map(company.dashCampaigns, ({id, name}) =>
-              <option key={id} value={id}>
-                {`${id} :: ${name}`}
-              </option>)}
-          </Select>
+          <input type='hidden' name='dash_campaign' value={get(dashCampaign, 'id', '')}/>
+
+          <AutoSelect
+            placeholder={this.context.messages.dashCampaignLabel}
+            onChange={this.onChangeDashCampaign}
+            options={map(company.dashCampaigns, normalizeDCampaign)}
+            selected={dashCampaign ? normalizeDCampaign(dashCampaign) : null}/>
 
           <RolesSelector roles={roles}/>
         </Content>

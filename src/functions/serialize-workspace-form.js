@@ -9,7 +9,7 @@ export function serializeWorkspaceForm (form) {
   const {elements} = form
   const data = {
     name: elements.name.value,
-    dash_campaign: elements.dash_campaign.value,
+    dash_campaign: elements.dash_campaign.value || null,
     accounts: {
       facebook: JSON.parse(elements.facebook_account.value),
       adwords: JSON.parse(elements.adwords_account.value)
