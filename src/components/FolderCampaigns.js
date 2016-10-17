@@ -2,7 +2,6 @@ import deburr from 'lodash/deburr'
 import filter from 'lodash/filter'
 import includes from 'lodash/includes'
 import lowerCase from 'lodash/toLower'
-import settle from 'promise-settle'
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import sortBy from 'lodash/sortBy'
@@ -11,7 +10,7 @@ import FolderCampaignLi from './FolderCampaignLi'
 import FolderCampaignLooseLi from './FolderCampaignLooseLi'
 import FolderCampaignsHeader from './FolderCampaignsHeader'
 import FolderCampaignsSelector from './FolderCampaignsSelectorCard'
-import {linkCampaignAction} from '../actions/link-campaign'
+import {linkCampaignsAction} from '../actions/link-campaigns'
 import {loadCampaignsAction} from '../actions/load-campaigns'
 import {loadLooseCampaignsAction} from '../actions/load-loose-campaigns'
 import {unlinkCampaignAction} from '../actions/unlink-campaign'
@@ -76,17 +75,16 @@ const FolderCampaigns = React.createClass({
       ])
     }
 
-    function action (fn) {
+    function executeAction (action) {
       function invoke (campaigns) {
-        const actions = campaigns.map(campaign => dispatch(fn, company, workspace, folder, campaign))
-        return settle(actions).then(reload)
+        return dispatch(action, company, workspace, folder, campaigns).then(reload)
       }
 
       return invoke
     }
 
-    this.link = action(linkCampaignAction)
-    this.unlink = action(unlinkCampaignAction)
+    this.link = executeAction(linkCampaignsAction)
+    this.unlink = executeAction(unlinkCampaignAction)
 
     loadLoose()
   },
