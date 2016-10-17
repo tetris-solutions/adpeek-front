@@ -19,6 +19,7 @@ export default {
   },
   getInitialState () {
     return {
+      isLoadingDashCampaigns: true,
       dashCampaign: this.getCurrentCampaign(),
       name: get(this.props, 'workspace.name', '')
     }
@@ -26,8 +27,11 @@ export default {
   componentWillMount () {
     const {company, dispatch} = this.props
 
-    if (!company.dashCampaigns) {
+    if (company.dashCampaigns) {
+      this.setState({isLoadingDashCampaigns: false})
+    } else {
       dispatch(loadDashCampaignsAction, company.id)
+        .then(() => this.setState({isLoadingDashCampaigns: false}))
     }
   },
   componentWillReceiveProps ({company: {dashCampaigns}}) {

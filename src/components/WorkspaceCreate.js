@@ -48,6 +48,7 @@ export const CreateWorkspace = React.createClass({
           <input type='hidden' name='dash_campaign' value={get(dashCampaign, 'id', '')}/>
 
           <AutoSelect
+            disabled={this.state.isLoadingDashCampaigns}
             placeholder={this.context.messages.dashCampaignLabel}
             onChange={this.onChangeDashCampaign}
             options={map(company.dashCampaigns, this.normalizeDashCampaignOption)}
