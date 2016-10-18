@@ -1,5 +1,6 @@
 import csjs from 'csjs'
 import find from 'lodash/find'
+import size from 'lodash/size'
 import flatten from 'lodash/flatten'
 import groupBy from 'lodash/groupBy'
 import intersec from 'lodash/intersection'
@@ -14,6 +15,7 @@ import reportEntityType from '../propTypes/report-entity'
 import Attributes from './ReportModuleEditAttributes'
 import {styled} from './mixins/styled'
 import compact from 'lodash/compact'
+import not from 'lodash/negate'
 
 const isCampaignActive = campaign => get(campaign, 'status.is_active')
 const {PropTypes} = React
@@ -127,14 +129,14 @@ const EntityList = React.createClass({
     const entityId = lowerCase(entity.id)
     const entities = keyBy(this.props.entities, lowerCaseId)
     const ids = map(attributes, 'id')
+    let inactiveCampaignCount = 0
     let innerList
 
     if (entityId === 'campaign') {
+      inactiveCampaignCount += size(map(filter(attributes, not(isCampaignActive)), 'id'))
+
       innerList = (
-        <Attributes
-          {...this.props}
-          attributes={activeOnly ? filter(attributes, isCampaignActive) : attributes}
-        />
+        <Attributes {...this.props} attributes={activeOnly ? filter(attributes, isCampaignActive) : attributes}/>
       )
     }
 
@@ -142,8 +144,9 @@ const EntityList = React.createClass({
       const renderCampaignEntityGroup = (adGroupList, campaignId) => {
         const campaign = find(entities.campaign.list, {id: campaignId})
 
-        if (activeOnly && !isCampaignActive(campaign)) {
-          return null
+        if (!isCampaignActive(campaign)) {
+          inactiveCampaignCount++
+          if (activeOnly) return null
         }
 
         const ids = map(adGroupList, 'id')
@@ -201,8 +204,9 @@ const EntityList = React.createClass({
       const renderSubCampaignEntityGroup = (adGroupList, campaignId) => {
         const campaign = find(entities.campaign.list, {id: campaignId})
 
-        if (activeOnly && !isCampaignActive(campaign)) {
-          return null
+        if (!isCampaignActive(campaign)) {
+          inactiveCampaignCount++
+          if (activeOnly) return null
         }
 
         const ids = flatten(map(adGroupList, 'ids'))
@@ -239,11 +243,15 @@ const EntityList = React.createClass({
 
     return (
       <div>
-        <p style={{textAlign: 'right'}}>
-          <button type='button' className='mdl-button' onClick={this.toggle}>
-            <Message>{activeOnly ? 'showAllInactiveCampaigns' : 'hideAllInactiveCampaigns'}</Message>
-          </button>
-        </p>
+        {inactiveCampaignCount > 0 && (
+          <p style={{textAlign: 'right'}}>
+            <button type='button' className='mdl-button' onClick={this.toggle}>
+              <Message count={String(inactiveCampaignCount)}>
+                {activeOnly ? 'showNCampaigns' : 'hideNCampaigns'}
+              </Message>
+            </button>
+          </p>)}
+
         <ul className={String(style.list)}>
           <EntityGroup
             openByDefault
