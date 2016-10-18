@@ -47,7 +47,7 @@ export function normalizeResult (attributes, result) {
         date._format_ = 'MMMM'
         break
       case 'date':
-        date = new Date(value)
+        date = moment(value).toDate()
         date._format_ = 'DD - MMM, YY'
         break
       case 'hourly_stats_aggregated_by_advertiser_time_zone':
