@@ -3,6 +3,8 @@ import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
 import csjs from 'csjs'
 import {styledFnComponent} from './higher-order/styled-fn-component'
+import compact from 'lodash/compact'
+import join from 'lodash/join'
 
 const style = csjs`
 .wrapper {
@@ -43,7 +45,7 @@ function inferDisplayUrl (final_urls, path_1, path_2) {
     .replace(/.*?:\/\//g, '')
     .split('/')[0]
 
-  const url = `www.${path_0}/${path_1}/${path_2}`
+  const url = join(compact([`www.${path_0}`, path_1, path_2]), '/')
 
   return url.replace(/\/$/g, '')
 }
