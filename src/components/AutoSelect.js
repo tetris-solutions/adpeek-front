@@ -7,7 +7,7 @@ import lowerCase from 'lodash/toLower'
 import property from 'lodash/property'
 import Autosuggest from 'react-autosuggest'
 import React from 'react'
-import trimStart from 'lodash/trimStart'
+import {removeFromStart} from '../functions/remove-from-start'
 import {styled} from './mixins/styled'
 import get from 'lodash/get'
 
@@ -172,7 +172,7 @@ export const AutoSelect = React.createClass({
     return value ? `${this.props.prefix}${this.removeValuePrefix(value)}` : ''
   },
   removeValuePrefix (value) {
-    return trimStart(value, this.props.prefix)
+    return removeFromStart(value, this.props.prefix)
   },
   onChange (e, {newValue}) {
     const newState = {

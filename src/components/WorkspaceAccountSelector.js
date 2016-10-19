@@ -9,7 +9,7 @@ import upperFirst from 'lodash/upperFirst'
 import Autosuggest from 'react-autosuggest'
 import Message from 'intl-messageformat'
 import React from 'react'
-import trimStart from 'lodash/trimStart'
+import {removeFromStart} from '../functions/remove-from-start'
 
 import {loadCompanyAccountsAction} from '../actions/load-company-accounts'
 import {contextualize} from './higher-order/contextualize'
@@ -223,7 +223,7 @@ export const WorkspaceAccountSelector = React.createClass({
     return value ? `${this.platformPrefix()}${this.removeValuePrefix(value)}` : value
   },
   removeValuePrefix (value) {
-    return trimStart(value, this.platformPrefix())
+    return removeFromStart(value, this.platformPrefix())
   },
   onChange (e, {newValue}) {
     const newState = {value: this.addValuePrefix(newValue)}
