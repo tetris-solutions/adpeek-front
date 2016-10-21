@@ -160,8 +160,13 @@ const ModalSpawner = React.createClass({
     children: PropTypes.node.isRequired,
     provide: PropTypes.array
   },
+  getDefaultProps () {
+    return {
+      provide: []
+    }
+  },
   componentWillMount () {
-    this.Portal = createPortal(concat(baseContext, this.props.provide || []))
+    this.Portal = createPortal(concat(baseContext, this.props.provide))
   },
   render () {
     const {Portal} = this
