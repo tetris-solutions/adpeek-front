@@ -55,7 +55,7 @@
     "react-router": "^2.7.0",
     "recompose": "^0.20.2",
     "stable": "^0.1.5",
-    "tetris-iso": "^0.2.3",
+    "tetris-iso": "^0.3.1",
     "winston": "^2.2.0",
     "winston-logstash": "^0.2.11"
   },

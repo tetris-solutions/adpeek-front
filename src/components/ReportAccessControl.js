@@ -1,5 +1,5 @@
 import React from 'react'
-import Modal from './Modal'
+import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
 import {openReportAction} from '../actions/open-report'
 import {setFolderReportAction} from '../actions/set-folder-report'
