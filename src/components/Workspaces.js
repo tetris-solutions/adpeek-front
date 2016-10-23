@@ -10,6 +10,7 @@ import Fence from './Fence'
 import SearchBox from './HeaderSearchBox'
 import {contextualize} from './higher-order/contextualize'
 import {ThumbLink, ThumbButton} from './ThumbLink'
+import SubHeader from './SubHeader'
 
 const {PropTypes} = React
 const cleanStr = str => trim(deburr(lowerCase(str)))
@@ -49,13 +50,9 @@ export const Workspaces = React.createClass({
 
     return (
       <div>
-        <header className='mdl-layout__header'>
-          <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
-            <Message>workspaceList</Message>
-            <div className='mdl-layout-spacer'/>
-            <SearchBox onChange={this.onChange}/>
-          </div>
-        </header>
+        <SubHeader title={<Message>workspaceList</Message>}>
+          <SearchBox onChange={this.onChange}/>
+        </SubHeader>
         <div className='mdl-grid'>
           {map(matchingWorkspaces, (workspace, index) =>
             <Workspace key={index} {...workspace} company={id}/>)}

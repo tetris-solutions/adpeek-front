@@ -7,6 +7,7 @@ import NotImplemented from './AdGroupsNotImplemented'
 import LoadingHorizontal from './LoadingHorizontal'
 import {createCampaignAdGroupsReportAction} from '../actions/create-campaign-adgroups-report'
 import DownloadReportButton from './DownloadReportButton'
+import SubHeader from './SubHeader'
 
 const {PropTypes} = React
 
@@ -80,17 +81,12 @@ export const Campaign = React.createClass({
 
     return (
       <div>
-        <header className='mdl-layout__header'>
-          <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
-            <Message campaign={campaign.name}>campaignAdsTitle</Message>
-            <div className='mdl-layout-spacer'/>
-
-            <DownloadReportButton
-              loading={creatingReport}
-              extract={this.extractReport}
-              report={campaign.adGroupsReport}/>
-          </div>
-        </header>
+        <SubHeader title={<Message campaign={campaign.name}>campaignAdsTitle</Message>}>
+          <DownloadReportButton
+            loading={creatingReport}
+            extract={this.extractReport}
+            report={campaign.adGroupsReport}/>
+        </SubHeader>
 
         {isLoading ? (
           <LoadingHorizontal>

@@ -15,6 +15,7 @@ import MessageFormat from 'intl-messageformat'
 import {cloneOrderAction} from '../actions/clone-order'
 import {loadOrdersAction} from '../actions/load-orders'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
+import SubHeader from './SubHeader'
 
 const style = csjs`
 .table {
@@ -173,18 +174,13 @@ export const OrdersClone = React.createClass({
 
     return (
       <form onSubmit={this.handleSubmit}>
-        <header className='mdl-layout__header'>
-          <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
-            <Message>cloneOrders</Message>
-            <div className='mdl-layout-spacer'/>
-
-            <button className='mdl-button mdl-color-text--grey-100' type='submit'>
-              {hasSelected
-                ? <Message>save</Message>
-                : <Message>selectOrders</Message>}
-            </button>
-          </div>
-        </header>
+        <SubHeader title={<Message>cloneOrders</Message>}>
+          <button className='mdl-button mdl-color-text--grey-100' type='submit'>
+            {hasSelected
+              ? <Message>save</Message>
+              : <Message>selectOrders</Message>}
+          </button>
+        </SubHeader>
         <div className='mdl-grid'>
           <div className='mdl-cell--12-col' style={{overflowX: 'auto'}}>
             {hasSelected && selectedOrders.length > 1 && (

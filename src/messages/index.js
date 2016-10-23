@@ -202,6 +202,7 @@ module.exports = {
     // entity list headers
     workspaceList: 'Workspaces',
     folderList: 'Folders',
+    companyList: 'Companies',
     emptyReportResult: 'Empty Report',
     invalidModuleConfig: 'Please select at least 1 item from: {entity}, Segments and Metrics',
     resultLimitLabel: 'Limit',
@@ -450,6 +451,7 @@ module.exports = {
     // entity list headers
     workspaceList: 'Áreas de Trabalho',
     folderList: 'Pastas',
+    companyList: 'Empresas',
     emptyReportResult: 'Relatório Vazio',
     invalidModuleConfig: 'Selecione ao menos 1 de cada: {entity}, Dimensões e Métricas',
     resultLimitLabel: 'Limite de linhas',

@@ -1,31 +1,23 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import HeaderSearchBox from './HeaderSearchBox'
+import SubHeader from './SubHeader'
 
 const {PropTypes} = React
 
-export function FolderCampaignsHeader ({
-  onChange,
-  isLoading,
-  onClickRefresh
-}) {
-  return (
-    <header className='mdl-layout__header'>
-      <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
-        <button
-          type='button'
-          className='mdl-button mdl-color-text--grey-100' onClick={onClickRefresh}
-          disabled={isLoading}>
-          <Message>{isLoading
-            ? 'loadingCampaigns'
-            : 'refreshCampaigns'}</Message>
-        </button>
-        <div className='mdl-layout-spacer'/>
-        <HeaderSearchBox onChange={onChange}/>
-      </div>
-    </header>
-  )
-}
+export const FolderCampaignsHeader = ({onChange, isLoading, onClickRefresh}) => (
+  <SubHeader>
+    <button
+      type='button'
+      className='mdl-button mdl-color-text--grey-100' onClick={onClickRefresh}
+      disabled={isLoading}>
+      <Message>{isLoading
+        ? 'loadingCampaigns'
+        : 'refreshCampaigns'}</Message>
+    </button>
+    <HeaderSearchBox onChange={onChange}/>
+  </SubHeader>
+)
 
 FolderCampaignsHeader.displayName = 'Campaigns-Header'
 FolderCampaignsHeader.propTypes = {

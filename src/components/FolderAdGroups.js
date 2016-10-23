@@ -7,6 +7,7 @@ import {createFolderAdGroupsReportAction} from '../actions/create-folder-adgroup
 import NotImplemented from './AdGroupsNotImplemented'
 import LoadingHorizontal from './LoadingHorizontal'
 import DownloadReportButton from './DownloadReportButton'
+import SubHeader from './SubHeader'
 
 const {PropTypes} = React
 
@@ -79,17 +80,12 @@ export const FolderAdGroups = React.createClass({
 
     return (
       <div>
-        <header className='mdl-layout__header'>
-          <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
-            <Message folder={folder.name}>folderAdsTitle</Message>
-            <div className='mdl-layout-spacer'/>
-
-            <DownloadReportButton
-              loading={creatingReport}
-              extract={this.extractReport}
-              report={folder.adGroupsReport}/>
-          </div>
-        </header>
+        <SubHeader title={<Message folder={folder.name}>folderAdsTitle</Message>}>
+          <DownloadReportButton
+            loading={creatingReport}
+            extract={this.extractReport}
+            report={folder.adGroupsReport}/>
+        </SubHeader>
 
         {isLoading ? (
           <LoadingHorizontal>

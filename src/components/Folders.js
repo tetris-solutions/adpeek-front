@@ -7,7 +7,7 @@ import trim from 'lodash/trim'
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import Fence from './Fence'
-
+import SubHeader from './SubHeader'
 import SearchBox from './HeaderSearchBox'
 import {contextualize} from './higher-order/contextualize'
 import {ThumbLink, ThumbButton} from './ThumbLink'
@@ -54,13 +54,9 @@ export const Folders = React.createClass({
 
     return (
       <div>
-        <header className='mdl-layout__header'>
-          <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
-            <Message>folderList</Message>
-            <div className='mdl-layout-spacer'/>
-            <SearchBox onChange={this.onChange}/>
-          </div>
-        </header>
+        <SubHeader title={<Message>folderList</Message>}>
+          <SearchBox onChange={this.onChange}/>
+        </SubHeader>
         <div className='mdl-grid'>
           {map(matchingFolders, (folder, index) =>
             <Folder key={index} {...folder} workspace={id} company={company.id}/>)}

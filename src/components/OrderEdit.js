@@ -8,9 +8,9 @@ import BudgetEdit from './BudgetEdit'
 import EmptySelectionCard from './BudgetEmptySelection'
 import OrderHeader from './OrderHeader'
 import OrderPie from './OrderPie'
-import OrderSelector from './OrdersSelector'
 import OrderSpawnAutoBudget from './OrderSpawnAutoBudget'
 import Fence from './Fence'
+import SubHeader from './SubHeader'
 
 const {PropTypes} = React
 const notPercentage = budget => budget && budget.mode === 'amount'
@@ -39,19 +39,14 @@ export function OrderEdit ({
   return (
     <div>
       <Fence canEditOrder>{({canEditOrder}) =>
-        <header className='mdl-layout__header'>
-          <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
-            <span><OrderSelector/></span>
-            <div className='mdl-layout-spacer'/>
+        <SubHeader>
+          {canEditOrder && Boolean(order.id) && (
+            <OrderSpawnAutoBudget runAutoBudget={runAutoBudget}/>)}
 
-            {canEditOrder && Boolean(order.id) && (
-              <OrderSpawnAutoBudget runAutoBudget={runAutoBudget}/>)}
-
-            {canEditOrder && <button onClick={save} className='mdl-button mdl-color-text--grey-100'>
-              <Message>save</Message>
-            </button>}
-          </div>
-        </header>}
+          {canEditOrder && <button onClick={save} className='mdl-button mdl-color-text--grey-100'>
+            <Message>save</Message>
+          </button>}
+        </SubHeader>}
       </Fence>
 
       <section>

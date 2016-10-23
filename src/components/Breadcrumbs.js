@@ -14,6 +14,10 @@ const style = csjs`
 .breadcrumb:empty {
   display: none;
 }
+.breadcrumb a {
+  color: white !important;
+  text-decoration: none !important;
+}
 .breadcrumb i {
   float: left;
   margin-top: -.1em;
@@ -23,7 +27,7 @@ const style = csjs`
 const {PropTypes} = React
 const hasBreadcrumbs = has('breadcrumb')
 
-export function Breadcrumbs (props, {params, routes}) {
+function Breadcrumbs (props, {params, routes}) {
   return (
     <span>
       {map(filter(routes, hasBreadcrumbs),
@@ -32,10 +36,18 @@ export function Breadcrumbs (props, {params, routes}) {
             <Breadcrumb params={params}/>
           </span>
         ))}
+      {props.title ? (
+        <span className={style.breadcrumb}>
+          {props.title}
+        </span>
+      ) : null}
     </span>
   )
 }
 
+Breadcrumbs.propTypes = {
+  title: PropTypes.node
+}
 Breadcrumbs.contextTypes = {
   params: PropTypes.object,
   routes: PropTypes.array

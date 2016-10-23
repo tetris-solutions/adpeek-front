@@ -1,5 +1,4 @@
 import React from 'react'
-import Breadcrumbs from './Breadcrumbs'
 import Message from 'tetris-iso/Message'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
@@ -15,6 +14,12 @@ const style = csjs`
 }
 .crop {
   overflow: hidden;
+}
+.header {
+  background-image: url(/img/tetris-logo.png);
+  background-position: 30px center;
+  background-repeat: no-repeat;
+  background-size: 100px;
 }
 .logout {
   color: rgb(100, 100, 100);
@@ -141,10 +146,9 @@ const Header = React.createClass({
     const {user, company} = this.props
 
     return (
-      <header className='mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600'>
-        <div className='mdl-layout__drawer-button'/>
+      <header className={`mdl-layout__header mdl-color--primary ${style.header}`}>
         <div className='mdl-layout__header-row'>
-          <Breadcrumbs />
+          <span/>
           <div className='mdl-layout-spacer'/>
           <UserMenu {...user} company={company} logout={this.logout}/>
         </div>

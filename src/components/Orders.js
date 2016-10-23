@@ -10,6 +10,7 @@ import {Link} from 'react-router'
 import Fence from './Fence'
 import SearchBox from './HeaderSearchBox'
 import {ThumbLink, ThumbButton} from './ThumbLink'
+import SubHeader from './SubHeader'
 
 const {PropTypes} = React
 const cleanStr = str => trim(deburr(lowerCase(str)))
@@ -59,19 +60,14 @@ export const Orders = React.createClass({
     return (
       <Fence canEditOrder>{({canEditOrder}) =>
         <div>
-          <header className='mdl-layout__header'>
-            <div className='mdl-layout__header-row mdl-color--blue-grey-500'>
-              <Message>orders</Message>
-              <div className='mdl-layout-spacer'/>
+          <SubHeader>
+            {canEditOrder && (
+              <Link className='mdl-button mdl-color-text--grey-100' to={`${location.pathname}/clone`}>
+                <Message>cloneOrders</Message>
+              </Link>)}
+            <SearchBox onChange={this.onChange}/>
+          </SubHeader>
 
-              {canEditOrder && (
-                <Link className='mdl-button mdl-color-text--grey-100' to={`${location.pathname}/clone`}>
-                  <Message>cloneOrders</Message>
-                </Link>)}
-
-              <SearchBox onChange={this.onChange}/>
-            </div>
-          </header>
           <div className='mdl-grid'>
 
             {map(matchingOrders, (order, index) =>

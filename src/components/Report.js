@@ -8,11 +8,10 @@ import moment from 'moment'
 import sortBy from 'lodash/sortBy'
 import Message from 'tetris-iso/Message'
 import React from 'react'
-
+import SubHeader from './SubHeader'
 import ReportExportButton from './ReportExportButton'
 import entityType from '../propTypes/report-entity'
 import reportType from '../propTypes/report'
-import Input from './Input'
 import LoadingHorizontal from './LoadingHorizontal'
 import Module from './ReportModuleController'
 import ReportDateRange from './ReportDateRange'
@@ -125,39 +124,33 @@ const Report = React.createClass({
       .catch(() => this.setState({isCreatingReport: false}))
   },
   render () {
-    const {isLoading, editMode, report: {name, modules, metaData}} = this.props
+    const {isLoading, editMode, report: {modules, metaData}} = this.props
     const {isCreatingReport} = this.state
     const {from, to} = this.getCurrentRange()
     const reportParams = assign({from, to}, this.props.reportParams)
     const {platform} = reportParams
 
+    // @todo bring back input for name editing
+
     return (
       <div>
-        <header className='mdl-layout__header'>
-          <div ref='header' className='mdl-layout__header-row mdl-color--blue-grey-500'>
-            {editMode
-              ? <Input disabled={isLoading} name='name' onChange={this.onChangeName} defaultValue={name}/>
-              : name}
+        <SubHeader>
+          <ReportDateRange
+            buttonClassName='mdl-button mdl-color-text--grey-100'
+            onChange={this.onChangeRange}
+            startDate={moment(from)}
+            endDate={moment(to)}/>
 
-            <div className='mdl-layout-spacer'/>
+          {editMode && (
+            <button disabled={isLoading} className='mdl-button mdl-color-text--grey-100' onClick={this.addNewModule}>
+              <Message>newModule</Message>
+            </button>)}
 
-            <ReportDateRange
-              buttonClassName='mdl-button mdl-color-text--grey-100'
-              onChange={this.onChangeRange}
-              startDate={moment(from)}
-              endDate={moment(to)}/>
-
-            {editMode && (
-              <button disabled={isLoading} className='mdl-button mdl-color-text--grey-100' onClick={this.addNewModule}>
-                <Message>newModule</Message>
-              </button>)}
-
-            <ReportExportButton
-              create={this.downloadReport}
-              isCreatingReport={isCreatingReport}
-              isLoading={isLoading}/>
-          </div>
-        </header>
+          <ReportExportButton
+            create={this.downloadReport}
+            isCreatingReport={isCreatingReport}
+            isLoading={isLoading}/>
+        </SubHeader>
         <div className='mdl-grid' ref='grid'>
           {isLoading ? (
             <LoadingHorizontal>
