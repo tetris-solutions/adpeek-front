@@ -6,7 +6,7 @@ import {ThumbLink} from './ThumbLink'
 
 const {PropTypes} = React
 
-const Home = ({user}) => (
+const Companies = ({user}) => (
   <div className='mdl-layout mdl-layout--fixed-header'>
     <header className='mdl-layout__header'>
       <div className='mdl-layout__header-row mdl-color--blue-A700'>
@@ -30,11 +30,11 @@ const Home = ({user}) => (
   </div>
 )
 
-Home.displayName = 'Home'
-Home.propTypes = {
+Companies.displayName = 'Companies'
+Companies.propTypes = {
   user: PropTypes.shape({
     companies: PropTypes.array
   }).isRequired
 }
 
-export default branch({user: ['user']}, Home)
+export default branch({user: ['user']}, Companies)

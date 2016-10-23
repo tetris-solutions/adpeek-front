@@ -27,7 +27,7 @@ import FolderOrdersCloning from '../components/FolderOrdersCloning'
 import FolderReportBuilder from '../components/FolderReport'
 import FolderReports from '../components/FolderReports'
 import Folders from '../components/Folders'
-import Home from '../components/Home'
+import Companies from '../components/Companies'
 import Order from '../components/Order'
 import OrderAside from '../components/OrderAside'
 import OrderAutoBudget from '../components/OrderAutoBudget'
@@ -76,9 +76,9 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
   /* eslint-disable react/jsx-indent-props */
   return (
     <Route path='/' component={root(tree, createRoot(DocTitle, ErrorScreen))} onEnter={protectRoute}>
-      <Route onEnter={preload(companies)}>
-        <IndexRoute component={Home}/>
-        <Route path='company/:company' breadcrumb={CompanyBreadcrumb} aside={CompanyAside} component={App}>
+      <Route onEnter={preload(companies)} component={App}>
+        <IndexRoute component={Companies}/>
+        <Route path='company/:company' breadcrumb={CompanyBreadcrumb} aside={CompanyAside}>
           <IndexRoute component={Workspaces} onEnter={preload(workspaces)}/>
 
           <Route path='orders' breadcrumb={OrdersBreadCrumb} onEnter={preload(orders)}>

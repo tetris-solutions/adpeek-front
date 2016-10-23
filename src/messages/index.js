@@ -243,7 +243,10 @@ module.exports = {
     untitledModule: '[ untitled module ] ',
     emptyAccessControlOptions: 'Unfortunately, your user is not allowed to edit the access options for the current report.',
     hideNCampaigns: 'Hide {count} inactive campaign(s)',
-    showNCampaigns: 'Show {count} inactive campaign(s)'
+    showNCampaigns: 'Show {count} inactive campaign(s)',
+    globalAdmin: 'Global Admin',
+    regularUser: 'Regular User',
+    edit: 'Edit'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -489,6 +492,9 @@ module.exports = {
     untitledModule: '[ módulo sem nome ] ',
     emptyAccessControlOptions: 'Infelizmente, seu usuário não tem permissões para alterar as opções de acesso deste relatório.',
     hideNCampaigns: 'Ocultar {count} campanha(s) inativa(s)',
-    showNCampaigns: 'Exibir {count} campanha(s) inativa(s)'
+    showNCampaigns: 'Exibir {count} campanha(s) inativa(s)',
+    globalAdmin: 'Administrador geral',
+    regularUser: 'Usuário regular',
+    edit: 'Editar'
   }
 }

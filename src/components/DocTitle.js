@@ -18,7 +18,7 @@ function DocTitle ({report, order, campaign, folder, workspace, company}) {
     report && report.name
   ].reverse()
 
-  return <Helmet title={join(compact(parts), ' < ')}/>
+  return <Helmet title={join(compact(parts), ' - ')}/>
 }
 
 DocTitle.displayName = 'Title'
