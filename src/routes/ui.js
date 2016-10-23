@@ -75,13 +75,10 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
   /* eslint-disable react/jsx-indent-props */
   return (
-    <Route path='/' component={root(tree, createRoot(DocTitle, ErrorScreen))}>
-      <IndexRoute component={Home}/>
-      <Route onEnter={protectRoute}>
-
-        <Route path='company/:company' breadcrumb={CompanyBreadcrumb} aside={CompanyAside} component={App}
-               onEnter={preload(companies)}>
-
+    <Route path='/' component={root(tree, createRoot(DocTitle, ErrorScreen))} onEnter={protectRoute}>
+      <Route onEnter={preload(companies)}>
+        <IndexRoute component={Home}/>
+        <Route path='company/:company' breadcrumb={CompanyBreadcrumb} aside={CompanyAside} component={App}>
           <IndexRoute component={Workspaces} onEnter={preload(workspaces)}/>
 
           <Route path='orders' breadcrumb={OrdersBreadCrumb} onEnter={preload(orders)}>

@@ -23,7 +23,10 @@ export function setAppRoutes (app, render) {
   const campaignsWithAdsets = bind(campaigns, null, _, _, 'include-adsets')
   const defaultFolderReport = bind(reports, null, _, _, true)
 
-  app.get('/', render)
+  app.get('/',
+    protect,
+    preload(companies),
+    render)
 
   app.get('/company/:company',
     protect,
