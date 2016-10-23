@@ -15,6 +15,7 @@ const style = csjs`
   display: none;
 }
 .breadcrumb a {
+  font-weight: bold;
   color: white !important;
   text-decoration: none !important;
 }
