@@ -40,7 +40,7 @@ const style = csjs`
 }
 .menu {
   width: 250px;
-  padding: 2em 0;
+  padding: 1em 0 1em 0;
   height: auto;
   text-align: center;
   color: #515151;
