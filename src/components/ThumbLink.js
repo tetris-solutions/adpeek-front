@@ -9,6 +9,7 @@ const style = csjs`
   margin: 2em 6em;
 }
 .card {
+  background: white;
   display: inline-block;
   position: relative;
   width: 200px;

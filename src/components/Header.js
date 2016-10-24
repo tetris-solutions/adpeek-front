@@ -73,11 +73,10 @@ const style = csjs`
 .button extends .round, .crop {
   position: relative;
   cursor: pointer;
-  border: 2px solid transparent;
+  border: 3px solid transparent;
 }
 .button:hover {
-  box-shadow: -1px 2px 3px rgba(0,0,0,0.2);
-  border: 2px solid #5c9cfe;
+  border: 3px solid #5c9cfe;
 }`
 
 const {PropTypes} = React
