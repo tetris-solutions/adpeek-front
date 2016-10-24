@@ -29,17 +29,11 @@ function Workspace ({company, workspace, deleteWorkspace}) {
     <ThumbLink to={`/company/${company}/workspace/${workspace.id}`} title={workspace.name}>
       <Title>{workspace.name}</Title>
       <Menu>
-        <MenuItem>
-          <Link to={`/company/${company}/workspace/${workspace.id}/edit`}>
-            <i className='material-icons'>mode_edit</i>
-            <Message>editWorkspace</Message>
-          </Link>
+        <MenuItem tag={Link} to={`/company/${company}/workspace/${workspace.id}/edit`} icon='mode_edit'>
+          <Message>editWorkspace</Message>
         </MenuItem>
-        <MenuItem>
-          <DeleteButton span entityName={workspace.name} onClick={onClick}>
-            <i className='material-icons'>delete</i>
-            <Message>deleteWorkspace</Message>
-          </DeleteButton>
+        <MenuItem tag={DeleteButton} span entityName={workspace.name} onClick={onClick} icon='delete'>
+          <Message>deleteWorkspace</Message>
         </MenuItem>
       </Menu>
     </ThumbLink>

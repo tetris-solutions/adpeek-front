@@ -45,7 +45,6 @@ const Recent = React.createClass({
       pathname: PropTypes.string
     }).isRequired
   },
-
   getList () {
     return this.props.node[camelCase(`recent ${this.props.level}`)]
   },

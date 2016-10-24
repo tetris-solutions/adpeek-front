@@ -3,6 +3,7 @@ import csjs from 'csjs'
 import {Link} from 'react-router'
 import {styledFnComponent} from './higher-order/styled-fn-component'
 import Tooltip from 'tetris-iso/Tooltip'
+import omit from 'lodash/omit'
 
 const style = csjs`
 .container {
@@ -73,13 +74,13 @@ const style = csjs`
 }
 .menu extends .visible {}
 .options extends .visible {}
-.item > * {
+.item > a, .item > span {
   color: #545454 !important;
   font-size: small;
   text-decoration: none;
   display: inline-block;
 }
-.item i {
+.ico {
   font-size: inherit;
   margin-right: .5em;
   transform: translateY(2px);
@@ -168,14 +169,27 @@ Menu.propTypes = {
   children: PropTypes.node.isRequired
 }
 
-export const MenuItem = ({children}) => (
-  <li className={`mdl-menu__item ${style.item}`}>
-    {children}
-  </li>
-)
+export const MenuItem = props => {
+  const {children, tag: Tag, icon} = props
+  let ico = icon ? <i className={`material-icons ${style.ico}`}>{icon}</i> : null
+
+  return (
+    <li className={`mdl-menu__item ${style.item}`}>
+      <Tag {...omit(props, 'children', 'icon', 'tag')}>
+        {ico}
+        {children}
+      </Tag>
+    </li>
+  )
+}
 
 MenuItem.displayName = 'Menu-Item'
+MenuItem.defaultProps = {
+  tag: 'span'
+}
 MenuItem.propTypes = {
+  tag: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+  icon: PropTypes.string,
   children: PropTypes.node.isRequired
 }
 
