@@ -14,7 +14,7 @@ const style = csjs`
   position: relative;
   width: 200px;
   min-height: 200px;
-  margin: 0 10px;
+  margin: 10px;
   text-align: left;
   border-radius: 2px;
 }
@@ -30,7 +30,6 @@ const style = csjs`
   background-color: rgb(240, 240, 240);
   opacity: .8;
 }
-
 .gear {
   display: inline-block;
   position: absolute;
@@ -68,12 +67,8 @@ const style = csjs`
   width: auto;
   height: auto;
 }
-.menu extends .visible {
-  
-}
-.options extends .visible {
-  
-}
+.menu extends .visible {}
+.options extends .visible {}
 .options a {
   color: #545454 !important;
   font-size: small;

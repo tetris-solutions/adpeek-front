@@ -37,14 +37,14 @@ const HTML = ({payload, children, css}) => (
       {Helmet.rewind().title.toComponent()}
       <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' type='text/css'/>
       <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons'/>
-      <link rel='stylesheet' href='https://code.getmdl.io/1.2.0/material.indigo-pink.min.css'/>
+      <link rel='stylesheet' href='https://code.getmdl.io/1.2.1/material.blue-indigo.min.css'/>
       <link rel='stylesheet' href='/css/mdl-selectfield.min.css'/>
       <link rel='stylesheet' href='/css/animate.min.css'/>
       <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css'/>
       <script src='https://cdn.rawgit.com/HubSpot/pace/v1.0.0/pace.min.js' async/>
       <style dangerouslySetInnerHTML={{__html: paceCss}}/>
       <style id='style-injection' dangerouslySetInnerHTML={{__html: css}}/>
-      <script src='https://code.getmdl.io/1.2.0/material.min.js' defer/>
+      <script src='https://code.getmdl.io/1.2.1/material.min.js' defer/>
       <script
         id='state-injection'
         dangerouslySetInnerHTML={{__html: `var backendPayload = ${JSON.stringify(payload)}`}}/>

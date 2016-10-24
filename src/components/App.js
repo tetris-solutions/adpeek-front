@@ -1,6 +1,5 @@
 import React from 'react'
 import Header from './Header'
-// import SideNav from './SideNav'
 import find from 'lodash/find'
 
 const {PropTypes} = React
@@ -9,7 +8,6 @@ const UI = ({children}) => (
   <div className='mdl-layout__container'>
     <div className='mdl-layout mdl-layout--fixed-header is-upgraded'>
       <Header />
-      {/* <SideNav /> */}
       <main className='mdl-layout__content mdl-color--grey-300'>
         {children}
       </main>

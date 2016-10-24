@@ -11,6 +11,7 @@ import SearchBox from './HeaderSearchBox'
 import {contextualize} from './higher-order/contextualize'
 import {Container, Title, Button, ThumbLink} from './ThumbLink'
 import SubHeader from './SubHeader'
+import Page from './Page'
 
 const {PropTypes} = React
 const cleanStr = str => trim(deburr(lowerCase(str)))
@@ -57,18 +58,20 @@ export const Workspaces = React.createClass({
         <SubHeader title={<Message>workspaceList</Message>}>
           <SearchBox onChange={this.onChange}/>
         </SubHeader>
-        <Container>
-          {map(matchingWorkspaces, (workspace, index) =>
-            <Workspace key={index} {...workspace} company={id}/>)}
+        <Page>
+          <Container>
+            {map(matchingWorkspaces, (workspace, index) =>
+              <Workspace key={index} {...workspace} company={id}/>)}
 
-          <Fence canEditWorkspace>
-            <ThumbLink to={`/company/${id}/create/workspace`} sad>
-              <Button>
-                <Message>newWorkspaceHeader</Message>
-              </Button>
-            </ThumbLink>
-          </Fence>
-        </Container>
+            <Fence canEditWorkspace>
+              <ThumbLink to={`/company/${id}/create/workspace`} sad>
+                <Button>
+                  <Message>newWorkspaceHeader</Message>
+                </Button>
+              </ThumbLink>
+            </Fence>
+          </Container>
+        </Page>
       </div>
     )
   }

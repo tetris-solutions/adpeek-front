@@ -153,7 +153,7 @@ const Header = React.createClass({
     const {user, company} = this.props
 
     return (
-      <header className={`mdl-layout__header mdl-color--primary ${style.header}`}>
+      <header className={`mdl-layout__header mdl-color--primary-dark ${style.header}`}>
         <div className={`mdl-layout__header-row ${style.row}`}>
           <Link className={String(style.logo)} src='/img/tetris-logo.png' to='/'/>
           <div className='mdl-layout-spacer'/>
