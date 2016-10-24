@@ -17,14 +17,23 @@ const style = csjs`
   border-radius: 2px;
 }
 .title {
-  color: white;
+  position: absolute;
   font-size: large;
   font-weight: bold;
-  position: absolute;
   bottom: .7em;
   line-height: 1.2em;
-  margin: 0;
-  margin-left: .7em;
+  margin: 0 .7em;
+}
+.sad {
+  background-color: rgb(240, 240, 240);
+  opacity: .8;
+}
+.button {
+  position: absolute;
+  text-transform: none;
+  padding: 0 .7em;
+  bottom: .7em;
+  left: .7em;
 }`
 
 const {PropTypes} = React
@@ -40,13 +49,24 @@ export const Title = ({children}) => (
 )
 Title.displayName = 'Title'
 Title.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node.isRequired
 }
 
-export function ThumbLink ({to, title, img, children}) {
+export const Button = ({children}) => (
+  <span className={`mdl-button ${style.button}`}>
+    {children}
+  </span>
+)
+
+Button.displayName = 'Button'
+Button.propTypes = {
+  children: PropTypes.node.isRequired
+}
+
+export function ThumbLink ({to, title, img, children, sad}) {
   const props = {
     style: img ? backgroundStyle(img) : undefined,
-    className: `mdl-shadow--2dp ${style.card}`,
+    className: `mdl-shadow--2dp ${style.card} ${sad ? style.sad : ''}`,
     to
   }
 
@@ -59,6 +79,7 @@ export function ThumbLink ({to, title, img, children}) {
 
 ThumbLink.displayName = 'Thumb-Link'
 ThumbLink.propTypes = {
+  sad: PropTypes.bool,
   children: PropTypes.node,
   img: PropTypes.string,
   to: PropTypes.string,

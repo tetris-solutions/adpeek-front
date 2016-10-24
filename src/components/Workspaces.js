@@ -9,14 +9,18 @@ import React from 'react'
 import Fence from './Fence'
 import SearchBox from './HeaderSearchBox'
 import {contextualize} from './higher-order/contextualize'
-import {ThumbLink, ThumbButton} from './ThumbLink'
+import {Container, Title, Button, ThumbLink} from './ThumbLink'
 import SubHeader from './SubHeader'
 
 const {PropTypes} = React
 const cleanStr = str => trim(deburr(lowerCase(str)))
 
 function Workspace ({company, id, name}) {
-  return <ThumbLink to={`/company/${company}/workspace/${id}`} title={name}/>
+  return (
+    <ThumbLink to={`/company/${company}/workspace/${id}`} title={name}>
+      <Title>{name}</Title>
+    </ThumbLink>
+  )
 }
 
 Workspace.displayName = 'Workspace'
@@ -53,17 +57,18 @@ export const Workspaces = React.createClass({
         <SubHeader title={<Message>workspaceList</Message>}>
           <SearchBox onChange={this.onChange}/>
         </SubHeader>
-        <div className='mdl-grid'>
+        <Container>
           {map(matchingWorkspaces, (workspace, index) =>
             <Workspace key={index} {...workspace} company={id}/>)}
 
           <Fence canEditWorkspace>
-            <ThumbButton
-              title={<Message>newWorkspaceHeader</Message>}
-              label={<Message>newWorkspaceCallToAction</Message>}
-              to={`/company/${id}/create/workspace`}/>
+            <ThumbLink to={`/company/${id}/create/workspace`} sad>
+              <Button>
+                <Message>newWorkspaceHeader</Message>
+              </Button>
+            </ThumbLink>
           </Fence>
-        </div>
+        </Container>
       </div>
     )
   }
