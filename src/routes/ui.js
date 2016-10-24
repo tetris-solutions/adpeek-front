@@ -4,7 +4,6 @@ import {loadUserCompaniesActionRouterAdaptor as companies} from 'tetris-iso/acti
 import {root} from 'baobab-react/higher-order'
 import {IndexRoute, Route} from 'react-router'
 
-import {tracker} from '../components/higher-order/tracker'
 import App from '../components/App'
 import DocTitle from '../components/DocTitle'
 import Campaign from '../components/Campaign'
@@ -82,7 +81,6 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
         <Route
           path='company/:company'
           breadcrumb={CompanyBreadcrumb}
-          component={tracker('company')}
           aside={CompanyAside}>
 
           <IndexRoute component={Workspaces} onEnter={preload(workspaces)}/>
@@ -96,7 +94,6 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
           <Route path='workspace/:workspace'
                  breadcrumb={WorkspaceBreadcrumb}
-                 component={tracker('workspace')}
                  onEnter={preload(workspace)}
                  aside={WorkspaceAside}>
 
@@ -114,7 +111,6 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
             <Route path='folder/:folder'
                    aside={FolderAside}
                    breadcrumb={FolderBreadcrumb}
-                   component={tracker('folder')}
                    onEnter={preload(folder, defaultFolderReport)}>
 
               <IndexRoute component={Campaigns} onEnter={preload(statuses, campaigns)}/>
@@ -123,8 +119,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
               <Route
                 path='campaign/:campaign'
                 aside={CampaignAside}
-                breadcrumb={CampaignBreadcrumb}
-                component={tracker('campaign')}>
+                breadcrumb={CampaignBreadcrumb}>
 
                 <IndexRoute component={Campaign}/>
               </Route>
@@ -134,7 +129,6 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                   path='report/:report'
                   aside={ReportAside}
                   breadcrumb={ReportBread}
-                  component={tracker('report')}
                   onEnter={preload(report)}>
 
                   <IndexRoute component={FolderReportBuilder}/>
@@ -158,8 +152,8 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 <Route
                   aside={OrderAside}
                   path='order/:order'
-                  breadcrumb={OrderBreadCrumb}
-                  component={tracker('order')}>
+                  breadcrumb={OrderBreadCrumb}>
+
                   <IndexRoute onEnter={preload(budgets)} component={Order}/>
                   <Route path='autobudget' onEnter={preload(autoBudgetLogs)} component={OrderAutoBudget}/>
                   <Route path='autobudget/:day' onEnter={preload(autoBudgetLogs)} component={OrderAutoBudget}/>

@@ -1,13 +1,12 @@
 import {saveResponseTokenAsCookie, getApiFetchConfig} from 'tetris-iso/utils'
 import {PUT} from '@tetris/http'
+import qs from 'query-string'
 
-function sendHit (company, level, target = null, config) {
-  const query = target ? `?target=${target}` : ''
-
-  return PUT(`${process.env.ADPEEK_API_URL}/company/${company}/hit/${level}${query}`, config)
+function sendHit (level, params, config) {
+  return PUT(`${process.env.ADPEEK_API_URL}/hit/${level}?${qs.stringify(params)}`, config)
 }
 
-export function sendHitAction (tree, company, level, target, token) {
-  return sendHit(company, level, target, getApiFetchConfig(tree, token))
+export function sendHitAction (tree, level, params, token) {
+  return sendHit(level, params, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
 }
