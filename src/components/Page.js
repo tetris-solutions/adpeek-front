@@ -15,6 +15,7 @@ const style = csjs`
   display: flex;
   flex: 1;
   min-height: calc(100% - 64px);
+  width: 100%;
   position: absolute;
 }
 .content {
