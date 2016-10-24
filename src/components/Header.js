@@ -7,6 +7,7 @@ import Tooltip from 'tetris-iso/Tooltip'
 import {contextualize} from './higher-order/contextualize'
 import {logoutAction} from 'tetris-iso/actions'
 import get from 'lodash/get'
+import {Link} from 'react-router'
 
 const style = csjs`
 .round {
@@ -15,12 +16,18 @@ const style = csjs`
 .crop {
   overflow: hidden;
 }
-.header {
+.logo {
   background-image: url(/img/tetris-logo.png);
-  background-position: 30px center;
+  background-position: 0 center;
   background-repeat: no-repeat;
   background-size: 100px;
+  width: 100px;
+  height: 24px;
 }
+.row {
+  padding: 0 30px;
+}
+.header {}
 .logout {
   color: rgb(100, 100, 100);
   font-size: small;
@@ -147,8 +154,8 @@ const Header = React.createClass({
 
     return (
       <header className={`mdl-layout__header mdl-color--primary ${style.header}`}>
-        <div className='mdl-layout__header-row'>
-          <span/>
+        <div className={`mdl-layout__header-row ${style.row}`}>
+          <Link className={String(style.logo)} src='/img/tetris-logo.png' to='/'/>
           <div className='mdl-layout-spacer'/>
           <UserMenu {...user} company={company} logout={this.logout}/>
         </div>

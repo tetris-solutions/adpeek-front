@@ -4,37 +4,74 @@ import {Link} from 'react-router'
 import {styledFnComponent} from './higher-order/styled-fn-component'
 
 const style = csjs`
+.container {
+  margin: 2em 6em;
+}
 .card {
-  width: 100%
+  display: inline-block;
+  position: relative;
+  width: 200px;
+  min-height: 200px;
+  margin: 0 10px;
+  text-align: left;
+  border-radius: 2px;
+}
+.title {
+  color: white;
+  font-size: large;
+  font-weight: bold;
+  position: absolute;
+  bottom: .7em;
+  line-height: 1.2em;
+  margin: 0;
+  margin-left: .7em;
 }`
 
 const {PropTypes} = React
 
-function TLink ({to, title}) {
+const backgroundStyle = img => ({
+  background: `url(${img}) center/cover no-repeat`
+})
+
+export const Title = ({children}) => (
+  <h4 className={`mdl-color-text--blue-800 ${style.title}`}>
+    {children}
+  </h4>
+)
+Title.displayName = 'Title'
+Title.propTypes = {
+  children: PropTypes.node
+}
+
+export function ThumbLink ({to, title, img, children}) {
+  const props = {
+    style: img ? backgroundStyle(img) : undefined,
+    className: `mdl-shadow--2dp ${style.card}`,
+    to
+  }
+
   return (
-    <Link to={to} className='mdl-cell mdl-cell--2-col'>
-      <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
-        <div className='mdl-card__title mdl-card--expand'>
-          <h3 className='mdl-card__title-text'>
-            {title}
-          </h3>
-        </div>
-      </div>
+    <Link {...props} title={title}>
+      {children}
     </Link>
   )
 }
 
-TLink.displayName = 'Thumb-Link'
-TLink.propTypes = {
+ThumbLink.displayName = 'Thumb-Link'
+ThumbLink.propTypes = {
+  children: PropTypes.node,
+  img: PropTypes.string,
   to: PropTypes.string,
   title: PropTypes.string
 }
 
-function TButton ({to, title, label}) {
+export function ThumbButton ({to, title, label, img}) {
   return (
-    <div className='mdl-cell mdl-cell--2-col'>
-      <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
-        <div className='mdl-card__title mdl-card--expand'>
+    <div className={String(style.card)}>
+      <div className='mdl-card mdl-shadow--2dp'>
+        <div
+          className={`mdl-card__title mdl-card--expand ${style.expand}`}
+          style={img ? backgroundStyle(img) : undefined}>
           <h3 className='mdl-card__title-text'>
             {title}
           </h3>
@@ -49,12 +86,22 @@ function TButton ({to, title, label}) {
   )
 }
 
-TButton.displayName = 'Thumb-Button'
-TButton.propTypes = {
+ThumbButton.displayName = 'Thumb-Button'
+ThumbButton.propTypes = {
+  img: PropTypes.string,
   to: PropTypes.string,
   title: PropTypes.node,
   label: PropTypes.node
 }
 
-export const ThumbLink = styledFnComponent(TLink, style)
-export const ThumbButton = styledFnComponent(TButton, style)
+const Parent = ({children}) => (
+  <div className={String(style.container)}>
+    {children}
+  </div>
+)
+Parent.displayName = 'Container'
+Parent.propTypes = {
+  children: PropTypes.node
+}
+
+export const Container = styledFnComponent(Parent, style)

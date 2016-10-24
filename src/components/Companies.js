@@ -3,20 +3,20 @@ import Message from 'tetris-iso/Message'
 import React from 'react'
 import {branch} from 'baobab-react/higher-order'
 import SubHeader from './SubHeader'
-import {ThumbLink} from './ThumbLink'
+import {Container, Title, ThumbLink} from './ThumbLink'
 
 const {PropTypes} = React
 
 const Companies = ({user}) => (
   <div>
     <SubHeader title={<Message>companyList</Message>}/>
-    <div className='mdl-grid'>
-      {map(user.companies, ({id, name}) =>
-        <ThumbLink key={id} title={name} to={`/company/${id}`}>
-          {name}
+    <Container>
+      {map(user.companies, ({id, name, icon}) =>
+        <ThumbLink key={id} title={name} to={`/company/${id}`} img={icon}>
+          {icon ? null : <Title>{name}</Title>}
         </ThumbLink>
       )}
-    </div>
+    </Container>
   </div>
 )
 
