@@ -62,26 +62,35 @@ Button.propTypes = {
   children: PropTypes.node.isRequired
 }
 
-const Wrapper = ({icon, img, children}) => {
-  children = React.Children.toArray(children)
+export const Buttons = ({children}) => (
+  <section className={`${style.menu}`}>
+    {children}
+  </section>
+)
+export const Name = ({children}) => (
+  <section className={`${style.name}`}>
+    <h4>
+      {children}
+    </h4>
+  </section>
+)
+Name.displayName = 'Name'
+Buttons.displayName = 'Buttons'
 
-  return (
-    <div className={`${style.wrapper}`}>
-      {img ? (
-        <img className={`${style.img}`} src={img}/>
-      ) : (
-        <i className='material-icons'>{icon}</i>
-      )}
-      <section className={`${style.name}`}>
-        {children[0]}
-      </section>
-      <br/>
-      <section className={`${style.menu}`}>
-        {children.slice(1)}
-      </section>
-    </div>
-  )
+Name.propTypes = Buttons.propTypes = {
+  children: PropTypes.node.isRequired
 }
+
+const Wrapper = ({icon, img, children}) => (
+  <div className={`${style.wrapper}`}>
+    {img ? (
+      <img className={`${style.img}`} src={img}/>
+    ) : (
+      <i className='material-icons'>{icon}</i>
+    )}
+    {children}
+  </div>
+)
 
 Wrapper.displayName = 'Navigation'
 Wrapper.propTypes = {
