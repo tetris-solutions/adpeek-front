@@ -5,10 +5,11 @@ import {styledFnComponent} from './higher-order/styled-fn-component'
 const {PropTypes} = React
 const style = csjs`
 .wrapper {
-  padding: 5px 10px;
+  width: 270px;
+  margin: 10px 0;
 }
 .icon {
-  padding-top: 10px;
+  padding-top: 20px;
   font-size: 56px;
 }
 .img {
@@ -20,7 +21,7 @@ const style = csjs`
 .menu {
   display: block;
   text-align: center;
-  margin: 0 10%;
+  margin: 0 8%;
 }
 .button {
   display: block;

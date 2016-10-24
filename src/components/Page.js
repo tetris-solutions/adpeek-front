@@ -23,7 +23,23 @@ const style = csjs`
 }
 .nav {
   background: white;
-  flex: 0 0 320px;
+  position: relative;
+  flex: 0 0 12px;
+}
+.caret {
+  display: block;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 12px;
+  background: white;
+}
+.caret > span {
+  display: inline-block;
+  font-size: 8px;
+  margin: 40vh 0 0 2px;  
 }`
 
 const Page = React.createClass({
@@ -38,13 +54,19 @@ const Page = React.createClass({
   getInitialState () {
     return {isNavOpen: false}
   },
+  toggleNav () {
+    this.setState({isNavOpen: !this.state.isNavOpen})
+  },
   render () {
     const SubNav = getSubNav(findLast(this.context.routes, hasSubNav))
 
     return (
       <div className={String(style.page)}>
         <nav className={`mdl-shadow--6dp ${style.nav}`}>
-          {SubNav ? <SubNav /> : null}
+          {SubNav && this.state.isNavOpen ? <SubNav /> : null}
+          <div onClick={this.toggleNav} className={String(style.caret)}>
+            <span>&#9658;</span>
+          </div>
         </nav>
         <div className={String(style.content)}>
           {this.props.children}
