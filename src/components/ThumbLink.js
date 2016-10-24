@@ -56,10 +56,10 @@ const style = csjs`
   transition: transform .5s ease;
 }
 
-.card:hover > .gear {
+.card:hover > .gear, .gear[data-active] {
   opacity: 1;
 }
-.card:hover > .gear > i {
+.card:hover > .gear > i, .gear[data-active] > i {
   transform: rotate(90deg);
 }
 .visible {
@@ -78,6 +78,7 @@ const style = csjs`
   color: #545454 !important;
   font-size: small;
   text-decoration: none;
+  display: inline-block;
 }
 .options i {
   font-size: inherit;
@@ -153,7 +154,7 @@ function doNotBubble (e) {
 export const Menu = ({children}) => (
   <span className={String(style.gear)} onClick={doNotBubble}>
     <i className='material-icons'>settings</i>
-    <Tooltip hover>
+    <Tooltip>
       <div className={`mdl-menu__container is-visible ${style.menu}`}>
         <ul className={`mdl-menu ${style.options}`}>
           {children}

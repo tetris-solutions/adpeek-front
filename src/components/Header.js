@@ -74,8 +74,9 @@ const style = csjs`
   position: relative;
   cursor: pointer;
   border: 3px solid transparent;
+  transition: border 1s ease;
 }
-.button:hover {
+.button:hover, .button[data-active] {
   border: 3px solid #5c9cfe;
 }`
 
