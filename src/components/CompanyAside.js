@@ -8,12 +8,13 @@ import Recent from './Recent'
 const {PropTypes} = React
 
 export const CompanyAside = ({company, params, dispatch}) => (
-  <Navigation img={company.icon} icon='info_outline'>
+  <Navigation img={company.icon} icon='account_balance'>
     <Name>
       <small>Nome da empresa:</small>
       <br/>
       {company.name}
     </Name>
+    <br/>
     <Buttons>
       <Button href={`${process.env.FRONT_URL}/dashboard/company/${company.id}/info`} icon='info_outline'>
         <Message>manageCompany</Message>

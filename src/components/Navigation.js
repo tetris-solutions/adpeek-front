@@ -8,9 +8,15 @@ const style = csjs`
   width: 270px;
   margin: 10px 0;
 }
+.wrapper > hr {
+  width: 80%;
+  margin: 0 auto;
+}
 .icon {
-  padding-top: 20px;
-  font-size: 56px;
+  font-size: 72px;
+  display: block;
+  text-align: center;
+  margin: .5em 0;
 }
 .img {
   width: 200px;
@@ -86,7 +92,7 @@ const Wrapper = ({icon, img, children}) => (
     {img ? (
       <img className={`${style.img}`} src={img}/>
     ) : (
-      <i className='material-icons'>{icon}</i>
+      <i className={`material-icons ${style.icon}`}>{icon}</i>
     )}
     {children}
   </div>
