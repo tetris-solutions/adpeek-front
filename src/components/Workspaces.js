@@ -9,27 +9,13 @@ import React from 'react'
 import Fence from './Fence'
 import SearchBox from './HeaderSearchBox'
 import {contextualize} from './higher-order/contextualize'
-import {Container, Title, Button, ThumbLink} from './ThumbLink'
+import {Container, Title, ThumbLink} from './ThumbLink'
 import SubHeader from './SubHeader'
 import Page from './Page'
+import {Link} from 'react-router'
 
 const {PropTypes} = React
 const cleanStr = str => trim(deburr(lowerCase(str)))
-
-function Workspace ({company, id, name}) {
-  return (
-    <ThumbLink to={`/company/${company}/workspace/${id}`} title={name}>
-      <Title>{name}</Title>
-    </ThumbLink>
-  )
-}
-
-Workspace.displayName = 'Workspace'
-Workspace.propTypes = {
-  id: PropTypes.string,
-  company: PropTypes.string,
-  name: PropTypes.string
-}
 
 export const Workspaces = React.createClass({
   displayName: 'Workspaces',
@@ -55,21 +41,25 @@ export const Workspaces = React.createClass({
 
     return (
       <div>
-        <SubHeader title={<Message>workspaceList</Message>}>
+        <SubHeader>
+          <Fence canEditWorkspace>
+            <Link className='mdl-button mdl-color-text--white' to={`/company/${id}/create/workspace`}>
+              <i className='material-icons'>add</i>
+              <Message>newWorkspaceHeader</Message>
+            </Link>
+          </Fence>
           <SearchBox onChange={this.onChange}/>
+
         </SubHeader>
         <Page>
           <Container>
+            <h5>
+              <Message>workspaceList</Message>
+            </h5>
             {map(matchingWorkspaces, (workspace, index) =>
-              <Workspace key={index} {...workspace} company={id}/>)}
-
-            <Fence canEditWorkspace>
-              <ThumbLink to={`/company/${id}/create/workspace`} sad>
-                <Button>
-                  <Message>newWorkspaceHeader</Message>
-                </Button>
-              </ThumbLink>
-            </Fence>
+              <ThumbLink to={`/company/${id}/workspace/${workspace.id}`} title={workspace.name}>
+                <Title>{workspace.name}</Title>
+              </ThumbLink>)}
           </Container>
         </Page>
       </div>

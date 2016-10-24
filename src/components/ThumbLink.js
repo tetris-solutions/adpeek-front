@@ -8,6 +8,10 @@ const style = csjs`
 .container {
   margin: 2em 6em;
 }
+.container > h5 {
+  color: #7d7d7d;
+  font-weight: bold;
+}
 .card {
   background: white;
   display: inline-block;

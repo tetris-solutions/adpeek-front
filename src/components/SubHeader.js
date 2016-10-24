@@ -6,6 +6,9 @@ import csjs from 'csjs'
 const style = csjs`
 .row {
   padding: 0 30px;  
+}
+.row a {
+  text-transform: none;
 }`
 const {PropTypes} = React
 
