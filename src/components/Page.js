@@ -14,7 +14,7 @@ const style = csjs`
 .page {
   display: flex;
   flex: 1;
-  height: 100%;
+  min-height: calc(100% - 64px);
   position: absolute;
 }
 .content {
