@@ -2,7 +2,7 @@ import {GET} from '@tetris/http'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {saveResponseData} from '../functions/save-response-data'
 
-export function loadCompanyWorkspaces (id, config) {
+function loadCompanyWorkspaces (id, config) {
   return GET(`${process.env.ADPEEK_API_URL}/company/${id}/workspaces`, config)
 }
 

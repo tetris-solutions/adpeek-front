@@ -34,8 +34,8 @@ Prompt.propTypes = {
   onCancel: PropTypes.func.isRequired
 }
 
-const DeleteButton = ({className, children, entityName, onClick}) => (
-  <ButtonWithPrompt className={className} label={children}>
+const DeleteButton = ({span, className, children, entityName, onClick}) => (
+  <ButtonWithPrompt className={className} label={children} span={span}>
     {({dismiss}) => (
       <Prompt
         entityName={entityName}
@@ -47,7 +47,8 @@ const DeleteButton = ({className, children, entityName, onClick}) => (
 
 DeleteButton.displayName = 'Delete-Buttton'
 DeleteButton.propTypes = {
-  className: PropTypes.string.isRequired,
+  span: PropTypes.bool,
+  className: PropTypes.string,
   onClick: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
   entityName: PropTypes.node.isRequired

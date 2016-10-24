@@ -73,13 +73,13 @@ const style = csjs`
 }
 .menu extends .visible {}
 .options extends .visible {}
-.options a {
+.item > * {
   color: #545454 !important;
   font-size: small;
   text-decoration: none;
   display: inline-block;
 }
-.options i {
+.item i {
   font-size: inherit;
   margin-right: .5em;
   transform: translateY(2px);
@@ -169,7 +169,7 @@ Menu.propTypes = {
 }
 
 export const MenuItem = ({children}) => (
-  <li className='mdl-menu__item'>
+  <li className={`mdl-menu__item ${style.item}`}>
     {children}
   </li>
 )

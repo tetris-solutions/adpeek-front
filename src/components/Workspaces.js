@@ -9,25 +9,73 @@ import React from 'react'
 import Fence from './Fence'
 import SearchBox from './HeaderSearchBox'
 import {contextualize} from './higher-order/contextualize'
-import {Container, Title, ThumbLink} from './ThumbLink'
+import {Container, Title, ThumbLink, Menu, MenuItem} from './ThumbLink'
 import SubHeader from './SubHeader'
 import Page from './Page'
 import {Link} from 'react-router'
+import {deleteWorkspaceAction} from '../actions/delete-workspace'
+import {loadCompanyWorkspacesAction} from '../actions/load-company-workspaces'
+import DeleteButton from './DeleteButton'
 
 const {PropTypes} = React
 const cleanStr = str => trim(deburr(lowerCase(str)))
 
+function Workspace ({company, workspace, deleteWorkspace}) {
+  function onClick () {
+    deleteWorkspace(workspace.id)
+  }
+
+  return (
+    <ThumbLink to={`/company/${company}/workspace/${workspace.id}`} title={workspace.name}>
+      <Title>{workspace.name}</Title>
+      <Menu>
+        <MenuItem>
+          <Link to={`/company/${company}/workspace/${workspace.id}/edit`}>
+            <i className='material-icons'>mode_edit</i>
+            <Message>editWorkspace</Message>
+          </Link>
+        </MenuItem>
+        <MenuItem>
+          <DeleteButton span entityName={workspace.name} onClick={onClick}>
+            <i className='material-icons'>delete</i>
+            <Message>deleteWorkspace</Message>
+          </DeleteButton>
+        </MenuItem>
+      </Menu>
+    </ThumbLink>
+  )
+}
+Workspace.displayName = 'Workspace'
+Workspace.propTypes = {
+  company: PropTypes.string,
+  workspace: PropTypes.object,
+  deleteWorkspace: PropTypes.func.isRequired
+}
+Workspace.contextTypes = {
+  router: PropTypes.object
+}
+
 export const Workspaces = React.createClass({
   displayName: 'Workspaces',
   propTypes: {
+    dispatch: PropTypes.func,
     company: PropTypes.shape({
       workspaces: PropTypes.array
     })
+  },
+  contextTypes: {
+    router: PropTypes.object
   },
   getInitialState () {
     return {
       searchValue: ''
     }
+  },
+  deleteWorkspace (id) {
+    const {dispatch, company} = this.props
+
+    dispatch(deleteWorkspaceAction, id)
+      .then(() => dispatch(loadCompanyWorkspacesAction, company.id))
   },
   onChange (searchValue) {
     this.setState({searchValue})
@@ -57,9 +105,11 @@ export const Workspaces = React.createClass({
               <Message>workspaceList</Message>
             </h5>
             {map(matchingWorkspaces, (workspace, index) =>
-              <ThumbLink to={`/company/${id}/workspace/${workspace.id}`} title={workspace.name}>
-                <Title>{workspace.name}</Title>
-              </ThumbLink>)}
+              <Workspace
+                deleteWorkspace={this.deleteWorkspace}
+                key={workspace.id}
+                company={id}
+                workspace={workspace}/>)}
           </Container>
         </Page>
       </div>
