@@ -10,7 +10,7 @@ const {PropTypes} = React
 export const CompanyAside = ({company, params, dispatch}) => (
   <Navigation img={company.icon} icon='account_balance'>
     <Name>
-      <small>Nome da empresa:</small>
+      <small><Message>companyName</Message>:</small>
       <br/>
       {company.name}
     </Name>

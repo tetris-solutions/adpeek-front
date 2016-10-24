@@ -247,7 +247,9 @@ module.exports = {
     showNCampaigns: 'Show {count} inactive campaign(s)',
     globalAdmin: 'Global Admin',
     regularUser: 'Regular User',
-    edit: 'Edit'
+    edit: 'Edit',
+    companyName: 'Company name',
+    recentWorkspace: 'Recently accessed workspaces'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -279,7 +281,7 @@ module.exports = {
     save: 'Salvar',
     cancel: 'Cancelar',
     update: 'Atualizar',
-    budgetNameLabel: 'Nome do orçamento',
+    budgetNameLabel: 'Nome do Orçamento',
     orderNameLabel: 'Nome do Pedido',
     orders: 'Pedidos',
     dayLabel: 'Dia',
@@ -497,6 +499,8 @@ module.exports = {
     showNCampaigns: 'Exibir {count} campanha(s) inativa(s)',
     globalAdmin: 'Administrador geral',
     regularUser: 'Usuário regular',
-    edit: 'Editar'
+    edit: 'Editar',
+    companyName: 'Nome da Empresa',
+    recentWorkspace: 'Áreas de Trabalho Recentes:'
   }
 }
