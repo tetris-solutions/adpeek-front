@@ -2,6 +2,7 @@ import React from 'react'
 import csjs from 'csjs'
 import {Link} from 'react-router'
 import {styledFnComponent} from './higher-order/styled-fn-component'
+import Tooltip from 'tetris-iso/Tooltip'
 
 const style = csjs`
 .container {
@@ -27,6 +28,60 @@ const style = csjs`
 .sad {
   background-color: rgb(240, 240, 240);
   opacity: .8;
+}
+
+.gear {
+  display: inline-block;
+  position: absolute;
+  text-align: center;
+  opacity: 0;
+  cursor: pointer;
+  
+  background: white;
+  color: grey;
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+  
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  
+  padding: 0;
+  top: -12px;
+  right: -12px;
+  transition: opacity .3s ease;
+}
+.gear i {
+  line-height: 32px;
+  transition: transform .5s ease;
+}
+
+.card:hover > .gear {
+  opacity: 1;
+}
+.card:hover > .gear > i {
+  transform: rotate(90deg);
+}
+.visible {
+  position: relative;
+  display: block;
+  width: auto;
+  height: auto;
+}
+.menu extends .visible {
+  
+}
+.options extends .visible {
+  
+}
+.options a {
+  color: #545454 !important;
+  font-size: small;
+  text-decoration: none;
+}
+.options i {
+  font-size: inherit;
+  margin-right: .5em;
+  transform: translateY(2px);
 }
 .button {
   position: absolute;
@@ -84,6 +139,43 @@ ThumbLink.propTypes = {
   img: PropTypes.string,
   to: PropTypes.string,
   title: PropTypes.string
+}
+
+/**
+ * @param {Event} e event
+ * @return {undefined}
+ */
+function doNotBubble (e) {
+  e.preventDefault()
+}
+
+export const Menu = ({children}) => (
+  <span className={String(style.gear)} onClick={doNotBubble}>
+    <i className='material-icons'>settings</i>
+    <Tooltip hover>
+      <div className={`mdl-menu__container is-visible ${style.menu}`}>
+        <ul className={`mdl-menu ${style.options}`}>
+          {children}
+        </ul>
+      </div>
+    </Tooltip>
+  </span>
+)
+
+Menu.displayName = 'Menu'
+Menu.propTypes = {
+  children: PropTypes.node.isRequired
+}
+
+export const MenuItem = ({children}) => (
+  <li className='mdl-menu__item'>
+    {children}
+  </li>
+)
+
+MenuItem.displayName = 'Menu-Item'
+MenuItem.propTypes = {
+  children: PropTypes.node.isRequired
 }
 
 export function ThumbButton ({to, title, label, img}) {
