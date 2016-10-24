@@ -9,14 +9,13 @@ import React from 'react'
 import Fence from './Fence'
 import SearchBox from './HeaderSearchBox'
 import {contextualize} from './higher-order/contextualize'
-import {Container, Title, ThumbLink, Menu, MenuItem} from './ThumbLink'
+import {Container, Title, ThumbLink, Menu, HeaderMenuItem, MenuItem} from './ThumbLink'
 import SubHeader from './SubHeader'
 import Page from './Page'
 import {Link} from 'react-router'
 import {deleteWorkspaceAction} from '../actions/delete-workspace'
 import {loadCompanyWorkspacesAction} from '../actions/load-company-workspaces'
 import DeleteButton from './DeleteButton'
-
 const {PropTypes} = React
 const cleanStr = str => trim(deburr(lowerCase(str)))
 
@@ -29,6 +28,11 @@ function Workspace ({company, workspace, deleteWorkspace}) {
     <ThumbLink to={`/company/${company}/workspace/${workspace.id}`} title={workspace.name}>
       <Title>{workspace.name}</Title>
       <Menu>
+        <HeaderMenuItem icon={workspace.is_favorite ? 'star' : 'star_border'}>
+          <Message>
+            {workspace.is_favorite ? 'unfaveWorkspace' : 'faveWorkspace'}
+          </Message>
+        </HeaderMenuItem>
         <MenuItem tag={Link} to={`/company/${company}/workspace/${workspace.id}/edit`} icon='mode_edit'>
           <Message>editWorkspace</Message>
         </MenuItem>

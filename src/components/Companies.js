@@ -16,17 +16,11 @@ const Companies = ({user}) => (
         <ThumbLink key={id} title={name} to={`/company/${id}`} img={icon}>
           {icon ? null : <Title>{name}</Title>}
           <Menu>
-            <MenuItem>
-              <a href={`${process.env.FRONT_URL}/dashboard/company/${id}/info`}>
-                <i className='material-icons'>info_outline</i>
-                <Message>manageCompany</Message>
-              </a>
+            <MenuItem tag='a' href={`${process.env.FRONT_URL}/dashboard/company/${id}/info`} icon='info_outline'>
+              <Message>manageCompany</Message>
             </MenuItem>
-            <MenuItem>
-              <Link to={`/company/${id}/orders`}>
-                <i className='material-icons'>attach_money</i>
-                <Message>companyOrders</Message>
-              </Link>
+            <MenuItem tag={Link} to={`/company/${id}/orders`} icon='attach_money'>
+              <Message>companyOrders</Message>
             </MenuItem>
           </Menu>
         </ThumbLink>
