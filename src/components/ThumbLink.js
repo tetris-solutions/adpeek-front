@@ -51,6 +51,7 @@ const style = csjs`
   font-size: large;
   font-weight: bold;
   line-height: 1.2em;
+  margin: 0;
 }
 .sad {
   background-color: rgb(240, 240, 240);
