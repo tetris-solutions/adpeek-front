@@ -11,6 +11,7 @@ import OrderPie from './OrderPie'
 import OrderSpawnAutoBudget from './OrderSpawnAutoBudget'
 import Fence from './Fence'
 import SubHeader from './SubHeader'
+import Page from './Page'
 
 const {PropTypes} = React
 const notPercentage = budget => budget && budget.mode === 'amount'
@@ -49,7 +50,7 @@ export function OrderEdit ({
         </SubHeader>}
       </Fence>
 
-      <section>
+      <Page>
         <OrderHeader
           min={some(order.budgets, notPercentage) ? Math.max(1, order.amount - remainingValue) : 1}
           change={changeOrderField}
@@ -88,7 +89,7 @@ export function OrderEdit ({
             )}
           </div>
         </div>
-      </section>
+      </Page>
     </div>
   )
 }

@@ -1,18 +1,22 @@
 import React from 'react'
-import ContextMenu from './ContextMenu'
 import {contextualize} from './higher-order/contextualize'
 import {Link} from 'react-router'
 import Message from 'tetris-iso/Message'
+import {Navigation, Button, Buttons, Name} from './Navigation'
 
 const {PropTypes} = React
 
 export const CampaignAside = ({params: {company, workspace, folder}, campaign}) =>
-  <ContextMenu title={campaign.name} icon='format_shapes'>
-    <Link className='mdl-navigation__link' to={`/company/${company}/workspace/${workspace}/folder/${folder}`}>
-      <i className='material-icons'>close</i>
-      <Message>oneLevelUpNavigation</Message>
-    </Link>
-  </ContextMenu>
+  <Navigation icon='format_shapes'>
+    <Name>
+      {campaign.name}
+    </Name>
+    <Buttons>
+      <Button tag={Link} to={`/company/${company}/workspace/${workspace}/folder/${folder}`} icon='close'>
+        <Message>oneLevelUpNavigation</Message>
+      </Button>
+    </Buttons>
+  </Navigation>
 
 CampaignAside.displayName = 'Campaign-Aside'
 CampaignAside.propTypes = {

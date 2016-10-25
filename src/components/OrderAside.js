@@ -2,10 +2,10 @@ import Message from 'tetris-iso/Message'
 import React from 'react'
 import {Link} from 'react-router'
 import Fence from './Fence'
-import ContextMenu from './ContextMenu'
 import DeleteButton from './DeleteButton'
 import {deleteOrderAction} from '../actions/delete-order'
 import {contextualize} from './higher-order/contextualize'
+import {Navigation, Name, Button, Buttons} from './Navigation'
 
 const {PropTypes} = React
 
@@ -19,32 +19,30 @@ export function OrderAside ({params: {company, workspace, folder}, order, dispat
 
   return (
     <Fence canEditOrder>{({canEditOrder}) =>
-      <ContextMenu title={order.name} icon='monetization_on'>
-        {canEditOrder && <Link className='mdl-navigation__link' to={`${folderUrl}/order/${order.id}`}>
-          <i className='material-icons'>mode_edit</i>
-          <Message>editOrder</Message>
-        </Link>}
+      <Navigation icon='monetization_on'>
+        <Name>{order.name}</Name>
+        <Buttons>
+          {canEditOrder && <Button tag={Link} to={`${folderUrl}/order/${order.id}`} icon='mode_edit'>
+            <Message>editOrder</Message>
+          </Button>}
 
-        {canEditOrder && <Link className='mdl-navigation__link' to={`${folderUrl}/orders/clone?id=${order.id}`}>
-          <i className='material-icons'>content_copy</i>
-          <Message>cloneSingleOrder</Message>
-        </Link>}
+          {canEditOrder && <Button tag={Link} to={`${folderUrl}/orders/clone?id=${order.id}`} icon='content_copy'>
+            <Message>cloneSingleOrder</Message>
+          </Button>}
 
-        <Link className='mdl-navigation__link' to={`${folderUrl}/order/${order.id}/autobudget`}>
-          <i className='material-icons'>today</i>
-          <Message>autoBudgetLog</Message>
-        </Link>
+          <Button tag={Link} to={`${folderUrl}/order/${order.id}/autobudget`} icon='today'>
+            <Message>autoBudgetLog</Message>
+          </Button>
 
-        {canEditOrder && <DeleteButton entityName={order.name} className='mdl-navigation__link' onClick={onClick}>
-          <i className='material-icons'>delete</i>
-          <Message>deleteOrder</Message>
-        </DeleteButton>}
+          {canEditOrder && <Button tag={DeleteButton} entityName={order.name} onClick={onClick} icon='delete'>
+            <Message>deleteOrder</Message>
+          </Button>}
 
-        <Link className='mdl-navigation__link' to={`${folderUrl}/orders`}>
-          <i className='material-icons'>close</i>
-          <Message>oneLevelUpNavigation</Message>
-        </Link>
-      </ContextMenu>}
+          <Button tag={Link} to={`${folderUrl}/orders`} icon='close'>
+            <Message>oneLevelUpNavigation</Message>
+          </Button>
+        </Buttons>
+      </Navigation>}
     </Fence>
   )
 }

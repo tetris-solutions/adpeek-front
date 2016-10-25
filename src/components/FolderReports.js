@@ -1,15 +1,20 @@
 import React from 'react'
-import {ThumbLink, ThumbButton} from './ThumbLink'
 import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
 import {contextualize} from './higher-order/contextualize'
 import Fence from './Fence'
+import Page from './Page'
+import {Container, Title, ThumbLink} from './ThumbLink'
+import SubHeader, {SubHeaderButton} from './SubHeader'
+import {Link} from 'react-router'
 
 const {PropTypes} = React
 
-function Report ({company, workspace, folder, id, name}) {
-  return <ThumbLink to={`/company/${company}/workspace/${workspace}/folder/${folder}/report/${id}`} title={name}/>
-}
+const Report = ({company, workspace, folder, id, name}) => (
+  <ThumbLink to={`/company/${company}/workspace/${workspace}/folder/${folder}/report/${id}`} title={name}>
+    <Title>{name}</Title>
+  </ThumbLink>
+)
 
 Report.displayName = 'Report'
 Report.propTypes = {
@@ -34,21 +39,24 @@ export const Reports = React.createClass({
 
     return (
       <div>
-        <div className='mdl-grid'>
-          {map(reports, (report, index) =>
-            <Report
-              key={index} {...report}
-              folder={id}
-              workspace={workspace}
-              company={company}/>)}
-
+        <SubHeader>
           <Fence canEditReport>
-            <ThumbButton
-              title={<Message>newReportHeader</Message>}
-              label={<Message>newReportCallToAction</Message>}
-              to={`/company/${company}/workspace/${workspace}/folder/${id}/reports/new`}/>
+            <SubHeaderButton tag={Link} to={`/company/${company}/workspace/${workspace}/folder/${id}/reports/new`}>
+              <i className='material-icons'>add</i>
+              <Message>newReportHeader</Message>
+            </SubHeaderButton>
           </Fence>
-        </div>
+        </SubHeader>
+        <Page>
+          <Container>
+            {map(reports, (report, index) =>
+              <Report
+                key={index} {...report}
+                folder={id}
+                workspace={workspace}
+                company={company}/>)}
+          </Container>
+        </Page>
       </div>
     )
   }

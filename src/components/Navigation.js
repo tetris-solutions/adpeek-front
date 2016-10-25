@@ -55,7 +55,7 @@ export const Button = props => {
   return (
     <Tag className={className} {...otherProps}>
       {icon ? <i className='material-icons'>{icon}</i> : null}
-      {children}
+      {children || null}
     </Tag>
   )
 }
@@ -69,7 +69,7 @@ Button.propTypes = {
   to: PropTypes.string,
   icon: PropTypes.string,
   onClick: PropTypes.func,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node
 }
 
 export const Buttons = ({children}) => (

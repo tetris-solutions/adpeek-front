@@ -4,7 +4,6 @@ import React from 'react'
 import {Link} from 'react-router'
 import TextMessage from 'intl-messageformat'
 import Fence from './Fence'
-import ContextMenu from './ContextMenu'
 import DeleteButton from './DeleteButton'
 import {deleteReportAction} from '../actions/delete-report'
 import {loadFolderReportAction} from '../actions/load-folder-report'
@@ -12,6 +11,7 @@ import {setFolderReportAction} from '../actions/set-folder-report'
 import {contextualize} from './higher-order/contextualize'
 import ReportAccessControl from './ReportAccessControl'
 import ReportEditPrompt from './ReportEditPrompt'
+import {Name, Navigation, Button, Buttons} from './Navigation'
 
 const {PropTypes} = React
 
@@ -44,45 +44,47 @@ export function ReportAside ({report, dispatch, user}, {messages, locales, route
   return (
     <Fence canEditReport canBrowseReports>
       {({canEditReport, canBrowseReports}) =>
-        <ContextMenu title={report.name} icon='trending_up'>
-          {canBrowseReports && <a className='mdl-navigation__link' onClick={favorite} title={favTitle}>
-            <i className='material-icons'>{report.is_user_selected ? 'star' : 'star_border'}</i>
-            <Message>{report.is_user_selected ? 'unfavoriteReport' : 'favoriteReport'}</Message>
-          </a>}
+        <Navigation icon='trending_up'>
+          <Name>{report.name}</Name>
 
-          {canEditReport && (
-            <ReportAccessControl
-              dispatch={dispatch}
-              reload={reload}
-              params={params}
-              report={report}
-              user={user}/>)}
+          <Buttons>
+            {canBrowseReports && (
+              <Button onClick={favorite} title={favTitle} icon={report.is_user_selected ? 'star' : 'star_border'}>
+                <Message>{report.is_user_selected ? 'unfavoriteReport' : 'favoriteReport'}</Message>
+              </Button>)}
 
-          {canEditReport && <Link className='mdl-navigation__link' to={cloneUrl}>
-            <i className='material-icons'>content_copy</i>
-            <Message>cloneReport</Message>
-          </Link>}
+            {canEditReport && (
+              <Button
+                icon='share'
+                tag={ReportAccessControl}
+                dispatch={dispatch}
+                reload={reload}
+                params={params}
+                report={report}
+                user={user}/>)}
 
-          {canEditReport && !inEditMode && shouldSkipEditPrompt && (
-            <Link className='mdl-navigation__link' to={`${folderUrl}/report/${report.id}/edit`}>
-              <i className='material-icons'>create</i>
-              <Message>editReport</Message>
-            </Link>)}
+            {canEditReport && <Button tag={Link} to={cloneUrl} icon='content_copy'>
+              <Message>cloneReport</Message>
+            </Button>}
 
-          {canEditReport && !inEditMode && !shouldSkipEditPrompt && (
-            <ReportEditPrompt report={report} params={params}/>)}
+            {canEditReport && !inEditMode && shouldSkipEditPrompt && (
+              <Button tag={Link} to={`${folderUrl}/report/${report.id}/edit`} icon='create'>
+                <Message>editReport</Message>
+              </Button>)}
 
-          {canEditReport && (
-            <DeleteButton entityName={report.name} className='mdl-navigation__link' onClick={deleteReport}>
-              <i className='material-icons'>delete</i>
-              <Message>deleteReport</Message>
-            </DeleteButton>)}
+            {canEditReport && !inEditMode && !shouldSkipEditPrompt && (
+              <Button tag={ReportEditPrompt} report={report} params={params} icon='create'/>)}
 
-          <Link className='mdl-navigation__link' to={canBrowseReports ? `${folderUrl}/reports` : folderUrl}>
-            <i className='material-icons'>close</i>
-            <Message>oneLevelUpNavigation</Message>
-          </Link>
-        </ContextMenu>}
+            {canEditReport && (
+              <Button tag={DeleteButton} entityName={report.name} onClick={deleteReport} icon='delete'>
+                <Message>deleteReport</Message>
+              </Button>)}
+
+            <Button tag={Link} to={canBrowseReports ? `${folderUrl}/reports` : folderUrl} icon='close'>
+              <Message>oneLevelUpNavigation</Message>
+            </Button>
+          </Buttons>
+        </Navigation>}
     </Fence>
   )
 }

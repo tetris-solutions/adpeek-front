@@ -9,6 +9,7 @@ const isBrowser = typeof window !== 'undefined'
 const style = csjs`
 .wrapper {
   overflow: auto;
+  background: white
 }
 .grid {
   display: flex;
@@ -36,6 +37,11 @@ export const AdGroups = React.createClass({
   mixins: [styled(style)],
   propTypes: {
     adGroups: PropTypes.array
+  },
+  getDefaultProps () {
+    return {
+      adGroups: []
+    }
   },
   componentDidMount () {
     fitWrapper(this.refs.wrapper)

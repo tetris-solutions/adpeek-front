@@ -8,6 +8,7 @@ import LoadingHorizontal from './LoadingHorizontal'
 import {createCampaignAdGroupsReportAction} from '../actions/create-campaign-adgroups-report'
 import DownloadReportButton from './DownloadReportButton'
 import SubHeader from './SubHeader'
+import Page from './Page'
 
 const {PropTypes} = React
 
@@ -76,7 +77,7 @@ export const Campaign = React.createClass({
     const {creatingReport, isLoading} = this.state
     const {campaign} = this.props
     const inner = campaign.platform === 'adwords'
-      ? <AdGroups adGroups={campaign.adGroups || []}/>
+      ? <AdGroups adGroups={campaign.adGroups}/>
       : <NotImplemented />
 
     return (
@@ -87,12 +88,13 @@ export const Campaign = React.createClass({
             extract={this.extractReport}
             report={campaign.adGroupsReport}/>
         </SubHeader>
-
-        {isLoading ? (
-          <LoadingHorizontal>
-            <Message>loadingAds</Message>
-          </LoadingHorizontal>
-        ) : inner}
+        <Page>
+          {isLoading ? (
+            <LoadingHorizontal>
+              <Message>loadingAds</Message>
+            </LoadingHorizontal>
+          ) : inner}
+        </Page>
       </div>
     )
   }

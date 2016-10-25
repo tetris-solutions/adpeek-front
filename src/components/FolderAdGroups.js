@@ -8,6 +8,7 @@ import NotImplemented from './AdGroupsNotImplemented'
 import LoadingHorizontal from './LoadingHorizontal'
 import DownloadReportButton from './DownloadReportButton'
 import SubHeader from './SubHeader'
+import Page from './Page'
 
 const {PropTypes} = React
 
@@ -75,7 +76,7 @@ export const FolderAdGroups = React.createClass({
     const {creatingReport, isLoading} = this.state
     const {folder} = this.props
     const inner = folder.account.platform === 'adwords'
-      ? <AdGroups adGroups={folder.adGroups || []}/>
+      ? <AdGroups adGroups={folder.adGroups}/>
       : <NotImplemented />
 
     return (
@@ -86,12 +87,13 @@ export const FolderAdGroups = React.createClass({
             extract={this.extractReport}
             report={folder.adGroupsReport}/>
         </SubHeader>
-
-        {isLoading ? (
-          <LoadingHorizontal>
-            <Message>loadingAds</Message>
-          </LoadingHorizontal>
-        ) : inner}
+        <Page>
+          {isLoading ? (
+            <LoadingHorizontal>
+              <Message>loadingAds</Message>
+            </LoadingHorizontal>
+          ) : inner}
+        </Page>
       </div>
     )
   }

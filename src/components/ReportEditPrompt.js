@@ -15,6 +15,8 @@ const ReportEditPrompt = React.createClass({
     }
   },
   propTypes: {
+    children: PropTypes.node.isRequired,
+    className: PropTypes.string.isRequired,
     report: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired
   },
@@ -62,11 +64,11 @@ const ReportEditPrompt = React.createClass({
     this.remember()
   },
   render () {
-    const {report} = this.props
+    const {report, children, className} = this.props
 
     return (
-      <a className='mdl-navigation__link' onClick={this.open}>
-        <i className='material-icons'>create</i>
+      <a className={className} onClick={this.open}>
+        {children}
         <Message>editReport</Message>
         {this.state.isModalOpen ? (
           <Modal onEscPress={this.closeModalAnd}>

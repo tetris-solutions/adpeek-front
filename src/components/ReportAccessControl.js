@@ -140,6 +140,8 @@ const ReportAccessControl = React.createClass({
     }
   },
   propTypes: {
+    className: PropTypes.string.isRequired,
+    children: PropTypes.node.isRequired,
     dispatch: PropTypes.func.isRequired,
     reload: PropTypes.func.isRequired,
     report: PropTypes.object.isRequired,
@@ -167,11 +169,11 @@ const ReportAccessControl = React.createClass({
     this.setState({isModalOpen: false})
   },
   render () {
-    const {report, user} = this.props
+    const {report, user, className, children} = this.props
 
     return (
-      <a className='mdl-navigation__link' onClick={this.open}>
-        <i className='material-icons'>share</i>
+      <a className={className} onClick={this.open}>
+        {children}
         <Message>reportAccessControl</Message>
         {this.state.isModalOpen ? (
           <Modal size='large' onEscPress={this.close}>

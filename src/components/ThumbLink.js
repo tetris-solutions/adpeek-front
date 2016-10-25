@@ -191,35 +191,6 @@ Gear.propTypes = {
   children: PropTypes.node.isRequired
 }
 
-export function ThumbButton ({to, title, label, img}) {
-  return (
-    <div className={String(style.card)}>
-      <div className='mdl-card mdl-shadow--2dp'>
-        <div
-          className={`mdl-card__title mdl-card--expand ${style.expand}`}
-          style={img ? backgroundStyle(img) : undefined}>
-          <h3 className='mdl-card__title-text'>
-            {title}
-          </h3>
-        </div>
-        <div className='mdl-card__actions mdl-card--border'>
-          <Link className='mdl-button mdl-button--colored' to={to}>
-            {label}
-          </Link>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-ThumbButton.displayName = 'Thumb-Button'
-ThumbButton.propTypes = {
-  img: PropTypes.string,
-  to: PropTypes.string,
-  title: PropTypes.node,
-  label: PropTypes.node
-}
-
 const Parent = ({children}) => (
   <div className={String(style.container)}>
     {children}

@@ -20,6 +20,7 @@ import {exportReportAction} from '../actions/export-report'
 import {updateReportAction} from '../actions/update-report'
 import {serializeReportModules} from '../functions/seralize-report-modules'
 import {contextualize} from './higher-order/contextualize'
+import Page from './Page'
 
 const {PropTypes} = React
 
@@ -151,26 +152,30 @@ const Report = React.createClass({
             isCreatingReport={isCreatingReport}
             isLoading={isLoading}/>
         </SubHeader>
-        <div className='mdl-grid' ref='grid'>
-          {isLoading ? (
-            <LoadingHorizontal>
-              <Message>loadingReport</Message>
-            </LoadingHorizontal>
-          ) : map(sortBy(modules, 'index'), (module, index) => (
-            <div
-              data-report-module={module.id}
-              key={module.id}
-              className={`mdl-cell mdl-cell--${module.cols}-col`}>
+        <Page>
+          <div style={{position: 'relative', width: '100%'}}>
+            <div className='mdl-grid' ref='grid'>
+              {isLoading ? (
+                <LoadingHorizontal>
+                  <Message>loadingReport</Message>
+                </LoadingHorizontal>
+              ) : map(sortBy(modules, 'index'), (module, index) => (
+                <div
+                  data-report-module={module.id}
+                  key={module.id}
+                  className={`mdl-cell mdl-cell--${module.cols}-col`}>
 
-              <Module
-                changeDateRange={this.onChangeRange}
-                module={module}
-                editable={editMode}
-                metaData={get(metaData, [platform, module.entity])}
-                reportParams={reportParams}
-                entities={this.props.entities}/>
-            </div>))}
-        </div>
+                  <Module
+                    changeDateRange={this.onChangeRange}
+                    module={module}
+                    editable={editMode}
+                    metaData={get(metaData, [platform, module.entity])}
+                    reportParams={reportParams}
+                    entities={this.props.entities}/>
+                </div>))}
+            </div>
+          </div>
+        </Page>
       </div>
     )
   }
