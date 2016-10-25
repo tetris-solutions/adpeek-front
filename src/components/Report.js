@@ -153,27 +153,25 @@ const Report = React.createClass({
             isLoading={isLoading}/>
         </SubHeader>
         <Page>
-          <div style={{position: 'relative', width: '100%'}}>
-            <div className='mdl-grid' ref='grid'>
-              {isLoading ? (
-                <LoadingHorizontal>
-                  <Message>loadingReport</Message>
-                </LoadingHorizontal>
-              ) : map(sortBy(modules, 'index'), (module, index) => (
-                <div
-                  data-report-module={module.id}
-                  key={module.id}
-                  className={`mdl-cell mdl-cell--${module.cols}-col`}>
+          <div className='mdl-grid' ref='grid'>
+            {isLoading ? (
+              <LoadingHorizontal>
+                <Message>loadingReport</Message>
+              </LoadingHorizontal>
+            ) : map(sortBy(modules, 'index'), (module, index) => (
+              <div
+                data-report-module={module.id}
+                key={module.id}
+                className={`mdl-cell mdl-cell--${module.cols}-col`}>
 
-                  <Module
-                    changeDateRange={this.onChangeRange}
-                    module={module}
-                    editable={editMode}
-                    metaData={get(metaData, [platform, module.entity])}
-                    reportParams={reportParams}
-                    entities={this.props.entities}/>
-                </div>))}
-            </div>
+                <Module
+                  changeDateRange={this.onChangeRange}
+                  module={module}
+                  editable={editMode}
+                  metaData={get(metaData, [platform, module.entity])}
+                  reportParams={reportParams}
+                  entities={this.props.entities}/>
+              </div>))}
           </div>
         </Page>
       </div>
