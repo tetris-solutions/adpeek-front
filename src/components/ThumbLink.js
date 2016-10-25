@@ -105,7 +105,7 @@ const style = csjs`
   color: #545454 !important;
   font-size: small;
   text-decoration: none;
-  display: inline-block;
+  display: block;
 }
 .ico {
   font-size: inherit;
