@@ -10,7 +10,9 @@ import Fence from './Fence'
 import SubHeader from './SubHeader'
 import SearchBox from './HeaderSearchBox'
 import {contextualize} from './higher-order/contextualize'
-import {ThumbLink, ThumbButton} from './ThumbLink'
+import {Container, ThumbLink} from './ThumbLink'
+import {Link} from 'react-router'
+import Page from './Page'
 
 const cleanStr = str => trim(deburr(lowerCase(str)))
 
@@ -54,20 +56,24 @@ export const Folders = React.createClass({
 
     return (
       <div>
-        <SubHeader title={<Message>folderList</Message>}>
+        <SubHeader>
+          <Fence canEditFolder>
+            <Link className='mdl-button mdl-color-text--white' to={`/company/${company.id}/workspace/${id}/create/folder`}>
+              <i className='material-icons'>add</i>
+              <Message>newFolderHeader</Message>
+            </Link>
+          </Fence>
           <SearchBox onChange={this.onChange}/>
         </SubHeader>
-        <div className='mdl-grid'>
-          {map(matchingFolders, (folder, index) =>
-            <Folder key={index} {...folder} workspace={id} company={company.id}/>)}
-
-          <Fence canEditFolder>
-            <ThumbButton
-              title={<Message>newFolderHeader</Message>}
-              label={<Message>newFolderCallToAction</Message>}
-              to={`/company/${company.id}/workspace/${id}/create/folder`}/>
-          </Fence>
-        </div>
+        <Page>
+          <Container>
+            <h5>
+              <Message>folderList</Message>
+            </h5>
+            {map(matchingFolders, (folder, index) =>
+              <Folder key={index} {...folder} workspace={id} company={company.id}/>)}
+          </Container>
+        </Page>
       </div>
     )
   }

@@ -1,6 +1,7 @@
 import React from 'react'
 import csjs from 'csjs'
 import {styledFnComponent} from './higher-order/styled-fn-component'
+import omit from 'lodash/omit'
 
 const {PropTypes} = React
 const style = csjs`
@@ -31,30 +32,33 @@ const style = csjs`
 }
 .button {
   display: block;
-  margin: .5em 0;
-  line-height: 3em;
+  margin: .7em 0;
+  padding: 0;
+  line-height: 3.5em;
   height: auto;
   text-transform: none;
   text-align: left;
-  padding: 0 10px 0 20px;
+  width: 100%;
 }
 .button i {
-  margin-right: .5em;
+  margin: 0 .5em 0 1em;
 }
 .name {
   margin-left: 20px;
 }`
 
-export const Button = ({tag: Tag, href, to, onClick, children, icon}) => (
-  <Tag className={`mdl-button mdl-button--raised mdl-button--colored mdl-color--primary-dark ${style.button}`} {...{
-    href,
-    to,
-    onClick
-  }}>
-    {icon ? <i className='material-icons'>{icon}</i> : null}
-    {children}
-  </Tag>
-)
+export const Button = props => {
+  const {tag: Tag, children, icon} = props
+  const otherProps = omit(props, 'tag', 'icon', 'children')
+  const className = `mdl-button mdl-button--raised mdl-button--colored mdl-color--primary-dark ${style.button}`
+
+  return (
+    <Tag className={className} {...otherProps}>
+      {icon ? <i className='material-icons'>{icon}</i> : null}
+      {children}
+    </Tag>
+  )
+}
 Button.displayName = 'Button'
 Button.defaultProps = {
   tag: 'a'

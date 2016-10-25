@@ -53,7 +53,7 @@ const Page = React.createClass({
     routes: PropTypes.array.isRequired
   },
   getInitialState () {
-    return {isNavOpen: false}
+    return {isNavOpen: true}
   },
   toggleNav () {
     this.setState({isNavOpen: !this.state.isNavOpen})

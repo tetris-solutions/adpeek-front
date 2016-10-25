@@ -5,6 +5,7 @@ import Fence from './Fence'
 import DeleteButton from './DeleteButton'
 import {deleteWorkspaceAction} from '../actions/delete-workspace'
 import {contextualize} from './higher-order/contextualize'
+import {Navigation, Button, Buttons, Name} from './Navigation'
 
 const {PropTypes} = React
 
@@ -16,33 +17,31 @@ export function WorkspaceAside ({params: {company}, workspace, dispatch}, {route
 
   return (
     <Fence canEditWorkspace>{({canEditWorkspace}) =>
-      <div>
-        <div>
-          <i className='material-icons'>domain</i>
-          <h5>{workspace.name}</h5>
-        </div>
-        {canEditWorkspace && (
-          <Link className='mdl-button' to={`/company/${company}/workspace/${workspace.id}/edit`}>
-            <i className='material-icons'>mode_edit</i>
-            <Message>editWorkspace</Message>
-          </Link>)}
+      <Navigation icon='domain'>
+        <Name>
+          {workspace.name}
+        </Name>
+        <br/>
+        <Buttons>
+          {canEditWorkspace && (
+            <Button tag={Link} to={`/company/${company}/workspace/${workspace.id}/edit`} icon='mode_edit'>
+              <Message>editWorkspace</Message>
+            </Button>)}
 
-        <Link className='mdl-button' to={`/company/${company}/workspace/${workspace.id}/orders`}>
-          <i className='material-icons'>attach_money</i>
-          <Message>workspaceOrders</Message>
-        </Link>
+          <Button tag={Link} to={`/company/${company}/workspace/${workspace.id}/orders`} icon='attach_money'>
+            <Message>workspaceOrders</Message>
+          </Button>
 
-        {canEditWorkspace && (
-          <DeleteButton entityName={workspace.name} className='mdl-button' onClick={onClick}>
-            <i className='material-icons'>delete</i>
-            <Message>deleteWorkspace</Message>
-          </DeleteButton>)}
+          {canEditWorkspace && (
+            <Button tag={DeleteButton} entityName={workspace.name} onClick={onClick} icon='delete'>
+              <Message>deleteWorkspace</Message>
+            </Button>)}
 
-        <Link className='mdl-button' to={`/company/${company}`}>
-          <i className='material-icons'>close</i>
-          <Message>oneLevelUpNavigation</Message>
-        </Link>
-      </div>}
+          <Button tag={Link} to={`/company/${company}`} icon='close'>
+            <Message>oneLevelUpNavigation</Message>
+          </Button>
+        </Buttons>
+      </Navigation>}
     </Fence>
   )
 }

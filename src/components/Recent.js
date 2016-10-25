@@ -50,7 +50,7 @@ const Recent = React.createClass({
   getList () {
     return this.props.node[camelCase(`recent ${this.props.level}`)]
   },
-  componentWillMount () {
+  componentDidMount () {
     const {dispatch, params, level} = this.props
 
     dispatch(loadRecentAction, level, params)

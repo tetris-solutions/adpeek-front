@@ -155,7 +155,10 @@ export const Workspaces = React.createClass({
         </SubHeader>
         <Page>
           <Container>
-            {anyFave && <h5><Message>faveWorkspaceList</Message></h5>}
+            {anyFave && (
+              <h5>
+                <Message>faveWorkspaceList</Message>
+              </h5>)}
 
             {map(groupedByFaveStatus.true, (workspace, index) =>
               <Workspace
