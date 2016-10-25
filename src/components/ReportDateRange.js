@@ -42,7 +42,7 @@ function ReportDateRange ({startDate, endDate, onChange, buttonClassName}) {
   )
 
   return (
-    <ButtonWithPrompt className={buttonClassName} label={label}>
+    <ButtonWithPrompt className={buttonClassName} label={label} size='medium'>
       {({dismiss}) => (
         <DateRangeModal
           close={dismiss}

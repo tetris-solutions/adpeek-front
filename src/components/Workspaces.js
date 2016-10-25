@@ -12,7 +12,7 @@ import SearchBox from './HeaderSearchBox'
 import {contextualize} from './higher-order/contextualize'
 import {Container, ThumbLink, BottomLine, Cap, Gear} from './ThumbLink'
 import {DropdownMenu, MenuItem, HeaderMenuItem} from './DrodownMenu'
-import SubHeader from './SubHeader'
+import SubHeader, {SubHeaderButton} from './SubHeader'
 import Page from './Page'
 import {Link} from 'react-router'
 import {deleteWorkspaceAction} from '../actions/delete-workspace'
@@ -145,13 +145,12 @@ export const Workspaces = React.createClass({
       <div>
         <SubHeader>
           <Fence canEditWorkspace>
-            <Link className='mdl-button mdl-color-text--white' to={`/company/${id}/create/workspace`}>
+            <SubHeaderButton tag={Link} to={`/company/${id}/create/workspace`}>
               <i className='material-icons'>add</i>
               <Message>newWorkspaceHeader</Message>
-            </Link>
+            </SubHeaderButton>
           </Fence>
           <SearchBox onChange={this.onChange}/>
-
         </SubHeader>
         <Page>
           <Container>

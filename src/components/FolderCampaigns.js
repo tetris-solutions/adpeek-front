@@ -15,6 +15,7 @@ import {loadCampaignsAction} from '../actions/load-campaigns'
 import {loadLooseCampaignsAction} from '../actions/load-loose-campaigns'
 import {unlinkCampaignsAction} from '../actions/unlink-campaign'
 import {contextualize} from './higher-order/contextualize'
+import Page from './Page'
 
 const {PropTypes} = React
 
@@ -122,28 +123,30 @@ const FolderCampaigns = React.createClass({
           onChange={this.setFilterValue}/>
 
         <Fence canEditCampaign>{({canEditCampaign}) =>
-          <div className='mdl-grid'>
-            <div className='mdl-cell mdl-cell--7-col'>
-              <FolderCampaignsSelector
-                renderer={FolderCampaignLi}
-                onSelected={this.unlink}
-                campaigns={linked}
-                readOnly={!canEditCampaign}
-                title={<Message n={String(linked.length)}>nCampaigns</Message>}
-                label={messages.unlinkCampaignsCallToAction}/>
+          <Page>
+            <div className='mdl-grid'>
+              <div className='mdl-cell mdl-cell--7-col'>
+                <FolderCampaignsSelector
+                  renderer={FolderCampaignLi}
+                  onSelected={this.unlink}
+                  campaigns={linked}
+                  readOnly={!canEditCampaign}
+                  title={<Message n={String(linked.length)}>nCampaigns</Message>}
+                  label={messages.unlinkCampaignsCallToAction}/>
+              </div>
+              <div className='mdl-cell mdl-cell--5-col'>
+                <FolderCampaignsSelector
+                  isLoading={isLoading}
+                  renderer={FolderCampaignLooseLi}
+                  headerColor='grey-600'
+                  campaigns={sortBy(loose, hasFolder)}
+                  readOnly={!canEditCampaign}
+                  onSelected={this.link}
+                  title={<Message n={String(loose.length)}>nLooseCampaigns</Message>}
+                  label={messages.linkCampaignsCallToAction}/>
+              </div>
             </div>
-            <div className='mdl-cell mdl-cell--5-col'>
-              <FolderCampaignsSelector
-                isLoading={isLoading}
-                renderer={FolderCampaignLooseLi}
-                headerColor='grey-600'
-                campaigns={sortBy(loose, hasFolder)}
-                readOnly={!canEditCampaign}
-                onSelected={this.link}
-                title={<Message n={String(loose.length)}>nLooseCampaigns</Message>}
-                label={messages.linkCampaignsCallToAction}/>
-            </div>
-          </div>}
+          </Page>}
         </Fence>
       </div>
     )

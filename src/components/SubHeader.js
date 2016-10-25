@@ -2,6 +2,7 @@ import React from 'react'
 import Breadcrumbs from './Breadcrumbs'
 import {styledFnComponent} from './higher-order/styled-fn-component'
 import csjs from 'csjs'
+import omit from 'lodash/omit'
 
 const style = csjs`
 .row {
@@ -11,6 +12,22 @@ const style = csjs`
   text-transform: none;
 }`
 const {PropTypes} = React
+
+export const SubHeaderButton = props => {
+  const {tag: Tag, children} = props
+
+  return (
+    <Tag className='mdl-button mdl-color-text--white' {...omit(props, 'tag', 'children')}>
+      {children}
+    </Tag>
+  )
+}
+
+SubHeaderButton.displayName = 'Sub-Header-Button'
+SubHeaderButton.propTypes = {
+  children: PropTypes.node.isRequired,
+  tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string])
+}
 
 const SubHeader = ({title, children}) => (
   <header className='mdl-layout__header'>

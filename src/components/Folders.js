@@ -7,7 +7,7 @@ import trim from 'lodash/trim'
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import Fence from './Fence'
-import SubHeader from './SubHeader'
+import SubHeader, {SubHeaderButton} from './SubHeader'
 import SearchBox from './HeaderSearchBox'
 import {contextualize} from './higher-order/contextualize'
 import {Container, ThumbLink, Title} from './ThumbLink'
@@ -60,13 +60,10 @@ export const Folders = React.createClass({
       <div>
         <SubHeader>
           <Fence canEditFolder>
-            <Link
-              className='mdl-button mdl-color-text--white'
-              to={`/company/${company.id}/workspace/${id}/create/folder`}>
-
+            <SubHeaderButton tag={Link} to={`/company/${company.id}/workspace/${id}/create/folder`}>
               <i className='material-icons'>add</i>
               <Message>newFolderHeader</Message>
-            </Link>
+            </SubHeaderButton>
           </Fence>
           <SearchBox onChange={this.onChange}/>
         </SubHeader>
