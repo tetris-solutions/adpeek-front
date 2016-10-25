@@ -6,10 +6,13 @@ import DeleteButton from './DeleteButton'
 import {deleteWorkspaceAction} from '../actions/delete-workspace'
 import {contextualize} from './higher-order/contextualize'
 import {Navigation, Button, Buttons, Name} from './Navigation'
+import Recent from './Recent'
 
 const {PropTypes} = React
 
-export function WorkspaceAside ({params: {company}, workspace, dispatch}, {router}) {
+export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
+  const {company} = params
+
   function onClick () {
     dispatch(deleteWorkspaceAction, workspace.id)
       .then(() => router.replace(`/company/${company}`))
@@ -41,6 +44,14 @@ export function WorkspaceAside ({params: {company}, workspace, dispatch}, {route
             <Message>oneLevelUpNavigation</Message>
           </Button>
         </Buttons>
+        <br/>
+        <hr/>
+        <Recent
+          params={params}
+          dispatch={dispatch}
+          icon='folder'
+          level='folder'
+          node={workspace}/>
       </Navigation>}
     </Fence>
   )
