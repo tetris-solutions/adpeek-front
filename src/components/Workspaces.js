@@ -10,7 +10,8 @@ import React from 'react'
 import Fence from './Fence'
 import SearchBox from './HeaderSearchBox'
 import {contextualize} from './higher-order/contextualize'
-import {Container, ThumbLink, BottomLine, Cap, Menu, HeaderMenuItem, MenuItem} from './ThumbLink'
+import {Container, ThumbLink, BottomLine, Cap, Gear} from './ThumbLink'
+import {DropdownMenu, MenuItem, HeaderMenuItem} from './DrodownMenu'
 import SubHeader from './SubHeader'
 import Page from './Page'
 import {Link} from 'react-router'
@@ -65,19 +66,21 @@ const Workspace = ({company, workspace, del, fave, unfave}) => (
         </strong>
       </div>
     </BottomLine>
-    <Menu>
-      <HeaderMenuItem icon={workspace.favorite ? 'star' : 'star_border'} onClick={workspace.favorite ? unfave : fave}>
-        <Message>
-          {workspace.favorite ? 'unfaveWorkspace' : 'faveWorkspace'}
-        </Message>
-      </HeaderMenuItem>
-      <MenuItem tag={Link} to={`/company/${company}/workspace/${workspace.id}/edit`} icon='mode_edit'>
-        <Message>editWorkspace</Message>
-      </MenuItem>
-      <MenuItem tag={DeleteButton} span entityName={workspace.name} onClick={del} icon='delete'>
-        <Message>deleteWorkspace</Message>
-      </MenuItem>
-    </Menu>
+    <Gear>
+      <DropdownMenu>
+        <HeaderMenuItem icon={workspace.favorite ? 'star' : 'star_border'} onClick={workspace.favorite ? unfave : fave}>
+          <Message>
+            {workspace.favorite ? 'unfaveWorkspace' : 'faveWorkspace'}
+          </Message>
+        </HeaderMenuItem>
+        <MenuItem tag={Link} to={`/company/${company}/workspace/${workspace.id}/edit`} icon='mode_edit'>
+          <Message>editWorkspace</Message>
+        </MenuItem>
+        <MenuItem tag={DeleteButton} span entityName={workspace.name} onClick={del} icon='delete'>
+          <Message>deleteWorkspace</Message>
+        </MenuItem>
+      </DropdownMenu>
+    </Gear>
   </ThumbLink>
 )
 Workspace.displayName = 'Workspace'

@@ -3,7 +3,8 @@ import Message from 'tetris-iso/Message'
 import React from 'react'
 import {branch} from 'baobab-react/higher-order'
 import SubHeader from './SubHeader'
-import {Container, Menu, MenuItem, Title, ThumbLink} from './ThumbLink'
+import {Container, Gear, Title, ThumbLink} from './ThumbLink'
+import {DropdownMenu, MenuItem} from './DrodownMenu'
 import {Link} from 'react-router'
 
 const {PropTypes} = React
@@ -15,14 +16,16 @@ const Companies = ({user}) => (
       {map(user.companies, ({id, name, icon}) =>
         <ThumbLink key={id} title={name} to={`/company/${id}`} img={icon}>
           {icon ? null : <Title>{name}</Title>}
-          <Menu>
-            <MenuItem tag='a' href={`${process.env.FRONT_URL}/dashboard/company/${id}/info`} icon='info_outline'>
-              <Message>manageCompany</Message>
-            </MenuItem>
-            <MenuItem tag={Link} to={`/company/${id}/orders`} icon='attach_money'>
-              <Message>companyOrders</Message>
-            </MenuItem>
-          </Menu>
+          <Gear>
+            <DropdownMenu>
+              <MenuItem tag='a' href={`${process.env.FRONT_URL}/dashboard/company/${id}/info`} icon='info_outline'>
+                <Message>manageCompany</Message>
+              </MenuItem>
+              <MenuItem tag={Link} to={`/company/${id}/orders`} icon='attach_money'>
+                <Message>companyOrders</Message>
+              </MenuItem>
+            </DropdownMenu>
+          </Gear>
         </ThumbLink>
       )}
     </Container>
