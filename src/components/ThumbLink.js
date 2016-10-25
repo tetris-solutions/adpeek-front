@@ -13,6 +13,12 @@ const style = csjs`
   color: #7d7d7d;
   font-weight: bold;
 }
+.bottom {
+  position: absolute;
+  bottom: .7em;
+  left: .7em;
+  right: .7em;
+}
 .card {
   background: white;
   display: inline-block;
@@ -41,13 +47,10 @@ const style = csjs`
   left: .7em;
   right: .5em;
 }
-.title {
-  position: absolute;
+.title extends .bottom {
   font-size: large;
   font-weight: bold;
-  bottom: .7em;
   line-height: 1.2em;
-  margin: 0 .7em;
 }
 .sad {
   background-color: rgb(240, 240, 240);
@@ -117,6 +120,7 @@ const style = csjs`
 }
 .menuHeader > .ico {
   display: block;
+  margin-right: 0;
 }
 .button {
   position: absolute;
@@ -132,6 +136,15 @@ const backgroundStyle = img => ({
   background: `url(${img}) center/cover no-repeat`
 })
 
+export const BottomLine = ({children}) => (
+  <div className={`${style.bottom}`}>
+    {children}
+  </div>
+)
+BottomLine.displayName = 'Bottom-Line'
+BottomLine.propTypes = {
+  children: PropTypes.node.isRequired
+}
 export const Title = ({children}) => (
   <h4 className={`mdl-color-text--blue-800 ${style.title}`}>
     {children}

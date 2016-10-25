@@ -10,7 +10,7 @@ import React from 'react'
 import Fence from './Fence'
 import SearchBox from './HeaderSearchBox'
 import {contextualize} from './higher-order/contextualize'
-import {Container, ThumbLink, Cap, Menu, HeaderMenuItem, MenuItem} from './ThumbLink'
+import {Container, ThumbLink, BottomLine, Cap, Menu, HeaderMenuItem, MenuItem} from './ThumbLink'
 import SubHeader from './SubHeader'
 import Page from './Page'
 import {Link} from 'react-router'
@@ -20,13 +20,51 @@ import {unfavoriteWorkspaceAction} from '../actions/unfavorite-workspace'
 import {favoriteWorkspaceAction} from '../actions/favorite-workspace'
 import DeleteButton from './DeleteButton'
 import bind from 'lodash/bind'
+import csjs from 'csjs'
+import {styled} from './mixins/styled'
 
+const style = csjs`
+.sober {
+  color: grey;
+}
+.platform {
+  width: 24px;
+  height: 24px;
+}
+.numbers {
+  line-height: 24px;
+  padding-left: .5em;
+}
+.label extends .sober {
+  padding-left: .5em;
+  padding-bottom: .5em;
+}
+.number extends .sober {
+  margin: 0 .8em 0 .3em;
+}`
 const {PropTypes} = React
 const cleanStr = str => trim(deburr(lowerCase(str)))
 
 const Workspace = ({company, workspace, del, fave, unfave}) => (
   <ThumbLink to={`/company/${company}/workspace/${workspace.id}`} title={workspace.name}>
     <Cap>{workspace.name}</Cap>
+    <BottomLine>
+      <div className={`${style.label}`}>
+        <Message>workspaceFoldersSummary</Message>:
+      </div>
+
+      <div className={`${style.numbers}`}>
+        <img className={`${style.platform}`} src='/img/g-circle-32.png'/>
+        <strong className={`${style.number}`}>
+          {Number(workspace.summary.adwords || 0)}
+        </strong>
+
+        <img className={`${style.platform}`} src='/img/fb-circle-32.png'/>
+        <strong className={`${style.number}`}>
+          {Number(workspace.summary.facebook || 0)}
+        </strong>
+      </div>
+    </BottomLine>
     <Menu>
       <HeaderMenuItem icon={workspace.favorite ? 'star' : 'star_border'} onClick={workspace.favorite ? unfave : fave}>
         <Message>
@@ -56,6 +94,7 @@ Workspace.contextTypes = {
 
 export const Workspaces = React.createClass({
   displayName: 'Workspaces',
+  mixins: [styled(style)],
   propTypes: {
     dispatch: PropTypes.func,
     company: PropTypes.shape({
