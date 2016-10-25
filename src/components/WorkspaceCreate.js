@@ -6,11 +6,8 @@ import AccountSelector from './WorkspaceAccountSelector'
 import RolesSelector from './WorkspaceRolesSelector'
 import {createWorkspaceAction} from '../actions/create-workspace'
 import {Form, Content, Header, Footer} from './Card'
-import {contextualize} from './higher-order/contextualize'
-import map from 'lodash/map'
 import WorkspaceForm from './mixins/WorkspaceForm'
-import AutoSelect from './AutoSelect'
-import get from 'lodash/get'
+import {branch} from 'baobab-react/higher-order'
 
 const {PropTypes} = React
 
@@ -19,7 +16,6 @@ export const CreateWorkspace = React.createClass({
   mixins: [FormMixin, WorkspaceForm],
   propTypes: {
     dispatch: PropTypes.func,
-    company: PropTypes.object,
     params: PropTypes.object
   },
   onSubmit (e) {
@@ -32,8 +28,7 @@ export const CreateWorkspace = React.createClass({
     this.saveWorkspace(data, action, redirectUrl)
   },
   render () {
-    const {company} = this.props
-    const {errors, dashCampaign} = this.state
+    const {errors} = this.state
 
     return (
       <Form onSubmit={this.onSubmit}>
@@ -45,14 +40,6 @@ export const CreateWorkspace = React.createClass({
           <Input label='name' name='name' error={errors.name} onChange={this.dismissError}/>
           <AccountSelector platform='facebook'/>
           <AccountSelector platform='adwords'/>
-          <input type='hidden' name='dash_campaign' value={get(dashCampaign, 'id', '')}/>
-
-          <AutoSelect
-            disabled={this.state.isLoadingDashCampaigns}
-            placeholder={this.context.messages.dashCampaignLabel}
-            onChange={this.onChangeDashCampaign}
-            options={map(company.dashCampaigns, this.normalizeDashCampaignOption)}
-            selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}/>
           <RolesSelector/>
         </Content>
 
@@ -64,4 +51,4 @@ export const CreateWorkspace = React.createClass({
   }
 })
 
-export default contextualize(CreateWorkspace, 'company')
+export default branch({}, CreateWorkspace)

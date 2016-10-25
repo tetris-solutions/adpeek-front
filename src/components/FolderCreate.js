@@ -53,7 +53,7 @@ export const CreateFolder = React.createClass({
     const folder = {
       name: elements.name.value,
       workspace_account: elements.workspace_account.value,
-      dash_campaign: elements.dash_campaign.value || null,
+      dash_campaign: get(elements, 'dash_campaign.value', null),
       tag: elements.tag.value || null,
       media: elements.media.value,
       kpi: elements.kpi.value
@@ -154,13 +154,17 @@ export const CreateFolder = React.createClass({
               ))}
           </Select>
 
-          <input type='hidden' name='dash_campaign' value={get(dashCampaign, 'id', '')}/>
-          <AutoSelect
-            disabled={this.state.isLoadingDashCampaigns}
-            placeholder={this.context.messages.dashCampaignLabel}
-            onChange={this.onChangeDashCampaign}
-            options={map(company.dashCampaigns, this.normalizeDashCampaignOption)}
-            selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}/>
+          {this.isConnectedToDash() ? (
+            <div>
+              <input type='hidden' name='dash_campaign' value={get(dashCampaign, 'id', '')}/>
+              <AutoSelect
+                disabled={this.state.isLoadingDashCampaigns}
+                placeholder={this.context.messages.dashCampaignLabel}
+                onChange={this.onChangeDashCampaign}
+                options={map(company.dashCampaigns, this.normalizeDashCampaignOption)}
+                selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}/>
+            </div>
+          ) : null}
 
           <Input
             name='tag'

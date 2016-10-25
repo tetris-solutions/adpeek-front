@@ -23,13 +23,8 @@ export default {
     }
   },
   componentWillMount () {
-    const {company, dispatch} = this.props
-
-    if (company.dashCampaigns) {
-      this.setState({isLoadingDashCampaigns: false})
-    } else {
-      dispatch(loadDashCampaignsAction, company.id)
-        .then(() => this.setState({isLoadingDashCampaigns: false}))
+    if (this.isConnectedToDash()) {
+      this.loadDashCampaigns()
     }
   },
   componentWillReceiveProps ({company: {dashCampaigns}}) {
@@ -37,6 +32,19 @@ export default {
       this.setState({
         dashCampaign: this.getCurrentCampaign(dashCampaigns)
       })
+    }
+  },
+  isConnectedToDash () {
+    return Boolean(this.props.company.legacy_dash_url)
+  },
+  loadDashCampaigns () {
+    const {company, dispatch} = this.props
+
+    if (company.dashCampaigns) {
+      this.setState({isLoadingDashCampaigns: false})
+    } else {
+      dispatch(loadDashCampaignsAction, company.id)
+        .then(() => this.setState({isLoadingDashCampaigns: false}))
     }
   },
   getCurrentCampaign (dashCampaigns = this.props.company.dashCampaigns) {
