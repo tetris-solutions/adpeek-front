@@ -23,6 +23,24 @@ const style = csjs`
   text-align: left;
   border-radius: 2px;
 }
+.cap {
+  position: relative;
+  font-weight: bold;
+  font-size: medium;
+  width: 100%;
+  height: calc(2.4em + .7em + 1em);
+  line-height: 1.2em;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+.cap > span {
+  position: absolute;
+  bottom: .7em;
+  max-height: calc(1.2em * 2);
+  overflow: hidden;
+  left: .7em;
+  right: .5em;
+}
 .title {
   position: absolute;
   font-size: large;
@@ -122,6 +140,19 @@ export const Title = ({children}) => (
 Title.displayName = 'Title'
 Title.propTypes = {
   children: PropTypes.node.isRequired
+}
+
+export const Cap = ({children}) => (
+  <div className={`mdl-color--primary-dark mdl-color-text--white ${style.cap}`}>
+    <span>
+      {children}
+    </span>
+  </div>
+)
+
+Cap.displayName = 'Cap'
+Cap.propTypes = {
+  children: PropTypes.node
 }
 
 export const Button = ({children}) => (

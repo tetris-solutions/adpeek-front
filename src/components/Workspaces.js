@@ -10,7 +10,7 @@ import React from 'react'
 import Fence from './Fence'
 import SearchBox from './HeaderSearchBox'
 import {contextualize} from './higher-order/contextualize'
-import {Container, Title, ThumbLink, Menu, HeaderMenuItem, MenuItem} from './ThumbLink'
+import {Container, ThumbLink, Cap, Menu, HeaderMenuItem, MenuItem} from './ThumbLink'
 import SubHeader from './SubHeader'
 import Page from './Page'
 import {Link} from 'react-router'
@@ -26,7 +26,7 @@ const cleanStr = str => trim(deburr(lowerCase(str)))
 
 const Workspace = ({company, workspace, del, fave, unfave}) => (
   <ThumbLink to={`/company/${company}/workspace/${workspace.id}`} title={workspace.name}>
-    <Title>{workspace.name}</Title>
+    <Cap>{workspace.name}</Cap>
     <Menu>
       <HeaderMenuItem icon={workspace.favorite ? 'star' : 'star_border'} onClick={workspace.favorite ? unfave : fave}>
         <Message>
