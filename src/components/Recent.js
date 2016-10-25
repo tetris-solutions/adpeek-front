@@ -18,6 +18,8 @@ const style = csjs`
   text-decoration: none;
   margin: 5px 10px;
   line-height: 2em;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .item > i {
   display: inline-block;
