@@ -11,14 +11,17 @@ import get from 'lodash/get'
 import {Form, Content, Header, Footer} from './Card'
 import {contextualize} from './higher-order/contextualize'
 import Checkbox from './Checkbox'
+import AutoSelect from './AutoSelect'
+import FolderFormMixin from './mixins/FolderForm'
 
 const {PropTypes} = React
 
 export const CreateFolder = React.createClass({
   displayName: 'Create-Folder',
-  mixins: [FormMixin],
+  mixins: [FormMixin, FolderFormMixin],
   propTypes: {
     dispatch: PropTypes.func,
+    company: PropTypes.object,
     medias: PropTypes.array,
     params: PropTypes.shape({
       company: PropTypes.string,
@@ -50,6 +53,7 @@ export const CreateFolder = React.createClass({
     const folder = {
       name: elements.name.value,
       workspace_account: elements.workspace_account.value,
+      dash_campaign: elements.dash_campaign.value || null,
       tag: elements.tag.value || null,
       media: elements.media.value,
       kpi: elements.kpi.value
@@ -84,8 +88,8 @@ export const CreateFolder = React.createClass({
     })
   },
   render () {
-    const {medias, workspace: {accounts}} = this.props
-    const {errors, selectedMedia, showTagCheckbox} = this.state
+    const {medias, company, workspace: {accounts}} = this.props
+    const {errors, selectedMedia, showTagCheckbox, dashCampaign} = this.state
 
     return (
       <Form onSubmit={this.handleSubmit}>
@@ -150,6 +154,14 @@ export const CreateFolder = React.createClass({
               ))}
           </Select>
 
+          <input type='hidden' name='dash_campaign' value={get(dashCampaign, 'id', '')}/>
+          <AutoSelect
+            disabled={this.state.isLoadingDashCampaigns}
+            placeholder={this.context.messages.dashCampaignLabel}
+            onChange={this.onChangeDashCampaign}
+            options={map(company.dashCampaigns, this.normalizeDashCampaignOption)}
+            selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}/>
+
           <Input
             name='tag'
             label='folderTag'
@@ -174,4 +186,4 @@ export const CreateFolder = React.createClass({
   }
 })
 
-export default contextualize(CreateFolder, {medias: ['medias']}, 'workspace')
+export default contextualize(CreateFolder, {medias: ['medias']}, 'workspace', 'company')

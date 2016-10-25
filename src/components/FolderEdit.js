@@ -6,7 +6,6 @@ import pick from 'lodash/pick'
 import FormMixin from './mixins/FormMixin'
 import Message from 'tetris-iso/Message'
 import React from 'react'
-
 import Checkbox from './Checkbox'
 import Input from './Input'
 import Select from './Select'
@@ -14,14 +13,17 @@ import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import {updateFolderAction} from '../actions/update-folder'
 import {Form, Content, Header, Footer} from './Card'
 import {contextualize} from './higher-order/contextualize'
+import FolderFormMixin from './mixins/FolderForm'
+import AutoSelect from './AutoSelect'
 
 const {PropTypes} = React
 
 export const EditFolder = React.createClass({
   displayName: 'Edit-Folder',
-  mixins: [FormMixin],
+  mixins: [FormMixin, FolderFormMixin],
   propTypes: {
     dispatch: PropTypes.func,
+    company: PropTypes.object,
     medias: PropTypes.array,
     params: PropTypes.shape({
       company: PropTypes.string,
@@ -65,6 +67,7 @@ export const EditFolder = React.createClass({
       id,
       name: elements.name.value,
       workspace_account: elements.workspace_account.value,
+      dash_campaign: elements.dash_campaign.value || null,
       tag: elements.tag.value || null,
       media: elements.media.value,
       kpi: elements.kpi.value
@@ -93,8 +96,8 @@ export const EditFolder = React.createClass({
     return onChange
   },
   render () {
-    const {medias, workspace: {accounts}} = this.props
-    const {errors, kpi, name, workspace_account, media, tag} = this.state
+    const {medias, company, workspace: {accounts}} = this.props
+    const {errors, kpi, name, workspace_account, dashCampaign, media, tag} = this.state
 
     return (
       <Form onSubmit={this.handleSubmit}>
@@ -163,6 +166,14 @@ export const EditFolder = React.createClass({
               ))}
           </Select>
 
+          <input type='hidden' name='dash_campaign' value={get(dashCampaign, 'id', '')}/>
+          <AutoSelect
+            disabled={this.state.isLoadingDashCampaigns}
+            placeholder={this.context.messages.dashCampaignLabel}
+            onChange={this.onChangeDashCampaign}
+            options={map(company.dashCampaigns, this.normalizeDashCampaignOption)}
+            selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}/>
+
           <Input
             name='tag'
             label='folderTag'
@@ -187,4 +198,4 @@ export const EditFolder = React.createClass({
   }
 })
 
-export default contextualize(EditFolder, {medias: ['medias']}, 'folder', 'workspace')
+export default contextualize(EditFolder, {medias: ['medias']}, 'folder', 'workspace', 'company')
