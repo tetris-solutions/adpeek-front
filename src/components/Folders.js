@@ -10,7 +10,7 @@ import Fence from './Fence'
 import SubHeader from './SubHeader'
 import SearchBox from './HeaderSearchBox'
 import {contextualize} from './higher-order/contextualize'
-import {Container, ThumbLink} from './ThumbLink'
+import {Container, ThumbLink, Title} from './ThumbLink'
 import {Link} from 'react-router'
 import Page from './Page'
 
@@ -18,9 +18,11 @@ const cleanStr = str => trim(deburr(lowerCase(str)))
 
 const {PropTypes} = React
 
-function Folder ({company, workspace, id, name}) {
-  return <ThumbLink to={`/company/${company}/workspace/${workspace}/folder/${id}`} title={name}/>
-}
+const Folder = ({company, workspace, id, name}) => (
+  <ThumbLink to={`/company/${company}/workspace/${workspace}/folder/${id}`} title={name}>
+    <Title>{name}</Title>
+  </ThumbLink>
+)
 
 Folder.displayName = 'Folder'
 Folder.propTypes = {
@@ -58,7 +60,10 @@ export const Folders = React.createClass({
       <div>
         <SubHeader>
           <Fence canEditFolder>
-            <Link className='mdl-button mdl-color-text--white' to={`/company/${company.id}/workspace/${id}/create/folder`}>
+            <Link
+              className='mdl-button mdl-color-text--white'
+              to={`/company/${company.id}/workspace/${id}/create/folder`}>
+
               <i className='material-icons'>add</i>
               <Message>newFolderHeader</Message>
             </Link>
