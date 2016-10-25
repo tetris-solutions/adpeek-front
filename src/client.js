@@ -1,8 +1,9 @@
-import {createClient} from 'tetris-iso/client'
-import {getRoutes} from './routes/ui'
-import defaultState from './default-state'
+require('@tetris/base-lib/intl')
 
-require('tetris-iso/base-context')
-  .extend('company', 'router')
+const {createClient} = require('tetris-iso/client')
+const {getRoutes} = require('./routes/ui')
+const defaultState = require('./default-state').default
+const {extend: extendBaseContext} = require('tetris-iso/base-context')
 
+extendBaseContext('company', 'router')
 createClient(getRoutes, defaultState)
