@@ -66,7 +66,12 @@ const Recent = React.createClass({
         </h6>
 
         {map(this.getList(), ({id, name}) =>
-          <Link key={id} to={`${clean(pathname)}/${level}/${id}`} className={`mdl-color-text--grey-800 ${style.item}`}>
+          <Link
+            key={id}
+            title={name}
+            to={`${clean(pathname)}/${level}/${id}`}
+            className={`mdl-color-text--grey-800 ${style.item}`}>
+
             <i className='material-icons'>{icon}</i>
             <span>{name}</span>
           </Link>)}
