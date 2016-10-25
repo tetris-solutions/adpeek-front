@@ -1,5 +1,6 @@
 import deburr from 'lodash/deburr'
 import filter from 'lodash/filter'
+import groupBy from 'lodash/groupBy'
 import includes from 'lodash/includes'
 import lowerCase from 'lodash/toLower'
 import map from 'lodash/map'
@@ -15,39 +16,39 @@ import Page from './Page'
 import {Link} from 'react-router'
 import {deleteWorkspaceAction} from '../actions/delete-workspace'
 import {loadCompanyWorkspacesAction} from '../actions/load-company-workspaces'
+import {unfavoriteWorkspaceAction} from '../actions/unfavorite-workspace'
+import {favoriteWorkspaceAction} from '../actions/favorite-workspace'
 import DeleteButton from './DeleteButton'
+import bind from 'lodash/bind'
+
 const {PropTypes} = React
 const cleanStr = str => trim(deburr(lowerCase(str)))
 
-function Workspace ({company, workspace, deleteWorkspace}) {
-  function onClick () {
-    deleteWorkspace(workspace.id)
-  }
-
-  return (
-    <ThumbLink to={`/company/${company}/workspace/${workspace.id}`} title={workspace.name}>
-      <Title>{workspace.name}</Title>
-      <Menu>
-        <HeaderMenuItem icon={workspace.is_favorite ? 'star' : 'star_border'}>
-          <Message>
-            {workspace.is_favorite ? 'unfaveWorkspace' : 'faveWorkspace'}
-          </Message>
-        </HeaderMenuItem>
-        <MenuItem tag={Link} to={`/company/${company}/workspace/${workspace.id}/edit`} icon='mode_edit'>
-          <Message>editWorkspace</Message>
-        </MenuItem>
-        <MenuItem tag={DeleteButton} span entityName={workspace.name} onClick={onClick} icon='delete'>
-          <Message>deleteWorkspace</Message>
-        </MenuItem>
-      </Menu>
-    </ThumbLink>
-  )
-}
+const Workspace = ({company, workspace, del, fave, unfave}) => (
+  <ThumbLink to={`/company/${company}/workspace/${workspace.id}`} title={workspace.name}>
+    <Title>{workspace.name}</Title>
+    <Menu>
+      <HeaderMenuItem icon={workspace.favorite ? 'star' : 'star_border'} onClick={workspace.favorite ? unfave : fave}>
+        <Message>
+          {workspace.favorite ? 'unfaveWorkspace' : 'faveWorkspace'}
+        </Message>
+      </HeaderMenuItem>
+      <MenuItem tag={Link} to={`/company/${company}/workspace/${workspace.id}/edit`} icon='mode_edit'>
+        <Message>editWorkspace</Message>
+      </MenuItem>
+      <MenuItem tag={DeleteButton} span entityName={workspace.name} onClick={del} icon='delete'>
+        <Message>deleteWorkspace</Message>
+      </MenuItem>
+    </Menu>
+  </ThumbLink>
+)
 Workspace.displayName = 'Workspace'
 Workspace.propTypes = {
   company: PropTypes.string,
   workspace: PropTypes.object,
-  deleteWorkspace: PropTypes.func.isRequired
+  del: PropTypes.func.isRequired,
+  fave: PropTypes.func.isRequired,
+  unfave: PropTypes.func.isRequired
 }
 Workspace.contextTypes = {
   router: PropTypes.object
@@ -69,11 +70,20 @@ export const Workspaces = React.createClass({
       searchValue: ''
     }
   },
-  deleteWorkspace (id) {
+  workspaceAction (id, action) {
     const {dispatch, company} = this.props
+    const reloadWorkspaces = () => dispatch(loadCompanyWorkspacesAction, company.id)
 
-    dispatch(deleteWorkspaceAction, id)
-      .then(() => dispatch(loadCompanyWorkspacesAction, company.id))
+    dispatch(action, id).then(reloadWorkspaces)
+  },
+  deleteWorkspace (id) {
+    this.workspaceAction(id, deleteWorkspaceAction)
+  },
+  favoriteWorkspace (id) {
+    this.workspaceAction(id, favoriteWorkspaceAction)
+  },
+  unfavoriteWorkspace (id) {
+    this.workspaceAction(id, unfavoriteWorkspaceAction)
   },
   onChange (searchValue) {
     this.setState({searchValue})
@@ -84,6 +94,10 @@ export const Workspaces = React.createClass({
     const matchingWorkspaces = searchValue
       ? filter(workspaces, ({name}) => includes(cleanStr(name), searchValue))
       : workspaces
+
+    const groupedByFaveStatus = groupBy(matchingWorkspaces, ({favorite}) => Boolean(favorite))
+    const anyFave = Boolean(groupedByFaveStatus.true)
+    const anyNormie = Boolean(groupedByFaveStatus.false)
 
     return (
       <div>
@@ -99,12 +113,26 @@ export const Workspaces = React.createClass({
         </SubHeader>
         <Page>
           <Container>
-            <h5>
-              <Message>workspaceList</Message>
-            </h5>
-            {map(matchingWorkspaces, (workspace, index) =>
+            {anyFave && <h5><Message>faveWorkspaceList</Message></h5>}
+
+            {map(groupedByFaveStatus.true, (workspace, index) =>
               <Workspace
-                deleteWorkspace={this.deleteWorkspace}
+                fave={bind(this.favoriteWorkspace, null, workspace.id)}
+                unfave={bind(this.unfavoriteWorkspace, null, workspace.id)}
+                del={bind(this.deleteWorkspace, null, workspace.id)}
+                key={workspace.id}
+                company={id}
+                workspace={workspace}/>)}
+
+            {anyFave && <br/>}
+            {anyFave && <br/>}
+
+            {anyNormie && <h5><Message>workspaceList</Message></h5>}
+            {map(groupedByFaveStatus.false, (workspace, index) =>
+              <Workspace
+                fave={bind(this.favoriteWorkspace, null, workspace.id)}
+                unfave={bind(this.unfavoriteWorkspace, null, workspace.id)}
+                del={bind(this.deleteWorkspace, null, workspace.id)}
                 key={workspace.id}
                 company={id}
                 workspace={workspace}/>)}

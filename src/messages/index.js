@@ -249,9 +249,10 @@ module.exports = {
     regularUser: 'Regular User',
     edit: 'Edit',
     companyName: 'Company name',
-    recentWorkspace: 'Recently accessed workspaces',
+    recentWorkspace: 'Recently Accessed Workspaces',
     faveWorkspace: 'Favorite',
-    unfaveWorkspace: 'Unfavorite'
+    unfaveWorkspace: 'Unfavorite',
+    faveWorkspaceList: 'Favorite Workspaces'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -505,6 +506,7 @@ module.exports = {
     companyName: 'Nome da Empresa',
     recentWorkspace: 'Áreas de Trabalho Recentes:',
     faveWorkspace: 'Favoritar',
-    unfaveWorkspace: 'Desfavoritar'
+    unfaveWorkspace: 'Desfavoritar',
+    faveWorkspaceList: 'Áreas de Trabalho Favoritas'
   }
 }
