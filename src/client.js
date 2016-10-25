@@ -1,5 +1,3 @@
-require('@tetris/base-lib/intl')
-
 const {createClient} = require('tetris-iso/client')
 const {getRoutes} = require('./routes/ui')
 const defaultState = require('./default-state').default
