@@ -21,6 +21,7 @@ const style = csjs`
 .content {
   flex: 1;
   position: relative;
+  overflow-x: hidden;
 }
 .nav {
   background: white;
@@ -41,10 +42,6 @@ const style = csjs`
   display: inline-block;
   font-size: 8px;
   margin: 40vh 0 0 2px;  
-}
-.hack {
-  position: absolute;
-  width: 100%;
 }`
 
 const Page = React.createClass({
@@ -74,9 +71,7 @@ const Page = React.createClass({
           </div>
         </nav>
         <div className={String(style.content)}>
-          <div className={String(style.hack)}>
-            {this.props.children}
-          </div>
+          {this.props.children}
         </div>
       </div>
     )
