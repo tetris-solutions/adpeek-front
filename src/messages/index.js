@@ -85,7 +85,7 @@ module.exports = {
     closedCostTitle: 'Closed',
     totalCostTitle: 'Total',
     todayCostTitle: 'Today\'s',
-    campaignTitle: 'CampaignCreatives {name}',
+    campaignTitle: 'Campaign {name}',
     budgetTitle: 'Budget {name}',
     adsetTitle: 'Ad Set {name}',
 
@@ -133,7 +133,7 @@ module.exports = {
     keywords: 'Keywords',
     adSets: 'Ad Sets',
     ads: 'Ads',
-    campaignEntity: 'CampaignCreatives',
+    campaignEntity: 'Campaign',
     adEntity: 'Ad',
     adGroupEntity: 'Ad Group',
     adSetEntity: 'Ad Set',
@@ -158,7 +158,7 @@ module.exports = {
     companyBreadcrumb: 'Company',
     workspaceBreadcrumb: 'Workspace',
     folderBreadcrumb: 'Folder',
-    campaignBreadcrumb: 'CampaignCreatives',
+    campaignBreadcrumb: 'Campaign',
     orderBreadcrumb: 'Order',
     reportBreadcrumb: 'Report',
     // delete button modal

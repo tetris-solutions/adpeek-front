@@ -50,7 +50,7 @@ export function FolderCampaignLooseLi ({external_id, name, status, platform, is_
   )
 }
 
-FolderCampaignLooseLi.displayName = 'Loose-CampaignCreatives'
+FolderCampaignLooseLi.displayName = 'Loose-Campaign'
 FolderCampaignLooseLi.defaultProps = {
   is_adwords_video: false
 }

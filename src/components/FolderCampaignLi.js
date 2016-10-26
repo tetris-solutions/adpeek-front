@@ -24,7 +24,7 @@ export function FolderCampaignLi ({id, name, status, readOnly}, {params}) {
   )
 }
 
-FolderCampaignLi.displayName = 'CampaignCreatives-Li'
+FolderCampaignLi.displayName = 'Folder-Campaign-Li'
 FolderCampaignLi.propTypes = {
   readOnly: PropTypes.bool,
   id: PropTypes.string,
