@@ -61,13 +61,14 @@ const Page = React.createClass({
   },
   render () {
     const SubNav = getSubNav(findLast(this.context.routes, hasSubNav))
+    const caret = this.state.isNavOpen ? '◀' : '▶'
 
     return (
       <div className={String(style.page)}>
         <nav className={`mdl-shadow--6dp ${style.nav}`}>
           {SubNav && this.state.isNavOpen ? <SubNav /> : null}
           <div onClick={this.toggleNav} className={String(style.caret)}>
-            <span>&#9658;</span>
+            <span>{caret}</span>
           </div>
         </nav>
         <div className={String(style.content)}>
