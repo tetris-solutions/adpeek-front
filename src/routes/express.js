@@ -106,12 +106,12 @@ export function setAppRoutes (app, render) {
     preload(...subFolderActions),
     render)
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/adgroups',
+  app.get('/company/:company/workspace/:workspace/folder/:folder/creatives',
     protect,
     preload(statuses, companies, workspace, folder, campaigns),
     render)
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/campaign/:campaign',
+  app.get('/company/:company/workspace/:workspace/folder/:folder/campaign/:campaign/creatives',
     protect,
     preload(statuses, companies, workspace, folder, campaigns),
     render)
@@ -149,10 +149,5 @@ export function setAppRoutes (app, render) {
   app.get('/company/:company/workspace/:workspace/folder/:folder/edit',
     protect,
     preload(medias, companies, workspace, accounts, folder),
-    render)
-
-  app.get('/company/:company/workspace/:workspace/folder/:folder/create/campaign',
-    protect,
-    preload(companies, workspace, folder),
     render)
 }

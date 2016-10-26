@@ -12,8 +12,8 @@ import Page from './Page'
 
 const {PropTypes} = React
 
-export const FolderAdGroups = React.createClass({
-  displayName: 'Campaign',
+export const FolderCreatives = React.createClass({
+  displayName: 'Folder-Creatives',
   propTypes: {
     dispatch: PropTypes.func,
     folder: PropTypes.shape({
@@ -81,7 +81,7 @@ export const FolderAdGroups = React.createClass({
 
     return (
       <div>
-        <SubHeader title={<Message folder={folder.name}>folderAdsTitle</Message>}>
+        <SubHeader title={<Message>creatives</Message>}>
           <DownloadReportButton
             loading={creatingReport}
             extract={this.extractReport}
@@ -99,4 +99,4 @@ export const FolderAdGroups = React.createClass({
   }
 })
 
-export default contextualize(FolderAdGroups, 'folder')
+export default contextualize(FolderCreatives, 'folder')

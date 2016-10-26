@@ -85,7 +85,7 @@ module.exports = {
     closedCostTitle: 'Closed',
     totalCostTitle: 'Total',
     todayCostTitle: 'Today\'s',
-    campaignTitle: 'Campaign {name}',
+    campaignTitle: 'CampaignCreatives {name}',
     budgetTitle: 'Budget {name}',
     adsetTitle: 'Ad Set {name}',
 
@@ -98,9 +98,7 @@ module.exports = {
     updateBudgetTitle: 'Updated budget',
     updateAdsetTitle: 'Updated Ad Set',
     remove: 'Remove',
-    campaignAdsTitle: 'Campaign "{campaign}" Ads',
     finalUrl: 'Final URL',
-    folderAdsTitle: 'Folder "{folder}" Ads',
     cloneOrders: 'Clone Orders',
     cloneSingleOrder: 'Clone Order',
     selectOrders: 'Select',
@@ -135,7 +133,7 @@ module.exports = {
     keywords: 'Keywords',
     adSets: 'Ad Sets',
     ads: 'Ads',
-    campaignEntity: 'Campaign',
+    campaignEntity: 'CampaignCreatives',
     adEntity: 'Ad',
     adGroupEntity: 'Ad Group',
     adSetEntity: 'Ad Set',
@@ -160,7 +158,7 @@ module.exports = {
     companyBreadcrumb: 'Company',
     workspaceBreadcrumb: 'Workspace',
     folderBreadcrumb: 'Folder',
-    campaignBreadcrumb: 'Campaign',
+    campaignBreadcrumb: 'CampaignCreatives',
     orderBreadcrumb: 'Order',
     reportBreadcrumb: 'Report',
     // delete button modal
@@ -189,7 +187,6 @@ module.exports = {
     editOrder: 'Edit Order',
     autoBudgetLog: 'AutoBudget History',
     deleteOrder: 'Delete Order',
-    folderAds: 'Folder Ads',
     folderOrders: 'Folder Orders',
     folderReport: 'Folder Report',
     editFolder: 'Edit Folder',
@@ -254,7 +251,8 @@ module.exports = {
     unfaveWorkspace: 'Unfavorite',
     faveWorkspaceList: 'Favorite Workspaces',
     workspaceFoldersSummary: 'Folders',
-    recentFolder: 'Last Accessed Folders'
+    recentFolder: 'Last Accessed Folders',
+    creatives: 'Creatives'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -354,9 +352,7 @@ module.exports = {
     updateBudgetTitle: 'Orçamento atualizado',
     updateAdsetTitle: 'Ad Set atualizado',
     remove: 'Remover',
-    campaignAdsTitle: 'Criativos da campanha "{campaign}"',
     finalUrl: 'URL de destino',
-    folderAdsTitle: 'Criativos da pasta "{folder}"',
     cloneOrders: 'Clonar Pedidos',
     cloneSingleOrder: 'Clonar PI',
     selectOrders: 'Selecionar',
@@ -445,7 +441,6 @@ module.exports = {
     editOrder: 'Editar Ordem',
     autoBudgetLog: 'Histórico AutoBudget',
     deleteOrder: 'Remover Ordem',
-    folderAds: 'Criativos',
     folderOrders: 'Pedidos',
     folderReport: 'Relatório',
     editFolder: 'Editar Pasta',
@@ -511,6 +506,7 @@ module.exports = {
     unfaveWorkspace: 'Desfavoritar',
     faveWorkspaceList: 'Áreas de Trabalho Favoritas',
     workspaceFoldersSummary: 'Pastas',
-    recentFolder: 'Pastas recentes'
+    recentFolder: 'Pastas recentes',
+    creatives: 'Criativos'
   }
 }

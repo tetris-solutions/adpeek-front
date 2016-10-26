@@ -80,7 +80,7 @@ const FolderReport = React.createClass({
     const {account: {platform}, campaigns, adSets, adGroups, ads, keywords} = this.props.folder
 
     const entities = [{
-      id: 'Campaign',
+      id: 'CampaignCreatives',
       name: messages.campaigns,
       list: map(campaigns, c => assign({}, c, {id: c.external_id}))
     }]

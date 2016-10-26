@@ -12,8 +12,8 @@ import Page from './Page'
 
 const {PropTypes} = React
 
-export const Campaign = React.createClass({
-  displayName: 'Campaign',
+export const CampaignCreatives = React.createClass({
+  displayName: 'Campaign-Creatives',
   propTypes: {
     dispatch: PropTypes.func,
     campaign: PropTypes.shape({
@@ -82,7 +82,7 @@ export const Campaign = React.createClass({
 
     return (
       <div>
-        <SubHeader title={<Message campaign={campaign.name}>campaignAdsTitle</Message>}>
+        <SubHeader title={<Message>creatives</Message>}>
           <DownloadReportButton
             loading={creatingReport}
             extract={this.extractReport}
@@ -100,4 +100,4 @@ export const Campaign = React.createClass({
   }
 })
 
-export default contextualize(Campaign, 'campaign')
+export default contextualize(CampaignCreatives, 'campaign')

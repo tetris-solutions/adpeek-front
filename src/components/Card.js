@@ -1,7 +1,7 @@
 import React from 'react'
 import csjs from 'csjs'
 import omit from 'lodash/omit'
-import {styledFnComponent} from './higher-order/styled-fn-component'
+import {styled} from './mixins/styled'
 
 const style = csjs`
 .card {
@@ -40,37 +40,41 @@ const style = csjs`
 
 const {PropTypes} = React
 
-const Card_ = props => {
-  const {children, size, tag: Tag} = props
-  const subProps = omit(props, 'tag')
+export const Card = React.createClass({
+  display: 'Card',
+  mixins: [styled(style)],
+  propTypes: {
+    size: PropTypes.oneOf(['small', 'large', 'full']),
+    tag: PropTypes.string,
+    children: PropTypes.node.isRequired
+  },
+  getDefaultProps () {
+    return {
+      size: 'small',
+      tag: 'div'
+    }
+  },
+  render () {
+    const {children, size, tag: Tag} = this.props
+    const subProps = omit(this.props, 'tag')
 
-  return (
-    <Tag className={`mdl-card mdl-shadow--6dp ${style[size]}`} {...subProps}>
-      {children}
-    </Tag>
-  )
-}
+    return (
+      <Tag className={`mdl-card mdl-shadow--6dp ${style[size]}`} {...subProps}>
+        {children}
+      </Tag>
+    )
+  }
+})
 
-Card_.displayName = 'Card'
-Card_.propTypes = {
-  size: PropTypes.oneOf(['small', 'large', 'full']),
-  tag: PropTypes.string,
-  children: PropTypes.node.isRequired
-}
-Card_.defaultProps = {
-  size: 'small',
-  tag: 'div'
-}
-
-export const Card = styledFnComponent(Card_, style)
-
-export const Form = props => <Card {...props} tag='form'/>
-
-Form.displayName = 'Form'
-Form.propTypes = {
-  onSubmit: PropTypes.func,
-  children: PropTypes.node
-}
+export const Form = React.createClass({
+  displayName: 'Form',
+  propTypes: {
+    onSubmit: PropTypes.func.isRequired
+  },
+  render () {
+    return <Card {...this.props} tag='form'/>
+  }
+})
 
 export const Content = ({children, tag: Tag, className}) => (
   <Tag className={`mdl-card__supporting-text ${style.content} ${className}`}>

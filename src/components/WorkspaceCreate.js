@@ -8,6 +8,8 @@ import {createWorkspaceAction} from '../actions/create-workspace'
 import {Form, Content, Header, Footer} from './Card'
 import WorkspaceForm from './mixins/WorkspaceForm'
 import {branch} from 'baobab-react/higher-order'
+import Page from './Page'
+import SubHeader from './SubHeader'
 
 const {PropTypes} = React
 
@@ -31,22 +33,27 @@ export const CreateWorkspace = React.createClass({
     const {errors} = this.state
 
     return (
-      <Form onSubmit={this.onSubmit}>
-        <Header>
-          <Message>newWorkspaceHeader</Message>
-        </Header>
+      <div>
+        <SubHeader/>
+        <Page>
+          <Form onSubmit={this.onSubmit}>
+            <Header>
+              <Message>newWorkspaceHeader</Message>
+            </Header>
 
-        <Content>
-          <Input label='name' name='name' error={errors.name} onChange={this.dismissError}/>
-          <AccountSelector platform='facebook'/>
-          <AccountSelector platform='adwords'/>
-          <RolesSelector/>
-        </Content>
+            <Content>
+              <Input label='name' name='name' error={errors.name} onChange={this.dismissError}/>
+              <AccountSelector platform='facebook'/>
+              <AccountSelector platform='adwords'/>
+              <RolesSelector/>
+            </Content>
 
-        <Footer>
-          <Message>newWorkspaceCallToAction</Message>
-        </Footer>
-      </Form>
+            <Footer>
+              <Message>newWorkspaceCallToAction</Message>
+            </Footer>
+          </Form>
+        </Page>
+      </div>
     )
   }
 })

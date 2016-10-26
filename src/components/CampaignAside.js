@@ -18,7 +18,7 @@ export const CampaignAside = ({params: {company, workspace, folder}, campaign}) 
     </Buttons>
   </Navigation>
 
-CampaignAside.displayName = 'Campaign-Aside'
+CampaignAside.displayName = 'CampaignCreatives-Aside'
 CampaignAside.propTypes = {
   params: PropTypes.object,
   campaign: PropTypes.shape({

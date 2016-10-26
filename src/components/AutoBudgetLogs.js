@@ -180,7 +180,7 @@ const LoadCampaignBudget = ({current_budget, timestamp}) => (
   </div>
 )
 
-LoadCampaignBudget.displayName = 'Load-Campaign-Budget'
+LoadCampaignBudget.displayName = 'Load-CampaignCreatives-Budget'
 LoadCampaignBudget.propTypes = {
   current_budget: budgetPropTypes,
   timestamp: PropTypes.string
@@ -217,7 +217,7 @@ const LoadCampaignCost = ({cost, timestamp}) => (
   </div>
 )
 
-LoadCampaignCost.displayName = 'Load-Campaign-Cost'
+LoadCampaignCost.displayName = 'Load-CampaignCreatives-Cost'
 LoadCampaignCost.propTypes = {
   cost: PropTypes.shape({
     closed: PropTypes.number,
@@ -387,7 +387,7 @@ const SetCampaignBudget = ({timestamp, old_budget, new_budget}) => (
   </div>
 )
 
-SetCampaignBudget.displayName = 'Set-Campaign-Budget'
+SetCampaignBudget.displayName = 'Set-CampaignCreatives-Budget'
 SetCampaignBudget.propTypes = {
   timestamp: PropTypes.string,
   old_budget: budgetPropTypes,
@@ -569,7 +569,7 @@ const Campaign = ({entries}) => (
     </Content>
   </Card>
 )
-Campaign.displayName = 'Campaign-Actions'
+Campaign.displayName = 'CampaignCreatives-Actions'
 Campaign.propTypes = {
   entries: PropTypes.array
 }

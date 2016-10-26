@@ -6,7 +6,7 @@ import {IndexRoute, Route} from 'react-router'
 
 import App from '../components/App'
 import DocTitle from '../components/DocTitle'
-import Campaign from '../components/Campaign'
+import CampaignCreatives from '../components/CampaignCreatives'
 import CampaignAside from '../components/CampaignAside'
 import CampaignBreadcrumb from '../components/CampaignBreadcrumb'
 import Campaigns from '../components/FolderCampaigns'
@@ -14,11 +14,10 @@ import CompanyAside from '../components/CompanyAside'
 import CompanyBreadcrumb from '../components/CompanyBreadcrumb'
 import CompanyOrders from '../components/CompanyOrders'
 import CompanyOrdersCloning from '../components/CompanyOrdersCloning'
-import CreateCampaign from '../components/CampaignCreate'
 import CreateFolder from '../components/FolderCreate'
 import CreateReport from '../components/FolderReportCreate'
 import CreateWorkspace from '../components/WorkspaceCreate'
-import FolderAdGroups from '../components/FolderAdGroups'
+import FolderCreatives from '../components/FolderCreatives'
 import FolderAside from '../components/FolderAside'
 import FolderBreadcrumb from '../components/FolderBreadcrumb'
 import FolderEdit from '../components/FolderEdit'
@@ -114,14 +113,10 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                    onEnter={preload(folder, defaultFolderReport)}>
 
               <IndexRoute component={Campaigns} onEnter={preload(statuses, campaigns)}/>
-              <Route path='adgroups' component={FolderAdGroups} onEnter={preload(statuses, campaigns)}/>
+              <Route path='creatives' component={FolderCreatives} onEnter={preload(statuses, campaigns)}/>
 
-              <Route
-                path='campaign/:campaign'
-                aside={CampaignAside}
-                breadcrumb={CampaignBreadcrumb}>
-
-                <IndexRoute component={Campaign}/>
+              <Route path='campaign/:campaign' aside={CampaignAside} breadcrumb={CampaignBreadcrumb}>
+                <Route path='creatives' component={CampaignCreatives}/>
               </Route>
 
               <Route onEnter={preload(campaigns)} breadcrumb={ReportsBread}>
@@ -163,7 +158,6 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
               </Route>
 
               <Route path='edit' onEnter={preload(medias, accounts)} component={FolderEdit}/>
-              <Route path='create/campaign' component={CreateCampaign}/>
             </Route>
           </Route>
         </Route>

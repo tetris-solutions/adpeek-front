@@ -15,6 +15,8 @@ import {Form, Content, Header, Footer} from './Card'
 import {contextualize} from './higher-order/contextualize'
 import FolderFormMixin from './mixins/FolderForm'
 import AutoSelect from './AutoSelect'
+import Page from './Page'
+import SubHeader from './SubHeader'
 
 const {PropTypes} = React
 
@@ -100,104 +102,109 @@ export const EditFolder = React.createClass({
     const {errors, kpi, name, workspace_account, dashCampaign, media, tag} = this.state
 
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <Header>
-          <Message>editFolderHeader</Message>
-        </Header>
+      <div>
+        <SubHeader/>
+        <Page>
+          <Form onSubmit={this.handleSubmit}>
+            <Header>
+              <Message>editFolderHeader</Message>
+            </Header>
 
-        <Content>
-          <Input
-            label='name'
-            name='name'
-            error={errors.name}
-            value={name}
-            onChange={this.saveAndDismiss('name')}/>
+            <Content>
+              <Input
+                label='name'
+                name='name'
+                error={errors.name}
+                value={name}
+                onChange={this.saveAndDismiss('name')}/>
 
-          <Select
-            disabled
-            name='workspace_account'
-            label='externalAccount'
-            error={errors.workspace_account}
-            value={workspace_account}
-            onChange={this.saveAndDismiss('workspace_account')}>
+              <Select
+                disabled
+                name='workspace_account'
+                label='externalAccount'
+                error={errors.workspace_account}
+                value={workspace_account}
+                onChange={this.saveAndDismiss('workspace_account')}>
 
-            <option value=''/>
+                <option value=''/>
 
-            {map(accounts,
-              ({id, platform, name}, index) => (
-                <option key={index} value={id}>
-                  {`${platform} :: ${name}`}
-                </option>
-              ))}
+                {map(accounts,
+                  ({id, platform, name}, index) => (
+                    <option key={index} value={id}>
+                      {`${platform} :: ${name}`}
+                    </option>
+                  ))}
 
-          </Select>
+              </Select>
 
-          <Select
-            name='media'
-            label='media'
-            error={errors.media}
-            value={media}
-            onChange={this.saveAndDismiss('media')}>
+              <Select
+                name='media'
+                label='media'
+                error={errors.media}
+                value={media}
+                onChange={this.saveAndDismiss('media')}>
 
-            <option value=''/>
+                <option value=''/>
 
-            {map(medias,
-              ({id, name}, index) => (
-                <option key={index} value={id}>
-                  {name}
-                </option>
-              ))}
-          </Select>
+                {map(medias,
+                  ({id, name}, index) => (
+                    <option key={index} value={id}>
+                      {name}
+                    </option>
+                  ))}
+              </Select>
 
-          <Select
-            name='kpi'
-            label='kpi'
-            error={errors.kpi}
-            value={kpi}
-            onChange={this.saveAndDismiss('kpi')}>
+              <Select
+                name='kpi'
+                label='kpi'
+                error={errors.kpi}
+                value={kpi}
+                onChange={this.saveAndDismiss('kpi')}>
 
-            <option value=''/>
+                <option value=''/>
 
-            {map(get(find(medias, {id: media}), 'kpis'),
-              ({id, name}, index) => (
-                <option key={index} value={id}>
-                  {name}
-                </option>
-              ))}
-          </Select>
+                {map(get(find(medias, {id: media}), 'kpis'),
+                  ({id, name}, index) => (
+                    <option key={index} value={id}>
+                      {name}
+                    </option>
+                  ))}
+              </Select>
 
-          {this.isConnectedToDash() ? (
-            <div>
-              <input type='hidden' name='dash_campaign' value={get(dashCampaign, 'id', '')}/>
-              <AutoSelect
-                disabled={this.state.isLoadingDashCampaigns}
-                placeholder={this.context.messages.dashCampaignLabel}
-                onChange={this.onChangeDashCampaign}
-                options={map(company.dashCampaigns, this.normalizeDashCampaignOption)}
-                selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}/>
-            </div>
-          ) : null}
+              {this.isConnectedToDash() ? (
+                <div>
+                  <input type='hidden' name='dash_campaign' value={get(dashCampaign, 'id', '')}/>
+                  <AutoSelect
+                    disabled={this.state.isLoadingDashCampaigns}
+                    placeholder={this.context.messages.dashCampaignLabel}
+                    onChange={this.onChangeDashCampaign}
+                    options={map(company.dashCampaigns, this.normalizeDashCampaignOption)}
+                    selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}/>
+                </div>
+              ) : null}
 
-          <Input
-            name='tag'
-            label='folderTag'
-            error={errors.tag}
-            value={tag}
-            onChange={this.saveAndDismiss('tag')}/>
+              <Input
+                name='tag'
+                label='folderTag'
+                error={errors.tag}
+                value={tag}
+                onChange={this.saveAndDismiss('tag')}/>
 
-          <br/>
+              <br/>
 
-          {tag && (
-            <Checkbox
-              checked
-              label={<Message>autoLinkRightAway</Message>}
-              name='searchTagsRightAway'/>)}
-        </Content>
+              {tag && (
+                <Checkbox
+                  checked
+                  label={<Message>autoLinkRightAway</Message>}
+                  name='searchTagsRightAway'/>)}
+            </Content>
 
-        <Footer>
-          <Message>save</Message>
-        </Footer>
-      </Form>
+            <Footer>
+              <Message>save</Message>
+            </Footer>
+          </Form>
+        </Page>
+      </div>
     )
   }
 })

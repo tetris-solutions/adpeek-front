@@ -5,7 +5,7 @@ import {Link} from 'react-router'
 const {PropTypes} = React
 
 export function FolderCampaignLi ({id, name, status, readOnly}, {params}) {
-  const campaignUri = `/company/${params.company}/workspace/${params.workspace}/folder/${params.folder}/campaign/${id}`
+  const campaignUri = `/company/${params.company}/workspace/${params.workspace}/folder/${params.folder}/campaign/${id}/creatives`
 
   return (
     <li className='mdl-list__item'>
@@ -24,7 +24,7 @@ export function FolderCampaignLi ({id, name, status, readOnly}, {params}) {
   )
 }
 
-FolderCampaignLi.displayName = 'Campaign-Li'
+FolderCampaignLi.displayName = 'CampaignCreatives-Li'
 FolderCampaignLi.propTypes = {
   readOnly: PropTypes.bool,
   id: PropTypes.string,

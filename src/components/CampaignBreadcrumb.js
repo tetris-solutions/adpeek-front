@@ -14,7 +14,7 @@ export function CampaignBreadcrumb ({params: {company, workspace, folder}, campa
   )
 }
 
-CampaignBreadcrumb.displayName = 'Campaign-Breadcrumb'
+CampaignBreadcrumb.displayName = 'CampaignCreatives-Breadcrumb'
 CampaignBreadcrumb.propTypes = {
   campaign: PropTypes.shape({
     id: PropTypes.string,

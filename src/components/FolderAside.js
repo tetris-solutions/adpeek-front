@@ -37,8 +37,8 @@ export function FolderAside ({
             {folder.name}
           </Name>
           <Buttons>
-            <Button tag={Link} to={`${baseUrl}/adgroups`} icon='receipt'>
-              <Message>folderAds</Message>
+            <Button tag={Link} to={`${baseUrl}/creatives`} icon='receipt'>
+              <Message>creatives</Message>
             </Button>
 
             <Button tag={Link} to={`${baseUrl}/orders`} icon='attach_money'>

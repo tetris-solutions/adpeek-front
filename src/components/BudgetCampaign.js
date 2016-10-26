@@ -24,7 +24,7 @@ function BudgetCampaign ({campaign, actionIcon, onClick}) {
   )
 }
 
-BudgetCampaign.displayName = 'Campaign'
+BudgetCampaign.displayName = 'CampaignCreatives'
 BudgetCampaign.propTypes = {
   campaign: campaignType.isRequired,
   actionIcon: PropTypes.string.isRequired,

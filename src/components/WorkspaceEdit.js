@@ -9,6 +9,8 @@ import {updateWorkspaceAction} from '../actions/update-workspace'
 import {Form, Content, Header, Footer} from './Card'
 import {contextualize} from './higher-order/contextualize'
 import WorkspaceForm from './mixins/WorkspaceForm'
+import Page from './Page'
+import SubHeader from './SubHeader'
 
 const {PropTypes} = React
 
@@ -49,38 +51,43 @@ export const WorkspaceEdit = React.createClass({
     const {accounts: {facebook, adwords}} = workspace
 
     return (
-      <Form onSubmit={this.onSubmit}>
-        <Header>
-          <Message>editWorkspaceHeader</Message>
-        </Header>
+      <div>
+        <SubHeader/>
+        <Page>
+          <Form onSubmit={this.onSubmit}>
+            <Header>
+              <Message>editWorkspaceHeader</Message>
+            </Header>
 
-        <Content>
-          <Input
-            label='name'
-            name='name'
-            error={errors.name}
-            onChange={this.onChangeName}
-            value={name}/>
+            <Content>
+              <Input
+                label='name'
+                name='name'
+                error={errors.name}
+                onChange={this.onChangeName}
+                value={name}/>
 
-          <AccountSelector
-            disabled
-            account={facebook}
-            value={facebook ? facebook.name : ''}
-            platform='facebook'/>
+              <AccountSelector
+                disabled
+                account={facebook}
+                value={facebook ? facebook.name : ''}
+                platform='facebook'/>
 
-          <AccountSelector
-            disabled
-            account={adwords}
-            value={adwords ? adwords.name : ''}
-            platform='adwords'/>
+              <AccountSelector
+                disabled
+                account={adwords}
+                value={adwords ? adwords.name : ''}
+                platform='adwords'/>
 
-          <RolesSelector roles={roles}/>
-        </Content>
+              <RolesSelector roles={roles}/>
+            </Content>
 
-        <Footer>
-          <Message>save</Message>
-        </Footer>
-      </Form>
+            <Footer>
+              <Message>save</Message>
+            </Footer>
+          </Form>
+        </Page>
+      </div>
     )
   }
 })

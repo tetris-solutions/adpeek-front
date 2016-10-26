@@ -13,6 +13,8 @@ import {contextualize} from './higher-order/contextualize'
 import Checkbox from './Checkbox'
 import AutoSelect from './AutoSelect'
 import FolderFormMixin from './mixins/FolderForm'
+import Page from './Page'
+import SubHeader from './SubHeader'
 
 const {PropTypes} = React
 
@@ -92,100 +94,105 @@ export const CreateFolder = React.createClass({
     const {errors, selectedMedia, showTagCheckbox, dashCampaign} = this.state
 
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <Header>
-          <Message>newFolderHeader</Message>
-        </Header>
+      <div>
+        <SubHeader/>
+        <Page>
+          <Form onSubmit={this.handleSubmit}>
+            <Header>
+              <Message>newFolderHeader</Message>
+            </Header>
 
-        <Content>
-          <Input
-            label='name'
-            name='name'
-            error={errors.name}
-            onChange={this.dismissError}/>
+            <Content>
+              <Input
+                label='name'
+                name='name'
+                error={errors.name}
+                onChange={this.dismissError}/>
 
-          <Select
-            name='workspace_account'
-            label='externalAccount'
-            error={errors.workspace_account}
-            onChange={this.dismissError}>
+              <Select
+                name='workspace_account'
+                label='externalAccount'
+                error={errors.workspace_account}
+                onChange={this.dismissError}>
 
-            <option value=''/>
+                <option value=''/>
 
-            {map(accounts,
-              ({id, platform, name}, index) => (
-                <option key={index} value={id}>
-                  {`${platform} :: ${name}`}
-                </option>
-              ))}
+                {map(accounts,
+                  ({id, platform, name}, index) => (
+                    <option key={index} value={id}>
+                      {`${platform} :: ${name}`}
+                    </option>
+                  ))}
 
-          </Select>
+              </Select>
 
-          <Select
-            name='media'
-            label='media'
-            error={errors.media}
-            value={selectedMedia}
-            onChange={this.onChangeMedia}>
+              <Select
+                name='media'
+                label='media'
+                error={errors.media}
+                value={selectedMedia}
+                onChange={this.onChangeMedia}>
 
-            <option value=''/>
+                <option value=''/>
 
-            {map(medias,
-              ({id, name}, index) => (
-                <option key={index} value={id}>
-                  {name}
-                </option>
-              ))}
-          </Select>
+                {map(medias,
+                  ({id, name}, index) => (
+                    <option key={index} value={id}>
+                      {name}
+                    </option>
+                  ))}
+              </Select>
 
-          <Select
-            name='kpi'
-            label='kpi'
-            error={errors.kpi}
-            onChange={this.dismissError}>
+              <Select
+                name='kpi'
+                label='kpi'
+                error={errors.kpi}
+                onChange={this.dismissError}>
 
-            <option value=''/>
+                <option value=''/>
 
-            {map(get(find(medias, {id: selectedMedia}), 'kpis'),
-              ({id, name}, index) => (
-                <option key={index} value={id}>
-                  {name}
-                </option>
-              ))}
-          </Select>
+                {map(get(find(medias, {id: selectedMedia}), 'kpis'),
+                  ({id, name}, index) => (
+                    <option key={index} value={id}>
+                      {name}
+                    </option>
+                  ))}
+              </Select>
 
-          {this.isConnectedToDash() ? (
-            <div>
-              <input type='hidden' name='dash_campaign' value={get(dashCampaign, 'id', '')}/>
-              <AutoSelect
-                disabled={this.state.isLoadingDashCampaigns}
-                placeholder={this.context.messages.dashCampaignLabel}
-                onChange={this.onChangeDashCampaign}
-                options={map(company.dashCampaigns, this.normalizeDashCampaignOption)}
-                selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}/>
-            </div>
-          ) : null}
+              {this.isConnectedToDash() ? (
+                <div>
+                  <input type='hidden' name='dash_campaign' value={get(dashCampaign, 'id', '')}/>
+                  <AutoSelect
+                    disabled={this.state.isLoadingDashCampaigns}
+                    placeholder={this.context.messages.dashCampaignLabel}
+                    onChange={this.onChangeDashCampaign}
+                    options={map(company.dashCampaigns, this.normalizeDashCampaignOption)}
+                    selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}/>
+                </div>
+              ) : null}
 
-          <Input
-            name='tag'
-            label='folderTag'
-            error={errors.tag}
-            onChange={this.onChangeTag}/>
+              <Input
+                name='tag'
+                label='folderTag'
+                error={errors.tag}
+                onChange={this.onChangeTag}/>
 
-          <br/>
+              <br/>
 
-          {showTagCheckbox && (
-            <Checkbox
-              checked
-              label={<Message>autoLinkRightAway</Message>}
-              name='searchTagsRightAway'/>)}
+              {showTagCheckbox && (
+                <Checkbox
+                  checked
+                  label={<Message>autoLinkRightAway</Message>}
+                  name='searchTagsRightAway'/>)}
 
-        </Content>
+            </Content>
 
-        <Footer>
-          <Message>newFolderCallToAction</Message>
-        </Footer>
-      </Form>
+            <Footer>
+              <Message>newFolderCallToAction</Message>
+            </Footer>
+          </Form>
+        </Page>
+      </div>
     )
   }
 })

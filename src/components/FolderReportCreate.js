@@ -6,6 +6,8 @@ import {createFolderReportAction} from '../actions/create-folder-report'
 import {cloneFolderReportAction} from '../actions/clone-folder-report'
 import {Form, Content, Header, Footer} from './Card'
 import Message from 'tetris-iso/Message'
+import Page from './Page'
+import SubHeader from './SubHeader'
 
 const {PropTypes} = React
 
@@ -69,25 +71,30 @@ const CreateReport = React.createClass({
     const {errors} = this.state
 
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <Header>
-          <Message>newReportHeader</Message>
-        </Header>
+      <div>
+        <SubHeader/>
+        <Page>
+          <Form onSubmit={this.handleSubmit}>
+            <Header>
+              <Message>newReportHeader</Message>
+            </Header>
 
-        <Content>
-          <Input
-            required
-            label='name'
-            name='name'
-            error={errors.name}
-            defaultValue={query.name}
-            onChange={this.dismissError}/>
-        </Content>
+            <Content>
+              <Input
+                required
+                label='name'
+                name='name'
+                error={errors.name}
+                defaultValue={query.name}
+                onChange={this.dismissError}/>
+            </Content>
 
-        <Footer>
-          <Message>newReportCallToAction</Message>
-        </Footer>
-      </Form>
+            <Footer>
+              <Message>newReportCallToAction</Message>
+            </Footer>
+          </Form>
+        </Page>
+      </div>
     )
   }
 })
