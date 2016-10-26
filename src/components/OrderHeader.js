@@ -9,8 +9,8 @@ import {styled} from './mixins/styled'
 
 const style = csjs`
 .card {
-  width: 96%;
-  margin: 1em auto 0 auto;
+  width: 100%;
+  margin: 0;
   min-height: 0
 }
 .inner {

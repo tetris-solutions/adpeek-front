@@ -6,9 +6,8 @@ import Message from 'tetris-iso/Message'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
 import {Link} from 'react-router'
-import trimEnd from 'lodash/trimEnd'
+import compact from 'lodash/compact'
 
-const clean = str => trimEnd(str, '/')
 const style = csjs`
 .box {
   margin: 0 8%;
@@ -31,6 +30,9 @@ const style = csjs`
 }`
 
 const {PropTypes} = React
+const levels = ['company', 'workspace', 'folder', 'campaign', 'order', 'report']
+const calcPath = params => compact(map(levels, name => params[name] && `${name}/${params[name]}`))
+  .join('/')
 
 const Recent = React.createClass({
   displayName: 'Recent',
@@ -42,11 +44,6 @@ const Recent = React.createClass({
     level: PropTypes.string.isRequired,
     node: PropTypes.object.isRequired
   },
-  contextTypes: {
-    location: PropTypes.shape({
-      pathname: PropTypes.string
-    }).isRequired
-  },
   getList () {
     return this.props.node[camelCase(`recent ${this.props.level}`)]
   },
@@ -56,8 +53,8 @@ const Recent = React.createClass({
     dispatch(loadRecentAction, level, params)
   },
   render () {
-    const {location: {pathname}} = this.context
-    const {level, icon} = this.props
+    const {level, params, icon} = this.props
+    const path = calcPath(params)
 
     return (
       <div className={String(style.box)}>
@@ -69,7 +66,7 @@ const Recent = React.createClass({
           <Link
             key={id}
             title={name}
-            to={`${clean(pathname)}/${level}/${id}`}
+            to={`/${path}/${level}/${id}`}
             className={`mdl-color-text--grey-800 ${style.item}`}>
 
             <i className='material-icons'>{icon}</i>

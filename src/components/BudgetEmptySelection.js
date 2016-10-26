@@ -16,7 +16,7 @@ function BudgetEmptySelection ({
   }
 
   return (
-    <Form onSubmit={onSubmit} size='large'>
+    <Form onSubmit={onSubmit} size='full'>
       <Header color='blue-grey-500'>
         <Message>emptyBudgetSelectionTitle</Message>
       </Header>

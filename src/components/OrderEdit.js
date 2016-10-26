@@ -51,24 +51,21 @@ export function OrderEdit ({
       </Fence>
 
       <Page>
-        <OrderHeader
-          min={some(order.budgets, notPercentage) ? Math.max(1, order.amount - remainingValue) : 1}
-          change={changeOrderField}
-          order={order}/>
-
         <div className='mdl-grid'>
+          <div className='mdl-cell mdl-cell--12-col'>
+            <OrderHeader
+              min={some(order.budgets, notPercentage) ? Math.max(1, order.amount - remainingValue) : 1}
+              change={changeOrderField}
+              order={order}/>
+          </div>
           <div className='mdl-cell mdl-cell--5-col'>
-            <br/>
-
             <OrderPie
               selectedBudgetId={budget ? budget.id : null}
               remainingAmount={remainingAmount}
               order={order}
               selectBudget={selectBudget}/>
-
           </div>
           <div className='mdl-cell mdl-cell--7-col'>
-
             {budget ? (
               <BudgetEdit
                 close={closeBudget}

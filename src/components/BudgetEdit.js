@@ -76,7 +76,7 @@ export const BudgetEdit = React.createClass({
     }
 
     return (
-      <Card size='large'>
+      <Card size='full'>
         <Header>
           <Message>editBudgetHeader</Message>
         </Header>

@@ -1,8 +1,7 @@
 import React from 'react'
 import csjs from 'csjs'
 import omit from 'lodash/omit'
-import assign from 'lodash/assign'
-import {styled} from './mixins/styled'
+import {styledFnComponent} from './higher-order/styled-fn-component'
 
 const style = csjs`
 .card {
@@ -16,10 +15,19 @@ const style = csjs`
 .large extends .card {
   width: 90%;
 }
+.full extends .card {
+  width: 100%;
+  margin: 0;
+}
 .small > .content {
   overflow: visible;
   width: 90%;
   margin: .5em auto;
+}
+.full > .content {
+  margin: 2em auto;
+  padding: 0;
+  width: 94%;
 }
 .large > .content {
   width: 90%;
@@ -32,47 +40,43 @@ const style = csjs`
 
 const {PropTypes} = React
 
-export const Card = React.createClass({
-  displayName: 'Card',
-  mixins: [styled(style)],
-  getDefaultProps () {
-    return {
-      size: 'small',
-      tag: 'div'
-    }
-  },
-  propTypes: {
-    size: PropTypes.oneOf(['small', 'large']),
-    tag: PropTypes.string,
-    children: PropTypes.node.isRequired
-  },
-  render () {
-    const {children, size, tag} = this.props
+const Card_ = props => {
+  const {children, size, tag: Tag} = props
+  const subProps = omit(props, 'tag')
 
-    const props = omit(this.props, 'tag')
-
-    return React.createElement(tag, assign(props, {
-      className: `mdl-card mdl-shadow--6dp ${style[size]}`
-    }), children)
-  }
-})
-
-export const Form = React.createClass({
-  displayName: 'Form',
-  propTypes: {
-    onSubmit: PropTypes.func,
-    children: PropTypes.node
-  },
-  render () {
-    return <Card {...this.props} tag='form'/>
-  }
-})
-
-export function Content ({children, tag, className}) {
-  return React.createElement(tag, {
-    className: `mdl-card__supporting-text ${style.content} ${className}`
-  }, children)
+  return (
+    <Tag className={`mdl-card mdl-shadow--6dp ${style[size]}`} {...subProps}>
+      {children}
+    </Tag>
+  )
 }
+
+Card_.displayName = 'Card'
+Card_.propTypes = {
+  size: PropTypes.oneOf(['small', 'large', 'full']),
+  tag: PropTypes.string,
+  children: PropTypes.node.isRequired
+}
+Card_.defaultProps = {
+  size: 'small',
+  tag: 'div'
+}
+
+export const Card = styledFnComponent(Card_, style)
+
+export const Form = props => <Card {...props} tag='form'/>
+
+Form.displayName = 'Form'
+Form.propTypes = {
+  onSubmit: PropTypes.func,
+  children: PropTypes.node
+}
+
+export const Content = ({children, tag: Tag, className}) => (
+  <Tag className={`mdl-card__supporting-text ${style.content} ${className}`}>
+    {children}
+  </Tag>
+)
 
 Content.defaultProps = {
   tag: 'section',
