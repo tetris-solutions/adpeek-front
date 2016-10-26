@@ -54,10 +54,27 @@ const Page = React.createClass({
     routes: PropTypes.array.isRequired
   },
   getInitialState () {
-    return {isNavOpen: true}
+    return {
+      isNavOpen: typeof window !== 'undefined' && this.readFromLocalStorage()
+    }
   },
   toggleNav () {
-    this.setState({isNavOpen: !this.state.isNavOpen})
+    this.setState({
+      isNavOpen: !this.state.isNavOpen
+    }, this.writeToLocalStorage)
+  },
+  readFromLocalStorage () {
+    try {
+      return window.localStorage.getItem('openSideNav') !== 'false'
+    } catch (e) {
+      return true
+    }
+  },
+  writeToLocalStorage () {
+    try {
+      window.localStorage.setItem('openSideNav', this.state.isNavOpen)
+    } catch (e) {
+    }
   },
   render () {
     const SubNav = getSubNav(findLast(this.context.routes, hasSubNav))
