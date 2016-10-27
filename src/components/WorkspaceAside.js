@@ -7,6 +7,7 @@ import {deleteWorkspaceAction} from '../actions/delete-workspace'
 import {contextualize} from './higher-order/contextualize'
 import {Navigation, Button, Buttons, Name} from './Navigation'
 import Recent from './Recent'
+import isEmpty from 'lodash/isEmpty'
 
 const {PropTypes} = React
 
@@ -18,8 +19,12 @@ export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
       .then(() => router.replace(`/company/${company}`))
   }
 
+  const baseUrl = `/company/${company}/workspace/${workspace.id}`
+  const linkToReportList = isEmpty(workspace.reports)
+  const reportUrl = `${baseUrl}/${linkToReportList ? 'reports' : 'report/' + company.workspace[0].id}`
+
   return (
-    <Fence canEditWorkspace>{({canEditWorkspace}) =>
+    <Fence canBrowseReports canEditWorkspace>{({canBrowseReports, canEditWorkspace}) =>
       <Navigation icon='domain'>
         <Name>
           {workspace.name}
@@ -34,6 +39,11 @@ export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
           <Button tag={Link} to={`/company/${company}/workspace/${workspace.id}/orders`} icon='attach_money'>
             <Message>workspaceOrders</Message>
           </Button>
+
+          {(canBrowseReports || !linkToReportList) && (
+            <Button tag={Link} to={reportUrl} icon='show_chart'>
+              <Message>workspaceReport</Message>
+            </Button>)}
 
           {canEditWorkspace && (
             <Button tag={DeleteButton} entityName={workspace.name} onClick={onClick} icon='delete'>

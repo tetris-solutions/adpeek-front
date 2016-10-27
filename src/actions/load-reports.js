@@ -18,7 +18,7 @@ export function loadReportsAction (tree, params, limitToFirst = false, token = n
 
   if (params.folder) {
     level = 'folder'
-  } else if (params.folder) {
+  } else if (params.workspace) {
     level = 'workspace'
   }
 

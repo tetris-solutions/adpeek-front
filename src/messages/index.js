@@ -253,7 +253,8 @@ module.exports = {
     workspaceFoldersSummary: 'Folders',
     recentFolder: 'Last Accessed Folders',
     creatives: 'Creatives',
-    companyReport: 'Company Report'
+    companyReport: 'Company Report',
+    workspaceReport: 'Workspace Report'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -509,6 +510,7 @@ module.exports = {
     workspaceFoldersSummary: 'Pastas',
     recentFolder: 'Pastas recentes',
     creatives: 'Criativos',
-    companyReport: 'Relatório'
+    companyReport: 'Relatório',
+    workspaceReport: 'Relatório'
   }
 }
