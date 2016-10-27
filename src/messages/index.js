@@ -252,7 +252,8 @@ module.exports = {
     faveWorkspaceList: 'Favorite Workspaces',
     workspaceFoldersSummary: 'Folders',
     recentFolder: 'Last Accessed Folders',
-    creatives: 'Creatives'
+    creatives: 'Creatives',
+    companyReport: 'Company Report'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -507,6 +508,7 @@ module.exports = {
     faveWorkspaceList: 'Áreas de Trabalho Favoritas',
     workspaceFoldersSummary: 'Pastas',
     recentFolder: 'Pastas recentes',
-    creatives: 'Criativos'
+    creatives: 'Criativos',
+    companyReport: 'Relatório'
   }
 }
