@@ -1,8 +1,8 @@
 import omit from 'lodash/omit'
-import set from 'lodash/set'
-import without from 'lodash/without'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {GET} from '@tetris/http'
+import filter from 'lodash/filter'
+import map from 'lodash/map'
 
 import {getDeepCursor} from '../functions/get-deep-cursor'
 
@@ -139,23 +139,28 @@ export function loadReportMetaDataAction (tree, params, platform, entity, token)
     entity
   ])
 
+  function saveMetadata (response) {
+    const attributes = omit(response.data, excluded)
+
+    if (attributes.id) {
+      const entityNameMessage = `${entity[0].toLowerCase() + entity.slice(1)}Entity`
+      attributes.id.name = tree.get(['intl', 'messages', entityNameMessage])
+    }
+
+    const metaData = {
+      attributes,
+      dimensions: map(filter(attributes, 'is_dimension'), 'id'),
+      metrics: map(filter(attributes, 'is_metric'), 'id')
+    }
+
+    tree.set(pathToReport, metaData)
+    tree.commit()
+
+    return response
+  }
+
   return loadReportMetaData(platform, entity, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
-    .then(function onSuccess (response) {
-      const metaData = response.data
-      const entityNameMessage = `${entity[0].toLowerCase() + entity.slice(1)}Entity`
-
-      metaData.attributes = omit(metaData.attributes, excluded)
-
-      set(metaData, 'attributes.id.name',
-        tree.get(['intl', 'messages', entityNameMessage]))
-
-      metaData.dimensions = without(metaData.dimensions, excluded)
-
-      tree.set(pathToReport, metaData)
-      tree.commit()
-
-      return response
-    })
+    .then(saveMetadata)
     .catch(pushResponseErrorToState(tree))
 }
