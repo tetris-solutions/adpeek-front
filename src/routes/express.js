@@ -21,7 +21,6 @@ import {loadWorkspaceActionServerAdaptor as workspace} from '../actions/load-wor
 export function setAppRoutes (app, render) {
   const _ = bind.placeholder
   const campaignsWithAdsets = bind(campaigns, null, _, _, 'include-adsets')
-  const defaultFolderReport = bind(reports, null, _, _, true)
 
   app.get('/',
     protect,
@@ -31,6 +30,16 @@ export function setAppRoutes (app, render) {
   app.get('/company/:company',
     protect,
     preload(companies, workspaces),
+    render)
+
+  app.get('/company/:company/reports',
+    protect,
+    preload(companies, reports),
+    render)
+
+  app.get('/company/:company/orders',
+    protect,
+    preload(companies, orders),
     render)
 
   app.get('/company/:company/orders',
@@ -53,6 +62,11 @@ export function setAppRoutes (app, render) {
     preload(companies, workspace, folders),
     render)
 
+  app.get('/company/:company/workspace/:workspace/reports',
+    protect,
+    preload(companies, workspace, reports),
+    render)
+
   app.get('/company/:company/workspace/:workspace/orders',
     protect,
     preload(companies, workspace, orders),
@@ -73,14 +87,13 @@ export function setAppRoutes (app, render) {
     preload(medias, companies, workspace, accounts),
     render)
 
-  const subFolderActions = [statuses, companies, workspace, folder, campaigns, defaultFolderReport]
+  const subFolderActions = [statuses, companies, workspace, folder, campaigns]
 
   app.get('/company/:company/workspace/:workspace/folder/:folder',
     protect,
     preload(...subFolderActions),
     render)
 
-  subFolderActions.pop()
   subFolderActions.push(reports)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/reports',

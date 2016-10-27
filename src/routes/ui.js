@@ -74,7 +74,6 @@ const NOPE = () => <div>NOPE.jpeg</div>
 export function getRoutes (tree, protectRoute, preload, createRoot) {
   const _ = bind.placeholder
   const campaignsWithAdsets = bind(campaigns, null, _, _, 'include-adsets')
-  const defaultFolderReport = bind(reports, null, _, _, true)
 
   /* eslint-disable react/jsx-indent-props */
   return (
@@ -138,7 +137,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
             <Route path='folder/:folder'
                    aside={FolderAside}
                    breadcrumb={FolderBreadcrumb}
-                   onEnter={preload(folder, defaultFolderReport)}>
+                   onEnter={preload(folder)}>
 
               <IndexRoute component={Campaigns} onEnter={preload(statuses, campaigns)}/>
               <Route path='creatives' component={FolderCreatives} onEnter={preload(statuses, campaigns)}/>

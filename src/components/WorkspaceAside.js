@@ -7,7 +7,7 @@ import {deleteWorkspaceAction} from '../actions/delete-workspace'
 import {contextualize} from './higher-order/contextualize'
 import {Navigation, Button, Buttons, Name} from './Navigation'
 import Recent from './Recent'
-import isEmpty from 'lodash/isEmpty'
+import ReportLink from './ReportLink'
 
 const {PropTypes} = React
 
@@ -20,11 +20,9 @@ export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
   }
 
   const baseUrl = `/company/${company}/workspace/${workspace.id}`
-  const linkToReportList = isEmpty(workspace.reports)
-  const reportUrl = `${baseUrl}/${linkToReportList ? 'reports' : 'report/' + company.workspace[0].id}`
 
   return (
-    <Fence canBrowseReports canEditWorkspace>{({canBrowseReports, canEditWorkspace}) =>
+    <Fence canEditWorkspace>{({canEditWorkspace}) =>
       <Navigation icon='domain'>
         <Name>
           {workspace.name}
@@ -32,18 +30,18 @@ export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
         <br/>
         <Buttons>
           {canEditWorkspace && (
-            <Button tag={Link} to={`/company/${company}/workspace/${workspace.id}/edit`} icon='mode_edit'>
+            <Button tag={Link} to={`${baseUrl}/edit`} icon='mode_edit'>
               <Message>editWorkspace</Message>
             </Button>)}
 
-          <Button tag={Link} to={`/company/${company}/workspace/${workspace.id}/orders`} icon='attach_money'>
+          <Button tag={Link} to={`${baseUrl}/orders`} icon='attach_money'>
             <Message>workspaceOrders</Message>
           </Button>
 
-          {(canBrowseReports || !linkToReportList) && (
-            <Button tag={Link} to={reportUrl} icon='show_chart'>
-              <Message>workspaceReport</Message>
-            </Button>)}
+          <ReportLink
+            params={params}
+            node={workspace}
+            dispatch={dispatch}/>
 
           {canEditWorkspace && (
             <Button tag={DeleteButton} entityName={workspace.name} onClick={onClick} icon='delete'>
