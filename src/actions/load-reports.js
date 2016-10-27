@@ -2,6 +2,7 @@ import {GET} from '@tetris/http'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {saveResponseData} from '../functions/save-response-data'
 import compact from 'lodash/compact'
+import {inferLevelFromParams} from '../functions/infer-level-from-params'
 
 function loadReports (level, id, limitToFirst = false, config) {
   let url = `${process.env.ADPEEK_API_URL}/${level}/${id}/reports`
@@ -14,14 +15,7 @@ function loadReports (level, id, limitToFirst = false, config) {
 }
 
 export function loadReportsAction (tree, params, limitToFirst = false, token = null) {
-  let level = 'company'
-
-  if (params.folder) {
-    level = 'folder'
-  } else if (params.workspace) {
-    level = 'workspace'
-  }
-
+  const level = inferLevelFromParams(params)
   const path = compact([
     'user',
     ['companies', params.company],

@@ -37,6 +37,11 @@ export function setAppRoutes (app, render) {
     preload(companies, reports),
     render)
 
+  app.get('/company/:company/reports/new',
+    protect,
+    preload(companies, reports),
+    render)
+
   app.get('/company/:company/orders',
     protect,
     preload(companies, orders),
@@ -63,6 +68,11 @@ export function setAppRoutes (app, render) {
     render)
 
   app.get('/company/:company/workspace/:workspace/reports',
+    protect,
+    preload(companies, workspace, reports),
+    render)
+
+  app.get('/company/:company/workspace/:workspace/reports/new',
     protect,
     preload(companies, workspace, reports),
     render)
