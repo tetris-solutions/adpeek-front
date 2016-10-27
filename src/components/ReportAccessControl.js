@@ -60,11 +60,11 @@ CardButton.propTypes = {
 }
 
 function Options ({user, report, makePublic, unlock, setAsFolderDefault, close, canEditFolder}) {
-  const setAsDefaultDescription = report.is_folder_report
+  const setAsDefaultDescription = report.is_default_report
     ? <Message>uncheckFolderReportDescription</Message>
     : <Message>checkFolderReportDescription</Message>
 
-  const setAsDefaultCallToAction = report.is_folder_report
+  const setAsDefaultCallToAction = report.is_default_report
     ? <Message>uncheckFolderReport</Message>
     : <Message>checkFolderReport</Message>
 
@@ -105,7 +105,7 @@ function Options ({user, report, makePublic, unlock, setAsFolderDefault, close, 
         {showMakeDefault && (
           <CardButton
             description={setAsDefaultDescription}
-            icon={report.is_folder_report ? 'indeterminate_check_box' : 'check_box'}
+            icon={report.is_default_report ? 'indeterminate_check_box' : 'check_box'}
             callToAction={setAsDefaultCallToAction}
             onClick={setAsFolderDefault}/>)}
 

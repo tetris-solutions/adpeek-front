@@ -13,5 +13,5 @@ export default PropTypes.shape({
   platform: PropTypes.string,
   is_private: PropTypes.bool,
   is_user_selected: PropTypes.bool,
-  is_folder_report: PropTypes.bool
+  is_default_report: PropTypes.bool
 })
