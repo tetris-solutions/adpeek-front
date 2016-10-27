@@ -43,10 +43,9 @@ export function FolderAside ({
             <Message>folderOrders</Message>
           </Button>
 
-          <ReportLink
-            params={params}
-            node={folder}
-            dispatch={dispatch}/>
+          <ReportLink params={params} reports={folder.reports} dispatch={dispatch}>
+            <Message>folderReport</Message>
+          </ReportLink>
 
           {canEditFolder && (
             <Button tag={Link} to={`${baseUrl}/edit`} icon='mode_edit'>

@@ -30,10 +30,9 @@ export const CompanyAside = ({company, params, dispatch}) => {
           <Message>companyOrders</Message>
         </Button>
 
-        <ReportLink
-          params={params}
-          node={company}
-          dispatch={dispatch}/>
+        <ReportLink params={params} reports={company.reports} dispatch={dispatch}>
+          <Message>companyReport</Message>
+        </ReportLink>
 
         <Button tag={Link} to='/' icon='close'>
           <Message>oneLevelUpNavigation</Message>

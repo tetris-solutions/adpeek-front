@@ -29,19 +29,18 @@ export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
         </Name>
         <br/>
         <Buttons>
-          {canEditWorkspace && (
-            <Button tag={Link} to={`${baseUrl}/edit`} icon='mode_edit'>
-              <Message>editWorkspace</Message>
-            </Button>)}
-
           <Button tag={Link} to={`${baseUrl}/orders`} icon='attach_money'>
             <Message>workspaceOrders</Message>
           </Button>
 
-          <ReportLink
-            params={params}
-            node={workspace}
-            dispatch={dispatch}/>
+          <ReportLink params={params} reports={workspace.reports} dispatch={dispatch}>
+            <Message>workspaceReport</Message>
+          </ReportLink>
+
+          {canEditWorkspace && (
+            <Button tag={Link} to={`${baseUrl}/edit`} icon='mode_edit'>
+              <Message>editWorkspace</Message>
+            </Button>)}
 
           {canEditWorkspace && (
             <Button tag={DeleteButton} entityName={workspace.name} onClick={onClick} icon='delete'>
