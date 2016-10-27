@@ -25,7 +25,7 @@ function canSkipReportEditPrompt () {
   }
 }
 
-export function ReportAside ({report, dispatch, user}, {messages, locales, router, location: {pathname}, params}) {
+export function FolderReportAside ({report, dispatch, user}, {messages, locales, router, location: {pathname}, params}) {
   const {company, workspace, folder} = params
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${folder}`
   const reload = () => dispatch(loadFolderReportAction, company, workspace, folder, report.id)
@@ -89,8 +89,8 @@ export function ReportAside ({report, dispatch, user}, {messages, locales, route
   )
 }
 
-ReportAside.displayName = 'Report-Aside'
-ReportAside.propTypes = {
+FolderReportAside.displayName = 'Folder-Report-Aside'
+FolderReportAside.propTypes = {
   dispatch: PropTypes.func,
   user: PropTypes.object,
   report: PropTypes.shape({
@@ -98,7 +98,7 @@ ReportAside.propTypes = {
     name: PropTypes.string
   })
 }
-ReportAside.contextTypes = {
+FolderReportAside.contextTypes = {
   messages: PropTypes.object,
   locales: PropTypes.string,
   router: PropTypes.object,
@@ -106,4 +106,4 @@ ReportAside.contextTypes = {
   params: PropTypes.object
 }
 
-export default contextualize(ReportAside, 'report', 'user')
+export default contextualize(FolderReportAside, 'report', 'user')

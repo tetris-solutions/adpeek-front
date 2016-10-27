@@ -1,20 +1,19 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import {Link} from 'react-router'
+import compact from 'lodash/compact'
+import join from 'lodash/join'
 
 const {PropTypes} = React
 
 export function OrdersBreadcrumb ({params: {company, workspace, folder}}) {
-  let url = `/company/${company}`
+  const scope = join(compact([
+    company && `company/${company}`,
+    workspace && `workspace/${workspace}`,
+    folder && `folder/${folder}`
+  ]), '/')
 
-  if (workspace) {
-    url += `/workspace/${workspace}`
-    if (folder) {
-      url += `/folder/${folder}`
-    }
-  }
-  url += '/orders'
-
+  const url = `/${scope}/orders`
   return (
     <Link to={url}>
       <i className='material-icons'>list</i>

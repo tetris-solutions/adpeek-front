@@ -2,19 +2,19 @@ import Message from 'tetris-iso/Message'
 import React from 'react'
 import {Link} from 'react-router'
 import Fence from './Fence'
+import compact from 'lodash/compact'
+import join from 'lodash/join'
 
 const {PropTypes} = React
 
 export function ReportsBreadcrumb ({params: {company, workspace, folder}}) {
-  let url = `/company/${company}`
+  const scope = join(compact([
+    company && `company/${company}`,
+    workspace && `workspace/${workspace}`,
+    folder && `folder/${folder}`
+  ]), '/')
 
-  if (workspace) {
-    url += `/workspace/${workspace}`
-    if (folder) {
-      url += `/folder/${folder}`
-    }
-  }
-  url += '/reports'
+  const url = `/${scope}/reports`
 
   return (
     <Fence canBrowseReports>

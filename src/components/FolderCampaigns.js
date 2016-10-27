@@ -11,7 +11,7 @@ import FolderCampaignLooseLi from './FolderCampaignLooseLi'
 import FolderCampaignsHeader from './FolderCampaignsHeader'
 import FolderCampaignsSelector from './FolderCampaignsSelectorCard'
 import {linkCampaignsAction} from '../actions/link-campaigns'
-import {loadCampaignsAction} from '../actions/load-campaigns'
+import {loadFolderCampaignsAction} from '../actions/load-folder-campaigns'
 import {loadLooseCampaignsAction} from '../actions/load-loose-campaigns'
 import {unlinkCampaignsAction} from '../actions/unlink-campaign'
 import {contextualize} from './higher-order/contextualize'
@@ -71,7 +71,7 @@ const FolderCampaigns = React.createClass({
 
     function reload () {
       return Promise.all([
-        dispatch(loadCampaignsAction, company, workspace, folder),
+        dispatch(loadFolderCampaignsAction, company, workspace, folder),
         loadLoose()
       ])
     }
@@ -97,7 +97,7 @@ const FolderCampaigns = React.createClass({
 
     this.setState({isRefreshing: true})
 
-    return dispatch(loadCampaignsAction, company, workspace, folder, 'refresh-campaigns')
+    return dispatch(loadFolderCampaignsAction, company, workspace, folder, 'refresh-campaigns')
       .then(() => this.setState({isRefreshing: false}), err => {
         this.setState({isRefreshing: false})
         throw err

@@ -16,6 +16,8 @@ import {cloneOrderAction} from '../actions/clone-order'
 import {loadOrdersAction} from '../actions/load-orders'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import SubHeader from './SubHeader'
+import compact from 'lodash/compact'
+import join from 'lodash/join'
 
 const style = csjs`
 .table {
@@ -112,16 +114,13 @@ export const OrdersClone = React.createClass({
         }))
 
     function navigateBackToOrderList () {
-      let orderListUrl = `/company/${params.company}`
-      if (params.workspace) {
-        orderListUrl += `/workspace/${params.workspace}`
-        if (params.folder) {
-          orderListUrl += `/folder/${params.folder}`
-        }
-      }
-      orderListUrl += '/orders'
+      const scope = join(compact([
+        params.company && `company/${params.company}`,
+        params.workspace && `workspace/${params.workspace}`,
+        params.folder && `folder/${params.folder}`
+      ]), '/')
 
-      router.push(orderListUrl)
+      router.push(`/${scope}/orders`)
     }
 
     const reloadOrders = () =>

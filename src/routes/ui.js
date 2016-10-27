@@ -15,7 +15,7 @@ import CompanyBreadcrumb from '../components/CompanyBreadcrumb'
 import CompanyOrders from '../components/CompanyOrders'
 import CompanyOrdersCloning from '../components/CompanyOrdersCloning'
 import CreateFolder from '../components/FolderCreate'
-import CreateReport from '../components/FolderReportCreate'
+import FolderReportCreate from '../components/FolderReportCreate'
 import CreateWorkspace from '../components/WorkspaceCreate'
 import FolderCreatives from '../components/FolderCreatives'
 import FolderAside from '../components/FolderAside'
@@ -25,6 +25,8 @@ import FolderOrders from '../components/FolderOrders'
 import FolderOrdersCloning from '../components/FolderOrdersCloning'
 import FolderReportBuilder from '../components/FolderReport'
 import FolderReports from '../components/FolderReports'
+import WorkspaceReports from '../components/WorkspaceReports'
+import CompanyReports from '../components/CompanyReports'
 import Folders from '../components/Folders'
 import Companies from '../components/Companies'
 import Order from '../components/Order'
@@ -32,7 +34,7 @@ import OrderAside from '../components/OrderAside'
 import OrderAutoBudget from '../components/OrderAutoBudget'
 import OrderBreadCrumb from '../components/OrderBreadcrumb'
 import OrdersBreadCrumb from '../components/OrdersBreadcrumb'
-import ReportAside from '../components/ReportAside'
+import FolderReportAside from '../components/FolderReportAside'
 import ReportBread from '../components/ReportBreadcrumb'
 import ReportsBread from '../components/ReportsBreadcrumb'
 import WorkspaceAside from '../components/WorkspaceAside'
@@ -46,18 +48,20 @@ import ErrorScreen from '../components/ErrorScreen'
 import {loadWorkspaceAccountsActionRouterAdaptor as accounts} from '../actions/load-accounts'
 import {loadAutoBudgetLogsActionRouterAdaptor as autoBudgetLogs} from '../actions/load-autobudget-logs'
 import {loadBudgetsActionRouterAdaptor as budgets} from '../actions/load-budgets'
-import {loadCampaignsActionRouterAdaptor as campaigns} from '../actions/load-campaigns'
+import {loadFolderCampaignsActionRouterAdaptor as campaigns} from '../actions/load-folder-campaigns'
 import {loadCompanyRolesActionRouterAdaptor as roles} from '../actions/load-company-roles'
 import {loadCompanyWorkspacesActionRouterAdaptor as workspaces} from '../actions/load-company-workspaces'
 import {loadDeliveryMethodsActionRouterAdaptor as deliveryMethods} from '../actions/load-delivery-methods'
 import {loadFolderActionRouterAdaptor as folder} from '../actions/load-folder'
 import {loadFolderReportActionRouterAdaptor as report} from '../actions/load-folder-report'
-import {loadFolderReportsActionRouterAdaptor as reports} from '../actions/load-folder-reports'
+import {loadReportsActionRouterAdaptor as reports} from '../actions/load-reports'
 import {loadWorkspaceFoldersActionRouterAdaptor as folders} from '../actions/load-folders'
 import {loadMediasActionRouterAdaptor as medias} from '../actions/load-medias'
 import {loadOrdersActionRouterAdaptor as orders} from '../actions/load-orders'
 import {loadStatusesActionRouterAdaptor as statuses} from '../actions/load-statuses'
 import {loadWorkspaceActionRouterAdaptor as workspace} from '../actions/load-workspace'
+
+const NOPE = () => <div>NOPE.jpeg</div>
 
 /**
  * returns the route config
@@ -84,6 +88,18 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
           <IndexRoute component={Workspaces} onEnter={preload(workspaces)}/>
 
+          <Route breadcrumb={ReportsBread}>
+            <Route path='report/:report' breadcrumb={ReportBread}>
+              <IndexRoute component={NOPE}/>
+              <Route path='edit' component={NOPE}/>
+            </Route>
+
+            <Route path='reports'>
+              <IndexRoute onEnter={preload(reports)} component={CompanyReports}/>
+              <Route path='new' component={NOPE}/>
+            </Route>
+          </Route>
+
           <Route path='orders' breadcrumb={OrdersBreadCrumb} onEnter={preload(orders)}>
             <IndexRoute component={CompanyOrders}/>
             <Route path='clone' component={CompanyOrdersCloning}/>
@@ -97,6 +113,18 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                  aside={WorkspaceAside}>
 
             <IndexRoute component={Folders} onEnter={preload(folders)}/>
+
+            <Route breadcrumb={ReportsBread}>
+              <Route path='report/:report' breadcrumb={ReportBread}>
+                <IndexRoute component={NOPE}/>
+                <Route path='edit' component={NOPE}/>
+              </Route>
+
+              <Route path='reports'>
+                <IndexRoute onEnter={preload(reports)} component={WorkspaceReports}/>
+                <Route path='new' component={NOPE}/>
+              </Route>
+            </Route>
 
             <Route path='orders' breadcrumb={OrdersBreadCrumb} onEnter={preload(orders)}>
               <IndexRoute component={WorkspaceOrders}/>
@@ -122,7 +150,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
               <Route onEnter={preload(campaigns)} breadcrumb={ReportsBread}>
                 <Route
                   path='report/:report'
-                  aside={ReportAside}
+                  aside={FolderReportAside}
                   breadcrumb={ReportBread}
                   onEnter={preload(report)}>
 
@@ -132,7 +160,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
                 <Route path='reports'>
                   <IndexRoute onEnter={preload(reports)} component={FolderReports}/>
-                  <Route path='new' component={CreateReport}/>
+                  <Route path='new' component={FolderReportCreate}/>
                 </Route>
               </Route>
 
