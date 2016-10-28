@@ -44,6 +44,7 @@ import WorkspaceOrders from '../components/WorkspaceOrders'
 import WorkspaceOrdersCloning from '../components/WorkspaceOrdersCloning'
 import Workspaces from '../components/Workspaces'
 import ErrorScreen from '../components/ErrorScreen'
+import NotImplemented from '../components/NotImplemented'
 
 import {loadWorkspaceAccountsActionRouterAdaptor as accounts} from '../actions/load-accounts'
 import {loadAutoBudgetLogsActionRouterAdaptor as autoBudgetLogs} from '../actions/load-autobudget-logs'
@@ -60,8 +61,6 @@ import {loadMediasActionRouterAdaptor as medias} from '../actions/load-medias'
 import {loadOrdersActionRouterAdaptor as orders} from '../actions/load-orders'
 import {loadStatusesActionRouterAdaptor as statuses} from '../actions/load-statuses'
 import {loadWorkspaceActionRouterAdaptor as workspace} from '../actions/load-workspace'
-
-const NOPE = () => <div>NOPE.jpeg</div>
 
 /**
  * returns the route config
@@ -89,8 +88,8 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
           <Route breadcrumb={ReportsBread}>
             <Route path='report/:report' breadcrumb={ReportBread}>
-              <IndexRoute component={NOPE}/>
-              <Route path='edit' component={NOPE}/>
+              <IndexRoute component={NotImplemented}/>
+              <Route path='edit' component={NotImplemented}/>
             </Route>
 
             <Route path='reports'>
@@ -115,8 +114,8 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
             <Route breadcrumb={ReportsBread}>
               <Route path='report/:report' breadcrumb={ReportBread}>
-                <IndexRoute component={NOPE}/>
-                <Route path='edit' component={NOPE}/>
+                <IndexRoute component={NotImplemented}/>
+                <Route path='edit' component={NotImplemented}/>
               </Route>
 
               <Route path='reports'>

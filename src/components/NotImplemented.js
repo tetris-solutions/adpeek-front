@@ -9,7 +9,7 @@ const style = csjs`
   background-color: rgb(250, 250, 250)
 }`
 
-export const AdGroupsNotImplemented = () => (
+export const NotImplemented = () => (
   <div className={`mdl-card mdl-shadow--2dp ${style.notImplementedCard}`}>
     <div className='mdl-card__title mdl-card--expand'>
       <h4>
@@ -19,6 +19,6 @@ export const AdGroupsNotImplemented = () => (
   </div>
 )
 
-AdGroupsNotImplemented.displayName = 'AdGroups-Not-Implemented'
+NotImplemented.displayName = 'Not-Implemented'
 
-export default styledFnComponent(AdGroupsNotImplemented, style)
+export default styledFnComponent(NotImplemented, style)
