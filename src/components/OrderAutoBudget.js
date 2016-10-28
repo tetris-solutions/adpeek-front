@@ -3,20 +3,18 @@ import {styled} from './mixins/styled'
 import csjs from 'csjs'
 import {contextualize} from './higher-order/contextualize'
 import Input from './Input'
-import moment from 'moment'
 import AutoBudgetLogs from './AutoBudgetLogs'
 
 const {PropTypes} = React
 const style = csjs`
 `
 
-const yesterday = () => moment().subtract(1, 'day').format('YYYY-MM-DD')
-
 export const OrderAutoBudget = React.createClass({
   displayName: 'OrderAutoBudget',
   mixins: [styled(style)],
   contextTypes: {
-    router: PropTypes.object
+    router: PropTypes.object,
+    moment: PropTypes.func
   },
   propTypes: {
     order: PropTypes.object,
@@ -32,6 +30,9 @@ export const OrderAutoBudget = React.createClass({
       `/company/${company}/workspace/${workspace}/folder/${folder}/order/${order}/autobudget/${day}`
     )
   },
+  yesterday () {
+    return this.context.moment().subtract(1, 'day').format('YYYY-MM-DD')
+  },
   render () {
     const {folder, order: {autoBudgetLogs}, routeParams: {day}} = this.props
 
@@ -42,7 +43,7 @@ export const OrderAutoBudget = React.createClass({
             name='day'
             type='date'
             label='day'
-            value={day || yesterday()}
+            value={day || this.yesterday()}
             onChange={this.onChangeDay}/>
           <AutoBudgetLogs logs={autoBudgetLogs} platform={folder.account.platform}/>
         </div>

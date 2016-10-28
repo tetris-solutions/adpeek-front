@@ -3,7 +3,6 @@ import get from 'lodash/get'
 import isNumber from 'lodash/isNumber'
 import map from 'lodash/map'
 import max from 'lodash/max'
-import moment from 'moment'
 import sortBy from 'lodash/sortBy'
 import Message from 'tetris-iso/Message'
 import React from 'react'
@@ -41,7 +40,8 @@ const Report = React.createClass({
   contextTypes: {
     router: PropTypes.object,
     messages: PropTypes.object,
-    location: PropTypes.object
+    location: PropTypes.object,
+    moment: PropTypes.func
   },
   getInitialState () {
     return {
@@ -61,6 +61,7 @@ const Report = React.createClass({
   },
   getCurrentRange () {
     let {location: {query: {from, to}}} = this.context
+    const {moment} = this.context
 
     from = from || moment().subtract(30, 'days').format('YYYY-MM-DD')
     to = to || moment().format('YYYY-MM-DD')
@@ -119,6 +120,7 @@ const Report = React.createClass({
   render () {
     const {isLoading, metaData, editMode, report: {modules}} = this.props
     const {isCreatingReport} = this.state
+    const {moment} = this.context
     const {from, to} = this.getCurrentRange()
     const reportParams = assign({from, to}, this.props.reportParams)
     const {platform} = reportParams

@@ -2,7 +2,6 @@ import React from 'react'
 import Switch from './Switch'
 import {styled} from './mixins/styled'
 import csjs from 'csjs'
-import moment from 'moment'
 import VerticalAlign from './VerticalAlign'
 import filter from 'lodash/filter'
 import find from 'lodash/find'
@@ -73,11 +72,15 @@ export const EditableHeader = React.createClass({
     moment: React.PropTypes.func
   },
   getInitialState () {
-    return {
+    return {autoBudget: true}
+  },
+  componentWillMount () {
+    const {moment} = this.context
+
+    this.setState({
       start: moment().date(1).format('YYYY-MM-DD'),
-      end: moment().add(1, 'month').date(0).format('YYYY-MM-DD'),
-      autoBudget: true
-    }
+      end: moment().add(1, 'month').date(0).format('YYYY-MM-DD')
+    })
   },
   apply (e) {
     e.preventDefault()
