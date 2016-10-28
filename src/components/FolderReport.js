@@ -4,7 +4,7 @@ import flatten from 'lodash/flatten'
 import map from 'lodash/map'
 import trim from 'lodash/trim'
 import React from 'react'
-import get from 'lodash/get'
+import has from 'lodash/has'
 import Report from './Report'
 import {loadFolderEntitiesAction} from '../actions/load-folder-entities'
 import {loadReportMetaDataAction} from '../actions/load-report-meta-data'
@@ -69,7 +69,7 @@ const FolderReport = React.createClass({
       : dispatch(loadFolderEntitiesAction, params.company, params.workspace, params.folder)
 
     const loadMetaDataPromise = map(this.getEntities(),
-      ({id}) => get(metaData, [platform, id])
+      ({id}) => has(metaData, [platform, id])
         ? Promise.resolve()
         : dispatch(loadReportMetaDataAction, platform, id))
 
