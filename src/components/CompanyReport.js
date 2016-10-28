@@ -5,30 +5,29 @@ import get from 'lodash/get'
 
 const {PropTypes} = React
 
-const FolderReport = React.createClass({
-  displayName: 'Folder-Report',
+const CompanyReport = React.createClass({
+  displayName: 'Company-Report',
   propTypes: {
     report: PropTypes.object,
     location: PropTypes.object,
     metaData: PropTypes.object,
     params: PropTypes.object.isRequired,
     dispatch: PropTypes.func,
-    folder: PropTypes.shape({
+    company: PropTypes.shape({
       campaigns: PropTypes.array,
       adSets: PropTypes.array,
       keywords: PropTypes.array,
       adGroups: PropTypes.array,
       ads: PropTypes.array,
-      account: PropTypes.shape({
+      savedAccounts: PropTypes.arrayOf(PropTypes.shape({
         external_id: PropTypes.string,
         tetris_id: PropTypes.string,
         platform: PropTypes.string
-      })
+      }))
     })
   },
   render () {
-    const {params, metaData, dispatch, report, folder, location} = this.props
-    const {account} = folder
+    const {params, metaData, dispatch, report, company, location} = this.props
 
     return (
       <Report
@@ -36,15 +35,15 @@ const FolderReport = React.createClass({
         report={report}
         location={location}
         params={params}
-        metaData={get(metaData, account.platform)}
-        ads={folder.ads}
-        adGroups={folder.adGroups}
-        adSets={folder.adSets}
-        campaigns={folder.campaigns}
-        keywords={folder.keywords}
-        accounts={[account]}/>
+        metaData={get(metaData, '_')}
+        ads={company.ads}
+        adGroups={company.adGroups}
+        adSets={company.adSets}
+        campaigns={company.campaigns}
+        keywords={company.keywords}
+        accounts={company.savedAccounts}/>
     )
   }
 })
 
-export default contextualize(FolderReport, {metaData: ['reportMetaData']}, 'folder', 'report')
+export default contextualize(CompanyReport, {metaData: ['reportMetaData']}, 'company', 'report')

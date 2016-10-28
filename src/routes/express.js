@@ -17,7 +17,7 @@ import {loadMediasActionServerAdaptor as medias} from '../actions/load-medias'
 import {loadOrdersActionServerAdaptor as orders} from '../actions/load-orders'
 import {loadStatusesActionServerAdaptor as statuses} from '../actions/load-statuses'
 import {loadWorkspaceActionServerAdaptor as workspace} from '../actions/load-workspace'
-
+import {loadCompanySavedAccountsActionServerAdaptor as savedAccounts} from '../actions/load-company-saved-accounts'
 export function setAppRoutes (app, render) {
   const _ = bind.placeholder
   const campaignsWithAdsets = bind(campaigns, null, _, _, 'include-adsets')
@@ -34,22 +34,22 @@ export function setAppRoutes (app, render) {
 
   app.get('/company/:company/reports',
     protect,
-    preload(companies, reports),
+    preload(companies, savedAccounts, reports),
     render)
 
   app.get('/company/:company/reports/new',
     protect,
-    preload(companies, reports),
+    preload(companies, savedAccounts, reports),
     render)
 
   app.get('/company/:company/report/:report',
     protect,
-    preload(companies, report),
+    preload(companies, savedAccounts, report),
     render)
 
   app.get('/company/:company/report/:report/edit',
     protect,
-    preload(companies, report),
+    preload(companies, savedAccounts, report),
     render)
 
   app.get('/company/:company/orders',

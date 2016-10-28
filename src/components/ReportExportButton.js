@@ -76,7 +76,6 @@ const ReportExportButton = React.createClass({
   displayName: 'Report-Export-Button',
   propTypes: {
     create: PropTypes.func.isRequired,
-    isLoading: PropTypes.bool.isRequired,
     isCreatingReport: PropTypes.bool.isRequired
   },
   getInitialState () {
@@ -99,21 +98,18 @@ const ReportExportButton = React.createClass({
     this.setState({isModalOpen: false})
   },
   render () {
-    const {isLoading, isCreatingReport} = this.props
-    const isDisabled = isLoading || isCreatingReport
-
-    let label = <Message>extractReport</Message>
-
-    if (isCreatingReport) {
-      label = <Message>creatingReport</Message>
-    }
-    if (isLoading) {
-      label = <Message>loadingReport</Message>
-    }
+    const {isCreatingReport} = this.props
 
     return (
-      <button type='button' disabled={isDisabled} className='mdl-button mdl-color-text--grey-100' onClick={this.open}>
-        {label}
+      <button
+        type='button'
+        disabled={isCreatingReport}
+        className='mdl-button mdl-color-text--grey-100'
+        onClick={this.open}>
+
+        {isCreatingReport
+          ? <Message>creatingReport</Message>
+          : <Message>extractReport</Message>}
 
         {this.state.isModalOpen && (
           <Modal onEscPress={this.close}>

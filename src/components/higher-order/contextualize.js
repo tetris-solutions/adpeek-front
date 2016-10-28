@@ -5,6 +5,7 @@ import isObject from 'lodash/isObject'
 import keys from 'lodash/keys'
 import React from 'react'
 import {branch} from 'baobab-react/higher-order'
+import {inferLevelFromParams} from '../../functions/infer-level-from-params'
 
 const {PropTypes} = React
 const isRouteParam = {
@@ -25,8 +26,11 @@ searchPath.folder = searchPath.workspace.concat([['folder', 'folders']])
 searchPath.campaign = searchPath.folder.concat([['campaign', 'campaigns']])
 searchPath.order = searchPath.folder.concat([['order', 'orders']])
 
-// @todo dynamic path, because a report can be at any point in the tree
-searchPath.report = searchPath.folder.concat([['report', 'reports']])
+searchPath.report = params => {
+  const level = inferLevelFromParams(params)
+
+  return searchPath[level].concat([['report', 'reports']])
+}
 
 /**
  * nope
@@ -38,7 +42,15 @@ searchPath.report = searchPath.folder.concat([['report', 'reports']])
  * @returns {Array|null} the full path to the object
  */
 function getCursorToEntity (entity, tree, params, cursor = [], path = null) {
-  path = path || searchPath[entity].concat()
+  if (!path) {
+    const aux = searchPath[entity]
+
+    if (typeof aux === 'function') {
+      path = aux(params)
+    } else {
+      path = aux.concat()
+    }
+  }
 
   const top = path.shift()
 

@@ -3,10 +3,8 @@ import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} 
 import {GET} from '@tetris/http'
 import filter from 'lodash/filter'
 import map from 'lodash/map'
-
-function loadReportMetaData (platform, entity, config) {
-  return GET(`${process.env.NUMBERS_API_URL}/meta?platform=${platform}&entity=${entity}`, config)
-}
+import curry from 'lodash/curry'
+import join from 'lodash/join'
 
 const excluded = [
   'account_id',
@@ -125,35 +123,48 @@ const excluded = [
   'viewthroughconversionssignificance'
 ]
 
-export function loadReportMetaDataAction (tree, platform, entity, token) {
-  const pathToReport = [
-    'reportMetaData',
-    platform,
-    entity
-  ]
+function loadReportMetaData (platform, entity, config) {
+  return GET(`${process.env.NUMBERS_API_URL}/meta?platform=${platform}&entity=${entity}`, config)
+}
 
-  function saveMetadata (response) {
-    const attributes = omit(response.data, excluded)
+function loadCrossPlatformMetaData (platforms, entity, config) {
+  return GET(`${process.env.NUMBERS_API_URL}/x/meta?platforms=${join(platforms, ',')}&entity=${entity}`, config)
+}
 
-    if (attributes.id) {
-      const entityNameMessage = `${entity[0].toLowerCase() + entity.slice(1)}Entity`
-      attributes.id.name = tree.get(['intl', 'messages', entityNameMessage])
-    }
+const saveMetaData = curry((tree, platform, entity, response) => {
+  const attributes = omit(response.data, excluded)
 
-    const metaData = {
-      attributes,
-      dimensions: map(filter(attributes, 'is_dimension'), 'id'),
-      metrics: map(filter(attributes, 'is_metric'), 'id')
-    }
-
-    tree.set(pathToReport, metaData)
-    tree.commit()
-
-    return response
+  if (attributes.id) {
+    const entityNameMessage = `${entity[0].toLowerCase() + entity.slice(1)}Entity`
+    attributes.id.name = tree.get(['intl', 'messages', entityNameMessage])
   }
 
+  const metaData = {
+    attributes,
+    dimensions: map(filter(attributes, 'is_dimension'), 'id'),
+    metrics: map(filter(attributes, 'is_metric'), 'id')
+  }
+
+  tree.set(platform
+      ? ['reportMetaData', platform, entity]
+      : ['reportMetaData', '_', entity],
+    metaData)
+
+  tree.commit()
+
+  return response
+})
+
+export function loadReportMetaDataAction (tree, platform, entity, token) {
   return loadReportMetaData(platform, entity, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
-    .then(saveMetadata)
+    .then(saveMetaData(tree, platform, entity))
+    .catch(pushResponseErrorToState(tree))
+}
+
+export function loadCrossPlatformReportMetaDataAction (tree, platforms, entity, token) {
+  return loadCrossPlatformMetaData(platforms, entity, getApiFetchConfig(tree, token))
+    .then(saveResponseTokenAsCookie)
+    .then(saveMetaData(tree, null, entity))
     .catch(pushResponseErrorToState(tree))
 }

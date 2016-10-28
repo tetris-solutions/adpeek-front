@@ -23,7 +23,9 @@ import FolderBreadcrumb from '../components/FolderBreadcrumb'
 import FolderEdit from '../components/FolderEdit'
 import FolderOrders from '../components/FolderOrders'
 import FolderOrdersCloning from '../components/FolderOrdersCloning'
-import FolderReportBuilder from '../components/FolderReport'
+import FolderReport from '../components/FolderReport'
+import WorkspaceReport from '../components/WorkspaceReport'
+import CompanyReport from '../components/CompanyReport'
 import FolderReports from '../components/FolderReports'
 import WorkspaceReports from '../components/WorkspaceReports'
 import CompanyReports from '../components/CompanyReports'
@@ -44,7 +46,6 @@ import WorkspaceOrders from '../components/WorkspaceOrders'
 import WorkspaceOrdersCloning from '../components/WorkspaceOrdersCloning'
 import Workspaces from '../components/Workspaces'
 import ErrorScreen from '../components/ErrorScreen'
-import NotImplemented from '../components/NotImplemented'
 
 import {loadWorkspaceAccountsActionRouterAdaptor as accounts} from '../actions/load-accounts'
 import {loadAutoBudgetLogsActionRouterAdaptor as autoBudgetLogs} from '../actions/load-autobudget-logs'
@@ -61,7 +62,7 @@ import {loadMediasActionRouterAdaptor as medias} from '../actions/load-medias'
 import {loadOrdersActionRouterAdaptor as orders} from '../actions/load-orders'
 import {loadStatusesActionRouterAdaptor as statuses} from '../actions/load-statuses'
 import {loadWorkspaceActionRouterAdaptor as workspace} from '../actions/load-workspace'
-
+import {loadCompanySavedAccountsActionRouterAdaptor as savedAccounts} from '../actions/load-company-saved-accounts'
 /**
  * returns the route config
  * @param {Baobab} tree state tree
@@ -86,10 +87,10 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
           <IndexRoute component={Workspaces} onEnter={preload(workspaces)}/>
 
-          <Route breadcrumb={ReportsBread}>
+          <Route breadcrumb={ReportsBread} onEnter={preload(savedAccounts)}>
             <Route path='report/:report' breadcrumb={ReportBread} onEnter={preload(report)}>
-              <IndexRoute component={NotImplemented}/>
-              <Route path='edit' component={NotImplemented}/>
+              <IndexRoute component={CompanyReport}/>
+              <Route path='edit' component={CompanyReport}/>
             </Route>
 
             <Route path='reports'>
@@ -114,8 +115,8 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
             <Route breadcrumb={ReportsBread}>
               <Route path='report/:report' breadcrumb={ReportBread} onEnter={preload(report)}>
-                <IndexRoute component={NotImplemented}/>
-                <Route path='edit' component={NotImplemented}/>
+                <IndexRoute component={WorkspaceReport}/>
+                <Route path='edit' component={WorkspaceReport}/>
               </Route>
 
               <Route path='reports'>
@@ -152,8 +153,8 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                   breadcrumb={ReportBread}
                   onEnter={preload(report)}>
 
-                  <IndexRoute component={FolderReportBuilder}/>
-                  <Route path='edit' component={FolderReportBuilder}/>
+                  <IndexRoute component={FolderReport}/>
+                  <Route path='edit' component={FolderReport}/>
                 </Route>
 
                 <Route path='reports'>

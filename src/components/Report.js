@@ -1,176 +1,208 @@
-import assign from 'lodash/assign'
-import get from 'lodash/get'
-import isNumber from 'lodash/isNumber'
-import map from 'lodash/map'
-import max from 'lodash/max'
-import sortBy from 'lodash/sortBy'
-import Message from 'tetris-iso/Message'
 import React from 'react'
-import SubHeader from './SubHeader'
-import ReportExportButton from './ReportExportButton'
-import entityType from '../propTypes/report-entity'
-import reportType from '../propTypes/report'
-import LoadingHorizontal from './LoadingHorizontal'
-import Module from './ReportModuleController'
-import ReportDateRange from './ReportDateRange'
-import {createModuleReportAction} from '../actions/create-module'
-import {exportReportAction} from '../actions/export-report'
-import {serializeReportModules} from '../functions/seralize-report-modules'
-import {contextualize} from './higher-order/contextualize'
+import head from 'lodash/head'
+import uniq from 'lodash/uniq'
+import concat from 'lodash/concat'
+import endsWith from 'lodash/endsWith'
+import ReportController from './ReportController'
+import {inferLevelFromParams} from '../functions/infer-level-from-params'
+import {loadReportEntitiesAction} from '../actions/load-report-entities'
+import {loadReportMetaDataAction, loadCrossPlatformReportMetaDataAction} from '../actions/load-report-meta-data'
+import has from 'lodash/has'
+import map from 'lodash/map'
+import trim from 'lodash/trim'
+import assign from 'lodash/assign'
 import Page from './Page'
+import SubHeader from './SubHeader'
+import LoadingHorizontal from './LoadingHorizontal'
+import Message from 'tetris-iso/Message'
+import NotImplemented from './NotImplemented'
+import pick from 'lodash/pick'
 
 const {PropTypes} = React
 
+function normalizeAd (ad) {
+  ad = assign({}, ad)
+
+  if (ad.description_1) {
+    ad.description = (
+      trim(ad.description_1) + ' ' +
+      trim(ad.description_2)
+    )
+  }
+
+  if (ad.headline_part_1) {
+    ad.headline = (
+      trim(ad.headline_part_1) + ' ' +
+      trim(ad.headline_part_2)
+    )
+  }
+
+  return ad
+}
+
+const Placeholder = ({children}) => (
+  <div>
+    <SubHeader/>
+    <Page>
+      {children}
+    </Page>
+  </div>
+)
+
+Placeholder.displayName = 'Report-Placeholder'
+Placeholder.propTypes = {
+  children: PropTypes.node.isRequired
+}
+
 const Report = React.createClass({
   displayName: 'Report',
-  propTypes: {
-    report: reportType,
-    isLoading: PropTypes.bool.isRequired,
-    editMode: PropTypes.bool.isRequired,
-    metaData: PropTypes.object,
-    dispatch: PropTypes.func,
-    params: PropTypes.object,
-    reportParams: PropTypes.shape({
-      ad_account: PropTypes.string,
-      plaftorm: PropTypes.string,
-      tetris_account: PropTypes.string
-    }),
-    entities: PropTypes.arrayOf(entityType).isRequired
-  },
   contextTypes: {
-    router: PropTypes.object,
-    messages: PropTypes.object,
-    location: PropTypes.object,
-    moment: PropTypes.func
+    messages: PropTypes.object
+  },
+  propTypes: {
+    dispatch: PropTypes.func.isRequired,
+    report: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired,
+    metaData: PropTypes.object,
+    campaigns: PropTypes.array,
+    adSets: PropTypes.array,
+    adGroups: PropTypes.array,
+    ads: PropTypes.array,
+    keywords: PropTypes.array,
+    accounts: PropTypes.arrayOf(PropTypes.shape({
+      external_id: PropTypes.string,
+      tetris_id: PropTypes.string,
+      platform: PropTypes.string
+    })).isRequired
   },
   getInitialState () {
-    return {
-      isCreatingReport: false
-    }
+    return {isLoading: true}
   },
   componentDidMount () {
-    this.ensureDateRange()
+    this.load()
   },
-  componentWillReceiveProps (nextProps, nextContext) {
-    this.ensureDateRange(nextContext)
+  isFolderLevel () {
+    return inferLevelFromParams(this.props.params) === 'folder'
   },
-  ensureDateRange (context = this.context) {
-    if (!context.location.query.from) {
-      this.navigateToNewRange(this.getCurrentRange(), 'replace', context)
-    }
+  getPlatforms () {
+    return uniq(map(this.props.accounts, 'platform'))
   },
-  getCurrentRange () {
-    let {location: {query: {from, to}}} = this.context
-    const {moment} = this.context
-
-    from = from || moment().subtract(30, 'days').format('YYYY-MM-DD')
-    to = to || moment().format('YYYY-MM-DD')
-
-    return {from, to}
-  },
-  onChangeRange ({startDate, endDate}) {
-    this.navigateToNewRange({
-      from: startDate.format('YYYY-MM-DD'),
-      to: endDate.format('YYYY-MM-DD')
-    })
-  },
-  navigateToNewRange ({from, to}, method = 'push', context = this.context) {
-    const {location: {pathname}, router} = context
-
-    router[method](`${pathname}?from=${from}&to=${to}`)
-  },
-  addNewModule () {
-    const {report, params, dispatch} = this.props
+  getEntities () {
     const {messages} = this.context
-    const lastIndex = max(map(report.modules, 'index'))
-    const index = (isNumber(lastIndex) ? lastIndex : -1) + 1
+    const {campaigns, adSets, adGroups, ads, keywords} = this.props
 
-    dispatch(createModuleReportAction, params, {
-      type: 'line',
-      name: messages.module + ' ' + (index + 1),
-      index
+    const entities = [{
+      id: 'Campaign',
+      name: messages.campaigns,
+      list: map(campaigns, c => assign({}, c, {id: c.external_id}))
+    }]
+
+    entities.push({
+      id: 'AdGroup',
+      name: messages.adGroups,
+      list: adGroups || []
     })
+
+    entities.push({
+      id: 'Keyword',
+      name: messages.keywords,
+      list: keywords || []
+    })
+
+    entities.push({
+      id: 'AdSet',
+      name: messages.adSets,
+      list: adSets || []
+    })
+
+    entities.push({
+      id: 'Ad',
+      name: messages.ads,
+      list: map(ads, normalizeAd)
+    })
+
+    return entities
   },
-  downloadReport (type = 'pdf') {
-    const {dispatch, params, report} = this.props
-    const {grid} = this.refs
+  loadEntities (account) {
+    const {ads, params, dispatch} = this.props
 
-    function getModuleElement ({id, name}) {
-      const el = grid.querySelector(`div[data-report-module="${id}"]`)
-
-      return {id, el, name}
+    if (ads) {
+      return Promise.resolve()
     }
 
-    const modules = map(report.modules, getModuleElement)
+    return dispatch(loadReportEntitiesAction, params, pick(account, 'tetris_id', 'external_id', 'platform'))
+  },
+  loadMultiPlatformMetaData (entity) {
+    const {metaData, dispatch} = this.props
 
-    this.setState({isCreatingReport: true})
+    if (has(metaData, entity)) {
+      return Promise.resolve()
+    }
 
-    serializeReportModules(modules, type === 'xls')
-      .then(modules => dispatch(exportReportAction, params, type, {
-        id: report.id,
-        name: report.name,
-        modules
-      }))
-      .then(response => this.setState({isCreatingReport: false},
-        function navigateToReportUrl () {
-          window.location.href = response.data.url
-        }))
-      .catch(() => this.setState({isCreatingReport: false}))
+    return dispatch(loadCrossPlatformReportMetaDataAction, this.getPlatforms(), entity)
+  },
+  loadSinglePlatformMetaData (entity) {
+    const {metaData, dispatch} = this.props
+    const platform = head(this.getPlatforms())
+
+    if (has(metaData, entity)) {
+      return Promise.resolve()
+    }
+
+    return dispatch(loadReportMetaDataAction, platform, entity)
+  },
+  loadMetaData (entity) {
+    return this.isFolderLevel()
+      ? this.loadSinglePlatformMetaData(entity)
+      : this.loadMultiPlatformMetaData(entity)
+  },
+  load () {
+    const promises = concat(
+      map(this.getEntities(), ({id}) => this.loadMetaData(id)),
+      map(this.props.accounts, this.loadEntities)
+    )
+
+    Promise.all(promises)
+      .then(() => this.setState({isLoading: false}))
   },
   render () {
-    const {isLoading, metaData, editMode, report: {modules}} = this.props
-    const {isCreatingReport} = this.state
-    const {moment} = this.context
-    const {from, to} = this.getCurrentRange()
-    const reportParams = assign({from, to}, this.props.reportParams)
-    const {platform} = reportParams
+    const {location, accounts, metaData, report} = this.props
 
-    // @todo bring back input for name editing
+    if (this.state.isLoading) {
+      return (
+        <Placeholder>
+          <LoadingHorizontal>
+            <Message>loadingReport</Message>
+          </LoadingHorizontal>
+        </Placeholder>
+      )
+    }
+
+    if (!this.isFolderLevel()) {
+      return (
+        <Placeholder>
+          <NotImplemented/>
+        </Placeholder>
+      )
+    }
+
+    const account = head(accounts)
+    const reportParams = {
+      ad_account: account.external_id,
+      platform: account.platform,
+      tetris_account: account.tetris_id
+    }
 
     return (
-      <div>
-        <SubHeader>
-          <ReportDateRange
-            buttonClassName='mdl-button mdl-color-text--grey-100'
-            onChange={this.onChangeRange}
-            startDate={moment(from)}
-            endDate={moment(to)}/>
-
-          {editMode && (
-            <button disabled={isLoading} className='mdl-button mdl-color-text--grey-100' onClick={this.addNewModule}>
-              <Message>newModule</Message>
-            </button>)}
-
-          <ReportExportButton
-            create={this.downloadReport}
-            isCreatingReport={isCreatingReport}
-            isLoading={isLoading}/>
-        </SubHeader>
-        <Page>
-          <div className='mdl-grid' ref='grid'>
-            {isLoading ? (
-              <LoadingHorizontal>
-                <Message>loadingReport</Message>
-              </LoadingHorizontal>
-            ) : map(sortBy(modules, 'index'), (module, index) => (
-              <div
-                data-report-module={module.id}
-                key={module.id}
-                className={`mdl-cell mdl-cell--${module.cols}-col`}>
-
-                <Module
-                  changeDateRange={this.onChangeRange}
-                  module={module}
-                  editable={editMode}
-                  metaData={get(metaData, [platform, module.entity])}
-                  reportParams={reportParams}
-                  entities={this.props.entities}/>
-              </div>))}
-          </div>
-        </Page>
-      </div>
+      <ReportController
+        report={report}
+        metaData={metaData}
+        editMode={endsWith(location.pathname, '/edit')}
+        reportParams={reportParams}
+        entities={this.getEntities()}/>
     )
   }
 })
 
-export default contextualize(Report, 'report')
+export default Report
