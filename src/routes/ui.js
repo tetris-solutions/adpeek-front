@@ -54,7 +54,7 @@ import {loadCompanyRolesActionRouterAdaptor as roles} from '../actions/load-comp
 import {loadCompanyWorkspacesActionRouterAdaptor as workspaces} from '../actions/load-company-workspaces'
 import {loadDeliveryMethodsActionRouterAdaptor as deliveryMethods} from '../actions/load-delivery-methods'
 import {loadFolderActionRouterAdaptor as folder} from '../actions/load-folder'
-import {loadFolderReportActionRouterAdaptor as report} from '../actions/load-folder-report'
+import {loadReportActionRouterAdaptor as report} from '../actions/load-report'
 import {loadReportsActionRouterAdaptor as reports} from '../actions/load-reports'
 import {loadWorkspaceFoldersActionRouterAdaptor as folders} from '../actions/load-folders'
 import {loadMediasActionRouterAdaptor as medias} from '../actions/load-medias'
@@ -87,7 +87,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
           <IndexRoute component={Workspaces} onEnter={preload(workspaces)}/>
 
           <Route breadcrumb={ReportsBread}>
-            <Route path='report/:report' breadcrumb={ReportBread}>
+            <Route path='report/:report' breadcrumb={ReportBread} onEnter={preload(report)}>
               <IndexRoute component={NotImplemented}/>
               <Route path='edit' component={NotImplemented}/>
             </Route>
@@ -113,7 +113,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
             <IndexRoute component={Folders} onEnter={preload(folders)}/>
 
             <Route breadcrumb={ReportsBread}>
-              <Route path='report/:report' breadcrumb={ReportBread}>
+              <Route path='report/:report' breadcrumb={ReportBread} onEnter={preload(report)}>
                 <IndexRoute component={NotImplemented}/>
                 <Route path='edit' component={NotImplemented}/>
               </Route>

@@ -6,7 +6,7 @@ import TextMessage from 'intl-messageformat'
 import Fence from './Fence'
 import DeleteButton from './DeleteButton'
 import {deleteReportAction} from '../actions/delete-report'
-import {loadFolderReportAction} from '../actions/load-folder-report'
+import {loadReportAction} from '../actions/load-report'
 import {setFolderReportAction} from '../actions/set-folder-report'
 import {contextualize} from './higher-order/contextualize'
 import ReportAccessControl from './ReportAccessControl'
@@ -28,7 +28,7 @@ function canSkipReportEditPrompt () {
 export function FolderReportAside ({report, dispatch, user}, {messages, locales, router, location: {pathname}, params}) {
   const {company, workspace, folder} = params
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${folder}`
-  const reload = () => dispatch(loadFolderReportAction, company, workspace, folder, report.id)
+  const reload = () => dispatch(loadReportAction, params, report.id)
   const favorite = () => dispatch(setFolderReportAction, folder, report.id, true).then(reload)
 
   const deleteReport = () =>

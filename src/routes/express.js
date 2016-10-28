@@ -10,7 +10,7 @@ import {loadCompanyRolesActionServerAdaptor as roles} from '../actions/load-comp
 import {loadCompanyWorkspacesActionServerAdaptor as workspaces} from '../actions/load-company-workspaces'
 import {loadDeliveryMethodsActionServerAdaptor as deliveryMethods} from '../actions/load-delivery-methods'
 import {loadFolderActionServerAdaptor as folder} from '../actions/load-folder'
-import {loadFolderReportActionServerAdaptor as report} from '../actions/load-folder-report'
+import {loadReportActionServerAdaptor as report} from '../actions/load-report'
 import {loadReportsActionServerAdaptor as reports} from '../actions/load-reports'
 import {loadWorkspaceFoldersActionServerAdaptor as folders} from '../actions/load-folders'
 import {loadMediasActionServerAdaptor as medias} from '../actions/load-medias'
