@@ -19,7 +19,7 @@ export default {
     return {
       isLoadingDashCampaigns: true,
       dashCampaign: this.getCurrentCampaign(),
-      name: get(this.props, 'workspace.name', '')
+      name: get(this.props, 'folder.name', '')
     }
   },
   componentWillMount () {
@@ -48,7 +48,7 @@ export default {
     }
   },
   getCurrentCampaign (dashCampaigns = this.props.company.dashCampaigns) {
-    const campaignId = get(this.state, 'dashCampaign.id') || get(this.props, 'workspace.dash_campaign')
+    const campaignId = get(this.state, 'dashCampaign.id') || get(this.props, 'folder.dash_campaign')
 
     if (!campaignId) return null
 
