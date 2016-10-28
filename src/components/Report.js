@@ -1,5 +1,4 @@
 import assign from 'lodash/assign'
-import debounce from 'lodash/debounce'
 import get from 'lodash/get'
 import isNumber from 'lodash/isNumber'
 import map from 'lodash/map'
@@ -17,7 +16,6 @@ import Module from './ReportModuleController'
 import ReportDateRange from './ReportDateRange'
 import {createModuleReportAction} from '../actions/create-module'
 import {exportReportAction} from '../actions/export-report'
-import {updateReportAction} from '../actions/update-report'
 import {serializeReportModules} from '../functions/seralize-report-modules'
 import {contextualize} from './higher-order/contextualize'
 import Page from './Page'
@@ -50,20 +48,13 @@ const Report = React.createClass({
       isCreatingReport: false
     }
   },
-  componentWillMount () {
-    const {dispatch, params, report: {id}} = this.props
-    const getName = () => this.refs.header.querySelector('input[name="name"]').value
-
-    this.onChangeName = debounce(() =>
-      dispatch(updateReportAction, params, {id, name: getName()}), 1000)
-  },
   componentDidMount () {
-    this.ensureRange()
+    this.ensureDateRange()
   },
   componentWillReceiveProps (nextProps, nextContext) {
-    this.ensureRange(nextContext)
+    this.ensureDateRange(nextContext)
   },
-  ensureRange (context = this.context) {
+  ensureDateRange (context = this.context) {
     if (!context.location.query.from) {
       this.navigateToNewRange(this.getCurrentRange(), 'replace', context)
     }
