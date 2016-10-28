@@ -9,7 +9,6 @@ import Page from './Page'
 import SubHeader from './SubHeader'
 import join from 'lodash/join'
 import compact from 'lodash/compact'
-import {inferLevelFromParams} from '../functions/infer-level-from-params'
 
 const {PropTypes} = React
 
@@ -17,13 +16,13 @@ const ReportCreate = React.createClass({
   displayName: 'Create-Report',
   mixins: [FormMixin],
   contextTypes: {
-    router: PropTypes.object
+    router: PropTypes.object,
+    tree: PropTypes.object
   },
   propTypes: {
     location: PropTypes.shape({
       query: PropTypes.object
     }).isRequired,
-    platform: PropTypes.string,
     params: PropTypes.shape({
       company: PropTypes.string,
       workspace: PropTypes.string,
@@ -31,21 +30,13 @@ const ReportCreate = React.createClass({
     }).isRequired,
     dispatch: PropTypes.func.isRequired
   },
-  getDefaultProps () {
-    return {
-      platform: null
-    }
-  },
   handleSubmit (e) {
     e.preventDefault()
-    const {platform, location: {query}, dispatch, params} = this.props
+    const {location: {query}, params} = this.props
     const {folder, company, workspace} = params
-
     const report = {
       id: query.clone || null,
       name: e.target.elements.name.value,
-      level: inferLevelFromParams(params),
-      platform,
       company
     }
 
@@ -53,7 +44,7 @@ const ReportCreate = React.createClass({
 
     const action = report.id ? cloneReportAction : createReportAction
 
-    return dispatch(action, params, report)
+    return action(this.context.tree, params, report)
       .then(response => {
         const reportId = response.data.id
 

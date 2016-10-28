@@ -15,9 +15,7 @@ import CompanyBreadcrumb from '../components/CompanyBreadcrumb'
 import CompanyOrders from '../components/CompanyOrders'
 import CompanyOrdersCloning from '../components/CompanyOrdersCloning'
 import CreateFolder from '../components/FolderCreate'
-import FolderReportCreate from '../components/FolderReportCreate'
-import WorkspaceReportCreate from '../components/WorkspaceReportCreate'
-import CompanyReportCreate from '../components/CompanyReportCreate'
+import ReportCreate from '../components/ReportCreate'
 import CreateWorkspace from '../components/WorkspaceCreate'
 import FolderCreatives from '../components/FolderCreatives'
 import FolderAside from '../components/FolderAside'
@@ -97,7 +95,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
             <Route path='reports'>
               <IndexRoute onEnter={preload(reports)} component={CompanyReports}/>
-              <Route path='new' component={CompanyReportCreate}/>
+              <Route path='new' component={ReportCreate}/>
             </Route>
           </Route>
 
@@ -123,7 +121,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
               <Route path='reports'>
                 <IndexRoute onEnter={preload(reports)} component={WorkspaceReports}/>
-                <Route path='new' component={WorkspaceReportCreate}/>
+                <Route path='new' component={ReportCreate}/>
               </Route>
             </Route>
 
@@ -161,7 +159,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
                 <Route path='reports'>
                   <IndexRoute onEnter={preload(reports)} component={FolderReports}/>
-                  <Route path='new' component={FolderReportCreate}/>
+                  <Route path='new' component={ReportCreate}/>
                 </Route>
               </Route>
 
