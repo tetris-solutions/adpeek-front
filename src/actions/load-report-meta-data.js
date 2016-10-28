@@ -4,8 +4,6 @@ import {GET} from '@tetris/http'
 import filter from 'lodash/filter'
 import map from 'lodash/map'
 
-import {getDeepCursor} from '../functions/get-deep-cursor'
-
 function loadReportMetaData (platform, entity, config) {
   return GET(`${process.env.NUMBERS_API_URL}/meta?platform=${platform}&entity=${entity}`, config)
 }
@@ -127,17 +125,12 @@ const excluded = [
   'viewthroughconversionssignificance'
 ]
 
-export function loadReportMetaDataAction (tree, params, platform, entity, token) {
-  const pathToReport = getDeepCursor(tree, [
-    'user',
-    ['companies', params.company],
-    ['workspaces', params.workspace],
-    ['folders', params.folder],
-    ['reports', params.report],
-    'metaData',
+export function loadReportMetaDataAction (tree, platform, entity, token) {
+  const pathToReport = [
+    'reportMetaData',
     platform,
     entity
-  ])
+  ]
 
   function saveMetadata (response) {
     const attributes = omit(response.data, excluded)

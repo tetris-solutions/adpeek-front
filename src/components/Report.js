@@ -30,6 +30,7 @@ const Report = React.createClass({
     report: reportType,
     isLoading: PropTypes.bool.isRequired,
     editMode: PropTypes.bool.isRequired,
+    metaData: PropTypes.object,
     dispatch: PropTypes.func,
     params: PropTypes.object,
     reportParams: PropTypes.shape({
@@ -125,7 +126,7 @@ const Report = React.createClass({
       .catch(() => this.setState({isCreatingReport: false}))
   },
   render () {
-    const {isLoading, editMode, report: {modules, metaData}} = this.props
+    const {isLoading, metaData, editMode, report: {modules}} = this.props
     const {isCreatingReport} = this.state
     const {from, to} = this.getCurrentRange()
     const reportParams = assign({from, to}, this.props.reportParams)

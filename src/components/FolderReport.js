@@ -4,7 +4,7 @@ import flatten from 'lodash/flatten'
 import map from 'lodash/map'
 import trim from 'lodash/trim'
 import React from 'react'
-
+import get from 'lodash/get'
 import Report from './Report'
 import {loadFolderEntitiesAction} from '../actions/load-folder-entities'
 import {loadReportMetaDataAction} from '../actions/load-report-meta-data'
@@ -40,6 +40,7 @@ const FolderReport = React.createClass({
   propTypes: {
     location: PropTypes.object,
     params: PropTypes.object.isRequired,
+    metaData: PropTypes.object,
     dispatch: PropTypes.func,
     folder: PropTypes.shape({
       campaigns: PropTypes.array,
@@ -60,17 +61,17 @@ const FolderReport = React.createClass({
     }
   },
   componentDidMount () {
-    const {params, folder, dispatch} = this.props
+    const {params, folder, dispatch, metaData} = this.props
+    const {platform} = folder.account
+
     const loadEntitiesPromise = folder.ads
       ? Promise.resolve()
       : dispatch(loadFolderEntitiesAction, params.company, params.workspace, params.folder)
 
-    const loadMetaDataPromise = map(this.getEntities(), ({id}) =>
-      dispatch(loadReportMetaDataAction,
-        params,
-        folder.account.platform,
-        id
-      ))
+    const loadMetaDataPromise = map(this.getEntities(),
+      ({id}) => get(metaData, [platform, id])
+        ? Promise.resolve()
+        : dispatch(loadReportMetaDataAction, platform, id))
 
     Promise.all(flatten([loadEntitiesPromise, loadMetaDataPromise]))
       .then(() => this.setState({isLoading: false}))
@@ -133,4 +134,4 @@ const FolderReport = React.createClass({
   }
 })
 
-export default contextualize(FolderReport, 'folder')
+export default contextualize(FolderReport, {metaData: ['reportMetaData']}, 'folder')
