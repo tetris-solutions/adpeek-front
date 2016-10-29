@@ -3,6 +3,8 @@ import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} 
 import {saveResponseData} from '../functions/save-response-data'
 import assign from 'lodash/assign'
 import compact from 'lodash/compact'
+import concat from 'lodash/concat'
+import forEach from 'lodash/forEach'
 import {inferLevelFromParams} from '../functions/infer-level-from-params'
 import qs from 'query-string'
 
@@ -18,7 +20,17 @@ export function loadReportEntitiesAction (tree, params, query = null) {
   const level = inferLevelFromParams(params)
   const {company, workspace, folder} = params
 
-  const mergeEntities = (entities, node) => assign({}, node, entities)
+  function mergeNewEntities (entities, node) {
+    const aux = {}
+
+    forEach(entities, (value, name) => {
+      aux[name] = node[name]
+        ? concat(value, node[name])
+        : value
+    })
+
+    return assign({}, node, aux)
+  }
 
   const path = compact([
     'user',
@@ -29,6 +41,6 @@ export function loadReportEntitiesAction (tree, params, query = null) {
 
   return loadReportEntities(level, params[level], getApiFetchConfig(tree), query)
     .then(saveResponseTokenAsCookie)
-    .then(saveResponseData(tree, path, mergeEntities))
+    .then(saveResponseData(tree, path, mergeNewEntities))
     .catch(pushResponseErrorToState(tree))
 }
