@@ -1,4 +1,5 @@
-import omit from 'lodash/omit'
+import omitBy from 'lodash/omitBy'
+import includes from 'lodash/includes'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {GET} from '@tetris/http'
 import filter from 'lodash/filter'
@@ -131,8 +132,12 @@ function loadCrossPlatformMetaData (platforms, entity, config) {
   return GET(`${process.env.NUMBERS_API_URL}/x/meta?platforms=${join(platforms, ',')}&entity=${entity}`, config)
 }
 
+const prefixless = name => name.substr(name.indexOf(':') + 1)
+
 const saveMetaData = curry((tree, platform, entity, response) => {
-  const attributes = omit(response.data, excluded)
+  const attributes = omitBy(response.data, (obj, id) => (
+    includes(excluded, prefixless(id))
+  ))
 
   if (attributes.id) {
     const entityNameMessage = `${entity[0].toLowerCase() + entity.slice(1)}Entity`
