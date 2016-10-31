@@ -3,8 +3,12 @@ import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} 
 import {saveResponseData} from '../functions/save-response-data'
 import assign from 'lodash/assign'
 import compact from 'lodash/compact'
-import concat from 'lodash/concat'
+import uniqBy from 'lodash/uniqBy'
+import map from 'lodash/map'
+import get from 'lodash/get'
 import forEach from 'lodash/forEach'
+import concat from 'lodash/concat'
+import {statusResolver} from '../functions/status-resolver'
 import {inferLevelFromParams} from '../functions/infer-level-from-params'
 import qs from 'query-string'
 
@@ -16,20 +20,36 @@ function loadReportEntities (level, id, config, queryParams) {
   return GET(`${process.env.ADPEEK_API_URL}/${level}/${id}/report-entities${queryString}`, config)
 }
 
-export function loadReportEntitiesAction (tree, params, query = null) {
+function _loadReportEntitiesAction (tree, params, query) {
   const level = inferLevelFromParams(params)
   const {company, workspace, folder} = params
+  const setStatus = statusResolver(tree.get('statuses'))
+
+  function namespaceId (e) {
+    e.id = e.external_id || e.id
+
+    if (level !== 'folder') {
+      e.id = `${e.platform}:${e.id}`
+    }
+
+    return e
+  }
 
   function mergeNewEntities (entities, node) {
-    const aux = {}
+    if (entities.campaigns) {
+      entities.campaigns = map(entities.campaigns, setStatus)
+    } else {
+      entities.campaigns = map(node.campaigns, namespaceId)
+    }
 
-    forEach(entities, (value, name) => {
-      aux[name] = node[name]
-        ? concat(value, node[name])
-        : value
+    forEach(entities, (localList, name) => {
+      entities[name] = uniqBy(concat(
+        get(node, `entities.${name}`, []),
+        map(localList, namespaceId)
+      ), 'id')
     })
 
-    return assign({}, node, aux)
+    return assign({}, node, {entities})
   }
 
   const path = compact([
@@ -43,4 +63,18 @@ export function loadReportEntitiesAction (tree, params, query = null) {
     .then(saveResponseTokenAsCookie)
     .then(saveResponseData(tree, path, mergeNewEntities))
     .catch(pushResponseErrorToState(tree))
+}
+
+const byPlatformCalls = {}
+
+export function loadReportEntitiesAction (tree, params, query) {
+  const call = () => _loadReportEntitiesAction(tree, params, query)
+
+  if (byPlatformCalls[query.platform]) {
+    byPlatformCalls[query.platform] = byPlatformCalls[query.platform].then(call, call)
+  } else {
+    byPlatformCalls[query.platform] = call()
+  }
+
+  return byPlatformCalls[query.platform]
 }

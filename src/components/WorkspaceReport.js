@@ -15,11 +15,13 @@ const FolderReport = React.createClass({
     params: PropTypes.object.isRequired,
     dispatch: PropTypes.func,
     workspace: PropTypes.shape({
-      campaigns: PropTypes.array,
-      adSets: PropTypes.array,
-      keywords: PropTypes.array,
-      adGroups: PropTypes.array,
-      ads: PropTypes.array,
+      entities: PropTypes.shape({
+        campaigns: PropTypes.array,
+        adSets: PropTypes.array,
+        keywords: PropTypes.array,
+        adGroups: PropTypes.array,
+        ads: PropTypes.array
+      }),
       accounts: PropTypes.object
     })
   },
@@ -34,11 +36,7 @@ const FolderReport = React.createClass({
         location={location}
         params={params}
         metaData={get(metaData, '_')}
-        ads={workspace.ads}
-        adGroups={workspace.adGroups}
-        adSets={workspace.adSets}
-        campaigns={workspace.campaigns}
-        keywords={workspace.keywords}
+        {...workspace.entities}
         accounts={values(accounts)}/>
     )
   }

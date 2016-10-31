@@ -14,11 +14,13 @@ const CompanyReport = React.createClass({
     params: PropTypes.object.isRequired,
     dispatch: PropTypes.func,
     company: PropTypes.shape({
-      campaigns: PropTypes.array,
-      adSets: PropTypes.array,
-      keywords: PropTypes.array,
-      adGroups: PropTypes.array,
-      ads: PropTypes.array,
+      entities: PropTypes.shape({
+        campaigns: PropTypes.array,
+        adSets: PropTypes.array,
+        keywords: PropTypes.array,
+        adGroups: PropTypes.array,
+        ads: PropTypes.array
+      }),
       savedAccounts: PropTypes.arrayOf(PropTypes.shape({
         external_id: PropTypes.string,
         tetris_id: PropTypes.string,
@@ -36,11 +38,7 @@ const CompanyReport = React.createClass({
         location={location}
         params={params}
         metaData={get(metaData, '_')}
-        ads={company.ads}
-        adGroups={company.adGroups}
-        adSets={company.adSets}
-        campaigns={company.campaigns}
-        keywords={company.keywords}
+        {...company.entities}
         accounts={company.savedAccounts}/>
     )
   }

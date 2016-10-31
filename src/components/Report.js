@@ -95,7 +95,7 @@ const Report = React.createClass({
     const entities = [{
       id: 'Campaign',
       name: messages.campaigns,
-      list: map(campaigns, c => assign({}, c, {id: c.external_id}))
+      list: campaigns
     }]
 
     entities.push({
