@@ -11,6 +11,7 @@ import concat from 'lodash/concat'
 import {statusResolver} from '../functions/status-resolver'
 import {inferLevelFromParams} from '../functions/infer-level-from-params'
 import qs from 'query-string'
+import trim from 'lodash/trim'
 
 function loadReportEntities (level, id, config, queryParams) {
   const queryString = queryParams
@@ -25,14 +26,28 @@ function _loadReportEntitiesAction (tree, params, query) {
   const {company, workspace, folder} = params
   const setStatus = statusResolver(tree.get('statuses'))
 
-  function namespaceId (e) {
-    e.id = e.external_id || e.id
+  function namespaceId (item) {
+    item.id = item.external_id || item.id
 
     if (level !== 'folder') {
-      e.id = `${e.platform}:${e.id}`
+      item.id = `${item.platform}:${item.id}`
     }
 
-    return e
+    if (item.description_1) {
+      item.description = (
+        trim(item.description_1) + ' ' +
+        trim(item.description_2)
+      )
+    }
+
+    if (item.headline_part_1) {
+      item.headline = (
+        trim(item.headline_part_1) + ' ' +
+        trim(item.headline_part_2)
+      )
+    }
+
+    return item
   }
 
   function mergeNewEntities (entities, node) {

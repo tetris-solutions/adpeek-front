@@ -9,8 +9,6 @@ import {loadReportEntitiesAction} from '../actions/load-report-entities'
 import {loadReportMetaDataAction, loadCrossPlatformReportMetaDataAction} from '../actions/load-report-meta-data'
 import has from 'lodash/has'
 import map from 'lodash/map'
-import trim from 'lodash/trim'
-import assign from 'lodash/assign'
 import Page from './Page'
 import SubHeader from './SubHeader'
 import LoadingHorizontal from './LoadingHorizontal'
@@ -19,26 +17,7 @@ import NotImplemented from './NotImplemented'
 import pick from 'lodash/pick'
 
 const {PropTypes} = React
-
-function normalizeAd (ad) {
-  ad = assign({}, ad)
-
-  if (ad.description_1) {
-    ad.description = (
-      trim(ad.description_1) + ' ' +
-      trim(ad.description_2)
-    )
-  }
-
-  if (ad.headline_part_1) {
-    ad.headline = (
-      trim(ad.headline_part_1) + ' ' +
-      trim(ad.headline_part_2)
-    )
-  }
-
-  return ad
-}
+const empty = []
 
 const Placeholder = ({children}) => (
   <div>
@@ -101,25 +80,25 @@ const Report = React.createClass({
     entities.push({
       id: 'AdGroup',
       name: messages.adGroups,
-      list: adGroups || []
+      list: adGroups || empty
     })
 
     entities.push({
       id: 'Keyword',
       name: messages.keywords,
-      list: keywords || []
+      list: keywords || empty
     })
 
     entities.push({
       id: 'AdSet',
       name: messages.adSets,
-      list: adSets || []
+      list: adSets || empty
     })
 
     entities.push({
       id: 'Ad',
       name: messages.ads,
-      list: map(ads, normalizeAd)
+      list: ads || empty
     })
 
     return entities
