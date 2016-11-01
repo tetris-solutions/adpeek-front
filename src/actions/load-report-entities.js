@@ -26,13 +26,7 @@ function _loadReportEntitiesAction (tree, params, query) {
   const {company, workspace, folder} = params
   const setStatus = statusResolver(tree.get('statuses'))
 
-  function namespaceId (item) {
-    item.id = item.external_id || item.id
-
-    if (level !== 'folder') {
-      item.id = `${item.platform}:${item.id}`
-    }
-
+  function normalize (item) {
     if (item.description_1) {
       item.description = (
         trim(item.description_1) + ' ' +
@@ -51,16 +45,12 @@ function _loadReportEntitiesAction (tree, params, query) {
   }
 
   function mergeNewEntities (entities, node) {
-    if (entities.campaigns) {
-      entities.campaigns = map(entities.campaigns, setStatus)
-    } else {
-      entities.campaigns = map(node.campaigns, namespaceId)
-    }
+    entities.campaigns = map(entities.campaigns, setStatus)
 
     forEach(entities, (localList, name) => {
       entities[name] = uniqBy(concat(
         get(node, `entities.${name}`, []),
-        map(localList, namespaceId)
+        map(localList, normalize)
       ), 'id')
     })
 
