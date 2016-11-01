@@ -25,9 +25,9 @@ const ReportController = React.createClass({
   propTypes: {
     report: reportType.isRequired,
     editMode: PropTypes.bool.isRequired,
-    metaData: PropTypes.object,
-    dispatch: PropTypes.func,
-    params: PropTypes.object,
+    metaData: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    params: PropTypes.object.isRequired,
     reportParams: PropTypes.shape({
       ad_account: PropTypes.string,
       plaftorm: PropTypes.string,

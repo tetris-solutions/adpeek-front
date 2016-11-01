@@ -146,7 +146,7 @@ const Report = React.createClass({
       .then(() => this.setState({isLoading: false}))
   },
   render () {
-    const {location, accounts, metaData, report} = this.props
+    const {location, dispatch, params, accounts, metaData, report} = this.props
 
     if (this.state.isLoading) {
       return (
@@ -175,6 +175,8 @@ const Report = React.createClass({
 
     return (
       <ReportController
+        dispatch={dispatch}
+        params={params}
         report={report}
         metaData={metaData}
         editMode={endsWith(location.pathname, '/edit')}
