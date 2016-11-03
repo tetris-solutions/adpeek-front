@@ -18,22 +18,11 @@ const {PropTypes} = React
 
 const ReportModule = React.createClass({
   displayName: 'Report-Module-Controller',
-  getDefaultProps () {
-    return {
-      editable: false,
-      metaData: {
-        attributes: {},
-        metrics: [],
-        dimensions: [],
-        filters: []
-      }
-    }
-  },
   propTypes: {
-    module: moduleType,
-    editable: PropTypes.bool,
-    metaData: reportMetaDataType,
-    entity: reportEntityType,
+    module: moduleType.isRequired,
+    editable: PropTypes.bool.isRequired,
+    metaData: reportMetaDataType.isRequired,
+    entity: reportEntityType.isRequired,
     entities: PropTypes.arrayOf(reportEntityType).isRequired,
     reportParams: reportParamsType
   },
