@@ -4,6 +4,7 @@ import uniq from 'lodash/uniq'
 import concat from 'lodash/concat'
 import endsWith from 'lodash/endsWith'
 import ReportController from './ReportController'
+import ReportControllerX from './ReportControllerX'
 import {inferLevelFromParams} from '../functions/infer-level-from-params'
 import {loadReportEntitiesAction} from '../actions/load-report-entities'
 import {loadReportMetaDataAction, loadCrossPlatformReportMetaDataAction} from '../actions/load-report-meta-data'
@@ -13,11 +14,16 @@ import Page from './Page'
 import SubHeader from './SubHeader'
 import LoadingHorizontal from './LoadingHorizontal'
 import Message from 'tetris-iso/Message'
-import NotImplemented from './NotImplemented'
 import pick from 'lodash/pick'
 
 const {PropTypes} = React
 const empty = []
+
+const transformAccount = ({external_id, tetris_id, platform}) => ({
+  ad_account: external_id,
+  platform: platform,
+  tetris_account: tetris_id
+})
 
 const Placeholder = ({children}) => (
   <div>
@@ -160,17 +166,15 @@ const Report = React.createClass({
 
     if (!this.isFolderLevel()) {
       return (
-        <Placeholder>
-          <NotImplemented/>
-        </Placeholder>
+        <ReportControllerX
+          dispatch={dispatch}
+          params={params}
+          report={report}
+          metaData={metaData}
+          editMode={endsWith(location.pathname, '/edit')}
+          accounts={map(accounts, transformAccount)}
+          entities={this.getEntities()}/>
       )
-    }
-
-    const account = head(accounts)
-    const reportParams = {
-      ad_account: account.external_id,
-      platform: account.platform,
-      tetris_account: account.tetris_id
     }
 
     return (
@@ -180,7 +184,7 @@ const Report = React.createClass({
         report={report}
         metaData={metaData}
         editMode={endsWith(location.pathname, '/edit')}
-        reportParams={reportParams}
+        reportParams={transformAccount(head(accounts))}
         entities={this.getEntities()}/>
     )
   }
