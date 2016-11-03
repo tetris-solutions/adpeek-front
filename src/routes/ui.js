@@ -83,6 +83,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
         <Route
           path='company/:company'
           breadcrumb={CompanyBreadcrumb}
+          onEnter={preload(statuses)}
           aside={CompanyAside}>
 
           <IndexRoute component={Workspaces} onEnter={preload(workspaces)}/>
@@ -139,8 +140,8 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                    breadcrumb={FolderBreadcrumb}
                    onEnter={preload(folder)}>
 
-              <IndexRoute component={Campaigns} onEnter={preload(statuses, campaigns)}/>
-              <Route path='creatives' component={FolderCreatives} onEnter={preload(statuses, campaigns)}/>
+              <IndexRoute component={Campaigns} onEnter={preload(campaigns)}/>
+              <Route path='creatives' component={FolderCreatives} onEnter={preload(campaigns)}/>
 
               <Route path='campaign/:campaign' aside={CampaignAside} breadcrumb={CampaignBreadcrumb}>
                 <Route path='creatives' component={CampaignCreatives}/>
@@ -169,7 +170,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
               </Route>
 
               <Route breadcrumb={OrdersBreadCrumb}
-                     onEnter={preload(deliveryMethods, statuses, campaignsWithAdsets, orders)}>
+                     onEnter={preload(deliveryMethods, campaignsWithAdsets, orders)}>
 
                 <Route
                   aside={OrderAside}

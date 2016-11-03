@@ -6,7 +6,7 @@ import values from 'lodash/values'
 
 const {PropTypes} = React
 
-const FolderReport = React.createClass({
+const WorkspaceReport = React.createClass({
   displayName: 'Workspace-Report',
   propTypes: {
     report: PropTypes.object,
@@ -42,4 +42,4 @@ const FolderReport = React.createClass({
   }
 })
 
-export default contextualize(FolderReport, {metaData: ['reportMetaData']}, 'workspace', 'report')
+export default contextualize(WorkspaceReport, {metaData: ['reportMetaData']}, 'workspace', 'report')

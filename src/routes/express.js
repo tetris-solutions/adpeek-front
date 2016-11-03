@@ -22,118 +22,120 @@ export function setAppRoutes (app, render) {
   const _ = bind.placeholder
   const campaignsWithAdsets = bind(campaigns, null, _, _, 'include-adsets')
 
+  const ensureLoad = (...args) => preload(statuses, companies, ...args)
+
   app.get('/',
     protect,
-    preload(companies),
+    ensureLoad(),
     render)
 
   app.get('/company/:company',
     protect,
-    preload(companies, workspaces),
+    ensureLoad(workspaces),
     render)
 
   app.get('/company/:company/reports',
     protect,
-    preload(companies, savedAccounts, reports),
+    ensureLoad(savedAccounts, reports),
     render)
 
   app.get('/company/:company/reports/new',
     protect,
-    preload(companies, savedAccounts, reports),
+    ensureLoad(savedAccounts, reports),
     render)
 
   app.get('/company/:company/report/:report',
     protect,
-    preload(companies, savedAccounts, report),
+    ensureLoad(savedAccounts, report),
     render)
 
   app.get('/company/:company/report/:report/edit',
     protect,
-    preload(companies, savedAccounts, report),
+    ensureLoad(savedAccounts, report),
     render)
 
   app.get('/company/:company/orders',
     protect,
-    preload(companies, orders),
+    ensureLoad(orders),
     render)
 
   app.get('/company/:company/orders',
     protect,
-    preload(companies, orders),
+    ensureLoad(orders),
     render)
 
   app.get('/company/:company/orders/clone',
     protect,
-    preload(companies, orders),
+    ensureLoad(orders),
     render)
 
   app.get('/company/:company/create/workspace',
     protect,
-    preload(companies, roles),
+    ensureLoad(roles),
     render)
 
   app.get('/company/:company/workspace/:workspace',
     protect,
-    preload(companies, workspace, folders),
+    ensureLoad(workspace, folders),
     render)
 
   app.get('/company/:company/workspace/:workspace/reports',
     protect,
-    preload(companies, workspace, reports),
+    ensureLoad(workspace, reports),
     render)
 
   app.get('/company/:company/workspace/:workspace/reports/new',
     protect,
-    preload(companies, workspace, reports),
+    ensureLoad(workspace, reports),
     render)
 
   app.get('/company/:company/workspace/:workspace/report/:report',
     protect,
-    preload(companies, workspace, report),
+    ensureLoad(workspace, report),
     render)
 
   app.get('/company/:company/workspace/:workspace/report/:report/edit',
     protect,
-    preload(companies, workspace, report),
+    ensureLoad(workspace, report),
     render)
 
   app.get('/company/:company/workspace/:workspace/orders',
     protect,
-    preload(companies, workspace, orders),
+    ensureLoad(workspace, orders),
     render)
 
   app.get('/company/:company/workspace/:workspace/orders/clone',
     protect,
-    preload(companies, workspace, orders),
+    ensureLoad(workspace, orders),
     render)
 
   app.get('/company/:company/workspace/:workspace/edit',
     protect,
-    preload(companies, roles, workspace),
+    ensureLoad(roles, workspace),
     render)
 
   app.get('/company/:company/workspace/:workspace/create/folder',
     protect,
-    preload(medias, companies, workspace, accounts),
+    ensureLoad(medias, workspace, accounts),
     render)
 
-  const subFolderActions = [statuses, companies, workspace, folder, campaigns]
+  const subFolderActions = [workspace, folder, campaigns]
 
   app.get('/company/:company/workspace/:workspace/folder/:folder',
     protect,
-    preload(...subFolderActions),
+    ensureLoad(...subFolderActions),
     render)
 
   subFolderActions.push(reports)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/reports',
     protect,
-    preload(...subFolderActions),
+    ensureLoad(...subFolderActions),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/reports/new',
     protect,
-    preload(...subFolderActions),
+    ensureLoad(...subFolderActions),
     render)
 
   subFolderActions.pop()
@@ -141,56 +143,56 @@ export function setAppRoutes (app, render) {
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/report/:report',
     protect,
-    preload(...subFolderActions),
+    ensureLoad(...subFolderActions),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/report/:report/edit',
     protect,
-    preload(...subFolderActions),
+    ensureLoad(...subFolderActions),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/creatives',
     protect,
-    preload(statuses, companies, workspace, folder, campaigns),
+    ensureLoad(workspace, folder, campaigns),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/campaign/:campaign/creatives',
     protect,
-    preload(statuses, companies, workspace, folder, campaigns),
+    ensureLoad(workspace, folder, campaigns),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/orders',
     protect,
-    preload(companies, workspace, folder, orders),
+    ensureLoad(workspace, folder, orders),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/orders/clone',
     protect,
-    preload(companies, workspace, folder, orders),
+    ensureLoad(workspace, folder, orders),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/order/:order',
     protect,
-    preload(deliveryMethods, statuses, companies, workspace, folder, campaignsWithAdsets, orders, budgets),
+    ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/order/:order/autobudget',
     protect,
-    preload(deliveryMethods, statuses, companies, workspace, folder, campaignsWithAdsets, orders, budgets, autoBudgetLogs),
+    ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets, autoBudgetLogs),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/order/:order/autobudget/:day',
     protect,
-    preload(deliveryMethods, statuses, companies, workspace, folder, campaignsWithAdsets, orders, budgets, autoBudgetLogs),
+    ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets, autoBudgetLogs),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/create/order',
     protect,
-    preload(deliveryMethods, statuses, companies, workspace, folder, campaignsWithAdsets, orders),
+    ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/edit',
     protect,
-    preload(medias, companies, workspace, accounts, folder),
+    ensureLoad(medias, workspace, accounts, folder),
     render)
 }
