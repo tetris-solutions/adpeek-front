@@ -1,12 +1,12 @@
 import {DELETE} from '@tetris/http'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 
-function deleteReport (workspace, report, config) {
-  return DELETE(`${process.env.ADPEEK_API_URL}/workspace/${workspace}/report/${report}`, (config))
+function deleteReport (company, report, config) {
+  return DELETE(`${process.env.ADPEEK_API_URL}/company/${company}/report/${report}`, (config))
 }
 
-export function deleteReportAction (tree, {workspace}, report) {
-  return deleteReport(workspace, report, getApiFetchConfig(tree))
+export function deleteReportAction (tree, {company}, report) {
+  return deleteReport(company, report, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }

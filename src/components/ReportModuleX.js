@@ -4,19 +4,20 @@ import find from 'lodash/find'
 import isEmpty from 'lodash/isEmpty'
 import pick from 'lodash/pick'
 import React from 'react'
-
 import moduleType from '../propTypes/report-module'
 import reportEntityType from '../propTypes/report-entity'
 import reportMetaDataType from '../propTypes/report-meta-data'
 import reportParamsType from '../propTypes/report-params'
 import Module from './ReportModule'
 import {deleteModuleAction} from '../actions/delete-module'
-import {loadReportModuleResultAction} from '../actions/load-report-module-result'
+import {loadReportModuleResultAction} from '../actions/load-report-module-result-x'
 import {updateModuleAction} from '../actions/update-module'
+import map from 'lodash/map'
+import fPick from 'lodash/fp/pick'
 
 const {PropTypes} = React
 
-const ReportModule = React.createClass({
+const ModuleController = React.createClass({
   displayName: 'Report-Module-Controller',
   propTypes: {
     module: moduleType.isRequired,
@@ -51,10 +52,12 @@ const ReportModule = React.createClass({
     const {reportParams} = this.props
     const {module, entity} = this.props
     const filters = assign({}, module.filters)
+    const accounts = map(reportParams.accounts, fPick(['ad_account', 'tetris_account', 'platform']))
 
     return assign({filters, entity: entity.id},
       pick(module, 'dimensions', 'metrics'),
-      pick(reportParams, 'ad_account', 'tetris_account', 'platform', 'from', 'to')
+      pick(reportParams, 'from', 'to'),
+      {accounts}
     )
   },
   remove () {
@@ -85,24 +88,24 @@ const ReportModule = React.createClass({
   }
 })
 
-function ModuleWrapper (props) {
+function ReportModuleX (props) {
   const module = assign({}, props.module)
   const filters = assign({}, module.filters)
   const entity = find(props.entities, {id: module.entity})
 
   if (isEmpty(filters.id)) {
-    filters.id = entity.list.map(({id}) => id)
+    filters.id = map(entity.list, 'id')
   }
 
   module.filters = filters
 
-  return <ReportModule {...props} module={module} entity={entity}/>
+  return <ModuleController {...props} module={module} entity={entity}/>
 }
 
-ModuleWrapper.displayName = 'Module-Wrapper'
-ModuleWrapper.propTypes = {
+ReportModuleX.displayName = 'Module-Wrapper'
+ReportModuleX.propTypes = {
   module: moduleType,
   entities: PropTypes.arrayOf(reportEntityType).isRequired
 }
 
-export default ModuleWrapper
+export default ReportModuleX

@@ -1,25 +1,25 @@
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {DELETE} from '@tetris/http'
-
+import compact from 'lodash/compact'
 import {getDeepCursor} from '../functions/get-deep-cursor'
 
-function deleteModule (workspace, module, config) {
-  return DELETE(`${process.env.ADPEEK_API_URL}/workspace/${workspace}/module/${module}`, config)
+function deleteModule (company, module, config) {
+  return DELETE(`${process.env.ADPEEK_API_URL}/company/${company}/module/${module}`, config)
 }
 
 export function deleteModuleAction (tree, params, moduleId) {
-  return deleteModule(params.workspace, moduleId, getApiFetchConfig(tree))
+  return deleteModule(params.company, moduleId, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .then(function onSuccess (response) {
-      tree.unset(getDeepCursor(tree, [
+      tree.unset(getDeepCursor(tree, compact([
         'user',
         ['companies', params.company],
-        ['workspaces', params.workspace],
-        ['folders', params.folder],
+        params.workspace && ['workspaces', params.workspace],
+        params.folder && ['folders', params.folder],
         ['reports', params.report],
         'modules',
         moduleId
-      ]))
+      ])))
       tree.commit()
 
       return response
