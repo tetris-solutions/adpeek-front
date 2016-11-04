@@ -4,6 +4,8 @@ import Message from 'tetris-iso/Message'
 import isFunction from 'lodash/isFunction'
 import TextMessage from 'intl-messageformat'
 import Checkbox from './Checkbox'
+import join from 'lodash/join'
+import compact from 'lodash/compact'
 
 const {PropTypes} = React
 
@@ -37,7 +39,13 @@ const ReportEditPrompt = React.createClass({
     const {report, params: {company, workspace, folder}} = this.props
     const cloneName = new TextMessage(messages.copyOfName, locales).format({name: report.name})
 
-    router.push(`/company/${company}/workspace/${workspace}/folder/${folder}/reports/new?clone=${report.id}&name=${cloneName}`)
+    const scope = join(compact([
+      `company/${company}`,
+      workspace && `workspace/${workspace}`,
+      folder && `folder/${folder}`
+    ]), '/')
+
+    router.push(`${scope}/reports/new?clone=${report.id}&name=${cloneName}`)
   },
   cloneInstead () {
     this.closeModalAnd(this.navigateToCloneForm)
@@ -56,7 +64,13 @@ const ReportEditPrompt = React.createClass({
   navigateToEditMode () {
     const {params: {company, workspace, folder, report}} = this.props
 
-    this.context.router.push(`/company/${company}/workspace/${workspace}/folder/${folder}/report/${report}/edit`)
+    const scope = join(compact([
+      `company/${company}`,
+      workspace && `workspace/${workspace}`,
+      folder && `folder/${folder}`
+    ]), '/')
+
+    this.context.router.push(`${scope}/report/${report}/edit`)
   },
   confirm () {
     this.closeModalAnd(this.navigateToEditMode)
