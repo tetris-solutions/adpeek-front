@@ -37,6 +37,7 @@ import OrderAutoBudget from '../components/OrderAutoBudget'
 import OrderBreadCrumb from '../components/OrderBreadcrumb'
 import OrdersBreadCrumb from '../components/OrdersBreadcrumb'
 import FolderReportAside from '../components/FolderReportAside'
+import WorkspaceReportAside from '../components/WorkspaceReportAside'
 import ReportBread from '../components/ReportBreadcrumb'
 import ReportsBread from '../components/ReportsBreadcrumb'
 import WorkspaceAside from '../components/WorkspaceAside'
@@ -115,7 +116,10 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
             <IndexRoute component={Folders} onEnter={preload(folders)}/>
 
             <Route breadcrumb={ReportsBread}>
-              <Route path='report/:report' breadcrumb={ReportBread} onEnter={preload(report)}>
+              <Route path='report/:report'
+                     breadcrumb={ReportBread}
+                     aside={WorkspaceReportAside}
+                     onEnter={preload(report)}>
                 <IndexRoute component={WorkspaceReport}/>
                 <Route path='edit' component={WorkspaceReport}/>
               </Route>

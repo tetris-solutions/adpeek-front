@@ -16,21 +16,21 @@ import {canSkipReportEditPrompt} from '../functions/can-skip-report-edit-prompt'
 
 const {PropTypes} = React
 
-export function FolderReportAside ({report, dispatch, user}, {messages, locales, router, location: {pathname}, params}) {
-  const {company, workspace, folder} = params
-  const folderUrl = `/company/${company}/workspace/${workspace}/folder/${folder}`
+export function WorkspaceReportAside ({report, dispatch, user}, {messages, locales, router, location: {pathname}, params}) {
+  const {company, workspace} = params
+  const workspaceUrl = `/company/${company}/workspace/${workspace}`
   const reload = () => dispatch(loadReportAction, params, report.id)
   const favorite = () => dispatch(setDefaultReportAction, params, report.id, true).then(reload)
 
   const deleteReport = () =>
     dispatch(deleteReportAction, params, report.id)
-      .then(() => router.push(`${folderUrl}/reports`))
+      .then(() => router.push(`${workspaceUrl}/reports`))
 
   const inEditMode = endsWith(pathname, '/edit')
   const cloneName = new TextMessage(messages.copyOfName, locales).format({name: report.name})
   const shouldSkipEditPrompt = report.is_private || canSkipReportEditPrompt()
   const favTitle = report.is_user_selected ? messages.unfavoriteReportDescription : messages.favoriteReportDescription
-  const cloneUrl = `${folderUrl}/reports/new?clone=${report.id}&name=${cloneName}`
+  const cloneUrl = `${workspaceUrl}/reports/new?clone=${report.id}&name=${cloneName}`
 
   return (
     <Fence canEditReport canBrowseReports>
@@ -59,7 +59,7 @@ export function FolderReportAside ({report, dispatch, user}, {messages, locales,
             </Button>}
 
             {canEditReport && !inEditMode && shouldSkipEditPrompt && (
-              <Button tag={Link} to={`${folderUrl}/report/${report.id}/edit`} icon='create'>
+              <Button tag={Link} to={`${workspaceUrl}/report/${report.id}/edit`} icon='create'>
                 <Message>editReport</Message>
               </Button>)}
 
@@ -71,7 +71,7 @@ export function FolderReportAside ({report, dispatch, user}, {messages, locales,
                 <Message>deleteReport</Message>
               </Button>)}
 
-            <Button tag={Link} to={canBrowseReports ? `${folderUrl}/reports` : folderUrl} icon='close'>
+            <Button tag={Link} to={canBrowseReports ? `${workspaceUrl}/reports` : workspaceUrl} icon='close'>
               <Message>oneLevelUpNavigation</Message>
             </Button>
           </Buttons>
@@ -80,8 +80,8 @@ export function FolderReportAside ({report, dispatch, user}, {messages, locales,
   )
 }
 
-FolderReportAside.displayName = 'Folder-Report-Aside'
-FolderReportAside.propTypes = {
+WorkspaceReportAside.displayName = 'Workspace-Report-Aside'
+WorkspaceReportAside.propTypes = {
   dispatch: PropTypes.func,
   user: PropTypes.object,
   report: PropTypes.shape({
@@ -89,7 +89,7 @@ FolderReportAside.propTypes = {
     name: PropTypes.string
   })
 }
-FolderReportAside.contextTypes = {
+WorkspaceReportAside.contextTypes = {
   messages: PropTypes.object,
   locales: PropTypes.string,
   router: PropTypes.object,
@@ -97,4 +97,4 @@ FolderReportAside.contextTypes = {
   params: PropTypes.object
 }
 
-export default contextualize(FolderReportAside, 'report', 'user')
+export default contextualize(WorkspaceReportAside, 'report', 'user')

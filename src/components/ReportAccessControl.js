@@ -2,11 +2,12 @@ import React from 'react'
 import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
 import {openReportAction} from '../actions/open-report'
-import {setFolderReportAction} from '../actions/set-folder-report'
+import {setDefaultReportAction} from '../actions/set-default-report'
 import {updateReportAction} from '../actions/update-report'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
 import Fence from './Fence'
+import {inferLevelFromParams} from '../functions/infer-level-from-params'
 
 const style = csjs`
 .card {
@@ -59,18 +60,18 @@ CardButton.propTypes = {
   description: PropTypes.node.isRequired
 }
 
-function Options ({user, report, makePublic, unlock, setAsFolderDefault, close, canEditFolder}) {
+function Options ({user, report, makePublic, unlock, setAsDefault, close, canEdit}) {
   const setAsDefaultDescription = report.is_default_report
-    ? <Message>uncheckFolderReportDescription</Message>
-    : <Message>checkFolderReportDescription</Message>
+    ? <Message>uncheckDefaultReportDescription</Message>
+    : <Message>checkDefaultReportDescription</Message>
 
   const setAsDefaultCallToAction = report.is_default_report
-    ? <Message>uncheckFolderReport</Message>
-    : <Message>checkFolderReport</Message>
+    ? <Message>uncheckDefaultReport</Message>
+    : <Message>checkDefaultReport</Message>
 
   const showMakeGlobal = user.is_admin && !report.is_global
   const showMakePublic = report.is_private
-  const showMakeDefault = canEditFolder && !report.is_private
+  const showMakeDefault = canEdit && !report.is_private
   const noPossibleOptions = !(showMakeGlobal || showMakeDefault || showMakePublic)
 
   return (
@@ -107,7 +108,7 @@ function Options ({user, report, makePublic, unlock, setAsFolderDefault, close, 
             description={setAsDefaultDescription}
             icon={report.is_default_report ? 'indeterminate_check_box' : 'check_box'}
             callToAction={setAsDefaultCallToAction}
-            onClick={setAsFolderDefault}/>)}
+            onClick={setAsDefault}/>)}
 
         <br/>
         <hr/>
@@ -126,9 +127,9 @@ Options.propTypes = {
   report: PropTypes.object.isRequired,
   makePublic: PropTypes.func.isRequired,
   unlock: PropTypes.func.isRequired,
-  setAsFolderDefault: PropTypes.func.isRequired,
+  setAsDefault: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
-  canEditFolder: PropTypes.bool.isRequired
+  canEdit: PropTypes.bool.isRequired
 }
 
 const ReportAccessControl = React.createClass({
@@ -155,8 +156,8 @@ const ReportAccessControl = React.createClass({
       dispatch(openReportAction, params, report.id)
         .then(reload)
 
-    this.setAsFolderDefault = () =>
-      dispatch(setFolderReportAction, params.folder, report.id)
+    this.setAsDefault = () =>
+      dispatch(setDefaultReportAction, params, report.id)
         .then(reload)
 
     this.unlock = () =>
@@ -169,7 +170,14 @@ const ReportAccessControl = React.createClass({
     this.setState({isModalOpen: false})
   },
   render () {
-    const {report, user, className, children} = this.props
+    const {report, user, className, params, children} = this.props
+    const level = inferLevelFromParams(params)
+
+    const canEditPermission = level === 'folder'
+      ? 'canEditFolder'
+      : 'canEditWorkspace' // @todo how to check for company edit permission??
+
+    const fencePerms = {[canEditPermission]: true}
 
     return (
       <a className={className} onClick={this.open}>
@@ -177,10 +185,10 @@ const ReportAccessControl = React.createClass({
         <Message>reportAccessControl</Message>
         {this.state.isModalOpen ? (
           <Modal size='large' onEscPress={this.close}>
-            <Fence canEditFolder>{({canEditFolder}) => (
+            <Fence {...fencePerms}>{permissions => (
               <Options
-                canEditFolder={canEditFolder}
-                setAsFolderDefault={this.setAsFolderDefault}
+                canEdit={permissions[canEditPermission]}
+                setAsDefault={this.setAsDefault}
                 unlock={this.unlock}
                 makePublic={this.makePublic}
                 close={this.close}
