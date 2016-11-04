@@ -1,6 +1,7 @@
 import React from 'react'
 import head from 'lodash/head'
 import uniq from 'lodash/uniq'
+import includes from 'lodash/includes'
 import concat from 'lodash/concat'
 import endsWith from 'lodash/endsWith'
 import ReportController from './ReportController'
@@ -76,6 +77,9 @@ const Report = React.createClass({
   getEntities () {
     const {messages} = this.context
     const {campaigns, adSets, adGroups, ads, keywords} = this.props
+    const platforms = this.getPlatforms()
+    const hasAdwords = includes(platforms, 'adwords')
+    const hasFacebook = includes(platforms, 'facebook')
 
     const entities = [{
       id: 'Campaign',
@@ -83,23 +87,27 @@ const Report = React.createClass({
       list: campaigns
     }]
 
-    entities.push({
-      id: 'AdGroup',
-      name: messages.adGroups,
-      list: adGroups || empty
-    })
+    if (hasAdwords) {
+      entities.push({
+        id: 'AdGroup',
+        name: messages.adGroups,
+        list: adGroups || empty
+      })
 
-    entities.push({
-      id: 'Keyword',
-      name: messages.keywords,
-      list: keywords || empty
-    })
+      entities.push({
+        id: 'Keyword',
+        name: messages.keywords,
+        list: keywords || empty
+      })
+    }
 
-    entities.push({
-      id: 'AdSet',
-      name: messages.adSets,
-      list: adSets || empty
-    })
+    if (hasFacebook) {
+      entities.push({
+        id: 'AdSet',
+        name: messages.adSets,
+        list: adSets || empty
+      })
+    }
 
     entities.push({
       id: 'Ad',

@@ -14,7 +14,7 @@ function monthNameToIndex (name) {
 function zeroedMoment () {
   return moment().month(0).date(1).hour(0).minute(0).second(0)
 }
-
+const prefixless = name => name.substr(name.indexOf(':') + 1)
 /**
  * @param {Object} attributes attributes for type mapping
  * @param {Array} result result array
@@ -28,7 +28,9 @@ export function normalizeResult (attributes, result) {
 
     let date
 
-    switch (attribute.id) {
+    const attributeId = prefixless(attribute.id)
+
+    switch (attributeId) {
       case 'year':
         date = zeroedMoment().year(value).toDate()
         date._format_ = 'YYYY'
