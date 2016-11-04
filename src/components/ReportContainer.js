@@ -5,7 +5,6 @@ import includes from 'lodash/includes'
 import concat from 'lodash/concat'
 import endsWith from 'lodash/endsWith'
 import ReportController from './ReportController'
-import ReportControllerX from './ReportControllerX'
 import {inferLevelFromParams} from '../functions/infer-level-from-params'
 import {loadReportEntitiesAction} from '../actions/load-report-entities'
 import {loadReportMetaDataAction, loadCrossPlatformReportMetaDataAction} from '../actions/load-report-meta-data'
@@ -40,8 +39,8 @@ Placeholder.propTypes = {
   children: PropTypes.node.isRequired
 }
 
-const Report = React.createClass({
-  displayName: 'Report',
+const ReportContainer = React.createClass({
+  displayName: 'Report-Container',
   contextTypes: {
     messages: PropTypes.object
   },
@@ -175,19 +174,6 @@ const Report = React.createClass({
       )
     }
 
-    if (!this.isFolderLevel()) {
-      return (
-        <ReportControllerX
-          dispatch={dispatch}
-          params={params}
-          report={report}
-          metaData={metaData}
-          editMode={endsWith(location.pathname, '/edit')}
-          accounts={map(accounts, transformAccount)}
-          entities={this.getEntities()}/>
-      )
-    }
-
     return (
       <ReportController
         dispatch={dispatch}
@@ -195,10 +181,10 @@ const Report = React.createClass({
         report={report}
         metaData={metaData}
         editMode={endsWith(location.pathname, '/edit')}
-        reportParams={transformAccount(head(accounts))}
+        accounts={map(accounts, transformAccount)}
         entities={this.getEntities()}/>
     )
   }
 })
 
-export default Report
+export default ReportContainer

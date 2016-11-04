@@ -42,7 +42,7 @@ export function normalizeResult (attributes, result) {
         break
       case 'month':
         date = new Date(value)
-        date._format_ = 'MMMM, YY'
+        date._format_ = 'MMMM/YY'
         break
       case 'monthofyear':
         date = zeroedMoment().month(monthNameToIndex(value)).toDate()
@@ -50,7 +50,7 @@ export function normalizeResult (attributes, result) {
         break
       case 'date':
         date = moment(value).toDate()
-        date._format_ = 'DD - MMM, YY'
+        date._format_ = 'DD/MM/YYYY'
         break
       case 'hourly_stats_aggregated_by_advertiser_time_zone':
       case 'hourly_stats_aggregated_by_audience_time_zone':

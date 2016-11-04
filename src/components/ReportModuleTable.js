@@ -2,12 +2,12 @@ import concat from 'lodash/concat'
 import csjs from 'csjs'
 import cx from 'classnames'
 import find from 'lodash/find'
+import isString from 'lodash/isString'
 import compact from 'lodash/compact'
 import flow from 'lodash/flow'
 import forEach from 'lodash/forEach'
 import fromPairs from 'lodash/fromPairs'
 import indexOf from 'lodash/indexOf'
-import keys from 'lodash/keys'
 import map from 'lodash/map'
 import pick from 'lodash/pick'
 import sortBy from 'lodash/sortBy'
@@ -59,6 +59,12 @@ class Sortable {
   }
 }
 
+function normalizeForSorting (val) {
+  return (
+    isNumber(val) || isString(val) || isDate(val)
+  ) ? val : -Infinity
+}
+
 function sortWith ([field, order]) {
   if (field === '_fields_') {
     return ls => ls
@@ -66,8 +72,8 @@ function sortWith ([field, order]) {
 
   function sortFn (ls) {
     function compare (a, b) {
-      const aValue = a[field] instanceof Sortable ? a[field].sortKey : a[field]
-      const bValue = b[field] instanceof Sortable ? b[field].sortKey : b[field]
+      const aValue = a[field] instanceof Sortable ? a[field].sortKey : normalizeForSorting(a[field])
+      const bValue = b[field] instanceof Sortable ? b[field].sortKey : normalizeForSorting(b[field])
 
       if (aValue === bValue) return 0
 
@@ -281,11 +287,12 @@ const ReportModuleTable = React.createClass({
     } = this.props
 
     const sortPairs = fromPairs(sort)
-    const fieldSort = sortPairs._fields_ || concat(query.dimensions, query.metrics)
+    const fields = concat(query.dimensions, query.metrics)
+    const fieldSort = sortPairs._fields_ || fields
 
     delete sortPairs._fields_
 
-    const columns = sortHeaders(keys(result[0]), fieldSort)
+    const columns = sortHeaders(fields, fieldSort)
     let tbody = null
     let colHeaders = null
 

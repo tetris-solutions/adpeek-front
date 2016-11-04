@@ -1,4 +1,3 @@
-import assign from 'lodash/assign'
 import get from 'lodash/get'
 import isNumber from 'lodash/isNumber'
 import map from 'lodash/map'
@@ -10,8 +9,7 @@ import SubHeader from './SubHeader'
 import ReportExportButton from './ReportExportButton'
 import entityType from '../propTypes/report-entity'
 import reportType from '../propTypes/report'
-
-import Module from './ReportModuleController'
+import ReportModuleContainer from './ReportModuleContainer'
 import ReportDateRange from './ReportDateRange'
 import {createModuleReportAction} from '../actions/create-module'
 import {exportReportAction} from '../actions/export-report'
@@ -28,11 +26,11 @@ const ReportController = React.createClass({
     metaData: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
-    reportParams: PropTypes.shape({
+    accounts: PropTypes.arrayOf(PropTypes.shape({
       ad_account: PropTypes.string,
       plaftorm: PropTypes.string,
       tetris_account: PropTypes.string
-    }),
+    })),
     entities: PropTypes.arrayOf(entityType).isRequired
   },
   contextTypes: {
@@ -116,11 +114,11 @@ const ReportController = React.createClass({
       .catch(() => this.setState({isCreatingReport: false}))
   },
   render () {
-    const {metaData, editMode, report: {modules}} = this.props
+    const {metaData, editMode, accounts, report: {modules}} = this.props
     const {isCreatingReport} = this.state
     const {moment} = this.context
     const {from, to} = this.getCurrentRange()
-    const reportParams = assign({from, to}, this.props.reportParams)
+    const reportParams = {accounts, from, to}
 
     // @todo bring back input for name editing
 
@@ -145,7 +143,7 @@ const ReportController = React.createClass({
         <Page>
           <div className='mdl-grid' ref='grid'>{map(sortBy(modules, 'index'), (module, index) =>
             <div data-report-module={module.id} key={module.id} className={`mdl-cell mdl-cell--${module.cols}-col`}>
-              <Module
+              <ReportModuleContainer
                 changeDateRange={this.onChangeRange}
                 module={module}
                 editable={editMode}

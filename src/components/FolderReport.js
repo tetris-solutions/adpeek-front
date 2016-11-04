@@ -1,5 +1,5 @@
 import React from 'react'
-import Report from './Report'
+import ReportContainer from './ReportContainer'
 import {contextualize} from './higher-order/contextualize'
 import get from 'lodash/get'
 
@@ -33,7 +33,7 @@ const FolderReport = React.createClass({
     const {account} = folder
 
     return (
-      <Report
+      <ReportContainer
         dispatch={dispatch}
         report={report}
         location={location}

@@ -1,5 +1,5 @@
 import React from 'react'
-import Report from './Report'
+import ReportContainer from './ReportContainer'
 import {contextualize} from './higher-order/contextualize'
 import get from 'lodash/get'
 
@@ -32,7 +32,7 @@ const CompanyReport = React.createClass({
     const {params, metaData, dispatch, report, company, location} = this.props
 
     return (
-      <Report
+      <ReportContainer
         dispatch={dispatch}
         report={report}
         location={location}

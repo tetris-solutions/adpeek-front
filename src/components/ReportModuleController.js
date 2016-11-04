@@ -1,22 +1,19 @@
 import assign from 'lodash/assign'
 import debounce from 'lodash/debounce'
-import find from 'lodash/find'
-import isEmpty from 'lodash/isEmpty'
 import pick from 'lodash/pick'
 import React from 'react'
-
 import moduleType from '../propTypes/report-module'
 import reportEntityType from '../propTypes/report-entity'
 import reportMetaDataType from '../propTypes/report-meta-data'
 import reportParamsType from '../propTypes/report-params'
-import Module from './ReportModule'
+import ReportModule from './ReportModule'
 import {deleteModuleAction} from '../actions/delete-module'
 import {loadReportModuleResultAction} from '../actions/load-report-module-result'
 import {updateModuleAction} from '../actions/update-module'
 
 const {PropTypes} = React
 
-const ReportModule = React.createClass({
+const ReportModuleController = React.createClass({
   displayName: 'Report-Module-Controller',
   propTypes: {
     module: moduleType.isRequired,
@@ -24,7 +21,7 @@ const ReportModule = React.createClass({
     metaData: reportMetaDataType.isRequired,
     entity: reportEntityType.isRequired,
     entities: PropTypes.arrayOf(reportEntityType).isRequired,
-    reportParams: reportParamsType
+    reportParams: reportParamsType.isRequired
   },
   contextTypes: {
     tree: PropTypes.object,
@@ -54,7 +51,7 @@ const ReportModule = React.createClass({
 
     return assign({filters, entity: entity.id},
       pick(module, 'dimensions', 'metrics'),
-      pick(reportParams, 'ad_account', 'tetris_account', 'platform', 'from', 'to')
+      pick(reportParams, 'from', 'to', 'accounts')
     )
   },
   remove () {
@@ -77,7 +74,7 @@ const ReportModule = React.createClass({
     const {editable} = this.props
 
     return (
-      <Module
+      <ReportModule
         {...this.props}
         update={editable ? this.save : undefined}
         remove={editable ? this.remove : undefined}/>
@@ -85,24 +82,4 @@ const ReportModule = React.createClass({
   }
 })
 
-function ModuleWrapper (props) {
-  const module = assign({}, props.module)
-  const filters = assign({}, module.filters)
-  const entity = find(props.entities, {id: module.entity})
-
-  if (isEmpty(filters.id)) {
-    filters.id = entity.list.map(({id}) => id)
-  }
-
-  module.filters = filters
-
-  return <ReportModule {...props} module={module} entity={entity}/>
-}
-
-ModuleWrapper.displayName = 'Module-Wrapper'
-ModuleWrapper.propTypes = {
-  module: moduleType,
-  entities: PropTypes.arrayOf(reportEntityType).isRequired
-}
-
-export default ModuleWrapper
+export default ReportModuleController

@@ -19,7 +19,7 @@ const style = csjs`
 
 const {PropTypes} = React
 
-const Module = React.createClass({
+const ReportModule = React.createClass({
   displayName: 'Report-Module',
   mixins: [styled(style)],
   getInitialState () {
@@ -112,4 +112,4 @@ const Module = React.createClass({
   }
 })
 
-export default Module
+export default ReportModule

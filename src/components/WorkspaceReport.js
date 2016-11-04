@@ -1,5 +1,5 @@
 import React from 'react'
-import Report from './Report'
+import ReportContainer from './ReportContainer'
 import {contextualize} from './higher-order/contextualize'
 import get from 'lodash/get'
 import values from 'lodash/values'
@@ -30,7 +30,7 @@ const WorkspaceReport = React.createClass({
     const {accounts} = workspace
 
     return (
-      <Report
+      <ReportContainer
         dispatch={dispatch}
         report={report}
         location={location}
