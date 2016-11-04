@@ -77,9 +77,6 @@ const Report = React.createClass({
   getEntities () {
     const {messages} = this.context
     const {campaigns, adSets, adGroups, ads, keywords} = this.props
-    const platforms = this.getPlatforms()
-    const hasAdwords = includes(platforms, 'adwords')
-    const hasFacebook = includes(platforms, 'facebook')
 
     const entities = [{
       id: 'Campaign',
@@ -87,33 +84,39 @@ const Report = React.createClass({
       list: campaigns
     }]
 
-    if (hasAdwords) {
-      entities.push({
-        id: 'AdGroup',
-        name: messages.adGroups,
-        list: adGroups || empty
-      })
+    if (this.isFolderLevel()) {
+      const platforms = this.getPlatforms()
+      const hasAdwords = includes(platforms, 'adwords')
+      const hasFacebook = includes(platforms, 'facebook')
+
+      if (hasAdwords) {
+        entities.push({
+          id: 'AdGroup',
+          name: messages.adGroups,
+          list: adGroups || empty
+        })
+
+        entities.push({
+          id: 'Keyword',
+          name: messages.keywords,
+          list: keywords || empty
+        })
+      }
+
+      if (hasFacebook) {
+        entities.push({
+          id: 'AdSet',
+          name: messages.adSets,
+          list: adSets || empty
+        })
+      }
 
       entities.push({
-        id: 'Keyword',
-        name: messages.keywords,
-        list: keywords || empty
+        id: 'Ad',
+        name: messages.ads,
+        list: ads || empty
       })
     }
-
-    if (hasFacebook) {
-      entities.push({
-        id: 'AdSet',
-        name: messages.adSets,
-        list: adSets || empty
-      })
-    }
-
-    entities.push({
-      id: 'Ad',
-      name: messages.ads,
-      list: ads || empty
-    })
 
     return entities
   },
