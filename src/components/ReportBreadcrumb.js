@@ -1,13 +1,23 @@
 import React from 'react'
 import {Link} from 'react-router'
+import join from 'lodash/join'
+import compact from 'lodash/compact'
 
 import {contextualize} from './higher-order/contextualize'
 
 const {PropTypes} = React
 
 export function ReportBreadcrumb ({params: {company, workspace, folder}, report}, {messages: {reportBreadcrumb}}) {
+  const url = '/' +
+    join(compact([
+      `company/${company}`,
+      workspace && `workspace/${workspace}`,
+      folder && `folder/${folder}`,
+      `report/${report.id}`
+    ]), '/')
+
   return (
-    <Link to={`/company/${company}/workspace/${workspace}/folder/${folder}/report/${report.id}`} title={reportBreadcrumb}>
+    <Link to={url} title={reportBreadcrumb}>
       <i className='material-icons'>trending_up</i>
       {report.name}
     </Link>

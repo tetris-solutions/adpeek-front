@@ -45,7 +45,7 @@ const ReportEditPrompt = React.createClass({
       folder && `folder/${folder}`
     ]), '/')
 
-    router.push(`${scope}/reports/new?clone=${report.id}&name=${cloneName}`)
+    router.push(`/${scope}/reports/new?clone=${report.id}&name=${cloneName}`)
   },
   cloneInstead () {
     this.closeModalAnd(this.navigateToCloneForm)
@@ -70,7 +70,7 @@ const ReportEditPrompt = React.createClass({
       folder && `folder/${folder}`
     ]), '/')
 
-    this.context.router.push(`${scope}/report/${report}/edit`)
+    this.context.router.push(`/${scope}/report/${report}/edit`)
   },
   confirm () {
     this.closeModalAnd(this.navigateToEditMode)

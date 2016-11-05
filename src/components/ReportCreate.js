@@ -27,8 +27,7 @@ const ReportCreate = React.createClass({
       company: PropTypes.string,
       workspace: PropTypes.string,
       folder: PropTypes.string
-    }).isRequired,
-    dispatch: PropTypes.func.isRequired
+    }).isRequired
   },
   handleSubmit (e) {
     e.preventDefault()
