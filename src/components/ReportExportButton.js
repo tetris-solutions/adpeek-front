@@ -3,6 +3,8 @@ import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
 import {styledFnComponent} from './higher-order/styled-fn-component'
 import csjs from 'csjs'
+import {contextualize} from './higher-order/contextualize'
+import get from 'lodash/get'
 
 const {PropTypes} = React
 const style = csjs`
@@ -83,12 +85,21 @@ const ReportExportButton = React.createClass({
       isModalOpen: false
     }
   },
+  getReportMetaData () {
+    return {
+      folder: get(this.props, 'folder.name'),
+      workspace: get(this.props, 'workspace.name'),
+      company: get(this.props, 'company.name'),
+      icon: get(this.props, 'company.icon'),
+      url: window.location.href
+    }
+  },
   exportAsPdf () {
-    this.props.create('pdf')
+    this.props.create('pdf', this.getReportMetaData())
     this.close()
   },
   exportAsXls () {
-    this.props.create('xls')
+    this.props.create('xls', this.getReportMetaData())
     this.close()
   },
   open () {
@@ -120,4 +131,4 @@ const ReportExportButton = React.createClass({
   }
 })
 
-export default ReportExportButton
+export default contextualize(ReportExportButton, 'company', 'folder', 'workspace')

@@ -15,6 +15,7 @@ import {createModuleReportAction} from '../actions/create-module'
 import {exportReportAction} from '../actions/export-report'
 import {serializeReportModules} from '../functions/seralize-report-modules'
 import Page from './Page'
+import assign from 'lodash/assign'
 
 const {PropTypes} = React
 
@@ -87,7 +88,7 @@ const ReportController = React.createClass({
       index
     })
   },
-  downloadReport (type = 'pdf') {
+  downloadReport (type, config) {
     const {dispatch, params, report} = this.props
     const {grid} = this.refs
 
@@ -102,11 +103,11 @@ const ReportController = React.createClass({
     this.setState({isCreatingReport: true})
 
     serializeReportModules(modules, type === 'xls')
-      .then(modules => dispatch(exportReportAction, params, type, {
+      .then(modules => dispatch(exportReportAction, params, type, assign({
         id: report.id,
         name: report.name,
         modules
-      }))
+      }, config)))
       .then(response => this.setState({isCreatingReport: false},
         function navigateToReportUrl () {
           window.location.href = response.data.url

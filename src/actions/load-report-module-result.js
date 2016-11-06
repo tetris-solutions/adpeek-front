@@ -13,7 +13,7 @@ function loadReportModuleResult (query, isCrossPlatform, config) {
   const path = isCrossPlatform ? 'x' : ''
 
   if (!isCrossPlatform) {
-    assign(query, head(query.accounts))
+    query = assign({}, query, head(query.accounts))
     delete query.accounts
   }
 
