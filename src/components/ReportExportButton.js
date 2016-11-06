@@ -80,6 +80,9 @@ const ReportExportButton = React.createClass({
     create: PropTypes.func.isRequired,
     isCreatingReport: PropTypes.bool.isRequired
   },
+  contextTypes: {
+    location: PropTypes.object
+  },
   getInitialState () {
     return {
       isModalOpen: false
@@ -91,7 +94,9 @@ const ReportExportButton = React.createClass({
       workspace: get(this.props, 'workspace.name'),
       company: get(this.props, 'company.name'),
       icon: get(this.props, 'company.icon'),
-      url: window.location.href
+      url: window.location.href,
+      from: get(this.context, 'location.query.from'),
+      to: get(this.context, 'location.query.to')
     }
   },
   exportAsPdf () {
