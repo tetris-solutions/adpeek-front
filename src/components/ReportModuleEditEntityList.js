@@ -132,7 +132,7 @@ const EntityList = React.createClass({
     let inactiveCampaignCount = 0
     let innerList
 
-    if (entityId === 'campaign') {
+    if (entityId === 'campaign' || entityId === 'placement') {
       inactiveCampaignCount += size(map(filter(attributes, not(isCampaignActive)), 'id'))
 
       innerList = (

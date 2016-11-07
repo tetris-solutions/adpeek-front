@@ -9,7 +9,8 @@ export default PropTypes.shape({
     'column',
     'line',
     'pie',
-    'table'
+    'table',
+    'total'
   ]),
   entity: PropTypes.string.isRequired,
   cols: PropTypes.oneOf([12, 8, 6, 4]).isRequired,
