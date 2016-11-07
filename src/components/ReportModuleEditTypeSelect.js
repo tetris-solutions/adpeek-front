@@ -18,6 +18,9 @@ function TypeSelect ({onChange, value}, {messages}) {
       <option value='table'>
         {messages.table}
       </option>
+      <option value='total'>
+        {messages.totalChart}
+      </option>
     </Select>
   )
 }

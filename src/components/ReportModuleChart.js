@@ -11,11 +11,13 @@ import Line from './ReportModuleChartLine'
 import Pie from './ReportModuleChartPie'
 import Spinner from './Spinner'
 import Table from './ReportModuleTable'
+import Total from './ReportModuleTotal'
 import {styled} from './mixins/styled'
 
 const style = csjs`
 .wrap {
   overflow: auto;
+  position: relative;
 }
 .wrap > div[data-highcharts-chart] {
   height: 100%
@@ -32,7 +34,8 @@ const typeComponent = {
   line: Line,
   pie: Pie,
   column: Column,
-  table: Table
+  table: Table,
+  total: Total
 }
 const {PropTypes} = React
 

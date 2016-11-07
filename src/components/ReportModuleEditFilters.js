@@ -114,7 +114,8 @@ const ReportModuleEditFilters = React.createClass({
     dimensions: PropTypes.array.isRequired,
     metrics: PropTypes.array.isRequired,
     attributes: PropTypes.object.isRequired,
-    update: PropTypes.func.isRequired
+    update: PropTypes.func.isRequired,
+    type: PropTypes.string.isRequired
   },
   contextTypes: {
     messages: PropTypes.object.isRequired
@@ -152,7 +153,11 @@ const ReportModuleEditFilters = React.createClass({
     return filter(ls, notTaken)
   },
   getAttributes (current) {
-    const {metrics, dimensions, attributes} = this.props
+    const {metrics, attributes, type} = this.props
+    const dimensions = type === 'total'
+      ? map(filter(attributes, 'is_dimension'), 'id')
+      : this.props.dimensions
+
     const metricsAndDimensions = concat(filter(dimensions, notId), metrics)
     const ls = this.filterOutSelected(metricsAndDimensions, current)
 
@@ -162,6 +167,7 @@ const ReportModuleEditFilters = React.createClass({
     const attributes = attribute === 'limit'
       ? [{id: 'limit', name: this.context.messages.resultLimitLabel, type: 'integer'}]
       : this.getAttributes(attribute)
+
     const metaData = attribute === 'limit'
       ? {type: 'integer'}
       : find(attributes, {id: attribute}) || {type: 'string'}

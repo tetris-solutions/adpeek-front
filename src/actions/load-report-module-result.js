@@ -36,7 +36,7 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
   const isCursorOk = () => moduleCursor && moduleCursor.tree
   const sameQuery = () => isEqual(query, moduleCursor.get('query'))
 
-  if (!isCursorOk() || !isvalidReportQuery(query) || sameQuery()) return
+  if (!isCursorOk() || !isvalidReportQuery(moduleCursor.get('type'), query) || sameQuery()) return
 
   const isLoadingCursor = moduleCursor.select('isLoading')
   const myCall = lastCall[id] = Date.now()

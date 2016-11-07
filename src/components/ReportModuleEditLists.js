@@ -44,6 +44,7 @@ const Lists = React.createClass({
     addEntity: PropTypes.func.isRequired,
     addItem: PropTypes.func.isRequired,
     removeItem: PropTypes.func.isRequired,
+    type: PropTypes.string.isRequired,
     filters: PropTypes.shape({
       id: PropTypes.array
     }).isRequired
@@ -85,18 +86,24 @@ const Lists = React.createClass({
     const selectedMetrics = this.props.metrics
     const selectedDimensions = this.props.dimensions
     const selectedIds = this.props.filters.id
-    const {entity, removeEntity, addEntity, addItem, removeItem} = this.props
+    const {type, entity, removeEntity, addEntity, addItem, removeItem} = this.props
     const {dimensions, metrics, list, activeTab} = this.state
     const isIdSelected = size(selectedIds) === 1 || includes(selectedDimensions, 'id')
     const {messages} = this.context
+
+    const entityClasses = cx('material-icons', isEmpty(selectedIds) && 'mdl-color-text--red-A700')
     const entityTitle = (
-      <i className={cx('material-icons', isEmpty(selectedIds) && 'mdl-color-text--red-A700')} title={entity.name}>list</i>
+      <i className={entityClasses} title={entity.name}>list</i>
     )
-    const metrictTitle = (
-      <i className={cx('material-icons', isEmpty(selectedMetrics) && 'mdl-color-text--red-A700')} title={messages.metrics}>trending_up</i>
+
+    const metricClasses = cx('material-icons', isEmpty(selectedMetrics) && 'mdl-color-text--red-A700')
+    const metricTitle = (
+      <i className={metricClasses} title={messages.metrics}>trending_up</i>
     )
+
+    const dimensionClasses = cx('material-icons', isEmpty(selectedDimensions) && 'mdl-color-text--red-A700')
     const dimensionTitle = (
-      <i className={cx('material-icons', isEmpty(selectedDimensions) && 'mdl-color-text--red-A700')} title={messages.dimensions}>view_column</i>
+      <i className={dimensionClasses} title={messages.dimensions}>view_column</i>
     )
 
     return (
@@ -118,7 +125,7 @@ const Lists = React.createClass({
               removeItem={removeEntity}
               addItem={addEntity}/>
           </Tab>
-          <Tab id='metric' title={metrictTitle} active={activeTab === 'metric'}>
+          <Tab id='metric' title={metricTitle} active={activeTab === 'metric'}>
             <br/>
             <Attributes
               attributes={metrics}
@@ -127,7 +134,7 @@ const Lists = React.createClass({
               removeItem={removeItem}
               addItem={addItem}/>
           </Tab>
-          <Tab id='dimension' title={dimensionTitle} active={activeTab === 'dimension'}>
+          {type !== 'total' && <Tab id='dimension' title={dimensionTitle} active={activeTab === 'dimension'}>
             <br/>
             <Attributes
               attributes={dimensions}
@@ -135,7 +142,7 @@ const Lists = React.createClass({
               selectedAttributes={selectedDimensions}
               removeItem={removeItem}
               addItem={addItem}/>
-          </Tab>
+          </Tab>}
         </Tabs>
       </div>
     )

@@ -77,11 +77,11 @@ const ModuleEdit = React.createClass({
       newState.filters = {id: []}
     }
 
-    if (name === 'type' && value === 'pie') {
+    if (name === 'type' && (value === 'pie' || value === 'total')) {
       const {dimensions, metrics} = module
 
       if (dimensions.length > 1) {
-        newState.dimensions = [dimensions[0]]
+        newState.dimensions = value === 'total' ? [] : [dimensions[0]]
       }
 
       if (metrics.length > 1) {
@@ -165,7 +165,7 @@ const ModuleEdit = React.createClass({
     }
 
     function add (attribute, ls) {
-      if (module.type === 'pie') {
+      if (module.type === 'pie' || module.type === 'total') {
         return [attribute.id]
       }
 
@@ -239,7 +239,7 @@ const ModuleEdit = React.createClass({
     const {changeDateRange, metaData, entities, reportParams} = this.props
     const {moment, messages} = this.context
     const isInvalidModule = isEmpty(draftModule.name) ||
-      isEmpty(draftModule.dimensions) ||
+      (isEmpty(draftModule.dimensions) && draftModule.type !== 'total') ||
       isEmpty(draftModule.metrics) ||
       isEmpty(draftModule.filters.id)
 
@@ -253,6 +253,7 @@ const ModuleEdit = React.createClass({
               {...draftModule}
               entity={draftEntity}
               entities={entities}
+              type={draftModule.type}
               attributes={metaData.attributes}
               removeEntity={this.removeEntity}
               removeItem={this.removeItem}
@@ -274,6 +275,7 @@ const ModuleEdit = React.createClass({
               </Tab>
               <Tab id='module-filters' title={messages.filterModuleResult}>
                 <ReportModuleEditFilters
+                  type={draftModule.type}
                   filters={draftModule.filters}
                   limit={draftModule.limit}
                   dimensions={draftModule.dimensions}
