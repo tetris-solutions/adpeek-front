@@ -14,11 +14,11 @@ import reportEntityType from '../../../propTypes/report-entity'
 import reportMetaDataType from '../../../propTypes/report-meta-data'
 import reportModuleType from '../../../propTypes/report-module'
 import reportParamsType from '../../../propTypes/report-params'
-import ReportModuleEditPreview from '../../ReportModuleEditPreview'
-import ReportModuleEditFilters from '../../ReportModuleEditFilters'
-import Lists from '../../ReportModuleEditLists'
+import EditContent from './EditContent'
+import EditFilters from './EditFilters'
+import Lists from './ReportModuleEditLists'
 import ReportDateRange from '../DateRange'
-import Sizing from '../../ReportModuleSizing'
+import EditSize from './EditSize'
 import {Tabs, Tab} from '../../Tabs'
 
 const {PropTypes} = React
@@ -265,7 +265,7 @@ const ModuleEdit = React.createClass({
           <div className='mdl-cell mdl-cell--9-col'>
             <Tabs>
               <Tab id='module-content' title={messages.moduleContent}>
-                <ReportModuleEditPreview
+                <EditContent
                   update={this.update}
                   removeItem={this.removeItem}
                   onChangeInput={this.onChangeInput}
@@ -273,10 +273,13 @@ const ModuleEdit = React.createClass({
               </Tab>
               <Tab id='module-size' title={messages.moduleSize}>
                 <br/>
-                <Sizing module={draftModule} save={this.update}/>
+                <EditSize
+                  cols={draftModule.cols}
+                  rows={draftModule.rows}
+                  save={this.update}/>
               </Tab>
               <Tab id='module-filters' title={messages.filterModuleResult}>
-                <ReportModuleEditFilters
+                <EditFilters
                   type={draftModule.type}
                   filters={draftModule.filters}
                   limit={draftModule.limit}

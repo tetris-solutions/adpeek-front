@@ -1,9 +1,7 @@
 import csjs from 'csjs'
 import map from 'lodash/map'
 import React from 'react'
-
-import reportModuleType from '../propTypes/report-module'
-import {styled} from './mixins/styled'
+import {styled} from '../../mixins/styled'
 
 const {PropTypes} = React
 const style = csjs`
@@ -38,11 +36,12 @@ const style = csjs`
 const availableColSizes = [[4, '1/3'], [6, '1/2'], [8, '2/3'], [12, '3/3']]
 const availableRowSizes = [2, 3, 4, 5, 6]
 
-const ReportModuleSizing = React.createClass({
-  displayName: 'Module-Sizing',
+const EditSize = React.createClass({
+  displayName: 'Edit-Size',
   mixins: [styled(style)],
   propTypes: {
-    module: reportModuleType,
+    rows: PropTypes.number.isRequired,
+    cols: PropTypes.number.isRequired,
     save: PropTypes.func
   },
   onSelect (cols, rows) {
@@ -52,8 +51,8 @@ const ReportModuleSizing = React.createClass({
     }
   },
   render () {
-    const {module} = this.props
-    const getColor = (col, row) => module.cols >= col && module.rows >= row
+    const {cols, rows} = this.props
+    const getColor = (currentCol, currentRows) => cols >= currentCol && rows >= currentRows
       ? 'mdl-color--blue-grey-500'
       : 'mdl-color--blue-grey-100'
 
@@ -81,17 +80,17 @@ const ReportModuleSizing = React.createClass({
                 </small>
               </div>
             </div>
+
             {map(availableColSizes, ([cols, label]) =>
               <div key={cols} className={'mdl-cell mdl-cell--2-col'}>
                 <a href='' onClick={this.onSelect(cols, rows)} className={`${getColor(cols, rows)} ${style.block}`}>
                   &zwnj;
                 </a>
-              </div>
-            )}
+              </div>)}
           </div>)}
       </div>
     )
   }
 })
 
-export default ReportModuleSizing
+export default EditSize

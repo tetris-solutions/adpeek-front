@@ -8,7 +8,7 @@ import isEmpty from 'lodash/isEmpty'
 import map from 'lodash/map'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {styledFnComponent} from './higher-order/styled-fn-component'
+import {styledFnComponent} from '../../higher-order/styled-fn-component'
 
 /**
  * finds the root list

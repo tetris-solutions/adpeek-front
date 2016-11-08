@@ -1,6 +1,6 @@
 import React from 'react'
-import Input from './Input'
-import Select from './Select'
+import Input from '../../Input'
+import Select from '../../Select'
 import concat from 'lodash/concat'
 import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
@@ -13,7 +13,7 @@ import includes from 'lodash/includes'
 import curry from 'lodash/curry'
 import assign from 'lodash/assign'
 import omit from 'lodash/omit'
-import VerticalAlign from './VerticalAlign'
+import VerticalAlign from '../../VerticalAlign'
 
 const {PropTypes} = React
 const operators = ['contains', 'equals', 'less than', 'greater than', 'between']
@@ -101,7 +101,7 @@ Filter.contextTypes = {
   messages: PropTypes.object.isRequired
 }
 
-const ReportModuleEditFilters = React.createClass({
+const EditFilters = React.createClass({
   displayName: 'Edit-Filters',
   getInitialState () {
     return {
@@ -241,4 +241,4 @@ const ReportModuleEditFilters = React.createClass({
   }
 })
 
-export default ReportModuleEditFilters
+export default EditFilters

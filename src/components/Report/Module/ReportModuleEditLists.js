@@ -10,11 +10,11 @@ import trim from 'lodash/trim'
 import React from 'react'
 import size from 'lodash/size'
 
-import reportEntityType from '../propTypes/report-entity'
+import reportEntityType from '../../../propTypes/report-entity'
 import Attributes from './ReportModuleEditAttributes'
 import EntityList from './ReportModuleEditEntityList'
-import Input from './Input'
-import {Tabs, Tab} from './Tabs'
+import Input from '../../Input'
+import {Tabs, Tab} from '../../Tabs'
 
 const {PropTypes} = React
 const clean = str => trim(lowerCase(deburr(str)))
