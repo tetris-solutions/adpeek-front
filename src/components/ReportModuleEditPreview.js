@@ -3,7 +3,7 @@ import Input from './Input'
 import Fields from './ReportModuleEditFields'
 import Select from './Select'
 import TypeSelect from './ReportModuleEditTypeSelect'
-import _ReportChart from './ReportModuleChart'
+import _ReportChart from './Report/Chart/Container'
 import {expandVertically} from './higher-order/expand-vertically'
 import map from 'lodash/map'
 

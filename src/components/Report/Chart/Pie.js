@@ -1,13 +1,13 @@
 import React from 'react'
-import Chart from './Highcharts'
-import {reportToChartConfig} from '../functions/report-to-chart-config'
-import chartType from '../propTypes/report-chart'
+import Highcharts from '../../Highcharts'
+import {reportToChartConfig} from '../../../functions/report-to-chart-config'
+import chartType from '../../../propTypes/report-chart'
 
 function ChartPie (props) {
   const config = reportToChartConfig('pie', props)
 
   return (
-    <Chart config={config}>
+    <Highcharts config={config}>
       <title>{props.name}</title>
       <exporting
         sourceWidth={props.sourceWidth}
@@ -18,7 +18,7 @@ function ChartPie (props) {
           <data-labels enabled={false}/>
         </pie>
       </plot-options>
-    </Chart>
+    </Highcharts>
   )
 }
 

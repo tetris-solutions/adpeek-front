@@ -1,9 +1,9 @@
 import React from 'react'
 import csjs from 'csjs'
-import {styled} from './mixins/styled'
+import {styled} from '../../mixins/styled'
 import head from 'lodash/head'
 import get from 'lodash/get'
-import {prettyNumber} from '../functions/pretty-number'
+import {prettyNumber} from '../../../functions/pretty-number'
 
 const {PropTypes} = React
 const style = csjs`
@@ -30,8 +30,8 @@ const style = csjs`
   color: grey;
 }`
 
-const ReportModuleTotal = React.createClass({
-  displayName: 'Total',
+const TotalChart = React.createClass({
+  displayName: 'Total-Chart',
   mixins: [styled(style)],
   propTypes: {
     name: PropTypes.string.isRequired,
@@ -67,4 +67,4 @@ const ReportModuleTotal = React.createClass({
   }
 })
 
-export default ReportModuleTotal
+export default TotalChart

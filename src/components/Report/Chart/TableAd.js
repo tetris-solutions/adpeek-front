@@ -3,7 +3,7 @@ import find from 'lodash/find'
 import get from 'lodash/get'
 import React from 'react'
 
-import AdCreative from './ReportModuleTableAdCreative'
+import AdCreative from './TableCreative'
 
 const {PropTypes} = React
 const TextAd = ({description, headline}) => (

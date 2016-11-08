@@ -2,17 +2,17 @@ import csjs from 'csjs'
 import floor from 'lodash/floor'
 import React from 'react'
 
-import reportEntityType from '../propTypes/report-entity'
-import reportMetaDataType from '../propTypes/report-meta-data'
-import reportModuleType from '../propTypes/report-module'
-import reportParamsType from '../propTypes/report-params'
-import Column from './ReportModuleChartColumn'
-import Line from './ReportModuleChartLine'
-import Pie from './ReportModuleChartPie'
-import Spinner from './Spinner'
-import Table from './ReportModuleTable'
-import Total from './ReportModuleTotal'
-import {styled} from './mixins/styled'
+import reportEntityType from '../../../propTypes/report-entity'
+import reportMetaDataType from '../../../propTypes/report-meta-data'
+import reportModuleType from '../../../propTypes/report-module'
+import reportParamsType from '../../../propTypes/report-params'
+import Column from './Column'
+import Line from './Line'
+import Pie from './Pie'
+import Spinner from '../../Spinner'
+import Table from './Table'
+import Total from './Total'
+import {styled} from '../../mixins/styled'
 
 const style = csjs`
 .wrap {
@@ -53,8 +53,8 @@ const emptyResult = []
 
 const A4Ratio = 674 / 1032
 
-const ReportChart = React.createClass({
-  displayName: 'Report-Chart',
+const ChartContainer = React.createClass({
+  displayName: 'Chart',
   mixins: [styled(style)],
   propTypes: {
     save: PropTypes.func,
@@ -144,4 +144,4 @@ const ReportChart = React.createClass({
   }
 })
 
-export default ReportChart
+export default ChartContainer

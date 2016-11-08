@@ -1,11 +1,11 @@
 import csjs from 'csjs'
 import React from 'react'
-import reportEntityType from '../propTypes/report-entity'
-import reportMetaDataType from '../propTypes/report-meta-data'
-import reportModuleType from '../propTypes/report-module'
-import reportParamsType from '../propTypes/report-params'
-import ReportChart from './ReportModuleChart'
-import {styled} from './mixins/styled'
+import reportEntityType from '../../../propTypes/report-entity'
+import reportMetaDataType from '../../../propTypes/report-meta-data'
+import reportModuleType from '../../../propTypes/report-module'
+import reportParamsType from '../../../propTypes/report-params'
+import Chart from '../Chart/Container'
+import {styled} from '../../mixins/styled'
 
 const style = csjs`
 .card, .content, .content > div {
@@ -14,8 +14,8 @@ const style = csjs`
 
 const {PropTypes} = React
 
-const ReportModule = React.createClass({
-  displayName: 'Report-Module',
+const ModuleCard = React.createClass({
+  displayName: 'Module-Card',
   mixins: [styled(style)],
   propTypes: {
     children: PropTypes.node.isRequired,
@@ -44,7 +44,7 @@ const ReportModule = React.createClass({
     return (
       <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
         <div ref='chartWrapper' className={`mdl-card__title mdl-card--expand ${style.content}`}>
-          <ReportChart
+          <Chart
             height={module.rows * 100}
             metaData={metaData}
             module={module}
@@ -57,4 +57,4 @@ const ReportModule = React.createClass({
   }
 })
 
-export default ReportModule
+export default ModuleCard

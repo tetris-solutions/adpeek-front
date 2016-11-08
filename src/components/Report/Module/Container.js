@@ -5,11 +5,11 @@ import map from 'lodash/map'
 import isEmpty from 'lodash/isEmpty'
 import reportEntityType from '../../../propTypes/report-entity'
 import moduleType from '../../../propTypes/report-module'
-import ReportModuleController from './Controller'
+import Controller from './Controller'
 
 const {PropTypes} = React
 
-function ReportModuleContainer (props) {
+function ModuleContainer (props) {
   const module = assign({}, props.module)
   const filters = assign({}, module.filters)
   const entity = find(props.entities, {id: module.entity})
@@ -20,13 +20,13 @@ function ReportModuleContainer (props) {
 
   module.filters = filters
 
-  return <ReportModuleController {...props} module={module} entity={entity}/>
+  return <Controller {...props} module={module} entity={entity}/>
 }
 
-ReportModuleContainer.displayName = 'Report-Module-Container'
-ReportModuleContainer.propTypes = {
+ModuleContainer.displayName = 'Module-Container'
+ModuleContainer.propTypes = {
   module: moduleType,
   entities: PropTypes.arrayOf(reportEntityType).isRequired
 }
 
-export default ReportModuleContainer
+export default ModuleContainer

@@ -5,7 +5,7 @@ import ButtonWithPrompt from '../ButtonWithPrompt'
 
 const {PropTypes} = React
 
-const DateRangeModal = ({startDate, endDate, close, onChange}) => (
+const DateRangeSelector = ({startDate, endDate, close, onChange}) => (
   <div className='mdl-grid'>
     <div className='mdl-cell mdl-cell--12-col'>
       <h4>
@@ -26,15 +26,15 @@ const DateRangeModal = ({startDate, endDate, close, onChange}) => (
   </div>
 )
 
-DateRangeModal.displayName = 'Date-Range-Modal'
-DateRangeModal.propTypes = {
+DateRangeSelector.displayName = 'Date-Range-Modal'
+DateRangeSelector.propTypes = {
   onChange: PropTypes.func,
   close: PropTypes.func,
   startDate: PropTypes.object,
   endDate: PropTypes.object
 }
 
-function ReportDateRange ({startDate, endDate, onChange, buttonClassName}) {
+function DateRangeButton ({startDate, endDate, onChange, className}) {
   const label = (
     <Message startDate={startDate.format('ddd D, MMM')} endDate={endDate.format('ddd D, MMM - YYYY')}>
       dateRangeLabel
@@ -42,9 +42,9 @@ function ReportDateRange ({startDate, endDate, onChange, buttonClassName}) {
   )
 
   return (
-    <ButtonWithPrompt className={buttonClassName} label={label} size='medium'>
+    <ButtonWithPrompt className={className} label={label} size='medium'>
       {({dismiss}) => (
-        <DateRangeModal
+        <DateRangeSelector
           close={dismiss}
           onChange={onChange}
           startDate={startDate}
@@ -53,12 +53,12 @@ function ReportDateRange ({startDate, endDate, onChange, buttonClassName}) {
   )
 }
 
-ReportDateRange.displayName = 'Report-Date-Range'
-ReportDateRange.propTypes = {
-  buttonClassName: PropTypes.string,
+DateRangeButton.displayName = 'Report-Date-Range'
+DateRangeButton.propTypes = {
+  className: PropTypes.string,
   onChange: PropTypes.func,
   startDate: PropTypes.object,
   endDate: PropTypes.object
 }
 
-export default ReportDateRange
+export default DateRangeButton

@@ -10,7 +10,7 @@ import ReportExportButton from './ExportButton'
 import entityType from '../../propTypes/report-entity'
 import reportType from '../../propTypes/report'
 import ReportModuleContainer from './Module/Container'
-import ReportDateRange from './DateRangeButton'
+import ReportDateRange from './DateRange'
 import {createModuleReportAction} from '../../actions/create-module'
 import {exportReportAction} from '../../actions/export-report'
 import {serializeReportModules} from '../../functions/seralize-report-modules'
@@ -132,7 +132,7 @@ const ReportController = React.createClass({
       <div>
         <SubHeader>
           <ReportDateRange
-            buttonClassName='mdl-button mdl-color-text--grey-100'
+            className='mdl-button mdl-color-text--grey-100'
             onChange={this.onChangeRange}
             startDate={moment(from)}
             endDate={moment(to)}/>

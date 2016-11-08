@@ -2,10 +2,10 @@ import csjs from 'csjs'
 import find from 'lodash/find'
 import React from 'react'
 
-import reportParamsType from '../propTypes/report-params'
-import {loadCreativeAction} from '../actions/load-creative'
-import {contextualize} from './higher-order/contextualize'
-import {styled} from './mixins/styled'
+import reportParamsType from '../../../propTypes/report-params'
+import {loadCreativeAction} from '../../../actions/load-creative'
+import {contextualize} from '../../higher-order/contextualize'
+import {styled} from '../../mixins/styled'
 
 const {PropTypes} = React
 const style = csjs`

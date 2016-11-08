@@ -17,7 +17,7 @@ import reportParamsType from '../../../propTypes/report-params'
 import ReportModuleEditPreview from '../../ReportModuleEditPreview'
 import ReportModuleEditFilters from '../../ReportModuleEditFilters'
 import Lists from '../../ReportModuleEditLists'
-import ReportDateRange from '../DateRangeButton'
+import ReportDateRange from '../DateRange'
 import Sizing from '../../ReportModuleSizing'
 import {Tabs, Tab} from '../../Tabs'
 
@@ -308,7 +308,7 @@ const ModuleEdit = React.createClass({
             </button>)}
 
           <ReportDateRange
-            buttonClassName='mdl-button'
+            className='mdl-button'
             onChange={changeDateRange}
             startDate={moment(reportParams.from)}
             endDate={moment(reportParams.to)}/>

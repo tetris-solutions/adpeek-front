@@ -6,7 +6,7 @@ import moduleType from '../../../propTypes/report-module'
 import reportEntityType from '../../../propTypes/report-entity'
 import reportMetaDataType from '../../../propTypes/report-meta-data'
 import reportParamsType from '../../../propTypes/report-params'
-import ReportModule from '../../ReportModule'
+import ModuleCard from './Card'
 import {deleteModuleAction} from '../../../actions/delete-module'
 import {loadReportModuleResultAction} from '../../../actions/load-report-module-result'
 import {updateModuleAction} from '../../../actions/update-module'
@@ -17,8 +17,8 @@ import isEmpty from 'lodash/isEmpty'
 
 const {PropTypes} = React
 
-const ReportModuleController = React.createClass({
-  displayName: 'Report-Module-Controller',
+const ModuleController = React.createClass({
+  displayName: 'Module-Controller',
   propTypes: {
     changeDateRange: PropTypes.func.isRequired,
     remove: PropTypes.func,
@@ -98,7 +98,14 @@ const ReportModuleController = React.createClass({
     const remove = editable ? this.remove : undefined
 
     return (
-      <ReportModule {...this.props} update={update} remove={remove}>
+      <ModuleCard
+        entity={entity}
+        metaData={metaData}
+        module={module}
+        reportParams={reportParams}
+        update={update}
+        remove={remove}>
+
         <div className='mdl-card__menu'>
           {update && (
             <button className='mdl-button mdl-button--icon' onClick={this.openModal}>
@@ -128,9 +135,9 @@ const ReportModuleController = React.createClass({
           </Modal>
         )}
 
-      </ReportModule>
+      </ModuleCard>
     )
   }
 })
 
-export default ReportModuleController
+export default ModuleController
