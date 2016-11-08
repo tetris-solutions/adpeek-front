@@ -43,7 +43,9 @@ export const Input = React.createClass({
     }
   },
   getInitialState () {
-    const value = this.props.value || this.props.defaultValue
+    const value = this.props.value === undefined
+      ? this.props.defaultValue
+      : this.props.value
 
     return {
       value,

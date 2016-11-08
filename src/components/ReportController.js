@@ -85,7 +85,12 @@ const ReportController = React.createClass({
     dispatch(createModuleReportAction, params, {
       type: 'line',
       name: messages.module + ' ' + (index + 1),
-      index
+      index,
+      entity: 'Campaign',
+      filters: {
+        id: [],
+        impressions: ['greater than', 1]
+      }
     })
   },
   downloadReport (type, config) {

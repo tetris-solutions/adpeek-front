@@ -153,15 +153,14 @@ const ReportModuleEditFilters = React.createClass({
     return filter(ls, notTaken)
   },
   getAttributes (current) {
-    const {metrics, attributes, type} = this.props
-    const dimensions = type === 'total'
-      ? map(filter(attributes, 'is_dimension'), 'id')
-      : this.props.dimensions
+    const {metrics, dimensions, attributes} = this.props
+    // @todo should show as filter all available attributes instead of only selected ones
 
-    const metricsAndDimensions = concat(filter(dimensions, notId), metrics)
+    const metricsAndDimensions = concat(filter(dimensions, notId), metrics, [current])
     const ls = this.filterOutSelected(metricsAndDimensions, current)
+    const extendedAttributes = map(ls, id => find(attributes, {id}))
 
-    return concat([{id: '', name: ''}], compact(map(ls, id => find(attributes, {id}))))
+    return concat([{id: '', name: ''}], compact(extendedAttributes))
   },
   getFilterProps ({attribute, operator, value, secondary}) {
     const attributes = attribute === 'limit'
