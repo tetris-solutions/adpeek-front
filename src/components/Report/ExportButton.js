@@ -1,9 +1,9 @@
 import React from 'react'
 import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
-import {styledFnComponent} from './higher-order/styled-fn-component'
+import {styledFnComponent} from '../higher-order/styled-fn-component'
 import csjs from 'csjs'
-import {contextualize} from './higher-order/contextualize'
+import {contextualize} from '../higher-order/contextualize'
 import get from 'lodash/get'
 
 const {PropTypes} = React

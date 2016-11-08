@@ -1,7 +1,7 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import {Link} from 'react-router'
-import Fence from './Fence'
+import Fence from '../Fence'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
 
@@ -9,7 +9,7 @@ const {PropTypes} = React
 
 export function ReportsBreadcrumb ({params: {company, workspace, folder}}) {
   const scope = join(compact([
-    company && `company/${company}`,
+    `company/${company}`,
     workspace && `workspace/${workspace}`,
     folder && `folder/${folder}`
   ]), '/')

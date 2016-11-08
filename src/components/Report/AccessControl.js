@@ -1,13 +1,13 @@
 import React from 'react'
 import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
-import {openReportAction} from '../actions/open-report'
-import {setDefaultReportAction} from '../actions/set-default-report'
-import {updateReportAction} from '../actions/update-report'
+import {openReportAction} from '../../actions/open-report'
+import {setDefaultReportAction} from '../../actions/set-default-report'
+import {updateReportAction} from '../../actions/update-report'
 import csjs from 'csjs'
-import {styled} from './mixins/styled'
-import Fence from './Fence'
-import {inferLevelFromParams} from '../functions/infer-level-from-params'
+import {styled} from '../mixins/styled'
+import Fence from '../Fence'
+import {inferLevelFromParams} from '../../functions/infer-level-from-params'
 
 const style = csjs`
 .card {

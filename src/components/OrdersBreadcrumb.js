@@ -8,7 +8,7 @@ const {PropTypes} = React
 
 export function OrdersBreadcrumb ({params: {company, workspace, folder}}) {
   const scope = join(compact([
-    company && `company/${company}`,
+    `company/${company}`,
     workspace && `workspace/${workspace}`,
     folder && `folder/${folder}`
   ]), '/')

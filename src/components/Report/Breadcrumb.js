@@ -3,7 +3,7 @@ import {Link} from 'react-router'
 import join from 'lodash/join'
 import compact from 'lodash/compact'
 
-import {contextualize} from './higher-order/contextualize'
+import {contextualize} from '../higher-order/contextualize'
 
 const {PropTypes} = React
 

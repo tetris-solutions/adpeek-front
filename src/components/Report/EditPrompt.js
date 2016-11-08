@@ -3,7 +3,7 @@ import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
 import isFunction from 'lodash/isFunction'
 import TextMessage from 'intl-messageformat'
-import Checkbox from './Checkbox'
+import Checkbox from '../Checkbox'
 import join from 'lodash/join'
 import compact from 'lodash/compact'
 

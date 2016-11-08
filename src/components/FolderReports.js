@@ -1,6 +1,6 @@
 import React from 'react'
 import {contextualize} from './higher-order/contextualize'
-import Reports from './Reports'
+import Reports from './Report/List'
 
 const {PropTypes} = React
 

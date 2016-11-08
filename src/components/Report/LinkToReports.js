@@ -1,8 +1,8 @@
 import React from 'react'
-import Fence from './Fence'
+import Fence from '../Fence'
 import {Link} from 'react-router'
-import {Button} from './Navigation'
-import {loadReportsAction} from '../actions/load-reports'
+import {Button} from '../Navigation'
+import {loadReportsAction} from '../../actions/load-reports'
 import get from 'lodash/get'
 
 const {PropTypes} = React

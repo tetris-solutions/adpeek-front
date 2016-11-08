@@ -1,7 +1,7 @@
 import React from 'react'
 import Message from 'tetris-iso/Message'
-import DateRangePicker from './DateRangePicker'
-import ButtonWithPrompt from './ButtonWithPrompt'
+import DateRangePicker from '../DateRangePicker'
+import ButtonWithPrompt from '../ButtonWithPrompt'
 
 const {PropTypes} = React
 
@@ -48,8 +48,7 @@ function ReportDateRange ({startDate, endDate, onChange, buttonClassName}) {
           close={dismiss}
           onChange={onChange}
           startDate={startDate}
-          endDate={endDate}/>
-      )}
+          endDate={endDate}/>)}
     </ButtonWithPrompt>
   )
 }

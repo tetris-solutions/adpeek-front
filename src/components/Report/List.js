@@ -1,10 +1,10 @@
 import React from 'react'
 import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
-import Fence from './Fence'
-import Page from './Page'
-import {Container, Title, ThumbLink} from './ThumbLink'
-import SubHeader, {SubHeaderButton} from './SubHeader'
+import Fence from '../Fence'
+import Page from '../Page'
+import {Container, Title, ThumbLink} from '../ThumbLink'
+import SubHeader, {SubHeaderButton} from '../SubHeader'
 import {Link} from 'react-router'
 
 const {PropTypes} = React

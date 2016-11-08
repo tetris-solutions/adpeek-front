@@ -17,7 +17,7 @@ import reportParamsType from '../propTypes/report-params'
 import ReportModuleEditPreview from './ReportModuleEditPreview'
 import ReportModuleEditFilters from './ReportModuleEditFilters'
 import Lists from './ReportModuleEditLists'
-import ReportDateRange from './ReportDateRange'
+import ReportDateRange from './Report/DateRangeButton'
 import Sizing from './ReportModuleSizing'
 import {Tabs, Tab} from './Tabs'
 
@@ -166,11 +166,13 @@ const ModuleEdit = React.createClass({
 
     function add (attribute, ls) {
       if (module.type === 'pie' || module.type === 'total') {
-        return [attribute.id]
+        return [attribute.id] // override current selection
       }
 
       if (attribute.requires) {
-        return ls.concat(attribute.requires).concat([attribute.id])
+        return ls // include all the required attributes
+          .concat(attribute.requires)
+          .concat([attribute.id])
       }
 
       return ls.concat([attribute.id])

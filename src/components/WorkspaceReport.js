@@ -1,5 +1,5 @@
 import React from 'react'
-import ReportContainer from './ReportContainer'
+import ReportContainer from './Report/Container'
 import {contextualize} from './higher-order/contextualize'
 import get from 'lodash/get'
 import values from 'lodash/values'

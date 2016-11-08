@@ -7,7 +7,7 @@ import {Navigation, Button, Buttons, Name} from './Navigation'
 import DeleteButton from './DeleteButton'
 import {deleteFolderAction} from '../actions/delete-folder'
 import {contextualize} from './higher-order/contextualize'
-import ReportLink from './ReportLink'
+import ReportLink from './Report/LinkToReports'
 
 const {PropTypes} = React
 

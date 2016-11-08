@@ -4,7 +4,7 @@ import {Link} from 'react-router'
 import {contextualize} from './higher-order/contextualize'
 import {Navigation, Button, Buttons, Name} from './Navigation'
 import Recent from './Recent'
-import ReportLink from './ReportLink'
+import ReportLink from './Report/LinkToReports'
 
 const {PropTypes} = React
 

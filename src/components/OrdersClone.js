@@ -115,7 +115,7 @@ export const OrdersClone = React.createClass({
 
     function navigateBackToOrderList () {
       const scope = join(compact([
-        params.company && `company/${params.company}`,
+        `company/${params.company}`,
         params.workspace && `workspace/${params.workspace}`,
         params.folder && `folder/${params.folder}`
       ]), '/')
