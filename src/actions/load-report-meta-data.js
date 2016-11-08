@@ -92,6 +92,7 @@ const excluded = [
   'imagecreativeimagewidth',
   'imagecreativename',
   'impressionsignificance',
+  'interactiontypes',
   'isautotaggingenabled',
   'isbudgetexplicitlyshared',
   'istestaccount',
