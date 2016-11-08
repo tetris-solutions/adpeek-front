@@ -12,7 +12,7 @@ import React from 'react'
 import get from 'lodash/get'
 import filter from 'lodash/filter'
 import reportEntityType from '../../../propTypes/report-entity'
-import Attributes from './ReportModuleEditAttributes'
+import Attributes from './AttributesSelect'
 import {styled} from '../../mixins/styled'
 import compact from 'lodash/compact'
 import not from 'lodash/negate'
@@ -104,8 +104,8 @@ const EntityGroup = React.createClass({
   }
 })
 
-const EntityList = React.createClass({
-  displayName: 'Entity-List',
+const EntityTree = React.createClass({
+  displayName: 'Entity-Tree',
   mixins: [styled(style)],
   propTypes: {
     selectedAttributes: PropTypes.array,
@@ -270,4 +270,4 @@ const EntityList = React.createClass({
   }
 })
 
-export default EntityList
+export default EntityTree

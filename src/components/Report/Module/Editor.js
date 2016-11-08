@@ -16,7 +16,7 @@ import reportModuleType from '../../../propTypes/report-module'
 import reportParamsType from '../../../propTypes/report-params'
 import EditContent from './EditContent'
 import EditFilters from './EditFilters'
-import Lists from './ReportModuleEditLists'
+import Lists from './Lists'
 import ReportDateRange from '../DateRange'
 import EditSize from './EditSize'
 import {Tabs, Tab} from '../../Tabs'
@@ -245,8 +245,6 @@ const ModuleEdit = React.createClass({
       isEmpty(draftModule.metrics) ||
       isEmpty(draftModule.filters.id)
 
-    const previewProps = {metaData, savedModule, savedEntity, draftModule, draftEntity, reportParams, entities}
-
     return (
       <form>
         <div className='mdl-grid'>
@@ -269,7 +267,13 @@ const ModuleEdit = React.createClass({
                   update={this.update}
                   removeItem={this.removeItem}
                   onChangeInput={this.onChangeInput}
-                  {...previewProps}/>
+                  metaData={metaData}
+                  savedModule={savedModule}
+                  savedEntity={savedEntity}
+                  draftModule={draftModule}
+                  draftEntity={draftEntity}
+                  reportParams={reportParams}
+                  entities={entities}/>
               </Tab>
               <Tab id='module-size' title={messages.moduleSize}>
                 <br/>

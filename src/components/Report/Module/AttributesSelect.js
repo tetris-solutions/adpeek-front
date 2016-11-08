@@ -191,7 +191,7 @@ const Attribute = React.createClass({
   }
 })
 
-function ReportModuleEditAttributes ({attributes, selectedAttributes, addItem, removeItem, isIdSelected}) {
+function AttributesSelect ({attributes, selectedAttributes, addItem, removeItem, isIdSelected}) {
   const selectedBreakdowns = intersect(map(filter(attributes, 'is_breakdown'), 'id'), selectedAttributes)
 
   function renderAttribute (item) {
@@ -221,8 +221,8 @@ function ReportModuleEditAttributes ({attributes, selectedAttributes, addItem, r
   )
 }
 
-ReportModuleEditAttributes.displayName = 'Report-Module-Edit-Attributes'
-ReportModuleEditAttributes.propTypes = {
+AttributesSelect.displayName = 'Attributes-Select'
+AttributesSelect.propTypes = {
   addItem: PropTypes.func,
   removeItem: PropTypes.func,
   attributes: PropTypes.array.isRequired,
@@ -230,4 +230,4 @@ ReportModuleEditAttributes.propTypes = {
   isIdSelected: PropTypes.bool.isRequired
 }
 
-export default styledFnComponent(ReportModuleEditAttributes, style)
+export default styledFnComponent(AttributesSelect, style)

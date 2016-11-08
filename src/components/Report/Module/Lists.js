@@ -11,8 +11,8 @@ import React from 'react'
 import size from 'lodash/size'
 
 import reportEntityType from '../../../propTypes/report-entity'
-import Attributes from './ReportModuleEditAttributes'
-import EntityList from './ReportModuleEditEntityList'
+import AttributesSelect from './AttributesSelect'
+import EntityTree from './EntityTree'
 import Input from '../../Input'
 import {Tabs, Tab} from '../../Tabs'
 
@@ -116,7 +116,7 @@ const Lists = React.createClass({
         <Tabs onChangeTab={this.onChangeTab}>
           <Tab id='entity' title={entityTitle} active={activeTab === 'entity'}>
             <br/>
-            <EntityList
+            <EntityTree
               entity={entity}
               entities={this.props.entities}
               attributes={list}
@@ -127,7 +127,7 @@ const Lists = React.createClass({
           </Tab>
           <Tab id='metric' title={metricTitle} active={activeTab === 'metric'}>
             <br/>
-            <Attributes
+            <AttributesSelect
               attributes={metrics}
               isIdSelected={isIdSelected}
               selectedAttributes={selectedMetrics}
@@ -136,7 +136,7 @@ const Lists = React.createClass({
           </Tab>
           {type !== 'total' && <Tab id='dimension' title={dimensionTitle} active={activeTab === 'dimension'}>
             <br/>
-            <Attributes
+            <AttributesSelect
               attributes={dimensions}
               isIdSelected={isIdSelected}
               selectedAttributes={selectedDimensions}
