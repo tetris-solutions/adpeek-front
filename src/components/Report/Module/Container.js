@@ -3,9 +3,9 @@ import assign from 'lodash/assign'
 import find from 'lodash/find'
 import map from 'lodash/map'
 import isEmpty from 'lodash/isEmpty'
-import reportEntityType from '../propTypes/report-entity'
-import moduleType from '../propTypes/report-module'
-import ReportModuleController from './ReportModuleController'
+import reportEntityType from '../../../propTypes/report-entity'
+import moduleType from '../../../propTypes/report-module'
+import ReportModuleController from './Controller'
 
 const {PropTypes} = React
 

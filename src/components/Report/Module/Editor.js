@@ -10,23 +10,23 @@ import pick from 'lodash/pick'
 import uniq from 'lodash/uniq'
 import Message from 'tetris-iso/Message'
 import React from 'react'
-import reportEntityType from '../propTypes/report-entity'
-import reportMetaDataType from '../propTypes/report-meta-data'
-import reportModuleType from '../propTypes/report-module'
-import reportParamsType from '../propTypes/report-params'
-import ReportModuleEditPreview from './ReportModuleEditPreview'
-import ReportModuleEditFilters from './ReportModuleEditFilters'
-import Lists from './ReportModuleEditLists'
-import ReportDateRange from './Report/DateRangeButton'
-import Sizing from './ReportModuleSizing'
-import {Tabs, Tab} from './Tabs'
+import reportEntityType from '../../../propTypes/report-entity'
+import reportMetaDataType from '../../../propTypes/report-meta-data'
+import reportModuleType from '../../../propTypes/report-module'
+import reportParamsType from '../../../propTypes/report-params'
+import ReportModuleEditPreview from '../../ReportModuleEditPreview'
+import ReportModuleEditFilters from '../../ReportModuleEditFilters'
+import Lists from '../../ReportModuleEditLists'
+import ReportDateRange from '../DateRangeButton'
+import Sizing from '../../ReportModuleSizing'
+import {Tabs, Tab} from '../../Tabs'
 
 const {PropTypes} = React
 
 const editableFields = ['name', 'type', 'dimensions', 'metrics', 'rows', 'cols', 'entity', 'limit', 'sort', 'filters']
 
 const ModuleEdit = React.createClass({
-  displayName: 'Edit-Module',
+  displayName: 'Module-Editor',
   contextTypes: {
     messages: PropTypes.object,
     locales: PropTypes.string,

@@ -2,17 +2,17 @@ import assign from 'lodash/assign'
 import debounce from 'lodash/debounce'
 import pick from 'lodash/pick'
 import React from 'react'
-import moduleType from '../propTypes/report-module'
-import reportEntityType from '../propTypes/report-entity'
-import reportMetaDataType from '../propTypes/report-meta-data'
-import reportParamsType from '../propTypes/report-params'
-import ReportModule from './ReportModule'
-import {deleteModuleAction} from '../actions/delete-module'
-import {loadReportModuleResultAction} from '../actions/load-report-module-result'
-import {updateModuleAction} from '../actions/update-module'
-import Edit from './ReportModuleEdit'
+import moduleType from '../../../propTypes/report-module'
+import reportEntityType from '../../../propTypes/report-entity'
+import reportMetaDataType from '../../../propTypes/report-meta-data'
+import reportParamsType from '../../../propTypes/report-params'
+import ReportModule from '../../ReportModule'
+import {deleteModuleAction} from '../../../actions/delete-module'
+import {loadReportModuleResultAction} from '../../../actions/load-report-module-result'
+import {updateModuleAction} from '../../../actions/update-module'
+import Editor from './Editor'
 import Modal from 'tetris-iso/Modal'
-import DeleteButton from './DeleteButton'
+import DeleteButton from '../../DeleteButton'
 import isEmpty from 'lodash/isEmpty'
 
 const {PropTypes} = React
@@ -116,7 +116,7 @@ const ReportModuleController = React.createClass({
 
         {this.state.editMode && (
           <Modal size='huge'>
-            <Edit
+            <Editor
               changeDateRange={changeDateRange}
               entities={entities}
               metaData={metaData}
