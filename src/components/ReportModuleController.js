@@ -10,12 +10,19 @@ import ReportModule from './ReportModule'
 import {deleteModuleAction} from '../actions/delete-module'
 import {loadReportModuleResultAction} from '../actions/load-report-module-result'
 import {updateModuleAction} from '../actions/update-module'
+import Edit from './ReportModuleEdit'
+import Modal from 'tetris-iso/Modal'
+import DeleteButton from './DeleteButton'
+import isEmpty from 'lodash/isEmpty'
 
 const {PropTypes} = React
 
 const ReportModuleController = React.createClass({
   displayName: 'Report-Module-Controller',
   propTypes: {
+    changeDateRange: PropTypes.func.isRequired,
+    remove: PropTypes.func,
+    update: PropTypes.func,
     module: moduleType.isRequired,
     editable: PropTypes.bool.isRequired,
     metaData: reportMetaDataType.isRequired,
@@ -25,7 +32,16 @@ const ReportModuleController = React.createClass({
   },
   contextTypes: {
     tree: PropTypes.object,
-    params: PropTypes.object
+    params: PropTypes.object,
+    messages: PropTypes.object
+  },
+  getInitialState () {
+    return {
+      editMode: (
+        Boolean(this.props.editable) &&
+        isEmpty(this.props.module.metrics)
+      )
+    }
   },
   componentDidMount () {
     this.fetchResult = debounce(this.startResultLoadingAction, 1000)
@@ -70,14 +86,49 @@ const ReportModuleController = React.createClass({
       persistChanges
     )
   },
+  openModal () {
+    this.setState({editMode: true})
+  },
+  closeModal () {
+    this.setState({editMode: false})
+  },
   render () {
-    const {editable} = this.props
+    const {module, editable, metaData, entities, entity, reportParams, changeDateRange} = this.props
+    const update = editable ? this.save : undefined
+    const remove = editable ? this.remove : undefined
 
     return (
-      <ReportModule
-        {...this.props}
-        update={editable ? this.save : undefined}
-        remove={editable ? this.remove : undefined}/>
+      <ReportModule {...this.props} update={update} remove={remove}>
+        <div className='mdl-card__menu'>
+          {update && (
+            <button className='mdl-button mdl-button--icon' onClick={this.openModal}>
+              <i className='material-icons'>create</i>
+            </button>)}
+
+          {remove && (
+            <DeleteButton
+              className='mdl-button mdl-button--icon'
+              onClick={remove}
+              entityName={module.name || this.context.messages.untitledModule}>
+              <i className='material-icons'>clear</i>
+            </DeleteButton>)}
+        </div>
+
+        {this.state.editMode && (
+          <Modal size='huge'>
+            <Edit
+              changeDateRange={changeDateRange}
+              entities={entities}
+              metaData={metaData}
+              module={module}
+              entity={entity}
+              reportParams={reportParams}
+              save={update}
+              close={this.closeModal}/>
+          </Modal>
+        )}
+
+      </ReportModule>
     )
   }
 })
