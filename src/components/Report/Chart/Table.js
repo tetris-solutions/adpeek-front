@@ -229,7 +229,7 @@ const ReportModuleTable = React.createClass({
   mixins: [styled(style)],
   propTypes: {
     sort: PropTypes.array,
-    save: PropTypes.func,
+    change: PropTypes.func,
     limit: PropTypes.number,
     isLoading: PropTypes.bool,
     name: PropTypes.string,
@@ -257,7 +257,7 @@ const ReportModuleTable = React.createClass({
       sortObj[id] = 'desc'
     }
 
-    this.props.save({sort: toPairs(sortObj)})
+    this.props.change({sort: toPairs(sortObj)})
   },
   getEntityComponentById (id) {
     const {entity: {id: entityId, list}, reportParams} = this.props
@@ -317,7 +317,7 @@ const ReportModuleTable = React.createClass({
           columns={columns}
           attributes={attributes}
           sortPairs={sortPairs}
-          toggle={this.props.save ? this.toggleHeader : null}/>
+          toggle={this.props.change ? this.toggleHeader : null}/>
       )
 
       tbody = <TBody rows={rows} columns={columns} attributes={attributes}/>

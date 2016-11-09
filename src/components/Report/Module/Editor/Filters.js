@@ -1,6 +1,6 @@
 import React from 'react'
-import Input from '../../Input'
-import Select from '../../Select'
+import Input from '../../../Input'
+import Select from '../../../Select'
 import concat from 'lodash/concat'
 import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
@@ -13,7 +13,8 @@ import includes from 'lodash/includes'
 import curry from 'lodash/curry'
 import assign from 'lodash/assign'
 import omit from 'lodash/omit'
-import VerticalAlign from '../../VerticalAlign'
+import VerticalAlign from '../../../VerticalAlign'
+import uniq from 'lodash/uniq'
 
 const {PropTypes} = React
 const operators = ['contains', 'equals', 'less than', 'greater than', 'between']
@@ -108,27 +109,22 @@ const EditFilters = React.createClass({
       filters: this.parseFilters()
     }
   },
-  propTypes: {
-    limit: PropTypes.number,
-    filters: PropTypes.object.isRequired,
-    dimensions: PropTypes.array.isRequired,
-    metrics: PropTypes.array.isRequired,
-    attributes: PropTypes.object.isRequired,
-    update: PropTypes.func.isRequired,
-    type: PropTypes.string.isRequired
-  },
   contextTypes: {
-    messages: PropTypes.object.isRequired
+    messages: PropTypes.object.isRequired,
+    draft: PropTypes.object.isRequired,
+    update: PropTypes.func.isRequired,
+    attributes: PropTypes.object.isRequired
   },
   parseFilters () {
+    const {draft: {module}} = this.context
     const filters = [{
       attribute: 'limit',
       operator: 'equals',
-      value: this.props.limit,
+      value: module.limit,
       secondary: ''
     }]
 
-    return concat(filters, map(omit(this.props.filters, 'id'),
+    return concat(filters, map(omit(module.filters, 'id'),
       ([operator, value, secondary], attribute) => ({
         attribute,
         operator,
@@ -153,10 +149,10 @@ const EditFilters = React.createClass({
     return filter(ls, notTaken)
   },
   getAttributes (current) {
-    const {metrics, dimensions, attributes} = this.props
+    const {draft: {module: {metrics, dimensions}}, attributes} = this.context
     // @todo should show as filter all available attributes instead of only selected ones
 
-    const metricsAndDimensions = concat(filter(dimensions, notId), metrics, [current])
+    const metricsAndDimensions = uniq(concat(filter(dimensions, notId), metrics, [current]))
     const ls = this.filterOutSelected(metricsAndDimensions, current)
     const extendedAttributes = map(ls, id => find(attributes, {id}))
 
@@ -187,10 +183,13 @@ const EditFilters = React.createClass({
     filters.splice(index, 1)
     this.setState({filters})
 
-    this.props.update({filters: omit(this.props.filters, filterName)})
+    const oldFilters = this.context.draft.module.filters
+
+    this.context.update({filters: omit(oldFilters, filterName)})
   },
   componentWillMount () {
     const updateOnChange = (index, name, {target: {value, type}}) => {
+      const oldFilters = this.context.draft.module.filters
       const filters = concat(this.state.filters)
       const oldFilterConfig = filters[index]
 
@@ -203,10 +202,10 @@ const EditFilters = React.createClass({
       this.setState({filters})
 
       if (newFilterConfig.attribute === 'limit') {
-        return this.props.update({limit: value})
+        return this.context.update({limit: value})
       }
 
-      const parentFilters = assign({}, this.props.filters)
+      const parentFilters = assign({}, oldFilters)
       const switchFilters = oldFilterConfig.attribute && newFilterConfig.attribute !== oldFilterConfig.attribute
 
       if (switchFilters) {
@@ -217,7 +216,7 @@ const EditFilters = React.createClass({
         parentFilters[newFilterConfig.attribute] = [newFilterConfig.operator, newFilterConfig.value, newFilterConfig.secondary]
       }
 
-      this.props.update({filters: parentFilters})
+      this.context.update({filters: parentFilters})
     }
 
     this.onChange = curry(updateOnChange)
@@ -225,13 +224,12 @@ const EditFilters = React.createClass({
   render () {
     return (
       <section style={{height: '80vh', overflowY: 'auto'}}>
-        <div className='mdl-grid'>
-          {map(this.state.filters, (filter, index) =>
-            <Filter
-              key={index}
-              change={this.onChange(index)}
-              id={index} {...this.getFilterProps(filter)}
-              drop={bind(this.removeFilter, null, index)}/>)}
+        <div className='mdl-grid'>{map(this.state.filters, (filter, index) =>
+          <Filter
+            key={index}
+            change={this.onChange(index)}
+            id={index} {...this.getFilterProps(filter)}
+            drop={bind(this.removeFilter, null, index)}/>)}
         </div>
         <button className='mdl-button' type='button' onClick={this.newFilter}>
           <Message>newFilter</Message>

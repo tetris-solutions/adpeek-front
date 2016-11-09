@@ -9,7 +9,8 @@ import SubHeader from '../SubHeader'
 import ReportExportButton from './ExportButton'
 import entityType from '../../propTypes/report-entity'
 import reportType from '../../propTypes/report'
-import ReportModuleContainer from './Module/Container'
+import reportParamsType from '../../propTypes/report-params'
+import Module from './Module/Container'
 import ReportDateRange from './DateRange'
 import {createModuleReportAction} from '../../actions/create-module'
 import {exportReportAction} from '../../actions/export-report'
@@ -39,6 +40,18 @@ const ReportController = React.createClass({
     messages: PropTypes.object,
     location: PropTypes.object,
     moment: PropTypes.func
+  },
+  childContextTypes: {
+    entities: PropTypes.array,
+    changeDateRange: PropTypes.func,
+    reportParams: reportParamsType
+  },
+  getChildContext () {
+    return {
+      reportParams: this.getReportParams(),
+      entities: this.props.entities,
+      changeDateRange: this.onChangeRange
+    }
   },
   getInitialState () {
     return {
@@ -119,12 +132,17 @@ const ReportController = React.createClass({
         }))
       .catch(() => this.setState({isCreatingReport: false}))
   },
+  getReportParams () {
+    const {from, to} = this.getCurrentRange()
+    const {accounts} = this.props
+
+    return {accounts, from, to}
+  },
   render () {
-    const {metaData, editMode, accounts, report: {modules}} = this.props
+    const {metaData, editMode, report: {modules}} = this.props
     const {isCreatingReport} = this.state
     const {moment} = this.context
-    const {from, to} = this.getCurrentRange()
-    const reportParams = {accounts, from, to}
+    const reportParams = this.getReportParams()
 
     // @todo bring back input for name editing
 
@@ -134,8 +152,8 @@ const ReportController = React.createClass({
           <ReportDateRange
             className='mdl-button mdl-color-text--grey-100'
             onChange={this.onChangeRange}
-            startDate={moment(from)}
-            endDate={moment(to)}/>
+            startDate={moment(reportParams.from)}
+            endDate={moment(reportParams.to)}/>
 
           {editMode && (
             <button className='mdl-button mdl-color-text--grey-100' onClick={this.addNewModule}>
@@ -149,13 +167,10 @@ const ReportController = React.createClass({
         <Page>
           <div className='mdl-grid' ref='grid'>{map(sortBy(modules, 'index'), (module, index) =>
             <div data-report-module={module.id} key={module.id} className={`mdl-cell mdl-cell--${module.cols}-col`}>
-              <ReportModuleContainer
-                changeDateRange={this.onChangeRange}
+              <Module
                 module={module}
                 editable={editMode}
-                metaData={get(metaData, module.entity)}
-                reportParams={reportParams}
-                entities={this.props.entities}/>
+                metaData={get(metaData, module.entity)}/>
             </div>)}
           </div>
         </Page>

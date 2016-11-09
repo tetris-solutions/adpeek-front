@@ -1,11 +1,8 @@
 import csjs from 'csjs'
 import floor from 'lodash/floor'
 import React from 'react'
-
 import reportEntityType from '../../../propTypes/report-entity'
-import reportMetaDataType from '../../../propTypes/report-meta-data'
 import reportModuleType from '../../../propTypes/report-module'
-import reportParamsType from '../../../propTypes/report-params'
 import Column from './Column'
 import Line from './Line'
 import Pie from './Pie'
@@ -57,24 +54,16 @@ const ChartContainer = React.createClass({
   displayName: 'Chart',
   mixins: [styled(style)],
   propTypes: {
-    save: PropTypes.func,
     height: PropTypes.number.isRequired,
-    reportParams: reportParamsType,
-    metaData: reportMetaDataType.isRequired,
-    module: reportModuleType,
-    entity: reportEntityType,
-    dispatch: PropTypes.func
+    change: PropTypes.func
   },
   contextTypes: {
     messages: PropTypes.object,
-    locales: PropTypes.string
-  },
-  getDefaultProps () {
-    return {
-      metaData: {
-        attributes: {}
-      }
-    }
+    locales: PropTypes.string,
+    module: reportModuleType.isRequired,
+    entity: reportEntityType.isRequired,
+    attributes: PropTypes.object.isRequired,
+    reportParams: PropTypes.object.isRequired
   },
   getInitialState () {
     return {
@@ -93,9 +82,9 @@ const ChartContainer = React.createClass({
   componentDidMount () {
     this.refs.interface.renderAsTable = this.renderAsTable
   },
-  shouldComponentUpdate (nextProps, nextState) {
-    const newModule = nextProps.module
-    const oldModule = this.props.module
+  shouldComponentUpdate (nextProps, nextState, nextContext) {
+    const newModule = nextContext.module
+    const oldModule = this.context.module
 
     return (
       nextState.renderHiddenTable !== this.state.renderHiddenTable ||
@@ -111,11 +100,13 @@ const ChartContainer = React.createClass({
   },
   render () {
     const {renderHiddenTable} = this.state
-    const {save, height, reportParams, module, entity, metaData: {attributes}} = this.props
+    const {module, locales, reportParams, entity, attributes} = this.context
+    const {height, change} = this.props
     const Chart = typeComponent[module.type]
+
     const config = {
-      locales: this.context.locales,
-      save: save,
+      change,
+      locales: locales,
       sort: module.sort,
       limit: module.limit,
       isLoading: module.isLoading,

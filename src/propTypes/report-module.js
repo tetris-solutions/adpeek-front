@@ -19,5 +19,15 @@ export default PropTypes.shape({
   metrics: PropTypes.arrayOf(PropTypes.string).isRequired,
   filters: PropTypes.shape({
     id: PropTypes.arrayOf(PropTypes.string)
-  }).isRequired
+  }).isRequired,
+
+  // [["_fields_", ["id", "clicks", "impressions", "cost"]], ["clicks", "desc"]]
+  sort: PropTypes.arrayOf(
+    PropTypes.arrayOf(
+      PropTypes.oneOfType([
+        PropTypes.array,
+        PropTypes.string
+      ])
+    )
+  ).isRequired
 })

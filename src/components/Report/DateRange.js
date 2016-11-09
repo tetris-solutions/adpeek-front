@@ -34,9 +34,12 @@ DateRangeSelector.propTypes = {
   endDate: PropTypes.object
 }
 
-function DateRangeButton ({startDate, endDate, onChange, className}) {
+function DateRangeButton ({className}, {moment, reportParams: {from, to}, changeDateRange}) {
+  const startDate = moment(from).format('ddd D, MMM')
+  const endDate = moment(to).format('ddd D, MMM - YYYY')
+
   const label = (
-    <Message startDate={startDate.format('ddd D, MMM')} endDate={endDate.format('ddd D, MMM - YYYY')}>
+    <Message startDate={startDate} endDate={endDate}>
       dateRangeLabel
     </Message>
   )
@@ -46,7 +49,7 @@ function DateRangeButton ({startDate, endDate, onChange, className}) {
       {({dismiss}) => (
         <DateRangeSelector
           close={dismiss}
-          onChange={onChange}
+          onChange={changeDateRange}
           startDate={startDate}
           endDate={endDate}/>)}
     </ButtonWithPrompt>
@@ -55,10 +58,10 @@ function DateRangeButton ({startDate, endDate, onChange, className}) {
 
 DateRangeButton.displayName = 'Report-Date-Range'
 DateRangeButton.propTypes = {
-  className: PropTypes.string,
-  onChange: PropTypes.func,
-  startDate: PropTypes.object,
-  endDate: PropTypes.object
+  className: PropTypes.string.isRequired
 }
-
+DateRangeButton.contextTypes = {
+  moment: PropTypes.func.isRequired,
+  reportParams: PropTypes.object
+}
 export default DateRangeButton

@@ -1,7 +1,7 @@
 import csjs from 'csjs'
 import map from 'lodash/map'
 import React from 'react'
-import {styled} from '../../mixins/styled'
+import {styled} from '../../../mixins/styled'
 
 const {PropTypes} = React
 const style = csjs`
@@ -39,19 +39,18 @@ const availableRowSizes = [2, 3, 4, 5, 6]
 const EditSize = React.createClass({
   displayName: 'Edit-Size',
   mixins: [styled(style)],
-  propTypes: {
-    rows: PropTypes.number.isRequired,
-    cols: PropTypes.number.isRequired,
-    save: PropTypes.func
+  contextTypes: {
+    draft: PropTypes.object.isRequired,
+    update: PropTypes.func.isRequired
   },
   onSelect (cols, rows) {
     return e => {
       e.preventDefault()
-      this.props.save({cols, rows})
+      this.context.update({cols, rows})
     }
   },
   render () {
-    const {cols, rows} = this.props
+    const {draft: {module: {cols, rows}}} = this.context
     const getColor = (currentCol, currentRows) => cols >= currentCol && rows >= currentRows
       ? 'mdl-color--blue-grey-500'
       : 'mdl-color--blue-grey-100'

@@ -4,36 +4,44 @@ import pick from 'lodash/pick'
 import React from 'react'
 import moduleType from '../../../propTypes/report-module'
 import reportEntityType from '../../../propTypes/report-entity'
-import reportMetaDataType from '../../../propTypes/report-meta-data'
 import reportParamsType from '../../../propTypes/report-params'
 import ModuleCard from './Card'
 import {deleteModuleAction} from '../../../actions/delete-module'
 import {loadReportModuleResultAction} from '../../../actions/load-report-module-result'
 import {updateModuleAction} from '../../../actions/update-module'
-import Editor from './Editor'
+import Editor from './Editor/Controller'
 import Modal from 'tetris-iso/Modal'
 import DeleteButton from '../../DeleteButton'
 import isEmpty from 'lodash/isEmpty'
 
 const {PropTypes} = React
+const reportContext = ['reportParams', 'entities', 'changeDateRange', 'entity', 'attributes', 'module']
 
 const ModuleController = React.createClass({
   displayName: 'Module-Controller',
   propTypes: {
-    changeDateRange: PropTypes.func.isRequired,
-    remove: PropTypes.func,
-    update: PropTypes.func,
     module: moduleType.isRequired,
     editable: PropTypes.bool.isRequired,
-    metaData: reportMetaDataType.isRequired,
-    entity: reportEntityType.isRequired,
-    entities: PropTypes.arrayOf(reportEntityType).isRequired,
-    reportParams: reportParamsType.isRequired
+    attributes: PropTypes.object.isRequired,
+    entity: reportEntityType.isRequired
   },
   contextTypes: {
     tree: PropTypes.object,
     params: PropTypes.object,
-    messages: PropTypes.object
+    messages: PropTypes.object,
+    reportParams: reportParamsType.isRequired
+  },
+  childContextTypes: {
+    entity: reportEntityType,
+    attributes: PropTypes.object,
+    module: PropTypes.object
+  },
+  getChildContext () {
+    return {
+      entity: this.props.entity,
+      attributes: this.props.attributes,
+      module: this.props.module
+    }
   },
   getInitialState () {
     return {
@@ -58,10 +66,10 @@ const ModuleController = React.createClass({
       this.context.params,
       this.props.module.id,
       query,
-      this.props.metaData.attributes)
+      this.props.attributes)
   },
   getChartQuery () {
-    const {reportParams} = this.props
+    const {reportParams} = this.context
     const {module, entity} = this.props
     const filters = assign({}, module.filters)
 
@@ -93,45 +101,28 @@ const ModuleController = React.createClass({
     this.setState({editMode: false})
   },
   render () {
-    const {module, editable, metaData, entities, entity, reportParams, changeDateRange} = this.props
-    const update = editable ? this.save : undefined
-    const remove = editable ? this.remove : undefined
+    const {module: {name}, editable} = this.props
 
     return (
-      <ModuleCard
-        entity={entity}
-        metaData={metaData}
-        module={module}
-        reportParams={reportParams}
-        update={update}
-        remove={remove}>
-
+      <ModuleCard>
         <div className='mdl-card__menu'>
-          {update && (
+          {editable ? (
             <button className='mdl-button mdl-button--icon' onClick={this.openModal}>
               <i className='material-icons'>create</i>
-            </button>)}
+            </button>) : null}
 
-          {remove && (
+          {editable ? (
             <DeleteButton
               className='mdl-button mdl-button--icon'
-              onClick={remove}
-              entityName={module.name || this.context.messages.untitledModule}>
+              onClick={this.remove}
+              entityName={name || this.context.messages.untitledModule}>
               <i className='material-icons'>clear</i>
-            </DeleteButton>)}
+            </DeleteButton>) : null}
         </div>
 
         {this.state.editMode && (
-          <Modal size='huge'>
-            <Editor
-              changeDateRange={changeDateRange}
-              entities={entities}
-              metaData={metaData}
-              module={module}
-              entity={entity}
-              reportParams={reportParams}
-              save={update}
-              close={this.closeModal}/>
+          <Modal size='huge' provide={reportContext}>
+            <Editor save={this.save} close={this.closeModal}/>
           </Modal>
         )}
 

@@ -11,9 +11,9 @@ import Message from 'tetris-iso/Message'
 import React from 'react'
 import get from 'lodash/get'
 import filter from 'lodash/filter'
-import reportEntityType from '../../../propTypes/report-entity'
-import Attributes from './AttributesSelect'
-import {styled} from '../../mixins/styled'
+import reportEntityType from '../../../../propTypes/report-entity'
+import AttributesSelect from './AttributesSelect'
+import {styled} from '../../../mixins/styled'
 import compact from 'lodash/compact'
 import not from 'lodash/negate'
 
@@ -108,12 +108,14 @@ const EntityTree = React.createClass({
   displayName: 'Entity-Tree',
   mixins: [styled(style)],
   propTypes: {
-    selectedAttributes: PropTypes.array,
-    attributes: PropTypes.array.isRequired,
+    items: PropTypes.arrayOf(PropTypes.object)
+  },
+  contextTypes: {
+    draft: PropTypes.object.isRequired,
+    entities: PropTypes.array.isRequired,
     entity: reportEntityType.isRequired,
-    entities: PropTypes.arrayOf(reportEntityType).isRequired,
-    addItem: PropTypes.func.isRequired,
-    removeItem: PropTypes.func.isRequired
+    addEntity: PropTypes.func.isRequired,
+    removeEntity: PropTypes.func.isRequired
   },
   getInitialState () {
     return {
@@ -124,19 +126,26 @@ const EntityTree = React.createClass({
     this.setState({activeOnly: !this.state.activeOnly})
   },
   render () {
+    const {items} = this.props
+    const {draft: {module, entity}, addEntity, removeEntity} = this.context
     const {activeOnly} = this.state
-    const {selectedAttributes, addItem, removeItem, entity, attributes} = this.props
+    const selectedAttributes = module.filters.id
     const entityId = lowerCase(entity.id)
-    const entities = keyBy(this.props.entities, lowerCaseId)
-    const ids = map(attributes, 'id')
+    const entities = keyBy(this.context.entities, lowerCaseId)
+    const ids = map(items, 'id')
+
     let inactiveCampaignCount = 0
     let innerList
 
     if (entityId === 'campaign' || entityId === 'placement') {
-      inactiveCampaignCount += size(map(filter(attributes, not(isCampaignActive)), 'id'))
+      inactiveCampaignCount += size(map(filter(items, not(isCampaignActive)), 'id'))
 
       innerList = (
-        <Attributes {...this.props} attributes={activeOnly ? filter(attributes, isCampaignActive) : attributes}/>
+        <AttributesSelect
+          selectedAttributes={selectedAttributes}
+          add={addEntity}
+          remove={removeEntity}
+          attributes={activeOnly ? filter(items, isCampaignActive) : items}/>
       )
     }
 
@@ -162,15 +171,19 @@ const EntityTree = React.createClass({
             key={campaign.id}
             name={campaign.name}
             ids={ids}
-            select={addItem}
-            unselect={removeItem}>
+            select={addEntity}
+            unselect={removeEntity}>
 
-            <Attributes {...this.props} attributes={adGroupList}/>
+            <AttributesSelect
+              selectedAttributes={selectedAttributes}
+              add={addEntity}
+              remove={removeEntity}
+              attributes={adGroupList}/>
           </EntityGroup>
         )
       }
 
-      innerList = compact(map(groupBy(attributes, 'campaign_id'), renderCampaignEntityGroup))
+      innerList = compact(map(groupBy(items, 'campaign_id'), renderCampaignEntityGroup))
     }
 
     if (entityId === 'ad' || entityId === 'keyword') {
@@ -192,15 +205,19 @@ const EntityTree = React.createClass({
               key={adGroup.id}
               name={adGroup.name}
               ids={ids}
-              select={addItem}
-              unselect={removeItem}>
+              select={addEntity}
+              unselect={removeEntity}>
 
-              <Attributes {...this.props} attributes={adOrKeywordList}/>
+              <AttributesSelect
+                selectedAttributes={selectedAttributes}
+                add={addEntity}
+                remove={removeEntity}
+                attributes={adOrKeywordList}/>
             </EntityGroup>
           )
         }
       }
-      const adGroups = map(groupBy(attributes, `${parentEntity}_id`), renderAdGroupEntityGroup)
+      const adGroups = map(groupBy(items, `${parentEntity}_id`), renderAdGroupEntityGroup)
       const renderSubCampaignEntityGroup = (adGroupList, campaignId) => {
         const campaign = find(entities.campaign.list, {id: campaignId})
 
@@ -221,8 +238,8 @@ const EntityTree = React.createClass({
             key={campaign.id}
             name={campaign.name}
             ids={ids}
-            select={addItem}
-            unselect={removeItem}>
+            select={addEntity}
+            unselect={removeEntity}>
 
             <ul className={String(style.list)}>
               {map(adGroupList, 'content')}
@@ -258,8 +275,8 @@ const EntityTree = React.createClass({
             selection={selection}
             name={<Message>all</Message>}
             ids={ids}
-            select={addItem}
-            unselect={removeItem}>
+            select={addEntity}
+            unselect={removeEntity}>
             <ul className={String(style.list)}>
               {innerList}
             </ul>

@@ -9,7 +9,7 @@ import toPairs from 'lodash/toPairs'
 import React from 'react'
 import Reorder from 'react-reorder'
 
-import {styled} from '../../mixins/styled'
+import {styled} from '../../../mixins/styled'
 
 const style = csjs`
 .list {
@@ -60,36 +60,25 @@ function mountFields (attributes, dimensions, metrics, fieldSort) {
   return sortBy(map(concat(dimensions, metrics), normalizeField), 'index')
 }
 
-// [["_fields_", ["id", "clicks", "impressions", "cost"]], ["clicks", "desc"]]
-const sortType = PropTypes.arrayOf(
-  PropTypes.arrayOf(
-    PropTypes.oneOfType([
-      PropTypes.array,
-      PropTypes.string
-    ])
-  )
-)
-
 const SelectedFields = React.createClass({
   displayName: 'Selected-Fields',
   mixins: [styled(style)],
-  propTypes: {
-    sort: sortType.isRequired,
-    dimensions: PropTypes.arrayOf(PropTypes.string).isRequired,
-    metrics: PropTypes.arrayOf(PropTypes.string).isRequired,
+  contextTypes: {
+    draft: PropTypes.object.isRequired,
     attributes: PropTypes.object.isRequired,
-    remove: PropTypes.func.isRequired,
-    save: PropTypes.func.isRequired
+    removeAttribute: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired
   },
   onReorder (event, movedItem, previousIndex, nextIndex, fieldSort) {
-    const sort = fromPairs(this.props.sort)
+    const {draft: {module}, update} = this.context
+    const sort = fromPairs(module.sort)
 
     sort._fields_ = map(fieldSort, 'id')
 
-    this.props.save({sort: toPairs(sort)})
+    update({sort: toPairs(sort)})
   },
   render () {
-    const {attributes, dimensions, metrics, sort} = this.props
+    const {attributes, removeAttribute, draft: {module: {dimensions, metrics, sort}}} = this.context
     const sortPairs = fromPairs(sort)
     const fields = mountFields(
       attributes,
@@ -97,7 +86,9 @@ const SelectedFields = React.createClass({
       metrics,
       sortPairs._fields_
     )
-    const list = map(fields, field => assign(field, {remove: this.props.remove}))
+
+    const list = map(fields, field => assign(field, {remove: removeAttribute}))
+
     return (
       <div className='mdl-cell mdl-cell--12-col'>
         <Reorder

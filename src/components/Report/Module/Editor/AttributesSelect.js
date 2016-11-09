@@ -8,7 +8,7 @@ import isEmpty from 'lodash/isEmpty'
 import map from 'lodash/map'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {styledFnComponent} from '../../higher-order/styled-fn-component'
+import {styledFnComponent} from '../../../higher-order/styled-fn-component'
 
 /**
  * finds the root list
@@ -191,7 +191,7 @@ const Attribute = React.createClass({
   }
 })
 
-function AttributesSelect ({attributes, selectedAttributes, addItem, removeItem, isIdSelected}) {
+function AttributesSelect ({attributes, selectedAttributes, isIdSelected, remove, add}) {
   const selectedBreakdowns = intersect(map(filter(attributes, 'is_breakdown'), 'id'), selectedAttributes)
 
   function renderAttribute (item) {
@@ -199,15 +199,15 @@ function AttributesSelect ({attributes, selectedAttributes, addItem, removeItem,
     const isSelected = includes(selectedAttributes, id)
     const invalidPermutation = pairs_with && !isEmpty(diff(selectedBreakdowns, pairs_with))
     const disabledById = requires_id && !isIdSelected
-    const addMe = disabledById || invalidPermutation ? undefined : addItem
+    const addMe = disabledById || invalidPermutation ? undefined : add
 
     return (
       <Attribute
         {...item}
-        fixed={isSelected && !removeItem}
+        fixed={isSelected && !remove}
         disabled={!isSelected && !addMe}
         selected={isSelected}
-        toggle={isSelected ? removeItem : addMe}
+        toggle={isSelected ? remove : addMe}
         key={id}/>
     )
   }
@@ -223,11 +223,11 @@ function AttributesSelect ({attributes, selectedAttributes, addItem, removeItem,
 
 AttributesSelect.displayName = 'Attributes-Select'
 AttributesSelect.propTypes = {
-  addItem: PropTypes.func,
-  removeItem: PropTypes.func,
   attributes: PropTypes.array.isRequired,
   selectedAttributes: PropTypes.array.isRequired,
-  isIdSelected: PropTypes.bool.isRequired
+  isIdSelected: PropTypes.bool,
+  remove: PropTypes.func.isRequired,
+  add: PropTypes.func.isRequired
 }
 
 export default styledFnComponent(AttributesSelect, style)
