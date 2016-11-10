@@ -6,20 +6,19 @@ import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
 import camelCase from 'lodash/camelCase'
 import bind from 'lodash/bind'
-import find from 'lodash/find'
-import compact from 'lodash/compact'
 import filter from 'lodash/filter'
 import includes from 'lodash/includes'
 import curry from 'lodash/curry'
 import assign from 'lodash/assign'
 import omit from 'lodash/omit'
 import VerticalAlign from '../../../VerticalAlign'
-import uniq from 'lodash/uniq'
+import sortBy from 'lodash/sortBy'
+import find from 'lodash/find'
 
 const {PropTypes} = React
 const operators = ['contains', 'equals', 'less than', 'greater than', 'between']
 const limitOperators = ['equals']
-const notId = name => name !== 'id'
+
 const numTypes = [
   'integer',
   'decimal',
@@ -39,11 +38,11 @@ function inputType (type) {
   return 'text'
 }
 
-const Filter = ({id, attribute, operator, value, secondary, attributes, drop, change, metaData}, {messages}) => (
+const Filter = ({id, attribute, operator, value, secondary, options, drop, change, metaData}, {messages}) => (
   <div className='mdl-grid'>
     <div className='mdl-cell mdl-cell--4-col'>
       <Select name={`filters.${id}.attribute`} value={attribute} onChange={change('attribute')}>
-        {map(attributes, ({name, id}) =>
+        {map(options, ({name, id}) =>
           <option key={id} value={id}>
             {name}
           </option>)}
@@ -90,7 +89,7 @@ Filter.propTypes = {
   operator: PropTypes.oneOf(operators).isRequired,
   value: PropTypes.any,
   secondary: PropTypes.any,
-  attributes: PropTypes.array.isRequired,
+  options: PropTypes.array.isRequired,
   drop: PropTypes.func.isRequired,
   change: PropTypes.func.isRequired,
   metaData: PropTypes.shape({
@@ -113,7 +112,7 @@ const EditFilters = React.createClass({
     messages: PropTypes.object.isRequired,
     draft: PropTypes.object.isRequired,
     update: PropTypes.func.isRequired,
-    attributes: PropTypes.object.isRequired
+    selectable: PropTypes.object.isRequired
   },
   parseFilters () {
     const {draft: {module}} = this.context
@@ -142,37 +141,42 @@ const EditFilters = React.createClass({
 
     this.setState({filters})
   },
-  filterOutSelected (ls, current) {
-    const taken = map(this.state.filters, 'attribute')
-    const notTaken = id => id === current || !includes(taken, id)
+  filterOutSelected (selectedHere) {
+    const selectedElsewhere = this.state.filters
 
-    return filter(ls, notTaken)
+    return filter(this.context.selectable, ({id: attribute}) => (
+      attribute !== 'id' && (
+        attribute === selectedHere || !find(selectedElsewhere, {attribute})
+      )
+    ))
   },
-  getAttributes (current) {
-    const {draft: {module: {metrics, dimensions}}, attributes} = this.context
-    // @todo should show as filter all available attributes instead of only selected ones
+  getOptions (currentValue) {
+    const selectable = sortBy(this.filterOutSelected(currentValue), 'name')
 
-    const metricsAndDimensions = uniq(concat(filter(dimensions, notId), metrics, [current]))
-    const ls = this.filterOutSelected(metricsAndDimensions, current)
-    const extendedAttributes = map(ls, id => find(attributes, {id}))
-
-    return concat([{id: '', name: ''}], compact(extendedAttributes))
+    return concat([{id: '', name: ''}], selectable)
+  },
+  getLimitFilter () {
+    return {
+      id: 'limit',
+      name: this.context.messages.resultLimitLabel,
+      type: 'integer'
+    }
   },
   getFilterProps ({attribute, operator, value, secondary}) {
-    const attributes = attribute === 'limit'
-      ? [{id: 'limit', name: this.context.messages.resultLimitLabel, type: 'integer'}]
-      : this.getAttributes(attribute)
+    const options = attribute === 'limit'
+      ? [this.getLimitFilter()]
+      : this.getOptions(attribute)
 
     const metaData = attribute === 'limit'
       ? {type: 'integer'}
-      : find(attributes, {id: attribute}) || {type: 'string'}
+      : find(options, {id: attribute}) || {type: 'string'}
 
     return {
       attribute,
       operator,
       value,
       secondary,
-      attributes,
+      options,
       metaData
     }
   },

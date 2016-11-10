@@ -1,10 +1,6 @@
 import csjs from 'csjs'
 import cx from 'classnames'
-import diff from 'lodash/difference'
-import filter from 'lodash/filter'
 import includes from 'lodash/includes'
-import intersect from 'lodash/intersection'
-import isEmpty from 'lodash/isEmpty'
 import map from 'lodash/map'
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -191,35 +187,23 @@ const Attribute = React.createClass({
   }
 })
 
-function AttributesSelect ({attributes, selectedAttributes, isIdSelected, remove, add}) {
-  const selectedBreakdowns = intersect(map(filter(attributes, 'is_breakdown'), 'id'), selectedAttributes)
+const AttributesSelect = ({attributes, selectedAttributes, isIdSelected, remove, add}) => (
+  <div>
+    <ul className={`${style.list}`}>
+      {map(attributes, item => {
+        const isSelected = includes(selectedAttributes, item.id)
 
-  function renderAttribute (item) {
-    const {id, pairs_with, requires_id} = item
-    const isSelected = includes(selectedAttributes, id)
-    const invalidPermutation = pairs_with && !isEmpty(diff(selectedBreakdowns, pairs_with))
-    const disabledById = requires_id && !isIdSelected
-    const addMe = disabledById || invalidPermutation ? undefined : add
-
-    return (
-      <Attribute
-        {...item}
-        fixed={isSelected && !remove}
-        disabled={!isSelected && !addMe}
-        selected={isSelected}
-        toggle={isSelected ? remove : addMe}
-        key={id}/>
-    )
-  }
-
-  return (
-    <div>
-      <ul className={`${style.list}`}>
-        {map(attributes, renderAttribute)}
-      </ul>
-    </div>
-  )
-}
+        return (
+          <Attribute
+            {...item}
+            selected={isSelected}
+            toggle={isSelected ? remove : add}
+            key={item.id}/>
+        )
+      })}
+    </ul>
+  </div>
+)
 
 AttributesSelect.displayName = 'Attributes-Select'
 AttributesSelect.propTypes = {

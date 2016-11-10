@@ -8,7 +8,6 @@ import lowerCase from 'lodash/toLower'
 import sortBy from 'lodash/sortBy'
 import trim from 'lodash/trim'
 import React from 'react'
-import size from 'lodash/size'
 import AttributesSelect from './AttributesSelect'
 import EntityTree from './EntityTree'
 import Input from '../../../Input'
@@ -35,7 +34,7 @@ const Lists = React.createClass({
   propTypes: {},
   contextTypes: {
     messages: PropTypes.object,
-    attributes: PropTypes.object,
+    selectable: PropTypes.object,
     draft: PropTypes.object,
     addAttribute: PropTypes.func.isRequired,
     removeAttribute: PropTypes.func.isRequired
@@ -45,38 +44,27 @@ const Lists = React.createClass({
   },
   componentWillMount () {
     this.onChangeSearch = debounce(this.onChangeSearch, 300)
-    this.updateLists(this.context)
-  },
-  componentWillReceiveProps (nextProps, nextContext) {
-    if (nextContext.attributes !== this.context.attributes || nextContext.entity !== this.context.draft.entity) {
-      this.updateLists(nextContext)
-    }
-  },
-  updateLists ({draft: {entity}, attributes}, searchValue = this.state.searchValue) {
-    attributes = sorted(matching(attributes, searchValue))
-
-    const items = sorted(matching(entity.list, searchValue))
-    const dimensions = filter(attributes, 'is_dimension')
-    const metrics = filter(attributes, 'is_metric')
-
-    this.setState({items, dimensions, metrics, searchValue})
   },
   onChangeSearch () {
     const input = this.refs.wrapper.querySelector('input[name="searchValue"]')
-    this.updateLists(this.context, clean(input.value))
+    this.setState({searchValue: input.value})
   },
   render () {
-    const {draft: {module, entity}, addAttribute, removeAttribute} = this.context
-    const selectedMetrics = module.metrics
-    const selectedDimensions = module.dimensions
-    const selectedIds = module.filters.id
-    const {dimensions, metrics, items} = this.state
-    const isIdSelected = size(selectedIds) === 1 || includes(selectedDimensions, 'id')
-    const {messages} = this.context
+    const {searchValue} = this.state
+    const {messages, draft, addAttribute, removeAttribute} = this.context
+
+    const selectable = sorted(matching(this.context.selectable, searchValue))
+    const items = sorted(matching(draft.entity.list, searchValue))
+    const dimensions = filter(selectable, 'is_dimension')
+    const metrics = filter(selectable, 'is_metric')
+
+    const selectedMetrics = draft.module.metrics
+    const selectedDimensions = draft.module.dimensions
+    const selectedIds = draft.module.filters.id
 
     const entityClasses = cx('material-icons', isEmpty(selectedIds) && 'mdl-color-text--red-A700')
     const entityTitle = (
-      <i className={entityClasses} title={entity.name}>list</i>
+      <i className={entityClasses} title={draft.entity.name}>list</i>
     )
 
     const metricClasses = cx('material-icons', isEmpty(selectedMetrics) && 'mdl-color-text--red-A700')
@@ -108,18 +96,16 @@ const Lists = React.createClass({
               add={addAttribute}
               remove={removeAttribute}
               attributes={metrics}
-              isIdSelected={isIdSelected}
               selectedAttributes={selectedMetrics}/>
           </Tab>
 
-          {module.type !== 'total' && (
+          {draft.module.type !== 'total' && (
             <Tab id='dimension' title={dimensionTitle}>
               <br/>
               <AttributesSelect
                 add={addAttribute}
                 remove={removeAttribute}
                 attributes={dimensions}
-                isIdSelected={isIdSelected}
                 selectedAttributes={selectedDimensions}/>
             </Tab>)}
         </Tabs>
