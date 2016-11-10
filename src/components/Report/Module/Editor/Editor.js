@@ -40,6 +40,7 @@ const Editor = React.createClass({
     isInvalid: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
     save: PropTypes.func.isRequired,
+    redraw: PropTypes.func.isRequired,
     cancel: PropTypes.func.isRequired
   },
   childContextTypes: {
@@ -68,8 +69,8 @@ const Editor = React.createClass({
     return {selectable}
   },
   render () {
-    const {isLoading, isInvalid, save, cancel} = this.props
-    const {messages, draft, update} = this.context
+    const {isLoading, isInvalid, redraw, save, cancel} = this.props
+    const {messages, draft} = this.context
 
     return (
       <div>
@@ -97,7 +98,7 @@ const Editor = React.createClass({
           <Message>cancel</Message>
         </a>
 
-        <button disabled={isInvalid} type='button' className='mdl-button' onClick={update}>
+        <button disabled={isInvalid} type='button' className='mdl-button' onClick={save}>
           <Message>save</Message>
         </button>
 
@@ -106,10 +107,9 @@ const Editor = React.createClass({
             <em className='mdl-color-text--red-A700'>
               <Message entity={draft.entity.name}>invalidModuleConfig</Message>
             </em>) : (
-            <button disabled={isLoading} type='button' className='mdl-button' onClick={save}>
+            <button disabled={isLoading} type='button' className='mdl-button' onClick={redraw}>
               <Message>update</Message>
             </button>)}
-
           <DateRangeButton className='mdl-button'/>
         </span>
       </div>

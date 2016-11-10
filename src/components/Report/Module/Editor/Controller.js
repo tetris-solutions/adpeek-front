@@ -124,7 +124,7 @@ const ModuleEdit = React.createClass({
     })
     this.update({filters})
   },
-  removeAttribute (_attribute_, forceReload = false) {
+  removeAttribute (_attribute_, forceRedraw = false) {
     const {attributes} = this.context
     const removedAttributesIds = isArray(_attribute_) ? _attribute_ : [_attribute_]
     const module = this.getDraftModule()
@@ -167,7 +167,7 @@ const ModuleEdit = React.createClass({
     changes.dimensions = uniq(changes.dimensions)
     changes.metrics = uniq(changes.metrics)
 
-    this.update(changes, forceReload)
+    this.update(changes, forceRedraw)
   },
   addAttribute (_attribute_) {
     const {attributes} = this.context
@@ -212,15 +212,15 @@ const ModuleEdit = React.createClass({
 
     this.update(changes)
   },
-  update (changes, forceReload = false) {
+  update (changes, forceRedraw = false) {
     const newModule = assign({}, this.state.newModule, changes)
-    const reloadIfNecessary = () => {
-      if (forceReload || changes.sort) {
-        this.reload()
+    const redrawIfNecessary = () => {
+      if (forceRedraw || changes.sort) {
+        this.redraw()
       }
     }
 
-    this.setState({newModule}, reloadIfNecessary)
+    this.setState({newModule}, redrawIfNecessary)
   },
   cancel () {
     this.props.save(this.state.oldModule)
@@ -239,7 +239,7 @@ const ModuleEdit = React.createClass({
     this.props.save(draftModule, true)
     this.props.close()
   },
-  reload () {
+  redraw () {
     this.props.save(this.state.newModule)
   },
   getDraftModule () {
@@ -263,7 +263,8 @@ const ModuleEdit = React.createClass({
         isInvalid={isInvalidModule}
         isLoading={this.context.module.isLoading}
         cancel={this.cancel}
-        save={this.reload}/>
+        redraw={this.redraw}
+        save={this.save}/>
     )
   }
 })
