@@ -228,12 +228,13 @@ const EditFilters = React.createClass({
   render () {
     return (
       <section style={{height: '80vh', overflowY: 'auto'}}>
-        <div className='mdl-grid'>{map(this.state.filters, (filter, index) =>
-          <Filter
-            key={index}
-            change={this.onChange(index)}
-            id={index} {...this.getFilterProps(filter)}
-            drop={bind(this.removeFilter, null, index)}/>)}
+        <div className='mdl-grid'>
+          {map(this.state.filters, (filter, index) =>
+            <Filter
+              key={index}
+              change={this.onChange(index)}
+              id={index} {...this.getFilterProps(filter)}
+              drop={bind(this.removeFilter, null, index)}/>)}
         </div>
         <button className='mdl-button' type='button' onClick={this.newFilter}>
           <Message>newFilter</Message>
