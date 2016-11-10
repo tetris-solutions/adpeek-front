@@ -8,34 +8,18 @@ import isEmpty from 'lodash/isEmpty'
 import map from 'lodash/map'
 import pick from 'lodash/pick'
 import uniq from 'lodash/uniq'
-import Message from 'tetris-iso/Message'
 import React from 'react'
 import reportEntityType from '../../../../propTypes/report-entity'
 import reportModuleType from '../../../../propTypes/report-module'
-import DateRangeButton from '../../DateRange'
-import Lists from './Lists'
-import Size from './Size'
-import Filters from './Filters'
-import Preview from './Preview'
-import {Tabs, Tab} from '../../../Tabs'
-import {styled} from '../../../mixins/styled'
-import csjs from 'csjs'
+import Editor from './Editor'
 
 const {PropTypes} = React
-const style = csjs`
-.leftCol {
-  height: calc(80vh + 40px);
-  overflow-y: auto;
-}
-.rightButtons {
-  float: right;
-  margin-right: 1em
-}`
+
 const editableFields = ['name', 'type', 'dimensions', 'metrics', 'rows', 'cols', 'entity', 'limit', 'sort', 'filters']
 
 const ModuleEdit = React.createClass({
-  displayName: 'Module-Editor',
-  mixins: [styled(style)],
+  displayName: 'Editor-Controller',
+
   contextTypes: {
     attributes: PropTypes.object.isRequired,
     messages: PropTypes.object.isRequired,
@@ -265,59 +249,21 @@ const ModuleEdit = React.createClass({
     return find(this.context.entities, {id: this.state.newModule.entity})
   },
   render () {
-    const draftModule = this.getDraftModule()
-    const draftEntity = this.getDraftEntity()
-    const {messages} = this.context
+    const {name, type, dimensions, metrics, filters} = this.getDraftModule()
 
-    const isInvalidModule = isEmpty(draftModule.name) ||
-      (isEmpty(draftModule.dimensions) && draftModule.type !== 'total') ||
-      isEmpty(draftModule.metrics) ||
-      isEmpty(draftModule.filters.id)
+    const isInvalidModule = isEmpty(name) || (
+        isEmpty(dimensions) &&
+        type !== 'total'
+      ) ||
+      isEmpty(metrics) ||
+      isEmpty(filters.id)
 
     return (
-      <div>
-        <form className='mdl-grid'>
-          <div className={`mdl-cell mdl-cell--3-col ${style.leftCol}`}>
-            <Lists />
-          </div>
-          <div className='mdl-cell mdl-cell--9-col'>
-            <Tabs>
-              <Tab id='module-content' title={messages.moduleContent}>
-                <Preview />
-              </Tab>
-              <Tab id='module-size' title={messages.moduleSize}>
-                <br/>
-                <Size />
-              </Tab>
-              <Tab id='module-filters' title={messages.filterModuleResult}>
-                <Filters />
-              </Tab>
-            </Tabs>
-          </div>
-        </form>
-
-        <a className='mdl-button' onClick={this.cancel}>
-          <Message>cancel</Message>
-        </a>
-
-        <button disabled={isInvalidModule} type='button' className='mdl-button' onClick={this.save}>
-          <Message>save</Message>
-        </button>
-
-        <span className={`${style.rightButtons}`}>
-          {isInvalidModule ? (
-            <em className='mdl-color-text--red-A700'>
-              <Message entity={draftEntity.name}>invalidModuleConfig</Message>
-            </em>
-          ) : (
-            <button disabled={this.context.module.isLoading} type='button' className='mdl-button' onClick={this.reload}>
-              <Message>update</Message>
-            </button>
-          )}
-
-          <DateRangeButton className='mdl-button'/>
-        </span>
-      </div>
+      <Editor
+        isInvalid={isInvalidModule}
+        isLoading={this.context.module.isLoading}
+        cancel={this.cancel}
+        save={this.reload}/>
     )
   }
 })
