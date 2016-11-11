@@ -145,23 +145,40 @@ const Header = React.createClass({
     }).isRequired,
     company: PropTypes.object
   },
-  logout () {
+  loginRoundTrip () {
     this.props.dispatch(logoutAction)
 
     window.location.href = process.env.FRONT_URL + '/login?next=' + window.location.href
   },
   render () {
     const {user, company} = this.props
+    let GoHome, homeProps, leftButton
+
+    if (user.is_guest) {
+      GoHome = 'a'
+      homeProps = {href: '/'}
+
+      leftButton = (
+        <button type='button' className='mdl-button mdl-color-text--grey-100' onClick={this.loginRoundTrip}>
+          <Message>navLogin</Message>
+        </button>
+      )
+    } else {
+      GoHome = Link
+      homeProps = {to: '/'}
+      leftButton = <UserMenu {...user} company={company} logout={this.loginRoundTrip}/>
+    }
 
     return (
       <header className={`mdl-layout__header mdl-color--primary-dark ${style.header}`}>
         <div className={`mdl-layout__header-row ${style.row}`}>
-          <Link to='/'>
+          <GoHome {...homeProps}>
             <img className={String(style.tetris)} src={'/img/tetris-logo.png'}/>
             <img className={String(style.manager)} src={'/img/manager-logo.png'}/>
-          </Link>
+          </GoHome>
           <div className='mdl-layout-spacer'/>
-          <UserMenu {...user} company={company} logout={this.logout}/>
+
+          {leftButton}
         </div>
       </header>
     )

@@ -2,6 +2,7 @@ import React from 'react'
 import ReportContainer from './Report/Container'
 import {contextualize} from './higher-order/contextualize'
 import get from 'lodash/get'
+import endsWith from 'lodash/endsWith'
 
 const {PropTypes} = React
 
@@ -35,8 +36,8 @@ const CompanyReport = React.createClass({
       <ReportContainer
         dispatch={dispatch}
         report={report}
-        location={location}
         params={params}
+        editMode={endsWith(location.pathname, '/edit')}
         metaData={get(metaData, '_')}
         {...company.entities}
         accounts={company.savedAccounts}/>

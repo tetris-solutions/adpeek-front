@@ -17,14 +17,28 @@ import {exportReportAction} from '../../actions/export-report'
 import {serializeReportModules} from '../../functions/seralize-report-modules'
 import Page from '../Page'
 import assign from 'lodash/assign'
+import join from 'lodash/join'
+import compact from 'lodash/compact'
 
 const {PropTypes} = React
+
+function calcPathToReport ({company, workspace, folder, report}) {
+  const scope = compact([
+    `company/${company}`,
+    workspace && `workspace/${workspace}`,
+    folder && `folder/${folder}`,
+    `report/${report}`
+  ])
+
+  return '/' + join(scope, '/')
+}
 
 const ReportController = React.createClass({
   displayName: 'Report-Controller',
   propTypes: {
+    guestMode: PropTypes.bool,
+    editMode: PropTypes.bool,
     report: reportType.isRequired,
-    editMode: PropTypes.bool.isRequired,
     metaData: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
@@ -139,23 +153,40 @@ const ReportController = React.createClass({
     return {accounts, from, to}
   },
   render () {
-    const {metaData, editMode, report: {modules}} = this.props
+    const {guestMode, editMode, params, metaData, report: {modules}} = this.props
     const {isCreatingReport} = this.state
     const {moment} = this.context
     const reportParams = this.getReportParams()
 
     // @todo bring back input for name editing
 
+    const reportGrid = (
+      <div className='mdl-grid' ref='grid'>{map(sortBy(modules, 'index'), (module, index) =>
+        <div data-report-module={module.id} key={module.id} className={`mdl-cell mdl-cell--${module.cols}-col`}>
+          <Module
+            module={module}
+            editable={editMode}
+            metaData={get(metaData, module.entity)}/>
+        </div>)}
+      </div>
+    )
+
     return (
       <div>
         <SubHeader>
-          <ReportDateRange
-            className='mdl-button mdl-color-text--grey-100'
-            onChange={this.onChangeRange}
-            startDate={moment(reportParams.from)}
-            endDate={moment(reportParams.to)}/>
+          {guestMode ? (
+            <a href={calcPathToReport(params)} className='mdl-button mdl-color-text--grey-100'>
+              <Message>viewFullReport</Message>
+            </a>) : null}
 
-          {editMode && (
+          {!guestMode && (
+            <ReportDateRange
+              className='mdl-button mdl-color-text--grey-100'
+              onChange={this.onChangeRange}
+              startDate={moment(reportParams.from)}
+              endDate={moment(reportParams.to)}/>)}
+
+          {!guestMode && editMode && (
             <button className='mdl-button mdl-color-text--grey-100' onClick={this.addNewModule}>
               <Message>newModule</Message>
             </button>)}
@@ -164,16 +195,10 @@ const ReportController = React.createClass({
             create={this.downloadReport}
             isCreatingReport={isCreatingReport}/>
         </SubHeader>
-        <Page>
-          <div className='mdl-grid' ref='grid'>{map(sortBy(modules, 'index'), (module, index) =>
-            <div data-report-module={module.id} key={module.id} className={`mdl-cell mdl-cell--${module.cols}-col`}>
-              <Module
-                module={module}
-                editable={editMode}
-                metaData={get(metaData, module.entity)}/>
-            </div>)}
-          </div>
-        </Page>
+
+        {guestMode
+          ? reportGrid
+          : <Page>{reportGrid}</Page>}
       </div>
     )
   }

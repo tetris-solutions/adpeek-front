@@ -3,7 +3,6 @@ import head from 'lodash/head'
 import uniq from 'lodash/uniq'
 import includes from 'lodash/includes'
 import concat from 'lodash/concat'
-import endsWith from 'lodash/endsWith'
 import ReportController from './Controller'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
 import {loadReportEntitiesAction} from '../../actions/load-report-entities'
@@ -45,9 +44,10 @@ const ReportContainer = React.createClass({
     messages: PropTypes.object
   },
   propTypes: {
+    guestMode: PropTypes.bool,
+    editMode: PropTypes.bool,
     dispatch: PropTypes.func.isRequired,
     report: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     metaData: PropTypes.object,
     campaigns: PropTypes.array,
@@ -126,9 +126,9 @@ const ReportContainer = React.createClass({
     return entities
   },
   loadEntities (account) {
-    const {ads, params, dispatch} = this.props
+    const {campaigns, params, dispatch} = this.props
 
-    if (ads) {
+    if (campaigns) {
       return Promise.resolve()
     }
 
@@ -168,7 +168,7 @@ const ReportContainer = React.createClass({
       .then(() => this.setState({isLoading: false}))
   },
   render () {
-    const {location, dispatch, params, accounts, metaData, report} = this.props
+    const {guestMode, editMode, dispatch, params, accounts, metaData, report} = this.props
 
     if (this.state.isLoading) {
       return (
@@ -186,7 +186,8 @@ const ReportContainer = React.createClass({
         params={params}
         report={report}
         metaData={metaData}
-        editMode={endsWith(location.pathname, '/edit')}
+        editMode={editMode}
+        guestMode={guestMode}
         accounts={map(accounts, transformAccount)}
         entities={this.getEntities()}/>
     )

@@ -48,6 +48,7 @@ import WorkspaceOrders from '../components/WorkspaceOrders'
 import WorkspaceOrdersCloning from '../components/WorkspaceOrdersCloning'
 import Workspaces from '../components/Workspaces'
 import ErrorScreen from '../components/ErrorScreen'
+import ReportShare from '../components/Report/Share'
 
 import {loadWorkspaceAccountsActionRouterAdaptor as accounts} from '../actions/load-accounts'
 import {loadAutoBudgetLogsActionRouterAdaptor as autoBudgetLogs} from '../actions/load-autobudget-logs'
@@ -80,6 +81,12 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
   /* eslint-disable react/jsx-indent-props */
   return (
     <Route path='/' component={root(tree, createRoot(DocTitle, ErrorScreen))} onEnter={protectRoute}>
+      <Route path='share'>
+        <Route
+          path='report/:reportShare'
+          component={ReportShare}/>
+      </Route>
+
       <Route onEnter={preload(companies)} component={App}>
         <IndexRoute component={Companies}/>
         <Route

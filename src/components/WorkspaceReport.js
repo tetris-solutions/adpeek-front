@@ -3,6 +3,7 @@ import ReportContainer from './Report/Container'
 import {contextualize} from './higher-order/contextualize'
 import get from 'lodash/get'
 import values from 'lodash/values'
+import endsWith from 'lodash/endsWith'
 
 const {PropTypes} = React
 
@@ -33,8 +34,8 @@ const WorkspaceReport = React.createClass({
       <ReportContainer
         dispatch={dispatch}
         report={report}
-        location={location}
         params={params}
+        editMode={endsWith(location.pathname, '/edit')}
         metaData={get(metaData, '_')}
         {...workspace.entities}
         accounts={values(accounts)}/>

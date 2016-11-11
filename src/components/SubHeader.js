@@ -8,7 +8,8 @@ const style = csjs`
 .row {
   padding: 0 30px;  
 }
-.row a {
+.row a,
+.row button {
   text-transform: none;
 }`
 const {PropTypes} = React

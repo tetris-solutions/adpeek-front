@@ -48,3 +48,10 @@ export function loadReportActionServerAdaptor ({authToken, params}, res) {
 export function loadReportActionRouterAdaptor ({params}, tree) {
   return loadReportAction(tree, params, params.report)
 }
+
+export function loadReportShareActionServerAdaptor ({authToken}, res) {
+  const {tree} = res.locals
+  const {params} = tree.get('reportShare')
+
+  return loadReportAction(tree, params, params.report, authToken)
+}

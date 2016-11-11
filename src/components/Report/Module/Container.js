@@ -27,7 +27,7 @@ function ModuleContainer ({editable, module, metaData}, {entities}) {
 
 ModuleContainer.displayName = 'Module-Container'
 ModuleContainer.propTypes = {
-  editable: PropTypes.bool.isRequired,
+  editable: PropTypes.bool,
   module: moduleType.isRequired,
   metaData: reportMetaDataType.isRequired
 }

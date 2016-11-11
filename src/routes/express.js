@@ -1,7 +1,9 @@
 import bind from 'lodash/bind'
 import {loadUserCompaniesActionServerAdaptor as companies} from 'tetris-iso/actions'
 import {protectedRouteMiddleware as protect, performActionsMiddleware as preload} from 'tetris-iso/server'
+import {allowGuestMiddleware} from '../middlewares/allow-guest'
 
+import {loadReportShareActionServerAdaptor as reportShareMetaData} from '../actions/load-report-share'
 import {loadWorkspaceAccountsActionServerAdaptor as accounts} from '../actions/load-accounts'
 import {loadAutoBudgetLogsActionServerAdaptor as autoBudgetLogs} from '../actions/load-autobudget-logs'
 import {loadBudgetsActionServerAdaptor as budgets} from '../actions/load-budgets'
@@ -10,7 +12,12 @@ import {loadCompanyRolesActionServerAdaptor as roles} from '../actions/load-comp
 import {loadCompanyWorkspacesActionServerAdaptor as workspaces} from '../actions/load-company-workspaces'
 import {loadDeliveryMethodsActionServerAdaptor as deliveryMethods} from '../actions/load-delivery-methods'
 import {loadFolderActionServerAdaptor as folder} from '../actions/load-folder'
-import {loadReportActionServerAdaptor as report} from '../actions/load-report'
+
+import {
+  loadReportActionServerAdaptor as report,
+  loadReportShareActionServerAdaptor as reportShare
+} from '../actions/load-report'
+
 import {loadReportsActionServerAdaptor as reports} from '../actions/load-reports'
 import {loadWorkspaceFoldersActionServerAdaptor as folders} from '../actions/load-folders'
 import {loadMediasActionServerAdaptor as medias} from '../actions/load-medias'
@@ -18,6 +25,7 @@ import {loadOrdersActionServerAdaptor as orders} from '../actions/load-orders'
 import {loadStatusesActionServerAdaptor as statuses} from '../actions/load-statuses'
 import {loadWorkspaceActionServerAdaptor as workspace} from '../actions/load-workspace'
 import {loadCompanySavedAccountsActionServerAdaptor as savedAccounts} from '../actions/load-company-saved-accounts'
+
 export function setAppRoutes (app, render) {
   const _ = bind.placeholder
   const campaignsWithAdsets = bind(campaigns, null, _, _, 'include-adsets')
@@ -27,6 +35,12 @@ export function setAppRoutes (app, render) {
   app.get('/',
     protect,
     ensureLoad(),
+    render)
+
+  app.get('/share/report/:reportShare',
+    allowGuestMiddleware,
+    protect,
+    preload(reportShareMetaData, reportShare),
     render)
 
   app.get('/company/:company',

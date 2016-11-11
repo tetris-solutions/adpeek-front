@@ -20,8 +20,8 @@ const reportContext = ['reportParams', 'entities', 'changeDateRange', 'entity', 
 const ModuleController = React.createClass({
   displayName: 'Module-Controller',
   propTypes: {
+    editable: PropTypes.bool,
     module: moduleType.isRequired,
-    editable: PropTypes.bool.isRequired,
     attributes: PropTypes.object.isRequired,
     entity: reportEntityType.isRequired
   },
