@@ -9,7 +9,7 @@ import get from 'lodash/get'
 const {PropTypes} = React
 
 function Wrapper (props) {
-  const {accounts, metaData, location, report, dispatch, params, level} = props
+  const {accounts, isGuestUser, metaData, location, report, dispatch, params, level} = props
   const node = props[level]
 
   return (
@@ -19,6 +19,7 @@ function Wrapper (props) {
       location={location}
       accounts={accounts}
       report={report}
+      isGuestUser={isGuestUser}
       params={params}
       metaData={get(metaData, report.platform || '_')}
       guestMode/>
@@ -28,6 +29,7 @@ function Wrapper (props) {
 Wrapper.displayName = 'Report-Wrapper'
 Wrapper.propTypes = {
   metaData: PropTypes.object,
+  isGuestUser: PropTypes.bool.isRequired,
   report: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   accounts: PropTypes.array.isRequired,
@@ -53,7 +55,8 @@ const Share = React.createClass({
     const level = this.level = inferLevelFromParams(params)
 
     this.ReportWrapper = contextualize(Wrapper, {
-      metaData: ['reportMetaData']
+      metaData: ['reportMetaData'],
+      isGuestUser: ['user', 'is_guest']
     }, level, 'report')
   },
   getChildContext () {

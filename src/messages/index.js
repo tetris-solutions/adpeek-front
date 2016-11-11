@@ -257,7 +257,7 @@ module.exports = {
     creatives: 'Creatives',
     companyReport: 'Company Report',
     workspaceReport: 'Workspace Report',
-    viewFullReport: 'More options'
+    viewFullReport: 'View Full Report'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -517,6 +517,6 @@ module.exports = {
     creatives: 'Criativos',
     companyReport: 'Relatório',
     workspaceReport: 'Relatório',
-    viewFullReport: 'Versão completa'
+    viewFullReport: 'Ver Relatório Completo'
   }
 }

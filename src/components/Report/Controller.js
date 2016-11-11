@@ -38,6 +38,7 @@ const ReportController = React.createClass({
   propTypes: {
     guestMode: PropTypes.bool,
     editMode: PropTypes.bool,
+    isGuestUser: PropTypes.bool,
     report: reportType.isRequired,
     metaData: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
@@ -153,7 +154,7 @@ const ReportController = React.createClass({
     return {accounts, from, to}
   },
   render () {
-    const {guestMode, editMode, params, metaData, report: {modules}} = this.props
+    const {isGuestUser, guestMode, editMode, params, metaData, report: {modules}} = this.props
     const {isCreatingReport} = this.state
 
     // @todo bring back input for name editing
@@ -172,7 +173,7 @@ const ReportController = React.createClass({
     return (
       <div>
         <SubHeader>
-          {guestMode ? (
+          {!isGuestUser && guestMode ? (
             <a href={calcPathToReport(params)} className='mdl-button mdl-color-text--grey-100'>
               <Message>viewFullReport</Message>
             </a>) : null}

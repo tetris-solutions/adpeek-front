@@ -46,6 +46,7 @@ const ReportContainer = React.createClass({
   propTypes: {
     guestMode: PropTypes.bool,
     editMode: PropTypes.bool,
+    isGuestUser: PropTypes.bool,
     dispatch: PropTypes.func.isRequired,
     report: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
@@ -168,7 +169,7 @@ const ReportContainer = React.createClass({
       .then(() => this.setState({isLoading: false}))
   },
   render () {
-    const {guestMode, editMode, dispatch, params, accounts, metaData, report} = this.props
+    const {isGuestUser, guestMode, editMode, dispatch, params, accounts, metaData, report} = this.props
 
     if (this.state.isLoading) {
       return (
@@ -188,6 +189,7 @@ const ReportContainer = React.createClass({
         metaData={metaData}
         editMode={editMode}
         guestMode={guestMode}
+        isGuestUser={isGuestUser}
         accounts={map(accounts, transformAccount)}
         entities={this.getEntities()}/>
     )
