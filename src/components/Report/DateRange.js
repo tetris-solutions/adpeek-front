@@ -35,11 +35,11 @@ DateRangeSelector.propTypes = {
 }
 
 function DateRangeButton ({className}, {moment, reportParams: {from, to}, changeDateRange}) {
-  const startDate = moment(from).format('ddd D, MMM')
-  const endDate = moment(to).format('ddd D, MMM - YYYY')
+  const startDate = moment(from)
+  const endDate = moment(to)
 
   const label = (
-    <Message startDate={startDate} endDate={endDate}>
+    <Message startDate={startDate.format('ddd D, MMM')} endDate={endDate.format('ddd D, MMM - YYYY')}>
       dateRangeLabel
     </Message>
   )
