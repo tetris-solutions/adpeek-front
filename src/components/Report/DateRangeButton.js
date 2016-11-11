@@ -62,6 +62,7 @@ DateRangeButton.propTypes = {
 }
 DateRangeButton.contextTypes = {
   moment: PropTypes.func.isRequired,
-  reportParams: PropTypes.object
+  reportParams: PropTypes.object.isRequired,
+  changeDateRange: PropTypes.func.isRequired
 }
 export default DateRangeButton

@@ -21,8 +21,8 @@ const style = csjs`
 }
 .spinner {
   position: absolute;
-  bottom: 1em;
-  right: 1em;
+  bottom: 20px;
+  right: 20px;
   width: 40px;
   height: 40px;
 }`

@@ -11,7 +11,7 @@ import entityType from '../../propTypes/report-entity'
 import reportType from '../../propTypes/report'
 import reportParamsType from '../../propTypes/report-params'
 import Module from './Module/Container'
-import ReportDateRange from './DateRange'
+import DateRangeButton from './DateRangeButton'
 import {createModuleReportAction} from '../../actions/create-module'
 import {exportReportAction} from '../../actions/export-report'
 import {serializeReportModules} from '../../functions/seralize-report-modules'
@@ -155,8 +155,6 @@ const ReportController = React.createClass({
   render () {
     const {guestMode, editMode, params, metaData, report: {modules}} = this.props
     const {isCreatingReport} = this.state
-    const {moment} = this.context
-    const reportParams = this.getReportParams()
 
     // @todo bring back input for name editing
 
@@ -179,12 +177,7 @@ const ReportController = React.createClass({
               <Message>viewFullReport</Message>
             </a>) : null}
 
-          {!guestMode && (
-            <ReportDateRange
-              className='mdl-button mdl-color-text--grey-100'
-              onChange={this.onChangeRange}
-              startDate={moment(reportParams.from)}
-              endDate={moment(reportParams.to)}/>)}
+          {!guestMode && <DateRangeButton className='mdl-button mdl-color-text--grey-100'/>}
 
           {!guestMode && editMode && (
             <button className='mdl-button mdl-color-text--grey-100' onClick={this.addNewModule}>
