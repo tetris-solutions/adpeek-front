@@ -21,6 +21,11 @@ const ShareDialog = React.createClass({
     messages: PropTypes.object.isRequired
   },
   componentDidMount () {
+    if (!this.props.shareUrl) {
+      this.load()
+    }
+  },
+  load () {
     const {params, location, tree} = this.context
 
     loadReportShareUrlAction(tree, params, location.query)
