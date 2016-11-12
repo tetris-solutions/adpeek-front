@@ -24,18 +24,19 @@ const transformAccount = ({external_id, tetris_id, platform}) => ({
   tetris_account: tetris_id
 })
 
-const Placeholder = ({children}) => (
+const Placeholder = ({guestMode, children}) => (
   <div>
     <SubHeader/>
-    <Page>
-      {children}
-    </Page>
+    {guestMode
+      ? children
+      : <Page>{children}</Page>}
   </div>
 )
 
 Placeholder.displayName = 'Report-Placeholder'
 Placeholder.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  guestMode: PropTypes.bool
 }
 
 const ReportContainer = React.createClass({
@@ -173,7 +174,7 @@ const ReportContainer = React.createClass({
 
     if (this.state.isLoading) {
       return (
-        <Placeholder>
+        <Placeholder guestMode={guestMode}>
           <LoadingHorizontal>
             <Message>loadingReport</Message>
           </LoadingHorizontal>
