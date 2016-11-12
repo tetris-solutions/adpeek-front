@@ -8,8 +8,6 @@ import ShareButton from './ShareButton'
 
 const {PropTypes} = React
 
-// @todo bring back input for name editing
-
 const ReportScreen = ({
   children,
   showShareButton,
