@@ -29,5 +29,5 @@ export default PropTypes.shape({
         PropTypes.string
       ])
     )
-  ).isRequired
+  )
 })

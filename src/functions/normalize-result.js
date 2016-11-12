@@ -36,12 +36,11 @@ export function normalizeResult (attributes, result) {
         date._format_ = 'YYYY'
         break
       case 'hourofday':
-        date = new Date()
-        date.setHours(value, 0, 0)
+        date = zeroedMoment().hour(value).toDate()
         date._format_ = 'HH:mm'
         break
       case 'month':
-        date = new Date(value)
+        date = moment(value).toDate()
         date._format_ = 'MMMM/YY'
         break
       case 'monthofyear':
@@ -59,8 +58,12 @@ export function normalizeResult (attributes, result) {
           .slice(0, 3)
           .map(Number)
 
-        date = new Date()
-        date.setHours(...parts)
+        date = zeroedMoment()
+          .hour(parts[0])
+          .minute(parts[1])
+          .second(parts[2])
+          .toDate()
+
         date._format_ = 'HH:mm'
 
         break
