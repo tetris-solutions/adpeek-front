@@ -45,7 +45,11 @@ const ShareDialog = React.createClass({
           <br/>
 
           <div style={{textAlign: 'center'}}>
-            <Input name='shareUrl' value={shareUrl || '...'} disabled={!shareUrl}/>
+            <Input
+              name='shareUrl'
+              label='shareReport'
+              value={shareUrl || '...'}
+              disabled={!shareUrl}/>
           </div>
 
           <br/>

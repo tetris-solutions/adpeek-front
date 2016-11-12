@@ -260,6 +260,7 @@ module.exports = {
     viewFullReport: 'View Full Report',
     shareReportButton: 'Share',
     shareReportTitle: 'Share Report',
+    shareReportLabel: 'Shareable URL',
     copyToClipboard: 'Copy',
     copySuccess: 'Copied to clipboard!'
   },
@@ -524,6 +525,7 @@ module.exports = {
     viewFullReport: 'Ver Relatório Completo',
     shareReportButton: 'Compartilhar',
     shareReportTitle: 'Compartilhar Relatório',
+    shareReportLabel: 'URL compartilhável',
     copyToClipboard: 'Copiar',
     copySuccess: 'Copiado para área de transferência!'
   }
