@@ -1,12 +1,7 @@
 import {PropTypes} from 'react'
 import find from 'lodash/find'
 import get from 'lodash/get'
-import assign from 'lodash/assign'
 import {loadDashCampaignsAction} from '../../actions/load-dash-campaigns'
-
-const formatName = dashCampaign => assign({}, dashCampaign, {
-  name: `${dashCampaign.id} :: ${dashCampaign.name || '???'}`
-})
 
 export default {
   contextTypes: {
@@ -70,9 +65,10 @@ export default {
       this.setState({dashCampaign: null})
     }
   },
-  normalizeDashCampaignOption (dashCampaign) {
-    const {id: value, name: text} = formatName(dashCampaign)
-
-    return {text, value}
+  normalizeDashCampaignOption ({id, name}) {
+    return {
+      value: id,
+      text: `${id} :: ${name || '???'}`
+    }
   }
 }
