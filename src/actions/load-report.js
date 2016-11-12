@@ -8,8 +8,8 @@ import {saveResponseData} from '../functions/save-response-data'
 import compact from 'lodash/compact'
 import {inferLevelFromParams} from '../functions/infer-level-from-params'
 
-function loadReport (level, id, report, config) {
-  return GET(`${process.env.ADPEEK_API_URL}/${level}/${id}/report/${report}`, config)
+function loadReport (level, id, report, guest, config) {
+  return GET(`${process.env.ADPEEK_API_URL}/${level}/${id}/report/${report}${guest ? '?guest=true' : ''}`, config)
 }
 
 function keepOldReportMetaData (newReport, oldReport) {
@@ -35,7 +35,7 @@ export function loadReportAction (tree, params, report, token = null) {
 
   const level = inferLevelFromParams(params)
 
-  return loadReport(level, params[level], report, getApiFetchConfig(tree, token))
+  return loadReport(level, params[level], report, Boolean(params.reportShare), getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
     .then(saveResponseData(tree, path, keepOldReportMetaData))
     .catch(pushResponseErrorToState(tree))

@@ -165,7 +165,7 @@ const ReportController = React.createClass({
         addNewModule={this.addNewModule}
         showShareButton={!guestMode}
         showContextMenu={!guestMode}
-        shareUrl={!guestMode && shareUrl}
+        shareUrl={guestMode ? undefined : shareUrl}
         fullReportUrl={fullReportUrl}>
 
         <div className='mdl-grid' ref='grid'>{map(sortBy(modules, 'index'), (module, index) =>
