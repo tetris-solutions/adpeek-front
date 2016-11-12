@@ -19,6 +19,7 @@ export function loadReportShareAction (tree, shareId, token = null) {
     const reportShare = assign({}, response.data)
 
     reportShare.params = {
+      reportShare: shareId,
       report: reportShare.id,
       company: reportShare.company.id,
       workspace: get(reportShare, 'workspace.id'),

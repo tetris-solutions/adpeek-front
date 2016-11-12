@@ -3,22 +3,18 @@ import isNumber from 'lodash/isNumber'
 import map from 'lodash/map'
 import max from 'lodash/max'
 import sortBy from 'lodash/sortBy'
-import Message from 'tetris-iso/Message'
 import React from 'react'
-import SubHeader from '../SubHeader'
-import ReportExportButton from './ExportButton'
 import entityType from '../../propTypes/report-entity'
 import reportType from '../../propTypes/report'
 import reportParamsType from '../../propTypes/report-params'
 import Module from './Module/Container'
-import DateRangeButton from './DateRangeButton'
 import {createModuleReportAction} from '../../actions/create-module'
 import {exportReportAction} from '../../actions/export-report'
 import {serializeReportModules} from '../../functions/seralize-report-modules'
-import Page from '../Page'
 import assign from 'lodash/assign'
 import join from 'lodash/join'
 import compact from 'lodash/compact'
+import ReportScreen from './Screen'
 
 const {PropTypes} = React
 
@@ -154,46 +150,33 @@ const ReportController = React.createClass({
     return {accounts, from, to}
   },
   render () {
-    const {isGuestUser, guestMode, editMode, params, metaData, report: {modules}} = this.props
+    const {isGuestUser, guestMode, editMode, params, metaData, report: {modules, shareUrl}} = this.props
     const {isCreatingReport} = this.state
-
-    // @todo bring back input for name editing
-
-    const reportGrid = (
-      <div className='mdl-grid' ref='grid'>{map(sortBy(modules, 'index'), (module, index) =>
-        <div data-report-module={module.id} key={module.id} className={`mdl-cell mdl-cell--${module.cols}-col`}>
-          <Module
-            module={module}
-            editable={editMode}
-            metaData={get(metaData, module.entity)}/>
-        </div>)}
-      </div>
-    )
+    const fullReportUrl = !isGuestUser && guestMode
+      ? calcPathToReport(params)
+      : null
 
     return (
-      <div>
-        <SubHeader>
-          {!isGuestUser && guestMode ? (
-            <a href={calcPathToReport(params)} className='mdl-button mdl-color-text--grey-100'>
-              <Message>viewFullReport</Message>
-            </a>) : null}
+      <ReportScreen
+        showNewModuleButton={!guestMode && editMode}
+        showDateRangeButton={!guestMode}
+        downloadReport={this.downloadReport}
+        isCreatingReport={isCreatingReport}
+        addNewModule={this.addNewModule}
+        showShareButton={!guestMode}
+        showContextMenu={!guestMode}
+        shareUrl={!guestMode && shareUrl}
+        fullReportUrl={fullReportUrl}>
 
-          {!guestMode && <DateRangeButton className='mdl-button mdl-color-text--grey-100'/>}
-
-          {!guestMode && editMode && (
-            <button className='mdl-button mdl-color-text--grey-100' onClick={this.addNewModule}>
-              <Message>newModule</Message>
-            </button>)}
-
-          <ReportExportButton
-            create={this.downloadReport}
-            isCreatingReport={isCreatingReport}/>
-        </SubHeader>
-
-        {guestMode
-          ? reportGrid
-          : <Page>{reportGrid}</Page>}
-      </div>
+        <div className='mdl-grid' ref='grid'>{map(sortBy(modules, 'index'), (module, index) =>
+          <div data-report-module={module.id} key={module.id} className={`mdl-cell mdl-cell--${module.cols}-col`}>
+            <Module
+              module={module}
+              editable={editMode}
+              metaData={get(metaData, module.entity)}/>
+          </div>)}
+        </div>
+      </ReportScreen>
     )
   }
 })

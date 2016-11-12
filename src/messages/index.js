@@ -110,7 +110,7 @@ module.exports = {
     loadingAds: 'Loading Ads...',
     loadingReport: 'Loading Report...',
     loadingCampaigns: 'Loading Campaigns...',
-    extractReport: 'Download Report',
+    extractReport: 'Download',
     creatingReport: 'Creating Report...',
 
     // date ranges
@@ -257,7 +257,11 @@ module.exports = {
     creatives: 'Creatives',
     companyReport: 'Company Report',
     workspaceReport: 'Workspace Report',
-    viewFullReport: 'View Full Report'
+    viewFullReport: 'View Full Report',
+    shareReportButton: 'Share',
+    shareReportTitle: 'Share Report',
+    copyToClipboard: 'Copy',
+    copySuccess: 'Copied to clipboard!'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -369,7 +373,7 @@ module.exports = {
     loadingAds: 'Carregando criativos...',
     loadingReport: 'Carregando relatório...',
     loadingCampaigns: 'Carregando campanhas...',
-    extractReport: 'Extrair Relatório',
+    extractReport: 'Baixar',
     creatingReport: 'Gerando Relatório...',
 
     // date ranges
@@ -517,6 +521,10 @@ module.exports = {
     creatives: 'Criativos',
     companyReport: 'Relatório',
     workspaceReport: 'Relatório',
-    viewFullReport: 'Ver Relatório Completo'
+    viewFullReport: 'Ver Relatório Completo',
+    shareReportButton: 'Compartilhar',
+    shareReportTitle: 'Compartilhar Relatório',
+    copyToClipboard: 'Copiar',
+    copySuccess: 'Copiado para área de transferência!'
   }
 }
