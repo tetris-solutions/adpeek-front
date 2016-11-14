@@ -277,7 +277,10 @@ const ReportModuleTable = React.createClass({
   },
   getRowCompareFn () {
     const {sort, query: {metrics, dimensions}} = this.props
-    const sortCol = find(sort, ([name]) => name !== '_fields_')
+    const sortCol = find(sort, ([name]) => (
+      includes(dimensions, name) ||
+      includes(metrics, name)
+    ))
 
     if (sortCol) {
       return (a, b) => comparison(sortCol[0], sortCol[1], a, b)
