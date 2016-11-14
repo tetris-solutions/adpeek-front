@@ -111,7 +111,7 @@ const EditFilters = React.createClass({
   contextTypes: {
     messages: PropTypes.object.isRequired,
     draft: PropTypes.object.isRequired,
-    update: PropTypes.func.isRequired,
+    change: PropTypes.func.isRequired,
     selectable: PropTypes.object.isRequired
   },
   parseFilters () {
@@ -189,7 +189,7 @@ const EditFilters = React.createClass({
 
     const oldFilters = this.context.draft.module.filters
 
-    this.context.update({filters: omit(oldFilters, filterName)})
+    this.context.change({filters: omit(oldFilters, filterName)})
   },
   componentWillMount () {
     const updateOnChange = (index, name, {target: {value, type}}) => {
@@ -206,7 +206,7 @@ const EditFilters = React.createClass({
       this.setState({filters})
 
       if (newFilterConfig.attribute === 'limit') {
-        return this.context.update({limit: value})
+        return this.context.change({limit: value})
       }
 
       const parentFilters = assign({}, oldFilters)
@@ -220,7 +220,7 @@ const EditFilters = React.createClass({
         parentFilters[newFilterConfig.attribute] = [newFilterConfig.operator, newFilterConfig.value, newFilterConfig.secondary]
       }
 
-      this.context.update({filters: parentFilters})
+      this.context.change({filters: parentFilters})
     }
 
     this.onChange = curry(updateOnChange)

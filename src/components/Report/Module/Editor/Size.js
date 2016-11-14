@@ -41,12 +41,12 @@ const EditSize = React.createClass({
   mixins: [styled(style)],
   contextTypes: {
     draft: PropTypes.object.isRequired,
-    update: PropTypes.func.isRequired
+    change: PropTypes.func.isRequired
   },
   onSelect (cols, rows) {
     return e => {
       e.preventDefault()
-      this.context.update({cols, rows})
+      this.context.change({cols, rows})
     }
   },
   render () {

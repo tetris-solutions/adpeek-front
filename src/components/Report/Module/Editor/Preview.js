@@ -11,7 +11,7 @@ const ReportChart = expandVertically(_ReportChart)
 
 const {PropTypes} = React
 
-const EditContent = (props, {entities, onChangeProperty, update, draft: {module, entity}}) => (
+const EditContent = (props, {entities, onChangeProperty, change, draft: {module, entity}}) => (
   <section style={{height: '80vh', overflowY: 'auto'}}>
     <div className='mdl-grid'>
       <div className='mdl-cell mdl-cell--4-col'>
@@ -36,11 +36,11 @@ const EditContent = (props, {entities, onChangeProperty, update, draft: {module,
         metrics={module.metrics}
         sort={module.sort}
         attributes={module.attributes}
-        save={update}
+        save={change}
         remove={module}/>
     </div>
 
-    <ReportChart change={update}/>
+    <ReportChart change={change}/>
   </section>
 )
 
@@ -48,7 +48,7 @@ EditContent.displayName = 'Edit-Content'
 EditContent.contextTypes = {
   onChangeProperty: PropTypes.func.isRequired,
   entities: PropTypes.array.isRequired,
-  update: PropTypes.func.isRequired,
+  change: PropTypes.func.isRequired,
   draft: PropTypes.object.isRequired
 }
 

@@ -67,15 +67,15 @@ const SelectedFields = React.createClass({
     draft: PropTypes.object.isRequired,
     attributes: PropTypes.object.isRequired,
     removeAttribute: PropTypes.func.isRequired,
-    update: PropTypes.func.isRequired
+    change: PropTypes.func.isRequired
   },
   onReorder (event, movedItem, previousIndex, nextIndex, fieldSort) {
-    const {draft: {module}, update} = this.context
+    const {draft: {module}, change} = this.context
     const sort = fromPairs(module.sort)
 
     sort._fields_ = map(fieldSort, 'id')
 
-    update({sort: toPairs(sort)})
+    change({sort: toPairs(sort)})
   },
   render () {
     const {attributes, removeAttribute, draft: {module: {dimensions, metrics, sort}}} = this.context

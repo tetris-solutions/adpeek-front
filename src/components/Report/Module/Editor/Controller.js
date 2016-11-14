@@ -42,7 +42,7 @@ const ModuleEdit = React.createClass({
     removeEntity: PropTypes.func,
     addAttribute: PropTypes.func,
     removeAttribute: PropTypes.func,
-    update: PropTypes.func,
+    change: PropTypes.func,
     onChangeProperty: PropTypes.func
   },
   getChildContext () {
@@ -51,7 +51,7 @@ const ModuleEdit = React.createClass({
         module: this.getDraftModule(),
         entity: this.getDraftEntity()
       },
-      update: this.update,
+      change: this.change,
       onChangeProperty: this.onChangeProperty,
       addAttribute: this.addAttribute,
       removeAttribute: this.removeAttribute,
@@ -72,7 +72,7 @@ const ModuleEdit = React.createClass({
     this.persist = debounce(this.flushUpdateQueue, 500)
   },
   flushUpdateQueue () {
-    this.update(assign({}, ...this.updateQueue), true)
+    this.change(assign({}, ...this.updateQueue), true)
     this.updateQueue = []
   },
   enqueueUpdate (update) {
@@ -111,7 +111,7 @@ const ModuleEdit = React.createClass({
     const ids = isArray(id) ? id : [id]
     const module = this.getDraftModule()
 
-    this.update({
+    this.change({
       filters: assign({}, module.filters, {
         id: module.filters.id.filter(currentId => !includes(ids, currentId))
       })
@@ -123,7 +123,7 @@ const ModuleEdit = React.createClass({
     const filters = assign({}, module.filters, {
       id: uniq(module.filters.id.concat(ids))
     })
-    this.update({filters})
+    this.change({filters})
   },
   removeAttribute (_attribute_, forceRedraw = false) {
     const {attributes} = this.context
@@ -172,7 +172,7 @@ const ModuleEdit = React.createClass({
     changes.dimensions = uniq(changes.dimensions)
     changes.metrics = uniq(changes.metrics)
 
-    this.update(changes, forceRedraw)
+    this.change(changes, forceRedraw)
   },
   addAttribute (_attribute_) {
     const {attributes} = this.context
@@ -215,9 +215,9 @@ const ModuleEdit = React.createClass({
     changes.dimensions = uniq(changes.dimensions)
     changes.metrics = uniq(changes.metrics)
 
-    this.update(changes)
+    this.change(changes)
   },
-  update (changes, forceRedraw = false) {
+  change (changes, forceRedraw = false) {
     const newModule = assign({}, this.state.newModule, changes)
     const redrawIfNecessary = () => {
       if (forceRedraw || changes.sort) {
