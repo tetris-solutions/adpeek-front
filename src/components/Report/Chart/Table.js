@@ -4,7 +4,6 @@ import cx from 'classnames'
 import find from 'lodash/find'
 import isString from 'lodash/isString'
 import compact from 'lodash/compact'
-import flow from 'lodash/flow'
 import forEach from 'lodash/forEach'
 import fromPairs from 'lodash/fromPairs'
 import indexOf from 'lodash/indexOf'
@@ -22,6 +21,8 @@ import reportParamsType from '../../../propTypes/report-params'
 import Ad from './TableAd'
 import {styled} from '../../mixins/styled'
 import isDate from 'lodash/isDate'
+import curry from 'lodash/curry'
+import includes from 'lodash/includes'
 
 const style = csjs`
 .table {
@@ -65,33 +66,21 @@ function normalizeForSorting (val) {
   ) ? val : -Infinity
 }
 
-function sortWith ([field, order]) {
-  if (field === '_fields_') {
-    return ls => ls
+const comparison = curry((field, order, a, b) => {
+  const aValue = a[field] instanceof Sortable ? a[field].sortKey : normalizeForSorting(a[field])
+  const bValue = b[field] instanceof Sortable ? b[field].sortKey : normalizeForSorting(b[field])
+
+  if (aValue === bValue) return 0
+
+  if (order === 'asc') {
+    return aValue < bValue ? -1 : 1
+  } else {
+    return aValue < bValue ? 1 : -1
   }
-
-  function sortFn (ls) {
-    function compare (a, b) {
-      const aValue = a[field] instanceof Sortable ? a[field].sortKey : normalizeForSorting(a[field])
-      const bValue = b[field] instanceof Sortable ? b[field].sortKey : normalizeForSorting(b[field])
-
-      if (aValue === bValue) return 0
-
-      if (order === 'asc') {
-        return aValue < bValue ? -1 : 1
-      } else {
-        return aValue < bValue ? 1 : -1
-      }
-    }
-
-    return stableSort(ls, compare)
-  }
-
-  return sortFn
-}
+})
 
 function sortHeaders (headers, fieldSort) {
-  function normalizeHeader (field) {
+  function includeIndex (field) {
     const foundIndex = indexOf(fieldSort, field)
     return {
       field,
@@ -99,7 +88,9 @@ function sortHeaders (headers, fieldSort) {
     }
   }
 
-  return map(sortBy(map(headers, normalizeHeader), 'index'), 'field')
+  const indexedFields = map(headers, includeIndex)
+
+  return map(sortBy(indexedFields, 'index'), 'field')
 }
 
 const THeader = ({columns, attributes, sortPairs, toggle}) => (
@@ -129,8 +120,11 @@ function Cell ({attribute: {is_metric, type}, value}, {locales, moment}) {
     const m = moment(value)
 
     value = m.format(value._format_)
-    tdProps['data-raw'] = JSON.stringify(m.format('YYYY-MM-DD'))
-    tdProps['data-date'] = ''
+
+    if (value._simple_) {
+      tdProps['data-raw'] = JSON.stringify(m.format('YYYY-MM-DD'))
+      tdProps['data-date'] = ''
+    }
   }
 
   return (
@@ -282,6 +276,18 @@ const ReportModuleTable = React.createClass({
 
     return new Sortable(item.name || id, sortKey)
   },
+  getRowCompareFn () {
+    const {sort, query: {metrics, dimensions}} = this.props
+    const sortCol = find(sort, ([name]) => name !== '_fields_')
+
+    if (sortCol) {
+      return comparison(sortCol[0], sortCol[1])
+    } else if (includes(dimensions, 'date')) {
+      return comparison('date', 'asc')
+    }
+
+    return comparison(metrics[0], 'desc')
+  },
   render () {
     const {
       sort,
@@ -304,7 +310,7 @@ const ReportModuleTable = React.createClass({
     let colHeaders = null
 
     if (result.length) {
-      const customSort = flow(map(sort, sortWith))
+      const customSort = this.getRowCompareFn()
       const normalizeRow = row => {
         const parsedRow = {}
 
@@ -317,7 +323,9 @@ const ReportModuleTable = React.createClass({
         return parsedRow.id === null ? null : parsedRow
       }
       const normalizedResult = map(result, normalizeRow)
-      const rows = crop(customSort(compact(normalizedResult)), limit)
+      const validRows = compact(normalizedResult)
+      const sorted = stableSort(validRows, customSort)
+      const rows = crop(sorted, limit)
 
       colHeaders = (
         <THeader

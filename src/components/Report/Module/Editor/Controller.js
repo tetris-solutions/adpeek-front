@@ -6,6 +6,7 @@ import includes from 'lodash/includes'
 import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
 import map from 'lodash/map'
+import findIndex from 'lodash/findIndex'
 import pick from 'lodash/pick'
 import uniq from 'lodash/uniq'
 import React from 'react'
@@ -132,14 +133,18 @@ const ModuleEdit = React.createClass({
 
     const changes = {
       dimensions: module.dimensions.concat(),
-      metrics: module.metrics.concat()
+      metrics: module.metrics.concat(),
+      sort: module.sort
     }
 
     function remove (attribute, ls) {
       const ids = [attribute.id]
 
-      if (attribute.required_by) {
-        ids.splice(ids.length, 0, ...attribute.required_by)
+      const sortingIndex = findIndex(changes.sort, ([field]) => field === attribute.id)
+
+      if (sortingIndex > -1) {
+        changes.sort = changes.sort.concat()
+        changes.sort.splice(sortingIndex, 1)
       }
 
       return ls.filter(id => !includes(ids, id))

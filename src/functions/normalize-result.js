@@ -50,6 +50,7 @@ export function normalizeResult (attributes, result) {
       case 'date':
         date = moment(value).toDate()
         date._format_ = 'DD/MM/YYYY'
+        date._simple_ = true
         break
       case 'hourly_stats_aggregated_by_advertiser_time_zone':
       case 'hourly_stats_aggregated_by_audience_time_zone':
