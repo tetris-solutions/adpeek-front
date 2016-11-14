@@ -82,9 +82,9 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
   return (
     <Route path='/' component={root(tree, createRoot(DocTitle, ErrorScreen))} onEnter={protectRoute}>
       <Route path='share'>
-        <Route
-          path='report/:reportShare'
-          component={ReportShare}/>
+        <Route path='report/:reportShare'
+               breadcrumb={[CompanyBreadcrumb, WorkspaceBreadcrumb, FolderBreadcrumb, ReportBread]}
+               component={ReportShare}/>
       </Route>
 
       <Route onEnter={preload(companies)} component={App}>

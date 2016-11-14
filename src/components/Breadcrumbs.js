@@ -1,8 +1,8 @@
 import csjs from 'csjs'
-import filter from 'lodash/filter'
-import has from 'lodash/fp/has'
 import map from 'lodash/map'
 import React from 'react'
+import compact from 'lodash/compact'
+import flatten from 'lodash/flatten'
 
 import {styledFnComponent} from './higher-order/styled-fn-component'
 
@@ -26,17 +26,16 @@ const style = csjs`
 }`
 
 const {PropTypes} = React
-const hasBreadcrumbs = has('breadcrumb')
 
 function Breadcrumbs (props, {params, routes}) {
+  const breadcrumbs = flatten(compact(map(routes, 'breadcrumb')))
+
   return (
     <span>
-      {map(filter(routes, hasBreadcrumbs),
-        ({breadcrumb: Breadcrumb}, index) => (
-          <span key={index} className={style.breadcrumb}>
-            <Breadcrumb params={params}/>
-          </span>
-        ))}
+      {map(breadcrumbs, (Breadcrumb, index) => (
+        <span key={index} className={style.breadcrumb}>
+          <Breadcrumb params={params}/>
+        </span>))}
       {props.title ? (
         <span className={style.breadcrumb}>
           {props.title}

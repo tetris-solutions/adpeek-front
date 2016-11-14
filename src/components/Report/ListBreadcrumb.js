@@ -7,7 +7,7 @@ import join from 'lodash/join'
 
 const {PropTypes} = React
 
-export function ReportsBreadcrumb ({params: {company, workspace, folder}}) {
+function ReportsBreadcrumb ({params: {company, workspace, folder}}) {
   const scope = join(compact([
     `company/${company}`,
     workspace && `workspace/${workspace}`,
