@@ -44,7 +44,7 @@ const style = csjs`
 
 export const MenuItem = props => {
   const {children, tag: Tag, icon} = props
-  let ico = icon ? <i className={`material-icons ${style.ico}`}>{icon}</i> : null
+  const ico = icon ? <i className={`material-icons ${style.ico}`}>{icon}</i> : null
 
   return (
     <li className={`mdl-menu__item ${style.item}`}>

@@ -224,7 +224,7 @@ module.exports = {
     dashCampaignLabel: 'Campanha Dash',
     errorScreenTitle: 'Ops... we got an error!',
     errorScreenBody: `
-      It was not possible to display the page you we\'re looking for.<br/>
+      It was not possible to display the page you we're looking for.<br/>
       It could be anything really, you can contact support or try again later.`,
     errorScreenAuthTitle: 'Access Forbidden',
     errorScreenAuthBody: 'You are trying to access an area your user has no access to.<br/> You may want to check the URL or contact your administrator.',

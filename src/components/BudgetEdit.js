@@ -134,8 +134,8 @@ export const BudgetEdit = React.createClass({
             <Tab id='budget-campaigns' title={budgetCampaignsTitle}>
               <br/>
               {!size(campaigns) ? (
-                <Message html>budgetWithoutCampaigns</Message>
-              ) : (
+                <Message html>budgetWithoutCampaigns</Message>)
+                : (
                 <div className='mdl-list'>
                   {map(campaigns, campaign => (
                     <BudgetCampaign
@@ -148,13 +148,9 @@ export const BudgetEdit = React.createClass({
             </Tab>
             <Tab id='folder-campaigns' title={folderCampaignsTitle}>
               <br/>
-              {!showFolderCampaigns ? (
-                <Message html>maxCampaignsPerBudgetReached</Message>
-              ) : (
-                <BudgetEditFolderCampaigns
-                  campaigns={folderCampaigns}
-                  add={includeCampaign}/>
-              )}
+              {!showFolderCampaigns
+                ? <Message html>maxCampaignsPerBudgetReached</Message>
+                : <BudgetEditFolderCampaigns campaigns={folderCampaigns} add={includeCampaign}/>}
             </Tab>
           </Tabs>
         </Content>

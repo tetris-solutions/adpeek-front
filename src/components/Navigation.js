@@ -93,11 +93,9 @@ Name.propTypes = Buttons.propTypes = {
 
 const Wrapper = ({icon, img, children}) => (
   <div className={`${style.wrapper}`}>
-    {img ? (
-      <img className={`${style.img}`} src={img}/>
-    ) : (
-      <i className={`material-icons ${style.icon}`}>{icon}</i>
-    )}
+    {img
+      ? <img className={`${style.img}`} src={img}/>
+      : <i className={`material-icons ${style.icon}`}>{icon}</i>}
     {children}
   </div>
 )

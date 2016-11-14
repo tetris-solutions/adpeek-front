@@ -29,7 +29,9 @@ function BudgetEmptySelection ({
       </Content>
 
       <Footer multipleButtons={available < 1}>
-        {available >= 1 ? <Message>createBudget</Message> : (
+        {available >= 1
+          ? <Message>createBudget</Message>
+          : (
           <button type='button' className='mdl-button' disabled>
             <Message>noBudgetRemaining</Message>
           </button>)}
