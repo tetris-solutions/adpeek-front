@@ -21,7 +21,6 @@ import reportParamsType from '../../../propTypes/report-params'
 import Ad from './TableAd'
 import {styled} from '../../mixins/styled'
 import isDate from 'lodash/isDate'
-import curry from 'lodash/curry'
 import includes from 'lodash/includes'
 
 const style = csjs`
@@ -66,7 +65,7 @@ function normalizeForSorting (val) {
   ) ? val : -Infinity
 }
 
-const comparison = curry((field, order, a, b) => {
+function comparison (field, order, a, b) {
   const aValue = a[field] instanceof Sortable ? a[field].sortKey : normalizeForSorting(a[field])
   const bValue = b[field] instanceof Sortable ? b[field].sortKey : normalizeForSorting(b[field])
 
@@ -77,7 +76,7 @@ const comparison = curry((field, order, a, b) => {
   } else {
     return aValue < bValue ? 1 : -1
   }
-})
+}
 
 function sortHeaders (headers, fieldSort) {
   function includeIndex (field) {
@@ -281,12 +280,12 @@ const ReportModuleTable = React.createClass({
     const sortCol = find(sort, ([name]) => name !== '_fields_')
 
     if (sortCol) {
-      return comparison(sortCol[0], sortCol[1])
+      return (a, b) => comparison(sortCol[0], sortCol[1], a, b)
     } else if (includes(dimensions, 'date')) {
-      return comparison('date', 'asc')
+      return (a, b) => comparison('date', 'asc', a, b)
     }
 
-    return comparison(metrics[0], 'desc')
+    return (a, b) => comparison(metrics[0], 'desc', a, b)
   },
   render () {
     const {
