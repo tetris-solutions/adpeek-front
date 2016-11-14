@@ -2,13 +2,16 @@ import toArray from 'lodash/toArray'
 import includes from 'lodash/includes'
 import trim from 'lodash/trim'
 import startsWith from 'lodash/startsWith'
+import isNumber from 'lodash/isNumber'
+import assign from 'lodash/assign'
 
 /**
  * get cell text content
  * @param {HTMLTableCellElement} td table cell
+ * @param {String} type kind of export format
  * @return {Object} the cell content
  */
-function serializeTableCell (td) {
+function serializeTableCell (td, type) {
   let tableCell = td
 
   const hasIcons = tableCell
@@ -22,48 +25,64 @@ function serializeTableCell (td) {
       icons[i].parentElement.removeChild(icons[i])
     }
   }
+  const hasNonNumericClass = includes(tableCell.className, 'non-numeric')
 
-  const content = {
-    align: includes(tableCell.className, 'non-numeric') ? 'left' : 'right',
-    text: trim(tableCell.innerText)
+  const cell = {
+    align: hasNonNumericClass ? 'left' : 'right',
+    content: trim(tableCell.innerText)
   }
+
+  if (type === 'xls') {
+    const value = tableCell.dataset.raw
+      ? JSON.parse(tableCell.dataset.raw)
+      : trim(tableCell.innerText)
+
+    assign(cell, {
+      content: value,
+      date: tableCell.dataset.date !== undefined,
+      percentage: isNumber(value) && includes(tableCell.innerText, '%'),
+      currency: isNumber(value) && includes(tableCell.innerText, '$')
+    })
+  }
+
   const img = tableCell.querySelector('img')
-  const title = tableCell.querySelector('strong')
+  const cellStrongElement = tableCell.querySelector('strong')
   const anchor = tableCell.querySelector('a')
 
   if (img) {
-    content.img = img.src
+    cell.img = img.src
   }
 
-  if (title) {
-    content.title = trim(title.innerText)
-    content.text = startsWith(content.text, content.title)
-      ? trim(content.text.substr(content.title.length))
-      : content.text
+  if (cellStrongElement) {
+    cell.title = trim(tableCell.innerText)
+    cell.content = startsWith(cell.content, cell.title)
+      ? trim(cell.value.substr(cell.title.length))
+      : cell.content
   }
 
   if (anchor) {
-    content.link = anchor.href
+    cell.link = anchor.href
   }
 
-  return content
+  return cell
 }
 
 /**
  * reads array of strings from <tr>
  * @param {HTMLTableRowElement} tr table row
+ * @param {String} type kind of export format
  * @return {Array.<String>} array of cell string
  */
-function serializeTr (tr) {
-  return toArray(tr.cells).map(serializeTableCell)
+function serializeTr (tr, type) {
+  return toArray(tr.cells).map(el => serializeTableCell(el, type))
 }
 /**
  * serializes modules
  * @param {Array} modules the modules to be exported
- * @param {Boolean} [forceTableExport] whether modules ought to be exported as table regardless of type
+ * @param {String} type kind of export format
  * @return {*|Promise|Promise.<Array>} a promise that resolves to the array of serialized modules
  */
-export function serializeReportModules (modules, forceTableExport = false) {
+export function serializeReportModules (modules, type) {
   const {Highcharts} = window
   const originalDownloadMethod = Highcharts.downloadURL
   const exportedModules = []
@@ -74,19 +93,16 @@ export function serializeReportModules (modules, forceTableExport = false) {
 
   const exportChart = ({id, name, el}) =>
     new Promise(function resolveSerializedModule (resolve) {
-      const highChart = el.querySelector('div[data-highcharts-chart]')
+      const isTable = el.querySelector('table')
 
       function exportHC () {
+        const highChart = el.querySelector('div[data-highcharts-chart]')
         // hack highcharts download method
         Highcharts.downloadURL = img => resolve({name, img})
         highChart.HCharts.exportChartLocal()
       }
 
       function exportTable () {
-        /**
-         *
-         * @type {HTMLTableElement}
-         */
         const table = el.querySelector('table')
         const module = {
           name,
@@ -95,7 +111,7 @@ export function serializeReportModules (modules, forceTableExport = false) {
         }
 
         if (table.tHead.rows.length > 1) {
-          module.headers = serializeTr(table.tHead.rows[1])
+          module.headers = serializeTr(table.tHead.rows[1], type)
 
           /**
            *
@@ -104,7 +120,7 @@ export function serializeReportModules (modules, forceTableExport = false) {
           const tbody = table.tBodies[0]
 
           for (let i = 0; i < tbody.rows.length; i++) {
-            module.rows.push(serializeTr(tbody.rows[i]))
+            module.rows.push(serializeTr(tbody.rows[i], type))
           }
         }
 
@@ -117,9 +133,9 @@ export function serializeReportModules (modules, forceTableExport = false) {
           .then(exportTable)
       }
 
-      if (!highChart) {
+      if (isTable) {
         exportTable()
-      } else if (forceTableExport) {
+      } else if (type === 'xls' || el.dataset.moduleType === 'total') {
         renderAsTableThenExport()
       } else {
         exportHC()

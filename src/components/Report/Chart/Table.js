@@ -118,17 +118,24 @@ THeader.propTypes = {
 }
 
 function Cell ({attribute: {is_metric, type}, value}, {locales, moment}) {
+  const tdProps = {}
+
   if (isNumber(value)) {
+    tdProps['data-raw'] = JSON.stringify(value)
     value = prettyNumber(value, type, locales)
   }
 
   if (isDate(value)) {
-    value = moment(value).format(value._format_)
+    const m = moment(value)
+
+    value = m.format(value._format_)
+    tdProps['data-raw'] = JSON.stringify(m.format('YYYY-MM-DD'))
+    tdProps['data-date'] = ''
   }
 
   return (
-    <td className={is_metric ? '' : 'mdl-data-table__cell--non-numeric'}>
-      {value}
+    <td className={is_metric ? '' : 'mdl-data-table__cell--non-numeric'} {...tdProps}>
+      {isString(value) ? value : '---'}
     </td>
   )
 }

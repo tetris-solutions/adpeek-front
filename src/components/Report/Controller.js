@@ -122,7 +122,7 @@ const ReportController = React.createClass({
     const {grid} = this.refs
 
     function getModuleElement ({id, name}) {
-      const el = grid.querySelector(`div[data-report-module="${id}"]`)
+      const el = grid.querySelector(`div[data-module-id="${id}"]`)
 
       return {id, el, name}
     }
@@ -131,7 +131,7 @@ const ReportController = React.createClass({
 
     this.setState({isCreatingReport: true})
 
-    serializeReportModules(modules, type === 'xls')
+    serializeReportModules(modules, type)
       .then(modules => dispatch(exportReportAction, params, type, assign({
         id: report.id,
         name: report.name,
@@ -169,7 +169,7 @@ const ReportController = React.createClass({
         fullReportUrl={fullReportUrl}>
 
         <div className='mdl-grid' ref='grid'>{map(sortBy(modules, 'index'), (module, index) =>
-          <div data-report-module={module.id} key={module.id} className={`mdl-cell mdl-cell--${module.cols}-col`}>
+          <div data-module-id={module.id} data-module-type={module.type} key={module.id} className={`mdl-cell mdl-cell--${module.cols}-col`}>
             <Module
               module={module}
               editable={editMode}
