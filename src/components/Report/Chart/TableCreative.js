@@ -1,7 +1,7 @@
 import csjs from 'csjs'
 import find from 'lodash/find'
 import React from 'react'
-
+import get from 'lodash/get'
 import reportParamsType from '../../../propTypes/report-params'
 import {loadCreativeAction} from '../../../actions/load-creative'
 import {contextualize} from '../../higher-order/contextualize'
@@ -40,7 +40,7 @@ const style = csjs`
 function Creative ({thumbnail, body}) {
   return (
     <div className={`${style.post}`}>
-      <img src={thumbnail} />
+      <img src={thumbnail}/>
       <p>{body}</p>
     </div>
   )
@@ -77,7 +77,7 @@ const AdCreative = React.createClass({
 
     dispatch(loadCreativeAction,
       params.company,
-      reportParams.tetris_account,
+      get(reportParams, ['accounts', 0, 'tetris_account']),
       creative_id)
   },
   getCreative () {
