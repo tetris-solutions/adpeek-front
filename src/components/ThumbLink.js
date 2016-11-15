@@ -44,6 +44,7 @@ const style = csjs`
   overflow: hidden;
   left: .7em;
   right: .5em;
+  text-overflow: ellipsis;
 }
 .title extends .bottom {
   font-size: large;
