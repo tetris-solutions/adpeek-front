@@ -10,7 +10,7 @@ export const Switch = React.createClass({
   propTypes: {
     name: PropTypes.string,
     onChange: PropTypes.func,
-    label: PropTypes.string,
+    label: PropTypes.node,
     checked: PropTypes.bool
   },
   getInitialState () {
