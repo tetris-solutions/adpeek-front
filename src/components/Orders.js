@@ -109,9 +109,12 @@ export const Orders = React.createClass({
     const searchValue = cleanStr(this.state.searchValue)
     const {location, params} = this.context
     const {orders} = this.props
-    const matchingOrders = searchValue
-      ? filter(orders, ({name}) => includes(cleanStr(name), searchValue))
-      : orders
+    const matchesSearchTerm = ({name, folder_name, workspace_name}) => (
+      includes(cleanStr(name), searchValue) ||
+      includes(cleanStr(folder_name), searchValue) ||
+      includes(cleanStr(workspace_name), searchValue)
+    )
+    const matchingOrders = searchValue ? filter(orders, matchesSearchTerm) : orders
 
     return (
       <Fence canEditOrder>{({canEditOrder}) =>
