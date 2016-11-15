@@ -9,80 +9,12 @@ import React from 'react'
 import {Link} from 'react-router'
 import Fence from './Fence'
 import SearchBox from './HeaderSearchBox'
-import {Container, Cap, Title, ThumbLink} from './ThumbLink'
+import {Container} from './ThumbLink'
 import SubHeader, {SubHeaderButton} from './SubHeader'
 import Page from './Page'
-import {prettyNumber} from '../functions/pretty-number'
-import csjs from 'csjs'
-import {styledFnComponent} from './higher-order/styled-fn-component'
-
-const style = csjs`
-.strong {
-  display: inline;
-  white-space: nowrap;
-}
-.info {
-  font-size: smaller;
-  color: grey;
-  padding: 1em;
-  padding-right: 0;
-}
-.info > i {
-  transform: translateY(.3em);
-  margin-right: .3em;
-}`
-
+import Order from './OrderThumb'
 const {PropTypes} = React
 const cleanStr = str => trim(deburr(lowerCase(str)))
-const dFormat = 'DD/MMM'
-
-const Order_ = ({amount, start, end, company, workspace, folder, id, name, folder_name, workspace_name}, {moment, locales}) => (
-  <ThumbLink to={`/company/${company}/workspace/${workspace}/folder/${folder}/order/${id}`} title={name}>
-    <Cap>
-      <strong className={`${style.strong}`}>
-        {name}
-      </strong>
-      <br/>
-
-      <small>
-        {moment(start).format(dFormat)} - {moment(end).format(dFormat)}
-      </small>
-    </Cap>
-
-    <div className={`${style.info}`}>
-      <i className='material-icons'>folder</i>
-      {folder_name}
-      <br/>
-      <i className='material-icons'>domain</i>
-      {workspace_name}
-    </div>
-
-    <Title>
-      {prettyNumber(amount, 'currency', locales)}
-    </Title>
-  </ThumbLink>
-)
-
-Order_.displayName = 'Order'
-Order_.propTypes = {
-  id: PropTypes.string.isRequired,
-  amount: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
-  folder_name: PropTypes.string.isRequired,
-  workspace_name: PropTypes.string.isRequired,
-  start: PropTypes.string.isRequired,
-  end: PropTypes.string.isRequired,
-  workspace: PropTypes.string.isRequired,
-  company: PropTypes.string.isRequired,
-  folder: PropTypes.string.isRequired
-}
-
-Order_.contextTypes = {
-  moment: PropTypes.func.isRequired,
-  locales: PropTypes.string.isRequired
-}
-
-const Order = styledFnComponent(Order_, style)
 
 export const Orders = React.createClass({
   displayName: 'Orders',
