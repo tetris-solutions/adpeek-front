@@ -3,6 +3,7 @@ import pick from 'lodash/pick'
 import trim from 'lodash/trim'
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import isNumber from 'lodash/isNumber'
 import assign from 'lodash/assign'
 import MaskedTextInput from 'react-text-mask'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
@@ -48,17 +49,50 @@ export const Input = React.createClass({
     }
   },
   getInitialState () {
-    const value = this.props.value === undefined
+    return {isFocused: false}
+  },
+  componentWillMount () {
+    let value = this.props.value === undefined
       ? this.props.defaultValue
       : this.props.value
 
-    return {
+    if (this.props.type === 'number') {
+      value = this.fromNumber(value)
+    }
+
+    const state = {
       value,
-      isDirty: notEmptyString(value),
-      isFocused: false
+      isDirty: notEmptyString(value)
+    }
+
+    state.error = this.getError(assign({}, this.props, state))
+
+    this.setState(state)
+  },
+  componentWillReceiveProps (nextProps) {
+    const {value} = nextProps
+    const oldValue = this.props.value
+
+    if (this.props.type === 'number') {
+      const hasValueChanged = this.toNumber(value) !== this.toNumber(oldValue)
+
+      if (
+        hasValueChanged ||
+        nextProps.min !== this.props.min ||
+        nextProps.max !== this.props.max
+      ) {
+        const state = {value: this.fromNumber(value)}
+        state.error = this.getError(assign({}, nextProps, state))
+        this.setState(state)
+      }
+    } else if (value !== oldValue) {
+      const state = {value}
+      state.error = this.getError(assign({}, nextProps, state))
+      this.setState(state)
     }
   },
   toNumber (value) {
+    if (isNumber(value)) return value
     const {locales} = this.context
 
     const cleanValue = locales === 'pt-BR' ? (
@@ -70,6 +104,11 @@ export const Input = React.createClass({
 
     return Number(cleanValue.replace(/[^0-9-.]/g, '')
       .replace(/\D$/g, ''))
+  },
+  fromNumber (n) {
+    return this.context.locales === 'pt-BR'
+      ? String(n).replace('.', ',')
+      : String(n)
   },
   getNumberError (input) {
     const {messages: {invalidInput, greaterThanMax, lessThanMin}, locales} = this.context
@@ -88,17 +127,21 @@ export const Input = React.createClass({
 
     return null
   },
-  onChange (e) {
-    const {onChange, type} = this.props
-    const input = e.target
-
+  getError (input) {
     let error = null
 
     if (input.required && !trim(input.value)) {
       error = this.context.messages.requiredInput
-    } else if (type === 'number') {
+    } else if (this.props.type === 'number') {
       error = this.getNumberError(input)
     }
+
+    return error
+  },
+  onChange (e) {
+    const {onChange, type} = this.props
+    const input = e.target
+    const error = this.getError(input)
 
     this.setState({
       error,
@@ -125,11 +168,6 @@ export const Input = React.createClass({
   },
   isMask () {
     return this.props.type === 'number'
-  },
-  componentWillReceiveProps ({value, min, max}) {
-    if (value !== this.props.value) {
-      this.setState({value})
-    }
   },
   render () {
     const {value, isDirty, isFocused} = this.state
