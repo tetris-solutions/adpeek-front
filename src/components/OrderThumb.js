@@ -13,7 +13,9 @@ const style = csjs`
   font-size: smaller;
   color: grey;
   padding: 1em;
-  padding-right: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .info > i {
   transform: translateY(.3em);
