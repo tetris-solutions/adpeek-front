@@ -266,7 +266,7 @@ const ModuleEdit = React.createClass({
     return (
       <Editor
         isInvalid={isInvalidModule}
-        isLoading={this.context.module.isLoading}
+        isLoading={Boolean(this.context.module.isLoading)}
         cancel={this.cancel}
         redraw={this.redraw}
         save={this.save}/>

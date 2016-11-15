@@ -7,6 +7,8 @@ import isEmpty from 'lodash/isEmpty'
 import lowerCase from 'lodash/toLower'
 import sortBy from 'lodash/sortBy'
 import trim from 'lodash/trim'
+import head from 'lodash/head'
+import split from 'lodash/split'
 import React from 'react'
 import AttributeList from './AttributeList'
 import EntityTree from './EntityTree'
@@ -49,6 +51,17 @@ const Lists = React.createClass({
     const input = this.refs.wrapper.querySelector('input[name="searchValue"]')
     this.setState({searchValue: input.value})
   },
+  attributeLevels () {
+    const {messages} = this.context
+
+    return [
+      [platform => messages[platform + 'Level'], ({id}) => (
+        includes(id, ':')
+          ? head(split(id, ':'))
+          : 'shared'
+      )]
+    ]
+  },
   render () {
     const {searchValue} = this.state
     const {messages, draft, addAttribute, removeAttribute} = this.context
@@ -57,6 +70,7 @@ const Lists = React.createClass({
     const items = sorted(matching(draft.entity.list, searchValue))
     const dimensions = filter(selectable, 'is_dimension')
     const metrics = filter(selectable, 'is_metric')
+    const attrLevels = this.attributeLevels()
 
     const selectedMetrics = draft.module.metrics
     const selectedDimensions = draft.module.dimensions
@@ -96,6 +110,7 @@ const Lists = React.createClass({
               add={addAttribute}
               remove={removeAttribute}
               attributes={metrics}
+              levels={attrLevels}
               selectedAttributes={selectedMetrics}/>
           </Tab>
 
@@ -106,6 +121,7 @@ const Lists = React.createClass({
                 add={addAttribute}
                 remove={removeAttribute}
                 attributes={dimensions}
+                levels={attrLevels}
                 selectedAttributes={selectedDimensions}/>
             </Tab>)}
         </Tabs>

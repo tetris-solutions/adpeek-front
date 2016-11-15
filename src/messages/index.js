@@ -262,7 +262,10 @@ module.exports = {
     shareReportTitle: 'Share Report',
     shareReportLabel: 'Shareable URL',
     copyToClipboard: 'Copy',
-    copySuccess: 'Copied to clipboard!'
+    copySuccess: 'Copied to clipboard!',
+    adwordsLevel: 'Google Adwords',
+    facebookLevel: 'Facebook',
+    sharedLevel: 'Shared'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -527,6 +530,9 @@ module.exports = {
     shareReportTitle: 'Compartilhar Relatório',
     shareReportLabel: 'URL compartilhável',
     copyToClipboard: 'Copiar',
-    copySuccess: 'Copiado para área de transferência!'
+    copySuccess: 'Copiado para área de transferência!',
+    adwordsLevel: 'Google Adwords',
+    facebookLevel: 'Facebook',
+    sharedLevel: 'Compartilhado'
   }
 }
