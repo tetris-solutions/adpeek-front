@@ -8,7 +8,7 @@ import lowerCase from 'lodash/toLower'
 import sortBy from 'lodash/sortBy'
 import trim from 'lodash/trim'
 import React from 'react'
-import AttributesSelect from './AttributesSelect'
+import AttributeList from './AttributeList'
 import EntityTree from './EntityTree'
 import Input from '../../../Input'
 import {Tabs, Tab} from '../../../Tabs'
@@ -92,7 +92,7 @@ const Lists = React.createClass({
 
           <Tab id='metric' title={metricTitle}>
             <br/>
-            <AttributesSelect
+            <AttributeList
               add={addAttribute}
               remove={removeAttribute}
               attributes={metrics}
@@ -102,7 +102,7 @@ const Lists = React.createClass({
           {draft.module.type !== 'total' && (
             <Tab id='dimension' title={dimensionTitle}>
               <br/>
-              <AttributesSelect
+              <AttributeList
                 add={addAttribute}
                 remove={removeAttribute}
                 attributes={dimensions}

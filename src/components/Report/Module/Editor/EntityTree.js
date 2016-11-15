@@ -12,7 +12,7 @@ import React from 'react'
 import get from 'lodash/get'
 import filter from 'lodash/filter'
 import reportEntityType from '../../../../propTypes/report-entity'
-import AttributesSelect from './AttributesSelect'
+import AttributeList from './AttributeList'
 import {styled} from '../../../mixins/styled'
 import compact from 'lodash/compact'
 import not from 'lodash/negate'
@@ -141,7 +141,7 @@ const EntityTree = React.createClass({
       inactiveCampaignCount += size(map(filter(items, not(isCampaignActive)), 'id'))
 
       innerList = (
-        <AttributesSelect
+        <AttributeList
           selectedAttributes={selectedAttributes}
           add={addEntity}
           remove={removeEntity}
@@ -174,7 +174,7 @@ const EntityTree = React.createClass({
             select={addEntity}
             unselect={removeEntity}>
 
-            <AttributesSelect
+            <AttributeList
               selectedAttributes={selectedAttributes}
               add={addEntity}
               remove={removeEntity}
@@ -208,7 +208,7 @@ const EntityTree = React.createClass({
               select={addEntity}
               unselect={removeEntity}>
 
-              <AttributesSelect
+              <AttributeList
                 selectedAttributes={selectedAttributes}
                 add={addEntity}
                 remove={removeEntity}

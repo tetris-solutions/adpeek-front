@@ -1,10 +1,8 @@
 import csjs from 'csjs'
 import cx from 'classnames'
-import includes from 'lodash/includes'
-import map from 'lodash/map'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {styledFnComponent} from '../../../higher-order/styled-fn-component'
+import {styled} from '../../../mixins/styled'
 
 /**
  * finds the root list
@@ -57,11 +55,6 @@ function getIdsBetween (topUl, first, last) {
 }
 
 const style = csjs`
-.list {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
 .item {
   padding-left: 1em;
   border-left: 3px solid #e4e4e4;
@@ -123,8 +116,9 @@ GenericItem.propTypes = {
   selectable: PropTypes.bool
 }
 
-const Attribute = React.createClass({
-  displayName: 'Attribute',
+const AttributeItem = React.createClass({
+  displayName: 'Attribute-Item',
+  mixins: [styled(style)],
   getDefaultProps () {
     return {
       fixed: false
@@ -187,31 +181,4 @@ const Attribute = React.createClass({
   }
 })
 
-const AttributesSelect = ({attributes, selectedAttributes, isIdSelected, remove, add}) => (
-  <div>
-    <ul className={`${style.list}`}>
-      {map(attributes, item => {
-        const isSelected = includes(selectedAttributes, item.id)
-
-        return (
-          <Attribute
-            {...item}
-            selected={isSelected}
-            toggle={isSelected ? remove : add}
-            key={item.id}/>
-        )
-      })}
-    </ul>
-  </div>
-)
-
-AttributesSelect.displayName = 'Attributes-Select'
-AttributesSelect.propTypes = {
-  attributes: PropTypes.array.isRequired,
-  selectedAttributes: PropTypes.array.isRequired,
-  isIdSelected: PropTypes.bool,
-  remove: PropTypes.func.isRequired,
-  add: PropTypes.func.isRequired
-}
-
-export default styledFnComponent(AttributesSelect, style)
+export default AttributeItem
