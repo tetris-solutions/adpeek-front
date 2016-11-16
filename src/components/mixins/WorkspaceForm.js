@@ -2,6 +2,7 @@ import {PropTypes} from 'react'
 import get from 'lodash/get'
 import {pushSuccessMessageAction} from '../../actions/push-success-message-action'
 import startsWith from 'lodash/startsWith'
+import forEach from 'lodash/forEach'
 
 export default {
   contextTypes: {
@@ -50,14 +51,13 @@ export default {
       roles: []
     }
 
-    Object.keys(elements)
-      .forEach(function parseRole (name) {
-        const prefix = 'role_'
+    forEach(elements, ({type, name, checked}) => {
+      const prefix = 'role_'
 
-        if (startsWith(name, prefix) && elements[name].checked) {
-          data.roles.push(name.substr(prefix.length))
-        }
-      })
+      if (type === 'checkbox' && startsWith(name, prefix) && checked) {
+        data.roles.push(name.substr(prefix.length))
+      }
+    })
 
     return data
   }

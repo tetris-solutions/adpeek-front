@@ -18,6 +18,7 @@ import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import SubHeader from './SubHeader'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
+import forEach from 'lodash/forEach'
 
 const style = csjs`
 .table {
@@ -143,17 +144,15 @@ export const OrdersClone = React.createClass({
     const gone = {}
     const {orders} = this.props
 
-    for (const key in form.elements) {
-      const input = form.elements[key]
-      if (input && input.type === 'checkbox' && input.checked) {
-        const order = find(orders, {id: input.name})
+    forEach(form.elements, ({type, checked, name}) => {
+      if (type !== 'checkbox' || !checked) return
+      const order = find(orders, {id: name})
 
-        if (order && !gone[order.id]) {
-          gone[order.id] = true
-          selectedOrders.push(this.getCopyOf(order))
-        }
+      if (order && !gone[order.id]) {
+        gone[order.id] = true
+        selectedOrders.push(this.getCopyOf(order))
       }
-    }
+    })
 
     this.setState({selectedOrders})
   },
