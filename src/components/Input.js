@@ -4,6 +4,7 @@ import trim from 'lodash/trim'
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import isNumber from 'lodash/isNumber'
+import isString from 'lodash/isString'
 import assign from 'lodash/assign'
 import MaskedTextInput from 'react-text-mask'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
@@ -93,6 +94,8 @@ export const Input = React.createClass({
   },
   toNumber (value) {
     if (isNumber(value)) return value
+    if (!isString(value)) return 0
+
     const {locales} = this.context
 
     const cleanValue = locales === 'pt-BR' ? (
@@ -105,10 +108,13 @@ export const Input = React.createClass({
     return Number(cleanValue.replace(/[^0-9-.]/g, '')
       .replace(/\D$/g, ''))
   },
-  fromNumber (n) {
+  fromNumber (val) {
+    if (isString(val)) return val
+    if (!isNumber(val)) return ''
+
     return this.context.locales === 'pt-BR'
-      ? String(n).replace('.', ',')
-      : String(n)
+      ? String(val).replace('.', ',')
+      : String(val)
   },
   getNumberError (input) {
     const {messages: {invalidInput, greaterThanMax, lessThanMin}, locales} = this.context

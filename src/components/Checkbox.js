@@ -59,7 +59,7 @@ export const Checkbox = React.createClass({
   },
   getInitialState () {
     return {
-      checked: this.props.checked
+      checked: Boolean(this.props.checked)
     }
   },
   check () {
