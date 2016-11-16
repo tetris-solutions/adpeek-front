@@ -70,6 +70,10 @@ export const Input = React.createClass({
 
     this.setState(state)
   },
+  componentDidMount () {
+    this.input = this.refs.wrapper.querySelector('input')
+    this.input.inputMaskToNumber = this.toNumber
+  },
   componentWillReceiveProps (nextProps) {
     const {value} = nextProps
     const oldValue = this.props.value
@@ -92,7 +96,7 @@ export const Input = React.createClass({
       this.setState(state)
     }
   },
-  toNumber (value) {
+  toNumber (value = this.state.value) {
     if (isNumber(value)) return value
     if (!isString(value)) return 0
 
@@ -190,7 +194,6 @@ export const Input = React.createClass({
     let Tag = 'input'
 
     const inputProps = assign(pick(this.props, inputFields), {
-      ref: 'input',
       value,
       className: 'mdl-textfield__input',
       onChange: this.onChange,
@@ -211,7 +214,7 @@ export const Input = React.createClass({
     }
 
     return (
-      <div className={wrapperClasses}>
+      <div className={wrapperClasses} ref='wrapper'>
 
         <Tag {...inputProps}/>
 

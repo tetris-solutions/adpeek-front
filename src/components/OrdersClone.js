@@ -61,13 +61,13 @@ export const OrdersClone = React.createClass({
     orders: PropTypes.array
   },
   contextTypes: {
-    params: PropTypes.object,
-    location: PropTypes.object,
-    router: PropTypes.object,
+    locales: PropTypes.string.isRequired,
+    params: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired,
     messages: PropTypes.shape({
       copyOfName: PropTypes.string
-    }),
-    locales: PropTypes.any
+    }).isRequired
   },
   getInitialState () {
     return {
@@ -110,7 +110,7 @@ export const OrdersClone = React.createClass({
           name: form.elements[`${index}.name`].value,
           start: form.elements[`${index}.start`].value,
           end: form.elements[`${index}.end`].value,
-          amount: form.elements[`${index}.amount`].value,
+          amount: form.elements[`${index}.amount`].inputMaskToNumber(),
           auto_budget: form.elements[`${index}.autoBudget`].checked
         }))
 
