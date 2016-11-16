@@ -50,16 +50,18 @@ function hierarchy (attributes, levels) {
     return attributes
   }
 
-  const [getName, getId] = levels[0]
+  const {getName, getId, openByDefault} = levels[0]
   const grouped = groupBy(attributes, getId)
+  const subLevel = levels.slice(1)
 
   forEach(grouped, (ls, id) => {
-    const inner = hierarchy(ls, levels.slice(1))
+    const inner = hierarchy(ls, subLevel)
 
     grouped[id] = {
       id,
       name: getName(id),
       ids: flatten(map(inner, ids)),
+      openByDefault,
       list: inner
     }
   })
@@ -153,6 +155,7 @@ const AttributeList = ({attributes, selectedAttributes, levels, remove, add}) =>
     return (
       <Group
         key={item.id}
+        openByDefault={item.openByDefault}
         selection={selection}
         ids={item.ids}
         name={item.name}

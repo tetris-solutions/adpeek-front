@@ -14,6 +14,7 @@ import AttributeList from './AttributeList'
 import EntityTree from './EntityTree'
 import Input from '../../../Input'
 import {Tabs, Tab} from '../../../Tabs'
+import Entities from './Entities'
 
 const {PropTypes} = React
 const clean = str => trim(lowerCase(deburr(str)))
@@ -54,13 +55,16 @@ const Lists = React.createClass({
   attributeLevels () {
     const {messages} = this.context
 
-    return [
-      [platform => messages[platform + 'Level'], ({id}) => (
-        includes(id, ':')
+    return [{
+      getId ({id}) {
+        return includes(id, ':')
           ? head(split(id, ':'))
           : 'shared'
-      )]
-    ]
+      },
+      getName (platform) {
+        return messages[platform + 'Level']
+      }
+    }]
   },
   render () {
     const {searchValue} = this.state
@@ -101,7 +105,10 @@ const Lists = React.createClass({
         <Tabs onChangeTab={this.onChangeTab}>
           <Tab id='entity' title={entityTitle}>
             <br/>
-            <EntityTree items={items}/>
+
+            {draft.entity.id === 'Campaign'
+              ? <Entities items={items}/>
+              : <EntityTree items={items}/>}
           </Tab>
 
           <Tab id='metric' title={metricTitle}>

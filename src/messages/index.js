@@ -263,7 +263,7 @@ module.exports = {
     shareReportLabel: 'Shareable URL',
     copyToClipboard: 'Copy',
     copySuccess: 'Copied to clipboard!',
-    adwordsLevel: 'Google Adwords',
+    adwordsLevel: 'Adwords',
     facebookLevel: 'Facebook',
     sharedLevel: 'Shared'
   },
@@ -531,8 +531,8 @@ module.exports = {
     shareReportLabel: 'URL compartilhável',
     copyToClipboard: 'Copiar',
     copySuccess: 'Copiado para área de transferência!',
-    adwordsLevel: 'Google Adwords',
+    adwordsLevel: 'Adwords',
     facebookLevel: 'Facebook',
-    sharedLevel: 'Compartilhado'
+    sharedLevel: 'Comum'
   }
 }
