@@ -11,7 +11,7 @@ import head from 'lodash/head'
 import split from 'lodash/split'
 import React from 'react'
 import AttributeList from './AttributeList'
-import EntityTree from './EntityTree'
+// import EntityTree from './EntityTree'
 import Input from '../../../Input'
 import {Tabs, Tab} from '../../../Tabs'
 import Entities from './Entities'
@@ -34,11 +34,11 @@ const sorted = ls => sortBy(ls, 'name')
 
 const Lists = React.createClass({
   displayName: 'Lists',
-  propTypes: {},
   contextTypes: {
-    messages: PropTypes.object,
-    selectable: PropTypes.object,
-    draft: PropTypes.object,
+    report: PropTypes.object.isRequired,
+    messages: PropTypes.object.isRequired,
+    selectable: PropTypes.object.isRequired,
+    draft: PropTypes.object.isRequired,
     addAttribute: PropTypes.func.isRequired,
     removeAttribute: PropTypes.func.isRequired
   },
@@ -53,16 +53,20 @@ const Lists = React.createClass({
     this.setState({searchValue: input.value})
   },
   attributeLevels () {
-    const {messages} = this.context
+    const {messages, report} = this.context
 
-    return [{
-      getId ({id}) {
-        return includes(id, ':')
+    return report.platform ? undefined : [{
+      id: 'platform',
+      openByDefault: true,
+      mount ({id}) {
+        const platform = includes(id, ':')
           ? head(split(id, ':'))
           : 'shared'
-      },
-      getName (platform) {
-        return messages[platform + 'Level']
+
+        return {
+          id: platform,
+          name: messages[platform + 'Level']
+        }
       }
     }]
   },
@@ -105,10 +109,7 @@ const Lists = React.createClass({
         <Tabs onChangeTab={this.onChangeTab}>
           <Tab id='entity' title={entityTitle}>
             <br/>
-
-            {draft.entity.id === 'Campaign'
-              ? <Entities items={items}/>
-              : <EntityTree items={items}/>}
+            <Entities items={items}/>
           </Tab>
 
           <Tab id='metric' title={metricTitle}>

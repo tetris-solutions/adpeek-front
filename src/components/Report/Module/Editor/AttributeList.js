@@ -2,6 +2,7 @@ import csjs from 'csjs'
 import includes from 'lodash/includes'
 import map from 'lodash/map'
 import React from 'react'
+import get from 'lodash/get'
 import size from 'lodash/size'
 import intersection from 'lodash/intersection'
 import isEmpty from 'lodash/isEmpty'
@@ -11,6 +12,7 @@ import forEach from 'lodash/forEach'
 import groupBy from 'lodash/groupBy'
 import flatten from 'lodash/flatten'
 import sortBy from 'lodash/sortBy'
+import assign from 'lodash/assign'
 
 const style = csjs`
 .list {
@@ -45,24 +47,40 @@ const style = csjs`
 const {PropTypes} = React
 const ids = ({ids, id}) => ids || id
 
-function hierarchy (attributes, levels) {
+function extend (attr, levels) {
+  attr = assign({}, attr)
+
+  for (let i = levels.length - 1; i >= 0; i--) {
+    const {id: level, mount} = levels[i]
+
+    attr[level] = mount(attr)
+  }
+
+  return attr
+}
+
+function hierarchy (attributes, levels, mount = false) {
   if (isEmpty(levels)) {
     return attributes
   }
 
-  const {getName, getId, openByDefault} = levels[0]
-  const grouped = groupBy(attributes, getId)
+  if (mount) {
+    attributes = map(attributes, attr => extend(attr, levels))
+  }
+
+  const {id: level, openByDefault} = levels[0]
+  const grouped = groupBy(attributes, `${level}.id`)
   const subLevel = levels.slice(1)
 
-  forEach(grouped, (ls, id) => {
-    const inner = hierarchy(ls, subLevel)
+  forEach(grouped, (branches, id) => {
+    const list = hierarchy(branches, subLevel)
 
     grouped[id] = {
       id,
-      name: getName(id),
-      ids: flatten(map(inner, ids)),
+      name: get(branches, [0, level, 'name']),
+      ids: flatten(map(list, ids)),
       openByDefault,
-      list: inner
+      list: list
     }
   })
 
@@ -170,7 +188,7 @@ const AttributeList = ({attributes, selectedAttributes, levels, remove, add}) =>
 
   return (
     <List>
-      {map(hierarchy(attributes, levels), node)}
+      {map(hierarchy(attributes, levels, true), node)}
     </List>
   )
 }

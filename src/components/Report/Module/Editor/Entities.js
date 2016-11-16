@@ -1,13 +1,13 @@
 import find from 'lodash/find'
 import keyBy from 'lodash/keyBy'
 import React from 'react'
-import get from 'lodash/get'
 import AttributeList from './AttributeList'
 
 const {PropTypes} = React
 
 const Entities = React.createClass({
   contextTypes: {
+    report: PropTypes.object.isRequired,
     messages: PropTypes.object.isRequired,
     draft: PropTypes.object.isRequired,
     entities: PropTypes.array.isRequired,
@@ -17,25 +17,21 @@ const Entities = React.createClass({
   propTypes: {
     items: PropTypes.array.isRequired
   },
-  getFolderLevel ({Campaign}) {
+  getFolderLevel () {
     return {
+      id: 'folder',
       openByDefault: true,
-      getId ({folder: {id}}) {
-        return id
-      },
-      getName (id) {
-        return get(find(Campaign.list, ({folder}) => folder.id === id), 'folder.name', id)
+      mount ({folder, campaign}) {
+        return folder || campaign.folder
       }
     }
   },
-  getWorkspaceLevel ({Campaign}) {
+  getWorkspaceLevel () {
     return {
+      id: 'workspace',
       openByDefault: true,
-      getId ({workspace: {id}}) {
-        return id
-      },
-      getName (id) {
-        return get(find(Campaign.list, ({workspace}) => workspace.id === id), 'workspace.name', id)
+      mount ({workspace, campaign}) {
+        return workspace || campaign.workspace
       }
     }
   },
@@ -43,22 +39,39 @@ const Entities = React.createClass({
     const {messages} = this.context
 
     return {
+      id: 'platform',
       openByDefault: true,
-      getId ({platform}) {
-        return platform
-      },
-      getName (platform) {
-        return messages[platform + 'Level']
+      mount ({platform}) {
+        return {
+          id: platform,
+          name: messages[platform + 'Level']
+        }
       }
     }
   },
   getCampaignLevel ({Campaign}) {
     return {
-      getId ({campaign_id}) {
-        return campaign_id
-      },
-      getName (id) {
-        return get(find(Campaign.list, {id}), 'name', id)
+      id: 'campaign',
+      mount ({adgroup, adset, campaign_id}) {
+        return find(Campaign.list, {
+          id: campaign_id || (adset || adgroup).campaign_id
+        })
+      }
+    }
+  },
+  getAdGroupLevel ({AdGroup}) {
+    return {
+      id: 'adgroup',
+      mount ({adgroup_id}) {
+        return find(AdGroup.list, {id: adgroup_id})
+      }
+    }
+  },
+  getAdSetLevel ({AdSet}) {
+    return {
+      id: 'adset',
+      mount ({adset_id}) {
+        return find(AdSet.list, {id: adset_id})
       }
     }
   },
@@ -66,33 +79,58 @@ const Entities = React.createClass({
     const {messages} = this.context
 
     return {
+      id: 'top',
       openByDefault: true,
-      getId () {
-        return 'all'
-      },
-      getName () {
-        return messages.all
+      mount () {
+        return {
+          id: 'all',
+          name: messages.all
+        }
       }
     }
   },
   getLevels () {
-    const {draft: {entity}} = this.context
+    const {draft: {entity}, report} = this.context
     const entities = keyBy(this.context.entities, 'id')
 
     switch (entity.id) {
+      case 'Placement':
       case 'Campaign':
-        return [
-          this.getTopLevel(),
-          this.getWorkspaceLevel(entities),
-          this.getPlatformLevel(),
-          this.getFolderLevel(entities)
-        ]
+        if (report.level === 'company') {
+          return [
+            this.getTopLevel(),
+            this.getWorkspaceLevel(entities),
+            this.getPlatformLevel(),
+            this.getFolderLevel(entities)
+          ]
+        }
+
+        if (report.level === 'workspace') {
+          return [
+            this.getTopLevel(),
+            this.getPlatformLevel(),
+            this.getFolderLevel(entities)
+          ]
+        }
+
+        return [this.getTopLevel()]
       case 'AdSet':
       case 'AdGroup':
+        return [this.getTopLevel(), this.getCampaignLevel(entities)]
       case 'Ad':
+        return [
+          this.getTopLevel(),
+          this.getCampaignLevel(entities),
+          report.platform === 'facebook'
+            ? this.getAdSetLevel(entities)
+            : this.getAdGroupLevel(entities)
+        ]
       case 'Keyword':
-      case 'Placement':
-        return []
+        return [
+          this.getTopLevel(),
+          this.getCampaignLevel(entities),
+          this.getAdGroupLevel(entities)
+        ]
     }
   },
   render () {

@@ -53,12 +53,14 @@ const ReportController = React.createClass({
     moment: PropTypes.func
   },
   childContextTypes: {
+    report: PropTypes.object,
     entities: PropTypes.array,
     changeDateRange: PropTypes.func,
     reportParams: reportParamsType
   },
   getChildContext () {
     return {
+      report: this.props.report,
       reportParams: this.getReportParams(),
       entities: this.props.entities,
       changeDateRange: this.onChangeRange

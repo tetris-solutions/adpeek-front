@@ -139,9 +139,16 @@ const saveMetaData = curry((tree, platform, entity, response) => {
   const attributes = omitBy(response.data, (obj, id) => (
     includes(excluded, prefixless(id))
   ))
+  let entityNameMessage
+
+  if (entity === 'Placement') {
+    entityNameMessage = 'campaignEntity'
+    delete attributes.campaignname
+  } else {
+    entityNameMessage = `${entity[0].toLowerCase() + entity.slice(1)}Entity`
+  }
 
   if (attributes.id) {
-    const entityNameMessage = `${entity[0].toLowerCase() + entity.slice(1)}Entity`
     attributes.id.name = tree.get(['intl', 'messages', entityNameMessage])
   }
 
