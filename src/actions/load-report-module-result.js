@@ -1,6 +1,8 @@
 import assign from 'lodash/assign'
 import head from 'lodash/head'
 import isEqual from 'lodash/isEqual'
+import forEach from 'lodash/forEach'
+import find from 'lodash/find'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {POST} from '@tetris/http'
 import {normalizeResult} from '../functions/normalize-result'
@@ -21,6 +23,34 @@ function loadReportModuleResult (query, isCrossPlatform, config) {
 }
 
 const lastCall = {}
+
+function dealWithException (tree, params, {message, account: numbersAccount, code}) {
+  if (code === 403 && numbersAccount) {
+    const nodePath = compact([
+      'user',
+      ['companies', params.company],
+      params.workspace && ['workspaces', params.workspace],
+      params.folder && ['folders', params.folder],
+      params.workspace ? 'accounts' : 'savedAccounts'
+    ])
+
+    const accounts = tree.get(getDeepCursor(tree, nodePath))
+    const adPeekAccount = find(accounts, {
+      tetris_id: numbersAccount.tetris_account,
+      external_id: numbersAccount.ad_account
+    })
+
+    if (adPeekAccount) {
+      // <error with account "account_id"> => <error with account "account_name">
+      message = message.replace(numbersAccount.ad_account, adPeekAccount.name)
+    }
+  }
+
+  tree.push('alerts', {
+    level: 'warning',
+    message
+  })
+}
 
 export function loadReportModuleResultAction (tree, params, id, query, attributes) {
   const isCrossPlatform = inferLevelFromParams(params) !== 'folder'
@@ -46,8 +76,10 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
 
     if (isCursorOk()) {
       moduleCursor.set('query', query)
-      moduleCursor.set('result', normalizeResult(attributes, response.data))
+      moduleCursor.set('result', normalizeResult(attributes, response.data.result))
     }
+
+    forEach(response.data.exceptions, e => dealWithException(tree, params, e))
 
     tree.commit()
 
