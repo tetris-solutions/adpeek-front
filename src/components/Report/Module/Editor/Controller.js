@@ -28,7 +28,8 @@ const ModuleEdit = React.createClass({
     moment: PropTypes.func.isRequired,
     module: PropTypes.object.isRequired,
     entities: PropTypes.object.isRequired,
-    getUsedAccounts: PropTypes.func.isRequired
+    getUsedAccounts: PropTypes.func.isRequired,
+    activeOnly: PropTypes.bool.isRequired
   },
   propTypes: {
     close: PropTypes.func,
@@ -244,11 +245,15 @@ const ModuleEdit = React.createClass({
     this.props.close()
   },
   save () {
+    const {activeOnly} = this.context
     const draftModule = assign({}, this.state.newModule)
     const ids = map(this.getDraftEntity().list, 'id')
-    const fullSelection = diff(ids, draftModule.filters.id).length === 0
+    const canSafelyAssumeFullSelection = (
+      activeOnly &&
+      diff(ids, draftModule.filters.id).length === 0
+    )
 
-    if (fullSelection) {
+    if (canSafelyAssumeFullSelection) {
       draftModule.filters = assign({}, draftModule.filters)
       draftModule.filters.id = []
     }
