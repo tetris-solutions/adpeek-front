@@ -2,6 +2,7 @@ import get from 'lodash/get'
 import isNumber from 'lodash/isNumber'
 import map from 'lodash/map'
 import max from 'lodash/max'
+import uniqBy from 'lodash/uniqBy'
 import sortBy from 'lodash/sortBy'
 import React from 'react'
 import entityType from '../../propTypes/report-entity'
@@ -17,6 +18,8 @@ import compact from 'lodash/compact'
 import ReportScreen from './Screen'
 
 const {PropTypes} = React
+const getAccountKey = ({tetris_account, ad_account}) => `${tetris_account}:${ad_account}`
+const insertId = a => assign({}, a, {id: getAccountKey(a)})
 
 function calcPathToReport ({company, workspace, folder, report}) {
   const scope = compact([
@@ -147,7 +150,7 @@ const ReportController = React.createClass({
   },
   getReportParams () {
     const {from, to} = this.getCurrentRange()
-    const {accounts} = this.props
+    const accounts = uniqBy(map(this.props.accounts, insertId), 'id')
 
     return {accounts, from, to}
   },
@@ -171,7 +174,12 @@ const ReportController = React.createClass({
         fullReportUrl={fullReportUrl}>
 
         <div className='mdl-grid' ref='grid'>{map(sortBy(modules, 'index'), (module, index) =>
-          <div data-module-id={module.id} data-module-type={module.type} key={module.id} className={`mdl-cell mdl-cell--${module.cols}-col`}>
+          <div
+            key={module.id}
+            data-module-id={module.id}
+            data-module-type={module.type}
+            className={`mdl-cell mdl-cell--${module.cols}-col`}>
+
             <Module
               module={module}
               editable={editMode}

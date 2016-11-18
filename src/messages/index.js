@@ -265,7 +265,8 @@ module.exports = {
     copySuccess: 'Copied to clipboard!',
     adwordsLevel: 'Adwords',
     facebookLevel: 'Facebook',
-    sharedLevel: 'Shared'
+    sharedLevel: 'Shared',
+    tooManyAccounts: 'You have selected too many items'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -533,6 +534,7 @@ module.exports = {
     copySuccess: 'Copiado para área de transferência!',
     adwordsLevel: 'Adwords',
     facebookLevel: 'Facebook',
-    sharedLevel: 'Comum'
+    sharedLevel: 'Comum',
+    tooManyAccounts: 'O máximo de contas foi ultrapassado, selecione menos itens'
   }
 }

@@ -17,17 +17,18 @@ import Editor from './Editor'
 const {PropTypes} = React
 
 const editableFields = ['name', 'type', 'dimensions', 'metrics', 'rows', 'cols', 'entity', 'limit', 'sort', 'filters']
+const MAX_ACCOUNTS = 10
 
 const ModuleEdit = React.createClass({
   displayName: 'Editor-Controller',
-
   contextTypes: {
     attributes: PropTypes.object.isRequired,
     messages: PropTypes.object.isRequired,
     locales: PropTypes.string.isRequired,
     moment: PropTypes.func.isRequired,
     module: PropTypes.object.isRequired,
-    entities: PropTypes.object.isRequired
+    entities: PropTypes.object.isRequired,
+    getUsedAccounts: PropTypes.func.isRequired
   },
   propTypes: {
     close: PropTypes.func,
@@ -64,7 +65,8 @@ const ModuleEdit = React.createClass({
 
     return {
       oldModule: snapshot,
-      newModule: snapshot
+      newModule: snapshot,
+      tooManyAccounts: false
     }
   },
   componentWillMount () {
@@ -107,22 +109,32 @@ const ModuleEdit = React.createClass({
 
     this.enqueueUpdate(newState)
   },
+  checkAccounts (ids) {
+    const accounts = this.context.getUsedAccounts(ids)
+
+    this.setState({
+      tooManyAccounts: accounts.length > MAX_ACCOUNTS
+    })
+  },
   removeEntity (id) {
     const ids = isArray(id) ? id : [id]
     const module = this.getDraftModule()
-
-    this.change({
-      filters: assign({}, module.filters, {
-        id: module.filters.id.filter(currentId => !includes(ids, currentId))
-      })
+    const filters = assign({}, module.filters, {
+      id: module.filters.id.filter(currentId => !includes(ids, currentId))
     })
+
+    this.checkAccounts(filters.id)
+    this.change({filters})
   },
+
   addEntity (id) {
     const ids = isArray(id) ? id : [id]
     const module = this.getDraftModule()
     const filters = assign({}, module.filters, {
       id: uniq(module.filters.id.concat(ids))
     })
+
+    this.checkAccounts(filters.id)
     this.change({filters})
   },
   removeAttribute (_attribute_, forceRedraw = false) {
@@ -265,6 +277,7 @@ const ModuleEdit = React.createClass({
 
     return (
       <Editor
+        tooManyAccounts={this.state.tooManyAccounts}
         isInvalid={isInvalidModule}
         isLoading={Boolean(this.context.module.isLoading)}
         cancel={this.cancel}

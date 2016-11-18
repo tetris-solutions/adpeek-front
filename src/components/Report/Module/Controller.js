@@ -1,6 +1,8 @@
 import assign from 'lodash/assign'
 import debounce from 'lodash/debounce'
 import pick from 'lodash/pick'
+import map from 'lodash/map'
+import uniq from 'lodash/uniq'
 import React from 'react'
 import moduleType from '../../../propTypes/report-module'
 import reportEntityType from '../../../propTypes/report-entity'
@@ -13,9 +15,24 @@ import Editor from './Editor/Controller'
 import Modal from 'tetris-iso/Modal'
 import DeleteButton from '../../DeleteButton'
 import isEmpty from 'lodash/isEmpty'
+import filter from 'lodash/filter'
+import includes from 'lodash/includes'
 
 const {PropTypes} = React
-const reportContext = ['report', 'reportParams', 'entities', 'changeDateRange', 'entity', 'attributes', 'module', 'activeOnly', 'toggleActiveOnly']
+const reportContext = [
+  'report',
+  'reportParams',
+  'entities',
+  'changeDateRange',
+  'entity',
+  'attributes',
+  'module',
+  'activeOnly',
+  'toggleActiveOnly',
+  'getUsedAccounts'
+]
+
+const getAccountKeyFromId = id => id.substr(0, id.lastIndexOf(':'))
 
 const ModuleController = React.createClass({
   displayName: 'Module-Controller',
@@ -26,21 +43,24 @@ const ModuleController = React.createClass({
     entity: reportEntityType.isRequired
   },
   contextTypes: {
-    tree: PropTypes.object,
-    params: PropTypes.object,
-    messages: PropTypes.object,
+    tree: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired,
+    messages: PropTypes.object.isRequired,
+    report: PropTypes.object.isRequired,
     reportParams: reportParamsType.isRequired
   },
   childContextTypes: {
     entity: reportEntityType,
     attributes: PropTypes.object,
-    module: PropTypes.object
+    module: PropTypes.object,
+    getUsedAccounts: PropTypes.func
   },
   getChildContext () {
     return {
       entity: this.props.entity,
       attributes: this.props.attributes,
-      module: this.props.module
+      module: this.props.module,
+      getUsedAccounts: this.getUsedAccounts
     }
   },
   getInitialState () {
@@ -71,12 +91,23 @@ const ModuleController = React.createClass({
   getChartQuery () {
     const {reportParams} = this.context
     const {module, entity} = this.props
-    const filters = assign({}, module.filters)
 
-    return assign({filters, entity: entity.id},
-      pick(module, 'dimensions', 'metrics'),
-      pick(reportParams, 'from', 'to', 'accounts')
-    )
+    return assign({}, pick(module, 'dimensions', 'metrics'), pick(reportParams, 'from', 'to'), {
+      accounts: this.getUsedAccounts(module.filters.id),
+      filters: module.filters,
+      entity: entity.id
+    })
+  },
+  getUsedAccounts (ids) {
+    const {report: {platform}, reportParams: {accounts}} = this.context
+
+    if (platform) {
+      return accounts
+    }
+
+    const usedAccountKeys = uniq(map(ids, getAccountKeyFromId))
+
+    return filter(accounts, ({id}) => includes(usedAccountKeys, id))
   },
   remove () {
     deleteModuleAction(

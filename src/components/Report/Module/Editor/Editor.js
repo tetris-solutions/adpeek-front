@@ -37,6 +37,7 @@ const Editor = React.createClass({
     attributes: PropTypes.object.isRequired
   },
   propTypes: {
+    tooManyAccounts: PropTypes.bool.isRequired,
     isInvalid: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
     save: PropTypes.func.isRequired,
@@ -69,8 +70,29 @@ const Editor = React.createClass({
     return {selectable}
   },
   render () {
-    const {isLoading, isInvalid, redraw, save, cancel} = this.props
+    const {isLoading, isInvalid, tooManyAccounts, redraw, save, cancel} = this.props
     const {messages, draft} = this.context
+    let updateBt
+
+    if (isInvalid) {
+      updateBt = (
+        <em className='mdl-color-text--red-A700'>
+          <Message entity={draft.entity.name}>invalidModuleConfig</Message>
+        </em>
+      )
+    } else if (tooManyAccounts) {
+      updateBt = (
+        <em className='mdl-color-text--red-A700'>
+          <Message>tooManyAccounts</Message>
+        </em>
+      )
+    } else {
+      updateBt = (
+        <button disabled={isLoading} type='button' className='mdl-button' onClick={redraw}>
+          <Message>update</Message>
+        </button>
+      )
+    }
 
     return (
       <div>
@@ -98,18 +120,12 @@ const Editor = React.createClass({
           <Message>cancel</Message>
         </a>
 
-        <button disabled={isInvalid} type='button' className='mdl-button' onClick={save}>
+        <button disabled={isInvalid || tooManyAccounts} type='button' className='mdl-button' onClick={save}>
           <Message>save</Message>
         </button>
 
         <span className={`${style.rightButtons}`}>
-          {isInvalid ? (
-            <em className='mdl-color-text--red-A700'>
-              <Message entity={draft.entity.name}>invalidModuleConfig</Message>
-            </em>) : (
-            <button disabled={isLoading} type='button' className='mdl-button' onClick={redraw}>
-              <Message>update</Message>
-            </button>)}
+          {updateBt}
           <DateRangeButton className='mdl-button'/>
         </span>
       </div>
