@@ -17,7 +17,7 @@ import Editor from './Editor'
 const {PropTypes} = React
 
 const editableFields = ['name', 'type', 'dimensions', 'metrics', 'rows', 'cols', 'entity', 'limit', 'sort', 'filters']
-const MAX_ACCOUNTS = 10
+const MAX_ACCOUNTS = 20
 
 const ModuleEdit = React.createClass({
   displayName: 'Editor-Controller',
@@ -66,8 +66,7 @@ const ModuleEdit = React.createClass({
 
     return {
       oldModule: snapshot,
-      newModule: snapshot,
-      tooManyAccounts: false
+      newModule: snapshot
     }
   },
   componentWillMount () {
@@ -110,21 +109,12 @@ const ModuleEdit = React.createClass({
 
     this.enqueueUpdate(newState)
   },
-  checkAccounts (ids) {
-    const accounts = this.context.getUsedAccounts(ids)
-
-    this.setState({
-      tooManyAccounts: accounts.length > MAX_ACCOUNTS
-    })
-  },
   removeEntity (id) {
     const ids = isArray(id) ? id : [id]
     const module = this.getDraftModule()
     const filters = assign({}, module.filters, {
       id: module.filters.id.filter(currentId => !includes(ids, currentId))
     })
-
-    this.checkAccounts(filters.id)
     this.change({filters})
   },
 
@@ -134,8 +124,6 @@ const ModuleEdit = React.createClass({
     const filters = assign({}, module.filters, {
       id: uniq(module.filters.id.concat(ids))
     })
-
-    this.checkAccounts(filters.id)
     this.change({filters})
   },
   removeAttribute (_attribute_, forceRedraw = false) {
@@ -272,7 +260,7 @@ const ModuleEdit = React.createClass({
   },
   render () {
     const {name, type, dimensions, metrics, filters} = this.getDraftModule()
-
+    const numberOfSelectedAccounts = this.context.getUsedAccounts(filters.id).length
     const isInvalidModule = isEmpty(name) || (
         isEmpty(dimensions) &&
         type !== 'total'
@@ -282,7 +270,8 @@ const ModuleEdit = React.createClass({
 
     return (
       <Editor
-        tooManyAccounts={this.state.tooManyAccounts}
+        maxAccounts={MAX_ACCOUNTS}
+        numberOfSelectedAccounts={numberOfSelectedAccounts}
         isInvalid={isInvalidModule}
         isLoading={Boolean(this.context.module.isLoading)}
         cancel={this.cancel}

@@ -266,7 +266,7 @@ module.exports = {
     adwordsLevel: 'Adwords',
     facebookLevel: 'Facebook',
     sharedLevel: 'Shared',
-    tooManyAccounts: 'You have selected too many items'
+    tooManyAccounts: 'You have selected {selected} accounts, the max is {max}'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -535,6 +535,6 @@ module.exports = {
     adwordsLevel: 'Adwords',
     facebookLevel: 'Facebook',
     sharedLevel: 'Comum',
-    tooManyAccounts: 'O máximo de contas foi ultrapassado, selecione menos itens'
+    tooManyAccounts: 'O máximo de contas é {max}, você selecionou {selected}'
   }
 }

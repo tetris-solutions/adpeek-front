@@ -37,7 +37,8 @@ const Editor = React.createClass({
     attributes: PropTypes.object.isRequired
   },
   propTypes: {
-    tooManyAccounts: PropTypes.bool.isRequired,
+    maxAccounts: PropTypes.number.isRequired,
+    numberOfSelectedAccounts: PropTypes.number.isRequired,
     isInvalid: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
     save: PropTypes.func.isRequired,
@@ -70,8 +71,9 @@ const Editor = React.createClass({
     return {selectable}
   },
   render () {
-    const {isLoading, isInvalid, tooManyAccounts, redraw, save, cancel} = this.props
+    const {isLoading, isInvalid, maxAccounts, numberOfSelectedAccounts, redraw, save, cancel} = this.props
     const {messages, draft} = this.context
+    const selectedTooManyAccounts = numberOfSelectedAccounts > maxAccounts
     let updateBt
 
     if (isInvalid) {
@@ -80,10 +82,12 @@ const Editor = React.createClass({
           <Message entity={draft.entity.name}>invalidModuleConfig</Message>
         </em>
       )
-    } else if (tooManyAccounts) {
+    } else if (selectedTooManyAccounts) {
       updateBt = (
         <em className='mdl-color-text--red-A700'>
-          <Message>tooManyAccounts</Message>
+          <Message selected={String(numberOfSelectedAccounts)} max={String(maxAccounts)}>
+            tooManyAccounts
+          </Message>
         </em>
       )
     } else {
@@ -120,7 +124,7 @@ const Editor = React.createClass({
           <Message>cancel</Message>
         </a>
 
-        <button disabled={isInvalid || tooManyAccounts} type='button' className='mdl-button' onClick={save}>
+        <button disabled={isInvalid || selectedTooManyAccounts} type='button' className='mdl-button' onClick={save}>
           <Message>save</Message>
         </button>
 
