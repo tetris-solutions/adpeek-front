@@ -2,8 +2,10 @@ import React from 'react'
 import assign from 'lodash/assign'
 import find from 'lodash/find'
 import filter from 'lodash/filter'
+import values from 'lodash/values'
 import map from 'lodash/map'
 import isEmpty from 'lodash/isEmpty'
+import keyBy from 'lodash/keyBy'
 import reportEntityType from '../../../propTypes/report-entity'
 import reportMetaDataType from '../../../propTypes/report-meta-data'
 import moduleType from '../../../propTypes/report-module'
@@ -39,15 +41,49 @@ const ModuleContainer = React.createClass({
     }
   },
   getEntities () {
+    const {reportEntities} = this.context
+    const entities = keyBy(reportEntities, 'id')
     const {activeOnly} = this.state
 
-    function prepare (entity) {
-      return entity.id === 'Campaign' && activeOnly
+    function filterByStatus (entity) {
+      return activeOnly
         ? assign({}, entity, {list: filter(entity.list, 'status.is_active')})
         : entity
     }
 
-    return map(this.context.reportEntities, prepare)
+    function filterByParent (entity, parent, parentIdAtribute) {
+      return assign({}, entity, {
+        list: filter(entity.list, o => (
+          Boolean(find(parent.list, {id: o[parentIdAtribute]}))
+        ))
+      })
+    }
+
+    if (entities.Placement) {
+      entities.Placement = filterByStatus(entities.Placement)
+    }
+
+    entities.Campaign = filterByStatus(entities.Campaign)
+
+    if (entities.AdSet) {
+      entities.AdSet = filterByParent(entities.AdSet, entities.Campaign, 'campaign_id')
+    }
+
+    if (entities.AdGroup) {
+      entities.AdGroup = filterByParent(entities.AdGroup, entities.Campaign, 'campaign_id')
+    }
+
+    if (entities.Ad) {
+      entities.Ad = entities.AdSet
+        ? filterByParent(entities.Ad, entities.AdSet, 'adset_id')
+        : filterByParent(entities.Ad, entities.AdGroup, 'adgroup_id')
+    }
+
+    if (entities.Keyword) {
+      entities.Keyword = filterByParent(entities.Keyword, entities.AdGroup, 'adgroup_id')
+    }
+
+    return values(entities)
   },
   toggleActiveOnly () {
     this.setState({
