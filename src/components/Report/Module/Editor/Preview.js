@@ -47,7 +47,7 @@ const EditContent = (props, {entities, onChangeProperty, change, draft: {module,
 EditContent.displayName = 'Edit-Content'
 EditContent.contextTypes = {
   onChangeProperty: PropTypes.func.isRequired,
-  entities: PropTypes.array.isRequired,
+  entities: PropTypes.object.isRequired,
   change: PropTypes.func.isRequired,
   draft: PropTypes.object.isRequired
 }

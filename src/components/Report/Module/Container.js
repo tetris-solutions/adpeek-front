@@ -1,8 +1,7 @@
 import React from 'react'
 import assign from 'lodash/assign'
-import find from 'lodash/find'
+import some from 'lodash/some'
 import filter from 'lodash/filter'
-import values from 'lodash/values'
 import map from 'lodash/map'
 import isEmpty from 'lodash/isEmpty'
 import keyBy from 'lodash/keyBy'
@@ -24,7 +23,7 @@ const ModuleContainer = React.createClass({
     reportEntities: PropTypes.arrayOf(reportEntityType).isRequired
   },
   childContextTypes: {
-    entities: PropTypes.arrayOf(reportEntityType),
+    entities: PropTypes.object,
     activeOnly: PropTypes.bool,
     toggleActiveOnly: PropTypes.func
   },
@@ -53,9 +52,7 @@ const ModuleContainer = React.createClass({
 
     function filterByParent (entity, parent, parentIdAtribute) {
       return assign({}, entity, {
-        list: filter(entity.list, o => (
-          Boolean(find(parent.list, {id: o[parentIdAtribute]}))
-        ))
+        list: filter(entity.list, item => some(parent.list, {id: item[parentIdAtribute]}))
       })
     }
 
@@ -83,7 +80,7 @@ const ModuleContainer = React.createClass({
       entities.Keyword = filterByParent(entities.Keyword, entities.AdGroup, 'adgroup_id')
     }
 
-    return values(entities)
+    return entities
   },
   toggleActiveOnly () {
     this.setState({
@@ -95,7 +92,7 @@ const ModuleContainer = React.createClass({
     const entities = this.getEntities()
     const module = assign({}, this.props.module)
     const filters = assign({}, module.filters)
-    const entity = find(entities, {id: module.entity})
+    const entity = entities[module.entity]
 
     if (isEmpty(filters.id)) {
       filters.id = map(entity.list, 'id')

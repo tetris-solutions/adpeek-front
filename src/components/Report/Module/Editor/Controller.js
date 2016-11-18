@@ -27,7 +27,7 @@ const ModuleEdit = React.createClass({
     locales: PropTypes.string.isRequired,
     moment: PropTypes.func.isRequired,
     module: PropTypes.object.isRequired,
-    entities: PropTypes.array.isRequired
+    entities: PropTypes.object.isRequired
   },
   propTypes: {
     close: PropTypes.func,
@@ -251,7 +251,7 @@ const ModuleEdit = React.createClass({
     return assign({}, this.context.module, this.state.newModule)
   },
   getDraftEntity () {
-    return find(this.context.entities, {id: this.state.newModule.entity})
+    return this.context.entities[this.state.newModule.entity]
   },
   render () {
     const {name, type, dimensions, metrics, filters} = this.getDraftModule()

@@ -1,5 +1,4 @@
 import find from 'lodash/find'
-import keyBy from 'lodash/keyBy'
 import React from 'react'
 import Message from 'tetris-iso/Message'
 import AttributeList from './AttributeList'
@@ -12,7 +11,7 @@ const Entities = React.createClass({
     report: PropTypes.object.isRequired,
     messages: PropTypes.object.isRequired,
     draft: PropTypes.object.isRequired,
-    entities: PropTypes.array.isRequired,
+    entities: PropTypes.object.isRequired,
     addEntity: PropTypes.func.isRequired,
     removeEntity: PropTypes.func.isRequired,
     activeOnly: PropTypes.bool.isRequired,
@@ -94,8 +93,7 @@ const Entities = React.createClass({
     }
   },
   getLevels () {
-    const {draft: {entity}, report} = this.context
-    const entities = keyBy(this.context.entities, 'id')
+    const {draft: {entity}, report, entities} = this.context
 
     switch (entity.id) {
       case 'Placement':
