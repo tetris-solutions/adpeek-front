@@ -40,7 +40,7 @@ export function setAppRoutes (app, render) {
   app.get('/share/report/:reportShare',
     allowGuestMiddleware,
     protect,
-    preload(reportShareMetaData, reportShare),
+    preload(statuses, reportShareMetaData, reportShare),
     render)
 
   app.get('/company/:company',
