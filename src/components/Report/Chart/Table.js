@@ -128,7 +128,9 @@ function Cell ({attribute: {is_metric, type}, value}, {locales, moment}) {
 
   return (
     <td className={is_metric ? '' : 'mdl-data-table__cell--non-numeric'} {...tdProps}>
-      {isString(value) ? value : '---'}
+      {isString(value) || React.isValidElement(value)
+        ? value
+        : '---'}
     </td>
   )
 }
