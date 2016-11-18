@@ -15,7 +15,7 @@ import DeleteButton from '../../DeleteButton'
 import isEmpty from 'lodash/isEmpty'
 
 const {PropTypes} = React
-const reportContext = ['report', 'reportParams', 'entities', 'changeDateRange', 'entity', 'attributes', 'module']
+const reportContext = ['report', 'reportParams', 'entities', 'changeDateRange', 'entity', 'attributes', 'module', 'activeOnly', 'toggleActiveOnly']
 
 const ModuleController = React.createClass({
   displayName: 'Module-Controller',

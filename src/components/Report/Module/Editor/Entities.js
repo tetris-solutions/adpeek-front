@@ -1,7 +1,9 @@
 import find from 'lodash/find'
 import keyBy from 'lodash/keyBy'
 import React from 'react'
+import Message from 'tetris-iso/Message'
 import AttributeList from './AttributeList'
+import Switch from '../../../Switch'
 
 const {PropTypes} = React
 
@@ -12,7 +14,9 @@ const Entities = React.createClass({
     draft: PropTypes.object.isRequired,
     entities: PropTypes.array.isRequired,
     addEntity: PropTypes.func.isRequired,
-    removeEntity: PropTypes.func.isRequired
+    removeEntity: PropTypes.func.isRequired,
+    activeOnly: PropTypes.bool.isRequired,
+    toggleActiveOnly: PropTypes.func.isRequired
   },
   propTypes: {
     items: PropTypes.array.isRequired
@@ -134,16 +138,24 @@ const Entities = React.createClass({
     }
   },
   render () {
-    const {draft: {module}, addEntity, removeEntity} = this.context
+    const {activeOnly, toggleActiveOnly, draft: {module}, addEntity, removeEntity} = this.context
     const {items} = this.props
 
     return (
-      <AttributeList
-        levels={this.getLevels()}
-        attributes={items}
-        selectedAttributes={module.filters.id}
-        remove={removeEntity}
-        add={addEntity}/>
+      <div>
+        <AttributeList
+          levels={this.getLevels()}
+          attributes={items}
+          selectedAttributes={module.filters.id}
+          remove={removeEntity}
+          add={addEntity}/>
+
+        <br/>
+        <Switch
+          checked={activeOnly}
+          onChange={toggleActiveOnly}
+          label={<Message>filterActiveOnly</Message>}/>
+      </div>
     )
   }
 })

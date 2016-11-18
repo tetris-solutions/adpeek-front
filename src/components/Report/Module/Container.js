@@ -1,6 +1,7 @@
 import React from 'react'
 import assign from 'lodash/assign'
 import find from 'lodash/find'
+import filter from 'lodash/filter'
 import map from 'lodash/map'
 import isEmpty from 'lodash/isEmpty'
 import reportEntityType from '../../../propTypes/report-entity'
@@ -10,29 +11,64 @@ import Controller from './Controller'
 
 const {PropTypes} = React
 
-function ModuleContainer ({editable, module, metaData}, {entities}) {
-  module = assign({}, module)
+const ModuleContainer = React.createClass({
+  displayName: 'Module-Container',
+  propTypes: {
+    editable: PropTypes.bool,
+    module: moduleType.isRequired,
+    metaData: reportMetaDataType.isRequired
+  },
+  contextTypes: {
+    reportEntities: PropTypes.arrayOf(reportEntityType).isRequired
+  },
+  childContextTypes: {
+    entities: PropTypes.arrayOf(reportEntityType),
+    activeOnly: PropTypes.bool,
+    toggleActiveOnly: PropTypes.func
+  },
+  getInitialState () {
+    return {
+      activeOnly: true
+    }
+  },
+  getChildContext () {
+    return {
+      entities: this.getEntities(),
+      activeOnly: this.state.activeOnly,
+      toggleActiveOnly: this.toggleActiveOnly
+    }
+  },
+  getEntities () {
+    const {activeOnly} = this.state
 
-  const filters = assign({}, module.filters)
-  const entity = find(entities, {id: module.entity})
+    function prepare (entity) {
+      return entity.id === 'Campaign' && activeOnly
+        ? assign({}, entity, {list: filter(entity.list, 'status.is_active')})
+        : entity
+    }
 
-  if (isEmpty(filters.id)) {
-    filters.id = map(entity.list, 'id')
+    return map(this.context.reportEntities, prepare)
+  },
+  toggleActiveOnly () {
+    this.setState({
+      activeOnly: !this.state.activeOnly
+    })
+  },
+  render () {
+    const {editable, metaData} = this.props
+    const entities = this.getEntities()
+    const module = assign({}, this.props.module)
+    const filters = assign({}, module.filters)
+    const entity = find(entities, {id: module.entity})
+
+    if (isEmpty(filters.id)) {
+      filters.id = map(entity.list, 'id')
+    }
+
+    module.filters = filters
+
+    return <Controller editable={editable} module={module} entity={entity} attributes={metaData.attributes}/>
   }
-
-  module.filters = filters
-
-  return <Controller editable={editable} module={module} entity={entity} attributes={metaData.attributes}/>
-}
-
-ModuleContainer.displayName = 'Module-Container'
-ModuleContainer.propTypes = {
-  editable: PropTypes.bool,
-  module: moduleType.isRequired,
-  metaData: reportMetaDataType.isRequired
-}
-ModuleContainer.contextTypes = {
-  entities: PropTypes.arrayOf(reportEntityType).isRequired
-}
+})
 
 export default ModuleContainer

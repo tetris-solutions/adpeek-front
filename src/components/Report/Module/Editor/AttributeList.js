@@ -3,6 +3,7 @@ import includes from 'lodash/includes'
 import map from 'lodash/map'
 import React from 'react'
 import get from 'lodash/get'
+import compact from 'lodash/compact'
 import size from 'lodash/size'
 import intersection from 'lodash/intersection'
 import isEmpty from 'lodash/isEmpty'
@@ -47,25 +48,30 @@ const style = csjs`
 const {PropTypes} = React
 const ids = ({ids, id}) => ids || id
 
-function extend (attr, levels) {
-  attr = assign({}, attr)
+function hierarchy (attributes, levels, mount = false) {
+  function extend (attr) {
+    attr = assign({}, attr)
 
-  for (let i = levels.length - 1; i >= 0; i--) {
-    const {id: level, mount} = levels[i]
+    for (let i = levels.length - 1; i >= 0; i--) {
+      const {id: level, mount} = levels[i]
+      const levelInfo = mount(attr)
 
-    attr[level] = mount(attr)
+      if (levelInfo) {
+        attr[level] = levelInfo
+      } else {
+        return null
+      }
+    }
+
+    return attr
   }
 
-  return attr
-}
-
-function hierarchy (attributes, levels, mount = false) {
   if (isEmpty(levels)) {
     return attributes
   }
 
   if (mount) {
-    attributes = map(attributes, attr => extend(attr, levels))
+    attributes = compact(map(attributes, extend))
   }
 
   const {id: level, openByDefault} = levels[0]
