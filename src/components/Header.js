@@ -8,6 +8,7 @@ import {contextualize} from './higher-order/contextualize'
 import {logoutAction} from 'tetris-iso/actions'
 import get from 'lodash/get'
 import {Link} from 'react-router'
+import LocaleSelector from './LocaleSelector'
 
 const style = csjs`
 .round {
@@ -79,6 +80,9 @@ const style = csjs`
 }
 .button:hover, .button[data-active] {
   border: 3px solid #5c9cfe;
+}
+.locale {
+  margin: 0 2em;
 }`
 
 const {PropTypes} = React
@@ -98,7 +102,7 @@ const pTypes = {
   logout: PropTypes.func.isRequired
 }
 
-const DropDown = ({name, avatar, email, is_admin, company, logout}) => (
+const UserOptions = ({name, avatar, email, is_admin, company, logout}) => (
   <div>
     <div className={String(style.menu)}>
       <a href={`${process.env.FRONT_URL}/dashboard/profile`} className={String(style.link)}>
@@ -109,6 +113,9 @@ const DropDown = ({name, avatar, email, is_admin, company, logout}) => (
       </a>
       <div className={String(style.name)}>{name}</div>
       <sup>{userType(company, is_admin)}</sup>
+      <div className={String(style.locale)}>
+        <LocaleSelector/>
+      </div>
     </div>
     <a className={`mdl-button mdl-button--raised ${style.logout}`} onClick={logout}>
       <i className='material-icons'>keyboard_backspace</i>
@@ -117,8 +124,8 @@ const DropDown = ({name, avatar, email, is_admin, company, logout}) => (
   </div>
 )
 
-DropDown.displayName = 'DropDown'
-DropDown.propTypes = pTypes
+UserOptions.displayName = 'User-Options'
+UserOptions.propTypes = pTypes
 
 const UserMenu = props => (
   <a className={String(style.button)}>
@@ -127,7 +134,7 @@ const UserMenu = props => (
       src={props.avatar || gravatar.url(props.email, {s: '32'})}/>
 
     <Tooltip>
-      <DropDown {...props}/>
+      <UserOptions {...props}/>
     </Tooltip>
   </a>
 )
