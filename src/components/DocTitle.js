@@ -9,7 +9,7 @@ const {PropTypes} = React
 function DocTitle ({report, order, campaign, folder, workspace, company}) {
   const parts = [
     'Tetris Solutions',
-    'AdPeek',
+    'Manager',
     company && company.name,
     workspace && workspace.name,
     folder && folder.name,

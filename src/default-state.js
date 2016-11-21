@@ -1,4 +1,4 @@
 export default {
-  app: 'AdPeek',
+  app: 'Manager',
   alerts: []
 }
