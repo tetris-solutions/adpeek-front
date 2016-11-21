@@ -13,6 +13,7 @@ import ReportAccessControl from './Report/AccessControl'
 import ReportEditPrompt from './Report/EditPrompt'
 import {Name, Navigation, Button, Buttons} from './Navigation'
 import {canSkipReportEditPrompt} from '../functions/can-skip-report-edit-prompt'
+import NameInput from './Report/NameInput'
 
 const {PropTypes} = React
 
@@ -36,7 +37,9 @@ export function FolderReportAside ({report, dispatch, user}, {messages, locales,
     <Fence canEditReport canBrowseReports>
       {({canEditReport, canBrowseReports}) =>
         <Navigation icon='trending_up'>
-          <Name>{report.name}</Name>
+          {inEditMode
+            ? <NameInput dispatch={dispatch} params={params} report={report}/>
+            : <Name>{report.name}</Name>}
 
           <Buttons>
             {canBrowseReports && (
