@@ -56,7 +56,7 @@ function serializeTableCell (td, type) {
   if (cellStrongElement) {
     cell.title = trim(tableCell.innerText)
     cell.content = startsWith(cell.content, cell.title)
-      ? trim(cell.value.substr(cell.title.length))
+      ? trim(cell.content.substr(cell.title.length))
       : cell.content
   }
 
