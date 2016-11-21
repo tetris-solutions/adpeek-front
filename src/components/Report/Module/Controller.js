@@ -1,6 +1,4 @@
-import assign from 'lodash/assign'
 import debounce from 'lodash/debounce'
-import pick from 'lodash/pick'
 import map from 'lodash/map'
 import uniq from 'lodash/uniq'
 import React from 'react'
@@ -92,11 +90,15 @@ const ModuleController = React.createClass({
     const {reportParams} = this.context
     const {module, entity} = this.props
 
-    return assign({}, pick(module, 'dimensions', 'metrics'), pick(reportParams, 'from', 'to'), {
+    return {
+      metrics: module.metrics,
+      dimensions: module.dimensions,
+      to: reportParams.to,
+      from: reportParams.from,
       accounts: this.getUsedAccounts(module.filters.id),
       filters: module.filters,
       entity: entity.id
-    })
+    }
   },
   getUsedAccounts (ids) {
     const {report: {platform}, reportParams: {accounts}} = this.context

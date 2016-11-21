@@ -3,10 +3,14 @@ import map from 'lodash/map'
 import React from 'react'
 import compact from 'lodash/compact'
 import flatten from 'lodash/flatten'
-
-import {styledFnComponent} from './higher-order/styled-fn-component'
+import {styled} from './mixins/styled'
 
 const style = csjs`
+.wrapper {
+  max-width: 60%;
+  white-space: nowrap;
+  overflow-x: hidden;
+}
 .breadcrumb {
   display: inline-block;
   padding: 0 1em;
@@ -27,32 +31,42 @@ const style = csjs`
 
 const {PropTypes} = React
 
-function Breadcrumbs (props, {params, routes}) {
-  const breadcrumbs = flatten(compact(map(routes, 'breadcrumb')))
+const Breadcrumbs = React.createClass({
+  displayName: 'Breadcrumbs',
+  mixins: [styled(style)],
+  contextTypes: {
+    params: PropTypes.object,
+    routes: PropTypes.array
+  },
+  propTypes: {
+    title: PropTypes.node
+  },
+  componentDidMount () {
+    /**
+     * @type {HTMLElement} wrapper
+     */
+    const {wrapper} = this.refs
 
-  return (
-    <span>
-      {map(breadcrumbs, (Breadcrumb, index) => (
-        <span key={index} className={style.breadcrumb}>
-          <Breadcrumb params={params}/>
-        </span>))}
-      {props.title ? (
-        <span className={style.breadcrumb}>
-          {props.title}
-        </span>
-      ) : null}
-    </span>
-  )
-}
+    wrapper.scrollLeft = wrapper.scrollWidth - wrapper.clientWidth
+  },
+  render () {
+    const {title} = this.props
+    const {params, routes} = this.context
+    const breadcrumbs = flatten(compact(map(routes, 'breadcrumb')))
 
-Breadcrumbs.propTypes = {
-  title: PropTypes.node
-}
-Breadcrumbs.contextTypes = {
-  params: PropTypes.object,
-  routes: PropTypes.array
-}
+    return (
+      <span className={`${style.wrapper}`} ref='wrapper'>
+        {map(breadcrumbs, (Breadcrumb, index) => (
+          <span key={index} className={style.breadcrumb}>
+            <Breadcrumb params={params}/>
+          </span>))}
 
-Breadcrumbs.displayName = 'Breadcrumbs'
+        {title
+          ? <span className={style.breadcrumb}>{title}</span>
+          : null}
+      </span>
+    )
+  }
+})
 
-export default styledFnComponent(Breadcrumbs, style)
+export default Breadcrumbs

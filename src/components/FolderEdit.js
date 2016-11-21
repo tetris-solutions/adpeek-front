@@ -90,12 +90,10 @@ export const EditFolder = React.createClass({
       .then(this.posSubmit)
   },
   saveAndDismiss (name) {
-    function onChange ({target: {value}}) {
+    return ({target: {value}}) => {
       const errors = omit(this.state.errors, name)
       this.setState({errors, [name]: value})
     }
-
-    return onChange
   },
   render () {
     const {medias, company, workspace: {accounts}} = this.props
