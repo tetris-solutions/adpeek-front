@@ -133,9 +133,7 @@ export const BudgetEdit = React.createClass({
           <Tabs>
             <Tab id='budget-campaigns' title={budgetCampaignsTitle}>
               <br/>
-              {!size(campaigns) ? (
-                <Message html>budgetWithoutCampaigns</Message>)
-                : (
+              {!size(campaigns) ? <Message html>budgetWithoutCampaigns</Message> : (
                 <div className='mdl-list'>
                   {map(campaigns, campaign => (
                     <BudgetCampaign

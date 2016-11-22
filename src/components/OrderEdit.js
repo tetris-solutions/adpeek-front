@@ -77,8 +77,8 @@ export function OrderEdit ({
                 showFolderCampaigns={showFolderCampaigns}
                 max={remainingValue + budget.value}
                 budget={budget}
-                change={changeBudgetField}/>)
-              : (
+                change={changeBudgetField}/>
+            ) : (
               <EmptySelectionCard
                 available={remainingAmount}
                 amount={order.amount}
