@@ -10,7 +10,7 @@ const ButtonWithPrompt = React.createClass({
     className: PropTypes.string,
     label: PropTypes.node.isRequired,
     size: PropTypes.string,
-    span: PropTypes.bool
+    tag: PropTypes.string
   },
   getInitialState () {
     return {
@@ -19,7 +19,8 @@ const ButtonWithPrompt = React.createClass({
   },
   getDefaultProps () {
     return {
-      size: 'small'
+      size: 'small',
+      tag: 'button'
     }
   },
   openModal () {
@@ -33,13 +34,10 @@ const ButtonWithPrompt = React.createClass({
     this.openModal()
   },
   render () {
-    const {span, className, size, label, children: fn} = this.props
+    const {tag: Tag, className, size, label, children: fn} = this.props
     const props = {className, onClick: this.onClick, style: st}
-    let Tag = 'button'
 
-    if (span) {
-      Tag = 'span'
-    } else {
+    if (Tag === 'button') {
       props.type = 'button'
     }
 

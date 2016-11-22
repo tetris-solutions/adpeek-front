@@ -46,6 +46,10 @@ const style = csjs`
 const {PropTypes} = React
 const cleanStr = str => trim(deburr(lowerCase(str)))
 
+const DeleteSpan = props => <DeleteButton {...props} tag='span'/>
+
+DeleteSpan.displayName = 'Delete-Span'
+
 const Workspace = ({company, workspace, del, fave, unfave}) => (
   <ThumbLink to={`/company/${company}/workspace/${workspace.id}`} title={workspace.name}>
     <Cap>{workspace.name}</Cap>
@@ -76,7 +80,7 @@ const Workspace = ({company, workspace, del, fave, unfave}) => (
         <MenuItem tag={Link} to={`/company/${company}/workspace/${workspace.id}/edit`} icon='mode_edit'>
           <Message>editWorkspace</Message>
         </MenuItem>
-        <MenuItem tag={DeleteButton} span entityName={workspace.name} onClick={del} icon='delete'>
+        <MenuItem tag={DeleteSpan} entityName={workspace.name} onClick={del} icon='delete'>
           <Message>deleteWorkspace</Message>
         </MenuItem>
       </DropdownMenu>
