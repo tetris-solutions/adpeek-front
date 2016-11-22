@@ -151,8 +151,11 @@ export function reportToChartConfig (type, props) {
 
     if (isIdBased) {
       categories.push(referenceEntity.name)
-    } else if (isString(point[xAxisDimension])) {
-      categories.push(point[xAxisDimension])
+    } else if (
+      xAxisDimension === 'qualityscore' ||
+      isString(point[xAxisDimension])
+    ) {
+      categories.push(String(point[xAxisDimension]))
     }
 
     function metricIterator (metric, yAxisIndex) {
