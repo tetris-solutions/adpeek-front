@@ -21,5 +21,5 @@ export function allowGuestMiddleware ({query, path, user}, res, next) {
   query = assign({}, query)
   query._t = Date.now()
 
-  res.redirect(path + qs.stringify(query))
+  res.redirect(path + '?' + qs.stringify(query))
 }
