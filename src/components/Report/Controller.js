@@ -1,5 +1,6 @@
 import get from 'lodash/get'
 import isNumber from 'lodash/isNumber'
+import qs from 'query-string'
 import map from 'lodash/map'
 import max from 'lodash/max'
 import uniqBy from 'lodash/uniqBy'
@@ -21,7 +22,7 @@ const {PropTypes} = React
 const getAccountKey = ({tetris_account, ad_account}) => `${tetris_account}:${ad_account}`
 const insertId = a => assign({}, a, {id: getAccountKey(a)})
 
-function calcPathToReport ({company, workspace, folder, report}) {
+function calcPathToReport ({company, workspace, folder, report}, {from, to}) {
   const scope = compact([
     `company/${company}`,
     workspace && `workspace/${workspace}`,
@@ -29,7 +30,7 @@ function calcPathToReport ({company, workspace, folder, report}) {
     `report/${report}`
   ])
 
-  return '/' + join(scope, '/')
+  return '/' + join(scope, '/') + '?' + qs.stringify({from, to})
 }
 
 const ReportController = React.createClass({
@@ -158,13 +159,13 @@ const ReportController = React.createClass({
     const {isGuestUser, guestMode, editMode, params, metaData, report: {modules, shareUrl}} = this.props
     const {isCreatingReport} = this.state
     const fullReportUrl = !isGuestUser && guestMode
-      ? calcPathToReport(params)
+      ? calcPathToReport(params, this.context.location.query)
       : null
 
     return (
       <ReportScreen
         showNewModuleButton={!guestMode && editMode}
-        showDateRangeButton={!guestMode}
+        canChangeDateRange={!guestMode}
         downloadReport={this.downloadReport}
         isCreatingReport={isCreatingReport}
         addNewModule={this.addNewModule}

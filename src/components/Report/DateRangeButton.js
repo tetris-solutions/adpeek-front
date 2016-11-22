@@ -34,7 +34,7 @@ DateRangeSelector.propTypes = {
   endDate: PropTypes.object
 }
 
-function DateRangeButton ({className}, {moment, reportParams: {from, to}, changeDateRange}) {
+function DateRangeButton ({disabled, className}, {moment, reportParams: {from, to}, changeDateRange}) {
   const startDate = moment(from)
   const endDate = moment(to)
 
@@ -43,6 +43,14 @@ function DateRangeButton ({className}, {moment, reportParams: {from, to}, change
       dateRangeLabel
     </Message>
   )
+
+  if (disabled) {
+    return (
+      <button type='button' disabled className={className}>
+        {label}
+      </button>
+    )
+  }
 
   return (
     <ButtonWithPrompt className={className} label={label} size='medium'>
@@ -58,7 +66,8 @@ function DateRangeButton ({className}, {moment, reportParams: {from, to}, change
 
 DateRangeButton.displayName = 'Report-Date-Range'
 DateRangeButton.propTypes = {
-  className: PropTypes.string.isRequired
+  className: PropTypes.string.isRequired,
+  disabled: PropTypes.bool
 }
 DateRangeButton.contextTypes = {
   moment: PropTypes.func.isRequired,

@@ -14,7 +14,7 @@ const ReportScreen = ({
   showContextMenu,
   shareUrl,
   showNewModuleButton,
-  showDateRangeButton,
+  canChangeDateRange,
   fullReportUrl,
   downloadReport,
   isCreatingReport,
@@ -22,13 +22,13 @@ const ReportScreen = ({
 }) => (
   <div>
     <SubHeader>
+
+      <DateRangeButton disabled={!canChangeDateRange} className='mdl-button mdl-color-text--grey-100'/>
+
       {fullReportUrl && (
         <a href={fullReportUrl} className='mdl-button mdl-color-text--grey-100'>
           <Message>viewFullReport</Message>
         </a>)}
-
-      {showDateRangeButton && (
-        <DateRangeButton className='mdl-button mdl-color-text--grey-100'/>)}
 
       {showNewModuleButton && (
         <button className='mdl-button mdl-color-text--grey-100' onClick={addNewModule}>
@@ -52,7 +52,7 @@ ReportScreen.displayName = 'Report-Screen'
 ReportScreen.propTypes = {
   children: PropTypes.node.isRequired,
   showNewModuleButton: PropTypes.bool.isRequired,
-  showDateRangeButton: PropTypes.bool.isRequired,
+  canChangeDateRange: PropTypes.bool.isRequired,
   downloadReport: PropTypes.func.isRequired,
   isCreatingReport: PropTypes.bool.isRequired,
   addNewModule: PropTypes.func.isRequired,
