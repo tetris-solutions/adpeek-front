@@ -1,6 +1,6 @@
 import React from 'react'
 import Message from 'tetris-iso/Message'
-import ButtonWithPrompt from '../ButtonWithPrompt'
+import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
 import Input from '../Input'
 import clipboard from 'copy-to-clipboard'
 import {loadReportShareUrlAction} from '../../actions/load-report-share-url'

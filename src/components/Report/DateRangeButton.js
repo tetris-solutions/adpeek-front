@@ -1,7 +1,7 @@
 import React from 'react'
 import Message from 'tetris-iso/Message'
 import DateRangePicker from '../DateRangePicker'
-import ButtonWithPrompt from '../ButtonWithPrompt'
+import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
 
 const {PropTypes} = React
 

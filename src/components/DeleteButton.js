@@ -1,6 +1,6 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
-import ButtonWithPrompt from './ButtonWithPrompt'
+import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
 import flow from 'lodash/flow'
 
 const {PropTypes} = React
