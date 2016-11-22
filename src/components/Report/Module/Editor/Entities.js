@@ -23,7 +23,7 @@ const Entities = React.createClass({
   getFolderLevel () {
     return {
       id: 'folder',
-      openByDefault: true,
+      openByDefault: false,
       mount ({folder, campaign}) {
         return folder || campaign.folder
       }
