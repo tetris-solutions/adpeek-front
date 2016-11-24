@@ -153,7 +153,7 @@ export const Input = React.createClass({
     const input = e.target
     const error = this.getError(input)
 
-    function propagate () {
+    const propagate = () =>
       onChange({
         target: {
           name: input.name,
@@ -162,15 +162,14 @@ export const Input = React.createClass({
             : input.value
         }
       })
-    }
 
-    const callback = !error && onChange ? propagate : undefined
+    const onStateChange = !error && onChange ? propagate : undefined
 
     this.setState({
       error,
       value: input.value,
       isDirty: notEmptyString(input.value)
-    }, callback)
+    }, onStateChange)
   },
   onFocus () {
     this.setState({isFocused: true})
