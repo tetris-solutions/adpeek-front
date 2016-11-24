@@ -1,8 +1,7 @@
 import find from 'lodash/find'
 import React from 'react'
-import Message from 'tetris-iso/Message'
 import AttributeList from './AttributeList'
-import Switch from '../../../Switch'
+import FilterSwitch from './FilterSwitch'
 
 const {PropTypes} = React
 
@@ -13,9 +12,7 @@ const Entities = React.createClass({
     draft: PropTypes.object.isRequired,
     entities: PropTypes.object.isRequired,
     addEntity: PropTypes.func.isRequired,
-    removeEntity: PropTypes.func.isRequired,
-    activeOnly: PropTypes.bool.isRequired,
-    toggleActiveOnly: PropTypes.func.isRequired
+    removeEntity: PropTypes.func.isRequired
   },
   propTypes: {
     items: PropTypes.array.isRequired
@@ -136,23 +133,20 @@ const Entities = React.createClass({
     }
   },
   render () {
-    const {activeOnly, toggleActiveOnly, draft: {module}, addEntity, removeEntity} = this.context
+    const {draft: {module}, addEntity, removeEntity} = this.context
     const {items} = this.props
 
     return (
       <div>
+        <FilterSwitch/>
+        <br/>
+
         <AttributeList
           levels={this.getLevels()}
           attributes={items}
           selectedAttributes={module.filters.id}
           remove={removeEntity}
           add={addEntity}/>
-
-        <br/>
-        <Switch
-          checked={activeOnly}
-          onChange={toggleActiveOnly}
-          label={<Message>filterActiveOnly</Message>}/>
       </div>
     )
   }
