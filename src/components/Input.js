@@ -36,7 +36,7 @@ export const Input = React.createClass({
     label: PropTypes.string,
     name: PropTypes.string.isRequired,
     onChange: PropTypes.func,
-    format: PropTypes.oneOf(['currency', 'decimal'])
+    format: PropTypes.oneOf(['currency', 'percentage', 'decimal'])
   },
   contextTypes: {
     messages: PropTypes.object,
