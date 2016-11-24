@@ -97,7 +97,7 @@ export const Input = React.createClass({
       newState.value = newPropsValue
     }
 
-    newState.error = this.getError(assign({}, nextProps, newState))
+    newState.error = this.getError(assign({}, this.state, nextProps, newState))
 
     if (newState.value !== undefined || newState.error !== this.state.error) {
       this.setState(newState)
