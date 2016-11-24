@@ -18,6 +18,8 @@ import {loadKeywordsRelevanceAction} from '../actions/load-keywords-relevance'
 const {PropTypes} = React
 
 export function loadKeywordsRelevance () {
+  this.setState({calculatingRelevance: true})
+
   return Promise.resolve().then(() => {
     const {dispatch, params, campaign, folder} = this.props
     const adGroups = campaign ? campaign.adGroups : folder.adGroups
@@ -36,7 +38,7 @@ export function loadKeywordsRelevance () {
     })
 
     return promise
-  }).then(() => this.setState({isLoading: false}))
+  }).then(() => this.setState({calculatingRelevance: false}))
 }
 
 export const CampaignCreatives = React.createClass({
@@ -79,7 +81,7 @@ export const CampaignCreatives = React.createClass({
       params.workspace,
       params.folder,
       params.campaign)
-      .then(this.loadKeywordsRelevance)
+      .then(() => this.setState({isLoading: false}))
   },
   onAdGroupsLoaded () {
     const {campaign, dispatch, params} = this.props
@@ -102,7 +104,7 @@ export const CampaignCreatives = React.createClass({
   },
   loadKeywordsRelevance,
   render () {
-    const {creatingReport, isLoading} = this.state
+    const {creatingReport, isLoading, calculatingRelevance} = this.state
     const {campaign} = this.props
     const inner = campaign.platform === 'adwords'
       ? <AdGroups adGroups={campaign.adGroups}/>
@@ -111,6 +113,17 @@ export const CampaignCreatives = React.createClass({
     return (
       <div>
         <SubHeader title={<Message>creatives</Message>}>
+          <button
+            type='button'
+            className='mdl-button mdl-color-text--grey-100'
+            disabled={isLoading || calculatingRelevance !== undefined}
+            onClick={this.loadKeywordsRelevance}>
+
+            {calculatingRelevance
+              ? <Message>calculating</Message>
+              : <Message>calculateKeywordsRelevance</Message>}
+          </button>
+
           <DownloadReportButton
             loading={creatingReport}
             extract={this.extractReport}

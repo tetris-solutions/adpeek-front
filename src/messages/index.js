@@ -110,6 +110,7 @@ module.exports = {
     loadingAds: 'Loading Ads...',
     loadingReport: 'Loading Report...',
     loadingCampaigns: 'Loading Campaigns...',
+    calculating: 'Calculating...',
     extractReport: 'Download',
     creatingReport: 'Creating Report...',
 
@@ -266,7 +267,8 @@ module.exports = {
     adwordsLevel: 'Adwords',
     facebookLevel: 'Facebook',
     sharedLevel: 'Shared',
-    tooManyAccounts: 'You have selected {selected} accounts, the max is {max}'
+    tooManyAccounts: 'You have selected {selected} accounts, the max is {max}',
+    calculateKeywordsRelevance: 'Calculate relevance'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -378,6 +380,7 @@ module.exports = {
     loadingAds: 'Carregando criativos...',
     loadingReport: 'Carregando relatório...',
     loadingCampaigns: 'Carregando campanhas...',
+    calculating: 'Calculando...',
     extractReport: 'Baixar',
     creatingReport: 'Gerando Relatório...',
 
@@ -535,6 +538,7 @@ module.exports = {
     adwordsLevel: 'Adwords',
     facebookLevel: 'Facebook',
     sharedLevel: 'Comum',
-    tooManyAccounts: 'O máximo de contas é {max}, você selecionou {selected}'
+    tooManyAccounts: 'O máximo de contas é {max}, você selecionou {selected}',
+    calculateKeywordsRelevance: 'Calcular relevância'
   }
 }

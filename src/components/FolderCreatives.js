@@ -54,7 +54,7 @@ export const FolderCreatives = React.createClass({
       params.company,
       params.workspace,
       params.folder)
-      .then(this.loadKeywordsRelevance)
+      .then(() => this.setState({isLoading: false}))
   },
   onAdGroupsLoaded () {
     const {folder: {adGroups}, dispatch, params} = this.props
@@ -75,7 +75,7 @@ export const FolderCreatives = React.createClass({
   },
   loadKeywordsRelevance,
   render () {
-    const {creatingReport, isLoading} = this.state
+    const {creatingReport, isLoading, calculatingRelevance} = this.state
     const {folder} = this.props
     const inner = folder.account.platform === 'adwords'
       ? <AdGroups adGroups={folder.adGroups}/>
@@ -84,6 +84,16 @@ export const FolderCreatives = React.createClass({
     return (
       <div>
         <SubHeader title={<Message>creatives</Message>}>
+          <button
+            className='mdl-button mdl-color-text--grey-100'
+            disabled={isLoading || calculatingRelevance !== undefined}
+            onClick={this.loadKeywordsRelevance}>
+
+            {calculatingRelevance
+              ? <Message>calculating</Message>
+              : <Message>calculateKeywordsRelevance</Message>}
+          </button>
+
           <DownloadReportButton
             loading={creatingReport}
             extract={this.extractReport}
