@@ -77,12 +77,18 @@ const Workspace = ({company, workspace, del, fave, unfave}) => (
             {workspace.favorite ? 'unfaveWorkspace' : 'faveWorkspace'}
           </Message>
         </HeaderMenuItem>
-        <MenuItem tag={Link} to={`/company/${company}/workspace/${workspace.id}/edit`} icon='mode_edit'>
-          <Message>editWorkspace</Message>
-        </MenuItem>
-        <MenuItem tag={DeleteSpan} entityName={workspace.name} onClick={del} icon='delete'>
-          <Message>deleteWorkspace</Message>
-        </MenuItem>
+
+        <Fence canEditWorkspace>
+          <MenuItem tag={Link} to={`/company/${company}/workspace/${workspace.id}/edit`} icon='mode_edit'>
+            <Message>editWorkspace</Message>
+          </MenuItem>
+        </Fence>
+
+        <Fence canEditWorkspace>
+          <MenuItem tag={DeleteSpan} entityName={workspace.name} onClick={del} icon='delete'>
+            <Message>deleteWorkspace</Message>
+          </MenuItem>
+        </Fence>
       </DropdownMenu>
     </Gear>
   </ThumbLink>
