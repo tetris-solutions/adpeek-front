@@ -34,5 +34,12 @@ export function prettyNumber (value, type = 'decimal', locale = 'en-US') {
     options.currency = naiveCurrency[locale]
   }
 
-  return Intl.NumberFormat(locale, options).format(value)
+  /**
+   * @type {String}
+   */
+  const formatted = Intl.NumberFormat(locale, options).format(value)
+
+  return formatted
+    .replace('$', '$ ')
+    .replace('%', ' %')
 }

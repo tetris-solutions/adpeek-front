@@ -6,9 +6,8 @@ import React from 'react'
 import isNumber from 'lodash/isNumber'
 import isString from 'lodash/isString'
 import assign from 'lodash/assign'
-import MaskedTextInput from 'react-text-mask'
-import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 import TextMessage from 'intl-messageformat'
+import {prettyNumber} from '../functions/pretty-number'
 
 const {PropTypes} = React
 const inputFields = [
@@ -37,7 +36,7 @@ export const Input = React.createClass({
     label: PropTypes.string,
     name: PropTypes.string.isRequired,
     onChange: PropTypes.func,
-    prefix: PropTypes.string
+    currency: PropTypes.bool
   },
   contextTypes: {
     messages: PropTypes.object,
@@ -45,8 +44,7 @@ export const Input = React.createClass({
   },
   getDefaultProps () {
     return {
-      type: 'text',
-      prefix: ''
+      type: 'text'
     }
   },
   getInitialState () {
@@ -58,7 +56,7 @@ export const Input = React.createClass({
       : this.props.value
 
     if (this.props.type === 'number') {
-      value = this.fromNumber(value)
+      value = this.formatNumber(value)
     }
 
     const state = {
@@ -72,31 +70,34 @@ export const Input = React.createClass({
   },
   componentDidMount () {
     this.input = this.refs.wrapper.querySelector('input')
-    this.input.inputMaskToNumber = this.toNumber
+    this.input.inputMaskToNumber = () => this.getRawNumber(this.state.value)
   },
   componentWillReceiveProps (nextProps) {
+    const oldPropsValue = this.props.value
     const stateValue = this.state.value
     const newPropsValue = nextProps.value
     const newState = {}
 
     if (this.props.type === 'number') {
-      const hasValueChanged = this.toNumber(stateValue) !== this.toNumber(newPropsValue)
+      const hasNumberChanged = (
+        this.getRawNumber(oldPropsValue) !== this.getRawNumber(newPropsValue) &&
+        this.getRawNumber(stateValue) !== this.getRawNumber(newPropsValue)
+      )
 
-      if (hasValueChanged) {
-        newState.value = this.fromNumber(newPropsValue)
+      if (hasNumberChanged) {
+        newState.value = this.formatNumber(newPropsValue)
       }
-
-      newState.error = this.getError(assign({}, nextProps, newState))
-    } else if (newPropsValue !== stateValue) {
+    } else if (newPropsValue !== oldPropsValue && newPropsValue !== stateValue) {
       newState.value = newPropsValue
-      newState.error = this.getError(assign({}, nextProps))
     }
 
-    if (newState.value !== undefined && newState.error !== this.state.error) {
+    newState.error = this.getError(assign({}, nextProps, newState))
+
+    if (newState.value !== undefined || newState.error !== this.state.error) {
       this.setState(newState)
     }
   },
-  toNumber (value = this.state.value) {
+  getRawNumber (value) {
     if (isNumber(value)) return value
     if (!isString(value)) return 0
 
@@ -109,21 +110,28 @@ export const Input = React.createClass({
       value.replace(/,/g, '') // strip thousand sep
     )
 
-    return Number(cleanValue.replace(/[^0-9-.]/g, '')
-      .replace(/\D$/g, ''))
+    return Number(
+      cleanValue
+        .replace(/[^0-9-.]/g, '')
+        .replace(/\D$/g, '')
+    )
   },
-  fromNumber (val) {
-    if (isString(val)) return val
+  formatNumber (val) {
+    if (isString(val)) {
+      val = this.getRawNumber(val)
+    }
+
     if (!isNumber(val)) return ''
 
-    return this.context.locales === 'pt-BR'
-      ? String(val).replace('.', ',')
-      : String(val)
+    const {currency} = this.props
+    const {locales} = this.context
+
+    return prettyNumber(val, currency ? 'currency' : 'decimal', locales)
   },
   getNumberError (input) {
     const {messages: {invalidInput, greaterThanMax, lessThanMin}, locales} = this.context
 
-    const number = this.toNumber(input.value)
+    const number = this.getRawNumber(input.value)
 
     if (isNaN(number)) return invalidInput
 
@@ -158,7 +166,7 @@ export const Input = React.createClass({
         target: {
           name: input.name,
           value: type === 'number'
-            ? this.toNumber(input.value)
+            ? this.getRawNumber(input.value)
             : input.value
         }
       })
@@ -175,12 +183,16 @@ export const Input = React.createClass({
     this.setState({isFocused: true})
   },
   onBlur () {
-    this.setState({isFocused: false})
+    const {value} = this.state
+
+    this.setState({
+      isFocused: false,
+      value: this.props.type === 'number' ? this.formatNumber(value) : value
+    })
   },
   render () {
     const {value, isDirty, isFocused} = this.state
-    const {prefix, label} = this.props
-    const {locales} = this.context
+    const {label} = this.props
     const error = this.state.error || this.props.error
 
     const wrapperClasses = cx('mdl-textfield',
@@ -189,7 +201,7 @@ export const Input = React.createClass({
       isDirty && 'is-dirty',
       isFocused && 'is-focused')
 
-    let Tag = 'input'
+    const Tag = 'input'
 
     const inputProps = assign(pick(this.props, inputFields), {
       value,
@@ -200,15 +212,7 @@ export const Input = React.createClass({
     })
 
     if (inputProps.type === 'number') {
-      Tag = MaskedTextInput
-
       inputProps.type = 'text'
-      inputProps.mask = createNumberMask({
-        prefix,
-        allowDecimal: true,
-        decimalSymbol: locales === 'pt-BR' ? ',' : '.',
-        thousandsSeparatorSymbol: locales === 'pt-BR' ? '.' : ','
-      })
     }
 
     return (
@@ -219,8 +223,7 @@ export const Input = React.createClass({
         {label && (
           <label className='mdl-textfield__label'>
             <Message>{label + 'Label'}</Message>
-          </label>
-        )}
+          </label>)}
 
         {error && (<span className='mdl-textfield__error'>{error}</span>)}
 

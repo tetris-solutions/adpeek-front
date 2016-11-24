@@ -123,6 +123,7 @@ export const BudgetEdit = React.createClass({
                 onChange={this.onChangeValue}
                 value={value}
                 type='number'
+                currency
                 label='value'
                 name='value'
                 max={max}
