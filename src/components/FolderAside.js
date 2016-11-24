@@ -3,7 +3,7 @@ import React from 'react'
 import {Link} from 'react-router'
 import endsWith from 'lodash/endsWith'
 import Fence from './Fence'
-import {Navigation, NavBt, Buttons, Name} from './Navigation'
+import {Navigation, NavBt, NavBts, Name} from './Navigation'
 import DeleteButton from './DeleteButton'
 import {deleteFolderAction} from '../actions/delete-folder'
 import {contextualize} from './higher-order/contextualize'
@@ -34,7 +34,7 @@ export function FolderAside ({
         <Name>
           {folder.name}
         </Name>
-        <Buttons>
+        <NavBts>
           <NavBt tag={Link} to={`${baseUrl}/creatives`} icon='receipt'>
             <Message>creatives</Message>
           </NavBt>
@@ -60,7 +60,7 @@ export function FolderAside ({
           <NavBt tag={Link} to={backspaceUrl} icon='close'>
             <Message>oneLevelUpNavigation</Message>
           </NavBt>
-        </Buttons>
+        </NavBts>
       </Navigation>}
     </Fence>
   )

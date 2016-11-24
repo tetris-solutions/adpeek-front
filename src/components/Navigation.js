@@ -59,7 +59,7 @@ export const NavBt = props => {
     </Tag>
   )
 }
-NavBt.displayName = 'NavBt'
+NavBt.displayName = 'Nav-Button'
 NavBt.defaultProps = {
   tag: 'a'
 }
@@ -72,7 +72,7 @@ NavBt.propTypes = {
   children: PropTypes.node
 }
 
-export const Buttons = ({children}) => (
+export const NavBts = ({children}) => (
   <section className={`${style.menu}`}>
     {children}
   </section>
@@ -85,9 +85,9 @@ export const Name = ({children}) => (
   </section>
 )
 Name.displayName = 'Name'
-Buttons.displayName = 'Buttons'
+NavBts.displayName = 'Nav-Buttons'
 
-Name.propTypes = Buttons.propTypes = {
+Name.propTypes = NavBts.propTypes = {
   children: PropTypes.node.isRequired
 }
 

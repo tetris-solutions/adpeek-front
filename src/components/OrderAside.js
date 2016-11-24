@@ -5,7 +5,7 @@ import Fence from './Fence'
 import DeleteButton from './DeleteButton'
 import {deleteOrderAction} from '../actions/delete-order'
 import {contextualize} from './higher-order/contextualize'
-import {Navigation, Name, NavBt, Buttons} from './Navigation'
+import {Navigation, Name, NavBt, NavBts} from './Navigation'
 
 const {PropTypes} = React
 
@@ -21,7 +21,7 @@ export function OrderAside ({params: {company, workspace, folder}, order, dispat
     <Fence canEditOrder>{({canEditOrder}) =>
       <Navigation icon='monetization_on'>
         <Name>{order.name}</Name>
-        <Buttons>
+        <NavBts>
           {canEditOrder && <NavBt tag={Link} to={`${folderUrl}/order/${order.id}`} icon='mode_edit'>
             <Message>editOrder</Message>
           </NavBt>}
@@ -41,7 +41,7 @@ export function OrderAside ({params: {company, workspace, folder}, order, dispat
           <NavBt tag={Link} to={`${folderUrl}/orders`} icon='close'>
             <Message>oneLevelUpNavigation</Message>
           </NavBt>
-        </Buttons>
+        </NavBts>
       </Navigation>}
     </Fence>
   )

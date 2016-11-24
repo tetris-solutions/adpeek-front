@@ -2,7 +2,7 @@ import Message from 'tetris-iso/Message'
 import React from 'react'
 import {Link} from 'react-router'
 import {contextualize} from './higher-order/contextualize'
-import {Navigation, NavBt, Buttons, Name} from './Navigation'
+import {Navigation, NavBt, NavBts, Name} from './Navigation'
 import Recent from './Recent'
 import ReportLink from './Report/LinkToReports'
 
@@ -21,7 +21,7 @@ export const CompanyAside = ({company, params, dispatch}) => {
         {company.name}
       </Name>
       <br/>
-      <Buttons>
+      <NavBts>
         <NavBt href={`${process.env.FRONT_URL}/dashboard/company/${company.id}/info`} icon='info_outline'>
           <Message>manageCompany</Message>
         </NavBt>
@@ -37,7 +37,7 @@ export const CompanyAside = ({company, params, dispatch}) => {
         <NavBt tag={Link} to='/' icon='close'>
           <Message>oneLevelUpNavigation</Message>
         </NavBt>
-      </Buttons>
+      </NavBts>
       <br/>
       <hr/>
       <Recent

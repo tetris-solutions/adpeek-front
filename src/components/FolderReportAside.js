@@ -11,7 +11,7 @@ import {setDefaultReportAction} from '../actions/set-default-report'
 import {contextualize} from './higher-order/contextualize'
 import ReportAccessControl from './Report/AccessControl'
 import ReportEditPrompt from './Report/EditPrompt'
-import {Name, Navigation, NavBt, Buttons} from './Navigation'
+import {Name, Navigation, NavBt, NavBts} from './Navigation'
 import {canSkipReportEditPrompt} from '../functions/can-skip-report-edit-prompt'
 import NameInput from './Report/NameInput'
 
@@ -41,7 +41,7 @@ export function FolderReportAside ({report, dispatch, user}, {messages, locales,
             ? <NameInput dispatch={dispatch} params={params} report={report}/>
             : <Name>{report.name}</Name>}
 
-          <Buttons>
+          <NavBts>
             {canBrowseReports && (
               <NavBt onClick={favorite} title={favTitle} icon={report.is_user_selected ? 'star' : 'star_border'}>
                 <Message>{report.is_user_selected ? 'unfavoriteReport' : 'favoriteReport'}</Message>
@@ -77,7 +77,7 @@ export function FolderReportAside ({report, dispatch, user}, {messages, locales,
             <NavBt tag={Link} to={canBrowseReports ? `${folderUrl}/reports` : folderUrl} icon='close'>
               <Message>oneLevelUpNavigation</Message>
             </NavBt>
-          </Buttons>
+          </NavBts>
         </Navigation>}
     </Fence>
   )

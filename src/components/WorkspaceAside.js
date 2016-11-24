@@ -5,7 +5,7 @@ import Fence from './Fence'
 import DeleteButton from './DeleteButton'
 import {deleteWorkspaceAction} from '../actions/delete-workspace'
 import {contextualize} from './higher-order/contextualize'
-import {Navigation, NavBt, Buttons, Name} from './Navigation'
+import {Navigation, NavBt, NavBts, Name} from './Navigation'
 import Recent from './Recent'
 import ReportLink from './Report/LinkToReports'
 
@@ -28,7 +28,7 @@ export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
           {workspace.name}
         </Name>
         <br/>
-        <Buttons>
+        <NavBts>
           <NavBt tag={Link} to={`${baseUrl}/orders`} icon='attach_money'>
             <Message>workspaceOrders</Message>
           </NavBt>
@@ -50,7 +50,7 @@ export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
           <NavBt tag={Link} to={`/company/${company}`} icon='close'>
             <Message>oneLevelUpNavigation</Message>
           </NavBt>
-        </Buttons>
+        </NavBts>
         <br/>
         <hr/>
         <Recent
