@@ -76,7 +76,7 @@ export const OrderHeader = React.createClass({
             </VerticalAlign>
             <div className='mdl-cell mdl-cell--2-col'>
               <Input
-                currency
+                format='currency'
                 value={amount}
                 type='number'
                 label='investment'

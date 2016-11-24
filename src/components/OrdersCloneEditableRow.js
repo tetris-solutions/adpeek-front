@@ -67,7 +67,11 @@ export const Editable = React.createClass({
           <input type='hidden' name={`${index}.end`} value={end} ref='end'/>
         </td>
         <td className='mdl-data-table__cell--non-numeric'>
-          <Input currency type='number' name={`${index}.amount`} defaultValue={amount}/>
+          <Input
+            format='currency'
+            type='number'
+            name={`${index}.amount`}
+            defaultValue={amount}/>
         </td>
         <td className='mdl-data-table__cell--non-numeric'>
           <Checkbox

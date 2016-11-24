@@ -36,7 +36,7 @@ export const Input = React.createClass({
     label: PropTypes.string,
     name: PropTypes.string.isRequired,
     onChange: PropTypes.func,
-    currency: PropTypes.bool
+    format: PropTypes.oneOf(['currency', 'decimal'])
   },
   contextTypes: {
     messages: PropTypes.object,
@@ -44,7 +44,8 @@ export const Input = React.createClass({
   },
   getDefaultProps () {
     return {
-      type: 'text'
+      type: 'text',
+      format: 'decimal'
     }
   },
   getInitialState () {
@@ -72,7 +73,7 @@ export const Input = React.createClass({
     this.input = this.refs.wrapper.querySelector('input')
     this.input.inputMaskToNumber = () => this.getRawNumber(this.state.value)
   },
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps (nextProps, nextContext) {
     const oldPropsValue = this.props.value
     const stateValue = this.state.value
     const newPropsValue = nextProps.value
@@ -84,8 +85,13 @@ export const Input = React.createClass({
         this.getRawNumber(stateValue) !== this.getRawNumber(newPropsValue)
       )
 
-      if (hasNumberChanged) {
-        newState.value = this.formatNumber(newPropsValue)
+      const haveFormatRulesChanged = (
+        nextProps.format !== this.props.format ||
+        nextContext.locales !== this.context.locales
+      )
+
+      if (hasNumberChanged || haveFormatRulesChanged) {
+        newState.value = this.formatNumber(newPropsValue, nextProps.format, nextContext.locales)
       }
     } else if (newPropsValue !== oldPropsValue && newPropsValue !== stateValue) {
       newState.value = newPropsValue
@@ -116,17 +122,18 @@ export const Input = React.createClass({
         .replace(/\D$/g, '')
     )
   },
-  formatNumber (val) {
+  formatNumber (val, format = this.props.format, locale = this.context.locales) {
     if (isString(val)) {
       val = this.getRawNumber(val)
     }
 
     if (!isNumber(val)) return ''
 
-    const {currency} = this.props
-    const {locales} = this.context
-
-    return prettyNumber(val, currency ? 'currency' : 'decimal', locales)
+    if (format === 'percentage') {
+      return prettyNumber(val, 'decimal', locale) + ' %'
+    } else {
+      return prettyNumber(val, format, locale)
+    }
   },
   getNumberError (input) {
     const {messages: {invalidInput, greaterThanMax, lessThanMin}, locales} = this.context

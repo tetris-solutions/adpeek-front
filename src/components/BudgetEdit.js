@@ -58,12 +58,13 @@ export const BudgetEdit = React.createClass({
       close,
       deliveryMethods,
       max,
-      budget: {name, value, mode, campaigns, delivery_method}
+      budget: {value, name, mode, campaigns, delivery_method}
     } = this.props
 
+    const percentageMode = mode === 'percentage'
     let switchLabel, switchChecked
 
-    if (mode === 'percentage') {
+    if (percentageMode) {
       switchChecked = true
       switchLabel = percentageLabel
     } else {
@@ -123,7 +124,7 @@ export const BudgetEdit = React.createClass({
                 onChange={this.onChangeValue}
                 value={value}
                 type='number'
-                currency
+                format={percentageMode ? 'percentage' : 'currency'}
                 label='value'
                 name='value'
                 max={max}
