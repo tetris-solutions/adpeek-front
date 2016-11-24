@@ -75,25 +75,25 @@ export const Input = React.createClass({
     this.input.inputMaskToNumber = this.toNumber
   },
   componentWillReceiveProps (nextProps) {
-    const {value} = nextProps
-    const oldValue = this.props.value
+    const stateValue = this.state.value
+    const newPropsValue = nextProps.value
+    const newState = {}
 
     if (this.props.type === 'number') {
-      const hasValueChanged = this.toNumber(value) !== this.toNumber(oldValue)
+      const hasValueChanged = this.toNumber(stateValue) !== this.toNumber(newPropsValue)
 
-      if (
-        hasValueChanged ||
-        nextProps.min !== this.props.min ||
-        nextProps.max !== this.props.max
-      ) {
-        const state = {value: this.fromNumber(value)}
-        state.error = this.getError(assign({}, nextProps, state))
-        this.setState(state)
+      if (hasValueChanged) {
+        newState.value = this.fromNumber(newPropsValue)
       }
-    } else if (value !== oldValue) {
-      const state = {value}
-      state.error = this.getError(assign({}, nextProps, state))
-      this.setState(state)
+
+      newState.error = this.getError(assign({}, nextProps, newState))
+    } else if (newPropsValue !== stateValue) {
+      newState.value = newPropsValue
+      newState.error = this.getError(assign({}, nextProps))
+    }
+
+    if (newState.value !== undefined && newState.error !== this.state.error) {
+      this.setState(newState)
     }
   },
   toNumber (value = this.state.value) {
@@ -153,13 +153,7 @@ export const Input = React.createClass({
     const input = e.target
     const error = this.getError(input)
 
-    this.setState({
-      error,
-      value: input.value,
-      isDirty: notEmptyString(input.value)
-    })
-
-    if (!error && onChange) {
+    function propagate () {
       onChange({
         target: {
           name: input.name,
@@ -169,15 +163,20 @@ export const Input = React.createClass({
         }
       })
     }
+
+    const callback = !error && onChange ? propagate : undefined
+
+    this.setState({
+      error,
+      value: input.value,
+      isDirty: notEmptyString(input.value)
+    }, callback)
   },
   onFocus () {
     this.setState({isFocused: true})
   },
   onBlur () {
     this.setState({isFocused: false})
-  },
-  isMask () {
-    return this.props.type === 'number'
   },
   render () {
     const {value, isDirty, isFocused} = this.state
@@ -201,7 +200,7 @@ export const Input = React.createClass({
       onFocus: this.onFocus
     })
 
-    if (this.isMask()) {
+    if (inputProps.type === 'number') {
       Tag = MaskedTextInput
 
       inputProps.type = 'text'

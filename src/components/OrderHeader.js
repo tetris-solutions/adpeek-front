@@ -28,7 +28,7 @@ export const OrderHeader = React.createClass({
     order: orderType
   },
   contextTypes: {
-    moment: React.PropTypes.func
+    moment: React.PropTypes.func.isRequired
   },
   componentWillMount () {
     const {change} = this.props
