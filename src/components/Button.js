@@ -14,7 +14,7 @@ Button.propTypes = {
 }
 
 export function Submit (props) {
-  return <button type='submit' {...props} />
+  return <button {...props} type='submit'/>
 }
 
 Submit.displayName = 'Submit'
