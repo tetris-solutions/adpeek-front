@@ -5,6 +5,7 @@ import {styledFnComponent} from '../higher-order/styled-fn-component'
 import csjs from 'csjs'
 import {contextualize} from '../higher-order/contextualize'
 import get from 'lodash/get'
+import some from 'lodash/some'
 
 const {PropTypes} = React
 const style = csjs`
@@ -74,6 +75,8 @@ ExportOptions.propTypes = {
 }
 const PickType = styledFnComponent(ExportOptions, style)
 
+const notReady = ({isLoading, result}) => isLoading || !result
+
 const ReportExportButton = React.createClass({
   displayName: 'Report-Export-Button',
   propTypes: {
@@ -81,11 +84,13 @@ const ReportExportButton = React.createClass({
     isCreatingReport: PropTypes.bool.isRequired
   },
   contextTypes: {
-    location: PropTypes.object
+    location: PropTypes.object.isRequired,
+    report: PropTypes.object.isRequired
   },
   getInitialState () {
     return {
-      isModalOpen: false
+      isModalOpen: false,
+      waiting: false
     }
   },
   getReportMetaData () {
@@ -100,11 +105,11 @@ const ReportExportButton = React.createClass({
     }
   },
   exportAsPdf () {
-    this.props.create('pdf', this.getReportMetaData())
+    this.export('pdf', this.getReportMetaData())
     this.close()
   },
   exportAsXls () {
-    this.props.create('xls', this.getReportMetaData())
+    this.export('xls', this.getReportMetaData())
     this.close()
   },
   open () {
@@ -113,17 +118,30 @@ const ReportExportButton = React.createClass({
   close () {
     this.setState({isModalOpen: false})
   },
+  export (type, metaData) {
+    const {report: {modules}} = this.context
+    const stillLoading = some(modules, notReady)
+
+    if (stillLoading) {
+      clearTimeout(this.timeout)
+      this.setState({isWaiting: true})
+      setTimeout(() => this.export(type, metaData), 500)
+    } else {
+      this.setState({isWaiting: false})
+      this.props.create(type, metaData)
+    }
+  },
   render () {
-    const {isCreatingReport} = this.props
+    const isLoading = this.props.isCreatingReport || this.state.isWaiting
 
     return (
       <button
         type='button'
-        disabled={isCreatingReport}
+        disabled={isLoading}
         className='mdl-button mdl-color-text--grey-100'
         onClick={this.open}>
 
-        {isCreatingReport
+        {isLoading
           ? <Message>creatingReport</Message>
           : <Message>extractReport</Message>}
 
