@@ -1,4 +1,5 @@
 import React from 'react'
+import {Submit} from './Button'
 import Message from 'tetris-iso/Message'
 import {branch} from 'baobab-react/higher-order'
 import map from 'lodash/map'
@@ -173,11 +174,11 @@ export const OrdersClone = React.createClass({
     return (
       <form onSubmit={this.handleSubmit}>
         <SubHeader title={<Message>cloneOrders</Message>}>
-          <button className='mdl-button mdl-color-text--grey-100' type='submit'>
+          <Submit className='mdl-button mdl-color-text--grey-100'>
             {hasSelected
               ? <Message>save</Message>
               : <Message>selectOrders</Message>}
-          </button>
+          </Submit>
         </SubHeader>
         <div className='mdl-grid'>
           <div className='mdl-cell--12-col' style={{overflowX: 'auto'}}>

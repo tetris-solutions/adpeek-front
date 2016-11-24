@@ -14,7 +14,7 @@ function DownloadReportButton ({loading, extract, report}) {
   }
 
   return (
-    <button disabled={loading} onClick={extract} className={btClass}>
+    <button type='button' disabled={loading} onClick={extract} className={btClass}>
       {loading
         ? <Message>creatingReport</Message>
         : <Message>extractReport</Message>}

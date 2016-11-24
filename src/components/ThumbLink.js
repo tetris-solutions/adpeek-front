@@ -138,17 +138,6 @@ Cap.propTypes = {
   children: PropTypes.node
 }
 
-export const Button = ({children}) => (
-  <span className={`mdl-button ${style.button}`}>
-    {children}
-  </span>
-)
-
-Button.displayName = 'Button'
-Button.propTypes = {
-  children: PropTypes.node.isRequired
-}
-
 export function ThumbLink ({to, title, img, children, sad}) {
   const props = {
     style: img ? backgroundStyle(img) : undefined,

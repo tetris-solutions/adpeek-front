@@ -5,7 +5,7 @@ import Fence from './Fence'
 import DeleteButton from './DeleteButton'
 import {deleteOrderAction} from '../actions/delete-order'
 import {contextualize} from './higher-order/contextualize'
-import {Navigation, Name, Button, Buttons} from './Navigation'
+import {Navigation, Name, NavBt, Buttons} from './Navigation'
 
 const {PropTypes} = React
 
@@ -22,25 +22,25 @@ export function OrderAside ({params: {company, workspace, folder}, order, dispat
       <Navigation icon='monetization_on'>
         <Name>{order.name}</Name>
         <Buttons>
-          {canEditOrder && <Button tag={Link} to={`${folderUrl}/order/${order.id}`} icon='mode_edit'>
+          {canEditOrder && <NavBt tag={Link} to={`${folderUrl}/order/${order.id}`} icon='mode_edit'>
             <Message>editOrder</Message>
-          </Button>}
+          </NavBt>}
 
-          {canEditOrder && <Button tag={Link} to={`${folderUrl}/orders/clone?id=${order.id}`} icon='content_copy'>
+          {canEditOrder && <NavBt tag={Link} to={`${folderUrl}/orders/clone?id=${order.id}`} icon='content_copy'>
             <Message>cloneSingleOrder</Message>
-          </Button>}
+          </NavBt>}
 
-          <Button tag={Link} to={`${folderUrl}/order/${order.id}/autobudget`} icon='today'>
+          <NavBt tag={Link} to={`${folderUrl}/order/${order.id}/autobudget`} icon='today'>
             <Message>autoBudgetLog</Message>
-          </Button>
+          </NavBt>
 
-          {canEditOrder && <Button tag={DeleteButton} entityName={order.name} onClick={onClick} icon='delete'>
+          {canEditOrder && <NavBt tag={DeleteButton} entityName={order.name} onClick={onClick} icon='delete'>
             <Message>deleteOrder</Message>
-          </Button>}
+          </NavBt>}
 
-          <Button tag={Link} to={`${folderUrl}/orders`} icon='close'>
+          <NavBt tag={Link} to={`${folderUrl}/orders`} icon='close'>
             <Message>oneLevelUpNavigation</Message>
-          </Button>
+          </NavBt>
         </Buttons>
       </Navigation>}
     </Fence>

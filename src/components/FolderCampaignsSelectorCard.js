@@ -1,4 +1,5 @@
 import csjs from 'csjs'
+import {Submit} from './Button'
 import forEach from 'lodash/forEach'
 import Message from 'tetris-iso/Message'
 import React from 'react'
@@ -166,9 +167,9 @@ export const FolderCampaignsSelector = React.createClass({
               </button>)}
 
             {!isLoading && (
-              <button type='submit' className='mdl-button mdl-button--colored'>
+              <Submit className='mdl-button mdl-button--colored'>
                 {label}
-              </button>)}
+              </Submit>)}
 
             {!isLoading && (
               <a onClick={this.toggleAll} className='mdl-button mdl-button--colored'>

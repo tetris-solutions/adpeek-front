@@ -3,7 +3,7 @@ import React from 'react'
 import {Link} from 'react-router'
 import endsWith from 'lodash/endsWith'
 import Fence from './Fence'
-import {Navigation, Button, Buttons, Name} from './Navigation'
+import {Navigation, NavBt, Buttons, Name} from './Navigation'
 import DeleteButton from './DeleteButton'
 import {deleteFolderAction} from '../actions/delete-folder'
 import {contextualize} from './higher-order/contextualize'
@@ -35,31 +35,31 @@ export function FolderAside ({
           {folder.name}
         </Name>
         <Buttons>
-          <Button tag={Link} to={`${baseUrl}/creatives`} icon='receipt'>
+          <NavBt tag={Link} to={`${baseUrl}/creatives`} icon='receipt'>
             <Message>creatives</Message>
-          </Button>
+          </NavBt>
 
-          <Button tag={Link} to={`${baseUrl}/orders`} icon='attach_money'>
+          <NavBt tag={Link} to={`${baseUrl}/orders`} icon='attach_money'>
             <Message>folderOrders</Message>
-          </Button>
+          </NavBt>
 
           <ReportLink params={params} reports={folder.reports} dispatch={dispatch}>
             <Message>folderReport</Message>
           </ReportLink>
 
           {canEditFolder && (
-            <Button tag={Link} to={`${baseUrl}/edit`} icon='mode_edit'>
+            <NavBt tag={Link} to={`${baseUrl}/edit`} icon='mode_edit'>
               <Message>editFolder</Message>
-            </Button>)}
+            </NavBt>)}
 
           {canEditFolder && (
-            <Button tag={DeleteButton} entityName={folder.name} onClick={onClick} icon='delete'>
+            <NavBt tag={DeleteButton} entityName={folder.name} onClick={onClick} icon='delete'>
               <Message>deleteFolder</Message>
-            </Button>)}
+            </NavBt>)}
 
-          <Button tag={Link} to={backspaceUrl} icon='close'>
+          <NavBt tag={Link} to={backspaceUrl} icon='close'>
             <Message>oneLevelUpNavigation</Message>
-          </Button>
+          </NavBt>
         </Buttons>
       </Navigation>}
     </Fence>

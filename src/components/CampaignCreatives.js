@@ -14,31 +14,34 @@ import map from 'lodash/map'
 import uniq from 'lodash/uniq'
 import chunk from 'lodash/chunk'
 import {loadKeywordsRelevanceAction} from '../actions/load-keywords-relevance'
+import CalculateRelevanceButton from './CalculateRelevanceButton'
 
 const {PropTypes} = React
 
 export function loadKeywordsRelevance () {
   this.setState({calculatingRelevance: true})
 
-  return Promise.resolve().then(() => {
-    const {dispatch, params, campaign, folder} = this.props
-    const adGroups = campaign ? campaign.adGroups : folder.adGroups
+  this.loadingAdGroups
+    .then(() => {
+      const {dispatch, params, campaign, folder} = this.props
+      const adGroups = campaign ? campaign.adGroups : folder.adGroups
 
-    const keywordList =
-      uniq(flatten(map(adGroups,
-        ({keywords}) => map(keywords, 'id'))))
+      const keywordList =
+        uniq(flatten(map(adGroups,
+          ({keywords}) => map(keywords, 'id'))))
 
-    const chunks = chunk(keywordList, 500)
+      const chunks = chunk(keywordList, 500)
 
-    let promise = Promise.resolve()
+      let promise = Promise.resolve()
 
-    chunks.forEach(keywords => {
-      promise = promise.then(() =>
-        dispatch(loadKeywordsRelevanceAction, params, keywords))
+      chunks.forEach(keywords => {
+        promise = promise.then(() =>
+          dispatch(loadKeywordsRelevanceAction, params, keywords))
+      })
+
+      return promise
     })
-
-    return promise
-  }).then(() => this.setState({calculatingRelevance: false}))
+    .then(() => this.setState({calculatingRelevance: false}))
 }
 
 export const CampaignCreatives = React.createClass({
@@ -95,7 +98,7 @@ export const CampaignCreatives = React.createClass({
       .then(this.onReportCreated)
   },
   extractReport () {
-    if (!this.isAdwords) return
+    if (!this.isAdwords()) return
 
     this.setState({creatingReport: true})
 
@@ -113,16 +116,10 @@ export const CampaignCreatives = React.createClass({
     return (
       <div>
         <SubHeader title={<Message>creatives</Message>}>
-          <button
-            type='button'
-            className='mdl-button mdl-color-text--grey-100'
-            disabled={isLoading || calculatingRelevance !== undefined}
-            onClick={this.loadKeywordsRelevance}>
-
-            {calculatingRelevance
-              ? <Message>calculating</Message>
-              : <Message>calculateKeywordsRelevance</Message>}
-          </button>
+          <CalculateRelevanceButton
+            done={calculatingRelevance === false}
+            start={this.loadKeywordsRelevance}
+            isCalculating={calculatingRelevance === true}/>
 
           <DownloadReportButton
             loading={creatingReport}

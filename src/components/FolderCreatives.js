@@ -10,6 +10,7 @@ import DownloadReportButton from './DownloadReportButton'
 import SubHeader from './SubHeader'
 import Page from './Page'
 import {loadKeywordsRelevance} from './CampaignCreatives'
+import CalculateRelevanceButton from './CalculateRelevanceButton'
 
 const {PropTypes} = React
 
@@ -84,15 +85,10 @@ export const FolderCreatives = React.createClass({
     return (
       <div>
         <SubHeader title={<Message>creatives</Message>}>
-          <button
-            className='mdl-button mdl-color-text--grey-100'
-            disabled={isLoading || calculatingRelevance !== undefined}
-            onClick={this.loadKeywordsRelevance}>
-
-            {calculatingRelevance
-              ? <Message>calculating</Message>
-              : <Message>calculateKeywordsRelevance</Message>}
-          </button>
+          <CalculateRelevanceButton
+            done={calculatingRelevance === false}
+            start={this.loadKeywordsRelevance}
+            isCalculating={calculatingRelevance === true}/>
 
           <DownloadReportButton
             loading={creatingReport}

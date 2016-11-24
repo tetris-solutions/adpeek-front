@@ -1,7 +1,7 @@
 import React from 'react'
 import Fence from '../Fence'
 import {Link} from 'react-router'
-import {Button} from '../Navigation'
+import {NavBt} from '../Navigation'
 import {loadReportsAction} from '../../actions/load-reports'
 import get from 'lodash/get'
 
@@ -46,9 +46,9 @@ const ReportLink = React.createClass({
 
     return (
       <Fence canBrowseReports>{({canBrowseReports}) => canBrowseReports || mainReportId ? (
-        <Button tag={Link} to={reportUrl} icon='show_chart'>
+        <NavBt tag={Link} to={reportUrl} icon='show_chart'>
           {children}
-        </Button>) : null}
+        </NavBt>) : null}
       </Fence>
     )
   }

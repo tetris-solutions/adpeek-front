@@ -2,7 +2,7 @@ import React from 'react'
 import {contextualize} from './higher-order/contextualize'
 import {Link} from 'react-router'
 import Message from 'tetris-iso/Message'
-import {Navigation, Button, Buttons, Name} from './Navigation'
+import {Navigation, NavBt, Buttons, Name} from './Navigation'
 
 const {PropTypes} = React
 
@@ -12,9 +12,9 @@ export const CampaignAside = ({params: {company, workspace, folder}, campaign}) 
       {campaign.name}
     </Name>
     <Buttons>
-      <Button tag={Link} to={`/company/${company}/workspace/${workspace}/folder/${folder}`} icon='close'>
+      <NavBt tag={Link} to={`/company/${company}/workspace/${workspace}/folder/${folder}`} icon='close'>
         <Message>oneLevelUpNavigation</Message>
-      </Button>
+      </NavBt>
     </Buttons>
   </Navigation>
 

@@ -11,7 +11,7 @@ import {setDefaultReportAction} from '../actions/set-default-report'
 import {contextualize} from './higher-order/contextualize'
 import ReportAccessControl from './Report/AccessControl'
 import ReportEditPrompt from './Report/EditPrompt'
-import {Name, Navigation, Button, Buttons} from './Navigation'
+import {Name, Navigation, NavBt, Buttons} from './Navigation'
 import {canSkipReportEditPrompt} from '../functions/can-skip-report-edit-prompt'
 import NameInput from './Report/NameInput'
 
@@ -43,12 +43,12 @@ export function FolderReportAside ({report, dispatch, user}, {messages, locales,
 
           <Buttons>
             {canBrowseReports && (
-              <Button onClick={favorite} title={favTitle} icon={report.is_user_selected ? 'star' : 'star_border'}>
+              <NavBt onClick={favorite} title={favTitle} icon={report.is_user_selected ? 'star' : 'star_border'}>
                 <Message>{report.is_user_selected ? 'unfavoriteReport' : 'favoriteReport'}</Message>
-              </Button>)}
+              </NavBt>)}
 
             {canEditReport && (
-              <Button
+              <NavBt
                 icon='share'
                 tag={ReportAccessControl}
                 dispatch={dispatch}
@@ -57,26 +57,26 @@ export function FolderReportAside ({report, dispatch, user}, {messages, locales,
                 report={report}
                 user={user}/>)}
 
-            {canEditReport && <Button tag={Link} to={cloneUrl} icon='content_copy'>
+            {canEditReport && <NavBt tag={Link} to={cloneUrl} icon='content_copy'>
               <Message>cloneReport</Message>
-            </Button>}
+            </NavBt>}
 
             {canEditReport && !inEditMode && shouldSkipEditPrompt && (
-              <Button tag={Link} to={`${folderUrl}/report/${report.id}/edit`} icon='create'>
+              <NavBt tag={Link} to={`${folderUrl}/report/${report.id}/edit`} icon='create'>
                 <Message>editReport</Message>
-              </Button>)}
+              </NavBt>)}
 
             {canEditReport && !inEditMode && !shouldSkipEditPrompt && (
-              <Button tag={ReportEditPrompt} report={report} params={params} icon='create'/>)}
+              <NavBt tag={ReportEditPrompt} report={report} params={params} icon='create'/>)}
 
             {canEditReport && (
-              <Button tag={DeleteButton} entityName={report.name} onClick={deleteReport} icon='delete'>
+              <NavBt tag={DeleteButton} entityName={report.name} onClick={deleteReport} icon='delete'>
                 <Message>deleteReport</Message>
-              </Button>)}
+              </NavBt>)}
 
-            <Button tag={Link} to={canBrowseReports ? `${folderUrl}/reports` : folderUrl} icon='close'>
+            <NavBt tag={Link} to={canBrowseReports ? `${folderUrl}/reports` : folderUrl} icon='close'>
               <Message>oneLevelUpNavigation</Message>
-            </Button>
+            </NavBt>
           </Buttons>
         </Navigation>}
     </Fence>

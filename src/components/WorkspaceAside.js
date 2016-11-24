@@ -5,7 +5,7 @@ import Fence from './Fence'
 import DeleteButton from './DeleteButton'
 import {deleteWorkspaceAction} from '../actions/delete-workspace'
 import {contextualize} from './higher-order/contextualize'
-import {Navigation, Button, Buttons, Name} from './Navigation'
+import {Navigation, NavBt, Buttons, Name} from './Navigation'
 import Recent from './Recent'
 import ReportLink from './Report/LinkToReports'
 
@@ -29,27 +29,27 @@ export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
         </Name>
         <br/>
         <Buttons>
-          <Button tag={Link} to={`${baseUrl}/orders`} icon='attach_money'>
+          <NavBt tag={Link} to={`${baseUrl}/orders`} icon='attach_money'>
             <Message>workspaceOrders</Message>
-          </Button>
+          </NavBt>
 
           <ReportLink params={params} reports={workspace.reports} dispatch={dispatch}>
             <Message>workspaceReport</Message>
           </ReportLink>
 
           {canEditWorkspace && (
-            <Button tag={Link} to={`${baseUrl}/edit`} icon='mode_edit'>
+            <NavBt tag={Link} to={`${baseUrl}/edit`} icon='mode_edit'>
               <Message>editWorkspace</Message>
-            </Button>)}
+            </NavBt>)}
 
           {canEditWorkspace && (
-            <Button tag={DeleteButton} entityName={workspace.name} onClick={onClick} icon='delete'>
+            <NavBt tag={DeleteButton} entityName={workspace.name} onClick={onClick} icon='delete'>
               <Message>deleteWorkspace</Message>
-            </Button>)}
+            </NavBt>)}
 
-          <Button tag={Link} to={`/company/${company}`} icon='close'>
+          <NavBt tag={Link} to={`/company/${company}`} icon='close'>
             <Message>oneLevelUpNavigation</Message>
-          </Button>
+          </NavBt>
         </Buttons>
         <br/>
         <hr/>

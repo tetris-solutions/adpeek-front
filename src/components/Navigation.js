@@ -47,7 +47,7 @@ const style = csjs`
   margin-left: 20px;
 }`
 
-export const Button = props => {
+export const NavBt = props => {
   const {tag: Tag, children, icon} = props
   const otherProps = omit(props, 'tag', 'icon', 'children')
   const className = `mdl-button mdl-button--raised mdl-button--colored mdl-color--primary-dark ${style.button}`
@@ -59,11 +59,11 @@ export const Button = props => {
     </Tag>
   )
 }
-Button.displayName = 'Button'
-Button.defaultProps = {
+NavBt.displayName = 'NavBt'
+NavBt.defaultProps = {
   tag: 'a'
 }
-Button.propTypes = {
+NavBt.propTypes = {
   tag: PropTypes.any,
   href: PropTypes.string,
   to: PropTypes.string,

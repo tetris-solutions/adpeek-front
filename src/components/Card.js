@@ -1,4 +1,5 @@
 import React from 'react'
+import {Submit} from './Button'
 import csjs from 'csjs'
 import omit from 'lodash/omit'
 import {styled} from './mixins/styled'
@@ -118,9 +119,9 @@ export function Footer ({children, multipleButtons}) {
   return (
     <footer className='mdl-card__actions mdl-card--border'>
       {multipleButtons ? children : (
-        <button type='submit' className='mdl-button mdl-button--colored'>
+        <Submit className='mdl-button mdl-button--colored'>
           {children}
-        </button>)}
+        </Submit>)}
     </footer>
   )
 }
