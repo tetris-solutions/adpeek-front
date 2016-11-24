@@ -1,5 +1,6 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import {Button} from './Button'
 import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
 import flow from 'lodash/flow'
 
@@ -17,12 +18,12 @@ const Prompt = ({entityName, onConfirm, onCancel}) => (
       </p>
       <br/>
       <hr/>
-      <button className='mdl-button mdl-button--accent' type='button' onClick={onCancel}>
+      <Button className='mdl-button mdl-button--accent' onClick={onCancel}>
         <Message>cancel</Message>
-      </button>
-      <button className='mdl-button mdl-button--primary' type='button' onClick={onConfirm}>
+      </Button>
+      <Button className='mdl-button mdl-button--primary' onClick={onConfirm}>
         <Message>remove</Message>
-      </button>
+      </Button>
     </div>
   </div>
 )

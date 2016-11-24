@@ -6,6 +6,7 @@ import TextMessage from 'intl-messageformat'
 import Checkbox from '../Checkbox'
 import join from 'lodash/join'
 import compact from 'lodash/compact'
+import {Button} from '../Button'
 
 const {PropTypes} = React
 
@@ -101,20 +102,19 @@ const ReportEditPrompt = React.createClass({
                 <br/>
                 <hr/>
 
-                <button className='mdl-button mdl-button--accent' type='button' onClick={this.closeModalAnd}>
+                <Button className='mdl-button mdl-button--accent' onClick={this.closeModalAnd}>
                   <Message>cancel</Message>
-                </button>
+                </Button>
 
-                <button
-                  type='button'
+                <Button
                   className='mdl-button mdl-button--primary'
                   onClick={this.cloneInstead}>
                   <Message>cloneReport</Message>
-                </button>
+                </Button>
 
-                <button type='button' className='mdl-button' onClick={this.confirm}>
+                <Button className='mdl-button' onClick={this.confirm}>
                   <Message>editReport</Message>
-                </button>
+                </Button>
               </div>
             </form>
           </Modal>

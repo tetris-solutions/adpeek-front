@@ -12,6 +12,7 @@ import OrderSpawnAutoBudget from './OrderSpawnAutoBudget'
 import Fence from './Fence'
 import SubHeader from './SubHeader'
 import Page from './Page'
+import {Button} from './Button'
 
 const {PropTypes} = React
 const notPercentage = budget => budget && budget.mode === 'amount'
@@ -44,9 +45,9 @@ export function OrderEdit ({
           {canEditOrder && Boolean(order.id) && (
             <OrderSpawnAutoBudget runAutoBudget={runAutoBudget}/>)}
 
-          {canEditOrder && <button onClick={save} className='mdl-button mdl-color-text--grey-100'>
+          {canEditOrder && <Button onClick={save} className='mdl-button mdl-color-text--grey-100'>
             <Message>save</Message>
-          </button>}
+          </Button>}
         </SubHeader>}
       </Fence>
 

@@ -3,7 +3,7 @@ import React from 'react'
 const noop = () => false
 
 export function Button (props) {
-  return <button type='button' {...props} onClick={props.disabled ? noop : props.onClick}/>
+  return <button {...props} type='button' onClick={props.disabled ? noop : props.onClick}/>
 }
 
 Button.displayName = 'Button'

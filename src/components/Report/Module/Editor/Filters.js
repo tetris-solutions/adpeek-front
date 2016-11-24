@@ -14,6 +14,7 @@ import omit from 'lodash/omit'
 import VerticalAlign from '../../../VerticalAlign'
 import sortBy from 'lodash/sortBy'
 import find from 'lodash/find'
+import {Button} from '../../../Button'
 
 const {PropTypes} = React
 const operators = ['contains', 'equals', 'less than', 'greater than', 'between']
@@ -74,9 +75,9 @@ const Filter = ({id, attribute, operator, value, secondary, options, drop, chang
     {attribute !== 'limit' && (
       <VerticalAlign className='mdl-cell mdl-cell--1-col'>
         <div>
-          <button type='button' className='mdl-button mdl-button--icon' onClick={drop}>
+          <Button className='mdl-button mdl-button--icon' onClick={drop}>
             <i className='material-icons'>close</i>
-          </button>
+          </Button>
         </div>
       </VerticalAlign>)}
   </div>
@@ -236,9 +237,9 @@ const EditFilters = React.createClass({
               id={index} {...this.getFilterProps(filter)}
               drop={bind(this.removeFilter, null, index)}/>)}
         </div>
-        <button className='mdl-button' type='button' onClick={this.newFilter}>
+        <Button className='mdl-button' onClick={this.newFilter}>
           <Message>newFilter</Message>
-        </button>
+        </Button>
       </section>
     )
   }

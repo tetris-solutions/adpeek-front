@@ -3,6 +3,7 @@ import {branch} from 'baobab-react/higher-order'
 import {Card, Content, Header, Footer} from './Card'
 import {forgetError} from 'tetris-iso/actions'
 import Message from 'tetris-iso/Message'
+import {Button} from './Button'
 
 const {PropTypes} = React
 
@@ -37,9 +38,9 @@ function ErrorScreen ({error, dispatch}, {router}) {
         </div>
       </Content>
       <Footer multipleButtons>
-        <button className='mdl-button mdl-button--colored' type='button' onClick={goBack}>
+        <Button className='mdl-button mdl-button--colored' onClick={goBack}>
           <Message>errorScreenExit</Message>
-        </button>
+        </Button>
       </Footer>
     </Card>
   )

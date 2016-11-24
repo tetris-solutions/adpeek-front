@@ -5,6 +5,7 @@ import ReportExportButton from './ExportButton'
 import DateRangeButton from './DateRangeButton'
 import Page from '../Page'
 import ShareButton from './ShareButton'
+import {Button} from '../Button'
 
 const {PropTypes} = React
 
@@ -31,9 +32,9 @@ const ReportScreen = ({
         </a>)}
 
       {showNewModuleButton && (
-        <button className='mdl-button mdl-color-text--grey-100' onClick={addNewModule}>
+        <Button className='mdl-button mdl-color-text--grey-100' onClick={addNewModule}>
           <Message>newModule</Message>
-        </button>)}
+        </Button>)}
 
       {showShareButton && (
         <ShareButton className='mdl-button mdl-color-text--grey-100' shareUrl={shareUrl}/>)}

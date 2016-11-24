@@ -6,6 +6,7 @@ import csjs from 'csjs'
 import {contextualize} from '../higher-order/contextualize'
 import get from 'lodash/get'
 import some from 'lodash/some'
+import {Button} from '../Button'
 
 const {PropTypes} = React
 const style = csjs`
@@ -29,9 +30,9 @@ const Format = ({icon, onClick, children}) => (
       </span>
     </div>
     <div className='mdl-card__actions mdl-card--border'>
-      <button type='button' onClick={onClick} className='mdl-button mdl-button--colored'>
+      <Button onClick={onClick} className='mdl-button mdl-button--colored'>
         {children}
-      </button>
+      </Button>
     </div>
   </div>
 )
@@ -60,9 +61,9 @@ const ExportOptions = ({pdf, xls, cancel}) => (
       </div>
       <br/>
       <hr/>
-      <button className='mdl-button mdl-button--accent' type='button' onClick={cancel}>
+      <Button className='mdl-button mdl-button--accent' onClick={cancel}>
         <Message>cancel</Message>
-      </button>
+      </Button>
     </div>
   </div>
 )
@@ -135,8 +136,7 @@ const ReportExportButton = React.createClass({
     const isLoading = this.props.isCreatingReport || this.state.isWaiting
 
     return (
-      <button
-        type='button'
+      <Button
         disabled={isLoading}
         className='mdl-button mdl-color-text--grey-100'
         onClick={this.open}>
@@ -149,7 +149,7 @@ const ReportExportButton = React.createClass({
           <Modal onEscPress={this.close}>
             <PickType xls={this.exportAsXls} pdf={this.exportAsPdf} cancel={this.close}/>
           </Modal>)}
-      </button>
+      </Button>
     )
   }
 })

@@ -15,6 +15,7 @@ import DeleteButton from '../../DeleteButton'
 import isEmpty from 'lodash/isEmpty'
 import filter from 'lodash/filter'
 import includes from 'lodash/includes'
+import {Button} from '../../Button'
 
 const {PropTypes} = React
 const reportContext = [
@@ -140,9 +141,9 @@ const ModuleController = React.createClass({
       <ModuleCard>
         <div className='mdl-card__menu'>
           {editable ? (
-            <button className='mdl-button mdl-button--icon' onClick={this.openModal}>
+            <Button className='mdl-button mdl-button--icon' onClick={this.openModal}>
               <i className='material-icons'>create</i>
-            </button>) : null}
+            </Button>) : null}
 
           {editable ? (
             <DeleteButton

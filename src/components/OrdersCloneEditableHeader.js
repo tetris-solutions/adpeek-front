@@ -8,6 +8,7 @@ import find from 'lodash/find'
 import endsWith from 'lodash/endsWith'
 import Message from 'tetris-iso/Message'
 import OrderDateRange from './OrderDateRange'
+import {Button} from './Button'
 
 const style = csjs`
 .card {
@@ -137,9 +138,9 @@ export const EditableHeader = React.createClass({
             </VerticalAlign>
             <VerticalAlign className='mdl-cell mdl-cell--2-col'>
               <div>
-                <button className='mdl-button' onClick={this.apply}>
+                <Button className='mdl-button' onClick={this.apply}>
                   <Message>applyToSelectedOrders</Message>
-                </button>
+                </Button>
               </div>
             </VerticalAlign>
           </div>

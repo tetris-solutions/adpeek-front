@@ -8,6 +8,7 @@ import csjs from 'csjs'
 import {styled} from '../mixins/styled'
 import Fence from '../Fence'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
+import {Button} from '../Button'
 
 const style = csjs`
 .card {
@@ -113,9 +114,9 @@ function Options ({user, report, makePublic, unlock, setAsDefault, close, canEdi
         <br/>
         <hr/>
 
-        <button className='mdl-button mdl-button--accent' type='button' onClick={close}>
+        <Button className='mdl-button mdl-button--accent' onClick={close}>
           <Message>cancel</Message>
-        </button>
+        </Button>
       </div>
     </div>
   )

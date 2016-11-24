@@ -1,5 +1,5 @@
 import csjs from 'csjs'
-import {Submit} from './Button'
+import {Button, Submit} from './Button'
 import forEach from 'lodash/forEach'
 import Message from 'tetris-iso/Message'
 import React from 'react'
@@ -44,9 +44,9 @@ const InactiveCampaigns = React.createClass({
     return (
       <section>
         <p style={{textAlign: 'center'}}>
-          <button type='button' className='mdl-button' onClick={this.toggle}>
+          <Button className='mdl-button' onClick={this.toggle}>
             <Message count={String(count)}>{msgName}</Message>
-          </button>
+          </Button>
         </p>
 
         {map(isExpanded && campaigns, campaign => (
@@ -162,9 +162,9 @@ export const FolderCampaignsSelector = React.createClass({
         <Fence canEditCampaign>
           <Footer multipleButtons>
             {isLoading && (
-              <button type='button' disabled className='mdl-button mdl-button--colored mdl-color-text--grey-600'>
+              <Button disabled className='mdl-button mdl-button--colored mdl-color-text--grey-600'>
                 <Message>loadingCampaigns</Message>
-              </button>)}
+              </Button>)}
 
             {!isLoading && (
               <Submit className='mdl-button mdl-button--colored'>

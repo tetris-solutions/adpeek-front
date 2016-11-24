@@ -1,4 +1,5 @@
 import React from 'react'
+import {Button} from './Button'
 import Message from 'tetris-iso/Message'
 
 const {PropTypes} = React
@@ -14,11 +15,11 @@ function DownloadReportButton ({loading, extract, report}) {
   }
 
   return (
-    <button type='button' disabled={loading} onClick={extract} className={btClass}>
+    <Button disabled={loading} onClick={extract} className={btClass}>
       {loading
         ? <Message>creatingReport</Message>
         : <Message>extractReport</Message>}
-    </button>
+    </Button>
   )
 }
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
+import {Button} from './Button'
 
 const OrderSpawnAutoBudget = React.createClass({
   displayName: 'Order-Spawn-Auto-Budget',
@@ -24,7 +25,7 @@ const OrderSpawnAutoBudget = React.createClass({
   },
   render () {
     return (
-      <button onClick={this.open} className='mdl-button mdl-color-text--grey-100'>
+      <Button onClick={this.open} className='mdl-button mdl-color-text--grey-100'>
         <Message>manuallyRunAutoBudget</Message>
         {this.state.isModalOpen ? (
           <Modal onEsc={this.close}>
@@ -41,18 +42,18 @@ const OrderSpawnAutoBudget = React.createClass({
                 <br/>
                 <hr/>
 
-                <button className='mdl-button mdl-button--accent' type='button' onClick={this.close}>
+                <Button className='mdl-button mdl-button--accent' onClick={this.close}>
                   <Message>cancel</Message>
-                </button>
+                </Button>
 
-                <button type='button' className='mdl-button' onClick={this.confirm}>
+                <Button className='mdl-button' onClick={this.confirm}>
                   <Message>manuallyRunAutoBudget</Message>
-                </button>
+                </Button>
               </div>
             </div>
           </Modal>
         ) : null}
-      </button>
+      </Button>
     )
   }
 })

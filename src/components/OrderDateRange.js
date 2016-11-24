@@ -1,4 +1,5 @@
 import React from 'react'
+import {Button} from './Button'
 import Message from 'tetris-iso/Message'
 import DateRangePicker from './DateRangePicker'
 import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
@@ -68,9 +69,9 @@ function DateRangeModal ({startDate, endDate, close, onChange}, {messages}) {
 
         <br/>
         <hr/>
-        <button className='mdl-button' onClick={close}>
+        <Button className='mdl-button' onClick={close}>
           <Message>close</Message>
-        </button>
+        </Button>
       </div>
     </div>
   )

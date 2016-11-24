@@ -1,5 +1,6 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import {Button} from './Button'
 import {Form, Content, Header, Footer} from './Card'
 
 const {PropTypes} = React
@@ -29,9 +30,9 @@ function BudgetEmptySelection ({
 
       <Footer multipleButtons={available < 1}>
         {available >= 1 ? <Message>createBudget</Message> : (
-          <button type='button' className='mdl-button' disabled>
+          <Button className='mdl-button' disabled>
             <Message>noBudgetRemaining</Message>
-          </button>)}
+          </Button>)}
       </Footer>
     </Form>
   )

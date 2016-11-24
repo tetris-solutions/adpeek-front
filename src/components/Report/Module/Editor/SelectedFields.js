@@ -8,7 +8,7 @@ import sortBy from 'lodash/sortBy'
 import toPairs from 'lodash/toPairs'
 import React from 'react'
 import Reorder from 'react-reorder'
-
+import {Button} from '../../../Button'
 import {styled} from '../../../mixins/styled'
 
 const style = csjs`
@@ -29,9 +29,9 @@ function Field ({item: {name, remove, id}}) {
   return (
     <span className='mdl-chip mdl-chip--deletable'>
       <span className='mdl-chip__text'>{name}</span>
-      <button type='button' className='mdl-chip__action' onClick={onClick}>
+      <Button className='mdl-chip__action' onClick={onClick}>
         <i className='material-icons'>cancel</i>
-      </button>
+      </Button>
     </span>
   )
 }

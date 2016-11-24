@@ -16,6 +16,7 @@ import isEmpty from 'lodash/isEmpty'
 import diff from 'lodash/difference'
 import forEach from 'lodash/forEach'
 import size from 'lodash/size'
+import {Button} from '../../../Button'
 
 const style = csjs`
 .leftCol {
@@ -92,9 +93,9 @@ const Editor = React.createClass({
       )
     } else {
       updateBt = (
-        <button disabled={isLoading} type='button' className='mdl-button' onClick={redraw}>
+        <Button disabled={isLoading} className='mdl-button' onClick={redraw}>
           <Message>update</Message>
-        </button>
+        </Button>
       )
     }
 
@@ -124,9 +125,9 @@ const Editor = React.createClass({
           <Message>cancel</Message>
         </a>
 
-        <button disabled={isInvalid || selectedTooManyAccounts} type='button' className='mdl-button' onClick={save}>
+        <Button disabled={isInvalid || selectedTooManyAccounts} className='mdl-button' onClick={save}>
           <Message>save</Message>
-        </button>
+        </Button>
 
         <span className={`${style.rightButtons}`}>
           {updateBt}

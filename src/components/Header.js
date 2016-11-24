@@ -1,4 +1,5 @@
 import React from 'react'
+import {Button} from './Button'
 import Message from 'tetris-iso/Message'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
@@ -166,9 +167,9 @@ const Header = React.createClass({
       homeProps = {href: '/'}
 
       leftButton = (
-        <button type='button' className='mdl-button mdl-color-text--grey-100' onClick={this.loginRoundTrip}>
+        <Button className='mdl-button mdl-color-text--grey-100' onClick={this.loginRoundTrip}>
           <Message>navLogin</Message>
-        </button>
+        </Button>
       )
     } else {
       GoHome = Link

@@ -5,6 +5,7 @@ import Input from '../Input'
 import clipboard from 'copy-to-clipboard'
 import {loadReportShareUrlAction} from '../../actions/load-report-share-url'
 import {pushSuccessMessageAction} from '../../actions/push-success-message-action'
+import {Button} from '../Button'
 
 const {PropTypes} = React
 
@@ -61,12 +62,12 @@ const ShareDialog = React.createClass({
           <br/>
           <hr/>
 
-          <button className='mdl-button' onClick={this.copy}>
+          <Button className='mdl-button' onClick={this.copy}>
             <Message>copyToClipboard</Message>
-          </button>
-          <button className='mdl-button' onClick={close}>
+          </Button>
+          <Button className='mdl-button' onClick={close}>
             <Message>close</Message>
-          </button>
+          </Button>
         </div>
       </div>
     )

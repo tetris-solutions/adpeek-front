@@ -3,6 +3,7 @@ import map from 'lodash/map'
 import size from 'lodash/size'
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import {Button} from './Button'
 import {branch} from 'baobab-react/higher-order'
 import budgetType from '../propTypes/budget'
 import Input from './Input'
@@ -155,12 +156,12 @@ export const BudgetEdit = React.createClass({
           </Tabs>
         </Content>
         <Footer multipleButtons>
-          <button className='mdl-button mdl-button--colored' onClick={remove}>
+          <Button className='mdl-button mdl-button--colored' onClick={remove}>
             <Message>remove</Message>
-          </button>
-          <button className='mdl-button mdl-button--colored' onClick={close}>
+          </Button>
+          <Button className='mdl-button mdl-button--colored' onClick={close}>
             <Message>close</Message>
-          </button>
+          </Button>
         </Footer>
       </Card>
     )
