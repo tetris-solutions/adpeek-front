@@ -9,6 +9,7 @@ import LoadingHorizontal from './LoadingHorizontal'
 import DownloadReportButton from './DownloadReportButton'
 import SubHeader from './SubHeader'
 import Page from './Page'
+import {loadKeywordsRelevance} from './CampaignCreatives'
 
 const {PropTypes} = React
 
@@ -53,7 +54,7 @@ export const FolderCreatives = React.createClass({
       params.company,
       params.workspace,
       params.folder)
-      .then(() => this.setState({isLoading: false}))
+      .then(this.loadKeywordsRelevance)
   },
   onAdGroupsLoaded () {
     const {folder: {adGroups}, dispatch, params} = this.props
@@ -72,6 +73,7 @@ export const FolderCreatives = React.createClass({
 
     this.loadingAdGroups.then(this.onAdGroupsLoaded)
   },
+  loadKeywordsRelevance,
   render () {
     const {creatingReport, isLoading} = this.state
     const {folder} = this.props

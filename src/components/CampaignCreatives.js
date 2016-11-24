@@ -9,8 +9,35 @@ import {createCampaignAdGroupsReportAction} from '../actions/create-campaign-adg
 import DownloadReportButton from './DownloadReportButton'
 import SubHeader from './SubHeader'
 import Page from './Page'
+import flatten from 'lodash/flatten'
+import map from 'lodash/map'
+import uniq from 'lodash/uniq'
+import chunk from 'lodash/chunk'
+import {loadKeywordsRelevanceAction} from '../actions/load-keywords-relevance'
 
 const {PropTypes} = React
+
+export function loadKeywordsRelevance () {
+  return Promise.resolve().then(() => {
+    const {dispatch, params, campaign, folder} = this.props
+    const adGroups = campaign ? campaign.adGroups : folder.adGroups
+
+    const keywordList =
+      uniq(flatten(map(adGroups,
+        ({keywords}) => map(keywords, 'id'))))
+
+    const chunks = chunk(keywordList, 500)
+
+    let promise = Promise.resolve()
+
+    chunks.forEach(keywords => {
+      promise = promise.then(() =>
+        dispatch(loadKeywordsRelevanceAction, params, keywords))
+    })
+
+    return promise
+  }).then(() => this.setState({isLoading: false}))
+}
 
 export const CampaignCreatives = React.createClass({
   displayName: 'Campaign-Creatives',
@@ -52,7 +79,7 @@ export const CampaignCreatives = React.createClass({
       params.workspace,
       params.folder,
       params.campaign)
-      .then(() => this.setState({isLoading: false}))
+      .then(this.loadKeywordsRelevance)
   },
   onAdGroupsLoaded () {
     const {campaign, dispatch, params} = this.props
@@ -73,6 +100,7 @@ export const CampaignCreatives = React.createClass({
     this.loadingAdGroups
       .then(this.onAdGroupsLoaded)
   },
+  loadKeywordsRelevance,
   render () {
     const {creatingReport, isLoading} = this.state
     const {campaign} = this.props
