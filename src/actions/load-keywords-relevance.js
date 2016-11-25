@@ -9,7 +9,9 @@ function loadKeywordsRelevance (folder, keywords, config) {
   return POST(`${process.env.ADPEEK_API_URL}/folder/${folder}/keywords/relevance`, assign({}, config, {body: keywords}))
 }
 
-function findKeywordPath (adGroups, keywordId) {
+function findKeywordPaths (adGroups, keywordId) {
+  const paths = []
+
   for (let adGroupIndex = 0; adGroupIndex < adGroups.length; adGroupIndex++) {
     const {keywords} = adGroups[adGroupIndex]
 
@@ -17,10 +19,12 @@ function findKeywordPath (adGroups, keywordId) {
 
     for (let keywordIndex = 0; keywordIndex < keywords.length; keywordIndex++) {
       if (String(keywords[keywordIndex].id) === String(keywordId)) {
-        return {adGroupIndex, keywordIndex}
+        paths.push({adGroupIndex, keywordIndex})
       }
     }
   }
+
+  return paths
 }
 
 export function loadKeywordsRelevanceAction (tree, {company, workspace, folder, campaign}, keywords) {
@@ -40,20 +44,17 @@ export function loadKeywordsRelevanceAction (tree, {company, workspace, folder, 
 
       const adGroups = tree.get(adGroupsPath)
 
-      forEach(result, (relevance, keywordId) => {
-        const keywordsPath = findKeywordPath(adGroups, keywordId)
-
-        if (keywordsPath) {
+      forEach(result, (relevance, keywordId) =>
+        forEach(findKeywordPaths(adGroups, keywordId), ({adGroupIndex, keywordIndex}) => {
           const keywordRelevancePath = adGroupsPath.concat([
-            keywordsPath.adGroupIndex,
+            adGroupIndex,
             'keywords',
-            keywordsPath.keywordIndex,
+            keywordIndex,
             'relevance'
           ])
 
           tree.set(keywordRelevancePath, relevance)
-        }
-      })
+        }))
     })
     .catch(pushResponseErrorToState(tree))
 }
