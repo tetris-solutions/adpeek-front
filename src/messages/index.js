@@ -173,7 +173,7 @@ module.exports = {
     makeReportGlobal: 'Share Globally',
     makeReportGlobalDescription: 'Share report with other companies',
     makeReportPublic: 'Share with Company',
-    makeReportPublicDescription: 'Share report with your colleagues',
+    makeReportPublicDescription: 'Share report with your coworkers',
     favoriteReport: 'Favorite Report',
     favoriteReportDescription: 'Set report as the folder default (specifically for your user)',
     unfavoriteReport: 'Unfavorite Report',
