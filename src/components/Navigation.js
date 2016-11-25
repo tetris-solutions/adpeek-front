@@ -39,6 +39,8 @@ const style = csjs`
   text-transform: none;
   text-align: left;
   width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .button i {
   margin: 0 .5em 0 1em;
