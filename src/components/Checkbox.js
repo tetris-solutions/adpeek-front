@@ -1,6 +1,5 @@
 import React from 'react'
 import cx from 'classnames'
-import window from 'global/window'
 
 const {PropTypes} = React
 const isBrowser = typeof document !== 'undefined'

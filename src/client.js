@@ -10,5 +10,5 @@ const Emitter = require('emmett')
 window.event$ = new Emitter()
 
 if (process.env.NODE_ENV !== 'production') {
-  require('global').Perf = require('react-addons-perf')
+  window.Perf = require('react-addons-perf')
 }

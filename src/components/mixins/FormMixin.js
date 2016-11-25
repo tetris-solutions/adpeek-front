@@ -1,7 +1,6 @@
 import React from 'react'
 import isEmpty from 'lodash/isEmpty'
 import assign from 'lodash/assign'
-import window from 'global/window'
 import omit from 'lodash/omit'
 
 const {PropTypes} = React

@@ -1,4 +1,3 @@
-import window from 'global/window'
 import React from 'react'
 
 const {PropTypes} = React

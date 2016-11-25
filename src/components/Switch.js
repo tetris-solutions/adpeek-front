@@ -1,5 +1,4 @@
 import React from 'react'
-import window from 'global/window'
 import cx from 'classnames'
 
 const {PropTypes} = React

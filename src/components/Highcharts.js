@@ -14,16 +14,16 @@ import isString from 'lodash/isString'
 import lowerCase from 'lodash/toLower'
 import merge from 'lodash/merge'
 import omit from 'lodash/omit'
-import window from 'global/window'
 import Highcharts from 'highcharts'
 import React from 'react'
 
-if (typeof document !== 'undefined') {
+const isBrowser = typeof document !== 'undefined'
+
+if (isBrowser) {
   require('highcharts/modules/exporting')(Highcharts)
   require('highcharts/modules/offline-exporting.src')(Highcharts)
+  window.Highcharts = Highcharts
 }
-
-window.Highcharts = Highcharts
 
 function isUpperCase (letter) {
   return letter !== letter.toLowerCase()
