@@ -24,10 +24,21 @@ const ModuleCard = React.createClass({
 
     this.repaintChart = cols !== module.cols || rows !== module.rows
   },
+  componentDidMount () {
+    this.resizer = () => this.reflow()
+    window.event$.on('aside-toggle', this.resizer)
+  },
   componentDidUpdate () {
-    const resizedChart = this.repaintChart
-      ? this.refs.chartWrapper.querySelector('div[data-highcharts-chart]')
-      : null
+    if (this.repaintChart) {
+      delete this.repaintChart
+      this.reflow()
+    }
+  },
+  componentWillUnmount () {
+    window.event$.off('aside-toggle', this.resizer)
+  },
+  reflow () {
+    const resizedChart = this.refs.chartWrapper.querySelector('div[data-highcharts-chart]')
 
     if (resizedChart) {
       resizedChart.HCharts.reflow()

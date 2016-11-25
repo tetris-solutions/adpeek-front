@@ -61,7 +61,7 @@ const Page = React.createClass({
   toggleNav () {
     this.setState({
       isNavOpen: !this.state.isNavOpen
-    }, this.writeToLocalStorage)
+    }, this.onAsideVisibilityChange)
   },
   readFromLocalStorage () {
     try {
@@ -70,7 +70,9 @@ const Page = React.createClass({
       return true
     }
   },
-  writeToLocalStorage () {
+  onAsideVisibilityChange () {
+    window.event$.emit('aside-toggle')
+
     try {
       window.localStorage.setItem('openSideNav', this.state.isNavOpen)
     } catch (e) {

@@ -6,6 +6,9 @@ const {extend: extendBaseContext} = require('tetris-iso/base-context')
 extendBaseContext('company', 'router', 'location')
 createClient(getRoutes, defaultState)
 
+const Emitter = require('emmett')
+window.event$ = new Emitter()
+
 if (process.env.NODE_ENV !== 'production') {
   require('global').Perf = require('react-addons-perf')
 }
