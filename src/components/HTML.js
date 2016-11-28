@@ -26,6 +26,20 @@ const paceCss = `
   height: 2px;
 }`
 
+const gTagManagerScript = `(function (w, d, s, l, i) {
+  w[l] = w[l] || [];
+  w[l].push({
+    'gtm.start': new Date().getTime(), event: 'gtm.js'
+  });
+  var f = d.getElementsByTagName(s)[0],
+    j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+  j.async = true;
+  j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+  f.parentNode.insertBefore(j, f);
+})(window, document, 'script', 'dataLayer', '${process.env.GOOGLE_TAG_MANAGER_ID}');`
+
+const invisible = {display: 'none', visibility: 'hidden'}
+
 const revSuffix = process.env.BUILD_PROD ? `.${revision.short()}` : ''
 
 const HTML = ({payload, children, css}) => (
@@ -41,6 +55,7 @@ const HTML = ({payload, children, css}) => (
       <link rel='stylesheet' href='/css/mdl-selectfield.min.css'/>
       <link rel='stylesheet' href='/css/animate.min.css'/>
       <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css'/>
+      <script dangerouslySetInnerHTML={{__html: gTagManagerScript}}/>
       <script src='https://cdn.rawgit.com/HubSpot/pace/v1.0.0/pace.min.js' async/>
       <style dangerouslySetInnerHTML={{__html: paceCss}}/>
       <style id='style-injection' dangerouslySetInnerHTML={{__html: css}}/>
@@ -51,9 +66,13 @@ const HTML = ({payload, children, css}) => (
       <script src={`/js/client${revSuffix}.js`} defer/>
     </head>
     <body>
-
       <div id='app' dangerouslySetInnerHTML={{__html: children}}/>
-
+      <noscript>
+        <iframe
+          src={`https://www.googletagmanager.com/ns.html?id=${process.env.GOOGLE_TAG_MANAGER_ID}`}
+          height='0' width='0'
+          style={invisible}/>
+      </noscript>
     </body>
   </html>
 )
