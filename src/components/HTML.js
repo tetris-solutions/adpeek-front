@@ -26,7 +26,7 @@ const paceCss = `
   height: 2px;
 }`
 
-const gTagManagerScript = `(function (w, d, s, l, i) {
+const gTMSrc = `(function (w, d, s, l, i) {
   w[l] = w[l] || [];
   w[l].push({
     'gtm.start': new Date().getTime(), event: 'gtm.js'
@@ -38,27 +38,43 @@ const gTagManagerScript = `(function (w, d, s, l, i) {
   f.parentNode.insertBefore(j, f);
 })(window, document, 'script', 'dataLayer', '${process.env.GOOGLE_TAG_MANAGER_ID}');`
 
-const invisible = {display: 'none', visibility: 'hidden'}
+const gTMScript = process.env.NODE_ENV === 'production'
+  ? <script dangerouslySetInnerHTML={{__html: gTMSrc}}/>
+  : null
+
+const gTMIFrame = process.env.NODE_ENV === 'production' ? (
+  <noscript>
+    <iframe
+      src={`https://www.googletagmanager.com/ns.html?id=${process.env.GOOGLE_TAG_MANAGER_ID}`}
+      height='0' width='0'
+      style={{display: 'none', visibility: 'hidden'}}/>
+  </noscript>
+) : null
 
 const revSuffix = process.env.BUILD_PROD ? `.${revision.short()}` : ''
 
 const HTML = ({payload, children, css}) => (
   <html>
     <head>
-
       <meta charSet='UTF-8'/>
       <meta name='viewport' content='width=device-width, initial-scale=1'/>
-      {Helmet.rewind().title.toComponent()}
+
+      {Helmet
+        .rewind()
+        .title.toComponent()}
+
       <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' type='text/css'/>
       <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons'/>
       <link rel='stylesheet' href='https://code.getmdl.io/1.2.1/material.blue-indigo.min.css'/>
       <link rel='stylesheet' href='/css/mdl-selectfield.min.css'/>
       <link rel='stylesheet' href='/css/animate.min.css'/>
       <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css'/>
-      <script dangerouslySetInnerHTML={{__html: gTagManagerScript}}/>
-      <script src='https://cdn.rawgit.com/HubSpot/pace/v1.0.0/pace.min.js' async/>
+
       <style dangerouslySetInnerHTML={{__html: paceCss}}/>
       <style id='style-injection' dangerouslySetInnerHTML={{__html: css}}/>
+
+      {gTMScript}
+      <script src='https://cdn.rawgit.com/HubSpot/pace/v1.0.0/pace.min.js' async/>
       <script src='https://code.getmdl.io/1.2.1/material.min.js' defer/>
       <script
         id='state-injection'
@@ -67,12 +83,8 @@ const HTML = ({payload, children, css}) => (
     </head>
     <body>
       <div id='app' dangerouslySetInnerHTML={{__html: children}}/>
-      <noscript>
-        <iframe
-          src={`https://www.googletagmanager.com/ns.html?id=${process.env.GOOGLE_TAG_MANAGER_ID}`}
-          height='0' width='0'
-          style={invisible}/>
-      </noscript>
+
+      {gTMIFrame}
     </body>
   </html>
 )
