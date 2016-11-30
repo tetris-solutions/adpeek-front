@@ -1,5 +1,6 @@
 import deburr from 'lodash/deburr'
 import filter from 'lodash/filter'
+import forEach from 'lodash/forEach'
 import groupBy from 'lodash/groupBy'
 import includes from 'lodash/includes'
 import lowerCase from 'lodash/toLower'
@@ -187,11 +188,15 @@ export const Workspaces = React.createClass({
     }
   },
   componentDidMount () {
-    const {company, dispatch, location: {query}} = this.props
+    const {company: {id: companyId, workspaces}, dispatch, location: {query}} = this.props
 
     if (query.stats) {
-      Promise.all(map(company.workspaces, workspace =>
-        dispatch(loadWorkspaceStatsAction, company.id, workspace.id)))
+      let promise = Promise.resolve()
+
+      forEach(workspaces, ({id: workspaceId}) => {
+        promise = promise.then(() =>
+          dispatch(loadWorkspaceStatsAction, companyId, workspaceId))
+      })
     }
   },
   workspaceAction (id, action) {
