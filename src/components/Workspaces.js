@@ -62,6 +62,16 @@ const style = csjs`
 }
 .stats {
   padding: 0 1em 0 .5em;
+}
+.numbers {
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: small;
+}
+.numbers > strong {
+  font-size: 105%;
 }`
 const {PropTypes} = React
 const cleanStr = str => trim(deburr(lowerCase(str)))
@@ -79,9 +89,9 @@ const Stats = ({open, yesterday}, {locales}) => (
       <Message>investmentLabel</Message>:
     </div>
     <div className={`${style.stats}`}>
-      <div>
+      <div className={`${style.numbers}`}>
         <strong>
-          {open.budget === null ? '--' : prettyNumber(open.cost, 'currency', locales)}
+          {open.cost === null ? '--' : prettyNumber(open.cost, 'currency', locales)}
         </strong>
         <span className='mdl-color-text--grey-600'>
           {' / '}
