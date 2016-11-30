@@ -19,6 +19,7 @@ import {deleteWorkspaceAction} from '../actions/delete-workspace'
 import {loadCompanyWorkspacesAction} from '../actions/load-company-workspaces'
 import {unfavoriteWorkspaceAction} from '../actions/unfavorite-workspace'
 import {favoriteWorkspaceAction} from '../actions/favorite-workspace'
+import {loadWorkspaceStatsAction} from '../actions/load-workspace-stats'
 import DeleteButton from './DeleteButton'
 import bind from 'lodash/bind'
 import csjs from 'csjs'
@@ -109,6 +110,7 @@ export const Workspaces = React.createClass({
   displayName: 'Workspaces',
   mixins: [styled(style)],
   propTypes: {
+    location: PropTypes.object,
     dispatch: PropTypes.func,
     company: PropTypes.shape({
       workspaces: PropTypes.array
@@ -120,6 +122,14 @@ export const Workspaces = React.createClass({
   getInitialState () {
     return {
       searchValue: ''
+    }
+  },
+  componentDidMount () {
+    const {company, dispatch, location: {query}} = this.props
+
+    if (query.stats) {
+      Promise.all(map(company.workspaces, workspace =>
+        dispatch(loadWorkspaceStatsAction, company.id, workspace.id)))
     }
   },
   workspaceAction (id, action) {
