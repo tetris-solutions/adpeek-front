@@ -81,11 +81,11 @@ const Stats = ({open, yesterday}, {locales}) => (
     <div className={`${style.stats}`}>
       <div>
         <strong>
-          {prettyNumber(open.cost, 'currency', locales)}
+          {open.budget === null ? '--' : prettyNumber(open.cost, 'currency', locales)}
         </strong>
         <span className='mdl-color-text--grey-600'>
           {' / '}
-          {prettyNumber(open.budget, 'currency', locales)}
+          {open.budget === null ? '--' : prettyNumber(open.budget, 'currency', locales)}
         </span>
       </div>
       <div className={`mdl-color--grey-300 ${style.rail}`}>
@@ -99,6 +99,16 @@ const Stats = ({open, yesterday}, {locales}) => (
   </div>
 )
 Stats.displayName = 'Stats'
+Stats.defaultProps = {
+  open: {
+    budget: null,
+    cost: null
+  },
+  yesterday: {
+    budget: null,
+    cost: null
+  }
+}
 Stats.propTypes = {
   open: PropTypes.shape({
     budget: PropTypes.number,
@@ -113,10 +123,10 @@ Stats.contextTypes = {
   locales: PropTypes.string
 }
 
-const Workspace = ({company, workspace, del, fave, unfave}) => (
+const Workspace = ({showStats, company, workspace, del, fave, unfave}) => (
   <ThumbLink to={`/company/${company}/workspace/${workspace.id}`} title={workspace.name}>
     <Cap>{workspace.name}</Cap>
-    {workspace.stats && <Stats {...workspace.stats}/>}
+    {showStats && <Stats {...(workspace.stats || {})}/>}
     <BottomLine>
       <div className={`${style.label}`}>
         <Message>workspaceFoldersSummary</Message>:
@@ -159,6 +169,7 @@ const Workspace = ({company, workspace, del, fave, unfave}) => (
 )
 Workspace.displayName = 'Workspace'
 Workspace.propTypes = {
+  showStats: PropTypes.bool,
   company: PropTypes.string,
   workspace: PropTypes.object,
   del: PropTypes.func.isRequired,
@@ -227,6 +238,7 @@ export const Workspaces = React.createClass({
     const groupedByFaveStatus = groupBy(matchingWorkspaces, ({favorite}) => Boolean(favorite))
     const anyFave = Boolean(groupedByFaveStatus.true)
     const anyNormie = Boolean(groupedByFaveStatus.false)
+    const showStats = Boolean(this.props.location.query.stats)
 
     return (
       <div>
@@ -248,6 +260,7 @@ export const Workspaces = React.createClass({
 
             {map(groupedByFaveStatus.true, (workspace, index) =>
               <Workspace
+                showStats={showStats}
                 fave={bind(this.favoriteWorkspace, null, workspace.id)}
                 unfave={bind(this.unfavoriteWorkspace, null, workspace.id)}
                 del={bind(this.deleteWorkspace, null, workspace.id)}
@@ -261,6 +274,7 @@ export const Workspaces = React.createClass({
             {anyNormie && <h5><Message>workspaceList</Message></h5>}
             {map(groupedByFaveStatus.false, (workspace, index) =>
               <Workspace
+                showStats={showStats}
                 fave={bind(this.favoriteWorkspace, null, workspace.id)}
                 unfave={bind(this.unfavoriteWorkspace, null, workspace.id)}
                 del={bind(this.deleteWorkspace, null, workspace.id)}
