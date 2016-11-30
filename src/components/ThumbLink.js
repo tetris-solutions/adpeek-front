@@ -26,6 +26,7 @@ const style = csjs`
   margin: 10px;
   text-align: left;
   border-radius: 2px;
+  text-decoration: none !important;
 }
 .cap {
   position: relative;

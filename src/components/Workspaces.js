@@ -24,6 +24,7 @@ import DeleteButton from './DeleteButton'
 import bind from 'lodash/bind'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
+import {prettyNumber} from '../functions/pretty-number'
 
 const style = csjs`
 .sober {
@@ -43,6 +44,23 @@ const style = csjs`
 }
 .number extends .sober {
   margin: 0 .8em 0 .3em;
+}
+.rail {
+  background-color: grey;
+  overflow: hidden;
+  border-radius: 3px;
+  padding: 2px;
+  margin-bottom: 1em;
+}
+.rail > div {
+  border-radius: 3px;
+  height: 4px;
+}
+.statsWrap {
+  padding: 1em 0 5em .7em;
+}
+.stats {
+  padding: 0 1em 0 .5em;
 }`
 const {PropTypes} = React
 const cleanStr = str => trim(deburr(lowerCase(str)))
@@ -51,9 +69,53 @@ const DeleteSpan = props => <DeleteButton {...props} tag='span'/>
 
 DeleteSpan.displayName = 'Delete-Span'
 
+const num = val => val === null ? 0 : val
+const ratio = (a, b) => b === 0 ? 0 : a / b
+
+const Stats = ({open, yesterday}, {locales}) => (
+  <div className={`${style.statsWrap}`}>
+    <div className={`${style.label}`}>
+      <Message>investmentLabel</Message>:
+    </div>
+    <div className={`${style.stats}`}>
+      <div>
+        <strong>
+          {prettyNumber(open.cost, 'currency', locales)}
+        </strong>
+        <span className='mdl-color-text--grey-600'>
+          {' / '}
+          {prettyNumber(open.budget, 'currency', locales)}
+        </span>
+      </div>
+      <div className={`mdl-color--grey-300 ${style.rail}`}>
+        <div
+          style={{width: Math.min(100, Math.floor(100 * ratio(num(open.cost), num(open.budget)))) + '%'}}
+          className={num(open.cost) > num(open.budget)
+            ? 'mdl-color--red-800'
+            : 'mdl-color--primary'}/>
+      </div>
+    </div>
+  </div>
+)
+Stats.displayName = 'Stats'
+Stats.propTypes = {
+  open: PropTypes.shape({
+    budget: PropTypes.number,
+    cost: PropTypes.number
+  }),
+  yesterday: PropTypes.shape({
+    budget: PropTypes.number,
+    cost: PropTypes.number
+  })
+}
+Stats.contextTypes = {
+  locales: PropTypes.string
+}
+
 const Workspace = ({company, workspace, del, fave, unfave}) => (
   <ThumbLink to={`/company/${company}/workspace/${workspace.id}`} title={workspace.name}>
     <Cap>{workspace.name}</Cap>
+    {workspace.stats && <Stats {...workspace.stats}/>}
     <BottomLine>
       <div className={`${style.label}`}>
         <Message>workspaceFoldersSummary</Message>:
