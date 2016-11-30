@@ -21,8 +21,8 @@ const style = csjs`
   background: white;
   display: inline-block;
   position: relative;
-  width: 200px;
-  min-height: 200px;
+  width: 230px;
+  min-height: 230px;
   margin: 10px;
   text-align: left;
   border-radius: 2px;
