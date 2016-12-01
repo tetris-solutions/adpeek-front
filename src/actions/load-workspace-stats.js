@@ -8,14 +8,19 @@ function loadWorkspaceStats (id, requestFreshStats, config) {
   return GET(`${process.env.ADPEEK_API_URL}/workspace/${id}/stats${qs}`, config)
 }
 
+const statsRequestRegister = {}
+
 export function loadWorkspaceStatsAction (tree, company, workspace, requestFreshStats = false) {
-  loadWorkspaceStats(workspace, requestFreshStats, getApiFetchConfig(tree))
-    .then(saveResponseTokenAsCookie)
-    .then(saveResponseData(tree, [
-      'user',
-      ['companies', company],
-      ['workspaces', workspace],
-      'stats'
-    ]))
-    .catch(pushResponseErrorToState)
+  statsRequestRegister[workspace] = statsRequestRegister[workspace] ||
+    loadWorkspaceStats(workspace, requestFreshStats, getApiFetchConfig(tree))
+      .then(saveResponseTokenAsCookie)
+      .then(saveResponseData(tree, [
+        'user',
+        ['companies', company],
+        ['workspaces', workspace],
+        'stats'
+      ]))
+      .catch(pushResponseErrorToState)
+
+  return statsRequestRegister[workspace]
 }
