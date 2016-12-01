@@ -1,4 +1,5 @@
 import deburr from 'lodash/deburr'
+import isNumber from 'lodash/isNumber'
 import filter from 'lodash/filter'
 import forEach from 'lodash/forEach'
 import groupBy from 'lodash/groupBy'
@@ -72,6 +73,11 @@ const style = csjs`
 }
 .numbers > strong {
   font-size: 105%;
+}
+.iconLabel {
+  display: inline-block;
+  transform: translateY(-.4em);
+  padding-left: .3em;
 }`
 const {PropTypes} = React
 const cleanStr = str => trim(deburr(lowerCase(str)))
@@ -80,32 +86,105 @@ const DeleteSpan = props => <DeleteButton {...props} tag='span'/>
 
 DeleteSpan.displayName = 'Delete-Span'
 
-const num = val => val === null ? 0 : val
-const ratio = (a, b) => b === 0 ? 0 : a / b
+const num = val => !isNumber(val) ? 0 : val
+const division = (a, b) => b === 0 ? 0 : a / b
 
-const Stats = ({open, yesterday}, {locales}) => (
-  <div className={`${style.statsWrap}`}>
+const colors = {
+  neutral: {
+    icon: 'sentiment_neutral',
+    color: 'mdl-color-text--grey-900'
+  },
+  bad: {
+    icon: 'sentiment_very_dissatisfied',
+    color: 'mdl-color-text--red-900'
+  },
+  good: {
+    icon: 'mood',
+    color: 'mdl-color-text--green-900'
+  }
+}
+function goal (percent) {
+  if (percent < 70 || percent > 110) {
+    return colors.bad
+  }
+
+  if (percent >= 95) {
+    return colors.good
+  }
+
+  return colors.neutral
+}
+
+const Daily = ({budget, cost, locales}) => {
+  let icon, color, label
+
+  if (!isNumber(budget) || !isNumber(cost)) {
+    icon = colors.neutral.icon
+    color = colors.neutral.color
+    label = '--'
+  } else {
+    const ratio = division(num(cost), num(budget))
+    const c = goal(ratio * 100)
+
+    icon = c.icon
+    color = c.color
+    label = prettyNumber(ratio, 'percentage', locales)
+  }
+
+  return (
+    <div>
+      <div className={`${style.label}`}>
+        <Message>investmentDayLabel</Message>:
+      </div>
+
+      <div className={`${style.stats} ${color}`}>
+        <i className='material-icons'>{icon}</i>
+        <span className={`${style.iconLabel}`}>{label}</span>
+      </div>
+    </div>
+  )
+}
+
+Daily.displayName = 'Daily'
+
+const Period = ({cost, budget, locales}) => (
+  <div>
     <div className={`${style.label}`}>
       <Message>investmentLabel</Message>:
     </div>
+
     <div className={`${style.stats}`}>
       <div className={`${style.numbers}`}>
         <strong>
-          {open.cost === null ? '--' : prettyNumber(open.cost, 'currency', locales)}
+          {!isNumber(cost) ? '--' : prettyNumber(cost, 'currency', locales)}
         </strong>
         <span className='mdl-color-text--grey-600'>
           {' / '}
-          {open.budget === null ? '--' : prettyNumber(open.budget, 'currency', locales)}
+          {!isNumber(budget) ? '--' : prettyNumber(budget, 'currency', locales)}
         </span>
       </div>
       <div className={`mdl-color--grey-300 ${style.rail}`}>
         <div
-          style={{width: Math.min(100, Math.floor(100 * ratio(num(open.cost), num(open.budget)))) + '%'}}
-          className={num(open.cost) > num(open.budget)
+          style={{width: Math.min(100, Math.floor(100 * division(num(cost), num(budget)))) + '%'}}
+          className={num(cost) > num(budget)
             ? 'mdl-color--red-800'
             : 'mdl-color--primary'}/>
       </div>
     </div>
+  </div>
+)
+
+Period.displayName = 'Period'
+Period.propTypes = Daily.propTypes = {
+  locales: PropTypes.string,
+  budget: PropTypes.number,
+  cost: PropTypes.number
+}
+
+const Stats = ({open, yesterday}, {locales, location: {query}}) => (
+  <div className={`${style.statsWrap}`}>
+    <Period {...open} locales={locales}/>
+    {query.smile ? <Daily {...yesterday} locales={locales}/> : null}
   </div>
 )
 Stats.displayName = 'Stats'
@@ -130,7 +209,8 @@ Stats.propTypes = {
   })
 }
 Stats.contextTypes = {
-  locales: PropTypes.string
+  locales: PropTypes.string.isRequired,
+  location: PropTypes.object.isRequired
 }
 
 const Workspace = ({company, workspace, del, fave, unfave}) => (
