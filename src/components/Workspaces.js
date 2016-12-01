@@ -133,10 +133,10 @@ Stats.contextTypes = {
   locales: PropTypes.string
 }
 
-const Workspace = ({showStats, company, workspace, del, fave, unfave}) => (
+const Workspace = ({company, workspace, del, fave, unfave}) => (
   <ThumbLink to={`/company/${company}/workspace/${workspace.id}`} title={workspace.name}>
     <Cap>{workspace.name}</Cap>
-    {showStats && <Stats {...(workspace.stats || {})}/>}
+    <Stats {...(workspace.stats || {})}/>
     <BottomLine>
       <div className={`${style.label}`}>
         <Message>workspaceFoldersSummary</Message>:
@@ -179,7 +179,6 @@ const Workspace = ({showStats, company, workspace, del, fave, unfave}) => (
 )
 Workspace.displayName = 'Workspace'
 Workspace.propTypes = {
-  showStats: PropTypes.bool,
   company: PropTypes.string,
   workspace: PropTypes.object,
   del: PropTypes.func.isRequired,
@@ -211,14 +210,12 @@ export const Workspaces = React.createClass({
   componentDidMount () {
     const {company: {id: companyId, workspaces}, dispatch, location: {query}} = this.props
 
-    if (query.stats) {
-      let promise = Promise.resolve()
+    let promise = Promise.resolve()
 
-      forEach(workspaces, ({id: workspaceId}) => {
-        promise = promise.then(() =>
-          dispatch(loadWorkspaceStatsAction, companyId, workspaceId))
-      })
-    }
+    forEach(workspaces, ({id: workspaceId}) => {
+      promise = promise.then(() =>
+        dispatch(loadWorkspaceStatsAction, companyId, workspaceId, Boolean(query.fresh)))
+    })
   },
   workspaceAction (id, action) {
     const {dispatch, company} = this.props
@@ -248,7 +245,6 @@ export const Workspaces = React.createClass({
     const groupedByFaveStatus = groupBy(matchingWorkspaces, ({favorite}) => Boolean(favorite))
     const anyFave = Boolean(groupedByFaveStatus.true)
     const anyNormie = Boolean(groupedByFaveStatus.false)
-    const showStats = Boolean(this.props.location.query.stats)
 
     return (
       <div>
@@ -270,7 +266,6 @@ export const Workspaces = React.createClass({
 
             {map(groupedByFaveStatus.true, (workspace, index) =>
               <Workspace
-                showStats={showStats}
                 fave={bind(this.favoriteWorkspace, null, workspace.id)}
                 unfave={bind(this.unfavoriteWorkspace, null, workspace.id)}
                 del={bind(this.deleteWorkspace, null, workspace.id)}
@@ -284,7 +279,6 @@ export const Workspaces = React.createClass({
             {anyNormie && <h5><Message>workspaceList</Message></h5>}
             {map(groupedByFaveStatus.false, (workspace, index) =>
               <Workspace
-                showStats={showStats}
                 fave={bind(this.favoriteWorkspace, null, workspace.id)}
                 unfave={bind(this.unfavoriteWorkspace, null, workspace.id)}
                 del={bind(this.deleteWorkspace, null, workspace.id)}
