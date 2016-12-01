@@ -210,12 +210,8 @@ export const Workspaces = React.createClass({
   componentDidMount () {
     const {company: {id: companyId, workspaces}, dispatch, location: {query}} = this.props
 
-    let promise = Promise.resolve()
-
-    forEach(workspaces, ({id: workspaceId}) => {
-      promise = promise.then(() =>
-        dispatch(loadWorkspaceStatsAction, companyId, workspaceId, Boolean(query.fresh)))
-    })
+    forEach(workspaces, ({id: workspaceId}) =>
+      dispatch(loadWorkspaceStatsAction, companyId, workspaceId, Boolean(query.fresh)))
   },
   workspaceAction (id, action) {
     const {dispatch, company} = this.props
