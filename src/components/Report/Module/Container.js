@@ -2,6 +2,7 @@ import React from 'react'
 import assign from 'lodash/assign'
 import some from 'lodash/some'
 import filter from 'lodash/filter'
+import includes from 'lodash/includes'
 import map from 'lodash/map'
 import isEmpty from 'lodash/isEmpty'
 import keyBy from 'lodash/keyBy'
@@ -43,11 +44,20 @@ const ModuleContainer = React.createClass({
     const {reportEntities} = this.context
     const entities = keyBy(reportEntities, 'id')
     const {activeOnly} = this.state
+    const {module} = this.props
 
     function filterByStatus (entity) {
-      return activeOnly
-        ? assign({}, entity, {list: filter(entity.list, 'status.is_active')})
-        : entity
+      if (activeOnly) {
+        const whiteList = module.entity === entity.id
+          ? module.filters.id
+          : []
+
+        entity = assign({}, entity)
+        entity.list = filter(entity.list, ({status, id}) => (
+          status.is_active || includes(whiteList, id)
+        ))
+      }
+      return entity
     }
 
     function filterByParent (entity, parent, parentIdAtribute) {

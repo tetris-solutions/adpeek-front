@@ -126,11 +126,11 @@ const excluded = [
 ]
 
 function loadReportMetaData (platform, entity, config) {
-  return GET(`${process.env.NUMBERS_API_URL}/meta?platform=${platform}&entity=${entity}`, config)
+  return GET(`${process.env.NUMBERS_API_URL}/meta-data?platform=${platform}&entity=${entity}`, config)
 }
 
 function loadCrossPlatformMetaData (platforms, entity, config) {
-  return GET(`${process.env.NUMBERS_API_URL}/x/meta?platforms=${join(platforms, ',')}&entity=${entity}`, config)
+  return GET(`${process.env.NUMBERS_API_URL}/x/meta-data?platforms=${join(platforms, ',')}&entity=${entity}`, config)
 }
 
 const prefixless = name => name.substr(name.indexOf(':') + 1)
