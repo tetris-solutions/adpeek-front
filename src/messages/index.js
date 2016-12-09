@@ -269,7 +269,8 @@ module.exports = {
     facebookLevel: 'Facebook',
     sharedLevel: 'Shared',
     tooManyAccounts: 'You have selected {selected} accounts, the max is {max}',
-    calculateKeywordsRelevance: 'Calculate relevance'
+    calculateKeywordsRelevance: 'Calculate relevance',
+    reportMailing: 'Report Mailing'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -541,6 +542,7 @@ module.exports = {
     facebookLevel: 'Facebook',
     sharedLevel: 'Comum',
     tooManyAccounts: 'O máximo de contas é {max}, você selecionou {selected}',
-    calculateKeywordsRelevance: 'Calcular relevância'
+    calculateKeywordsRelevance: 'Calcular relevância',
+    reportMailing: 'Mailing do Relatório'
   }
 }

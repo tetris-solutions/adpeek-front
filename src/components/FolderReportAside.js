@@ -17,7 +17,7 @@ import NameInput from './Report/NameInput'
 
 const {PropTypes} = React
 
-export function FolderReportAside ({report, dispatch, user}, {messages, locales, router, location: {pathname}, params}) {
+export function FolderReportAside ({report, dispatch, user}, {messages, locales, router, location: {pathname, search}, params}) {
   const {company, workspace, folder} = params
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${folder}`
   const reload = () => dispatch(loadReportAction, params, report.id)
@@ -32,6 +32,7 @@ export function FolderReportAside ({report, dispatch, user}, {messages, locales,
   const shouldSkipEditPrompt = report.is_private || canSkipReportEditPrompt()
   const favTitle = report.is_user_selected ? messages.unfavoriteReportDescription : messages.favoriteReportDescription
   const cloneUrl = `${folderUrl}/reports/new?clone=${report.id}&name=${cloneName}`
+  const reportUrl = `${folderUrl}/report/${report.id}`
 
   return (
     <Fence canEditReport canBrowseReports>
@@ -62,7 +63,7 @@ export function FolderReportAside ({report, dispatch, user}, {messages, locales,
             </NavBt>}
 
             {canEditReport && !inEditMode && shouldSkipEditPrompt && (
-              <NavBt tag={Link} to={`${folderUrl}/report/${report.id}/edit`} icon='create'>
+              <NavBt tag={Link} to={`${reportUrl}/edit${search}`} icon='create'>
                 <Message>editReport</Message>
               </NavBt>)}
 
@@ -73,6 +74,10 @@ export function FolderReportAside ({report, dispatch, user}, {messages, locales,
               <NavBt tag={DeleteButton} entityName={report.name} onClick={deleteReport} icon='delete'>
                 <Message>deleteReport</Message>
               </NavBt>)}
+
+            <NavBt tag={Link} to={`${reportUrl}/mailing${search}`} icon='mail_outline'>
+              <Message>reportMailing</Message>
+            </NavBt>
 
             <NavBt tag={Link} to={canBrowseReports ? `${folderUrl}/reports` : folderUrl} icon='close'>
               <Message>oneLevelUpNavigation</Message>
