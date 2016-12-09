@@ -69,6 +69,11 @@ export function setAppRoutes (app, render) {
     ensureLoad(savedAccounts, report),
     render)
 
+  app.get('/company/:company/report/:report/mailing/:mailing?',
+    protect,
+    ensureLoad(savedAccounts, report, mailings),
+    render)
+
   app.get('/company/:company/orders',
     protect,
     ensureLoad(orders),
@@ -114,7 +119,7 @@ export function setAppRoutes (app, render) {
     ensureLoad(workspace, report),
     render)
 
-  app.get('/company/:company/workspace/:workspace/report/:report/mailing',
+  app.get('/company/:company/workspace/:workspace/report/:report/mailing/:mailing?',
     protect,
     ensureLoad(workspace, report, mailings),
     render)
@@ -171,7 +176,7 @@ export function setAppRoutes (app, render) {
     ensureLoad(...subFolderActions),
     render)
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/report/:report/mailing',
+  app.get('/company/:company/workspace/:workspace/folder/:folder/report/:report/mailing/:mailing?',
     protect,
     ensureLoad(...subFolderActions.concat([mailings])),
     render)

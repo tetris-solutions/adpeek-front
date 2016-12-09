@@ -1,36 +1,65 @@
 import React from 'react'
 import Modal from 'tetris-iso/Modal'
+import {Link} from 'react-router'
 import {contextualize} from '../higher-order/contextualize'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
+import Edit from './MailingEdit'
+import find from 'lodash/find'
+import map from 'lodash/map'
 
 const {PropTypes} = React
 
-const List = ({mailings}) => (
-  <pre>{JSON.stringify(mailings, null, 2)}</pre>
-)
+const List = ({mailings, params}, {location: {pathname, search}}) => {
+  // const singleReportMode = Boolean(params.report)
+  const editMode = Boolean(params.mailing)
+
+  if (editMode) {
+    return <Edit params={params} mailing={find(mailings, {id: params.mailing})}/>
+  }
+
+  return (
+    <ul>
+      {map(mailings, ({id, report}) => (
+        <li key={id}>
+          <Link to={`${pathname}/${id}${search}`}>
+            {report.name}
+          </Link>
+        </li>))}
+    </ul>
+  )
+}
 
 List.displayName = 'List'
 List.propTypes = {
-  mailings: PropTypes.array
+  mailings: PropTypes.array,
+  params: PropTypes.shape({
+    report: PropTypes.string,
+    mailing: PropTypes.string
+  })
+}
+List.contextTypes = {
+  location: PropTypes.object
 }
 
-const StandaloneMailingList = props => <List mailings={props[props.level].mailings}/>
+const StandaloneMailingList = props => <List params={props.params} mailings={props[props.level].mailings}/>
 
 StandaloneMailingList.displayName = 'Mailing-List'
 StandaloneMailingList.propTypes = {
+  params: PropTypes.object,
   level: PropTypes.string.isRequired
 }
 
-const ReportMailingList = ({report: {mailings}}) => (
+const ReportMailingList = ({params, report: {mailings}}) => (
   <div style={{display: 'none'}}>
     <Modal>
-      <List mailings={mailings}/>
+      <List params={params} mailings={mailings}/>
     </Modal>
   </div>
 )
 
 ReportMailingList.displayName = 'Report-Mailing-List'
 ReportMailingList.propTypes = {
+  params: PropTypes.object,
   report: PropTypes.shape({
     mailings: PropTypes.array
   })

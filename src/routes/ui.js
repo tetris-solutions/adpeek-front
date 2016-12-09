@@ -108,6 +108,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
               component={CompanyReport}>
 
               <Route path='edit'/>
+              <Route path='mailing(/:mailing)' onEnter={preload(mailings)} component={Mailing}/>
             </Route>
 
             <Route path='reports'>
@@ -138,9 +139,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                      component={WorkspaceReport}>
 
                 <Route path='edit'/>
-                <Route path='mailing' onEnter={preload(mailings)}>
-                  <IndexRoute component={Mailing}/>
-                </Route>
+                <Route path='mailing(/:mailing)' onEnter={preload(mailings)} component={Mailing}/>
               </Route>
 
               <Route path='reports'>
@@ -179,9 +178,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                   component={FolderReport}>
 
                   <Route path='edit'/>
-                  <Route path='mailing' onEnter={preload(mailings)}>
-                    <IndexRoute component={Mailing}/>
-                  </Route>
+                  <Route path='mailing(/:mailing)' onEnter={preload(mailings)} component={Mailing}/>
                 </Route>
 
                 <Route path='reports'>
