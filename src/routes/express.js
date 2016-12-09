@@ -25,6 +25,7 @@ import {loadOrdersActionServerAdaptor as orders} from '../actions/load-orders'
 import {loadStatusesActionServerAdaptor as statuses} from '../actions/load-statuses'
 import {loadWorkspaceActionServerAdaptor as workspace} from '../actions/load-workspace'
 import {loadCompanySavedAccountsActionServerAdaptor as savedAccounts} from '../actions/load-company-saved-accounts'
+import {loadMailingListActionServerAdaptor as mailings} from '../actions/load-mailing-list'
 
 export function setAppRoutes (app, render) {
   const _ = bind.placeholder
@@ -113,6 +114,11 @@ export function setAppRoutes (app, render) {
     ensureLoad(workspace, report),
     render)
 
+  app.get('/company/:company/workspace/:workspace/report/:report/mailing',
+    protect,
+    ensureLoad(workspace, report, mailings),
+    render)
+
   app.get('/company/:company/workspace/:workspace/orders',
     protect,
     ensureLoad(workspace, orders),
@@ -163,6 +169,11 @@ export function setAppRoutes (app, render) {
   app.get('/company/:company/workspace/:workspace/folder/:folder/report/:report/edit',
     protect,
     ensureLoad(...subFolderActions),
+    render)
+
+  app.get('/company/:company/workspace/:workspace/folder/:folder/report/:report/mailing',
+    protect,
+    ensureLoad(...subFolderActions.concat([mailings])),
     render)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/creatives',

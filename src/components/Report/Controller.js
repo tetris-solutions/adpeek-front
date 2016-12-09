@@ -36,6 +36,7 @@ function calcPathToReport ({company, workspace, folder, report}, {from, to}) {
 const ReportController = React.createClass({
   displayName: 'Report-Controller',
   propTypes: {
+    children: PropTypes.node,
     guestMode: PropTypes.bool,
     editMode: PropTypes.bool,
     isGuestUser: PropTypes.bool,
@@ -156,7 +157,7 @@ const ReportController = React.createClass({
     return {accounts, from, to}
   },
   render () {
-    const {isGuestUser, guestMode, editMode, params, metaData, report: {modules, shareUrl}} = this.props
+    const {children, isGuestUser, guestMode, editMode, params, metaData, report: {modules, shareUrl}} = this.props
     const {isCreatingReport} = this.state
     const fullReportUrl = !isGuestUser && guestMode
       ? calcPathToReport(params, this.context.location.query)
@@ -187,6 +188,8 @@ const ReportController = React.createClass({
               metaData={get(metaData, module.entity)}/>
           </div>)}
         </div>
+
+        {children || null}
       </ReportScreen>
     )
   }

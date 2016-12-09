@@ -27,14 +27,12 @@ const WorkspaceReport = React.createClass({
     })
   },
   render () {
-    const {params, metaData, dispatch, report, workspace, location} = this.props
+    const {metaData, workspace, location} = this.props
     const {accounts} = workspace
 
     return (
       <ReportContainer
-        dispatch={dispatch}
-        report={report}
-        params={params}
+        {...this.props}
         editMode={endsWith(location.pathname, '/edit')}
         metaData={get(metaData, '_')}
         {...workspace.entities}

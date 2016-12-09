@@ -30,13 +30,11 @@ const CompanyReport = React.createClass({
     })
   },
   render () {
-    const {params, metaData, dispatch, report, company, location} = this.props
+    const {metaData, company, location} = this.props
 
     return (
       <ReportContainer
-        dispatch={dispatch}
-        report={report}
-        params={params}
+        {...this.props}
         editMode={endsWith(location.pathname, '/edit')}
         metaData={get(metaData, '_')}
         {...company.entities}

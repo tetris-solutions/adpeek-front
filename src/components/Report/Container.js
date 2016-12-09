@@ -45,6 +45,7 @@ const ReportContainer = React.createClass({
     messages: PropTypes.object
   },
   propTypes: {
+    children: PropTypes.node,
     guestMode: PropTypes.bool,
     editMode: PropTypes.bool,
     isGuestUser: PropTypes.bool,
@@ -170,7 +171,7 @@ const ReportContainer = React.createClass({
       .then(() => this.setState({isLoading: false}))
   },
   render () {
-    const {isGuestUser, guestMode, editMode, dispatch, params, accounts, metaData, report} = this.props
+    const {guestMode, accounts} = this.props
 
     if (this.state.isLoading) {
       return (
@@ -184,13 +185,7 @@ const ReportContainer = React.createClass({
 
     return (
       <ReportController
-        dispatch={dispatch}
-        params={params}
-        report={report}
-        metaData={metaData}
-        editMode={editMode}
-        guestMode={guestMode}
-        isGuestUser={isGuestUser}
+        {...this.props}
         accounts={map(accounts, transformAccount)}
         entities={this.getEntities()}/>
     )

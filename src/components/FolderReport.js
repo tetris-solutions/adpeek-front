@@ -30,14 +30,12 @@ const FolderReport = React.createClass({
     })
   },
   render () {
-    const {params, metaData, dispatch, report, folder, location} = this.props
+    const {metaData, folder, location} = this.props
     const {account} = folder
 
     return (
       <ReportContainer
-        dispatch={dispatch}
-        report={report}
-        params={params}
+        {...this.props}
         editMode={endsWith(location.pathname, '/edit')}
         metaData={get(metaData, account.platform)}
         {...folder.entities}
