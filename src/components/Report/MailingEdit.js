@@ -10,6 +10,8 @@ import VerticalAlign from '../VerticalAlign'
 import moment from 'moment'
 import DatePicker from '../DatePicker'
 import {createMailingReportAction} from '../../actions/create-mailing-action'
+import {updateMailingReportAction} from '../../actions/update-mailing-action'
+import {pushSuccessMessageAction} from '../../actions/push-success-message-action'
 import {loadMailingListAction} from '../../actions/load-mailing-list'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
@@ -232,7 +234,7 @@ const MailingEdit = React.createClass({
     e.preventDefault()
 
     const {state: {mailing}, props: {params}, context: {router, tree}} = this
-    const save = mailing.id ? false : createMailingReportAction
+    const save = mailing.id ? updateMailingReportAction : createMailingReportAction
 
     function onCreate (response) {
       const path = compact([
@@ -262,6 +264,7 @@ const MailingEdit = React.createClass({
       .then(response => loadMailingListAction(tree, params)
         .then(() => response))
       .then(mailing.id ? onUpdate : onCreate)
+      .then(() => pushSuccessMessageAction(tree))
   },
   render () {
     const {mailing} = this.state
@@ -287,7 +290,7 @@ const MailingEdit = React.createClass({
           </Middle>
           <Middle className='mdl-cell mdl-cell--4-col'>
             <Switch
-              checked={!mailing.disabled}
+              checked={!mailing.schedule.date}
               onChange={this.onChangeRecurrent}
               label={<Message>mailingRecurrentSwitch</Message>}/>
           </Middle>

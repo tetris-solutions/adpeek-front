@@ -5,16 +5,21 @@ import Input from './Input'
 
 const {PropTypes} = React
 
-const DatePicker = (props, {moment}) => (
-  <Input
-    label='date'
-    readOnly
-    value={moment(props.value).format('DD/MM/YYYY')}>
-    <Tooltip hover>
-      <Calendar {...props}/>
-    </Tooltip>
-  </Input>
-)
+const DatePicker = (props, {moment}) => {
+  const date = moment(props.value)
+
+  return (
+    <Input
+      name={'__date__'}
+      label='date'
+      readOnly
+      value={date.format('DD/MM/YYYY')}>
+      <Tooltip hover>
+        <Calendar {...props} date={date}/>
+      </Tooltip>
+    </Input>
+  )
+}
 
 DatePicker.displayName = 'Date-Picker'
 DatePicker.propTypes = {
