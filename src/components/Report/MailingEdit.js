@@ -1,15 +1,48 @@
 import React from 'react'
+import FormMixin from '../mixins/FormMixin'
+import {Submit} from '../Button'
+import Message from 'tetris-iso/Message'
+import Select from '../Select'
+import assign from 'lodash/assign'
 
 const {PropTypes} = React
 const ranges = [
   'today',
   'yesterday',
   'last week',
+  'last month',
   'last 30 days',
   'this month'
 ]
 
+const NotFound = () => (
+  <p className='mdl-color--red mdl-color-text--white'>
+    Not found!
+  </p>
+)
+
+const RangeSelect = ({value, onChange}, {messages}) => (
+  <Select name='date_range' label='mailingRange' value={value} onChange={onChange}>
+    <option value='today'>{messages.today}</option>
+    <option value='yesterday'>{messages.yesterday}</option>
+    <option value='last week'>{messages.pastWeek}</option>
+    <option value='last month'>{messages.pastMonth}</option>
+    <option value='last 30 days'>{messages.last30Days}</option>
+    <option value='this month'>{messages.currentMonth}</option>
+  </Select>
+)
+
+RangeSelect.displayName = 'Range-Select'
+RangeSelect.propTypes = {
+  value: PropTypes.string,
+  onChange: PropTypes.func.isRequired
+}
+RangeSelect.contextTypes = {
+  messages: PropTypes.object
+}
+
 const MailingEdit = React.createClass({
+  mixins: [FormMixin],
   propTypes: {
     mailing: PropTypes.shape({
       id: PropTypes.string,
@@ -35,21 +68,42 @@ const MailingEdit = React.createClass({
       })
     })
   },
+  getInitialState () {
+    return {mailing: this.props.mailing}
+  },
+  change (changes) {
+    const mailing = assign({}, this.state.mailing, changes)
+
+    this.setState({mailing})
+  },
+  onChangeRange ({target: {value: date_range}}) {
+    this.change({date_range})
+  },
+  handleSubmit (e) {
+    e.preventDefault()
+  },
   render () {
-    const {mailing} = this.props
+    const {mailing} = this.state
 
     if (!mailing) {
-      return (
-        <p className='mdl-color--red mdl-color-text--white'>
-          Not found!
-        </p>
-      )
+      return <NotFound/>
     }
 
     return (
-      <pre>
-        {JSON.stringify(mailing, null, 2)}
-      </pre>
+      <form onSubmit={this.handleSubmit}>
+        <RangeSelect
+          value={mailing.date_range}
+          onChange={this.onChangeRange}/>
+
+        <hr/>
+        <Submit className='mdl-button'>
+          <Message>save</Message>
+        </Submit>
+
+        <pre>
+          {JSON.stringify(mailing, null, 2)}
+        </pre>
+      </form>
     )
   }
 })

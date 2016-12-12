@@ -120,6 +120,7 @@ module.exports = {
     yesterday: 'Yesterday',
     pastWeek: 'Past week',
     currentMonth: 'Current month',
+    last30Days: 'Last 30 days',
     pastMonth: 'Past month',
     nextWeek: 'Next week',
     nextMonth: 'Next month',
@@ -270,7 +271,9 @@ module.exports = {
     sharedLevel: 'Shared',
     tooManyAccounts: 'You have selected {selected} accounts, the max is {max}',
     calculateKeywordsRelevance: 'Calculate relevance',
-    reportMailing: 'Report Mailing'
+    reportMailing: 'Report Mailing',
+    newMailing: 'New Mailing',
+    mailingRangeLabel: 'Report date range'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -392,6 +395,7 @@ module.exports = {
     yesterday: 'Ontém',
     pastWeek: 'Semana passada',
     currentMonth: 'Mês atual',
+    last30Days: 'Últimos 30 dias',
     pastMonth: 'Mês passado',
     nextWeek: 'Próxima semana',
     nextMonth: 'Próximo mês',
@@ -543,6 +547,8 @@ module.exports = {
     sharedLevel: 'Comum',
     tooManyAccounts: 'O máximo de contas é {max}, você selecionou {selected}',
     calculateKeywordsRelevance: 'Calcular relevância',
-    reportMailing: 'Mailing do Relatório'
+    reportMailing: 'Mailing do Relatório',
+    newMailing: 'Novo mailing',
+    mailingRangeLabel: 'Período do relatório'
   }
 }
