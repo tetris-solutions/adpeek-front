@@ -275,7 +275,20 @@ module.exports = {
     newMailing: 'New Mailing',
     mailingRangeLabel: 'Report date range',
     mailingEnabledSwitch: 'Enabled',
-    mailingRecurrentSwitch: 'Recurrent'
+    mailingRecurrentSwitch: 'Recurrent',
+    sunday: 'Sunday',
+    monday: 'Monday',
+    tuesday: 'Tuesday',
+    wednesday: 'Wednesday',
+    thursday: 'Thursday',
+    friday: 'Friday',
+    saturday: 'Saturday',
+    daily: 'Daily',
+    weekly: 'Weekly',
+    monthly: 'Montly',
+    dayOfWeekLabel: 'Day of Week',
+    dayOfMonthLabel: 'Day of Month',
+    periodicityLabel: 'Periodicity'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -553,6 +566,19 @@ module.exports = {
     newMailing: 'Novo mailing',
     mailingRangeLabel: 'Período do relatório',
     mailingEnabledSwitch: 'Ativo',
-    mailingRecurrentSwitch: 'Recorrente'
+    mailingRecurrentSwitch: 'Recorrente',
+    sunday: 'Domingo',
+    monday: 'Segunda-feira',
+    tuesday: 'Terça-feira',
+    wednesday: 'Quarta-feira',
+    thursday: 'Quinta-feira',
+    friday: 'Sexta-feira',
+    saturday: 'Sábado',
+    daily: 'Diário',
+    weekly: 'Semanal',
+    monthly: 'Mensal',
+    dayOfWeekLabel: 'Dia da semana',
+    dayOfMonthLabel: 'Dia do mês',
+    periodicityLabel: 'Periodicidade'
   }
 }

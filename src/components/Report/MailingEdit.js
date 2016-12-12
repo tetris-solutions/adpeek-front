@@ -56,29 +56,38 @@ RangeSelect.contextTypes = {
   messages: PropTypes.object
 }
 
-const PeriodicitySelector = props => (
+const PeriodicitySelector = (props, {messages}) => (
   <div className='mdl-grid'>
     <div className='mdl-cell mdl-cell--6-col'>
-      <Select name='periodicity' value={props.periodicity} onChange={props.onChangePeriodicity}>
-        <option value='daily'>diária</option>
-        <option value='weekly'>semanal</option>
-        <option value='monthly'>mensal</option>
+      <Select
+        label='periodicity'
+        name='periodicity'
+        value={props.periodicity}
+        onChange={props.onChangePeriodicity}>
+        <option value='daily'>{messages.daily}</option>
+        <option value='weekly'>{messages.weekly}</option>
+        <option value='monthly'>{messages.monthly}</option>
       </Select>
     </div>
     <div className='mdl-cell mdl-cell--6-col'>
       {props.periodicity === 'weekly' && (
-        <Select name='day_of_week' value={props.day_of_week} onChange={props.onChangeDayOfWeek}>
-          <option value='0'>Monday</option>
-          <option value='1'>Sunday</option>
-          <option value='2'>Tuesday</option>
-          <option value='3'>Wednesday</option>
-          <option value='4'>Thursday</option>
-          <option value='5'>Friday</option>
-          <option value='6'>Saturday</option>
+        <Select
+          label='dayOfWeek'
+          name='day_of_week'
+          value={props.day_of_week}
+          onChange={props.onChangeDayOfWeek}>
+          <option value='0'>{messages.sunday}</option>
+          <option value='1'>{messages.monday}</option>
+          <option value='2'>{messages.tuesday}</option>
+          <option value='3'>{messages.wednesday}</option>
+          <option value='4'>{messages.thursday}</option>
+          <option value='5'>{messages.friday}</option>
+          <option value='6'>{messages.saturday}</option>
         </Select>)}
 
       {props.periodicity === 'monthly' && (
         <Input
+          label='dayOfMonth'
           name='day_of_month'
           type='number'
           value={props.day_of_month}
@@ -93,10 +102,13 @@ PeriodicitySelector.propTypes = {
   day_of_week: PropTypes.number,
   day_of_month: PropTypes.number,
   date: PropTypes.string,
-  periodicity: PropTypes.oneOf(['daily', 'weekly', 'montly']),
-  onChangePeriodicity: PropTypes.func,
-  onChangeDayOfWeek: PropTypes.func,
-  onChangeDayOfMonth: PropTypes.func
+  periodicity: PropTypes.oneOf(['daily', 'weekly', 'montly']).isRequired,
+  onChangePeriodicity: PropTypes.func.isRequired,
+  onChangeDayOfWeek: PropTypes.func.isRequired,
+  onChangeDayOfMonth: PropTypes.func.isRequired
+}
+PeriodicitySelector.contextTypes = {
+  messages: PropTypes.object.isRequired
 }
 
 const MailingEdit = React.createClass({
