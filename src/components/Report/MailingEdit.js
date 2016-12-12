@@ -4,6 +4,9 @@ import {Submit} from '../Button'
 import Message from 'tetris-iso/Message'
 import Select from '../Select'
 import assign from 'lodash/assign'
+import Switch from '../Switch'
+import VerticalAlign from '../VerticalAlign'
+import moment from 'moment'
 
 const {PropTypes} = React
 const ranges = [
@@ -20,6 +23,17 @@ const NotFound = () => (
     Not found!
   </p>
 )
+const Middle = ({className, children}) => (
+  <VerticalAlign className={className}>
+    <div>{children}</div>
+  </VerticalAlign>
+)
+
+Middle.displayName = 'Middle'
+Middle.propTypes = {
+  className: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired
+}
 
 const RangeSelect = ({value, onChange}, {messages}) => (
   <Select name='date_range' label='mailingRange' value={value} onChange={onChange}>
@@ -76,8 +90,27 @@ const MailingEdit = React.createClass({
 
     this.setState({mailing})
   },
+  changeSchedule (sChanges) {
+    const schedule = assign({}, this.state.mailing.schedule, sChanges)
+
+    this.change({schedule})
+  },
   onChangeRange ({target: {value: date_range}}) {
     this.change({date_range})
+  },
+  onChangeDisabled ({target: {checked}}) {
+    this.change({disabled: !checked})
+  },
+  onChangePeriodic ({target: {checked}}) {
+    this.changeSchedule(checked ? {
+      day_of_week: 0,
+      day_of_month: null,
+      date: null
+    } : {
+      day_of_week: null,
+      day_of_month: null,
+      date: moment().add(1, 'day').format('YYYY-MM-DD')
+    })
   },
   handleSubmit (e) {
     e.preventDefault()
@@ -91,9 +124,26 @@ const MailingEdit = React.createClass({
 
     return (
       <form onSubmit={this.handleSubmit}>
-        <RangeSelect
-          value={mailing.date_range}
-          onChange={this.onChangeRange}/>
+
+        <div className='mdl-grid'>
+          <div className='mdl-cell mdl-cell--4-col'>
+            <RangeSelect
+              value={mailing.date_range}
+              onChange={this.onChangeRange}/>
+          </div>
+          <Middle className='mdl-cell mdl-cell--4-col'>
+            <Switch
+              checked={!mailing.disabled}
+              onChange={this.onChangeDisabled}
+              label={<Message>mailingEnabledSwitch</Message>}/>
+          </Middle>
+          <Middle className='mdl-cell mdl-cell--4-col'>
+            <Switch
+              checked={!mailing.disabled}
+              onChange={this.onChangePeriodic}
+              label={<Message>mailingRecurrentSwitch</Message>}/>
+          </Middle>
+        </div>
 
         <hr/>
         <Submit className='mdl-button'>

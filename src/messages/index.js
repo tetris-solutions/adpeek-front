@@ -273,7 +273,9 @@ module.exports = {
     calculateKeywordsRelevance: 'Calculate relevance',
     reportMailing: 'Report Mailing',
     newMailing: 'New Mailing',
-    mailingRangeLabel: 'Report date range'
+    mailingRangeLabel: 'Report date range',
+    mailingEnabledSwitch: 'Enabled',
+    mailingRecurrentSwitch: 'Recurrent'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -549,6 +551,8 @@ module.exports = {
     calculateKeywordsRelevance: 'Calcular relevância',
     reportMailing: 'Mailing do Relatório',
     newMailing: 'Novo mailing',
-    mailingRangeLabel: 'Período do relatório'
+    mailingRangeLabel: 'Período do relatório',
+    mailingEnabledSwitch: 'Ativo',
+    mailingRecurrentSwitch: 'Recorrente'
   }
 }
