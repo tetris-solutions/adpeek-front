@@ -24,7 +24,7 @@ const New = ({params, report, company, workspace, folder}) => (
       date_range: 'last 30 days',
       disabled: false,
       schedule: {
-        day_of_week: 0
+        day_of_week: 1
       },
       report: extract(report),
       company: extract(company),
