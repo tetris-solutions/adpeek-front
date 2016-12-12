@@ -51,6 +51,7 @@ module.exports = {
     investmentDayLabel: 'Daily goal',
     startDateLabel: 'Start date',
     endDateLabel: 'End date',
+    dateLabel: 'Date',
     emptyBudgetSelectionTitle: 'No budget selected',
     emptyBudgetSelectionBody: `
       <p>
@@ -342,6 +343,7 @@ module.exports = {
     investmentDayLabel: 'Meta diária',
     startDateLabel: 'Data início',
     endDateLabel: 'Data final',
+    dateLabel: 'Data',
     emptyBudgetSelectionTitle: 'Nenhum orçamento selecionado',
     emptyBudgetSelectionBody: `
       <p>

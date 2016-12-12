@@ -12,6 +12,7 @@ import {prettyNumber} from '../functions/pretty-number'
 const {PropTypes} = React
 const inputFields = [
   'disabled',
+  'readOnly',
   'name',
   'type',
   'required',
@@ -26,6 +27,8 @@ function notEmptyString (value) {
 export const Input = React.createClass({
   displayName: 'Input',
   propTypes: {
+    children: PropTypes.node,
+    readOnly: PropTypes.bool,
     type: PropTypes.string,
     min: PropTypes.number,
     max: PropTypes.number,
@@ -199,7 +202,7 @@ export const Input = React.createClass({
   },
   render () {
     const {value, isDirty, isFocused} = this.state
-    const {label} = this.props
+    const {label, children} = this.props
     const error = this.state.error || this.props.error
 
     const wrapperClasses = cx('mdl-textfield',
@@ -233,7 +236,7 @@ export const Input = React.createClass({
           </label>)}
 
         {error && (<span className='mdl-textfield__error'>{error}</span>)}
-
+        {children}
       </div>
     )
   }

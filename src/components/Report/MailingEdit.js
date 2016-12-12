@@ -8,6 +8,7 @@ import Switch from '../Switch'
 import Input from '../Input'
 import VerticalAlign from '../VerticalAlign'
 import moment from 'moment'
+import DatePicker from '../DatePicker'
 
 const {PropTypes} = React
 const ranges = [
@@ -193,8 +194,10 @@ const MailingEdit = React.createClass({
       date: moment().add(1, 'day').format('YYYY-MM-DD')
     })
   },
-  onChangeDate ({target: {value: date}}) {
-    this.changeSchedule({date})
+  onChangeDate (momentDate) {
+    this.changeSchedule({
+      date: momentDate.format('YYYY-MM-DD')
+    })
   },
   onChangePeriodicity ({target: {value: periodicity}}) {
     const changes = {periodicity}
@@ -251,7 +254,9 @@ const MailingEdit = React.createClass({
         {mailing.schedule.date ? (
           <div className='mdl-grid'>
             <div className='mdl-cell mdl-cell--12-col'>
-              <Input name='date' type='date' onChange={this.onChangeDate}/>
+              <DatePicker
+                value={mailing.schedule.date}
+                onChange={this.onChangeDate}/>
             </div>
           </div>
         ) : (
