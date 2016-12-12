@@ -9,6 +9,10 @@ import Input from '../Input'
 import VerticalAlign from '../VerticalAlign'
 import moment from 'moment'
 import DatePicker from '../DatePicker'
+import {createMailingReportAction} from '../../actions/create-mailing-action'
+import {loadMailingListAction} from '../../actions/load-mailing-list'
+import compact from 'lodash/compact'
+import join from 'lodash/join'
 
 const {PropTypes} = React
 const ranges = [
@@ -115,6 +119,7 @@ PeriodicitySelector.contextTypes = {
 const MailingEdit = React.createClass({
   mixins: [FormMixin],
   propTypes: {
+    params: PropTypes.object.isRequired,
     mailing: PropTypes.shape({
       id: PropTypes.string,
       date_range: PropTypes.oneOf(ranges),
@@ -125,6 +130,7 @@ const MailingEdit = React.createClass({
         day_of_month: PropTypes.number,
         date: PropTypes.string
       }),
+      emails: PropTypes.array,
       report: PropTypes.shape({
         id: PropTypes.string,
         name: PropTypes.string
@@ -137,7 +143,11 @@ const MailingEdit = React.createClass({
         id: PropTypes.string,
         name: PropTypes.string
       })
-    })
+    }).isRequired
+  },
+  contextTypes: {
+    tree: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired
   },
   getInitialState () {
     let {mailing} = this.props
@@ -220,6 +230,38 @@ const MailingEdit = React.createClass({
   },
   handleSubmit (e) {
     e.preventDefault()
+
+    const {state: {mailing}, props: {params}, context: {router, tree}} = this
+    const save = mailing.id ? false : createMailingReportAction
+
+    function onCreate (response) {
+      const path = compact([
+        `company/${params.company}`,
+        params.workspace && `workspace/${params.workspace}`,
+        params.folder && `folder/${params.folder}`,
+        `report/${params.report}`,
+        `mailing/${response.data.id}`
+      ])
+
+      router.push('/' + join(path, '/'))
+    }
+
+    function onUpdate () {
+      const path = compact([
+        `company/${params.company}`,
+        params.workspace && `workspace/${params.workspace}`,
+        params.folder && `folder/${params.folder}`,
+        params.report && `report/${params.report}`,
+        'mailing'
+      ])
+
+      router.push('/' + join(path, '/'))
+    }
+
+    save(tree, params, mailing)
+      .then(response => loadMailingListAction(tree, params)
+        .then(() => response))
+      .then(mailing.id ? onUpdate : onCreate)
   },
   render () {
     const {mailing} = this.state

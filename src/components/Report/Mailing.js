@@ -26,6 +26,7 @@ const New = ({params, report, company, workspace, folder}) => (
       schedule: {
         day_of_week: 1
       },
+      emails: [],
       report: extract(report),
       company: extract(company),
       workspace: extract(workspace),
