@@ -34,6 +34,10 @@ export const CompanyAside = ({company, params, dispatch}) => {
           <Message>companyReport</Message>
         </ReportLink>
 
+        <NavBt tag={Link} to={`${baseUrl}/mailing`} icon='mail_outline'>
+          <Message>reportMailing</Message>
+        </NavBt>
+
         <NavBt tag={Link} to='/' icon='close'>
           <Message>oneLevelUpNavigation</Message>
         </NavBt>

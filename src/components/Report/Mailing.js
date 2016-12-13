@@ -1,6 +1,7 @@
 import React from 'react'
-import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
+import Page from '../Page'
+import SubHeader from '../SubHeader'
 import {Link} from 'react-router'
 import {updateMailingReportAction} from '../../actions/update-mailing-action'
 import {contextualize} from '../higher-order/contextualize'
@@ -132,11 +133,40 @@ const MailingLink = React.createClass({
 })
 
 const List = (props, {location: {pathname, search}}) => {
-  const {mailings, params} = props
+  const {url, mailings, params} = props
 
   if (endsWith(pathname, '/new')) {
     return <NewMailing {...props}/>
   }
+
+  // const singleReportMode = Boolean(params.report)
+  const editMode = Boolean(params.mailing)
+
+  if (editMode) {
+    return <Edit {...props} mailing={find(mailings, {id: params.mailing})}/>
+  }
+
+  return (
+    <Container>
+      {map(mailings, mailing =>
+        <MailingLink
+          {...props}
+          key={mailing.id}
+          mailing={mailing}
+          url={`${url}/${mailing.id}${search}`}/>)}
+    </Container>
+  )
+}
+
+List.displayName = 'List'
+List.propTypes = {
+  url: PropTypes.string.isRequired,
+  mailings: PropTypes.array.isRequired,
+  params: PropTypes.object.isRequired
+}
+
+const Content = (props, {location: {search}}) => {
+  const {params} = props
 
   const url = '/' + join(
       compact([
@@ -147,45 +177,32 @@ const List = (props, {location: {pathname, search}}) => {
         'mailing'
       ]), '/')
 
-  // const singleReportMode = Boolean(params.report)
-  const editMode = Boolean(params.mailing)
-
-  if (editMode) {
-    return <Edit {...props} mailing={find(mailings, {id: params.mailing})}/>
-  }
-
   return (
     <div>
-      <Link to={`${url}/new${search}`}>
-        <Message>newMailing</Message>
-      </Link>
-      <hr/>
-      <Container>
-        {map(mailings, mailing =>
-          <MailingLink
-            {...props}
-            key={mailing.id}
-            mailing={mailing}
-            url={`${url}/${mailing.id}${search}`}/>)}
-      </Container>
+      <SubHeader title={<Message>reportMailing</Message>}>
+        {params.report && (
+          <Link className='mdl-button mdl-color-text--grey-100' to={`${url}/new${search}`}>
+            <i className='material-icons'>add</i>
+            <Message>newMailing</Message>
+          </Link>)}
+      </SubHeader>
+      <Page>
+        <List {...props} url={url}/>
+      </Page>
     </div>
   )
 }
 
-List.displayName = 'List'
-List.propTypes = {
-  mailings: PropTypes.array,
-  params: PropTypes.shape({
-    report: PropTypes.string,
-    mailing: PropTypes.string
-  })
+Content.displayName = 'Content'
+Content.propTypes = {
+  params: PropTypes.object.isRequired
 }
-List.contextTypes = {
+Content.contextTypes = List.contextTypes = {
   location: PropTypes.object.isRequired
 }
 
 const StandaloneMailingList = props => (
-  <List {...props} mailings={props[props.level].mailings}/>
+  <Content {...props} mailings={props[props.level].mailings}/>
 )
 
 StandaloneMailingList.displayName = 'Mailing-List'
@@ -195,11 +212,7 @@ StandaloneMailingList.propTypes = {
 }
 
 const ReportMailingList = props => (
-  <div style={{display: 'none'}}>
-    <Modal>
-      <List {...props} mailings={props.report.mailings}/>
-    </Modal>
-  </div>
+  <Content {...props} mailings={props.report.mailings}/>
 )
 
 ReportMailingList.displayName = 'Report-Mailing-List'

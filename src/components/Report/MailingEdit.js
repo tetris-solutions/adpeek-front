@@ -290,6 +290,12 @@ const MailingEdit = React.createClass({
       .then(mailing.id ? onUpdate : onCreate)
       .then(() => pushSuccessMessageAction(tree))
   },
+  addOnEnter (e) {
+    if (e.which === 13) {
+      e.preventDefault()
+      this.addEmail()
+    }
+  },
   render () {
     const {mailing, newEmail} = this.state
 
@@ -298,7 +304,7 @@ const MailingEdit = React.createClass({
     }
 
     return (
-      <Form onSubmit={this.handleSubmit} size='large'>
+      <Form onSubmit={this.handleSubmit}>
         <Header>
           <Message report={mailing.report.name}>
             reportMailingFormTitle
@@ -347,6 +353,7 @@ const MailingEdit = React.createClass({
                 name='email'
                 label='newEmail'
                 value={newEmail}
+                onKeyPress={this.addOnEnter}
                 onChange={this.onChangeEmail}/>
             </div>
             <Middle className='mdl-cell mdl-cell--2-col'>

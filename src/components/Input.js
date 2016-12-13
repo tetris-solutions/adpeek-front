@@ -17,7 +17,10 @@ const inputFields = [
   'type',
   'required',
   'max',
-  'min'
+  'min',
+  'onKeyDown',
+  'onKeyPress',
+  'onKeyUp'
 ]
 
 function notEmptyString (value) {

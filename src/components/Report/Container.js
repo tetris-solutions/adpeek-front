@@ -172,7 +172,6 @@ const ReportContainer = React.createClass({
   },
   render () {
     const {guestMode, accounts} = this.props
-
     if (this.state.isLoading) {
       return (
         <Placeholder guestMode={guestMode}>
@@ -192,4 +191,14 @@ const ReportContainer = React.createClass({
   }
 })
 
-export default ReportContainer
+const R = props =>
+  props.children
+    ? props.children
+    : <ReportContainer {...props}/>
+
+R.displayName = 'Report-Wrapper'
+R.propTypes = {
+  children: PropTypes.node
+}
+
+export default R
