@@ -1,7 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router'
 import FormMixin from '../mixins/FormMixin'
-import {Submit} from '../Button'
+import {Submit, Button} from '../Button'
 import {Form, Header, Footer, Content} from '../Card'
 import Message from 'tetris-iso/Message'
 import Select from '../Select'
@@ -17,6 +17,9 @@ import {pushSuccessMessageAction} from '../../actions/push-success-message-actio
 import {loadMailingListAction} from '../../actions/load-mailing-list'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
+import map from 'lodash/map'
+import without from 'lodash/without'
+import uniq from 'lodash/uniq'
 
 const {PropTypes} = React
 const ranges = [
@@ -111,7 +114,7 @@ PeriodicitySelector.propTypes = {
   day_of_week: PropTypes.number,
   day_of_month: PropTypes.number,
   date: PropTypes.string,
-  periodicity: PropTypes.oneOf(['daily', 'weekly', 'montly']).isRequired,
+  periodicity: PropTypes.oneOf(['daily', 'weekly', 'monthly']).isRequired,
   onChangePeriodicity: PropTypes.func.isRequired,
   onChangeDayOfWeek: PropTypes.func.isRequired,
   onChangeDayOfMonth: PropTypes.func.isRequired
@@ -160,7 +163,10 @@ const MailingEdit = React.createClass({
       mailing = this.normalize(mailing)
     }
 
-    return {mailing}
+    return {
+      newEmail: '',
+      mailing
+    }
   },
   getMailingUrl (mailingId = null) {
     const {params} = this.props
@@ -194,7 +200,7 @@ const MailingEdit = React.createClass({
 
     return mailing
   },
-  change (changes) {
+  changeMailing (changes) {
     const mailing = assign({}, this.state.mailing, changes)
 
     this.setState({mailing})
@@ -202,13 +208,13 @@ const MailingEdit = React.createClass({
   changeSchedule (sChanges) {
     const schedule = assign({}, this.state.mailing.schedule, sChanges)
 
-    this.change({schedule})
+    this.changeMailing({schedule})
   },
   onChangeRange ({target: {value: date_range}}) {
-    this.change({date_range})
+    this.changeMailing({date_range})
   },
   onChangeDisabled ({target: {checked}}) {
-    this.change({disabled: !checked})
+    this.changeMailing({disabled: !checked})
   },
   onChangeRecurrent ({target: {checked}}) {
     this.changeSchedule(checked ? {
@@ -246,6 +252,25 @@ const MailingEdit = React.createClass({
   onChangeInterval ({target: {value, name}}) {
     this.changeSchedule({[name]: Number(value)})
   },
+  dropEmail (email) {
+    return e => {
+      e.preventDefault()
+      this.changeMailing({
+        emails: without(this.state.mailing.emails, email)
+      })
+    }
+  },
+  addEmail () {
+    const {mailing: {emails}, newEmail} = this.state
+
+    this.setState({newEmail: ''})
+    this.changeMailing({
+      emails: uniq(emails.concat([newEmail]))
+    })
+  },
+  onChangeEmail ({target: {value}}) {
+    this.setState({newEmail: value})
+  },
   handleSubmit (e) {
     e.preventDefault()
 
@@ -261,7 +286,7 @@ const MailingEdit = React.createClass({
       .then(() => pushSuccessMessageAction(tree))
   },
   render () {
-    const {mailing} = this.state
+    const {mailing, newEmail} = this.state
 
     if (!mailing) {
       return <NotFound/>
@@ -310,6 +335,34 @@ const MailingEdit = React.createClass({
               onChangeDayOfWeek={this.onChangeInterval}
               onChangePeriodicity={this.onChangePeriodicity}/>
           )}
+
+          <div className='mdl-grid'>
+            <div className='mdl-cell mdl-cell--10-col'>
+              <Input
+                type='email'
+                name='email'
+                label='newEmail'
+                value={newEmail}
+                onChange={this.onChangeEmail}/>
+            </div>
+            <Middle className='mdl-cell mdl-cell--2-col'>
+              <Button onClick={this.addEmail} className='mdl-button mdl-color-text--light-green-900'>
+                <i className='material-icons'>add</i>
+              </Button>
+            </Middle>
+          </div>
+
+          <div className='mdl-list'>
+            {map(mailing.emails, email => (
+              <div className='mdl-list__item'>
+                <span className='mdl-list__item-primary-content'>
+                  {email}
+                </span>
+                <a className='mdl-list__item-secondary-action' onClick={this.dropEmail(email)}>
+                  <i className='material-icons'>clear</i>
+                </a>
+              </div>))}
+          </div>
         </Content>
         <Footer multipleButtons>
           <Link to={this.getMailingUrl()} className='mdl-button mdl-button--accent'>

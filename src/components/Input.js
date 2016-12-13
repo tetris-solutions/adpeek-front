@@ -54,6 +54,9 @@ export const Input = React.createClass({
   getInitialState () {
     return {isFocused: false}
   },
+  getValue () {
+    return this.state.value
+  },
   componentWillMount () {
     let value = this.props.value === undefined
       ? this.props.defaultValue
@@ -103,6 +106,7 @@ export const Input = React.createClass({
     newState.error = this.getError(assign({}, this.state, nextProps, newState))
 
     if (newState.value !== undefined || newState.error !== this.state.error) {
+      newState.isDirty = notEmptyString(newState.value)
       this.setState(newState)
     }
   },

@@ -73,7 +73,6 @@ module.exports = {
     newOrderName: '{month}',
     deliveryMethodLabel: 'Delivery method',
     close: 'Close',
-
     calculateBudgetAmountTitle: 'Calculated budget amount',
     calculateAdsetAmountTitle: 'Calculated ad set amount',
     totalAmountTitle: 'Total',
@@ -290,7 +289,8 @@ module.exports = {
     dayOfWeekLabel: 'Day of Week',
     dayOfMonthLabel: 'Day of Month',
     periodicityLabel: 'Periodicity',
-    reportMailingFormTitle: 'Mailing report {report}'
+    reportMailingFormTitle: 'Mailing report {report}',
+    newEmailLabel: 'New email'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -365,7 +365,6 @@ module.exports = {
     newOrderName: 'PI de {month}',
     deliveryMethodLabel: 'Forma de entrega',
     close: 'Fechar',
-
     calculateBudgetAmountTitle: 'Calculado valor do orçamento',
     calculateAdsetAmountTitle: 'Calculado orçamento do adset',
     totalAmountTitle: 'Total',
@@ -583,6 +582,7 @@ module.exports = {
     dayOfWeekLabel: 'Dia da semana',
     dayOfMonthLabel: 'Dia do mês',
     periodicityLabel: 'Periodicidade',
-    reportMailingFormTitle: 'Mailing relatório {report}'
+    reportMailingFormTitle: 'Mailing relatório {report}',
+    newEmailLabel: 'Novo email'
   }
 }
