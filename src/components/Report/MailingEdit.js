@@ -1,6 +1,8 @@
 import React from 'react'
+import {Link} from 'react-router'
 import FormMixin from '../mixins/FormMixin'
 import {Submit} from '../Button'
+import {Form, Header, Footer, Content} from '../Card'
 import Message from 'tetris-iso/Message'
 import Select from '../Select'
 import assign from 'lodash/assign'
@@ -160,6 +162,19 @@ const MailingEdit = React.createClass({
 
     return {mailing}
   },
+  getMailingUrl (mailingId = null) {
+    const {params} = this.props
+
+    const path = compact([
+      `company/${params.company}`,
+      params.workspace && `workspace/${params.workspace}`,
+      params.folder && `folder/${params.folder}`,
+      `report/${params.report}`,
+      mailingId ? `mailing/${mailingId}` : 'mailing'
+    ])
+
+    return '/' + join(path, '/')
+  },
   normalize (mailing) {
     mailing = assign({}, mailing)
 
@@ -199,7 +214,8 @@ const MailingEdit = React.createClass({
     this.changeSchedule(checked ? {
       day_of_week: 1,
       day_of_month: null,
-      date: null
+      date: null,
+      periodicity: 'weekly'
     } : {
       day_of_week: null,
       day_of_month: null,
@@ -236,33 +252,11 @@ const MailingEdit = React.createClass({
     const {state: {mailing}, props: {params}, context: {router, tree}} = this
     const save = mailing.id ? updateMailingReportAction : createMailingReportAction
 
-    function onCreate (response) {
-      const path = compact([
-        `company/${params.company}`,
-        params.workspace && `workspace/${params.workspace}`,
-        params.folder && `folder/${params.folder}`,
-        `report/${params.report}`,
-        `mailing/${response.data.id}`
-      ])
-
-      router.push('/' + join(path, '/'))
-    }
-
-    function onUpdate () {
-      const path = compact([
-        `company/${params.company}`,
-        params.workspace && `workspace/${params.workspace}`,
-        params.folder && `folder/${params.folder}`,
-        params.report && `report/${params.report}`,
-        'mailing'
-      ])
-
-      router.push('/' + join(path, '/'))
-    }
+    const onUpdate = () => router.push(this.getMailingUrl())
+    const onCreate = response => router.push(this.getMailingUrl(response.data.id))
 
     save(tree, params, mailing)
-      .then(response => loadMailingListAction(tree, params)
-        .then(() => response))
+      .then(response => loadMailingListAction(tree, params).then(() => response))
       .then(mailing.id ? onUpdate : onCreate)
       .then(() => pushSuccessMessageAction(tree))
   },
@@ -274,53 +268,64 @@ const MailingEdit = React.createClass({
     }
 
     return (
-      <form onSubmit={this.handleSubmit}>
-
-        <div className='mdl-grid'>
-          <div className='mdl-cell mdl-cell--4-col'>
-            <RangeSelect
-              value={mailing.date_range}
-              onChange={this.onChangeRange}/>
-          </div>
-          <Middle className='mdl-cell mdl-cell--4-col'>
-            <Switch
-              checked={!mailing.disabled}
-              onChange={this.onChangeDisabled}
-              label={<Message>mailingEnabledSwitch</Message>}/>
-          </Middle>
-          <Middle className='mdl-cell mdl-cell--4-col'>
-            <Switch
-              checked={!mailing.schedule.date}
-              onChange={this.onChangeRecurrent}
-              label={<Message>mailingRecurrentSwitch</Message>}/>
-          </Middle>
-        </div>
-
-        {mailing.schedule.date ? (
+      <Form onSubmit={this.handleSubmit} size='large'>
+        <Header>
+          <Message report={mailing.report.name}>
+            reportMailingFormTitle
+          </Message>
+        </Header>
+        <Content>
           <div className='mdl-grid'>
-            <div className='mdl-cell mdl-cell--12-col'>
-              <DatePicker
-                value={mailing.schedule.date}
-                onChange={this.onChangeDate}/>
+            <div className='mdl-cell mdl-cell--4-col'>
+              <RangeSelect
+                value={mailing.date_range}
+                onChange={this.onChangeRange}/>
             </div>
+            <Middle className='mdl-cell mdl-cell--4-col'>
+              <Switch
+                checked={!mailing.disabled}
+                onChange={this.onChangeDisabled}
+                label={<Message>mailingEnabledSwitch</Message>}/>
+            </Middle>
+            <Middle className='mdl-cell mdl-cell--4-col'>
+              <Switch
+                checked={!mailing.schedule.date}
+                onChange={this.onChangeRecurrent}
+                label={<Message>mailingRecurrentSwitch</Message>}/>
+            </Middle>
           </div>
-        ) : (
-          <PeriodicitySelector
-            {...mailing.schedule}
-            onChangeDayOfMonth={this.onChangeInterval}
-            onChangeDayOfWeek={this.onChangeInterval}
-            onChangePeriodicity={this.onChangePeriodicity}/>
-        )}
 
-        <hr/>
-        <Submit className='mdl-button'>
-          <Message>save</Message>
-        </Submit>
+          {mailing.schedule.date ? (
+            <div className='mdl-grid'>
+              <div className='mdl-cell mdl-cell--12-col'>
+                <DatePicker
+                  value={mailing.schedule.date}
+                  onChange={this.onChangeDate}/>
+              </div>
+            </div>
+          ) : (
+            <PeriodicitySelector
+              {...mailing.schedule}
+              onChangeDayOfMonth={this.onChangeInterval}
+              onChangeDayOfWeek={this.onChangeInterval}
+              onChangePeriodicity={this.onChangePeriodicity}/>
+          )}
 
-        <pre>
-          {JSON.stringify(mailing, null, 2)}
-        </pre>
-      </form>
+          <hr/>
+          <pre>
+            {JSON.stringify(mailing, null, 2)}
+          </pre>
+        </Content>
+        <Footer multipleButtons>
+          <Link to={this.getMailingUrl()} className='mdl-button mdl-button--accent'>
+            <Message>cancel</Message>
+          </Link>
+
+          <Submit className='mdl-button mdl-button--primary'>
+            <Message>save</Message>
+          </Submit>
+        </Footer>
+      </Form>
     )
   }
 })

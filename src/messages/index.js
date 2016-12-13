@@ -286,10 +286,11 @@ module.exports = {
     saturday: 'Saturday',
     daily: 'Daily',
     weekly: 'Weekly',
-    monthly: 'Montly',
+    monthly: 'Monthly',
     dayOfWeekLabel: 'Day of Week',
     dayOfMonthLabel: 'Day of Month',
-    periodicityLabel: 'Periodicity'
+    periodicityLabel: 'Periodicity',
+    reportMailingFormTitle: 'Mailing report {report}'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -581,6 +582,7 @@ module.exports = {
     monthly: 'Mensal',
     dayOfWeekLabel: 'Dia da semana',
     dayOfMonthLabel: 'Dia do mês',
-    periodicityLabel: 'Periodicidade'
+    periodicityLabel: 'Periodicidade',
+    reportMailingFormTitle: 'Mailing relatório {report}'
   }
 }
