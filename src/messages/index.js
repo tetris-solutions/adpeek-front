@@ -573,8 +573,8 @@ module.exports = {
     periodicityLabel: 'Periodicidade',
     reportMailingFormTitle: 'Agendamento relatório {report}',
     newEmailLabel: 'Novo email',
-    disableMailing: 'Disable',
-    enableMailing: 'Enable',
+    disableMailing: 'Desligar',
+    enableMailing: 'Ligar',
     mailingReportLink: 'Abrir Relatório'
   }
 }

@@ -19,6 +19,8 @@ import {DropdownMenu, MenuItem, HeaderMenuItem} from '../DrodownMenu'
 import assign from 'lodash/assign'
 import DeleteButton from '../DeleteButton'
 import TextMessage from 'intl-messageformat'
+import Switch from '../Switch'
+import filter from 'lodash/filter'
 
 const {PropTypes} = React
 
@@ -111,7 +113,7 @@ const MailingLink = React.createClass({
 
     return (
       <ThumbLink to={url}>
-        <Cap>
+        <Cap bg={mailing.disabled ? 'grey-600' : undefined}>
           {report.name}
         </Cap>
 
@@ -134,7 +136,7 @@ const MailingLink = React.createClass({
         <Gear>
           <DropdownMenu>
             <HeaderMenuItem
-              icon={mailing.disabled ? 'radio_button_unchecked' : 'radio_button_checked'}
+              icon={mailing.disabled ? 'check_box_outline_blank' : 'check_box'}
               onClick={this.toggle}>
               <Message>
                 {mailing.disabled ? 'enableMailing' : 'disableMailing'}
@@ -153,38 +155,62 @@ const MailingLink = React.createClass({
   }
 })
 
-const List = (props, {location: {pathname, search}}) => {
-  const {url, mailings, params} = props
+const List = React.createClass({
+  displayName: 'Mailings',
+  propTypes: {
+    url: PropTypes.string.isRequired,
+    mailings: PropTypes.array.isRequired,
+    params: PropTypes.object.isRequired
+  },
+  contextTypes: {
+    location: PropTypes.object.isRequired
+  },
+  getInitialState () {
+    return {
+      activeOnly: true
+    }
+  },
+  onSwitch ({target: {checked: activeOnly}}) {
+    this.setState({activeOnly})
+  },
+  render () {
+    const {activeOnly} = this.state
+    const {location: {pathname, search}} = this.context
+    const {url, params} = this.props
+    const mailings = activeOnly
+      ? filter(this.props.mailings, {disabled: false})
+      : this.props.mailings
 
-  if (endsWith(pathname, '/new')) {
-    return <NewMailing {...props}/>
+    if (endsWith(pathname, '/new')) {
+      return <NewMailing {...this.props}/>
+    }
+
+    const editMode = Boolean(params.mailing)
+
+    if (editMode) {
+      return <Edit {...this.props} mailing={find(mailings, {id: params.mailing})}/>
+    }
+
+    return (
+      <Container>
+        <span style={{float: 'right'}}>
+          <Switch
+            checked={this.state.activeOnly}
+            name='activeOrdersOnly'
+            label={<Message>filterActiveOnly</Message>}
+            onChange={this.onSwitch}/>
+        </span>
+
+        {map(mailings, mailing =>
+          <MailingLink
+            {...this.props}
+            key={mailing.id}
+            mailing={mailing}
+            url={`${url}/${mailing.id}${search}`}/>)}
+      </Container>
+    )
   }
-
-  // const singleReportMode = Boolean(params.report)
-  const editMode = Boolean(params.mailing)
-
-  if (editMode) {
-    return <Edit {...props} mailing={find(mailings, {id: params.mailing})}/>
-  }
-
-  return (
-    <Container>
-      {map(mailings, mailing =>
-        <MailingLink
-          {...props}
-          key={mailing.id}
-          mailing={mailing}
-          url={`${url}/${mailing.id}${search}`}/>)}
-    </Container>
-  )
-}
-
-List.displayName = 'List'
-List.propTypes = {
-  url: PropTypes.string.isRequired,
-  mailings: PropTypes.array.isRequired,
-  params: PropTypes.object.isRequired
-}
+})
 
 const Content = (props, {location: {search}}) => {
   const {params} = props
@@ -218,7 +244,7 @@ Content.displayName = 'Content'
 Content.propTypes = {
   params: PropTypes.object.isRequired
 }
-Content.contextTypes = List.contextTypes = {
+Content.contextTypes = {
   location: PropTypes.object.isRequired
 }
 

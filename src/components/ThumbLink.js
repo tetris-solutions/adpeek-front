@@ -139,8 +139,8 @@ Title.propTypes = {
   children: PropTypes.node.isRequired
 }
 
-export const Cap = ({children}) => (
-  <div className={`mdl-color--primary-dark mdl-color-text--white ${style.cap}`}>
+export const Cap = ({children, bg = 'primary-dark'}) => (
+  <div className={`mdl-color--${bg} mdl-color-text--white ${style.cap}`}>
     <span>
       {children}
     </span>
@@ -149,6 +149,7 @@ export const Cap = ({children}) => (
 
 Cap.displayName = 'Cap'
 Cap.propTypes = {
+  bg: PropTypes.string,
   children: PropTypes.node
 }
 
