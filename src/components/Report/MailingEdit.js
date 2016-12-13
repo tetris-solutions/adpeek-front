@@ -310,11 +310,6 @@ const MailingEdit = React.createClass({
               onChangeDayOfWeek={this.onChangeInterval}
               onChangePeriodicity={this.onChangePeriodicity}/>
           )}
-
-          <hr/>
-          <pre>
-            {JSON.stringify(mailing, null, 2)}
-          </pre>
         </Content>
         <Footer multipleButtons>
           <Link to={this.getMailingUrl()} className='mdl-button mdl-button--accent'>
