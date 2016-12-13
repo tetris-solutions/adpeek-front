@@ -46,9 +46,16 @@ New.propTypes = {
 
 const NewMailing = contextualize(New, 'report', 'company', 'workspace', 'folder')
 
-const List = ({mailings, params}, {messages, moment, location: {pathname, search}}) => {
-  if (endsWith(pathname, '/new')) {
-    return <NewMailing params={params}/>
+const MailingLink = ({mailing, url}, {messages, moment}) => {
+  const {schedule, date_range, report} = mailing
+
+  const dateRangeMessages = {
+    today: messages.today,
+    yesterday: messages.yesterday,
+    'last week': messages.pastWeek,
+    'last month': messages.pastMonth,
+    'last 30 days': messages.last30Days,
+    'this month': messages.currentMonth
   }
 
   function formattedSchedule ({day_of_month, day_of_week, date}) {
@@ -65,6 +72,36 @@ const List = ({mailings, params}, {messages, moment, location: {pathname, search
     }
 
     return messages.daily
+  }
+
+  return (
+    <ThumbLink to={url}>
+      <Cap>{report.name}</Cap>
+      <Title>
+        {formattedSchedule(schedule)}
+        <br/>
+        <small>
+          {dateRangeMessages[date_range]}
+        </small>
+      </Title>
+
+    </ThumbLink>
+  )
+}
+
+MailingLink.displayName = 'Mailing-Link'
+MailingLink.propTypes = {
+  mailing: PropTypes.object.isRequired,
+  url: PropTypes.string.isRequired
+}
+MailingLink.contextTypes = {
+  messages: PropTypes.object.isRequired,
+  moment: PropTypes.func.isRequired
+}
+
+const List = ({mailings, params}, {location: {pathname, search}}) => {
+  if (endsWith(pathname, '/new')) {
+    return <NewMailing params={params}/>
   }
 
   const url = '/' + join(
@@ -90,18 +127,11 @@ const List = ({mailings, params}, {messages, moment, location: {pathname, search
       </Link>
       <hr/>
       <Container>
-        {map(mailings, ({id, schedule, report, emails}) => (
-          <ThumbLink key={id} to={`${pathname}/${id}${search}`}>
-            <Cap>{report.name}</Cap>
-            <Title>
-              {formattedSchedule(schedule)}
-              <br/>
-              <small>
-                {emails.join(', ')}
-              </small>
-            </Title>
-
-          </ThumbLink>))}
+        {map(mailings, mailing =>
+          <MailingLink
+            key={mailing.id}
+            mailing={mailing}
+            url={`${url}/${mailing.id}${search}`}/>)}
       </Container>
     </div>
   )
@@ -116,9 +146,7 @@ List.propTypes = {
   })
 }
 List.contextTypes = {
-  messages: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
-  moment: PropTypes.func.isRequired
+  location: PropTypes.object.isRequired
 }
 
 const StandaloneMailingList = props => <List params={props.params} mailings={props[props.level].mailings}/>
