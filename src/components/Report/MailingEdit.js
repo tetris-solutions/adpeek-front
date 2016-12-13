@@ -294,12 +294,9 @@ const MailingEdit = React.createClass({
     const {state: {mailing}, props: {params}, context: {router, tree}} = this
     const save = mailing.id ? updateMailingReportAction : createMailingReportAction
 
-    const onUpdate = () => router.push(this.getMailingUrl())
-    const onCreate = response => router.push(this.getMailingUrl({mailing: response.data.id}))
-
     save(tree, params, mailing)
       .then(response => loadMailingListAction(tree, params).then(() => response))
-      .then(mailing.id ? onUpdate : onCreate)
+      .then(() => router.push(this.getMailingUrl()))
       .then(() => pushSuccessMessageAction(tree))
   },
   addOnEnter (e) {

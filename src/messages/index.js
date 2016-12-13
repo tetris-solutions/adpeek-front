@@ -284,7 +284,8 @@ module.exports = {
     periodicityLabel: 'Periodicity',
     reportMailingFormTitle: 'Mailing report {report}',
     newEmailLabel: 'New email',
-    toggleMailing: 'Enable/Disable',
+    disableMailing: 'Disable',
+    enableMailing: 'Enable',
     mailingReportLink: 'Open report'
   },
   'pt-BR': {
@@ -572,7 +573,8 @@ module.exports = {
     periodicityLabel: 'Periodicidade',
     reportMailingFormTitle: 'Agendamento relatório {report}',
     newEmailLabel: 'Novo email',
-    toggleMailing: 'Ativar/Desativar',
+    disableMailing: 'Disable',
+    enableMailing: 'Enable',
     mailingReportLink: 'Abrir Relatório'
   }
 }

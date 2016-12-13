@@ -104,7 +104,7 @@ const style = csjs`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  min-height: 3em;
+  min-height: 60px;
 }
 .info > i {
   transform: translateY(.3em);
@@ -175,8 +175,8 @@ ThumbLink.propTypes = {
   title: PropTypes.string
 }
 
-export const Info = ({children, style: css}) => (
-  <div className={`${style.info}`} style={css}>
+export const Info = ({children}) => (
+  <div className={`${style.info}`}>
     {children}
   </div>
 )

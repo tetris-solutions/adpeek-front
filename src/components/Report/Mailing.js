@@ -4,6 +4,7 @@ import Page from '../Page'
 import SubHeader from '../SubHeader'
 import {Link} from 'react-router'
 import {updateMailingReportAction} from '../../actions/update-mailing-action'
+import {deleteMailingAction} from '../../actions/delete-mailing'
 import {contextualize} from '../higher-order/contextualize'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
 import Edit from './MailingEdit'
@@ -13,8 +14,11 @@ import endsWith from 'lodash/endsWith'
 import pick from 'lodash/pick'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
-import {ThumbLink, Title, Container, Cap, Info} from '../ThumbLink'
+import {ThumbLink, Title, Container, Cap, Info, Gear} from '../ThumbLink'
+import {DropdownMenu, MenuItem, HeaderMenuItem} from '../DrodownMenu'
 import assign from 'lodash/assign'
+import DeleteButton from '../DeleteButton'
+import TextMessage from 'intl-messageformat'
 
 const {PropTypes} = React
 
@@ -48,6 +52,7 @@ New.propTypes = {
 }
 
 const NewMailing = contextualize(New, 'report', 'company', 'workspace', 'folder')
+const DeleteSpan = props => <DeleteButton {...props} tag='span'/>
 
 const MailingLink = React.createClass({
   displayName: 'Mailing-Link',
@@ -58,20 +63,25 @@ const MailingLink = React.createClass({
     url: PropTypes.string.isRequired
   },
   contextTypes: {
+    locales: PropTypes.string.isRequired,
     messages: PropTypes.object.isRequired,
     moment: PropTypes.func.isRequired
   },
-  toggle (e) {
-    e.preventDefault()
+  toggle () {
     const {dispatch, params, mailing} = this.props
 
     dispatch(updateMailingReportAction, params, assign({}, mailing, {
       disabled: !mailing.disabled
     }))
   },
+  del () {
+    const {dispatch, params, mailing} = this.props
+
+    dispatch(deleteMailingAction, params, mailing.id)
+  },
   render () {
     const {mailing, url} = this.props
-    const {messages, moment} = this.context
+    const {messages, moment, locales} = this.context
     const {schedule, date_range, report, folder, workspace} = mailing
 
     const dateRangeMessages = {
@@ -105,14 +115,7 @@ const MailingLink = React.createClass({
           {report.name}
         </Cap>
 
-        <div className='mdl-color-text--green-800' style={{margin: '.5em 1em 0 0', textAlign: 'right'}}>
-          <i
-            title={messages.toggleMailing}
-            className='material-icons'
-            onClick={this.toggle}>{mailing.disabled ? 'panorama_fish_eye' : 'lens'}</i>
-        </div>
-
-        <Info style={{minHeight: 60, paddingBottom: '7em'}}>
+        <Info>
           {workspace ? <i className='material-icons'>domain</i> : null}
           {workspace ? workspace.name : null}
           {workspace && folder ? <br/> : null}
@@ -128,7 +131,23 @@ const MailingLink = React.createClass({
             {dateRangeMessages[date_range]}
           </small>
         </Title>
-
+        <Gear>
+          <DropdownMenu>
+            <HeaderMenuItem
+              icon={mailing.disabled ? 'radio_button_unchecked' : 'radio_button_checked'}
+              onClick={this.toggle}>
+              <Message>
+                {mailing.disabled ? 'enableMailing' : 'disableMailing'}
+              </Message>
+            </HeaderMenuItem>
+            <MenuItem
+              tag={DeleteSpan}
+              entityName={new TextMessage(messages.reportMailingFormTitle, locales).format({report: report.name})}
+              onClick={this.del} icon='delete'>
+              <Message>remove</Message>
+            </MenuItem>
+          </DropdownMenu>
+        </Gear>
       </ThumbLink>
     )
   }
