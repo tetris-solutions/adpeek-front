@@ -1,5 +1,5 @@
 import React from 'react'
-import {Cap, Title, ThumbLink} from './ThumbLink'
+import {Cap, Title, ThumbLink, Info} from './ThumbLink'
 import {prettyNumber} from '../functions/pretty-number'
 import csjs from 'csjs'
 import {styledFnComponent} from './higher-order/styled-fn-component'
@@ -8,18 +8,6 @@ const style = csjs`
 .strong {
   display: inline;
   white-space: nowrap;
-}
-.info {
-  font-size: smaller;
-  color: grey;
-  padding: 1em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.info > i {
-  transform: translateY(.3em);
-  margin-right: .3em;
 }`
 
 const {PropTypes} = React
@@ -38,13 +26,13 @@ const Order = ({amount, start, end, company, workspace, folder, id, name, folder
       </small>
     </Cap>
 
-    <div className={`${style.info}`}>
+    <Info>
       <i className='material-icons'>folder</i>
       {folder_name}
       <br/>
       <i className='material-icons'>domain</i>
       {workspace_name}
-    </div>
+    </Info>
 
     <Title>
       {prettyNumber(amount, 'currency', locales)}

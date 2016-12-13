@@ -2,6 +2,7 @@ import React from 'react'
 import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
 import {Link} from 'react-router'
+import {updateMailingReportAction} from '../../actions/update-mailing-action'
 import {contextualize} from '../higher-order/contextualize'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
 import Edit from './MailingEdit'
@@ -11,7 +12,8 @@ import endsWith from 'lodash/endsWith'
 import pick from 'lodash/pick'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
-import {ThumbLink, Title, Container, Cap} from '../ThumbLink'
+import {ThumbLink, Title, Container, Cap, Info} from '../ThumbLink'
+import assign from 'lodash/assign'
 
 const {PropTypes} = React
 
@@ -46,62 +48,94 @@ New.propTypes = {
 
 const NewMailing = contextualize(New, 'report', 'company', 'workspace', 'folder')
 
-const MailingLink = ({mailing, url}, {messages, moment}) => {
-  const {schedule, date_range, report} = mailing
+const MailingLink = React.createClass({
+  displayName: 'Mailing-Link',
+  propTypes: {
+    dispatch: PropTypes.func.isRequired,
+    params: PropTypes.object.isRequired,
+    mailing: PropTypes.object.isRequired,
+    url: PropTypes.string.isRequired
+  },
+  contextTypes: {
+    messages: PropTypes.object.isRequired,
+    moment: PropTypes.func.isRequired
+  },
+  toggle (e) {
+    e.preventDefault()
+    const {dispatch, params, mailing} = this.props
 
-  const dateRangeMessages = {
-    today: messages.today,
-    yesterday: messages.yesterday,
-    'last week': messages.pastWeek,
-    'last month': messages.pastMonth,
-    'last 30 days': messages.last30Days,
-    'this month': messages.currentMonth
+    dispatch(updateMailingReportAction, params, assign({}, mailing, {
+      disabled: !mailing.disabled
+    }))
+  },
+  render () {
+    const {mailing, url} = this.props
+    const {messages, moment} = this.context
+    const {schedule, date_range, report, folder, workspace} = mailing
+
+    const dateRangeMessages = {
+      today: messages.today,
+      yesterday: messages.yesterday,
+      'last week': messages.pastWeek,
+      'last month': messages.pastMonth,
+      'last 30 days': messages.last30Days,
+      'this month': messages.currentMonth
+    }
+
+    function formattedSchedule ({day_of_month, day_of_week, date}) {
+      if (date) {
+        return moment(date).format('DD/MM/YYYY')
+      }
+
+      if (day_of_week) {
+        return moment().weekday(day_of_week).format('dddd')
+      }
+
+      if (day_of_month) {
+        return moment().month('Jan').date(day_of_month).format('Do')
+      }
+
+      return messages.daily
+    }
+
+    return (
+      <ThumbLink to={url}>
+        <Cap>
+          {report.name}
+        </Cap>
+
+        <div className='mdl-color-text--green-800' style={{margin: '.5em 1em 0 0', textAlign: 'right'}}>
+          <i className='material-icons' onClick={this.toggle}>{
+            mailing.disabled ? 'panorama_fish_eye' : 'lens'}</i>
+        </div>
+
+        <Info>
+          {folder ? <i className='material-icons'>folder</i> : null}
+          {folder ? folder.name : null}
+          {folder ? <br/> : null}
+
+          {workspace ? <i className='material-icons'>domain</i> : null}
+          {workspace ? workspace.name : null}
+        </Info>
+
+        <Title>
+          {formattedSchedule(schedule)}
+          <br/>
+          <small>
+            {dateRangeMessages[date_range]}
+          </small>
+        </Title>
+
+      </ThumbLink>
+    )
   }
+})
 
-  function formattedSchedule ({day_of_month, day_of_week, date}) {
-    if (date) {
-      return moment(date).format('DD/MM/YYYY')
-    }
+const List = (props, {location: {pathname, search}}) => {
+  const {mailings, params} = props
 
-    if (day_of_week) {
-      return moment().weekday(day_of_week).format('dddd')
-    }
-
-    if (day_of_month) {
-      return moment().month('Jan').date(day_of_month).format('Do')
-    }
-
-    return messages.daily
-  }
-
-  return (
-    <ThumbLink to={url}>
-      <Cap>{report.name}</Cap>
-      <Title>
-        {formattedSchedule(schedule)}
-        <br/>
-        <small>
-          {dateRangeMessages[date_range]}
-        </small>
-      </Title>
-
-    </ThumbLink>
-  )
-}
-
-MailingLink.displayName = 'Mailing-Link'
-MailingLink.propTypes = {
-  mailing: PropTypes.object.isRequired,
-  url: PropTypes.string.isRequired
-}
-MailingLink.contextTypes = {
-  messages: PropTypes.object.isRequired,
-  moment: PropTypes.func.isRequired
-}
-
-const List = ({mailings, params}, {location: {pathname, search}}) => {
   if (endsWith(pathname, '/new')) {
-    return <NewMailing params={params}/>
+    return <NewMailing {...props}/>
   }
 
   const url = '/' + join(
@@ -117,7 +151,7 @@ const List = ({mailings, params}, {location: {pathname, search}}) => {
   const editMode = Boolean(params.mailing)
 
   if (editMode) {
-    return <Edit params={params} mailing={find(mailings, {id: params.mailing})}/>
+    return <Edit {...props} mailing={find(mailings, {id: params.mailing})}/>
   }
 
   return (
@@ -129,6 +163,7 @@ const List = ({mailings, params}, {location: {pathname, search}}) => {
       <Container>
         {map(mailings, mailing =>
           <MailingLink
+            {...props}
             key={mailing.id}
             mailing={mailing}
             url={`${url}/${mailing.id}${search}`}/>)}
@@ -149,7 +184,9 @@ List.contextTypes = {
   location: PropTypes.object.isRequired
 }
 
-const StandaloneMailingList = props => <List params={props.params} mailings={props[props.level].mailings}/>
+const StandaloneMailingList = props => (
+  <List {...props} mailings={props[props.level].mailings}/>
+)
 
 StandaloneMailingList.displayName = 'Mailing-List'
 StandaloneMailingList.propTypes = {
@@ -157,10 +194,10 @@ StandaloneMailingList.propTypes = {
   level: PropTypes.string.isRequired
 }
 
-const ReportMailingList = ({params, report: {mailings}}) => (
+const ReportMailingList = props => (
   <div style={{display: 'none'}}>
     <Modal>
-      <List params={params} mailings={mailings}/>
+      <List {...props} mailings={props.report.mailings}/>
     </Modal>
   </div>
 )

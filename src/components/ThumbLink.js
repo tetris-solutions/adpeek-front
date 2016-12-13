@@ -96,6 +96,18 @@ const style = csjs`
   padding: 0 .7em;
   bottom: .7em;
   left: .7em;
+}
+.info {
+  font-size: smaller;
+  color: grey;
+  padding: 1em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.info > i {
+  transform: translateY(.3em);
+  margin-right: .3em;
 }`
 
 const {PropTypes} = React
@@ -160,6 +172,16 @@ ThumbLink.propTypes = {
   img: PropTypes.string,
   to: PropTypes.string,
   title: PropTypes.string
+}
+
+export const Info = ({children}) => (
+  <div className={`${style.info}`}>
+    {children}
+  </div>
+)
+Info.displayName = 'Info'
+Info.propTypes = {
+  children: PropTypes.node.isRequired
 }
 
 /**
