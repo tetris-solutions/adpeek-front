@@ -186,6 +186,18 @@ const MailingEdit = React.createClass({
 
     return '/' + join(path, '/')
   },
+  getReportUrl () {
+    const {params, mailing: {workspace, folder, report}} = this.props
+
+    const path = compact([
+      `company/${params.company}`,
+      workspace && `workspace/${workspace.id}`,
+      folder && `folder/${folder.id}`,
+      `report/${report.id}`
+    ])
+
+    return '/' + join(path, '/')
+  },
   normalize (mailing) {
     mailing = assign({}, mailing)
 
@@ -283,7 +295,7 @@ const MailingEdit = React.createClass({
     const save = mailing.id ? updateMailingReportAction : createMailingReportAction
 
     const onUpdate = () => router.push(this.getMailingUrl())
-    const onCreate = response => router.push(this.getMailingUrl(response.data.id))
+    const onCreate = response => router.push(this.getMailingUrl({mailing: response.data.id}))
 
     save(tree, params, mailing)
       .then(response => loadMailingListAction(tree, params).then(() => response))
@@ -298,6 +310,7 @@ const MailingEdit = React.createClass({
   },
   render () {
     const {mailing, newEmail} = this.state
+    const {params} = this.props
 
     if (!mailing) {
       return <NotFound/>
@@ -383,6 +396,11 @@ const MailingEdit = React.createClass({
           <Submit className='mdl-button mdl-button--primary'>
             <Message>save</Message>
           </Submit>
+
+          {!params.report && (
+            <Link to={this.getReportUrl()} className='mdl-button' style={{float: 'right'}}>
+              <Message>mailingReportLink</Message>
+            </Link>)}
         </Footer>
       </Form>
     )
