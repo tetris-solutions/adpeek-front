@@ -49,6 +49,11 @@ export function setAppRoutes (app, render) {
     ensureLoad(workspaces),
     render)
 
+  app.get('/company/:company/mailing/:mailing?',
+    protect,
+    ensureLoad(mailings),
+    render)
+
   app.get('/company/:company/reports',
     protect,
     ensureLoad(savedAccounts, reports),

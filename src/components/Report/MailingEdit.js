@@ -180,7 +180,7 @@ const MailingEdit = React.createClass({
       `company/${params.company}`,
       params.workspace && `workspace/${params.workspace}`,
       params.folder && `folder/${params.folder}`,
-      `report/${params.report}`,
+      params.report && `report/${params.report}`,
       mailingId ? `mailing/${mailingId}` : 'mailing'
     ])
 

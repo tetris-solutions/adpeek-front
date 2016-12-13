@@ -283,7 +283,8 @@ module.exports = {
     dayOfMonthLabel: 'Day of Month',
     periodicityLabel: 'Periodicity',
     reportMailingFormTitle: 'Mailing report {report}',
-    newEmailLabel: 'New email'
+    newEmailLabel: 'New email',
+    toggleMailing: 'Enable/Disable'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -569,6 +570,7 @@ module.exports = {
     dayOfMonthLabel: 'Dia do mês',
     periodicityLabel: 'Periodicidade',
     reportMailingFormTitle: 'Agendamento relatório {report}',
-    newEmailLabel: 'Novo email'
+    newEmailLabel: 'Novo email',
+    toggleMailing: 'Ativar/Desativar'
   }
 }

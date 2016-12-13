@@ -98,6 +98,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
           aside={CompanyAside}>
 
           <IndexRoute component={Workspaces} onEnter={preload(workspaces)}/>
+          <Route path='mailing(/:mailing)' onEnter={preload(mailings)} component={Mailing}/>
 
           <Route breadcrumb={ReportsBread} onEnter={preload(savedAccounts)}>
             <Route

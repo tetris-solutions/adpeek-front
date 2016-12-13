@@ -106,17 +106,19 @@ const MailingLink = React.createClass({
         </Cap>
 
         <div className='mdl-color-text--green-800' style={{margin: '.5em 1em 0 0', textAlign: 'right'}}>
-          <i className='material-icons' onClick={this.toggle}>{
-            mailing.disabled ? 'panorama_fish_eye' : 'lens'}</i>
+          <i
+            title={messages.toggleMailing}
+            className='material-icons'
+            onClick={this.toggle}>{mailing.disabled ? 'panorama_fish_eye' : 'lens'}</i>
         </div>
 
-        <Info>
-          {folder ? <i className='material-icons'>folder</i> : null}
-          {folder ? folder.name : null}
-          {folder ? <br/> : null}
-
+        <Info style={{minHeight: 60, paddingBottom: '7em'}}>
           {workspace ? <i className='material-icons'>domain</i> : null}
           {workspace ? workspace.name : null}
+          {workspace && folder ? <br/> : null}
+
+          {folder ? <i className='material-icons'>folder</i> : null}
+          {folder ? folder.name : null}
         </Info>
 
         <Title>
