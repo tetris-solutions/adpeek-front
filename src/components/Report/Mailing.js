@@ -11,6 +11,7 @@ import endsWith from 'lodash/endsWith'
 import pick from 'lodash/pick'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
+import {ThumbLink, Title, Container, Cap} from '../ThumbLink'
 
 const {PropTypes} = React
 
@@ -45,9 +46,25 @@ New.propTypes = {
 
 const NewMailing = contextualize(New, 'report', 'company', 'workspace', 'folder')
 
-const List = ({mailings, params}, {location: {pathname, search}}) => {
+const List = ({mailings, params}, {messages, moment, location: {pathname, search}}) => {
   if (endsWith(pathname, '/new')) {
     return <NewMailing params={params}/>
+  }
+
+  function formattedSchedule ({day_of_month, day_of_week, date}) {
+    if (date) {
+      return moment(date).format('DD/MM/YYYY')
+    }
+
+    if (day_of_week) {
+      return moment().weekday(day_of_week).format('dddd')
+    }
+
+    if (day_of_month) {
+      return moment().month('Jan').date(day_of_month).format('Do')
+    }
+
+    return messages.daily
   }
 
   const url = '/' + join(
@@ -68,18 +85,24 @@ const List = ({mailings, params}, {location: {pathname, search}}) => {
 
   return (
     <div>
-      <Link to={`${url}/new`}>
+      <Link to={`${url}/new${search}`}>
         <Message>newMailing</Message>
       </Link>
       <hr/>
-      <ul>
-        {map(mailings, ({id, report}) => (
-          <li key={id}>
-            <Link to={`${pathname}/${id}${search}`}>
-              {report.name}
-            </Link>
-          </li>))}
-      </ul>
+      <Container>
+        {map(mailings, ({id, schedule, report, emails}) => (
+          <ThumbLink key={id} to={`${pathname}/${id}${search}`}>
+            <Cap>{report.name}</Cap>
+            <Title>
+              {formattedSchedule(schedule)}
+              <br/>
+              <small>
+                {emails.join(', ')}
+              </small>
+            </Title>
+
+          </ThumbLink>))}
+      </Container>
     </div>
   )
 }
@@ -93,7 +116,9 @@ List.propTypes = {
   })
 }
 List.contextTypes = {
-  location: PropTypes.object
+  messages: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
+  moment: PropTypes.func.isRequired
 }
 
 const StandaloneMailingList = props => <List params={props.params} mailings={props[props.level].mailings}/>

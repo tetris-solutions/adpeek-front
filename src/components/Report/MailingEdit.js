@@ -20,6 +20,7 @@ import join from 'lodash/join'
 import map from 'lodash/map'
 import without from 'lodash/without'
 import uniq from 'lodash/uniq'
+import range from 'lodash/range'
 
 const {PropTypes} = React
 const ranges = [
@@ -68,7 +69,16 @@ RangeSelect.contextTypes = {
   messages: PropTypes.object
 }
 
-const PeriodicitySelector = (props, {messages}) => (
+const daysOfWeek = moment => {
+  const m = moment()
+
+  return map(range(7), day =>
+    <option key={day} value={day}>
+      {m.weekday(day).format('dddd')}
+    </option>)
+}
+
+const PeriodicitySelector = (props, {messages, moment}) => (
   <div className='mdl-grid'>
     <div className='mdl-cell mdl-cell--6-col'>
       <Select
@@ -88,13 +98,7 @@ const PeriodicitySelector = (props, {messages}) => (
           name='day_of_week'
           value={props.day_of_week}
           onChange={props.onChangeDayOfWeek}>
-          <option value='0'>{messages.sunday}</option>
-          <option value='1'>{messages.monday}</option>
-          <option value='2'>{messages.tuesday}</option>
-          <option value='3'>{messages.wednesday}</option>
-          <option value='4'>{messages.thursday}</option>
-          <option value='5'>{messages.friday}</option>
-          <option value='6'>{messages.saturday}</option>
+          {daysOfWeek(moment)}
         </Select>)}
 
       {props.periodicity === 'monthly' && (
@@ -120,6 +124,7 @@ PeriodicitySelector.propTypes = {
   onChangeDayOfMonth: PropTypes.func.isRequired
 }
 PeriodicitySelector.contextTypes = {
+  moment: PropTypes.func.isRequired,
   messages: PropTypes.object.isRequired
 }
 
@@ -333,8 +338,7 @@ const MailingEdit = React.createClass({
               {...mailing.schedule}
               onChangeDayOfMonth={this.onChangeInterval}
               onChangeDayOfWeek={this.onChangeInterval}
-              onChangePeriodicity={this.onChangePeriodicity}/>
-          )}
+              onChangePeriodicity={this.onChangePeriodicity}/>)}
 
           <div className='mdl-grid'>
             <div className='mdl-cell mdl-cell--10-col'>
@@ -354,7 +358,7 @@ const MailingEdit = React.createClass({
 
           <div className='mdl-list'>
             {map(mailing.emails, email => (
-              <div className='mdl-list__item'>
+              <div key={email} className='mdl-list__item'>
                 <span className='mdl-list__item-primary-content'>
                   {email}
                 </span>
