@@ -76,8 +76,8 @@ HeaderMenuItem.propTypes = {
   children: PropTypes.node.isRequired
 }
 
-const DMenu = ({children}) => (
-  <Tooltip>
+const DMenu = ({children, provide}) => (
+  <Tooltip provide={provide}>
     <div className={`mdl-menu__container is-visible ${style.menu}`}>
       <ul className={`mdl-menu ${style.options}`}>
         {children}
@@ -86,9 +86,13 @@ const DMenu = ({children}) => (
   </Tooltip>
 )
 
+DMenu.defaultProps = {
+  provide: []
+}
 DMenu.displayName = 'Dropdown-Menu'
 DMenu.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  provide: PropTypes.array
 }
 
 export const DropdownMenu = styledFnComponent(DMenu, style)

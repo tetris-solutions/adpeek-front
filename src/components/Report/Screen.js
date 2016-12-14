@@ -1,5 +1,6 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import {DropdownMenu, MenuItem} from '../DrodownMenu'
 import SubHeader from '../SubHeader'
 import ReportExportButton from './ExportButton'
 import DateRangeButton from './DateRangeButton'
@@ -23,25 +24,31 @@ const ReportScreen = ({
 }) => (
   <div>
     <SubHeader>
+      <DateRangeButton
+        disabled={!canChangeDateRange}
+        className='mdl-button mdl-color-text--grey-100'/>
 
-      <DateRangeButton disabled={!canChangeDateRange} className='mdl-button mdl-color-text--grey-100'/>
+      <Button className='mdl-button mdl-js-button mdl-button--icon'>
+        <i className='material-icons'>more_vert</i>
 
-      {fullReportUrl && (
-        <a href={fullReportUrl} className='mdl-button mdl-color-text--grey-100'>
-          <Message>viewFullReport</Message>
-        </a>)}
+        <DropdownMenu provide={['report']}>
+          {showNewModuleButton && <MenuItem onClick={addNewModule}>
+            <Message>newModule</Message>
+          </MenuItem>}
 
-      {showNewModuleButton && (
-        <Button className='mdl-button mdl-color-text--grey-100' onClick={addNewModule}>
-          <Message>newModule</Message>
-        </Button>)}
+          {fullReportUrl && (
+            <MenuItem tag='a' href={fullReportUrl}>
+              <Message>viewFullReport</Message>
+            </MenuItem>)}
 
-      {showShareButton && (
-        <ShareButton className='mdl-button mdl-color-text--grey-100' shareUrl={shareUrl}/>)}
+          {showShareButton && <ShareButton shareUrl={shareUrl}/>}
 
-      <ReportExportButton
-        create={downloadReport}
-        isCreatingReport={isCreatingReport}/>
+          <ReportExportButton
+            create={downloadReport}
+            isCreatingReport={isCreatingReport}/>
+        </DropdownMenu>
+      </Button>
+
     </SubHeader>
 
     {showContextMenu

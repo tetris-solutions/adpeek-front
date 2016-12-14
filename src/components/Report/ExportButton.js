@@ -7,6 +7,7 @@ import {contextualize} from '../higher-order/contextualize'
 import get from 'lodash/get'
 import some from 'lodash/some'
 import {Button} from '../Button'
+import {MenuItem} from '../DrodownMenu'
 
 const {PropTypes} = React
 const style = csjs`
@@ -136,9 +137,8 @@ const ReportExportButton = React.createClass({
     const isLoading = this.props.isCreatingReport || this.state.isWaiting
 
     return (
-      <Button
+      <MenuItem
         disabled={isLoading}
-        className='mdl-button mdl-color-text--grey-100'
         onClick={this.open}>
 
         {isLoading
@@ -149,7 +149,7 @@ const ReportExportButton = React.createClass({
           <Modal onEscPress={this.close}>
             <PickType xls={this.exportAsXls} pdf={this.exportAsPdf} cancel={this.close}/>
           </Modal>)}
-      </Button>
+      </MenuItem>
     )
   }
 })

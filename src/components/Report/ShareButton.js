@@ -6,6 +6,7 @@ import clipboard from 'copy-to-clipboard'
 import {loadReportShareUrlAction} from '../../actions/load-report-share-url'
 import {pushSuccessMessageAction} from '../../actions/push-success-message-action'
 import {Button} from '../Button'
+import {MenuItem} from '../DrodownMenu'
 
 const {PropTypes} = React
 
@@ -74,8 +75,8 @@ const ShareDialog = React.createClass({
   }
 })
 
-const ShareButton = ({className, shareUrl}) => (
-  <ButtonWithPrompt className={className} label={<Message>shareReportButton</Message>}>
+const ShareButton = ({shareUrl}) => (
+  <ButtonWithPrompt tag={MenuItem} label={<Message>shareReportButton</Message>}>
     {({dismiss}) =>
       <ShareDialog
         close={dismiss}
@@ -85,7 +86,6 @@ const ShareButton = ({className, shareUrl}) => (
 
 ShareButton.displayName = 'Share-Button'
 ShareButton.propTypes = {
-  className: PropTypes.string.isRequired,
   shareUrl: PropTypes.string
 }
 
