@@ -150,7 +150,8 @@ const Header = React.createClass({
     dispatch: PropTypes.func.isRequired,
     user: PropTypes.shape({
       name: PropTypes.string
-    }).isRequired,
+    }),
+    hideLogin: PropTypes.bool.isRequired,
     company: PropTypes.object
   },
   loginRoundTrip () {
@@ -159,18 +160,19 @@ const Header = React.createClass({
     window.location.href = process.env.FRONT_URL + '/login?next=' + window.location.href
   },
   render () {
-    const {user, company} = this.props
+    const {user, company, hideLogin} = this.props
     let GoHome, homeProps, leftButton
 
-    if (user.is_guest) {
+    if (!user || user.is_guest) {
       GoHome = 'a'
       homeProps = {href: '/'}
 
-      leftButton = (
-        <Button className='mdl-button mdl-color-text--grey-100' onClick={this.loginRoundTrip}>
-          <Message>navLogin</Message>
-        </Button>
-      )
+      leftButton = hideLogin
+        ? null : (
+          <Button className='mdl-button mdl-color-text--grey-100' onClick={this.loginRoundTrip}>
+            <Message>navLogin</Message>
+          </Button>
+        )
     } else {
       GoHome = Link
       homeProps = {to: '/'}

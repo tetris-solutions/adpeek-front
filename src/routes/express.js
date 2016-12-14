@@ -26,12 +26,17 @@ import {loadStatusesActionServerAdaptor as statuses} from '../actions/load-statu
 import {loadWorkspaceActionServerAdaptor as workspace} from '../actions/load-workspace'
 import {loadCompanySavedAccountsActionServerAdaptor as savedAccounts} from '../actions/load-company-saved-accounts'
 import {loadMailingListActionServerAdaptor as mailings} from '../actions/load-mailing-list'
+import {unsubscribeActionServerAdaptor as unsub} from '../actions/unsub'
 
 export function setAppRoutes (app, render) {
   const _ = bind.placeholder
   const campaignsWithAdsets = bind(campaigns, null, _, _, 'include-adsets')
 
   const ensureLoad = (...args) => preload(statuses, companies, ...args)
+
+  app.get('/mailing/:mailing/unsubscribe/:email',
+    preload(unsub),
+    render)
 
   app.get('/',
     protect,

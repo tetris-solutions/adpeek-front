@@ -286,7 +286,9 @@ module.exports = {
     newEmailLabel: 'New email',
     disableMailing: 'Disable',
     enableMailing: 'Enable',
-    mailingReportLink: 'Open report'
+    mailingReportLink: 'Open report',
+    unsubscriptionTitle: 'Mailing Unsubscription',
+    unsubscriptionBody: 'Ok <strong>{email}</strong>, you have been unsubscribed from <em>{report}</em> emails.'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -575,6 +577,8 @@ module.exports = {
     newEmailLabel: 'Novo email',
     disableMailing: 'Desligar',
     enableMailing: 'Ligar',
-    mailingReportLink: 'Abrir Relatório'
+    mailingReportLink: 'Abrir Relatório',
+    unsubscriptionTitle: 'Desassinar Relatório',
+    unsubscriptionBody: 'Ok <strong>{email}</strong>, nós te removemos do relatório <em>{report}</em>.'
   }
 }
