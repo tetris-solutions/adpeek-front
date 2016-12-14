@@ -76,6 +76,10 @@ const ModuleContainer = React.createClass({
       entities.AdSet = filterByParent(entities.AdSet, entities.Campaign, 'campaign_id')
     }
 
+    if (entities.Search) {
+      entities.Search = filterByParent(entities.Search, entities.Campaign, 'campaign_id')
+    }
+
     if (entities.AdGroup) {
       entities.AdGroup = filterByParent(entities.AdGroup, entities.Campaign, 'campaign_id')
     }
