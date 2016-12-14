@@ -7,57 +7,78 @@ import DateRangeButton from './DateRangeButton'
 import Page from '../Page'
 import ShareButton from './ShareButton'
 import {Button} from '../Button'
+import join from 'lodash/join'
+import compact from 'lodash/compact'
+import qs from 'query-string'
 
 const {PropTypes} = React
 
-const ReportScreen = ({
+function ReportScreen ({
+  report,
   children,
   showShareButton,
   showContextMenu,
   shareUrl,
   showNewModuleButton,
   canChangeDateRange,
-  fullReportUrl,
+  showFullReportLink,
   downloadReport,
   isCreatingReport,
   addNewModule
-}) => (
-  <div>
-    <SubHeader>
-      <DateRangeButton
-        disabled={!canChangeDateRange}
-        className='mdl-button mdl-color-text--grey-100'/>
+}, {params: {company, workspace, folder}, location: {query: {from, to}}}) {
+  const scope = compact([
+    `company/${company}`,
+    workspace && `workspace/${workspace}`,
+    folder && `folder/${folder}`
+  ])
 
-      <Button className='mdl-button mdl-js-button mdl-button--icon'>
-        <i className='material-icons'>more_vert</i>
+  const fullReportUrl = '/' + join(scope, '/') + `/report/${report.id}?` + qs.stringify({from, to})
+  const cloneReportUrl = '/' + join(scope, '/') + `/reports/new?clone=${report.id}&name=${report.name}`
 
-        <DropdownMenu provide={['report']}>
-          {showNewModuleButton && <MenuItem onClick={addNewModule}>
-            <Message>newModule</Message>
-          </MenuItem>}
+  return (
+    <div>
+      <SubHeader>
+        <DateRangeButton
+          disabled={!canChangeDateRange}
+          className='mdl-button mdl-color-text--grey-100'/>
 
-          {fullReportUrl && (
-            <MenuItem tag='a' href={fullReportUrl}>
-              <Message>viewFullReport</Message>
-            </MenuItem>)}
+        <Button className='mdl-button mdl-js-button mdl-button--icon'>
+          <i className='material-icons'>more_vert</i>
 
-          {showShareButton && <ShareButton shareUrl={shareUrl}/>}
+          <DropdownMenu provide={['report']}>
+            {showNewModuleButton && <MenuItem onClick={addNewModule}>
+              <Message>newModule</Message>
+            </MenuItem>}
 
-          <ReportExportButton
-            create={downloadReport}
-            isCreatingReport={isCreatingReport}/>
-        </DropdownMenu>
-      </Button>
+            {showFullReportLink && (
+              <MenuItem tag='a' href={fullReportUrl}>
+                <Message>viewFullReport</Message>
+              </MenuItem>)}
 
-    </SubHeader>
+            {showFullReportLink && (
+              <MenuItem tag='a' href={cloneReportUrl}>
+                <Message>cloneReport</Message>
+              </MenuItem>)}
 
-    {showContextMenu
-      ? <Page>{children}</Page>
-      : children}
-  </div>
-)
+            {showShareButton && <ShareButton shareUrl={shareUrl}/>}
+
+            <ReportExportButton
+              create={downloadReport}
+              isCreatingReport={isCreatingReport}/>
+          </DropdownMenu>
+        </Button>
+
+      </SubHeader>
+
+      {showContextMenu
+        ? <Page>{children}</Page>
+        : children}
+    </div>
+  )
+}
 ReportScreen.displayName = 'Report-Screen'
 ReportScreen.propTypes = {
+  report: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
   showNewModuleButton: PropTypes.bool.isRequired,
   canChangeDateRange: PropTypes.bool.isRequired,
@@ -66,7 +87,11 @@ ReportScreen.propTypes = {
   addNewModule: PropTypes.func.isRequired,
   showShareButton: PropTypes.bool.isRequired,
   showContextMenu: PropTypes.bool.isRequired,
-  fullReportUrl: PropTypes.string,
+  showFullReportLink: PropTypes.bool,
   shareUrl: PropTypes.string
+}
+ReportScreen.contextTypes = {
+  params: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired
 }
 export default ReportScreen

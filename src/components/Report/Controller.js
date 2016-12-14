@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 import isNumber from 'lodash/isNumber'
-import qs from 'query-string'
+
 import map from 'lodash/map'
 import max from 'lodash/max'
 import uniqBy from 'lodash/uniqBy'
@@ -14,24 +14,12 @@ import {createModuleReportAction} from '../../actions/create-module'
 import {exportReportAction} from '../../actions/export-report'
 import {serializeReportModules} from '../../functions/seralize-report-modules'
 import assign from 'lodash/assign'
-import join from 'lodash/join'
-import compact from 'lodash/compact'
+
 import ReportScreen from './Screen'
 
 const {PropTypes} = React
 const getAccountKey = ({tetris_account, ad_account}) => `${tetris_account}:${ad_account}`
 const insertId = a => assign({}, a, {id: getAccountKey(a)})
-
-function calcPathToReport ({company, workspace, folder, report}, {from, to}) {
-  const scope = compact([
-    `company/${company}`,
-    workspace && `workspace/${workspace}`,
-    folder && `folder/${folder}`,
-    `report/${report}`
-  ])
-
-  return '/' + join(scope, '/') + '?' + qs.stringify({from, to})
-}
 
 const ReportController = React.createClass({
   displayName: 'Report-Controller',
@@ -157,14 +145,12 @@ const ReportController = React.createClass({
     return {accounts, from, to}
   },
   render () {
-    const {children, isGuestUser, guestMode, editMode, params, metaData, report: {modules, shareUrl}} = this.props
+    const {children, isGuestUser, guestMode, editMode, metaData, report} = this.props
     const {isCreatingReport} = this.state
-    const fullReportUrl = !isGuestUser && guestMode
-      ? calcPathToReport(params, this.context.location.query)
-      : null
 
     return (
       <ReportScreen
+        report={report}
         showNewModuleButton={!guestMode && editMode}
         canChangeDateRange={!guestMode}
         downloadReport={this.downloadReport}
@@ -172,10 +158,10 @@ const ReportController = React.createClass({
         addNewModule={this.addNewModule}
         showShareButton={!guestMode}
         showContextMenu={!guestMode}
-        shareUrl={guestMode ? undefined : shareUrl}
-        fullReportUrl={fullReportUrl}>
+        shareUrl={guestMode ? undefined : report.shareUrl}
+        showFullReportLink={!isGuestUser && guestMode}>
 
-        <div className='mdl-grid' ref='grid'>{map(sortBy(modules, 'index'), (module, index) =>
+        <div className='mdl-grid' ref='grid'>{map(sortBy(report.modules, 'index'), (module, index) =>
           <div
             key={module.id}
             data-module-id={module.id}
