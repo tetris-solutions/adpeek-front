@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 import isNumber from 'lodash/isNumber'
-
+import assign from 'lodash/assign'
 import map from 'lodash/map'
 import max from 'lodash/max'
 import uniqBy from 'lodash/uniqBy'
@@ -13,7 +13,8 @@ import Module from './Module/Container'
 import {createModuleReportAction} from '../../actions/create-module'
 import {exportReportAction} from '../../actions/export-report'
 import {serializeReportModules} from '../../functions/seralize-report-modules'
-import assign from 'lodash/assign'
+import {loadReportAction} from '../../actions/load-report'
+import {setDefaultReportAction} from '../../actions/set-default-report'
 
 import ReportScreen from './Screen'
 
@@ -140,6 +141,17 @@ const ReportController = React.createClass({
         }))
       .catch(() => this.setState({isCreatingReport: false}))
   },
+  reloadReport () {
+    const {params, dispatch, report} = this.props
+
+    return dispatch(loadReportAction, params, report.id)
+  },
+  favoriteReport () {
+    const {params, dispatch, report} = this.props
+
+    return dispatch(setDefaultReportAction, params, report.id, true)
+      .then(this.reloadReport)
+  },
   getReportParams () {
     const {from, to} = this.getCurrentRange()
     const accounts = uniqBy(map(this.props.accounts, insertId), 'id')
@@ -155,6 +167,7 @@ const ReportController = React.createClass({
         report={report}
         guestMode={guestMode}
         isGuestUser={isGuestUser}
+        favoriteReport={this.favoriteReport}
         downloadReport={this.downloadReport}
         isCreatingReport={isCreatingReport}
         shareUrl={report.shareUrl}>

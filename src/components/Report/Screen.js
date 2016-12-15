@@ -1,7 +1,7 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import {Link} from 'react-router'
-import {DropdownMenu, MenuItem} from '../DrodownMenu'
+import {DropdownMenu, MenuItem, HeaderMenuItem} from '../DrodownMenu'
 import SubHeader from '../SubHeader'
 import ReportExportButton from './ExportButton'
 import DateRangeButton from './DateRangeButton'
@@ -16,14 +16,9 @@ import Fence from '../Fence'
 
 const {PropTypes} = React
 
-function ReportScreen ({
-  report,
-  guestMode,
-  isGuestUser,
-  children,
-  downloadReport,
-  isCreatingReport
-}, {params: {company, workspace, folder}, location: {query: {from, to}}}) {
+function ReportScreen (props, context) {
+  const {favoriteReport, report, guestMode, isGuestUser, children, downloadReport, isCreatingReport} = props
+  const {messages, params: {company, workspace, folder}, location: {query: {from, to}}} = context
   const scope = compact([
     `company/${company}`,
     workspace && `workspace/${workspace}`,
@@ -36,7 +31,7 @@ function ReportScreen ({
   const cloneReportUrl = '/' + join(scope, '/') + `/reports/new?clone=${report.id}&name=${report.name}`
 
   return (
-    <Fence canEditReport>{({canEditReport}) =>
+    <Fence canBrowseReports canEditReport>{({canEditReport, canBrowseReports}) =>
       <div>
         <SubHeader>
           <DateRangeButton
@@ -47,6 +42,17 @@ function ReportScreen ({
             <i className='material-icons'>open_in_new</i>
 
             <DropdownMenu provide={['report']}>
+              {canBrowseReports && (
+                <HeaderMenuItem
+                  onClick={favoriteReport}
+                  title={report.is_user_selected ? messages.unfavoriteReportDescription : messages.favoriteReportDescription}
+                  icon={report.is_user_selected ? 'star' : 'star_border'}>
+
+                  {report.is_user_selected
+                    ? <Message>unfavoriteReport</Message>
+                    : <Message>favoriteReport</Message>}
+                </HeaderMenuItem>)}
+
               {canEditReport && (
                 <AccessControl/>)}
 
@@ -82,14 +88,16 @@ function ReportScreen ({
 }
 ReportScreen.displayName = 'Report-Screen'
 ReportScreen.propTypes = {
-  guestMode: PropTypes.bool.isRequired,
-  isGuestUser: PropTypes.bool.isRequired,
+  guestMode: PropTypes.bool,
+  isGuestUser: PropTypes.bool,
+  downloadReport: PropTypes.func.isRequired,
+  favoriteReport: PropTypes.func.isRequired,
   report: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
-  downloadReport: PropTypes.func.isRequired,
   isCreatingReport: PropTypes.bool.isRequired
 }
 ReportScreen.contextTypes = {
+  messages: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired
 }

@@ -6,8 +6,6 @@ import TextMessage from 'intl-messageformat'
 import Fence from '../Fence'
 import DeleteButton from '../DeleteButton'
 import {deleteReportAction} from '../../actions/delete-report'
-import {loadReportAction} from '../../actions/load-report'
-import {setDefaultReportAction} from '../../actions/set-default-report'
 import {contextualize} from '../higher-order/contextualize'
 import ReportEditPrompt from './EditPrompt'
 import {Name, Navigation, NavBt, NavBts} from '../Navigation'
@@ -29,9 +27,6 @@ export function ReportAside ({report, dispatch}, {messages, locales, router, loc
       folder && `folder/${folder}`
     ]), '/')
 
-  const reload = () => dispatch(loadReportAction, params, report.id)
-  const favorite = () => dispatch(setDefaultReportAction, params, report.id, true).then(reload)
-
   const deleteReport = () =>
     dispatch(deleteReportAction, params, report.id)
       .then(() => router.push(`${scopeUrl}/reports`))
@@ -39,7 +34,6 @@ export function ReportAside ({report, dispatch}, {messages, locales, router, loc
   const inEditMode = endsWith(pathname, '/edit')
   const cloneName = new TextMessage(messages.copyOfName, locales).format({name: report.name})
   const shouldSkipEditPrompt = report.is_private || canSkipReportEditPrompt()
-  const favTitle = report.is_user_selected ? messages.unfavoriteReportDescription : messages.favoriteReportDescription
 
   const cloneUrl = `${scopeUrl}/reports/new?clone=${report.id}&name=${cloneName}`
   const reportUrl = `${scopeUrl}/report/${report.id}`
@@ -53,14 +47,10 @@ export function ReportAside ({report, dispatch}, {messages, locales, router, loc
             : <Name>{report.name}</Name>}
 
           <NavBts>
-            {canBrowseReports && (
-              <NavBt onClick={favorite} title={favTitle} icon={report.is_user_selected ? 'star' : 'star_border'}>
-                <Message>{report.is_user_selected ? 'unfavoriteReport' : 'favoriteReport'}</Message>
+            {inEditMode && canEditReport && (
+              <NavBt onClick={createModule} icon='add'>
+                <Message>newModule</Message>
               </NavBt>)}
-
-            {canEditReport && <NavBt tag={Link} to={cloneUrl} icon='content_copy'>
-              <Message>cloneReport</Message>
-            </NavBt>}
 
             {canEditReport && !inEditMode && shouldSkipEditPrompt && (
               <NavBt tag={Link} to={`${reportUrl}/edit${search}`} icon='create'>
@@ -70,10 +60,9 @@ export function ReportAside ({report, dispatch}, {messages, locales, router, loc
             {canEditReport && !inEditMode && !shouldSkipEditPrompt && (
               <NavBt tag={ReportEditPrompt} report={report} params={params} icon='create'/>)}
 
-            {inEditMode && canEditReport && (
-              <NavBt onClick={createModule} icon='add'>
-                <Message>newModule</Message>
-              </NavBt>)}
+            {canEditReport && <NavBt tag={Link} to={cloneUrl} icon='content_copy'>
+              <Message>cloneReport</Message>
+            </NavBt>}
 
             {canEditReport && (
               <NavBt tag={DeleteButton} entityName={report.name} onClick={deleteReport} icon='delete'>
