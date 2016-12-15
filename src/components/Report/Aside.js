@@ -3,36 +3,46 @@ import Message from 'tetris-iso/Message'
 import React from 'react'
 import {Link} from 'react-router'
 import TextMessage from 'intl-messageformat'
-import Fence from './Fence'
-import DeleteButton from './DeleteButton'
-import {deleteReportAction} from '../actions/delete-report'
-import {loadReportAction} from '../actions/load-report'
-import {setDefaultReportAction} from '../actions/set-default-report'
-import {contextualize} from './higher-order/contextualize'
-import ReportAccessControl from './Report/AccessControl'
-import ReportEditPrompt from './Report/EditPrompt'
-import {Name, Navigation, NavBt, NavBts} from './Navigation'
-import {canSkipReportEditPrompt} from '../functions/can-skip-report-edit-prompt'
-import NameInput from './Report/NameInput'
+import Fence from '../Fence'
+import DeleteButton from '../DeleteButton'
+import {deleteReportAction} from '../../actions/delete-report'
+import {loadReportAction} from '../../actions/load-report'
+import {setDefaultReportAction} from '../../actions/set-default-report'
+import {contextualize} from '../higher-order/contextualize'
+import ReportEditPrompt from './EditPrompt'
+import {Name, Navigation, NavBt, NavBts} from '../Navigation'
+import {canSkipReportEditPrompt} from '../../functions/can-skip-report-edit-prompt'
+import NameInput from './NameInput'
+import compact from 'lodash/compact'
+import join from 'lodash/join'
 
 const {PropTypes} = React
+const createModule = () => window.event$.emit('report.onNewModuleClick')
 
-export function FolderReportAside ({report, dispatch, user}, {messages, locales, router, location: {pathname, search}, params}) {
+export function ReportAside ({report, dispatch}, {messages, locales, router, location: {pathname, search}, params}) {
   const {company, workspace, folder} = params
-  const folderUrl = `/company/${company}/workspace/${workspace}/folder/${folder}`
+
+  const scopeUrl = '/' +
+    join(compact([
+      `company/${company}`,
+      workspace && `workspace/${workspace}`,
+      folder && `folder/${folder}`
+    ]), '/')
+
   const reload = () => dispatch(loadReportAction, params, report.id)
   const favorite = () => dispatch(setDefaultReportAction, params, report.id, true).then(reload)
 
   const deleteReport = () =>
     dispatch(deleteReportAction, params, report.id)
-      .then(() => router.push(`${folderUrl}/reports`))
+      .then(() => router.push(`${scopeUrl}/reports`))
 
   const inEditMode = endsWith(pathname, '/edit')
   const cloneName = new TextMessage(messages.copyOfName, locales).format({name: report.name})
   const shouldSkipEditPrompt = report.is_private || canSkipReportEditPrompt()
   const favTitle = report.is_user_selected ? messages.unfavoriteReportDescription : messages.favoriteReportDescription
-  const cloneUrl = `${folderUrl}/reports/new?clone=${report.id}&name=${cloneName}`
-  const reportUrl = `${folderUrl}/report/${report.id}`
+
+  const cloneUrl = `${scopeUrl}/reports/new?clone=${report.id}&name=${cloneName}`
+  const reportUrl = `${scopeUrl}/report/${report.id}`
 
   return (
     <Fence canEditReport canBrowseReports>
@@ -48,16 +58,6 @@ export function FolderReportAside ({report, dispatch, user}, {messages, locales,
                 <Message>{report.is_user_selected ? 'unfavoriteReport' : 'favoriteReport'}</Message>
               </NavBt>)}
 
-            {canEditReport && (
-              <NavBt
-                icon='share'
-                tag={ReportAccessControl}
-                dispatch={dispatch}
-                reload={reload}
-                params={params}
-                report={report}
-                user={user}/>)}
-
             {canEditReport && <NavBt tag={Link} to={cloneUrl} icon='content_copy'>
               <Message>cloneReport</Message>
             </NavBt>}
@@ -70,16 +70,17 @@ export function FolderReportAside ({report, dispatch, user}, {messages, locales,
             {canEditReport && !inEditMode && !shouldSkipEditPrompt && (
               <NavBt tag={ReportEditPrompt} report={report} params={params} icon='create'/>)}
 
+            {inEditMode && canEditReport && (
+              <NavBt onClick={createModule} icon='add'>
+                <Message>newModule</Message>
+              </NavBt>)}
+
             {canEditReport && (
               <NavBt tag={DeleteButton} entityName={report.name} onClick={deleteReport} icon='delete'>
                 <Message>deleteReport</Message>
               </NavBt>)}
 
-            <NavBt tag={Link} to={`${reportUrl}/mailing${search}`} icon='mail_outline'>
-              <Message>reportMailing</Message>
-            </NavBt>
-
-            <NavBt tag={Link} to={canBrowseReports ? `${folderUrl}/reports` : folderUrl} icon='close'>
+            <NavBt tag={Link} to={canBrowseReports ? `${scopeUrl}/reports` : scopeUrl} icon='close'>
               <Message>oneLevelUpNavigation</Message>
             </NavBt>
           </NavBts>
@@ -88,8 +89,8 @@ export function FolderReportAside ({report, dispatch, user}, {messages, locales,
   )
 }
 
-FolderReportAside.displayName = 'Folder-Report-Aside'
-FolderReportAside.propTypes = {
+ReportAside.displayName = 'Report-Aside'
+ReportAside.propTypes = {
   dispatch: PropTypes.func,
   user: PropTypes.object,
   report: PropTypes.shape({
@@ -97,7 +98,7 @@ FolderReportAside.propTypes = {
     name: PropTypes.string
   })
 }
-FolderReportAside.contextTypes = {
+ReportAside.contextTypes = {
   messages: PropTypes.object,
   locales: PropTypes.string,
   router: PropTypes.object,
@@ -105,4 +106,4 @@ FolderReportAside.contextTypes = {
   params: PropTypes.object
 }
 
-export default contextualize(FolderReportAside, 'report', 'user')
+export default contextualize(ReportAside, 'report', 'user')

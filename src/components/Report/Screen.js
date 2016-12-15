@@ -1,30 +1,28 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import {Link} from 'react-router'
 import {DropdownMenu, MenuItem} from '../DrodownMenu'
 import SubHeader from '../SubHeader'
 import ReportExportButton from './ExportButton'
 import DateRangeButton from './DateRangeButton'
+import AccessControl from './AccessControl'
 import Page from '../Page'
 import ShareButton from './ShareButton'
 import {Button} from '../Button'
 import join from 'lodash/join'
 import compact from 'lodash/compact'
 import qs from 'query-string'
+import Fence from '../Fence'
 
 const {PropTypes} = React
 
 function ReportScreen ({
   report,
+  guestMode,
+  isGuestUser,
   children,
-  showShareButton,
-  showContextMenu,
-  shareUrl,
-  showNewModuleButton,
-  canChangeDateRange,
-  showFullReportLink,
   downloadReport,
-  isCreatingReport,
-  addNewModule
+  isCreatingReport
 }, {params: {company, workspace, folder}, location: {query: {from, to}}}) {
   const scope = compact([
     `company/${company}`,
@@ -32,63 +30,64 @@ function ReportScreen ({
     folder && `folder/${folder}`
   ])
 
-  const fullReportUrl = '/' + join(scope, '/') + `/report/${report.id}?` + qs.stringify({from, to})
+  const reportUrl = '/' + join(scope, '/') + `/report/${report.id}`
+  const dtRangeQueryString = '?' + qs.stringify({from, to})
+
   const cloneReportUrl = '/' + join(scope, '/') + `/reports/new?clone=${report.id}&name=${report.name}`
 
   return (
-    <div>
-      <SubHeader>
-        <DateRangeButton
-          disabled={!canChangeDateRange}
-          className='mdl-button mdl-color-text--grey-100'/>
+    <Fence canEditReport>{({canEditReport}) =>
+      <div>
+        <SubHeader>
+          <DateRangeButton
+            disabled={guestMode}
+            className='mdl-button mdl-color-text--grey-100'/>
 
-        <Button className='mdl-button mdl-js-button mdl-button--icon'>
-          <i className='material-icons'>more_vert</i>
+          <Button className='mdl-button mdl-js-button mdl-button--icon'>
+            <i className='material-icons'>open_in_new</i>
 
-          <DropdownMenu provide={['report']}>
-            {showNewModuleButton && <MenuItem onClick={addNewModule}>
-              <Message>newModule</Message>
-            </MenuItem>}
+            <DropdownMenu provide={['report']}>
+              {canEditReport && (
+                <AccessControl/>)}
 
-            {showFullReportLink && (
-              <MenuItem tag='a' href={fullReportUrl}>
-                <Message>viewFullReport</Message>
-              </MenuItem>)}
+              {guestMode && !isGuestUser && (
+                <MenuItem tag='a' href={cloneReportUrl} icon='content_copy'>
+                  <Message>save</Message>
+                </MenuItem>)}
 
-            {showFullReportLink && (
-              <MenuItem tag='a' href={cloneReportUrl}>
-                <Message>cloneReport</Message>
-              </MenuItem>)}
+              {!guestMode && <ShareButton shareUrl={report.shareUrl}/>}
 
-            {showShareButton && <ShareButton shareUrl={shareUrl}/>}
+              <ReportExportButton
+                create={downloadReport}
+                isCreatingReport={isCreatingReport}/>
 
-            <ReportExportButton
-              create={downloadReport}
-              isCreatingReport={isCreatingReport}/>
-          </DropdownMenu>
-        </Button>
+              {!guestMode && <MenuItem tag={Link} to={`${reportUrl}/mailing`} icon='mail_outline'>
+                <Message>reportMailing</Message>
+              </MenuItem>}
 
-      </SubHeader>
+              {guestMode && !isGuestUser && (
+                <MenuItem tag='a' href={reportUrl + dtRangeQueryString} icon='settings'>
+                  <Message>viewFullReport</Message>
+                </MenuItem>)}
+            </DropdownMenu>
+          </Button>
+        </SubHeader>
 
-      {showContextMenu
-        ? <Page>{children}</Page>
-        : children}
-    </div>
+        {!guestMode
+          ? <Page>{children}</Page>
+          : children}
+      </div>}
+    </Fence>
   )
 }
 ReportScreen.displayName = 'Report-Screen'
 ReportScreen.propTypes = {
+  guestMode: PropTypes.bool.isRequired,
+  isGuestUser: PropTypes.bool.isRequired,
   report: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
-  showNewModuleButton: PropTypes.bool.isRequired,
-  canChangeDateRange: PropTypes.bool.isRequired,
   downloadReport: PropTypes.func.isRequired,
-  isCreatingReport: PropTypes.bool.isRequired,
-  addNewModule: PropTypes.func.isRequired,
-  showShareButton: PropTypes.bool.isRequired,
-  showContextMenu: PropTypes.bool.isRequired,
-  showFullReportLink: PropTypes.bool,
-  shareUrl: PropTypes.string
+  isCreatingReport: PropTypes.bool.isRequired
 }
 ReportScreen.contextTypes = {
   params: PropTypes.object.isRequired,

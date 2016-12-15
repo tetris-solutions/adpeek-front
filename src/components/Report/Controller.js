@@ -66,6 +66,8 @@ const ReportController = React.createClass({
   },
   componentDidMount () {
     this.ensureDateRange()
+
+    window.event$.on('report.onNewModuleClick', this.addNewModule)
   },
   componentWillReceiveProps (nextProps, nextContext) {
     this.ensureDateRange(nextContext)
@@ -151,15 +153,11 @@ const ReportController = React.createClass({
     return (
       <ReportScreen
         report={report}
-        showNewModuleButton={!guestMode && editMode}
-        canChangeDateRange={!guestMode}
+        guestMode={guestMode}
+        isGuestUser={isGuestUser}
         downloadReport={this.downloadReport}
         isCreatingReport={isCreatingReport}
-        addNewModule={this.addNewModule}
-        showShareButton={!guestMode}
-        showContextMenu={!guestMode}
-        shareUrl={guestMode ? undefined : report.shareUrl}
-        showFullReportLink={!isGuestUser && guestMode}>
+        shareUrl={report.shareUrl}>
 
         <div className='mdl-grid' ref='grid'>{map(sortBy(report.modules, 'index'), (module, index) =>
           <div

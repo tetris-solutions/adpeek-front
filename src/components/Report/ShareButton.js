@@ -75,8 +75,10 @@ const ShareDialog = React.createClass({
   }
 })
 
+const MenuShare = props => <MenuItem {...props} icon='share'/>
+
 const ShareButton = ({shareUrl}) => (
-  <ButtonWithPrompt tag={MenuItem} label={<Message>shareReportButton</Message>}>
+  <ButtonWithPrompt tag={MenuShare} label={<Message>shareReportButton</Message>}>
     {({dismiss}) =>
       <ShareDialog
         close={dismiss}

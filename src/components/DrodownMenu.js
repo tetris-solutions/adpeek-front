@@ -43,12 +43,12 @@ const style = csjs`
 }`
 
 export const MenuItem = props => {
-  const {children, tag: Tag, icon} = props
+  const {divider, children, tag: Tag, icon} = props
   const ico = icon ? <i className={`material-icons ${style.ico}`}>{icon}</i> : null
 
   return (
-    <li className={`mdl-menu__item ${style.item}`}>
-      <Tag {...omit(props, 'children', 'icon', 'tag')}>
+    <li className={`mdl-menu__item ${style.item} ${divider ? 'mdl-menu__item--full-bleed-divider' : ''}`}>
+      <Tag {...omit(props, 'children', 'icon', 'tag', 'divider')}>
         {ico}
         {children}
       </Tag>
@@ -58,9 +58,11 @@ export const MenuItem = props => {
 
 MenuItem.displayName = 'Menu-Item'
 MenuItem.defaultProps = {
-  tag: 'span'
+  tag: 'span',
+  divider: false
 }
 MenuItem.propTypes = {
+  divider: PropTypes.bool,
   tag: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   icon: PropTypes.string,
   children: PropTypes.node.isRequired

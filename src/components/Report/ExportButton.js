@@ -138,6 +138,7 @@ const ReportExportButton = React.createClass({
 
     return (
       <MenuItem
+        icon='file_download'
         disabled={isLoading}
         onClick={this.open}>
 

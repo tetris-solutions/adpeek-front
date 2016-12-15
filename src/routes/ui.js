@@ -36,9 +36,7 @@ import OrderAside from '../components/OrderAside'
 import OrderAutoBudget from '../components/OrderAutoBudget'
 import OrderBreadCrumb from '../components/OrderBreadcrumb'
 import OrdersBreadCrumb from '../components/OrdersBreadcrumb'
-import FolderReportAside from '../components/FolderReportAside'
-import WorkspaceReportAside from '../components/WorkspaceReportAside'
-import CompanyReportAside from '../components/CompanyReportAside'
+import ReportAside from '../components/Report/Aside'
 import ReportBread from '../components/Report/Breadcrumb'
 import ReportsBread from '../components/Report/ListBreadcrumb'
 import WorkspaceAside from '../components/WorkspaceAside'
@@ -110,7 +108,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
             <Route breadcrumb={ReportsBread} onEnter={preload(savedAccounts)}>
               <Route
                 path='report/:report'
-                aside={CompanyReportAside}
+                aside={ReportAside}
                 breadcrumb={ReportBread}
                 onEnter={preload(report)}
                 component={CompanyReport}>
@@ -142,7 +140,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
               <Route breadcrumb={ReportsBread}>
                 <Route path='report/:report'
                        breadcrumb={ReportBread}
-                       aside={WorkspaceReportAside}
+                       aside={ReportAside}
                        onEnter={preload(report)}
                        component={WorkspaceReport}>
 
@@ -180,7 +178,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 <Route onEnter={preload(campaigns)} breadcrumb={ReportsBread}>
                   <Route
                     path='report/:report'
-                    aside={FolderReportAside}
+                    aside={ReportAside}
                     breadcrumb={ReportBread}
                     onEnter={preload(report)}
                     component={FolderReport}>

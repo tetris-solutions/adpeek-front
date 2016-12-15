@@ -1,6 +1,7 @@
 import React from 'react'
 import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
+import {contextualize} from '../higher-order/contextualize'
 import {openReportAction} from '../../actions/open-report'
 import {setDefaultReportAction} from '../../actions/set-default-report'
 import {updateReportAction} from '../../actions/update-report'
@@ -9,6 +10,8 @@ import {styled} from '../mixins/styled'
 import Fence from '../Fence'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
 import {Button} from '../Button'
+import {MenuItem} from '../DrodownMenu'
+import {loadReportAction} from '../../actions/load-report'
 
 const style = csjs`
 .card {
@@ -142,24 +145,21 @@ const ReportAccessControl = React.createClass({
     }
   },
   propTypes: {
-    className: PropTypes.string.isRequired,
-    children: PropTypes.node.isRequired,
     dispatch: PropTypes.func.isRequired,
-    reload: PropTypes.func.isRequired,
     report: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired
   },
   componentWillMount () {
-    const {dispatch, reload, report, params} = this.props
+    const {dispatch, report, params} = this.props
 
     this.makePublic = () =>
       dispatch(openReportAction, params, report.id)
-        .then(reload)
+        .then(this.reload)
 
     this.setAsDefault = () =>
       dispatch(setDefaultReportAction, params, report.id)
-        .then(reload)
+        .then(this.reload)
 
     this.unlock = () =>
       dispatch(updateReportAction, params, {id: report.id, is_private: false})
@@ -170,8 +170,13 @@ const ReportAccessControl = React.createClass({
   close () {
     this.setState({isModalOpen: false})
   },
+  reload () {
+    const {params, dispatch, report} = this.props
+
+    return dispatch(loadReportAction, params, report.id)
+  },
   render () {
-    const {report, user, className, params, children} = this.props
+    const {report, user, params} = this.props
     const level = inferLevelFromParams(params)
 
     const canEditPermission = level === 'folder'
@@ -181,8 +186,7 @@ const ReportAccessControl = React.createClass({
     const fencePerms = {[canEditPermission]: true}
 
     return (
-      <a className={className} onClick={this.open}>
-        {children}
+      <MenuItem icon='visibility' onClick={this.open}>
         <Message>reportAccessControl</Message>
         {this.state.isModalOpen ? (
           <Modal size='large' onEscPress={this.close}>
@@ -198,9 +202,9 @@ const ReportAccessControl = React.createClass({
             </Fence>
           </Modal>
         ) : null}
-      </a>
+      </MenuItem>
     )
   }
 })
 
-export default ReportAccessControl
+export default contextualize(ReportAccessControl, 'report', 'user')
