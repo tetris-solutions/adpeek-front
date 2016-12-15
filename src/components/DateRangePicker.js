@@ -3,7 +3,7 @@ import {DateRange} from 'react-date-range'
 
 const {PropTypes} = React
 
-const calculateRanges = ({today, yesterday, pastWeek, currentMonth, pastMonth}) => ({
+const calculateRanges = ({today, yesterday, pastWeek, currentMonth, pastMonth, last30Days}) => ({
   [today]: {
     startDate (now) {
       return now
@@ -42,6 +42,14 @@ const calculateRanges = ({today, yesterday, pastWeek, currentMonth, pastMonth}) 
     },
     endDate (now) {
       return now.subtract(1, 'month').endOf('month')
+    }
+  },
+  [last30Days]: {
+    startDate (now) {
+      return now.subtract(30, 'days')
+    },
+    endDate (now) {
+      return now
     }
   }
 })
