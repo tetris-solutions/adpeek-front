@@ -44,7 +44,7 @@ Middle.propTypes = {
   children: React.PropTypes.node.isRequired
 }
 
-const Comment = ({date, body, user, creation}, {moment}) => (
+const Comment = ({isGuestUser, date, body, user, creation}, {moment}) => (
   <li className={`mdl-list__item mdl-list__item--two-line ${style.comment}`}>
     <span className='mdl-list__item-primary-content'>
       <span>{user.name}</span>
@@ -53,9 +53,9 @@ const Comment = ({date, body, user, creation}, {moment}) => (
       }}/>
     </span>
 
-    <span className='mdl-list__item-secondary-content'>
+    {!isGuestUser && <span className='mdl-list__item-secondary-content'>
       <i className='material-icons'>close</i>
-    </span>
+    </span>}
 
     <small className={`${style.time}`}>
       {moment(creation).fromNow()}
@@ -65,6 +65,7 @@ const Comment = ({date, body, user, creation}, {moment}) => (
 
 Comment.displayName = 'Comment'
 Comment.propTypes = {
+  isGuestUser: React.PropTypes.bool,
   date: React.PropTypes.string.isRequired,
   body: React.PropTypes.string.isRequired,
   user: React.PropTypes.shape({
@@ -177,7 +178,7 @@ const Comments = React.createClass({
 
         <ul className='mdl-list'>
           {map(module.comments, comment =>
-            <Comment key={comment.id} {...comment}/>)}
+            <Comment key={comment.id} {...comment} isGuestUser={isGuestUser}/>)}
         </ul>
 
         <hr/>
