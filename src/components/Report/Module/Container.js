@@ -102,7 +102,7 @@ const ModuleContainer = React.createClass({
     })
   },
   render () {
-    const {editable, metaData} = this.props
+    const {metaData: {attributes}} = this.props
     const entities = this.getEntities()
     const module = assign({}, this.props.module)
     const filters = assign({}, module.filters)
@@ -114,7 +114,7 @@ const ModuleContainer = React.createClass({
 
     module.filters = filters
 
-    return <Controller editable={editable} module={module} entity={entity} attributes={metaData.attributes}/>
+    return <Controller {...this.props} module={module} entity={entity} attributes={attributes}/>
   }
 })
 

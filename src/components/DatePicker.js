@@ -13,6 +13,7 @@ const DatePicker = (props, {moment}) => {
       name={'__date__'}
       label='date'
       readOnly
+      data-value={date.format('YYYY-MM-DD')}
       value={date.format('DD/MM/YYYY')}>
       <Tooltip hover>
         <Calendar {...props} date={date}/>

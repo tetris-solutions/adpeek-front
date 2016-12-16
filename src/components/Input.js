@@ -1,5 +1,4 @@
 import cx from 'classnames'
-import pick from 'lodash/pick'
 import trim from 'lodash/trim'
 import Message from 'tetris-iso/Message'
 import React from 'react'
@@ -8,20 +7,9 @@ import isString from 'lodash/isString'
 import assign from 'lodash/assign'
 import TextMessage from 'intl-messageformat'
 import {prettyNumber} from '../functions/pretty-number'
+import omit from 'lodash/omit'
 
 const {PropTypes} = React
-const inputFields = [
-  'disabled',
-  'readOnly',
-  'name',
-  'type',
-  'required',
-  'max',
-  'min',
-  'onKeyDown',
-  'onKeyPress',
-  'onKeyUp'
-]
 
 function notEmptyString (value) {
   return value !== '' && value !== undefined && value !== null
@@ -120,11 +108,11 @@ export const Input = React.createClass({
     const {locales} = this.context
 
     const cleanValue = locales === 'pt-BR' ? (
-      value.replace(/\./g, '') // strip thousand sep
-        .replace(',', '.') // translate decimal sep
-    ) : (
-      value.replace(/,/g, '') // strip thousand sep
-    )
+        value.replace(/\./g, '') // strip thousand sep
+          .replace(',', '.') // translate decimal sep
+      ) : (
+        value.replace(/,/g, '') // strip thousand sep
+      )
 
     return Number(
       cleanValue
@@ -220,7 +208,19 @@ export const Input = React.createClass({
 
     const Tag = 'input'
 
-    const inputProps = assign(pick(this.props, inputFields), {
+    const protectedOnes = [
+      'className',
+      'value',
+      'onChange',
+      'onBlur',
+      'onFocus',
+      'defaultValue',
+      'children',
+      'error',
+      'label',
+      'format'
+    ]
+    const inputProps = assign(omit(this.props, protectedOnes), {
       value,
       className: 'mdl-textfield__input',
       onChange: this.onChange,

@@ -159,7 +159,7 @@ const ReportController = React.createClass({
     return {accounts, from, to}
   },
   render () {
-    const {children, isGuestUser, guestMode, editMode, metaData, report} = this.props
+    const {params, dispatch, children, isGuestUser, guestMode, editMode, metaData, report} = this.props
     const {isCreatingReport} = this.state
 
     return (
@@ -180,6 +180,8 @@ const ReportController = React.createClass({
             className={`mdl-cell mdl-cell--${module.cols}-col`}>
 
             <Module
+              params={params}
+              dispatch={dispatch}
               module={module}
               editable={editMode}
               metaData={get(metaData, module.entity)}/>

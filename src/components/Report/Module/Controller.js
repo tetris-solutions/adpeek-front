@@ -16,6 +16,7 @@ import isEmpty from 'lodash/isEmpty'
 import filter from 'lodash/filter'
 import includes from 'lodash/includes'
 import {Button} from '../../Button'
+import Comments from './Comments'
 
 const {PropTypes} = React
 const reportContext = [
@@ -36,14 +37,14 @@ const getAccountKeyFromId = id => id.substr(0, id.lastIndexOf(':'))
 const ModuleController = React.createClass({
   displayName: 'Module-Controller',
   propTypes: {
+    params: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
     editable: PropTypes.bool,
     module: moduleType.isRequired,
     attributes: PropTypes.object.isRequired,
     entity: reportEntityType.isRequired
   },
   contextTypes: {
-    tree: PropTypes.object.isRequired,
-    params: PropTypes.object.isRequired,
     messages: PropTypes.object.isRequired,
     report: PropTypes.object.isRequired,
     reportParams: reportParamsType.isRequired
@@ -80,12 +81,9 @@ const ModuleController = React.createClass({
   startResultLoadingAction (query) {
     if (!query) return
 
-    loadReportModuleResultAction(
-      this.context.tree,
-      this.context.params,
-      this.props.module.id,
-      query,
-      this.props.attributes)
+    const {params, dispatch, module, attributes} = this.props
+
+    return dispatch(loadReportModuleResultAction, params, module.id, query, attributes)
   },
   getChartQuery () {
     const {reportParams} = this.context
@@ -113,20 +111,14 @@ const ModuleController = React.createClass({
     return filter(accounts, ({id}) => includes(usedAccountKeys, id))
   },
   remove () {
-    deleteModuleAction(
-      this.context.tree,
-      this.context.params,
-      this.props.module.id
-    )
+    const {params, dispatch, module} = this.props
+
+    return dispatch(deleteModuleAction, params, module.id)
   },
   save (moduleChanges, persistChanges) {
-    updateModuleAction(
-      this.context.tree,
-      this.context.params,
-      this.props.module.id,
-      moduleChanges,
-      persistChanges
-    )
+    const {params, dispatch, module} = this.props
+
+    return dispatch(updateModuleAction, params, module.id, moduleChanges, persistChanges)
   },
   openModal () {
     this.setState({editMode: true})
@@ -135,11 +127,13 @@ const ModuleController = React.createClass({
     this.setState({editMode: false})
   },
   render () {
-    const {module: {name}, editable} = this.props
+    const {params, dispatch, module, editable} = this.props
 
     return (
       <ModuleCard>
         <div className='mdl-card__menu'>
+          <Comments {...{dispatch, module, params}}/>
+
           {editable ? (
             <Button className='mdl-button mdl-button--icon' onClick={this.openModal}>
               <i className='material-icons'>create</i>
@@ -149,7 +143,7 @@ const ModuleController = React.createClass({
             <DeleteButton
               className='mdl-button mdl-button--icon'
               onClick={this.remove}
-              entityName={name || this.context.messages.untitledModule}>
+              entityName={module.name || this.context.messages.untitledModule}>
               <i className='material-icons'>clear</i>
             </DeleteButton>) : null}
         </div>
