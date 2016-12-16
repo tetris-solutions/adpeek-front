@@ -2,6 +2,8 @@ import React from 'react'
 import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
 import Message from 'tetris-iso/Message'
 import {Button, Submit} from '../../Button'
+import {styled} from '../../mixins/styled'
+import csjs from 'csjs'
 import size from 'lodash/size'
 import map from 'lodash/map'
 import Switch from '../../Switch'
@@ -10,16 +12,36 @@ import {createModuleCommentAction} from '../../../actions/create-module-comment'
 import {pushSuccessMessageAction} from '../../../actions/push-success-message-action'
 import DatePicker from '../../DatePicker'
 
-const Comment = ({body, user, creation}, {moment}) => (
-  <li>
-    <div>
-      <strong>{user.name}</strong>
-      <small style={{float: 'right'}}>
-        {moment(creation).fromNow()}
-      </small>
+const style = csjs`
+.comment {
+  position: relative;
+  border-top: 1px solid #efefef;
+}
+.comment:first-of-type {
+  border-top: none;
+}
+.time {
+  position: absolute;
+  right: 1em;
+  top: .8em;
+  color: rgba(0,0,0,.54);
+  font-size: x-small;
+}`
 
-      <p dangerouslySetInnerHTML={{__html: body}}/>
-    </div>
+const Comment = ({body, user, creation}, {moment}) => (
+  <li className={`mdl-list__item mdl-list__item--two-line ${style.comment}`}>
+    <span className='mdl-list__item-primary-content'>
+      <span>{user.name}</span>
+      <div className='mdl-list__item-sub-title' dangerouslySetInnerHTML={{__html: body}}/>
+    </span>
+
+    <span className='mdl-list__item-secondary-content'>
+      <i className='material-icons'>close</i>
+    </span>
+
+    <small className={`${style.time}`}>
+      {moment(creation).fromNow()}
+    </small>
   </li>
 )
 
@@ -103,8 +125,9 @@ const Comments = React.createClass({
 
     return (
       <form onSubmit={this.onSubmit}>
-        <ul>{map(module.comments, comment =>
-          <Comment key={comment.id} {...comment}/>)}
+        <ul className='mdl-list'>
+          {map(module.comments, comment =>
+            <Comment key={comment.id} {...comment}/>)}
         </ul>
 
         {!isGuestUser && <div className='mdl-textfield'>
@@ -139,6 +162,7 @@ const Comments = React.createClass({
 
 const CommentsButton = React.createClass({
   displayName: 'Comments-Button',
+  mixins: [styled(style)],
   propTypes: {
     dispatch: Comments.propTypes.dispatch,
     params: Comments.propTypes.params,
