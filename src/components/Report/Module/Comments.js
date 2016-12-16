@@ -1,4 +1,7 @@
 import React from 'react'
+import Switch from '../../Switch'
+import DatePicker from '../../DatePicker'
+import VerticalAlign from '../../VerticalAlign'
 import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
 import Message from 'tetris-iso/Message'
 import {Button, Submit} from '../../Button'
@@ -6,11 +9,9 @@ import {styled} from '../../mixins/styled'
 import csjs from 'csjs'
 import size from 'lodash/size'
 import map from 'lodash/map'
-import Switch from '../../Switch'
 import {loadModuleCommentsAction} from '../../../actions/load-module-comments'
 import {createModuleCommentAction} from '../../../actions/create-module-comment'
 import {pushSuccessMessageAction} from '../../../actions/push-success-message-action'
-import DatePicker from '../../DatePicker'
 
 const style = csjs`
 .comment {
@@ -26,13 +27,30 @@ const style = csjs`
   top: .8em;
   color: rgba(0,0,0,.54);
   font-size: x-small;
+}
+.text {
+  width: 100%;
 }`
 
-const Comment = ({body, user, creation}, {moment}) => (
+const Middle = ({className, children}) => (
+  <VerticalAlign className={className}>
+    <div>{children}</div>
+  </VerticalAlign>
+)
+
+Middle.displayName = 'Middle'
+Middle.propTypes = {
+  className: React.PropTypes.string.isRequired,
+  children: React.PropTypes.node.isRequired
+}
+
+const Comment = ({date, body, user, creation}, {moment}) => (
   <li className={`mdl-list__item mdl-list__item--two-line ${style.comment}`}>
     <span className='mdl-list__item-primary-content'>
       <span>{user.name}</span>
-      <div className='mdl-list__item-sub-title' dangerouslySetInnerHTML={{__html: body}}/>
+      <div className='mdl-list__item-sub-title' dangerouslySetInnerHTML={{
+        __html: `<strong>${moment(date).format('D/MMM')}:</strong> ${body}`
+      }}/>
     </span>
 
     <span className='mdl-list__item-secondary-content'>
@@ -47,6 +65,7 @@ const Comment = ({body, user, creation}, {moment}) => (
 
 Comment.displayName = 'Comment'
 Comment.propTypes = {
+  date: React.PropTypes.string.isRequired,
   body: React.PropTypes.string.isRequired,
   user: React.PropTypes.shape({
     name: React.PropTypes.string
@@ -70,6 +89,7 @@ const Comments = React.createClass({
     }).isRequired
   },
   contextTypes: {
+    messages: React.PropTypes.object.isRequired,
     moment: React.PropTypes.func.isRequired,
     tree: React.PropTypes.object.isRequired
   },
@@ -120,41 +140,53 @@ const Comments = React.createClass({
     }
   },
   render () {
+    const {messages} = this.context
     const {close, module} = this.props
     const isGuestUser = this.isGuest()
 
     return (
       <form onSubmit={this.onSubmit}>
+        {!isGuestUser && (
+          <div>
+            <div className='mdl-grid'>
+              <div className='mdl-cell mdl-cell--12-col'>
+                <div className={`mdl-textfield ${style.text}`}>
+                  <textarea
+                    placeholder={messages.newCommentPlaceholder}
+                    required
+                    onKeyDown={this.detectEnter}
+                    className='mdl-textfield__input'
+                    name='body'/>
+                </div>
+              </div>
+              <div className='mdl-cell mdl-cell--6-col'>
+                <DatePicker onChange={this.onChangeDate} value={this.state.date}/>
+              </div>
+              <Middle className='mdl-cell mdl-cell--3-col'>
+                <Switch name='isPrivate' label={<Message>isPrivateComment</Message>}/>
+              </Middle>
+              <Middle className='mdl-cell mdl-cell--3-col'>
+                <Submit className='mdl-button mdl-button--primary'>
+                  <Message>newCommentButton</Message>
+                </Submit>
+              </Middle>
+            </div>
+
+            <hr/>
+          </div>)}
+
         <ul className='mdl-list'>
           {map(module.comments, comment =>
             <Comment key={comment.id} {...comment}/>)}
         </ul>
 
-        {!isGuestUser && <div className='mdl-textfield'>
-          <textarea
-            onKeyDown={this.detectEnter}
-            className='mdl-textfield__input'
-            name='body'/>
-        </div>}
-
-        {!isGuestUser && <div className='mdl-grid'>
-          <div className='mdl-cell mdl-cell--7-col'>
-            <DatePicker onChange={this.onChangeDate} value={this.state.date}/>
-          </div>
-          <div className='mdl-cell mdl-cell--5-col'>
-            <Switch name='isPrivate' label={<Message>isPrivateComment</Message>}/>
-          </div>
-        </div>}
-
         <hr/>
 
-        <Button className='mdl-button mdl-button--accent' onClick={close}>
-          <Message>cancel</Message>
-        </Button>
-
-        {!isGuestUser && <Submit className='mdl-button mdl-button--primary'>
-          <Message>save</Message>
-        </Submit>}
+        <div style={{textAlign: 'right'}}>
+          <Button className='mdl-button mdl-button--accent' onClick={close}>
+            <Message>close</Message>
+          </Button>
+        </div>
       </form>
     )
   }
@@ -196,10 +228,10 @@ const CommentsButton = React.createClass({
   render () {
     const {module, params, dispatch} = this.props
     const count = module.comments ? size(module.comments) : '.'
-    const icon = <div className='material-icons mdl-badge mdl-badge--overlap' data-badge={count}>chat</div>
+    const icon = <div className='material-icons mdl-badge mdl-badge--overlap' data-badge={count}>chat_bubble</div>
 
     return (
-      <ButtonWithPrompt tag={Button} label={icon} className='mdl-button mdl-button--icon'>
+      <ButtonWithPrompt tag={Button} size='medium' label={icon} className='mdl-button mdl-button--icon'>
         {({dismiss}) =>
           <Comments
             close={dismiss}
