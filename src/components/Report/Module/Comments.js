@@ -150,9 +150,15 @@ const CommentsButton = React.createClass({
   componentDidMount () {
     this.loadComments()
   },
-  loadComments () {
+  componentWillReceiveProps (nextProps, {reportParams}) {
+    const {reportParams: {from, to}} = this.context
+
+    if (from !== reportParams.from || to !== reportParams.to) {
+      this.loadComments(reportParams)
+    }
+  },
+  loadComments (reportParams = this.context.reportParams) {
     const {dispatch, params, module} = this.props
-    const {reportParams} = this.context
 
     return dispatch(loadModuleCommentsAction, params, reportParams, module.id)
   },
