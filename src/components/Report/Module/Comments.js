@@ -38,6 +38,7 @@ Comment.contextTypes = {
 const NewComment = React.createClass({
   displayName: 'New-Comment',
   propTypes: {
+    children: React.PropTypes.node,
     save: React.PropTypes.func.isRequired
   },
   contextTypes: {
@@ -89,6 +90,7 @@ const NewComment = React.createClass({
 
         <hr/>
 
+        {this.props.children}
         <Submit className='mdl-button mdl-button--primary'>
           <Message>save</Message>
         </Submit>
@@ -97,17 +99,22 @@ const NewComment = React.createClass({
   }
 })
 
-const Comments = ({save, module, params, dispatch}) => (
+const Comments = ({close, save, module, params, dispatch}) => (
   <div>
     <ul>{map(module.comments, comment =>
       <Comment key={comment.id} {...comment}/>)}
     </ul>
-    <NewComment save={save}/>
+    <NewComment save={save}>
+      <Button className='mdl-button mdl-button--accent' onClick={close}>
+        <Message>cancel</Message>
+      </Button>
+    </NewComment>
   </div>
 )
 
 Comments.displayName = 'Comments'
 Comments.propTypes = {
+  close: React.PropTypes.func.isRequired,
   save: React.PropTypes.func.isRequired,
   dispatch: React.PropTypes.func.isRequired,
   params: React.PropTypes.object.isRequired,
@@ -152,6 +159,7 @@ const CommentsButton = React.createClass({
       <ButtonWithPrompt tag={Button} label={icon} className='mdl-button mdl-button--icon'>
         {({dismiss}) =>
           <Comments
+            close={dismiss}
             params={params}
             dispatch={dispatch}
             module={module}
