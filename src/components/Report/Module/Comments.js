@@ -35,35 +35,50 @@ Comment.contextTypes = {
   moment: React.PropTypes.func.isRequired
 }
 
-const NewComment = React.createClass({
-  displayName: 'New-Comment',
+const Comments = React.createClass({
+  displayName: 'Comments',
   propTypes: {
-    children: React.PropTypes.node,
-    save: React.PropTypes.func.isRequired
+    close: React.PropTypes.func.isRequired,
+    save: React.PropTypes.func.isRequired,
+    dispatch: React.PropTypes.func.isRequired,
+    params: React.PropTypes.object.isRequired,
+    module: React.PropTypes.shape({
+      id: React.PropTypes.string,
+      comments: React.PropTypes.array
+    }).isRequired
   },
   contextTypes: {
-    moment: React.PropTypes.func.isRequired
+    moment: React.PropTypes.func.isRequired,
+    tree: React.PropTypes.object.isRequired
   },
   componentWillMount () {
     this.setState({
       date: this.context.moment().format('YYYY-MM-DD')
     })
   },
+  isGuest () {
+    return this.context.tree.get(['user', 'is_guest'])
+  },
   onSubmit (e) {
-    const {save} = this.props
-
     e.preventDefault()
-    /**
-     * @type {HTMLFormElement}
-     */
-    const form = e.target
+
+    this.submit(e.target)
+  },
+  /**
+   *
+   * @param {HTMLFormElement} form el
+   * @return {Promise} promise that resolves according to create-comment action
+   */
+  submit (form) {
+    if (this.isGuest()) return
+
     const comment = {
       body: form.elements.body.value,
       private: form.elements.isPrivate.checked,
       date: form.elements.__date__.dataset.value
     }
 
-    save(comment).then(() => {
+    this.props.save(comment).then(() => {
       form.elements.body.value = ''
     })
   },
@@ -72,57 +87,55 @@ const NewComment = React.createClass({
       date: momentDate.format('YYYY-MM-DD')
     })
   },
+  /**
+   *
+   * @param {KeyboardEvent} e keypress event
+   * @return {undefined}
+   */
+  detectEnter (e) {
+    if (e.which === 13 && e.ctrlKey) {
+      this.submit(e.target.form)
+    }
+  },
   render () {
+    const {close, module} = this.props
+    const isGuestUser = this.isGuest()
+
     return (
       <form onSubmit={this.onSubmit}>
-        <div className='mdl-textfield'>
-          <textarea className='mdl-textfield__input' name='body'/>
-        </div>
+        <ul>{map(module.comments, comment =>
+          <Comment key={comment.id} {...comment}/>)}
+        </ul>
 
-        <div className='mdl-grid'>
+        {!isGuestUser && <div className='mdl-textfield'>
+          <textarea
+            onKeyDown={this.detectEnter}
+            className='mdl-textfield__input'
+            name='body'/>
+        </div>}
+
+        {!isGuestUser && <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--7-col'>
             <DatePicker onChange={this.onChangeDate} value={this.state.date}/>
           </div>
           <div className='mdl-cell mdl-cell--5-col'>
-            <Switch name='isPrivate' label='isPrivate'/>
+            <Switch name='isPrivate' label={<Message>isPrivateComment</Message>}/>
           </div>
-        </div>
+        </div>}
 
         <hr/>
 
-        {this.props.children}
-        <Submit className='mdl-button mdl-button--primary'>
+        <Button className='mdl-button mdl-button--accent' onClick={close}>
+          <Message>cancel</Message>
+        </Button>
+
+        {!isGuestUser && <Submit className='mdl-button mdl-button--primary'>
           <Message>save</Message>
-        </Submit>
+        </Submit>}
       </form>
     )
   }
 })
-
-const Comments = ({close, save, module, params, dispatch}) => (
-  <div>
-    <ul>{map(module.comments, comment =>
-      <Comment key={comment.id} {...comment}/>)}
-    </ul>
-    <NewComment save={save}>
-      <Button className='mdl-button mdl-button--accent' onClick={close}>
-        <Message>cancel</Message>
-      </Button>
-    </NewComment>
-  </div>
-)
-
-Comments.displayName = 'Comments'
-Comments.propTypes = {
-  close: React.PropTypes.func.isRequired,
-  save: React.PropTypes.func.isRequired,
-  dispatch: React.PropTypes.func.isRequired,
-  params: React.PropTypes.object.isRequired,
-  module: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    comments: React.PropTypes.array
-  }).isRequired
-}
 
 const CommentsButton = React.createClass({
   displayName: 'Comments-Button',
