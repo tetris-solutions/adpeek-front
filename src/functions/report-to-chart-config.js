@@ -228,7 +228,7 @@ export function reportToChartConfig (type, props) {
   if (type === 'line' && xAxisDimension === 'date') {
     const days = groupBy(comments, 'date')
 
-    series.unshift({
+    series.push({
       id: 'comments',
       type: 'flags',
       name: 'Comments',

@@ -24,15 +24,28 @@ const style = csjs`
 }
 .comment {
   position: relative;
-  border-top: 1px solid #efefef;
+  border-bottom: 1px solid #efefef;
+  padding: 1em;
 }
-.comment:first-of-type {
-  border-top: none;
+.comment:last-child {
+  border-bottom: none;
+}
+.name {
+  font-size: 13pt;
+}
+.body {
+  font-size: small;
+  margin: .3em 0;
+}
+.del {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+.del > i {
+  font-size: medium;
 }
 .time {
-  position: absolute;
-  right: 1em;
-  top: .8em;
   color: rgba(0,0,0,.54);
   font-size: x-small;
 }
@@ -53,30 +66,29 @@ Middle.propTypes = {
 }
 
 const Comment = ({id, date, body, user, creation, del}, {messages, moment, locales}) => (
-  <li className={`mdl-list__item mdl-list__item--two-line ${style.comment}`}>
-    <span className='mdl-list__item-primary-content'>
-      <span>{user.name}</span>
-      <div className='mdl-list__item-sub-title' dangerouslySetInnerHTML={{
-        __html: `<strong>${moment(date).format('D/MMM')}:</strong> ${body}`
-      }}/>
-    </span>
-
+  <div className={`${style.comment}`}>
     <Fence isRegularUser>
-      <span className='mdl-list__item-secondary-content'>
-        <DeleteButton
-          tag={Button}
-          className='mdl-button mdl-button--icon'
-          onClick={del}
-          entityName={new TextMessage(messages.commentDescription, locales).format({user: user.name})}>
-          <i className='material-icons'>close</i>
-        </DeleteButton>
-      </span>
+      <DeleteButton
+        tag={Button}
+        className={`mdl-button mdl-button--icon ${style.del}`}
+        onClick={del}
+        entityName={new TextMessage(messages.commentDescription, locales).format({user: user.name})}>
+        <i className='material-icons'>close</i>
+      </DeleteButton>
     </Fence>
+
+    <strong className={`${style.name} mdl-color-text--grey-900`}>
+      {user.name}
+    </strong>
+
+    <p className={`${style.body} mdl-color-text--grey-800`} dangerouslySetInnerHTML={{
+      __html: `<strong>${moment(date).format('D/MMM')}:</strong> ${body}`
+    }}/>
 
     <small className={`${style.time}`}>
       {moment(creation).fromNow()}
     </small>
-  </li>
+  </div>
 )
 
 Comment.displayName = 'Comment'
@@ -190,11 +202,13 @@ const Comments = React.createClass({
           </div>
         </Fence>
 
-        <ul className='mdl-list'>
+        <section>
           {map(module.comments, comment =>
-            <Comment key={comment.id} {...comment} del={bind(del, null, comment.id)}/>)}
-        </ul>
-
+            <Comment
+              key={comment.id}
+              {...comment}
+              del={bind(del, null, comment.id)}/>)}
+        </section>
         <hr/>
 
         <div style={{textAlign: 'right'}}>
