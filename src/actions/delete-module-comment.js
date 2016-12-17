@@ -7,16 +7,16 @@ function deleteModuleComment (company, comment, config) {
   return DELETE(`${process.env.ADPEEK_API_URL}/company/${company}/comment/${comment}`, config)
 }
 
-export function deleteModuleAction (tree, params, moduleId, commentId) {
-  return deleteModuleComment(params.company, commentId, getApiFetchConfig(tree))
+export function deleteModuleAction (tree, {company, workspace, folder, report}, moduleId, commentId) {
+  return deleteModuleComment(company, commentId, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .then(function onSuccess (response) {
       tree.unset(getDeepCursor(tree, compact([
         'user',
-        ['companies', params.company],
-        params.workspace && ['workspaces', params.workspace],
-        params.folder && ['folders', params.folder],
-        ['reports', params.report],
+        ['companies', company],
+        workspace && ['workspaces', workspace],
+        folder && ['folders', folder],
+        ['reports', report],
         'modules',
         moduleId,
         ['comments', commentId]

@@ -12,7 +12,9 @@ import map from 'lodash/map'
 import {loadModuleCommentsAction} from '../../../actions/load-module-comments'
 import {createModuleCommentAction} from '../../../actions/create-module-comment'
 import {pushSuccessMessageAction} from '../../../actions/push-success-message-action'
+import {deleteModuleAction} from '../../../actions/delete-module-comment'
 import Fence from '../../Fence'
+import bind from 'lodash/bind'
 
 const style = csjs`
 .comment {
@@ -45,7 +47,7 @@ Middle.propTypes = {
   children: React.PropTypes.node.isRequired
 }
 
-const Comment = ({date, body, user, creation}, {moment}) => (
+const Comment = ({id, date, body, user, creation, del}, {moment}) => (
   <li className={`mdl-list__item mdl-list__item--two-line ${style.comment}`}>
     <span className='mdl-list__item-primary-content'>
       <span>{user.name}</span>
@@ -56,7 +58,7 @@ const Comment = ({date, body, user, creation}, {moment}) => (
 
     <Fence isRegularUser>
       <span className='mdl-list__item-secondary-content'>
-        <i className='material-icons'>close</i>
+        <i className='material-icons' onClick={del}>close</i>
       </span>
     </Fence>
 
@@ -68,6 +70,8 @@ const Comment = ({date, body, user, creation}, {moment}) => (
 
 Comment.displayName = 'Comment'
 Comment.propTypes = {
+  id: React.PropTypes.string.isRequired,
+  del: React.PropTypes.func.isRequired,
   date: React.PropTypes.string.isRequired,
   body: React.PropTypes.string.isRequired,
   user: React.PropTypes.shape({
@@ -83,6 +87,7 @@ const Comments = React.createClass({
   displayName: 'Comments',
   propTypes: {
     close: React.PropTypes.func.isRequired,
+    del: React.PropTypes.func.isRequired,
     save: React.PropTypes.func.isRequired,
     dispatch: React.PropTypes.func.isRequired,
     params: React.PropTypes.object.isRequired,
@@ -138,7 +143,7 @@ const Comments = React.createClass({
   },
   render () {
     const {messages} = this.context
-    const {close, module} = this.props
+    const {close, del, module} = this.props
 
     return (
       <form onSubmit={this.onSubmit}>
@@ -174,7 +179,7 @@ const Comments = React.createClass({
 
         <ul className='mdl-list'>
           {map(module.comments, comment =>
-            <Comment key={comment.id} {...comment} />)}
+            <Comment key={comment.id} {...comment} del={bind(del, null, comment.id)}/>)}
         </ul>
 
         <hr/>
@@ -222,6 +227,12 @@ const CommentsButton = React.createClass({
       .then(() => dispatch(pushSuccessMessageAction))
       .then(this.loadComments)
   },
+  deleteComment (commentId) {
+    const {dispatch, params, module} = this.props
+
+    return dispatch(deleteModuleAction, params, module.id, commentId)
+      .then(() => dispatch(pushSuccessMessageAction))
+  },
   render () {
     const {module, params, dispatch} = this.props
     const count = module.comments ? size(module.comments) : '.'
@@ -235,6 +246,7 @@ const CommentsButton = React.createClass({
             params={params}
             dispatch={dispatch}
             module={module}
+            del={this.deleteComment}
             save={this.createComment}/>}
       </ButtonWithPrompt>
     )
