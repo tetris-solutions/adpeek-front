@@ -82,7 +82,7 @@ const Comment = ({id, date, body, user, creation, del}, {messages, moment, local
     </strong>
 
     <p className={`${style.body} mdl-color-text--grey-800`} dangerouslySetInnerHTML={{
-      __html: `<strong>${moment(date).format('D/MMM')}:</strong> ${body}`
+      __html: `<strong>${moment(date).format('D/MMM')}:</strong> ${body.replace(/\n/g, '<br>')}`
     }}/>
 
     <small className={`${style.time}`}>

@@ -293,7 +293,9 @@ module.exports = {
     unsubscriptionBody: 'Ok <strong>{email}</strong>, you have been unsubscribed from <em>{report}</em> emails.',
     newCommentPlaceholder: 'Type your comment here',
     newCommentButton: 'Send',
-    commentDescription: 'Comment by {user}'
+    commentDescription: 'Comment by {user}',
+    moduleDescriptionTitle: 'Module Description',
+    moduleDescriptionPlaceholder: 'Write a description for this module'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -589,6 +591,8 @@ module.exports = {
     unsubscriptionBody: 'Ok <strong>{email}</strong>, nós te removemos do relatório <em>{report}</em>.',
     newCommentPlaceholder: 'Escreva seu comentário',
     newCommentButton: 'Enviar',
-    commentDescription: 'Comentário de {user}'
+    commentDescription: 'Comentário de {user}',
+    moduleDescriptionTitle: 'Descrição do Módulo',
+    moduleDescriptionPlaceholder: 'Escreva uma descrição para este módulo'
   }
 }

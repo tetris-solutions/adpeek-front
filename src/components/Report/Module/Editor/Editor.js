@@ -4,6 +4,7 @@ import Message from 'tetris-iso/Message'
 import DateRangeButton from '../../DateRangeButton'
 import Lists from './Lists'
 import Size from './Size'
+import Description from './Description'
 import Filters from './Filters'
 import Preview from './Preview'
 import {Tabs, Tab} from '../../../Tabs'
@@ -113,6 +114,9 @@ const Editor = React.createClass({
               <Tab id='module-size' title={messages.moduleSize}>
                 <br/>
                 <Size />
+              </Tab>
+              <Tab id='module-description' title={messages.moduleDescriptionTitle}>
+                <Description />
               </Tab>
               <Tab id='module-filters' title={messages.filterModuleResult}>
                 <Filters />

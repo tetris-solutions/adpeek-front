@@ -16,7 +16,7 @@ import Editor from './Editor'
 
 const {PropTypes} = React
 
-const editableFields = ['name', 'type', 'dimensions', 'metrics', 'rows', 'cols', 'entity', 'limit', 'sort', 'filters']
+const editableFields = ['description', 'name', 'type', 'dimensions', 'metrics', 'rows', 'cols', 'entity', 'limit', 'sort', 'filters']
 const MAX_ACCOUNTS = 15
 
 const ModuleEdit = React.createClass({
