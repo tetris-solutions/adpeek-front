@@ -19,6 +19,9 @@ import Fence from '../../Fence'
 import bind from 'lodash/bind'
 
 const style = csjs`
+.button {
+  overflow: visible;
+}
 .comment {
   position: relative;
   border-top: 1px solid #efefef;
@@ -246,10 +249,19 @@ const CommentsButton = React.createClass({
   render () {
     const {module, params, dispatch} = this.props
     const count = module.comments ? size(module.comments) : '.'
-    const icon = <div className='material-icons mdl-badge mdl-badge--overlap' data-badge={count}>chat_bubble</div>
+    const icon = (
+      <div
+        className='material-icons mdl-color-text--grey-600 mdl-badge mdl-badge--overlap'
+        data-badge={count}>chat_bubble</div>
+    )
 
     return (
-      <ButtonWithPrompt tag={Button} size='medium' label={icon} className='mdl-button mdl-button--icon'>
+      <ButtonWithPrompt
+        tag={Button}
+        size='medium'
+        label={icon}
+        className={`mdl-button mdl-button--icon ${style.button}`}>
+
         {({dismiss}) =>
           <Comments
             close={dismiss}
