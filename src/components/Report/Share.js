@@ -21,7 +21,7 @@ function Wrapper (props) {
       report={report}
       params={params}
       metaData={get(metaData, report.platform || '_')}
-      guestMode/>
+      reportLiteMode/>
   )
 }
 

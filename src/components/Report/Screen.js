@@ -17,7 +17,7 @@ import Fence from '../Fence'
 const {PropTypes} = React
 
 function ReportScreen (props, context) {
-  const {favoriteReport, report, guestMode, children, downloadReport, isCreatingReport} = props
+  const {favoriteReport, report, reportLiteMode, children, downloadReport, isCreatingReport} = props
   const {messages, params: {company, workspace, folder}, location: {query: {from, to}}} = context
   const scope = compact([
     `company/${company}`,
@@ -35,7 +35,7 @@ function ReportScreen (props, context) {
       <div>
         <SubHeader>
           <DateRangeButton
-            disabled={guestMode}
+            disabled={reportLiteMode}
             className='mdl-button mdl-color-text--grey-100'/>
 
           <Button className='mdl-button mdl-js-button mdl-button--icon'>
@@ -56,22 +56,22 @@ function ReportScreen (props, context) {
               {canEditReport && (
                 <AccessControl/>)}
 
-              {guestMode && isRegularUser && (
+              {reportLiteMode && isRegularUser && (
                 <MenuItem tag='a' href={cloneReportUrl} icon='content_copy'>
                   <Message>save</Message>
                 </MenuItem>)}
 
-              {!guestMode && <ShareButton shareUrl={report.shareUrl}/>}
+              {!reportLiteMode && <ShareButton shareUrl={report.shareUrl}/>}
 
               <ReportExportButton
                 create={downloadReport}
                 isCreatingReport={isCreatingReport}/>
 
-              {!guestMode && <MenuItem tag={Link} to={`${reportUrl}/mailing`} icon='mail_outline'>
+              {!reportLiteMode && <MenuItem tag={Link} to={`${reportUrl}/mailing`} icon='mail_outline'>
                 <Message>reportMailing</Message>
               </MenuItem>}
 
-              {guestMode && isRegularUser && (
+              {reportLiteMode && isRegularUser && (
                 <MenuItem tag='a' href={reportUrl + dtRangeQueryString} icon='settings'>
                   <Message>viewFullReport</Message>
                 </MenuItem>)}
@@ -79,7 +79,7 @@ function ReportScreen (props, context) {
           </Button>
         </SubHeader>
 
-        {!guestMode
+        {!reportLiteMode
           ? <Page>{children}</Page>
           : children}
       </div>}
@@ -88,7 +88,7 @@ function ReportScreen (props, context) {
 }
 ReportScreen.displayName = 'Report-Screen'
 ReportScreen.propTypes = {
-  guestMode: PropTypes.bool,
+  reportLiteMode: PropTypes.bool,
   downloadReport: PropTypes.func.isRequired,
   favoriteReport: PropTypes.func.isRequired,
   report: PropTypes.object.isRequired,

@@ -26,7 +26,7 @@ const ReportController = React.createClass({
   displayName: 'Report-Controller',
   propTypes: {
     children: PropTypes.node,
-    guestMode: PropTypes.bool,
+    reportLiteMode: PropTypes.bool,
     editMode: PropTypes.bool,
     report: reportType.isRequired,
     metaData: PropTypes.object.isRequired,
@@ -158,13 +158,13 @@ const ReportController = React.createClass({
     return {accounts, from, to}
   },
   render () {
-    const {params, dispatch, children, guestMode, editMode, metaData, report} = this.props
+    const {params, dispatch, children, reportLiteMode, editMode, metaData, report} = this.props
     const {isCreatingReport} = this.state
 
     return (
       <ReportScreen
         report={report}
-        guestMode={guestMode}
+        reportLiteMode={reportLiteMode}
         favoriteReport={this.favoriteReport}
         downloadReport={this.downloadReport}
         isCreatingReport={isCreatingReport}
