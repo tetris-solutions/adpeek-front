@@ -245,7 +245,6 @@ export function reportToChartConfig (type, props) {
         return {
           id: date,
           x: Date.UTC(year, month - 1, day),
-          comments: groupOfComments,
           title: String(groupOfComments.length),
           text: join(map(groupOfComments, ({user, body}) => `<strong>${user.name}</strong>: ${cropped(body)}`), '<br/>')
         }
