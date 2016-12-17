@@ -229,6 +229,7 @@ export function reportToChartConfig (type, props) {
     const days = groupBy(comments, 'date')
 
     series.unshift({
+      id: 'comments',
       type: 'flags',
       name: 'Comments',
       shape: 'circlepin',
@@ -242,6 +243,7 @@ export function reportToChartConfig (type, props) {
         const [year, month, day] = date.split('-').map(Number)
 
         return {
+          id: date,
           x: Date.UTC(year, month - 1, day),
           comments: groupOfComments,
           title: String(groupOfComments.length),
