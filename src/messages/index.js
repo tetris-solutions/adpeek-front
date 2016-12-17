@@ -292,7 +292,8 @@ module.exports = {
     unsubscriptionTitle: 'Mailing Unsubscription',
     unsubscriptionBody: 'Ok <strong>{email}</strong>, you have been unsubscribed from <em>{report}</em> emails.',
     newCommentPlaceholder: 'Type your comment here',
-    newCommentButton: 'Send'
+    newCommentButton: 'Send',
+    commentDescription: 'Comment by {user}'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -587,6 +588,7 @@ module.exports = {
     unsubscriptionTitle: 'Desassinar Relatório',
     unsubscriptionBody: 'Ok <strong>{email}</strong>, nós te removemos do relatório <em>{report}</em>.',
     newCommentPlaceholder: 'Escreva seu comentário',
-    newCommentButton: 'Enviar'
+    newCommentButton: 'Enviar',
+    commentDescription: 'Comentário de {user}'
   }
 }

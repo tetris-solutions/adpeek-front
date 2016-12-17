@@ -1,4 +1,5 @@
 import React from 'react'
+import TextMessage from 'intl-messageformat'
 import Switch from '../../Switch'
 import DatePicker from '../../DatePicker'
 import VerticalAlign from '../../VerticalAlign'
@@ -9,6 +10,7 @@ import {styled} from '../../mixins/styled'
 import csjs from 'csjs'
 import size from 'lodash/size'
 import map from 'lodash/map'
+import DeleteButton from '../../DeleteButton'
 import {loadModuleCommentsAction} from '../../../actions/load-module-comments'
 import {createModuleCommentAction} from '../../../actions/create-module-comment'
 import {pushSuccessMessageAction} from '../../../actions/push-success-message-action'
@@ -47,7 +49,7 @@ Middle.propTypes = {
   children: React.PropTypes.node.isRequired
 }
 
-const Comment = ({id, date, body, user, creation, del}, {moment}) => (
+const Comment = ({id, date, body, user, creation, del}, {messages, moment, locales}) => (
   <li className={`mdl-list__item mdl-list__item--two-line ${style.comment}`}>
     <span className='mdl-list__item-primary-content'>
       <span>{user.name}</span>
@@ -58,7 +60,13 @@ const Comment = ({id, date, body, user, creation, del}, {moment}) => (
 
     <Fence isRegularUser>
       <span className='mdl-list__item-secondary-content'>
-        <i className='material-icons' onClick={del}>close</i>
+        <DeleteButton
+          tag={Button}
+          className='mdl-button mdl-button--icon'
+          onClick={del}
+          entityName={new TextMessage(messages.commentDescription, locales).format({user: user.name})}>
+          <i className='material-icons'>close</i>
+        </DeleteButton>
       </span>
     </Fence>
 
@@ -80,6 +88,8 @@ Comment.propTypes = {
   creation: React.PropTypes.string.isRequired
 }
 Comment.contextTypes = {
+  locales: React.PropTypes.string.isRequired,
+  messages: React.PropTypes.object.isRequired,
   moment: React.PropTypes.func.isRequired
 }
 
