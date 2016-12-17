@@ -250,9 +250,7 @@ const CommentsButton = React.createClass({
     const {module, params, dispatch} = this.props
     const count = module.comments ? size(module.comments) : '.'
     const icon = (
-      <div
-        className='material-icons mdl-color-text--grey-600 mdl-badge mdl-badge--overlap'
-        data-badge={count}>chat_bubble</div>
+      <div className='material-icons mdl-badge mdl-badge--overlap' data-badge={count}>chat_bubble</div>
     )
 
     return (
@@ -274,7 +272,5 @@ const CommentsButton = React.createClass({
     )
   }
 })
-
-CommentsButton.displayName = 'Comments-Button'
 
 export default CommentsButton
