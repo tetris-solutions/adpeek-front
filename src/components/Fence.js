@@ -15,7 +15,10 @@ const permissionNames = {
   canEditCampaign: 'APEditCampaigns',
   canEditOrder: 'APEditOrders',
   canEditReport: 'APEditReports',
-  canBrowseReports: 'APBrowseReports'
+  canBrowseReports: 'APBrowseReports',
+  isRegularUser: 'isRegularUser',
+  isAdmin: 'isAdmin',
+  isLoggedIn: 'isLoggedIn'
 }
 const permissionAliases = invert(permissionNames)
 const getPermissionName = id => permissionNames[id]
@@ -50,7 +53,9 @@ Gate.propTypes = {
 const Fence = React.createClass({
   displayName: 'Fence',
   contextTypes: {
-    company: PropTypes.object.isRequired
+    company: PropTypes.object.isRequired,
+    isGuest: PropTypes.bool.isRequired,
+    isAdmin: PropTypes.bool.isRequired
   },
   propTypes: {
     children: passengerType,
@@ -59,12 +64,28 @@ const Fence = React.createClass({
     canEditCampaign: PropTypes.bool,
     canEditOrder: PropTypes.bool,
     canEditReport: PropTypes.bool,
-    canBrowseReports: PropTypes.bool
+    canBrowseReports: PropTypes.bool,
+    isLoggedIn: PropTypes.bool,
+    isRegularUser: PropTypes.bool,
+    isAdmin: PropTypes.bool
   },
   render () {
     const {props, context} = this
     const required = compact(map(keys(props), getPermissionName))
     const granted = map(get(context, ['company', 'permissions'], none), 'id')
+
+    if (!context.isGuest) {
+      granted.push(permissionNames.isRegularUser)
+    }
+
+    if (context.isAdmin) {
+      granted.push(permissionNames.isAdmin)
+    }
+
+    if (context.isLoggedIn) {
+      granted.push(permissionNames.isLoggedIn)
+    }
+
     const missing = diff(required, granted)
     const allow = isEmpty(missing)
     const permissions = {allow, missing, granted, required}

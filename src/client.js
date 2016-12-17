@@ -3,7 +3,7 @@ const {getRoutes} = require('./routes/ui')
 const defaultState = require('./default-state').default
 const {extend: extendBaseContext} = require('tetris-iso/base-context')
 
-extendBaseContext('company', 'router', 'location')
+extendBaseContext('company', 'router', 'location', 'isGuest', 'isAdmin', 'isLoggedIn')
 createClient(getRoutes, defaultState)
 
 const Emitter = require('emmett')

@@ -17,7 +17,7 @@ import Fence from '../Fence'
 const {PropTypes} = React
 
 function ReportScreen (props, context) {
-  const {favoriteReport, report, guestMode, isGuestUser, children, downloadReport, isCreatingReport} = props
+  const {favoriteReport, report, guestMode, children, downloadReport, isCreatingReport} = props
   const {messages, params: {company, workspace, folder}, location: {query: {from, to}}} = context
   const scope = compact([
     `company/${company}`,
@@ -31,7 +31,7 @@ function ReportScreen (props, context) {
   const cloneReportUrl = '/' + join(scope, '/') + `/reports/new?clone=${report.id}&name=${report.name}`
 
   return (
-    <Fence canBrowseReports canEditReport>{({canEditReport, canBrowseReports}) =>
+    <Fence isRegularUser canBrowseReports canEditReport>{({canEditReport, canBrowseReports, isRegularUser}) =>
       <div>
         <SubHeader>
           <DateRangeButton
@@ -56,7 +56,7 @@ function ReportScreen (props, context) {
               {canEditReport && (
                 <AccessControl/>)}
 
-              {guestMode && !isGuestUser && (
+              {guestMode && isRegularUser && (
                 <MenuItem tag='a' href={cloneReportUrl} icon='content_copy'>
                   <Message>save</Message>
                 </MenuItem>)}
@@ -71,7 +71,7 @@ function ReportScreen (props, context) {
                 <Message>reportMailing</Message>
               </MenuItem>}
 
-              {guestMode && !isGuestUser && (
+              {guestMode && isRegularUser && (
                 <MenuItem tag='a' href={reportUrl + dtRangeQueryString} icon='settings'>
                   <Message>viewFullReport</Message>
                 </MenuItem>)}
@@ -89,7 +89,6 @@ function ReportScreen (props, context) {
 ReportScreen.displayName = 'Report-Screen'
 ReportScreen.propTypes = {
   guestMode: PropTypes.bool,
-  isGuestUser: PropTypes.bool,
   downloadReport: PropTypes.func.isRequired,
   favoriteReport: PropTypes.func.isRequired,
   report: PropTypes.object.isRequired,

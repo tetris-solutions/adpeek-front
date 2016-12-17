@@ -12,6 +12,7 @@ import map from 'lodash/map'
 import {loadModuleCommentsAction} from '../../../actions/load-module-comments'
 import {createModuleCommentAction} from '../../../actions/create-module-comment'
 import {pushSuccessMessageAction} from '../../../actions/push-success-message-action'
+import Fence from '../../Fence'
 
 const style = csjs`
 .comment {
@@ -44,7 +45,7 @@ Middle.propTypes = {
   children: React.PropTypes.node.isRequired
 }
 
-const Comment = ({isGuestUser, date, body, user, creation}, {moment}) => (
+const Comment = ({date, body, user, creation}, {moment}) => (
   <li className={`mdl-list__item mdl-list__item--two-line ${style.comment}`}>
     <span className='mdl-list__item-primary-content'>
       <span>{user.name}</span>
@@ -53,9 +54,11 @@ const Comment = ({isGuestUser, date, body, user, creation}, {moment}) => (
       }}/>
     </span>
 
-    {!isGuestUser && <span className='mdl-list__item-secondary-content'>
-      <i className='material-icons'>close</i>
-    </span>}
+    <Fence isRegularUser>
+      <span className='mdl-list__item-secondary-content'>
+        <i className='material-icons'>close</i>
+      </span>
+    </Fence>
 
     <small className={`${style.time}`}>
       {moment(creation).fromNow()}
@@ -65,7 +68,6 @@ const Comment = ({isGuestUser, date, body, user, creation}, {moment}) => (
 
 Comment.displayName = 'Comment'
 Comment.propTypes = {
-  isGuestUser: React.PropTypes.bool,
   date: React.PropTypes.string.isRequired,
   body: React.PropTypes.string.isRequired,
   user: React.PropTypes.shape({
@@ -91,16 +93,12 @@ const Comments = React.createClass({
   },
   contextTypes: {
     messages: React.PropTypes.object.isRequired,
-    moment: React.PropTypes.func.isRequired,
-    tree: React.PropTypes.object.isRequired
+    moment: React.PropTypes.func.isRequired
   },
   componentWillMount () {
     this.setState({
       date: this.context.moment().format('YYYY-MM-DD')
     })
-  },
-  isGuest () {
-    return this.context.tree.get(['user', 'is_guest'])
   },
   onSubmit (e) {
     e.preventDefault()
@@ -113,8 +111,6 @@ const Comments = React.createClass({
    * @return {Promise} promise that resolves according to create-comment action
    */
   submit (form) {
-    if (this.isGuest()) return
-
     const comment = {
       body: form.elements.body.value,
       private: form.elements.isPrivate.checked,
@@ -143,11 +139,10 @@ const Comments = React.createClass({
   render () {
     const {messages} = this.context
     const {close, module} = this.props
-    const isGuestUser = this.isGuest()
 
     return (
       <form onSubmit={this.onSubmit}>
-        {!isGuestUser && (
+        <Fence isRegularUser>
           <div>
             <div className='mdl-grid'>
               <div className='mdl-cell mdl-cell--12-col'>
@@ -174,11 +169,12 @@ const Comments = React.createClass({
             </div>
 
             <hr/>
-          </div>)}
+          </div>
+        </Fence>
 
         <ul className='mdl-list'>
           {map(module.comments, comment =>
-            <Comment key={comment.id} {...comment} isGuestUser={isGuestUser}/>)}
+            <Comment key={comment.id} {...comment} />)}
         </ul>
 
         <hr/>
