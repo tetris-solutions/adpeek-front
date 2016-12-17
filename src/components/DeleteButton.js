@@ -48,7 +48,10 @@ const DeleteButton = ({tag, className, children, entityName, onClick}) => (
 
 DeleteButton.displayName = 'Delete-Buttton'
 DeleteButton.propTypes = {
-  tag: PropTypes.string,
+  tag: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.func
+  ]),
   className: PropTypes.string,
   onClick: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
