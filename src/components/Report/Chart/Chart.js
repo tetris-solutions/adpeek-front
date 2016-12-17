@@ -89,6 +89,7 @@ const ChartContainer = React.createClass({
     return (
       nextState.renderHiddenTable !== this.state.renderHiddenTable ||
       nextProps.height !== this.props.height ||
+      newModule.comments !== oldModule.comments ||
       newModule.sort !== oldModule.sort ||
       newModule.limit !== oldModule.limit ||
       newModule.cols !== oldModule.cols ||
@@ -118,6 +119,7 @@ const ChartContainer = React.createClass({
       attributes: attributes,
       entity: entity,
       result: module.result || emptyResult,
+      comments: module.comments || emptyResult,
       query: module.query || emptyQuery
     }
 

@@ -1,4 +1,5 @@
 import assign from 'lodash/assign'
+import groupBy from 'lodash/groupBy'
 import find from 'lodash/find'
 import forEach from 'lodash/forEach'
 import get from 'lodash/get'
@@ -19,6 +20,9 @@ import isDate from 'lodash/isDate'
 
 const isEntityId = d => d === 'id' || d === 'name'
 const notEntityId = negate(isEntityId)
+const cropped = comment => comment.length > 100
+  ? comment.substr(0, 100) + '...'
+  : comment
 
 const types = {
   linear: {
@@ -82,7 +86,7 @@ const emptyResultChart = ({isLoading, messages: {loadingReport, emptyReportResul
 })
 
 export function reportToChartConfig (type, props) {
-  const {query, entity, attributes} = props
+  const {comments, query, entity, attributes} = props
   const {metrics} = query
   let {result} = props
   let {dimensions} = query
@@ -220,6 +224,32 @@ export function reportToChartConfig (type, props) {
   }
 
   forEach(result, pointIterator)
+
+  if (type === 'line' && xAxisDimension === 'date') {
+    const days = groupBy(comments, 'date')
+
+    series.unshift({
+      type: 'flags',
+      name: 'Comments',
+      shape: 'circlepin',
+      showInLegend: false,
+      tooltip: {
+        pointFormatter () {
+          return this.text
+        }
+      },
+      data: map(days, (groupOfComments, date) => {
+        const [year, month, day] = date.split('-').map(Number)
+
+        return {
+          x: Date.UTC(year, month - 1, day),
+          comments: groupOfComments,
+          title: String(groupOfComments.length),
+          text: join(map(groupOfComments, ({user, body}) => `<strong>${user.name}</strong>: ${cropped(body)}`), '<br/>')
+        }
+      })
+    })
+  }
 
   const config = {
     yAxis,

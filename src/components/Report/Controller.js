@@ -69,6 +69,9 @@ const ReportController = React.createClass({
 
     window.event$.on('report.onNewModuleClick', this.addNewModule)
   },
+  componentWillUnmount () {
+    window.event$.off('report.onNewModuleClick', this.addNewModule)
+  },
   componentWillReceiveProps (nextProps, nextContext) {
     this.ensureDateRange(nextContext)
   },

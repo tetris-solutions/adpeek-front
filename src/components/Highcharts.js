@@ -14,7 +14,7 @@ import isString from 'lodash/isString'
 import lowerCase from 'lodash/toLower'
 import merge from 'lodash/merge'
 import omit from 'lodash/omit'
-import Highcharts from 'highcharts'
+import Highcharts from 'highcharts/highstock'
 import React from 'react'
 
 const isBrowser = typeof document !== 'undefined'
