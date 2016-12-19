@@ -79,7 +79,7 @@ function serializeTr (tr, type) {
 /**
  * serializes modules
  * @param {Array} modules the modules to be exported
- * @param {String} type kind of export format
+ * @param {String} type export format
  * @return {*|Promise|Promise.<Array>} a promise that resolves to the array of serialized modules
  */
 export function serializeReportModules (modules, type) {
@@ -91,20 +91,21 @@ export function serializeReportModules (modules, type) {
     Highcharts.downloadURL = originalDownloadMethod
   }
 
-  const exportChart = ({id, name, el}) =>
+  const exportChart = ({id, name, el, comments}) =>
     new Promise(function resolveSerializedModule (resolve) {
       const isTable = el.querySelector('table')
 
       function exportHC () {
         const highChart = el.querySelector('div[data-highcharts-chart]')
         // hack highcharts download method
-        Highcharts.downloadURL = img => resolve({name, img})
+        Highcharts.downloadURL = img => resolve({name, img, comments})
         highChart.HCharts.exportChartLocal()
       }
 
       function exportTable () {
         const table = el.querySelector('table')
         const module = {
+          comments,
           name,
           headers: [],
           rows: []

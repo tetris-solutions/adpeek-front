@@ -121,10 +121,10 @@ const ReportController = React.createClass({
     const {dispatch, params, report} = this.props
     const {grid} = this.refs
 
-    function getModuleElement ({id, name}) {
+    function getModuleElement ({id, name, comments}) {
       const el = grid.querySelector(`div[data-module-id="${id}"]`)
 
-      return {id, el, name}
+      return {id, el, name, comments}
     }
 
     const modules = map(report.modules, getModuleElement)
