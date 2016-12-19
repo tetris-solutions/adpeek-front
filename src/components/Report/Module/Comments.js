@@ -262,16 +262,17 @@ const CommentsButton = React.createClass({
   },
   render () {
     const {module, params, dispatch} = this.props
-    const count = module.comments ? size(module.comments) : '.'
-    const icon = (
-      <div className='material-icons mdl-badge mdl-badge--overlap' data-badge={count}>chat_bubble</div>
-    )
+    const count = module.comments ? size(module.comments) : null
+
+    const icoProps = count
+      ? {className: 'material-icons mdl-badge mdl-badge--overlap', 'data-badge': count}
+      : {className: 'material-icons'}
 
     return (
       <ButtonWithPrompt
         tag={Button}
         size='medium'
-        label={icon}
+        label={<div {...icoProps}>chat_bubble</div>}
         className={`mdl-button mdl-button--icon ${style.button}`}>
 
         {({dismiss}) =>
