@@ -15,6 +15,7 @@ const style = csjs`
 .wrap {
   overflow: auto;
   position: relative;
+  height: 100%;
 }
 .wrap > div[data-highcharts-chart] {
   height: 100%
@@ -23,8 +24,6 @@ const style = csjs`
   position: absolute;
   bottom: 20px;
   right: 20px;
-  width: 40px;
-  height: 40px;
 }`
 
 const typeComponent = {
@@ -124,14 +123,16 @@ const ChartContainer = React.createClass({
     }
 
     return (
-      <div className={`${style.wrap}`} style={{height}}>
-        <Chart {...config}/>
-        <div ref='interface' style={{display: 'none'}} data-interface>
-          {renderHiddenTable
-            ? <Table {...config}/>
-            : null}
+      <div style={{position: 'relative', height}}>
+        <div className={`${style.wrap}`}>
+          <Chart {...config}/>
+          <div ref='interface' style={{display: 'none'}} data-interface>
+            {renderHiddenTable
+              ? <Table {...config}/>
+              : null}
+          </div>
         </div>
-        {module.isLoading && <ChartSpinner/>}
+        {module.isLoading ? <ChartSpinner/> : null}
       </div>
     )
   }

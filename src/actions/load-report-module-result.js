@@ -2,6 +2,7 @@ import assign from 'lodash/assign'
 import head from 'lodash/head'
 import isEqual from 'lodash/isEqual'
 import forEach from 'lodash/forEach'
+import isArray from 'lodash/isArray'
 import find from 'lodash/find'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {POST} from '@tetris/http'
@@ -10,6 +11,8 @@ import {getDeepCursor} from '../functions/get-deep-cursor'
 import {isvalidReportQuery} from '../functions/is-valid-report-query'
 import compact from 'lodash/compact'
 import {inferLevelFromParams} from '../functions/infer-level-from-params'
+
+const RESULT_LENGTH_LIMIT = 1000
 
 function loadReportModuleResult (query, isCrossPlatform, config) {
   const path = isCrossPlatform ? 'x' : ''
@@ -76,7 +79,19 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
 
     if (isCursorOk()) {
       moduleCursor.set('query', query)
-      moduleCursor.set('result', normalizeResult(attributes, response.data.result))
+
+      const result = isArray(response.data.result)
+        ? response.data.result
+        : []
+
+      const tooLarge = result.length > RESULT_LENGTH_LIMIT
+
+      moduleCursor.set('cropped', tooLarge
+        ? {size: result.length}
+        : false)
+
+      moduleCursor.set('result', normalizeResult(attributes,
+        tooLarge ? result.slice(0, RESULT_LENGTH_LIMIT) : result))
     }
 
     forEach(response.data.exceptions, e => dealWithException(tree, params, e))

@@ -295,7 +295,11 @@ module.exports = {
     newCommentButton: 'Send',
     commentDescription: 'Comment by {user}',
     moduleDescriptionTitle: 'Module Description',
-    moduleDescriptionPlaceholder: 'Write a description for this module'
+    moduleDescriptionPlaceholder: 'Write a description for this module',
+    croppedResultAlertTitle: 'Partial result',
+    croppedResultAlertBody: `
+        This report result is too large and was cropped for performance reasons.
+        The displayed result contains only the first thousand lines out of {size}.`
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -593,6 +597,10 @@ module.exports = {
     newCommentButton: 'Enviar',
     commentDescription: 'Comentário de {user}',
     moduleDescriptionTitle: 'Descrição do Módulo',
-    moduleDescriptionPlaceholder: 'Escreva uma descrição para este módulo'
+    moduleDescriptionPlaceholder: 'Escreva uma descrição para este módulo',
+    croppedResultAlertTitle: 'Resultado incompleto',
+    croppedResultAlertBody: `
+        O resultado deste relatório é muito extenso e por questões de performance foi limitado.
+        Você está visualizando apenas as primeiras 1.000 linhas do total de {size}.`
   }
 }

@@ -17,6 +17,9 @@ import filter from 'lodash/filter'
 import includes from 'lodash/includes'
 import {Button} from '../../Button'
 import Comments from './Comments'
+import Message from 'tetris-iso/Message'
+import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
+import {prettyNumber} from '../../../functions/pretty-number'
 
 const {PropTypes} = React
 const reportContext = [
@@ -33,6 +36,45 @@ const reportContext = [
 ]
 
 const getAccountKeyFromId = id => id.substr(0, id.lastIndexOf(':'))
+
+const CroppedResultAlert = ({size}, {messages, locales}) => (
+  <ButtonWithPrompt
+    tag={props => <Button {...props} title={messages.croppedResultAlertTitle}/>}
+    label={<i className='material-icons'>error</i>}
+    className='mdl-button mdl-button--icon'>
+    {({dismiss}) => (
+      <div className='mdl-grid'>
+        <div className='mdl-cell mdl-cell--12-col'>
+          <h3>
+            <Message>croppedResultAlertTitle</Message>
+          </h3>
+        </div>
+        <div className='mdl-cell mdl-cell--12-col'>
+          <blockquote style={{fontSize: '12pt'}}>
+            <Message html size={prettyNumber(size, 'decimal', locales)}>croppedResultAlertBody</Message>
+          </blockquote>
+          <br/>
+          <br/>
+          <hr/>
+        </div>
+
+        <div className='mdl-cell mdl-cell--12-col'>
+          <Button onClick={dismiss} className='mdl-button mdl-button--primary'>
+            <Message>close</Message>
+          </Button>
+        </div>
+      </div>
+    )}
+  </ButtonWithPrompt>
+)
+CroppedResultAlert.displayName = 'Cropped-Result-Alert'
+CroppedResultAlert.propTypes = {
+  size: PropTypes.number.isRequired
+}
+CroppedResultAlert.contextTypes = {
+  messages: PropTypes.object.isRequired,
+  locales: PropTypes.string.isRequired
+}
 
 const ModuleController = React.createClass({
   displayName: 'Module-Controller',
@@ -132,20 +174,26 @@ const ModuleController = React.createClass({
     return (
       <ModuleCard>
         <div className='mdl-card__menu'>
+          {module.cropped &&
+
+          <CroppedResultAlert {...module.cropped}/>}
+
           <Comments {...{dispatch, module, params}}/>
 
-          {editable ? (
-            <Button className='mdl-button mdl-button--icon' onClick={this.openModal}>
-              <i className='material-icons'>create</i>
-            </Button>) : null}
+          {editable &&
 
-          {editable ? (
-            <DeleteButton
-              className='mdl-button mdl-button--icon'
-              onClick={this.remove}
-              entityName={module.name || this.context.messages.untitledModule}>
-              <i className='material-icons'>clear</i>
-            </DeleteButton>) : null}
+          <Button className='mdl-button mdl-button--icon' onClick={this.openModal}>
+            <i className='material-icons'>create</i>
+          </Button>}
+
+          {editable &&
+
+          <DeleteButton
+            className='mdl-button mdl-button--icon'
+            onClick={this.remove}
+            entityName={module.name || this.context.messages.untitledModule}>
+            <i className='material-icons'>clear</i>
+          </DeleteButton>}
         </div>
 
         {this.state.editMode && (
