@@ -298,8 +298,8 @@ module.exports = {
     moduleDescriptionPlaceholder: 'Write a description for this module',
     croppedResultAlertTitle: 'Partial result',
     croppedResultAlertBody: `
-        This report result is too large and was cropped for performance reasons.
-        The displayed result contains only the first thousand lines out of {size}.`
+        <strong>{module}</strong> result is too large and was cropped for performance reasons.
+        The displayed result contains only the first thousand lines out of <strong>{size}</strong>.`
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -600,7 +600,7 @@ module.exports = {
     moduleDescriptionPlaceholder: 'Escreva uma descrição para este módulo',
     croppedResultAlertTitle: 'Resultado incompleto',
     croppedResultAlertBody: `
-        O resultado deste relatório é muito extenso e por questões de performance foi limitado.
-        Você está visualizando apenas as primeiras 1.000 linhas do total de {size}.`
+        O resultado de <strong>{module}</strong> é muito extenso e por questões de performance foi limitado.
+        Você está visualizando apenas as primeiras 1.000 linhas do total de <strong>{size}</strong>.`
   }
 }

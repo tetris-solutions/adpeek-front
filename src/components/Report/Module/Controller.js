@@ -37,7 +37,7 @@ const reportContext = [
 
 const getAccountKeyFromId = id => id.substr(0, id.lastIndexOf(':'))
 
-const CroppedResultAlert = ({size}, {messages, locales}) => (
+const CroppedResultAlert = ({module, size}, {messages, locales}) => (
   <ButtonWithPrompt
     tag={props => <Button {...props} title={messages.croppedResultAlertTitle}/>}
     label={<i className='material-icons'>error</i>}
@@ -51,7 +51,9 @@ const CroppedResultAlert = ({size}, {messages, locales}) => (
         </div>
         <div className='mdl-cell mdl-cell--12-col'>
           <blockquote style={{fontSize: '12pt'}}>
-            <Message html size={prettyNumber(size, 'decimal', locales)}>croppedResultAlertBody</Message>
+            <Message html module={module} size={prettyNumber(size, 'decimal', locales)}>
+              croppedResultAlertBody
+            </Message>
           </blockquote>
           <br/>
           <br/>
@@ -69,6 +71,7 @@ const CroppedResultAlert = ({size}, {messages, locales}) => (
 )
 CroppedResultAlert.displayName = 'Cropped-Result-Alert'
 CroppedResultAlert.propTypes = {
+  module: PropTypes.string.isRequired,
   size: PropTypes.number.isRequired
 }
 CroppedResultAlert.contextTypes = {
@@ -175,8 +178,9 @@ const ModuleController = React.createClass({
       <ModuleCard>
         <div className='mdl-card__menu'>
           {module.cropped &&
-
-          <CroppedResultAlert {...module.cropped}/>}
+          <CroppedResultAlert
+            size={module.cropped.size}
+            module={module.name}/>}
 
           <Comments {...{dispatch, module, params}}/>
 
