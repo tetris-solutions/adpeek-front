@@ -19,7 +19,7 @@ export function FolderAside ({
   const {company, workspace} = params
 
   function onClick () {
-    dispatch(deleteFolderAction, folder.id)
+    dispatch(deleteFolderAction, params, folder.id)
       .then(() => router.replace(`/company/${company}/workspace/${workspace}`))
   }
 
