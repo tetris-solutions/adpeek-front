@@ -105,6 +105,12 @@ const ReportContainer = React.createClass({
         })
 
         entities.push({
+          id: 'Audience',
+          name: messages.audienceLevel,
+          list: adGroups
+        })
+
+        entities.push({
           id: 'AdGroup',
           name: messages.adGroups,
           list: adGroups || empty

@@ -144,7 +144,7 @@ const saveMetaData = curry((tree, platform, entity, response) => {
   if (entity === 'Placement') {
     entityNameMessage = 'campaignEntity'
     delete attributes.campaignname
-  } if (entity === 'Search') {
+  } if (entity === 'Search' || entity === 'Audience') {
     entityNameMessage = 'adGroupEntity'
   } else {
     entityNameMessage = `${entity[0].toLowerCase() + entity.slice(1)}Entity`
