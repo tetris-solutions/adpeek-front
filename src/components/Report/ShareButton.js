@@ -22,15 +22,17 @@ const ShareDialog = React.createClass({
     location: PropTypes.object.isRequired,
     messages: PropTypes.object.isRequired
   },
+  getInitialState () {
+    return {isLoading: true}
+  },
   componentDidMount () {
-    if (!this.props.shareUrl) {
-      this.load()
-    }
+    this.load()
   },
   load () {
     const {params, location, tree} = this.context
 
     loadReportShareUrlAction(tree, params, location.query)
+      .then(() => this.setState({isLoading: false}))
   },
   copy () {
     const {tree, messages} = this.context
@@ -55,7 +57,7 @@ const ShareDialog = React.createClass({
             <Input
               name='shareUrl'
               label='shareReport'
-              value={shareUrl || '...'}
+              value={this.state.isLoading ? '...' : shareUrl}
               disabled={!shareUrl}/>
           </div>
 
