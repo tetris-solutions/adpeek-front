@@ -404,25 +404,23 @@ const MailingEdit = React.createClass({
           </div>
         </Content>
         <Footer multipleButtons>
-          <Submit className='mdl-button mdl-button--primary'>
+          <Link to={this.getMailingUrl()} className='mdl-button mdl-button--accent'>
+            <Message>cancel</Message>
+          </Link>
+
+          {mailing.id &&
+          <Button className='mdl-button' onClick={this.run}>
+            <Message>spawnMailing</Message>
+          </Button>}
+
+          {!params.report && (
+            <Link to={this.getReportUrl()} className='mdl-button'>
+              <Message>mailingReportLink</Message>
+            </Link>)}
+
+          <Submit className='mdl-button mdl-button--primary' style={{float: 'right'}}>
             <Message>save</Message>
           </Submit>
-
-          <span style={{float: 'right'}}>
-            {mailing.id &&
-            <Button className='mdl-button' onClick={this.run}>
-              <Message>spawnMailing</Message>
-            </Button>}
-
-            <Link to={this.getMailingUrl()} className='mdl-button mdl-button--accent'>
-              <Message>cancel</Message>
-            </Link>
-
-            {!params.report && (
-              <Link to={this.getReportUrl()} className='mdl-button' style={{float: 'right'}}>
-                <Message>mailingReportLink</Message>
-              </Link>)}
-          </span>
         </Footer>
       </Form>
     )
