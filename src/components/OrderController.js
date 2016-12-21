@@ -201,6 +201,7 @@ export const OrderController = React.createClass({
     const {params, dispatch} = this.props
 
     dispatch(spawnAutoBudgetAction, params.order)
+      .then(() => dispatch(pushSuccessMessageAction))
   },
   save () {
     const {router} = this.context

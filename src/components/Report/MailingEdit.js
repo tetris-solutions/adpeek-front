@@ -15,6 +15,7 @@ import {createMailingReportAction} from '../../actions/create-mailing-action'
 import {updateMailingReportAction} from '../../actions/update-mailing-action'
 import {pushSuccessMessageAction} from '../../actions/push-success-message-action'
 import {loadMailingListAction} from '../../actions/load-mailing-list'
+import {spawnReportMailingAction} from '../../actions/spawn-report-mailing'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
 import map from 'lodash/map'
@@ -294,13 +295,10 @@ const MailingEdit = React.createClass({
     e.preventDefault()
 
     const {state: {newEmail}, props: {params}, context: {router, tree}} = this
-    let mailing
+    const mailing = assign({}, this.state.mailing)
 
     if (newEmail) {
-      mailing = assign({}, this.state.mailing)
-      mailing.emails.push(newEmail)
-    } else {
-      mailing = this.state.mailing
+      mailing.emails = mailing.emails.concat([newEmail])
     }
 
     const save = mailing.id ? updateMailingReportAction : createMailingReportAction
@@ -315,6 +313,12 @@ const MailingEdit = React.createClass({
       e.preventDefault()
       this.addEmail()
     }
+  },
+  run () {
+    const {tree} = this.context
+
+    spawnReportMailingAction(tree, this.props.mailing.id)
+      .then(() => pushSuccessMessageAction(tree))
   },
   render () {
     const {mailing, newEmail} = this.state
@@ -400,18 +404,25 @@ const MailingEdit = React.createClass({
           </div>
         </Content>
         <Footer multipleButtons>
-          <Link to={this.getMailingUrl()} className='mdl-button mdl-button--accent'>
-            <Message>cancel</Message>
-          </Link>
-
           <Submit className='mdl-button mdl-button--primary'>
             <Message>save</Message>
           </Submit>
 
-          {!params.report && (
-            <Link to={this.getReportUrl()} className='mdl-button' style={{float: 'right'}}>
-              <Message>mailingReportLink</Message>
-            </Link>)}
+          <span style={{float: 'right'}}>
+            {mailing.id &&
+            <Button className='mdl-button' onClick={this.run}>
+              <Message>spawnMailing</Message>
+            </Button>}
+
+            <Link to={this.getMailingUrl()} className='mdl-button mdl-button--accent'>
+              <Message>cancel</Message>
+            </Link>
+
+            {!params.report && (
+              <Link to={this.getReportUrl()} className='mdl-button' style={{float: 'right'}}>
+                <Message>mailingReportLink</Message>
+              </Link>)}
+          </span>
         </Footer>
       </Form>
     )

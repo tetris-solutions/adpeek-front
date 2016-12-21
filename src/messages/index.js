@@ -300,7 +300,8 @@ module.exports = {
     croppedResultAlertTitle: 'Partial result',
     croppedResultAlertBody: `
         <strong>{module}</strong> result is too large and was cropped for performance reasons.
-        The displayed result contains only the first thousand lines out of <strong>{size}</strong>.`
+        The displayed result contains only the first thousand lines out of <strong>{size}</strong>.`,
+    spawnMailing: 'Run'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -603,6 +604,7 @@ module.exports = {
     croppedResultAlertTitle: 'Resultado incompleto',
     croppedResultAlertBody: `
         O resultado de <strong>{module}</strong> é muito extenso e por questões de performance foi limitado.
-        Você está visualizando apenas as primeiras 1.000 linhas do total de <strong>{size}</strong>.`
+        Você está visualizando apenas as primeiras 1.000 linhas do total de <strong>{size}</strong>.`,
+    spawnMailing: 'Enviar agora'
   }
 }
