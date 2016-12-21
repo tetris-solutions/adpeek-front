@@ -61,7 +61,7 @@ function ReportScreen (props, context) {
                   <Message>save</Message>
                 </MenuItem>)}
 
-              {!reportLiteMode && <ShareButton shareUrl={report.shareUrl}/>}
+              {!reportLiteMode && <ShareButton {...report}/>}
 
               <ReportExportButton
                 create={downloadReport}

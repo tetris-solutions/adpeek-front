@@ -1,6 +1,7 @@
 import React from 'react'
 import Message from 'tetris-iso/Message'
 import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
+import moment from 'moment'
 import Input from '../Input'
 import clipboard from 'copy-to-clipboard'
 import {loadReportShareUrlAction} from '../../actions/load-report-share-url'
@@ -13,6 +14,7 @@ const {PropTypes} = React
 const ShareDialog = React.createClass({
   displayName: 'Share-Dialog',
   propTypes: {
+    id: PropTypes.string.isRequired,
     shareUrl: PropTypes.string,
     close: PropTypes.func.isRequired
   },
@@ -30,8 +32,10 @@ const ShareDialog = React.createClass({
   },
   load () {
     const {params, location, tree} = this.context
+    const from = location.query.from || moment().subtract(30, 'days').format('YYYY-MM-DD')
+    const to = location.query.to || moment().format('YYYY-MM-DD')
 
-    loadReportShareUrlAction(tree, params, location.query)
+    loadReportShareUrlAction(tree, params, this.props.id, {from, to})
       .then(() => this.setState({isLoading: false}))
   },
   copy () {
@@ -79,12 +83,12 @@ const ShareDialog = React.createClass({
 
 const MenuShare = props => <MenuItem {...props} icon='share'/>
 
-const ShareButton = ({shareUrl}) => (
+const ShareButton = props => (
   <ButtonWithPrompt tag={MenuShare} label={<Message>shareReportButton</Message>}>
     {({dismiss}) =>
       <ShareDialog
-        close={dismiss}
-        shareUrl={shareUrl}/>}
+        {...props}
+        close={dismiss}/>}
   </ButtonWithPrompt>
 )
 

@@ -15,16 +15,20 @@ import trim from 'lodash/trim'
 import SearchBox from '../HeaderSearchBox'
 import {DeleteSpan} from '../DeleteButton'
 import {deleteReportAction} from '../../actions/delete-report'
+import ShareButton from './ShareButton'
 
 const cleanStr = str => trim(deburr(lowerCase(str)))
 const {PropTypes} = React
 
-const Report = ({dispatch, params, path, id, name}) => (
+const Report = ({dispatch, params, shareUrl, path, id, name}) => (
   <ThumbLink to={`${path}/report/${id}`} title={name}>
     <Title>{name}</Title>
     <Fence canEditReport>{({canEditReport}) =>
       <Gear>
         <DropdownMenu>
+
+          <ShareButton {...{id, shareUrl}}/>
+
           {canEditReport &&
 
           <MenuItem tag={Link} icon='mode_edit' to={`${path}/report/${id}/edit`}>
@@ -49,6 +53,7 @@ const Report = ({dispatch, params, path, id, name}) => (
 Report.displayName = 'Report'
 Report.propTypes = {
   id: PropTypes.string,
+  shareUrl: PropTypes.string,
   path: PropTypes.string,
   name: PropTypes.string,
   dispatch: PropTypes.func.isRequired,
