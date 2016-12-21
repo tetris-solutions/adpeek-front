@@ -301,7 +301,8 @@ module.exports = {
     croppedResultAlertBody: `
         <strong>{module}</strong> result is too large and was cropped for performance reasons.
         The displayed result contains only the first thousand lines out of <strong>{size}</strong>.`,
-    spawnMailing: 'Run mailing'
+    spawnMailing: 'Run mailing',
+    unsubscribedEmail: 'User has unsubscribed from list'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -605,6 +606,7 @@ module.exports = {
     croppedResultAlertBody: `
         O resultado de <strong>{module}</strong> é muito extenso e por questões de performance foi limitado.
         Você está visualizando apenas as primeiras 1.000 linhas do total de <strong>{size}</strong>.`,
-    spawnMailing: 'Enviar agora'
+    spawnMailing: 'Enviar agora',
+    unsubscribedEmail: 'Usuário saiu da lista'
   }
 }
