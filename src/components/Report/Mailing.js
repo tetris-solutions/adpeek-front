@@ -6,6 +6,8 @@ import SubHeader from '../SubHeader'
 import {Link} from 'react-router'
 import {updateMailingReportAction} from '../../actions/update-mailing-action'
 import {deleteMailingAction} from '../../actions/delete-mailing'
+import {spawnReportMailingAction} from '../../actions/spawn-report-mailing'
+import {pushSuccessMessageAction} from '../../actions/push-success-message-action'
 import {contextualize} from '../higher-order/contextualize'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
 import Edit from './MailingEdit'
@@ -81,6 +83,12 @@ const MailingLink = React.createClass({
 
     dispatch(deleteMailingAction, params, mailing.id)
   },
+  run () {
+    const {dispatch, mailing} = this.props
+
+    dispatch(spawnReportMailingAction, mailing.id)
+      .then(() => dispatch(pushSuccessMessageAction))
+  },
   render () {
     const {mailing, url} = this.props
     const {messages, moment, locales} = this.context
@@ -142,11 +150,16 @@ const MailingLink = React.createClass({
                 {mailing.disabled ? 'enableMailing' : 'disableMailing'}
               </Message>
             </HeaderMenuItem>
+
             <MenuItem
               tag={DeleteSpan}
               entityName={new TextMessage(messages.reportMailingFormTitle, locales).format({report: report.name})}
               onClick={this.del} icon='delete'>
               <Message>remove</Message>
+            </MenuItem>
+
+            <MenuItem onClick={this.run} icon='mail'>
+              <Message>spawnMailing</Message>
             </MenuItem>
           </DropdownMenu>
         </Gear>

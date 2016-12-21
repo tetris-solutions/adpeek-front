@@ -301,7 +301,7 @@ module.exports = {
     croppedResultAlertBody: `
         <strong>{module}</strong> result is too large and was cropped for performance reasons.
         The displayed result contains only the first thousand lines out of <strong>{size}</strong>.`,
-    spawnMailing: 'Run'
+    spawnMailing: 'Run mailing'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
