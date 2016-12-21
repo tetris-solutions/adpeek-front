@@ -1,14 +1,14 @@
 import React from 'react'
 import {Link} from 'react-router'
 import {Cap, Title, ThumbLink, Info, Gear} from './ThumbLink'
-import {DropdownMenu, MenuItem} from './DropdownMenu'
+import {DropdownMenu, MenuItem, HeaderMenuItem} from './DropdownMenu'
 import {prettyNumber} from '../functions/pretty-number'
 import csjs from 'csjs'
 import Message from 'tetris-iso/Message'
 import {styledFnComponent} from './higher-order/styled-fn-component'
 import {DeleteSpan} from './DeleteButton'
 import {deleteOrderAction} from '../actions/delete-order'
-
+import {toggleOrderAutoBudgetAction} from '../actions/toggle-order-auto-budget'
 const style = csjs`
 .strong {
   display: inline;
@@ -18,7 +18,7 @@ const style = csjs`
 const {PropTypes} = React
 const dFormat = 'DD/MMM'
 
-const Order = ({dispatch, amount, start, end, company, workspace, folder, id, name, folder_name, workspace_name}, {params, moment, locales}) => {
+const Order = ({dispatch, amount, auto_budget, start, end, company, workspace, folder, id, name, folder_name, workspace_name}, {params, moment, locales}) => {
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${folder}`
   const orderUrl = `${folderUrl}/order/${id}`
 
@@ -49,6 +49,12 @@ const Order = ({dispatch, amount, start, end, company, workspace, folder, id, na
 
       <Gear>
         <DropdownMenu>
+          <HeaderMenuItem
+            icon={auto_budget ? 'check_box' : 'check_box_outline_blank'}
+            onClick={() => dispatch(toggleOrderAutoBudgetAction, params, id)}>
+            Auto Budget
+          </HeaderMenuItem>
+
           <MenuItem tag={Link} to={`${folderUrl}/orders/clone?id=${id}`} icon='content_copy'>
             <Message>cloneSingleOrder</Message>
           </MenuItem>
@@ -74,6 +80,7 @@ Order.displayName = 'Order'
 Order.propTypes = {
   id: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
+  auto_budget: PropTypes.bool.isRequired,
   amount: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   folder_name: PropTypes.string.isRequired,
