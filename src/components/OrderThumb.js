@@ -9,6 +9,7 @@ import {styledFnComponent} from './higher-order/styled-fn-component'
 import {DeleteSpan} from './DeleteButton'
 import {deleteOrderAction} from '../actions/delete-order'
 import {toggleOrderAutoBudgetAction} from '../actions/toggle-order-auto-budget'
+import Fence from './Fence'
 const style = csjs`
 .strong {
   display: inline;
@@ -48,29 +49,37 @@ const Order = ({dispatch, amount, auto_budget, start, end, company, workspace, f
       </Title>
 
       <Gear>
-        <DropdownMenu>
-          <HeaderMenuItem
-            icon={auto_budget ? 'check_box' : 'check_box_outline_blank'}
-            onClick={() => dispatch(toggleOrderAutoBudgetAction, params, id)}>
-            Auto Budget
-          </HeaderMenuItem>
+        <Fence canEditOrder>{({canEditOrder}) =>
+          <DropdownMenu>
+            {canEditOrder &&
 
-          <MenuItem tag={Link} to={`${folderUrl}/orders/clone?id=${id}`} icon='content_copy'>
-            <Message>cloneSingleOrder</Message>
-          </MenuItem>
+            <HeaderMenuItem
+              icon={auto_budget ? 'check_box' : 'check_box_outline_blank'}
+              onClick={() => dispatch(toggleOrderAutoBudgetAction, params, id)}>
+              Auto Budget
+            </HeaderMenuItem>}
 
-          <MenuItem tag={Link} to={`${orderUrl}/autobudget`} icon='today'>
-            <Message>autoBudgetLog</Message>
-          </MenuItem>
+            {canEditOrder &&
+            <MenuItem tag={Link} to={`${folderUrl}/orders/clone?id=${id}`} icon='content_copy'>
+              <Message>cloneSingleOrder</Message>
+            </MenuItem>}
 
-          <MenuItem
-            tag={DeleteSpan}
-            entityName={name}
-            onClick={() => dispatch(deleteOrderAction, params, id)}
-            icon='delete'>
-            <Message>deleteOrder</Message>
-          </MenuItem>
-        </DropdownMenu>
+            <MenuItem tag={Link} to={`${orderUrl}/autobudget`} icon='today'>
+              <Message>autoBudgetLog</Message>
+            </MenuItem>
+
+            {canEditOrder &&
+
+            <MenuItem
+              tag={DeleteSpan}
+              entityName={name}
+              onClick={() => dispatch(deleteOrderAction, params, id)}
+              icon='delete'>
+              <Message>deleteOrder</Message>
+            </MenuItem>}
+
+          </DropdownMenu>}
+        </Fence>
       </Gear>
     </ThumbLink>
   )
