@@ -2,6 +2,7 @@ import React from 'react'
 import csjs from 'csjs'
 import {styledFnComponent} from './higher-order/styled-fn-component'
 import omit from 'lodash/omit'
+import {Link} from 'react-router'
 
 const {PropTypes} = React
 const style = csjs`
@@ -73,6 +74,9 @@ NavBt.propTypes = {
   onClick: PropTypes.func,
   children: PropTypes.node
 }
+
+export const NavLink = props => <NavBt {...props} tag={Link}/>
+NavLink.displayName = 'Nav-Link'
 
 export const NavBts = ({children}) => (
   <section className={`${style.menu}`}>

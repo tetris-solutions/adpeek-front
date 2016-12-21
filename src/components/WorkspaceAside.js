@@ -1,13 +1,12 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
-import {Link} from 'react-router'
 import Fence from './Fence'
 import DeleteButton from './DeleteButton'
 import {deleteWorkspaceAction} from '../actions/delete-workspace'
 import {contextualize} from './higher-order/contextualize'
-import {Navigation, NavBt, NavBts, Name} from './Navigation'
+import {Navigation, NavLink, NavBt, NavBts, Name} from './Navigation'
 import Recent from './Recent'
-import ReportLink from './Report/LinkToReports'
+import ReportLink from './Report/ReportLink'
 
 const {PropTypes} = React
 
@@ -29,27 +28,27 @@ export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
         </Name>
         <br/>
         <NavBts>
-          <NavBt tag={Link} to={`${baseUrl}/orders`} icon='attach_money'>
+          <NavLink to={`${baseUrl}/orders`} icon='attach_money'>
             <Message>workspaceOrders</Message>
-          </NavBt>
+          </NavLink>
 
-          <ReportLink params={params} reports={workspace.reports} dispatch={dispatch}>
+          <ReportLink tag={NavBt} params={params} reports={workspace.reports} dispatch={dispatch}>
             <Message>workspaceReport</Message>
           </ReportLink>
 
           {canEditWorkspace && (
-            <NavBt tag={Link} to={`${baseUrl}/edit`} icon='mode_edit'>
+            <NavLink to={`${baseUrl}/edit`} icon='mode_edit'>
               <Message>editWorkspace</Message>
-            </NavBt>)}
+            </NavLink>)}
 
           {canEditWorkspace && (
             <NavBt tag={DeleteButton} entityName={workspace.name} onClick={onClick} icon='delete'>
               <Message>deleteWorkspace</Message>
             </NavBt>)}
 
-          <NavBt tag={Link} to={`/company/${company}`} icon='close'>
+          <NavLink to={`/company/${company}`} icon='close'>
             <Message>oneLevelUpNavigation</Message>
-          </NavBt>
+          </NavLink>
         </NavBts>
         <br/>
         <hr/>

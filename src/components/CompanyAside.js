@@ -1,10 +1,9 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
-import {Link} from 'react-router'
 import {contextualize} from './higher-order/contextualize'
-import {Navigation, NavBt, NavBts, Name} from './Navigation'
+import {Navigation, NavLink, NavBt, NavBts, Name} from './Navigation'
 import Recent from './Recent'
-import ReportLink from './Report/LinkToReports'
+import ReportLink from './Report/ReportLink'
 
 const {PropTypes} = React
 
@@ -26,21 +25,21 @@ export const CompanyAside = ({company, params, dispatch}) => {
           <Message>manageCompany</Message>
         </NavBt>
 
-        <NavBt tag={Link} to={`${baseUrl}/orders`} icon='attach_money'>
+        <NavLink to={`${baseUrl}/orders`} icon='attach_money'>
           <Message>companyOrders</Message>
-        </NavBt>
+        </NavLink>
 
-        <ReportLink params={params} reports={company.reports} dispatch={dispatch}>
+        <ReportLink tag={NavBt} params={params} reports={company.reports} dispatch={dispatch}>
           <Message>companyReport</Message>
         </ReportLink>
 
-        <NavBt tag={Link} to={`${baseUrl}/mailing`} icon='mail_outline'>
+        <NavLink to={`${baseUrl}/mailing`} icon='mail_outline'>
           <Message>reportMailing</Message>
-        </NavBt>
+        </NavLink>
 
-        <NavBt tag={Link} to='/' icon='close'>
+        <NavLink to='/' icon='close'>
           <Message>oneLevelUpNavigation</Message>
-        </NavBt>
+        </NavLink>
       </NavBts>
       <br/>
       <hr/>

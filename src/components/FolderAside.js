@@ -1,13 +1,12 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
-import {Link} from 'react-router'
 import endsWith from 'lodash/endsWith'
 import Fence from './Fence'
-import {Navigation, NavBt, NavBts, Name} from './Navigation'
+import {Navigation, NavBt, NavLink, NavBts, Name} from './Navigation'
 import DeleteButton from './DeleteButton'
 import {deleteFolderAction} from '../actions/delete-folder'
 import {contextualize} from './higher-order/contextualize'
-import ReportLink from './Report/LinkToReports'
+import ReportLink from './Report/ReportLink'
 
 const {PropTypes} = React
 
@@ -35,31 +34,31 @@ export function FolderAside ({
           {folder.name}
         </Name>
         <NavBts>
-          <NavBt tag={Link} to={`${baseUrl}/creatives`} icon='receipt'>
+          <NavLink to={`${baseUrl}/creatives`} icon='receipt'>
             <Message>creatives</Message>
-          </NavBt>
+          </NavLink>
 
-          <NavBt tag={Link} to={`${baseUrl}/orders`} icon='attach_money'>
+          <NavLink to={`${baseUrl}/orders`} icon='attach_money'>
             <Message>folderOrders</Message>
-          </NavBt>
+          </NavLink>
 
-          <ReportLink params={params} reports={folder.reports} dispatch={dispatch}>
+          <ReportLink tag={NavLink} params={params} reports={folder.reports} dispatch={dispatch}>
             <Message>folderReport</Message>
           </ReportLink>
 
           {canEditFolder && (
-            <NavBt tag={Link} to={`${baseUrl}/edit`} icon='mode_edit'>
+            <NavLink to={`${baseUrl}/edit`} icon='mode_edit'>
               <Message>editFolder</Message>
-            </NavBt>)}
+            </NavLink>)}
 
           {canEditFolder && (
             <NavBt tag={DeleteButton} entityName={folder.name} onClick={onClick} icon='delete'>
               <Message>deleteFolder</Message>
             </NavBt>)}
 
-          <NavBt tag={Link} to={backspaceUrl} icon='close'>
+          <NavLink to={backspaceUrl} icon='close'>
             <Message>oneLevelUpNavigation</Message>
-          </NavBt>
+          </NavLink>
         </NavBts>
       </Navigation>}
     </Fence>
