@@ -180,7 +180,7 @@ Period.propTypes = Daily.propTypes = {
 const Stats = ({open, yesterday}, {locales, location: {query}}) => (
   <div className={`${style.statsWrap}`}>
     <Period {...open} locales={locales}/>
-    {query.smile ? <Daily {...yesterday} locales={locales}/> : null}
+    <Daily {...yesterday} locales={locales}/>
   </div>
 )
 Stats.displayName = 'Stats'

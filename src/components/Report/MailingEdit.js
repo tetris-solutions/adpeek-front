@@ -234,16 +234,18 @@ const MailingEdit = React.createClass({
     this.changeMailing({disabled: !checked})
   },
   onChangeRecurrent ({target: {checked}}) {
-    this.changeSchedule(checked ? {
-      day_of_week: 1,
-      day_of_month: null,
-      date: null,
-      periodicity: 'weekly'
-    } : {
-      day_of_week: null,
-      day_of_month: null,
-      date: moment().add(1, 'day').format('YYYY-MM-DD')
-    })
+    this.changeSchedule(checked
+      ? {
+        day_of_week: 1,
+        day_of_month: null,
+        date: null,
+        periodicity: 'weekly'
+      }
+      : {
+        day_of_week: null,
+        day_of_month: null,
+        date: moment().add(1, 'day').format('YYYY-MM-DD')
+      })
   },
   onChangeDate (momentDate) {
     this.changeSchedule({
@@ -291,7 +293,16 @@ const MailingEdit = React.createClass({
   handleSubmit (e) {
     e.preventDefault()
 
-    const {state: {mailing}, props: {params}, context: {router, tree}} = this
+    const {state: {newEmail}, props: {params}, context: {router, tree}} = this
+    let mailing
+
+    if (newEmail) {
+      mailing = assign({}, this.state.mailing)
+      mailing.emails.push(newEmail)
+    } else {
+      mailing = this.state.mailing
+    }
+
     const save = mailing.id ? updateMailingReportAction : createMailingReportAction
 
     save(tree, params, mailing)
@@ -341,20 +352,23 @@ const MailingEdit = React.createClass({
             </Middle>
           </div>
 
-          {mailing.schedule.date ? (
-            <div className='mdl-grid'>
-              <div className='mdl-cell mdl-cell--12-col'>
-                <DatePicker
-                  value={mailing.schedule.date}
-                  onChange={this.onChangeDate}/>
+          {mailing.schedule.date
+            ? (
+              <div className='mdl-grid'>
+                <div className='mdl-cell mdl-cell--12-col'>
+                  <DatePicker
+                    value={mailing.schedule.date}
+                    onChange={this.onChangeDate}/>
+                </div>
               </div>
-            </div>
-          ) : (
-            <PeriodicitySelector
-              {...mailing.schedule}
-              onChangeDayOfMonth={this.onChangeInterval}
-              onChangeDayOfWeek={this.onChangeInterval}
-              onChangePeriodicity={this.onChangePeriodicity}/>)}
+            )
+            : (
+              <PeriodicitySelector
+                {...mailing.schedule}
+                onChangeDayOfMonth={this.onChangeInterval}
+                onChangeDayOfWeek={this.onChangeInterval}
+                onChangePeriodicity={this.onChangePeriodicity}/>
+            )}
 
           <div className='mdl-grid'>
             <div className='mdl-cell mdl-cell--10-col'>

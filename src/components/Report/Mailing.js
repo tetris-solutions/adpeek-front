@@ -1,6 +1,7 @@
 import React from 'react'
 import Message from 'tetris-iso/Message'
 import Page from '../Page'
+import isEmpty from 'lodash/isEmpty'
 import SubHeader from '../SubHeader'
 import {Link} from 'react-router'
 import {updateMailingReportAction} from '../../actions/update-mailing-action'
@@ -162,7 +163,8 @@ const List = React.createClass({
     params: PropTypes.object.isRequired
   },
   contextTypes: {
-    location: PropTypes.object.isRequired
+    location: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired
   },
   getInitialState () {
     return {
@@ -174,13 +176,17 @@ const List = React.createClass({
   },
   render () {
     const {activeOnly} = this.state
-    const {location: {pathname, search}} = this.context
+    const {location: {pathname, query}} = this.context
     const {url, params} = this.props
     const mailings = activeOnly
       ? filter(this.props.mailings, {disabled: false})
       : this.props.mailings
 
-    if (endsWith(pathname, '/new')) {
+    const shouldDisplayCreationForm = endsWith(pathname, '/new') || (
+        query.skipEmptyList && isEmpty(mailings)
+      )
+
+    if (shouldDisplayCreationForm) {
       return <NewMailing {...this.props}/>
     }
 
@@ -205,13 +211,13 @@ const List = React.createClass({
             {...this.props}
             key={mailing.id}
             mailing={mailing}
-            url={`${url}/${mailing.id}${search}`}/>)}
+            url={`${url}/${mailing.id}`}/>)}
       </Container>
     )
   }
 })
 
-const Content = (props, {location: {search}}) => {
+const Content = props => {
   const {params} = props
 
   const url = '/' + join(
@@ -227,7 +233,7 @@ const Content = (props, {location: {search}}) => {
     <div>
       <SubHeader title={<Message>reportMailing</Message>}>
         {params.report && (
-          <Link className='mdl-button mdl-color-text--grey-100' to={`${url}/new${search}`}>
+          <Link className='mdl-button mdl-color-text--grey-100' to={`${url}/new`}>
             <i className='material-icons'>add</i>
             <Message>newMailing</Message>
           </Link>)}
@@ -242,9 +248,6 @@ const Content = (props, {location: {search}}) => {
 Content.displayName = 'Content'
 Content.propTypes = {
   params: PropTypes.object.isRequired
-}
-Content.contextTypes = {
-  location: PropTypes.object.isRequired
 }
 
 const StandaloneMailingList = props => (

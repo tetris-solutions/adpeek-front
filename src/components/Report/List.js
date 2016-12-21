@@ -28,7 +28,7 @@ const Report = ({dispatch, params, shareUrl, path, id, name}) => (
         <DropdownMenu>
           <ShareButton {...{id, shareUrl}}/>
 
-          <MenuItem tag={Link} to={`${path}/report/${id}/mailing`} icon='mail_outline'>
+          <MenuItem tag={Link} to={`${path}/report/${id}/mailing?skipEmptyList=true`} icon='mail_outline'>
             <Message>reportMailing</Message>
           </MenuItem>
 

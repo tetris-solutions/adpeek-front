@@ -67,7 +67,7 @@ function ReportScreen (props, context) {
                 create={downloadReport}
                 isCreatingReport={isCreatingReport}/>
 
-              {!reportLiteMode && <MenuItem tag={Link} to={`${reportUrl}/mailing`} icon='mail_outline'>
+              {!reportLiteMode && <MenuItem tag={Link} to={`${reportUrl}/mailing?skipEmptyList=true`} icon='mail_outline'>
                 <Message>reportMailing</Message>
               </MenuItem>}
 
