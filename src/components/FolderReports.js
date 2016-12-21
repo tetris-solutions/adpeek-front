@@ -4,20 +4,20 @@ import Reports from './Report/List'
 
 const {PropTypes} = React
 
+// @todo abstract boilerplate into a HOC
+
 export const FolderReports = React.createClass({
   displayName: 'Folder-Reports',
   propTypes: {
-    params: PropTypes.shape({
-      company: PropTypes.string,
-      workspace: PropTypes.string
-    }),
+    dispatch: PropTypes.func.isRequired,
+    params: PropTypes.object.isRequired,
     folder: PropTypes.object
   },
   render () {
-    const {folder: {id, reports}, params: {company, workspace}} = this.props
-    const path = `/company/${company}/workspace/${workspace}/folder/${id}`
+    const {params, dispatch, folder: {id, reports}} = this.props
+    const path = `/company/${params.company}/workspace/${params.workspace}/folder/${id}`
 
-    return <Reports path={path} reports={reports}/>
+    return <Reports params={params} dispatch={dispatch} path={path} reports={reports}/>
   }
 })
 

@@ -14,8 +14,8 @@ export function OrderAside ({params, order, dispatch}, {router}) {
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${folder}`
 
   function onClick () {
+    router.replace(`${folderUrl}/orders`)
     dispatch(deleteOrderAction, params, order.id)
-      .then(() => router.replace(`${folderUrl}/orders`))
   }
 
   return (

@@ -18,8 +18,8 @@ export function FolderAside ({
   const {company, workspace} = params
 
   function onClick () {
+    router.replace(`/company/${company}/workspace/${workspace}`)
     dispatch(deleteFolderAction, params, folder.id)
-      .then(() => router.replace(`/company/${company}/workspace/${workspace}`))
   }
 
   const baseUrl = `/company/${company}/workspace/${workspace}/folder/${folder.id}`

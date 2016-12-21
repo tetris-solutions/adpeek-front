@@ -7,16 +7,18 @@ const {PropTypes} = React
 export const CompanyReports = React.createClass({
   displayName: 'Company-Reports',
   propTypes: {
+    dispatch: PropTypes.func.isRequired,
+    params: PropTypes.object.isRequired,
     company: PropTypes.shape({
       id: PropTypes.string,
       reports: PropTypes.array
     })
   },
   render () {
-    const {company: {id, reports}} = this.props
+    const {params, dispatch, company: {id, reports}} = this.props
     const path = `/company/${id}`
 
-    return <Reports path={path} reports={reports}/>
+    return <Reports params={params} dispatch={dispatch} path={path} reports={reports}/>
   }
 })
 
