@@ -302,7 +302,8 @@ module.exports = {
         <strong>{module}</strong> result is too large and was cropped for performance reasons.
         The displayed result contains only the first thousand lines out of <strong>{size}</strong>.`,
     spawnMailing: 'Run mailing',
-    unsubscribedEmail: 'User has unsubscribed from list'
+    unsubscribedEmail: 'User has unsubscribed from list',
+    emptyMailing: 'Your email list is empty'
   },
   'pt-BR': {
     welcomeMessage: 'Olá, {name}',
@@ -607,6 +608,7 @@ module.exports = {
         O resultado de <strong>{module}</strong> é muito extenso e por questões de performance foi limitado.
         Você está visualizando apenas as primeiras 1.000 linhas do total de <strong>{size}</strong>.`,
     spawnMailing: 'Enviar agora',
-    unsubscribedEmail: 'Usuário saiu da lista'
+    unsubscribedEmail: 'Usuário saiu da lista',
+    emptyMailing: 'Sua lista de emails está vazia'
   }
 }

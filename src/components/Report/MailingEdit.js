@@ -6,6 +6,7 @@ import {Form, Header, Footer, Content} from '../Card'
 import Message from 'tetris-iso/Message'
 import Select from '../Select'
 import assign from 'lodash/assign'
+import isEmpty from 'lodash/isEmpty'
 import Switch from '../Switch'
 import Input from '../Input'
 import VerticalAlign from '../VerticalAlign'
@@ -157,6 +158,8 @@ Email.propTypes = {
 Email.contextTypes = {
   messages: PropTypes.object.isRequired
 }
+
+const validEmail = str => Boolean(str.match(/\S+@\S+\.\S+/))
 
 const MailingEdit = React.createClass({
   mixins: [FormMixin],
@@ -312,6 +315,8 @@ const MailingEdit = React.createClass({
   addEmail () {
     const {mailing: {emails}, newEmail} = this.state
 
+    if (!newEmail) return
+
     this.setState({newEmail: ''})
     this.changeMailing({
       emails: uniq(emails.concat([newEmail]))
@@ -356,6 +361,8 @@ const MailingEdit = React.createClass({
     if (!mailing) {
       return <NotFound/>
     }
+
+    const noEmails = isEmpty(mailing.emails) && !validEmail(newEmail)
 
     return (
       <Form onSubmit={this.handleSubmit}>
@@ -420,14 +427,22 @@ const MailingEdit = React.createClass({
             </Middle>
           </div>
 
-          <div className='mdl-list'>
-            {map(mailing.emails, email => (
-              <Email
-                key={email}
-                email={email}
-                dead={includes(mailing.unsubscribed, email)}
-                drop={this.dropEmail(email)}/>))}
-          </div>
+          {noEmails
+            ? (
+              <p className='mdl-color-text--red-800'>
+                <Message html>emptyMailing</Message>
+              </p>
+            )
+            : (
+              <div className='mdl-list'>
+                {map(mailing.emails, email => (
+                  <Email
+                    key={email}
+                    email={email}
+                    dead={includes(mailing.unsubscribed, email)}
+                    drop={this.dropEmail(email)}/>))}
+              </div>
+            )}
         </Content>
         <Footer multipleButtons>
           <Link to={this.getMailingUrl()} className='mdl-button mdl-button--accent'>
@@ -444,7 +459,10 @@ const MailingEdit = React.createClass({
               <Message>mailingReportLink</Message>
             </Link>)}
 
-          <Submit className='mdl-button mdl-button--primary' style={{float: 'right'}}>
+          <Submit
+            disabled={noEmails}
+            className='mdl-button mdl-button--primary'
+            style={{float: 'right'}}>
             <Message>save</Message>
           </Submit>
         </Footer>
