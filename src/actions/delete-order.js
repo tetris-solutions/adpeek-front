@@ -10,5 +10,3 @@ export function deleteOrderAction (tree, order) {
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
-
-export default deleteOrderAction

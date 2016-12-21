@@ -1,7 +1,10 @@
 import React from 'react'
-import {Cap, Title, ThumbLink, Info} from './ThumbLink'
+import {Link} from 'react-router'
+import {Cap, Title, ThumbLink, Info, Gear} from './ThumbLink'
+import {DropdownMenu, MenuItem} from './DropdownMenu'
 import {prettyNumber} from '../functions/pretty-number'
 import csjs from 'csjs'
+import Message from 'tetris-iso/Message'
 import {styledFnComponent} from './higher-order/styled-fn-component'
 
 const style = csjs`
@@ -13,32 +16,49 @@ const style = csjs`
 const {PropTypes} = React
 const dFormat = 'DD/MMM'
 
-const Order = ({amount, start, end, company, workspace, folder, id, name, folder_name, workspace_name}, {moment, locales}) => (
-  <ThumbLink to={`/company/${company}/workspace/${workspace}/folder/${folder}/order/${id}`} title={name}>
-    <Cap>
-      <strong className={`${style.strong}`}>
-        {name}
-      </strong>
-      <br/>
+const Order = ({amount, start, end, company, workspace, folder, id, name, folder_name, workspace_name}, {moment, locales}) => {
+  const folderUrl = `/company/${company}/workspace/${workspace}/folder/${folder}`
+  const orderUrl = `${folderUrl}/order/${id}`
 
-      <small>
-        {moment(start).format(dFormat)} - {moment(end).format(dFormat)}
-      </small>
-    </Cap>
+  return (
+    <ThumbLink to={orderUrl} title={name}>
+      <Cap>
+        <strong className={`${style.strong}`}>
+          {name}
+        </strong>
+        <br/>
 
-    <Info>
-      <i className='material-icons'>folder</i>
-      {folder_name}
-      <br/>
-      <i className='material-icons'>domain</i>
-      {workspace_name}
-    </Info>
+        <small>
+          {moment(start).format(dFormat)} - {moment(end).format(dFormat)}
+        </small>
+      </Cap>
 
-    <Title>
-      {prettyNumber(amount, 'currency', locales)}
-    </Title>
-  </ThumbLink>
-)
+      <Info>
+        <i className='material-icons'>folder</i>
+        {folder_name}
+        <br/>
+        <i className='material-icons'>domain</i>
+        {workspace_name}
+      </Info>
+
+      <Title>
+        {prettyNumber(amount, 'currency', locales)}
+      </Title>
+
+      <Gear>
+        <DropdownMenu>
+          <MenuItem tag={Link} to={`${folderUrl}/orders/clone?id=${id}`} icon='content_copy'>
+            <Message>cloneSingleOrder</Message>
+          </MenuItem>
+
+          <MenuItem tag={Link} to={`${orderUrl}/autobudget`} icon='today'>
+            <Message>autoBudgetLog</Message>
+          </MenuItem>
+        </DropdownMenu>
+      </Gear>
+    </ThumbLink>
+  )
+}
 
 Order.displayName = 'Order'
 Order.propTypes = {

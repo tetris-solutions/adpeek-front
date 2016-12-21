@@ -6,7 +6,7 @@ import clipboard from 'copy-to-clipboard'
 import {loadReportShareUrlAction} from '../../actions/load-report-share-url'
 import {pushSuccessMessageAction} from '../../actions/push-success-message-action'
 import {Button} from '../Button'
-import {MenuItem} from '../DrodownMenu'
+import {MenuItem} from '../DropdownMenu'
 
 const {PropTypes} = React
 

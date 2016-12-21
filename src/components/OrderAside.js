@@ -22,10 +22,6 @@ export function OrderAside ({params: {company, workspace, folder}, order, dispat
       <Navigation icon='monetization_on'>
         <Name>{order.name}</Name>
         <NavBts>
-          {canEditOrder && <NavBt tag={Link} to={`${folderUrl}/order/${order.id}`} icon='mode_edit'>
-            <Message>editOrder</Message>
-          </NavBt>}
-
           {canEditOrder && <NavBt tag={Link} to={`${folderUrl}/orders/clone?id=${order.id}`} icon='content_copy'>
             <Message>cloneSingleOrder</Message>
           </NavBt>}

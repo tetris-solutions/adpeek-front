@@ -10,7 +10,7 @@ import {styled} from '../mixins/styled'
 import Fence from '../Fence'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
 import {Button} from '../Button'
-import {MenuItem} from '../DrodownMenu'
+import {MenuItem} from '../DropdownMenu'
 import {loadReportAction} from '../../actions/load-report'
 
 const style = csjs`

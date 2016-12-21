@@ -7,7 +7,7 @@ import {contextualize} from '../higher-order/contextualize'
 import get from 'lodash/get'
 import some from 'lodash/some'
 import {Button} from '../Button'
-import {MenuItem} from '../DrodownMenu'
+import {MenuItem} from '../DropdownMenu'
 
 const {PropTypes} = React
 const style = csjs`

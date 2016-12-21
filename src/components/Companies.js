@@ -4,7 +4,7 @@ import React from 'react'
 import {branch} from 'baobab-react/higher-order'
 import SubHeader from './SubHeader'
 import {Container, Gear, Title, ThumbLink} from './ThumbLink'
-import {DropdownMenu, MenuItem} from './DrodownMenu'
+import {DropdownMenu, MenuItem} from './DropdownMenu'
 import {Link} from 'react-router'
 
 const {PropTypes} = React

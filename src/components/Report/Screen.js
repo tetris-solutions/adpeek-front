@@ -1,7 +1,7 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import {Link} from 'react-router'
-import {DropdownMenu, MenuItem, HeaderMenuItem} from '../DrodownMenu'
+import {DropdownMenu, MenuItem, HeaderMenuItem} from '../DropdownMenu'
 import SubHeader from '../SubHeader'
 import ReportExportButton from './ExportButton'
 import DateRangeButton from './DateRangeButton'
