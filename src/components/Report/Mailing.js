@@ -192,7 +192,7 @@ const List = React.createClass({
     const {location: {pathname, query}} = this.context
     const {url, params} = this.props
     const mailings = activeOnly
-      ? filter(this.props.mailings, {disabled: false})
+      ? filter(this.props.mailings, ({disabled, id}) => !disabled || id === params.mailing)
       : this.props.mailings
 
     const shouldDisplayCreationForm = endsWith(pathname, '/new') || (
