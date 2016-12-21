@@ -26,8 +26,11 @@ const Report = ({dispatch, params, shareUrl, path, id, name}) => (
     <Fence canEditReport>{({canEditReport}) =>
       <Gear>
         <DropdownMenu>
-
           <ShareButton {...{id, shareUrl}}/>
+
+          <MenuItem tag={Link} to={`${path}/report/${id}/mailing`} icon='mail_outline'>
+            <Message>reportMailing</Message>
+          </MenuItem>
 
           {canEditReport &&
 
