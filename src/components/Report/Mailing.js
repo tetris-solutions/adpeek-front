@@ -17,7 +17,7 @@ import join from 'lodash/join'
 import {ThumbLink, Title, Container, Cap, Info, Gear} from '../ThumbLink'
 import {DropdownMenu, MenuItem, HeaderMenuItem} from '../DropdownMenu'
 import assign from 'lodash/assign'
-import DeleteButton from '../DeleteButton'
+import {DeleteSpan} from '../DeleteButton'
 import TextMessage from 'intl-messageformat'
 import Switch from '../Switch'
 import filter from 'lodash/filter'
@@ -54,7 +54,6 @@ New.propTypes = {
 }
 
 const NewMailing = contextualize(New, 'report', 'company', 'workspace', 'folder')
-const DeleteSpan = props => <DeleteButton {...props} tag='span'/>
 
 const MailingLink = React.createClass({
   displayName: 'Mailing-Link',

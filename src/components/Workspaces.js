@@ -22,7 +22,7 @@ import {loadCompanyWorkspacesAction} from '../actions/load-company-workspaces'
 import {unfavoriteWorkspaceAction} from '../actions/unfavorite-workspace'
 import {favoriteWorkspaceAction} from '../actions/favorite-workspace'
 import {loadWorkspaceStatsAction} from '../actions/load-workspace-stats'
-import DeleteButton from './DeleteButton'
+import {DeleteSpan} from './DeleteButton'
 import bind from 'lodash/bind'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
@@ -81,10 +81,6 @@ const style = csjs`
 }`
 const {PropTypes} = React
 const cleanStr = str => trim(deburr(lowerCase(str)))
-
-const DeleteSpan = props => <DeleteButton {...props} tag='span'/>
-
-DeleteSpan.displayName = 'Delete-Span'
 
 const num = val => !isNumber(val) ? 0 : val
 const division = (a, b) => b === 0 ? 0 : a / b

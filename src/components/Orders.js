@@ -30,7 +30,8 @@ export const Orders = React.createClass({
     })
   },
   propTypes: {
-    orders: PropTypes.array
+    dispatch: PropTypes.func.isRequired,
+    orders: PropTypes.array.isRequired
   },
   getInitialState () {
     return {
@@ -93,7 +94,7 @@ export const Orders = React.createClass({
                 <Message>orders</Message>
               </h5>
               {map(matchingOrders, (order, index) =>
-                <Order {...order} key={index}/>)}
+                <Order {...order} dispatch={this.props.dispatch} key={index}/>)}
             </Container>
           </Page>
         </div>}

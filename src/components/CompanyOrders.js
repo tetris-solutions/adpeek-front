@@ -7,12 +7,15 @@ const {PropTypes} = React
 export const CompanyOrders = React.createClass({
   displayName: 'Company-Orders',
   propTypes: {
+    dispatch: PropTypes.func.isRequired,
     company: PropTypes.shape({
       orders: PropTypes.array
-    })
+    }).isRequired
   },
   render () {
-    return <Orders orders={this.props.company.orders}/>
+    const {dispatch, company: {orders}} = this.props
+
+    return <Orders dispatch={dispatch} orders={orders}/>
   }
 })
 

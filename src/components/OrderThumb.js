@@ -6,6 +6,8 @@ import {prettyNumber} from '../functions/pretty-number'
 import csjs from 'csjs'
 import Message from 'tetris-iso/Message'
 import {styledFnComponent} from './higher-order/styled-fn-component'
+import {DeleteSpan} from './DeleteButton'
+import {deleteOrderAction} from '../actions/delete-order'
 
 const style = csjs`
 .strong {
@@ -16,7 +18,7 @@ const style = csjs`
 const {PropTypes} = React
 const dFormat = 'DD/MMM'
 
-const Order = ({amount, start, end, company, workspace, folder, id, name, folder_name, workspace_name}, {moment, locales}) => {
+const Order = ({dispatch, amount, start, end, company, workspace, folder, id, name, folder_name, workspace_name}, {params, moment, locales}) => {
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${folder}`
   const orderUrl = `${folderUrl}/order/${id}`
 
@@ -54,6 +56,14 @@ const Order = ({amount, start, end, company, workspace, folder, id, name, folder
           <MenuItem tag={Link} to={`${orderUrl}/autobudget`} icon='today'>
             <Message>autoBudgetLog</Message>
           </MenuItem>
+
+          <MenuItem
+            tag={DeleteSpan}
+            entityName={name}
+            onClick={() => dispatch(deleteOrderAction, params, id)}
+            icon='delete'>
+            <Message>deleteOrder</Message>
+          </MenuItem>
         </DropdownMenu>
       </Gear>
     </ThumbLink>
@@ -63,6 +73,7 @@ const Order = ({amount, start, end, company, workspace, folder, id, name, folder
 Order.displayName = 'Order'
 Order.propTypes = {
   id: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired,
   amount: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   folder_name: PropTypes.string.isRequired,
@@ -76,7 +87,8 @@ Order.propTypes = {
 
 Order.contextTypes = {
   moment: PropTypes.func.isRequired,
-  locales: PropTypes.string.isRequired
+  locales: PropTypes.string.isRequired,
+  params: PropTypes.object.isRequired
 }
 
 export default styledFnComponent(Order, style)

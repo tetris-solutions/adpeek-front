@@ -7,12 +7,15 @@ const {PropTypes} = React
 export const FolderOrders = React.createClass({
   displayName: 'Folder-Orders',
   propTypes: {
+    dispatch: PropTypes.func.isRequired,
     folder: PropTypes.shape({
       orders: PropTypes.array
-    })
+    }).isRequired
   },
   render () {
-    return <Orders orders={this.props.folder.orders}/>
+    const {dispatch, folder: {orders}} = this.props
+
+    return <Orders dispatch={dispatch} orders={orders}/>
   }
 })
 

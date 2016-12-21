@@ -58,4 +58,7 @@ DeleteButton.propTypes = {
   entityName: PropTypes.node.isRequired
 }
 
+export const DeleteSpan = props => <DeleteButton {...props} tag='span'/>
+DeleteSpan.displayName = 'Delete-Span'
+
 export default DeleteButton

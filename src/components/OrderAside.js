@@ -9,11 +9,12 @@ import {Navigation, Name, NavBt, NavBts} from './Navigation'
 
 const {PropTypes} = React
 
-export function OrderAside ({params: {company, workspace, folder}, order, dispatch}, {router}) {
+export function OrderAside ({params, order, dispatch}, {router}) {
+  const {company, workspace, folder} = params
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${folder}`
 
   function onClick () {
-    dispatch(deleteOrderAction, order.id)
+    dispatch(deleteOrderAction, params, order.id)
       .then(() => router.replace(`${folderUrl}/orders`))
   }
 
