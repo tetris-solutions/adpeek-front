@@ -25,9 +25,13 @@ const Report = ({dispatch, params, path, id, name}) => (
     <Fence canEditReport>{({canEditReport}) =>
       <Gear>
         <DropdownMenu>
-          <MenuItem tag={Link} icon='create' to={`${path}/report/${id}/edit`}>
+          {canEditReport &&
+
+          <MenuItem tag={Link} icon='mode_edit' to={`${path}/report/${id}/edit`}>
             <Message>editReport</Message>
-          </MenuItem>
+          </MenuItem>}
+
+          {canEditReport &&
 
           <MenuItem
             tag={DeleteSpan}
@@ -35,7 +39,7 @@ const Report = ({dispatch, params, path, id, name}) => (
             icon='delete'
             onClick={() => dispatch(deleteReportAction, params, id)}>
             <Message>deleteReport</Message>
-          </MenuItem>
+          </MenuItem>}
         </DropdownMenu>
       </Gear>}
     </Fence>
