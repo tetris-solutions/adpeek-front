@@ -255,18 +255,19 @@ export function reportToChartConfig (type, props) {
   const config = {
     yAxis,
     tooltip: {
-      useHTML: true,
-      headerFormat: xAxis.format
-        ? `<b>{point.x:${xAxis.format}}</b><br/>`
-        : undefined
+      useHTML: true
     },
     xAxis: {
-      type: xAxis.type,
-      labels: xAxis.format
-        ? {format: `{value:${xAxis.format}}`}
-        : undefined
+      type: xAxis.type
     },
     series
+  }
+
+  if (xAxis.format) {
+    config.tooltip.headerFormat = `<b>{point.x:${xAxis.format}}</b><br/>`
+    config.xAxis.labels = {
+      format: `{value:${xAxis.format}}`
+    }
   }
 
   if (xAxisDimension) {
