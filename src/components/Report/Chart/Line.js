@@ -8,7 +8,7 @@ function ChartLine (props) {
   const config = reportToChartConfig('line', props)
 
   return (
-    <Highcharts config={config} zoomType='x'>
+    <Highcharts config={config} zoomType='xy'>
       <title>{props.name}</title>
       <exporting
         sourceWidth={props.sourceWidth}

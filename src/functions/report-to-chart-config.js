@@ -143,13 +143,13 @@ export function reportToChartConfig (type, props) {
 
   const series = []
 
-  function pointIterator (point, index) {
-    const pointDimensions = pick(point, dimensions)
+  function walk (points, xValue) {
+    const firstPoint = points[0]
 
     let referenceEntity
 
-    if (point.id !== undefined) {
-      referenceEntity = find(entity.list, {id: point.id})
+    if (firstPoint.id !== undefined) {
+      referenceEntity = find(entity.list, {id: firstPoint.id})
       if (!referenceEntity) return
     }
 
@@ -157,73 +157,79 @@ export function reportToChartConfig (type, props) {
       categories.push(referenceEntity.name)
     } else if (
       xAxisDimension === 'qualityscore' ||
-      isString(point[xAxisDimension])
+      isString(firstPoint[xAxisDimension])
     ) {
-      categories.push(String(point[xAxisDimension]))
+      categories.push(String(firstPoint[xAxisDimension]))
     }
 
-    function metricIterator (metric, yAxisIndex) {
-      const seriesSignature = assign({metric}, pointDimensions)
+    function pointIterator (point, index) {
+      const pointDimensions = pick(point, dimensions)
 
-      function getNewSeries () {
-        const descriptors = map(seriesSignature, (val, key) => `${key}(${val})`)
+      function metricIterator (metric, yAxisIndex) {
+        const seriesSignature = assign({metric}, pointDimensions)
 
-        const newSeries = {
-          type,
-          id: join(descriptors, ':'),
-          name: join(descriptors, ':'),
-          seriesSignature,
-          yAxis: yAxisIndex,
-          data: []
+        function getNewSeries () {
+          const descriptors = map(seriesSignature, (val, key) => `${key}(${val})`)
+
+          const newSeries = {
+            type,
+            id: join(descriptors, ':'),
+            name: join(descriptors, ':'),
+            seriesSignature,
+            yAxis: yAxisIndex,
+            data: []
+          }
+
+          const nameParts = map(omit(seriesSignature, 'id'), getSeriesAttributeName)
+
+          if (seriesSignature.id !== undefined) {
+            nameParts.unshift(referenceEntity.name)
+          }
+
+          if (nameParts.length) {
+            newSeries.name = nameParts.join(', ')
+          }
+
+          return newSeries
         }
 
-        const nameParts = map(omit(seriesSignature, 'id'), getSeriesAttributeName)
+        let seriesConfig = type === 'pie'
+          ? series[0] // always one series
+          : find(series, s => isEqual(s.seriesSignature, seriesSignature))
 
-        if (seriesSignature.id !== undefined) {
-          nameParts.unshift(referenceEntity.name)
+        if (!seriesConfig) {
+          seriesConfig = getNewSeries()
+          series.push(seriesConfig)
         }
 
-        if (nameParts.length) {
-          newSeries.name = nameParts.join(', ')
+        const y = Number(point[metric])
+        const pointConfig = {
+          metric,
+          id: index,
+          // @todo maybe cast string values somehow?
+          y: isNaN(y) ? null : y
         }
 
-        return newSeries
+        if (type === 'pie') {
+          pointConfig.name = isIdBased
+            ? referenceEntity.name
+            : point[xAxisDimension]
+        }
+
+        if (isDate(point[xAxisDimension])) {
+          pointConfig.x = point[xAxisDimension]
+        }
+
+        seriesConfig.data.push(pointConfig)
       }
 
-      let seriesConfig = type === 'pie'
-        ? series[0] // always one series
-        : find(series, s => isEqual(s.seriesSignature, seriesSignature))
-
-      if (!seriesConfig) {
-        seriesConfig = getNewSeries()
-        series.push(seriesConfig)
-      }
-
-      const y = Number(point[metric])
-      const pointConfig = {
-        metric,
-        id: index,
-        // @todo maybe cast string values somehow?
-        y: isNaN(y) ? null : y
-      }
-
-      if (type === 'pie') {
-        pointConfig.name = isIdBased
-          ? referenceEntity.name
-          : point[xAxisDimension]
-      }
-
-      if (isDate(point[xAxisDimension])) {
-        pointConfig.x = point[xAxisDimension]
-      }
-
-      seriesConfig.data.push(pointConfig)
+      forEach(metrics, metricIterator)
     }
 
-    forEach(metrics, metricIterator)
+    forEach(points, pointIterator)
   }
 
-  forEach(result, pointIterator)
+  forEach(groupBy(result, xAxisDimension), walk)
 
   if (type === 'line' && xAxisDimension === 'date') {
     const days = groupBy(comments, 'date')

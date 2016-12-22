@@ -7,7 +7,7 @@ function ChartColumn (props) {
   const config = reportToChartConfig('column', props)
 
   return (
-    <Highcharts config={config} zoomType='x'>
+    <Highcharts config={config} zoomType='xy'>
       <title>{props.name}</title>
       <exporting
         sourceWidth={props.sourceWidth}
