@@ -17,18 +17,18 @@ import omit from 'lodash/omit'
 import Highcharts from 'highcharts/highstock'
 import React from 'react'
 
-Highcharts.setOptions({
-  global: {
-    useUTC: false
-  }
-})
-
 const isBrowser = typeof document !== 'undefined'
 
 if (isBrowser) {
   require('highcharts/modules/exporting')(Highcharts)
   require('highcharts/modules/offline-exporting.src')(Highcharts)
   window.Highcharts = Highcharts
+
+  Highcharts.setOptions({
+    global: {
+      useUTC: false
+    }
+  })
 }
 
 function isUpperCase (letter) {
