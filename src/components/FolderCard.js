@@ -176,13 +176,15 @@ DeleteFolder.propTypes = {
   dispatch: PropTypes.func.isRequired
 }
 
-const FolderCard = ({id, name, stats, reports, editable, dispatch, params}, {location: {query}}) => {
+const FolderCard = ({id, account: {platform}, name, stats, reports, editable, dispatch, params}, {location: {query}}) => {
   const {company, workspace} = params
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${id}`
 
   return (
     <ThumbLink to={folderUrl} title={name}>
-      <Cap>{name}</Cap>
+      <Cap bg={platform === 'adwords' ? 'amber-800' : 'blue-900'}>
+        {name}
+      </Cap>
 
       {query.stats && (
         <FolderStats
@@ -229,6 +231,9 @@ const FolderCard = ({id, name, stats, reports, editable, dispatch, params}, {loc
 FolderCard.displayName = 'FolderCard'
 FolderCard.propTypes = {
   id: PropTypes.string.isRequired,
+  account: PropTypes.shape({
+    platform: PropTypes.string
+  }).isRequired,
   name: PropTypes.string.isRequired,
   stats: PropTypes.object,
   reports: PropTypes.array,
