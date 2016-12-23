@@ -1,5 +1,6 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import cx from 'classnames'
 import {ThumbLink, Cap, Gear} from './ThumbLink'
 import {DropdownMenu, MenuItem} from './DropdownMenu'
 import {Link} from 'react-router'
@@ -16,6 +17,19 @@ const style = csjs`
 .chart {
   width: 230px;
   height: 150px;
+}
+.bt {
+  font-size: 9pt;
+  cursor: pointer;
+  display: inline-block;
+  padding: .3em .7em;
+  color: #9e9e9e;
+}
+.bt:hover {
+  background: rgba(0, 0, 0, 0.1)
+}
+.selected {
+  color: #283593;
 }`
 
 const {PropTypes} = React
@@ -27,7 +41,7 @@ const dt = str => {
 const labelStyle = {
   fontSize: '10px'
 }
-const Chart = ({metric, series}) => (
+const Chart = ({children}) => (
   <Highcharts className={String(style.chart)}>
     <title>{null}</title>
 
@@ -55,23 +69,13 @@ const Chart = ({metric, series}) => (
       <labels style={labelStyle}/>
     </y-axis>
 
-    <line id='budget'>
-      {map(series, ({date, budget}, index) =>
-        <point
-          key={`budget-${date}`}
-          id={`budget-${date}`}
-          y={budget}
-          x={dt(date)}/>)}
-    </line>
+    {children}
   </Highcharts>
 )
 
 Chart.displayName = 'Folder-Card-Chart'
 Chart.propTypes = {
-  metric: PropTypes.object,
-  series: PropTypes.arrayOf(PropTypes.shape({
-    date: PropTypes.string
-  })).isRequired
+  children: PropTypes.node
 }
 
 const FolderStats = React.createClass({
@@ -85,6 +89,11 @@ const FolderStats = React.createClass({
   contextTypes: {
     tree: PropTypes.object
   },
+  getInitialState () {
+    return {
+      selected: 'budget'
+    }
+  },
   componentDidMount () {
     loadFolderStatsAction(
       this.context.tree,
@@ -92,15 +101,58 @@ const FolderStats = React.createClass({
       this.props.id
     )
   },
+  selectMetric (e) {
+    e.preventDefault()
+    this.setState({selected: 'metric'})
+  },
+  selectBudget (e) {
+    e.preventDefault()
+    this.setState({selected: 'budget'})
+  },
   render () {
+    const {selected} = this.state
     const {stats} = this.props
 
-    return stats
-      ? (
-        <div>
-          <Chart {...stats}/>
-        </div>
-      ) : null
+    if (!stats || !stats.metric) {
+      return (
+        <div style={{height: 200}}/>
+      )
+    }
+
+    return (
+      <div>
+        <span
+          className={cx({
+            [style.bt]: true,
+            [style.selected]: selected === 'budget'
+          })}
+          onClick={this.selectBudget}>
+          Investimento
+        </span>
+
+        <span
+          className={cx({
+            [style.bt]: true,
+            [style.selected]: selected === 'metric'
+          })}
+          onClick={this.selectMetric}>
+          {stats.metric.name}
+        </span>
+
+        <Chart>
+          <line id={selected}>
+            {map(stats.series, (x, index) =>
+              <point
+                key={`${x.date}-${selected}-${index}`}
+                id={`${x.date}-${selected}-${index}`}
+                x={dt(x.date)}
+                y={selected === 'metric'
+                  ? x[stats.metric.id]
+                  : x.cost}/>)}
+          </line>
+        </Chart>
+      </div>
+    )
   }
 })
 
