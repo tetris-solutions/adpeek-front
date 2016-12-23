@@ -14,6 +14,9 @@ import csjs from 'csjs'
 import {styled} from './mixins/styled'
 
 const style = csjs`
+.wrapper {
+  height: 180px;
+}
 .chart {
   width: 230px;
   height: 150px;
@@ -91,7 +94,7 @@ const FolderStats = React.createClass({
   },
   getInitialState () {
     return {
-      selected: 'budget'
+      selected: 'metric'
     }
   },
   componentDidMount () {
@@ -115,12 +118,12 @@ const FolderStats = React.createClass({
 
     if (!stats || !stats.metric) {
       return (
-        <div style={{height: 200}}/>
+        <div className={`${style.wrapper}`}/>
       )
     }
 
     return (
-      <div>
+      <div className={`${style.wrapper}`}>
         <span
           className={cx({
             [style.bt]: true,
