@@ -1,20 +1,72 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
-import {ThumbLink, Title, Gear} from './ThumbLink'
+import {ThumbLink, Cap, Gear} from './ThumbLink'
 import {DropdownMenu, MenuItem} from './DropdownMenu'
 import {Link} from 'react-router'
 import {deleteFolderAction} from '../actions/delete-folder'
 import {loadFolderStatsAction} from '../actions/load-folder-stats'
 import {DeleteSpan} from './DeleteButton'
 import ReportLink from './Report/ReportLink'
+import Highcharts from './Highcharts'
+import map from 'lodash/map'
 
 const {PropTypes} = React
+const dt = str => {
+  const [year, month, day] = str.split('-')
+  return new Date(year, month - 1, day)
+}
+
+const Chart = ({metric, series}) => (
+  <Highcharts style={{height: 150, width: 200}}>
+    <title>{null}</title>
+
+    <plot-options>
+      <line>
+        <marker enabled={false}>
+          <states>
+            <hover enabled={false}/>
+          </states>
+        </marker>
+      </line>
+    </plot-options>
+
+    <legend enabled={false}/>
+    <tooltip enabled={false}/>
+
+    <x-axis>
+      <type>datetime</type>
+      <title>{null}</title>
+    </x-axis>
+
+    <y-axis>
+      <title>{null}</title>
+    </y-axis>
+
+    <line id='budget'>
+      {map(series, ({date, budget}, index) =>
+        <point
+          key={`budget-${date}`}
+          id={`budget-${date}`}
+          y={budget}
+          x={dt(date)}/>)}
+    </line>
+  </Highcharts>
+)
+
+Chart.displayName = 'Folder-Card-Chart'
+Chart.propTypes = {
+  metric: PropTypes.object,
+  series: PropTypes.arrayOf(PropTypes.shape({
+    date: PropTypes.string
+  })).isRequired
+}
 
 const FolderStats = React.createClass({
   displayName: 'Folder-Stats',
   propTypes: {
     id: PropTypes.string,
-    params: PropTypes.object
+    params: PropTypes.object,
+    stats: PropTypes.object
   },
   contextTypes: {
     tree: PropTypes.object
@@ -27,7 +79,14 @@ const FolderStats = React.createClass({
     )
   },
   render () {
-    return null
+    const {stats} = this.props
+
+    return stats
+      ? (
+        <div>
+          <Chart {...stats}/>
+        </div>
+      ) : null
   }
 })
 
@@ -48,17 +107,18 @@ DeleteFolder.propTypes = {
   dispatch: PropTypes.func.isRequired
 }
 
-const FolderCard = ({id, name, reports, editable, dispatch, params}, {location: {query}}) => {
+const FolderCard = ({id, name, stats, reports, editable, dispatch, params}, {location: {query}}) => {
   const {company, workspace} = params
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${id}`
 
   return (
     <ThumbLink to={folderUrl} title={name}>
-      <Title>{name}</Title>
+      <Cap>{name}</Cap>
 
       {query.stats && (
         <FolderStats
           params={params}
+          stats={stats}
           id={id}/>)}
 
       <Gear>
@@ -101,6 +161,7 @@ FolderCard.displayName = 'FolderCard'
 FolderCard.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  stats: PropTypes.object,
   reports: PropTypes.array,
   editable: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
