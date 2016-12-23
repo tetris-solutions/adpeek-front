@@ -10,90 +10,14 @@ import Fence from './Fence'
 import SubHeader, {SubHeaderButton} from './SubHeader'
 import SearchBox from './HeaderSearchBox'
 import {contextualize} from './higher-order/contextualize'
-import {Container, ThumbLink, Title, Gear} from './ThumbLink'
-import {DropdownMenu, MenuItem} from './DropdownMenu'
+import {Container} from './ThumbLink'
 import {Link} from 'react-router'
-import {deleteFolderAction} from '../actions/delete-folder'
 import Page from './Page'
-import DeleteButton from './DeleteButton'
-import ReportLink from './Report/ReportLink'
+import FolderCard from './FolderCard'
 
 const cleanStr = str => trim(deburr(lowerCase(str)))
 
 const {PropTypes} = React
-
-const DeleteSpan = props => <DeleteButton {...props} tag='span'/>
-DeleteSpan.displayName = 'Delete-Span'
-
-const DeleteFolder = ({params, dispatch, id, name}) => (
-  <MenuItem
-    icon='delete'
-    tag={DeleteSpan}
-    onClick={() => dispatch(deleteFolderAction, params, id)}
-    entityName={name}>
-    <Message>deleteFolder</Message>
-  </MenuItem>
-)
-DeleteFolder.displayName = 'Delete-Folder'
-DeleteFolder.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  params: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired
-}
-
-const Folder = ({id, name, reports, editable, dispatch, params}) => {
-  const {company, workspace} = params
-  const folderUrl = `/company/${company}/workspace/${workspace}/folder/${id}`
-
-  return (
-    <ThumbLink to={folderUrl} title={name}>
-      <Title>{name}</Title>
-      <Gear>
-        <DropdownMenu>
-          <MenuItem to={`${folderUrl}/creatives`} tag={Link} icon='receipt'>
-            <Message>creatives</Message>
-          </MenuItem>
-
-          <MenuItem to={`${folderUrl}/orders`} tag={Link} icon='attach_money'>
-            <Message>folderOrders</Message>
-          </MenuItem>
-
-          <ReportLink
-            tag={MenuItem}
-            params={{company, workspace, folder: id}}
-            reports={reports}
-            dispatch={dispatch}>
-            <Message>folderReport</Message>
-          </ReportLink>
-
-          {editable &&
-          <MenuItem to={`${folderUrl}/edit`} tag={Link} icon='mode_edit'>
-            <Message>editFolder</Message>
-          </MenuItem>}
-
-          {editable &&
-          <DeleteFolder
-            id={id}
-            name={name}
-            params={params}
-            dispatch={dispatch}/>}
-
-        </DropdownMenu>
-      </Gear>
-    </ThumbLink>
-  )
-}
-
-Folder.displayName = 'Folder'
-Folder.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  reports: PropTypes.array,
-  editable: PropTypes.bool.isRequired,
-  dispatch: PropTypes.func.isRequired,
-  params: PropTypes.object.isRequired
-}
 
 export const Folders = React.createClass({
   displayName: 'Folders',
@@ -136,7 +60,7 @@ export const Folders = React.createClass({
                 <Message>folderList</Message>
               </h5>
               {map(matchingFolders, (folder, index) =>
-                <Folder
+                <FolderCard
                   key={index}
                   {...folder}
                   dispatch={dispatch}
