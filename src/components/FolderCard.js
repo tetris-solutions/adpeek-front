@@ -16,6 +16,9 @@ const dt = str => {
   return new Date(year, month - 1, day)
 }
 
+const labelStyle = {
+  fontSize: '10px'
+}
 const Chart = ({metric, series}) => (
   <Highcharts style={{height: 150, width: 200}}>
     <title>{null}</title>
@@ -36,10 +39,12 @@ const Chart = ({metric, series}) => (
     <x-axis>
       <type>datetime</type>
       <title>{null}</title>
+      <labels style={labelStyle}/>
     </x-axis>
 
     <y-axis>
       <title>{null}</title>
+      <labels style={labelStyle}/>
     </y-axis>
 
     <line id='budget'>
