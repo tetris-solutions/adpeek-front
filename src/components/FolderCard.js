@@ -143,15 +143,14 @@ const FolderStats = React.createClass({
         </span>
 
         <Chart>
-          <line id={selected}>
-            {map(stats.series, (x, index) =>
-              <point
-                key={`${x.date}-${selected}-${index}`}
-                id={`${x.date}-${selected}-${index}`}
-                x={dt(x.date)}
-                y={selected === 'metric'
-                  ? x[stats.metric.id]
-                  : x.cost}/>)}
+          <line id={selected}>{map(stats.series, (x, index) =>
+            <point
+              key={`${x.date}-${selected}-${index}`}
+              id={`${x.date}-${selected}-${index}`}
+              x={dt(x.date)}
+              y={selected === 'metric'
+                ? x[stats.metric.id]
+                : x.cost}/>)}
           </line>
         </Chart>
       </div>
@@ -221,7 +220,6 @@ const FolderCard = ({id, account: {platform}, name, stats, reports, editable, di
             name={name}
             params={params}
             dispatch={dispatch}/>}
-
         </DropdownMenu>
       </Gear>
     </ThumbLink>
