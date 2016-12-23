@@ -24,8 +24,8 @@ module.exports = {
   isPrivateComment: 'Privado',
   newCampaignHeader: 'Nova campanha',
   newCampaignCallToAction: 'Criar campanha',
-  newOrderHeader: 'Nova ordem',
-  newOrderCallToAction: 'Criar ordem',
+  newOrderHeader: 'Novo pedido',
+  newOrderCallToAction: 'Criar pedido',
   save: 'Salvar',
   cancel: 'Cancelar',
   update: 'Atualizar',
@@ -58,7 +58,7 @@ module.exports = {
         Aqui você pode dizer como os <strong>R$ {amount}</strong> do seu PI vão ser distribuídos.
       </p>
       <p>
-        Cada fatia do gráfico ao lado representa um orçamento, que é uma partição do budget total da ordem.
+        Cada fatia do gráfico ao lado representa um orçamento, que é uma partição do budget total do pedido.
         É possível associar quantas campanhas você quiser a um orçamento, de forma que o valor será distribuído entre elas.
       </p>
       <p>
@@ -190,9 +190,9 @@ module.exports = {
   checkDefaultReportDescription: 'Seleciona relatório como padrão',
   uncheckDefaultReport: 'Desfazer Padrão',
   uncheckDefaultReportDescription: 'Relatório deixará de ser o padrão',
-  editOrder: 'Editar Ordem',
+  editOrder: 'Editar Pedido',
   autoBudgetLog: 'Histórico AutoBudget',
-  deleteOrder: 'Remover Ordem',
+  deleteOrder: 'Remover Pedido',
   folderOrders: 'Pedidos da pasta',
   folderReport: 'Relatório da pasta',
   editFolder: 'Editar Pasta',
