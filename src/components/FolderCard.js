@@ -4,10 +4,32 @@ import {ThumbLink, Title, Gear} from './ThumbLink'
 import {DropdownMenu, MenuItem} from './DropdownMenu'
 import {Link} from 'react-router'
 import {deleteFolderAction} from '../actions/delete-folder'
+import {loadFolderStatsAction} from '../actions/load-folder-stats'
 import {DeleteSpan} from './DeleteButton'
 import ReportLink from './Report/ReportLink'
 
 const {PropTypes} = React
+
+const FolderStats = React.createClass({
+  displayName: 'Folder-Stats',
+  propTypes: {
+    id: PropTypes.string,
+    params: PropTypes.object
+  },
+  contextTypes: {
+    tree: PropTypes.object
+  },
+  componentDidMount () {
+    loadFolderStatsAction(
+      this.context.tree,
+      this.props.params,
+      this.props.id
+    )
+  },
+  render () {
+    return null
+  }
+})
 
 const DeleteFolder = ({params, dispatch, id, name}) => (
   <MenuItem
@@ -26,13 +48,19 @@ DeleteFolder.propTypes = {
   dispatch: PropTypes.func.isRequired
 }
 
-const FolderCard = ({id, name, reports, editable, dispatch, params}) => {
+const FolderCard = ({id, name, reports, editable, dispatch, params}, {location: {query}}) => {
   const {company, workspace} = params
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${id}`
 
   return (
     <ThumbLink to={folderUrl} title={name}>
       <Title>{name}</Title>
+
+      {query.stats && (
+        <FolderStats
+          params={params}
+          id={id}/>)}
+
       <Gear>
         <DropdownMenu>
           <MenuItem to={`${folderUrl}/creatives`} tag={Link} icon='receipt'>
@@ -77,6 +105,10 @@ FolderCard.propTypes = {
   editable: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
   params: PropTypes.object.isRequired
+}
+
+FolderCard.contextTypes = {
+  location: PropTypes.object.isRequired
 }
 
 export default FolderCard

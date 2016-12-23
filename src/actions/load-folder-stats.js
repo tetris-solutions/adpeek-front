@@ -10,7 +10,7 @@ function loadFolderStats (id, requestFreshStats, config) {
 
 const statsRequestRegister = {}
 
-export function loadFolderStatsAction (tree, {company, workspace, folder}, requestFreshStats = false) {
+export function loadFolderStatsAction (tree, {company, workspace}, folder, requestFreshStats = false) {
   statsRequestRegister[folder] = statsRequestRegister[folder] ||
     loadFolderStats(folder, requestFreshStats, getApiFetchConfig(tree))
       .then(saveResponseTokenAsCookie)
