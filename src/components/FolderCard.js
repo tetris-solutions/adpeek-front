@@ -9,6 +9,14 @@ import {DeleteSpan} from './DeleteButton'
 import ReportLink from './Report/ReportLink'
 import Highcharts from './Highcharts'
 import map from 'lodash/map'
+import csjs from 'csjs'
+import {styled} from './mixins/styled'
+
+const style = csjs`
+.chart {
+  width: 230px;
+  height: 150px;
+}`
 
 const {PropTypes} = React
 const dt = str => {
@@ -20,7 +28,7 @@ const labelStyle = {
   fontSize: '10px'
 }
 const Chart = ({metric, series}) => (
-  <Highcharts style={{height: 150, width: 200}}>
+  <Highcharts className={String(style.chart)}>
     <title>{null}</title>
 
     <plot-options>
@@ -68,6 +76,7 @@ Chart.propTypes = {
 
 const FolderStats = React.createClass({
   displayName: 'Folder-Stats',
+  mixins: [styled(style)],
   propTypes: {
     id: PropTypes.string,
     params: PropTypes.object,
