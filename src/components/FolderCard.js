@@ -4,6 +4,7 @@ import cx from 'classnames'
 import {ThumbLink, Cap, Gear} from './ThumbLink'
 import {DropdownMenu, MenuItem} from './DropdownMenu'
 import {Link} from 'react-router'
+import {prettyNumber} from '../functions/pretty-number'
 import {deleteFolderAction} from '../actions/delete-folder'
 import {loadFolderStatsAction} from '../actions/load-folder-stats'
 import {DeleteSpan} from './DeleteButton'
@@ -44,42 +45,6 @@ const dt = str => {
 const labelStyle = {
   fontSize: '10px'
 }
-const Chart = ({children}) => (
-  <Highcharts className={String(style.chart)}>
-    <title>{null}</title>
-
-    <plot-options>
-      <line>
-        <marker enabled={false}>
-          <states>
-            <hover enabled={false}/>
-          </states>
-        </marker>
-      </line>
-    </plot-options>
-
-    <legend enabled={false}/>
-    <tooltip enabled={false}/>
-
-    <x-axis>
-      <type>datetime</type>
-      <title>{null}</title>
-      <labels style={labelStyle}/>
-    </x-axis>
-
-    <y-axis>
-      <title>{null}</title>
-      <labels style={labelStyle}/>
-    </y-axis>
-
-    {children}
-  </Highcharts>
-)
-
-Chart.displayName = 'Folder-Card-Chart'
-Chart.propTypes = {
-  children: PropTypes.node
-}
 
 const FolderStats = React.createClass({
   displayName: 'Folder-Stats',
@@ -90,7 +55,9 @@ const FolderStats = React.createClass({
     stats: PropTypes.object
   },
   contextTypes: {
-    tree: PropTypes.object
+    tree: PropTypes.object.isRequired,
+    locales: PropTypes.string.isRequired,
+    messages: PropTypes.object.isRequired
   },
   getInitialState () {
     return {
@@ -115,6 +82,7 @@ const FolderStats = React.createClass({
   render () {
     const {selected} = this.state
     const {stats} = this.props
+    const {locales, messages} = this.context
 
     if (!stats || !stats.metric) {
       return (
@@ -122,12 +90,25 @@ const FolderStats = React.createClass({
       )
     }
 
+    const metricView = selected === 'metric'
+    const seriesType = metricView ? stats.metric.type : 'currency'
+    const seriesName = metricView ? stats.metric.name : messages.investmentLabel
+
+    function pointFormatter () {
+      const value = prettyNumber(this.y, seriesType, locales)
+      return `<span style="color: ${this.color}">${seriesName}:</span> <b>${value}</b><br/>`
+    }
+
+    function labelFormatter () {
+      return prettyNumber(this.value, seriesType, locales)
+    }
+
     return (
       <div className={`${style.wrapper}`}>
         <span
           className={cx({
             [style.bt]: true,
-            [style.selected]: selected === 'budget'
+            [style.selected]: !metricView
           })}
           onClick={this.selectBudget}>
           <Message>investmentLabel</Message>
@@ -136,23 +117,49 @@ const FolderStats = React.createClass({
         <span
           className={cx({
             [style.bt]: true,
-            [style.selected]: selected === 'metric'
+            [style.selected]: metricView
           })}
           onClick={this.selectMetric}>
           {stats.metric.name}
         </span>
 
-        <Chart>
-          <line id={selected}>{map(stats.series, (x, index) =>
+        <Highcharts className={String(style.chart)}>
+          <title>{null}</title>
+
+          <plot-options>
+            <line>
+              <marker enabled={false}>
+                <states>
+                  <hover enabled={false}/>
+                </states>
+              </marker>
+            </line>
+          </plot-options>
+
+          <legend enabled={false}/>
+          <tooltip enabled={false}/>
+
+          <x-axis>
+            <type>datetime</type>
+            <title>{null}</title>
+            <labels style={labelStyle}/>
+          </x-axis>
+
+          <y-axis>
+            <title>{null}</title>
+            <labels style={labelStyle} formatter={labelFormatter}/>
+          </y-axis>
+
+          <line id={selected} tooltip={{pointFormatter}}>{map(stats.series, (x, index) =>
             <point
               key={`${x.date}-${selected}-${index}`}
               id={`${x.date}-${selected}-${index}`}
               x={dt(x.date)}
-              y={selected === 'metric'
+              y={metricView
                 ? x[stats.metric.id]
                 : x.cost}/>)}
           </line>
-        </Chart>
+        </Highcharts>
       </div>
     )
   }
