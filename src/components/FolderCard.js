@@ -130,7 +130,7 @@ const FolderStats = React.createClass({
             [style.selected]: selected === 'budget'
           })}
           onClick={this.selectBudget}>
-          Investimento
+          <Message>investmentLabel</Message>
         </span>
 
         <span
