@@ -1,6 +1,6 @@
 import {getDeepCursor} from './get-deep-cursor'
 import {mergeResponseArray} from './merge-response-arrays'
-
+import assign from 'lodash/assign'
 /**
  * computes dynamic tree cursor and sets fetch response there
  * @param {Baobab} tree state tree
@@ -25,3 +25,6 @@ export function saveResponseData (tree, path, transform = mergeResponseArray) {
 
   return onFulfilled
 }
+
+export const mergeResponseData = (tree, path) =>
+  saveResponseData(tree, path, (updates, old) => assign({}, old, updates))

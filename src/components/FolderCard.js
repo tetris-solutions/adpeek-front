@@ -65,11 +65,38 @@ const FolderStats = React.createClass({
     }
   },
   componentDidMount () {
+    this.setupFormatters()
     loadFolderStatsAction(
       this.context.tree,
       this.props.params,
       this.props.id
     )
+  },
+  setupFormatters () {
+    const component = this
+
+    this.labelFormatter = function () {
+      const {locales} = component
+      const {selected} = component.state
+      const {stats} = component.props
+
+      const metricView = selected === 'metric'
+      const seriesType = metricView ? stats.metric.type : 'currency'
+
+      return prettyNumber(this.value, seriesType, locales)
+    }
+    this.pointFormatter = function () {
+      const {messages, locales} = component
+      const {selected} = component.state
+      const {stats} = component.props
+
+      const metricView = selected === 'metric'
+      const seriesType = metricView ? stats.metric.type : 'currency'
+      const seriesName = metricView ? stats.metric.name : messages.investmentLabel
+
+      const value = prettyNumber(this.y, seriesType, locales)
+      return `<span style="color: ${this.color}">${seriesName}:</span> <b>${value}</b><br/>`
+    }
   },
   selectMetric (e) {
     e.preventDefault()
@@ -82,7 +109,6 @@ const FolderStats = React.createClass({
   render () {
     const {selected} = this.state
     const {stats} = this.props
-    const {locales, messages} = this.context
 
     if (!stats || !stats.metric) {
       return (
@@ -91,17 +117,6 @@ const FolderStats = React.createClass({
     }
 
     const metricView = selected === 'metric'
-    const seriesType = metricView ? stats.metric.type : 'currency'
-    const seriesName = metricView ? stats.metric.name : messages.investmentLabel
-
-    function pointFormatter () {
-      const value = prettyNumber(this.y, seriesType, locales)
-      return `<span style="color: ${this.color}">${seriesName}:</span> <b>${value}</b><br/>`
-    }
-
-    function labelFormatter () {
-      return prettyNumber(this.value, seriesType, locales)
-    }
 
     return (
       <div className={`${style.wrapper}`}>
@@ -147,17 +162,19 @@ const FolderStats = React.createClass({
 
           <y-axis>
             <title>{null}</title>
-            <labels style={labelStyle} formatter={labelFormatter}/>
+            <labels style={labelStyle} formatter={this.labelFormatter}/>
           </y-axis>
 
-          <line id={selected} tooltip={{pointFormatter}}>{map(stats.series, (x, index) =>
-            <point
-              key={`${x.date}-${selected}-${index}`}
-              id={`${x.date}-${selected}-${index}`}
-              x={dt(x.date)}
-              y={metricView
-                ? x[stats.metric.id]
-                : x.cost}/>)}
+          <line id={selected}>
+            <tooltip pointFormatter={this.pointFormatter}/>
+            {map(stats.series, (x, index) =>
+              <point
+                key={`${x.date}-${selected}-${index}`}
+                id={`${x.date}-${selected}-${index}`}
+                x={dt(x.date)}
+                y={metricView
+                  ? x[stats.metric.id]
+                  : x.cost}/>)}
           </line>
         </Highcharts>
       </div>
