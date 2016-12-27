@@ -5,7 +5,7 @@ export const styledFnComponent = (fnComponent, style) => React.createClass({
   displayName: fnComponent.displayName,
   propTypes: fnComponent.propTypes,
   getDefaultProps () {
-    return fnComponent.defaultProps
+    return fnComponent.defaultProps || {}
   },
   contextTypes: assign({
     insertCss: React.PropTypes.func

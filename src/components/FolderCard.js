@@ -59,9 +59,14 @@ const FolderStats = React.createClass({
     locales: PropTypes.string.isRequired,
     messages: PropTypes.object.isRequired
   },
+  getDefaultProps () {
+    return {
+      stats: {}
+    }
+  },
   getInitialState () {
     return {
-      selected: 'metric'
+      selectedSeries: 'kpi'
     }
   },
   componentDidMount () {
@@ -77,20 +82,21 @@ const FolderStats = React.createClass({
 
     this.labelFormatter = function () {
       const {locales} = component
-      const {selected} = component.state
+      const {selectedSeries} = component.state
       const {stats} = component.props
 
-      const metricView = selected === 'metric'
+      const metricView = selectedSeries === 'kpi'
       const seriesType = metricView ? stats.metric.type : 'currency'
 
       return prettyNumber(this.value, seriesType, locales)
     }
+
     this.pointFormatter = function () {
       const {messages, locales} = component
-      const {selected} = component.state
+      const {selectedSeries} = component.state
       const {stats} = component.props
 
-      const metricView = selected === 'metric'
+      const metricView = selectedSeries === 'kpi'
       const seriesType = metricView ? stats.metric.type : 'currency'
       const seriesName = metricView ? stats.metric.name : messages.investmentLabel
 
@@ -100,43 +106,36 @@ const FolderStats = React.createClass({
   },
   selectMetric (e) {
     e.preventDefault()
-    this.setState({selected: 'metric'})
+    this.setState({selectedSeries: 'kpi'})
   },
   selectBudget (e) {
     e.preventDefault()
-    this.setState({selected: 'budget'})
+    this.setState({selectedSeries: 'budget'})
   },
   render () {
-    const {selected} = this.state
+    const {selectedSeries} = this.state
     const {stats} = this.props
-
-    if (!stats || !stats.metric) {
-      return (
-        <div className={`${style.wrapper}`}/>
-      )
-    }
-
-    const metricView = selected === 'metric'
+    const isKpiSeries = selectedSeries === 'kpi'
 
     return (
       <div className={`${style.wrapper}`}>
         <span
           className={cx({
             [style.bt]: true,
-            [style.selected]: !metricView
+            [style.selected]: !isKpiSeries
           })}
           onClick={this.selectBudget}>
           <Message>investmentLabel</Message>
         </span>
 
-        <span
-          className={cx({
-            [style.bt]: true,
-            [style.selected]: metricView
-          })}
-          onClick={this.selectMetric}>
-          {stats.metric.name}
-        </span>
+        {stats.metric
+          ? <span
+            className={cx({
+              [style.bt]: true,
+              [style.selected]: isKpiSeries
+            })}
+            onClick={this.selectMetric}>{stats.metric.name}</span>
+          : null}
 
         <Highcharts className={String(style.chart)}>
           <title>{null}</title>
@@ -165,14 +164,14 @@ const FolderStats = React.createClass({
             <labels style={labelStyle} formatter={this.labelFormatter}/>
           </y-axis>
 
-          <line id={selected}>
+          <line id={selectedSeries}>
             <tooltip pointFormatter={this.pointFormatter}/>
             {map(stats.series, (x, index) =>
               <point
-                key={`${x.date}-${selected}-${index}`}
-                id={`${x.date}-${selected}-${index}`}
+                key={`${x.date}-${selectedSeries}-${index}`}
+                id={`${x.date}-${selectedSeries}-${index}`}
                 x={dt(x.date)}
-                y={metricView
+                y={isKpiSeries
                   ? x[stats.metric.id]
                   : x.cost}/>)}
           </line>
