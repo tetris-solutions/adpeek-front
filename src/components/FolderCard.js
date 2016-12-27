@@ -198,7 +198,7 @@ DeleteFolder.propTypes = {
   dispatch: PropTypes.func.isRequired
 }
 
-const FolderCard = ({id, account: {platform}, name, stats, reports, editable, dispatch, params}, {location: {query}}) => {
+const FolderCard = ({id, account: {platform}, name, stats, reports, editable, dispatch, params}) => {
   const {company, workspace} = params
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${id}`
 
@@ -208,11 +208,7 @@ const FolderCard = ({id, account: {platform}, name, stats, reports, editable, di
         {name}
       </Cap>
 
-      {query.stats && (
-        <FolderStats
-          params={params}
-          stats={stats}
-          id={id}/>)}
+      <FolderStats params={params} stats={stats} id={id}/>
 
       <Gear>
         <DropdownMenu>
@@ -261,10 +257,6 @@ FolderCard.propTypes = {
   editable: PropTypes.bool.isRequired,
   dispatch: PropTypes.func.isRequired,
   params: PropTypes.object.isRequired
-}
-
-FolderCard.contextTypes = {
-  location: PropTypes.object.isRequired
 }
 
 export default FolderCard
