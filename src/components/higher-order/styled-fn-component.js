@@ -1,24 +1,19 @@
 import React from 'react'
 import assign from 'lodash/assign'
 
-export function styledFnComponent (fnComponent, style) {
-  let inserted = false
-
-  function proxyFnComponent (props, context) {
-    if (!inserted) {
-      context.insertCss(style)
-      inserted = true
-    }
-
-    return fnComponent(props, context)
-  }
-
-  proxyFnComponent.displayName = fnComponent.displayName
-  proxyFnComponent.propTypes = fnComponent.propTypes
-  proxyFnComponent.defaultProps = fnComponent.defaultProps
-  proxyFnComponent.contextTypes = assign({
+export const styledFnComponent = (fnComponent, style) => React.createClass({
+  displayName: fnComponent.displayName,
+  propTypes: fnComponent.propTypes,
+  getDefaultProps () {
+    return fnComponent.defaultProps
+  },
+  contextTypes: assign({
     insertCss: React.PropTypes.func
-  }, fnComponent.contextTypes)
-
-  return proxyFnComponent
-}
+  }, fnComponent.contextTypes),
+  componentWillMount () {
+    this.context.insertCss(style)
+  },
+  render () {
+    return fnComponent(this.props, this.context)
+  }
+})
