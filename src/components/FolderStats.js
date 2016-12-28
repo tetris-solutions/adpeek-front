@@ -30,7 +30,6 @@ const style = csjs`
   color: #283593;
 }`
 
-const {PropTypes} = React
 const labelStyle = {
   fontSize: '10px'
 }
@@ -39,18 +38,98 @@ const dt = str => {
   return new Date(year, month - 1, day)
 }
 
+const Stats = ({selectedSeries, selectBudget, selectKPI, stats, labelFormatter, pointFormatter}) => (
+  <div className={`${style.wrapper}`}>
+    <span
+      className={cx({
+        [style.bt]: true,
+        [style.selected]: selectedSeries === 'budget'
+      })}
+      onClick={selectBudget}>
+      <Message>investmentLabel</Message>
+    </span>
+
+    {stats.metric
+      ? (
+        <span
+          className={cx({
+            [style.bt]: true,
+            [style.selected]: selectedSeries === 'kpi'
+          })}
+          onClick={selectKPI}>
+          {stats.metric.name}
+        </span>)
+      : null}
+
+    <Highcharts className={String(style.chart)}>
+      <title>{null}</title>
+
+      <plot-options>
+        <line>
+          <marker enabled={false}>
+            <states>
+              <hover enabled={false}/>
+            </states>
+          </marker>
+        </line>
+      </plot-options>
+
+      <legend enabled={false}/>
+      <tooltip enabled={false}/>
+
+      <x-axis>
+        <type>datetime</type>
+        <title>{null}</title>
+        <labels style={labelStyle}/>
+      </x-axis>
+
+      <y-axis>
+        <title>{null}</title>
+        <labels style={labelStyle} formatter={labelFormatter}/>
+      </y-axis>
+
+      <line id={selectedSeries}>
+        <tooltip pointFormatter={pointFormatter}/>
+        {map(stats.series, (x, index) =>
+          <point
+            key={`${x.date}-${selectedSeries}-${index}`}
+            id={`${x.date}-${selectedSeries}-${index}`}
+            x={dt(x.date)}
+            y={selectedSeries === 'kpi'
+              ? x[stats.metric.id]
+              : x.cost}/>)}
+      </line>
+    </Highcharts>
+  </div>
+)
+Stats.displayName = 'Stats'
+Stats.propTypes = {
+  selectedSeries: React.PropTypes.oneOf(['budget', 'kpi']).isRequired,
+  selectBudget: React.PropTypes.func.isRequired,
+  selectKPI: React.PropTypes.func.isRequired,
+  stats: React.PropTypes.shape({
+    metric: React.PropTypes.object,
+    series: React.PropTypes.arrayOf(React.PropTypes.shape({
+      date: React.PropTypes.string,
+      cost: React.PropTypes.number
+    }))
+  }).isRequired,
+  labelFormatter: React.PropTypes.func.isRequired,
+  pointFormatter: React.PropTypes.func.isRequired
+}
+
 const FolderStats = React.createClass({
   displayName: 'Folder-Stats',
   mixins: [styled(style)],
   propTypes: {
-    id: PropTypes.string,
-    params: PropTypes.object,
-    stats: PropTypes.object
+    id: React.PropTypes.string,
+    params: React.PropTypes.object,
+    stats: React.PropTypes.object
   },
   contextTypes: {
-    tree: PropTypes.object.isRequired,
-    locales: PropTypes.string.isRequired,
-    messages: PropTypes.object.isRequired
+    tree: React.PropTypes.object.isRequired,
+    locales: React.PropTypes.string.isRequired,
+    messages: React.PropTypes.object.isRequired
   },
   getDefaultProps () {
     return {
@@ -62,8 +141,10 @@ const FolderStats = React.createClass({
       selectedSeries: 'budget'
     }
   },
-  componentDidMount () {
+  componentWillMount () {
     this.setupFormatters()
+  },
+  componentDidMount () {
     loadFolderStatsAction(
       this.context.tree,
       this.props.params,
@@ -97,7 +178,7 @@ const FolderStats = React.createClass({
       return `<span style="color: ${this.color}">${seriesName}:</span> <b>${value}</b><br/>`
     }
   },
-  selectMetric (e) {
+  selectKPI (e) {
     e.preventDefault()
     this.setState({selectedSeries: 'kpi'})
   },
@@ -106,70 +187,14 @@ const FolderStats = React.createClass({
     this.setState({selectedSeries: 'budget'})
   },
   render () {
-    const {selectedSeries} = this.state
-    const {stats} = this.props
-    const isKpiSeries = selectedSeries === 'kpi'
-
     return (
-      <div className={`${style.wrapper}`}>
-        <span
-          className={cx({
-            [style.bt]: true,
-            [style.selected]: !isKpiSeries
-          })}
-          onClick={this.selectBudget}>
-          <Message>investmentLabel</Message>
-        </span>
-
-        {stats.metric
-          ? <span
-            className={cx({
-              [style.bt]: true,
-              [style.selected]: isKpiSeries
-            })}
-            onClick={this.selectMetric}>{stats.metric.name}</span>
-          : null}
-
-        <Highcharts className={String(style.chart)}>
-          <title>{null}</title>
-
-          <plot-options>
-            <line>
-              <marker enabled={false}>
-                <states>
-                  <hover enabled={false}/>
-                </states>
-              </marker>
-            </line>
-          </plot-options>
-
-          <legend enabled={false}/>
-          <tooltip enabled={false}/>
-
-          <x-axis>
-            <type>datetime</type>
-            <title>{null}</title>
-            <labels style={labelStyle}/>
-          </x-axis>
-
-          <y-axis>
-            <title>{null}</title>
-            <labels style={labelStyle} formatter={this.labelFormatter}/>
-          </y-axis>
-
-          <line id={selectedSeries}>
-            <tooltip pointFormatter={this.pointFormatter}/>
-            {map(stats.series, (x, index) =>
-              <point
-                key={`${x.date}-${selectedSeries}-${index}`}
-                id={`${x.date}-${selectedSeries}-${index}`}
-                x={dt(x.date)}
-                y={isKpiSeries
-                  ? x[stats.metric.id]
-                  : x.cost}/>)}
-          </line>
-        </Highcharts>
-      </div>
+      <Stats
+        stats={this.props.stats}
+        selectedSeries={this.state.selectedSeries}
+        selectBudget={this.selectBudget}
+        selectKPI={this.selectKPI}
+        labelFormatter={this.labelFormatter}
+        pointFormatter={this.pointFormatter}/>
     )
   }
 })
