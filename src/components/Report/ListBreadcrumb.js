@@ -5,8 +5,6 @@ import Fence from '../Fence'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
 
-const {PropTypes} = React
-
 function ReportsBreadcrumb ({params: {company, workspace, folder}}) {
   const scope = join(compact([
     `company/${company}`,
@@ -28,10 +26,10 @@ function ReportsBreadcrumb ({params: {company, workspace, folder}}) {
 
 ReportsBreadcrumb.displayName = 'Reports-Breadcrumb'
 ReportsBreadcrumb.propTypes = {
-  params: PropTypes.shape({
-    company: PropTypes.string,
-    workspace: PropTypes.string,
-    folder: PropTypes.string
+  params: React.PropTypes.shape({
+    company: React.PropTypes.string,
+    workspace: React.PropTypes.string,
+    folder: React.PropTypes.string
   })
 }
 

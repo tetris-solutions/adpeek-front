@@ -9,8 +9,6 @@ import map from 'lodash/map'
 
 const ReportChart = expandVertically(_ReportChart)
 
-const {PropTypes} = React
-
 const EditContent = (props, {entities, onChangeProperty, change, draft: {module, entity}}) => (
   <section style={{height: '80vh', overflowY: 'auto'}}>
     <div className='mdl-grid'>
@@ -46,10 +44,10 @@ const EditContent = (props, {entities, onChangeProperty, change, draft: {module,
 
 EditContent.displayName = 'Edit-Content'
 EditContent.contextTypes = {
-  onChangeProperty: PropTypes.func.isRequired,
-  entities: PropTypes.object.isRequired,
-  change: PropTypes.func.isRequired,
-  draft: PropTypes.object.isRequired
+  onChangeProperty: React.PropTypes.func.isRequired,
+  entities: React.PropTypes.object.isRequired,
+  change: React.PropTypes.func.isRequired,
+  draft: React.PropTypes.object.isRequired
 }
 
 export default EditContent

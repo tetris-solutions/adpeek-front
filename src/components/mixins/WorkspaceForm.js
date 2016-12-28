@@ -1,4 +1,4 @@
-import {PropTypes} from 'react'
+import React from 'react'
 import get from 'lodash/get'
 import {pushSuccessMessageAction} from '../../actions/push-success-message-action'
 import startsWith from 'lodash/startsWith'
@@ -6,12 +6,12 @@ import forEach from 'lodash/forEach'
 
 export default {
   contextTypes: {
-    router: PropTypes.object,
-    messages: PropTypes.object
+    router: React.PropTypes.object,
+    messages: React.PropTypes.object
   },
   propTypes: {
-    params: PropTypes.object,
-    dispatch: PropTypes.func.isRequired
+    params: React.PropTypes.object,
+    dispatch: React.PropTypes.func.isRequired
   },
   getInitialState () {
     return {

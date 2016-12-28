@@ -20,8 +20,6 @@ const style = csjs`
   padding: 10px 10px 0 10px;
 }`
 
-const {PropTypes} = React
-
 /**
  * fits scrollable wrapper in screen
  * @param {HTMLDivElement} wrapper div
@@ -36,7 +34,7 @@ export const AdGroups = React.createClass({
   displayName: '-AdGroups',
   mixins: [styled(style)],
   propTypes: {
-    adGroups: PropTypes.array
+    adGroups: React.PropTypes.array
   },
   getDefaultProps () {
     return {

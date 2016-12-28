@@ -29,17 +29,15 @@ const style = csjs`
   margin-right: .3em;
 }`
 
-const {PropTypes} = React
-
 const Breadcrumbs = React.createClass({
   displayName: 'Breadcrumbs',
   mixins: [styled(style)],
   contextTypes: {
-    params: PropTypes.object,
-    routes: PropTypes.array
+    params: React.PropTypes.object,
+    routes: React.PropTypes.array
   },
   propTypes: {
-    title: PropTypes.node
+    title: React.PropTypes.node
   },
   componentDidMount () {
     /**

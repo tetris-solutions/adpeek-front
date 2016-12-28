@@ -16,7 +16,7 @@ import {contextualize} from './higher-order/contextualize'
 import {styled} from './mixins/styled'
 
 const yes = () => true
-const {PropTypes} = React
+
 const getSuggestionValue = property('name')
 
 /**
@@ -146,7 +146,7 @@ function Suggestion ({name}) {
 
 Suggestion.displayName = 'Suggestion'
 Suggestion.propTypes = {
-  name: PropTypes.string
+  name: React.PropTypes.string
 }
 
 /**
@@ -165,19 +165,19 @@ export const WorkspaceAccountSelector = React.createClass({
   displayName: 'Workspace-Account-Selector',
   mixins: [styled(style)],
   contextTypes: {
-    locales: PropTypes.string,
-    messages: PropTypes.object
+    locales: React.PropTypes.string,
+    messages: React.PropTypes.object
   },
   propTypes: {
-    disabled: PropTypes.bool,
-    company: PropTypes.shape({
-      id: PropTypes.string,
-      accounts: PropTypes.array
+    disabled: React.PropTypes.bool,
+    company: React.PropTypes.shape({
+      id: React.PropTypes.string,
+      accounts: React.PropTypes.array
     }),
-    platform: PropTypes.string,
-    dispatch: PropTypes.func,
-    value: PropTypes.string,
-    account: PropTypes.object
+    platform: React.PropTypes.string,
+    dispatch: React.PropTypes.func,
+    value: React.PropTypes.string,
+    account: React.PropTypes.object
   },
   getDefaultProps () {
     return {

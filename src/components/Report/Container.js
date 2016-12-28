@@ -14,8 +14,6 @@ import SubHeader from '../SubHeader'
 import LoadingHorizontal from '../LoadingHorizontal'
 import Message from 'tetris-iso/Message'
 import pick from 'lodash/pick'
-
-const {PropTypes} = React
 const empty = []
 
 const transformAccount = ({external_id, tetris_id, platform}) => ({
@@ -35,33 +33,33 @@ const Placeholder = ({reportLiteMode, children}) => (
 
 Placeholder.displayName = 'Report-Placeholder'
 Placeholder.propTypes = {
-  children: PropTypes.node.isRequired,
-  reportLiteMode: PropTypes.bool
+  children: React.PropTypes.node.isRequired,
+  reportLiteMode: React.PropTypes.bool
 }
 
 const ReportContainer = React.createClass({
   displayName: 'Report-Container',
   contextTypes: {
-    messages: PropTypes.object
+    messages: React.PropTypes.object
   },
   propTypes: {
-    children: PropTypes.node,
-    reportLiteMode: PropTypes.bool,
-    editMode: PropTypes.bool,
-    isGuestUser: PropTypes.bool,
-    dispatch: PropTypes.func.isRequired,
-    report: PropTypes.object.isRequired,
-    params: PropTypes.object.isRequired,
-    metaData: PropTypes.object,
-    campaigns: PropTypes.array,
-    adSets: PropTypes.array,
-    adGroups: PropTypes.array,
-    ads: PropTypes.array,
-    keywords: PropTypes.array,
-    accounts: PropTypes.arrayOf(PropTypes.shape({
-      external_id: PropTypes.string,
-      tetris_id: PropTypes.string,
-      platform: PropTypes.string
+    children: React.PropTypes.node,
+    reportLiteMode: React.PropTypes.bool,
+    editMode: React.PropTypes.bool,
+    isGuestUser: React.PropTypes.bool,
+    dispatch: React.PropTypes.func.isRequired,
+    report: React.PropTypes.object.isRequired,
+    params: React.PropTypes.object.isRequired,
+    metaData: React.PropTypes.object,
+    campaigns: React.PropTypes.array,
+    adSets: React.PropTypes.array,
+    adGroups: React.PropTypes.array,
+    ads: React.PropTypes.array,
+    keywords: React.PropTypes.array,
+    accounts: React.PropTypes.arrayOf(React.PropTypes.shape({
+      external_id: React.PropTypes.string,
+      tetris_id: React.PropTypes.string,
+      platform: React.PropTypes.string
     })).isRequired
   },
   getInitialState () {
@@ -210,7 +208,7 @@ const R = props =>
 
 R.displayName = 'Report-Wrapper'
 R.propTypes = {
-  children: PropTypes.node
+  children: React.PropTypes.node
 }
 
 export default R

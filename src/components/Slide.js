@@ -1,16 +1,14 @@
 import React from 'react'
 
-const {PropTypes} = React
-
 export const Slide = React.createClass({
   displayName: 'Slide',
   propTypes: {
-    onChange: PropTypes.func,
-    name: PropTypes.string,
-    value: PropTypes.number,
-    min: PropTypes.number,
-    max: PropTypes.number,
-    step: PropTypes.number
+    onChange: React.PropTypes.func,
+    name: React.PropTypes.string,
+    value: React.PropTypes.number,
+    min: React.PropTypes.number,
+    max: React.PropTypes.number,
+    step: React.PropTypes.number
   },
   getDefaultProps () {
     return {

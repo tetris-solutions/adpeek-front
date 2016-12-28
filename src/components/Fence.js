@@ -22,12 +22,10 @@ const permissionNames = {
 }
 const permissionAliases = invert(permissionNames)
 const getPermissionName = id => permissionNames[id]
-
-const {PropTypes} = React
 const none = []
-const passengerType = PropTypes.oneOfType([
-  PropTypes.func,
-  PropTypes.node
+const passengerType = React.PropTypes.oneOfType([
+  React.PropTypes.func,
+  React.PropTypes.node
 ]).isRequired
 
 function Gate ({passenger, permissions}) {
@@ -43,31 +41,31 @@ function Gate ({passenger, permissions}) {
 Gate.displayName = 'Gate'
 Gate.propTypes = {
   passenger: passengerType,
-  permissions: PropTypes.shape({
-    allow: PropTypes.bool.isRequired,
-    granted: PropTypes.array.isRequired,
-    required: PropTypes.array.isRequired
+  permissions: React.PropTypes.shape({
+    allow: React.PropTypes.bool.isRequired,
+    granted: React.PropTypes.array.isRequired,
+    required: React.PropTypes.array.isRequired
   }).isRequired
 }
 
 const Fence = React.createClass({
   displayName: 'Fence',
   contextTypes: {
-    company: PropTypes.object.isRequired,
-    isGuest: PropTypes.bool.isRequired,
-    isAdmin: PropTypes.bool.isRequired
+    company: React.PropTypes.object.isRequired,
+    isGuest: React.PropTypes.bool.isRequired,
+    isAdmin: React.PropTypes.bool.isRequired
   },
   propTypes: {
     children: passengerType,
-    canEditWorkspace: PropTypes.bool,
-    canEditFolder: PropTypes.bool,
-    canEditCampaign: PropTypes.bool,
-    canEditOrder: PropTypes.bool,
-    canEditReport: PropTypes.bool,
-    canBrowseReports: PropTypes.bool,
-    isLoggedIn: PropTypes.bool,
-    isRegularUser: PropTypes.bool,
-    isAdmin: PropTypes.bool
+    canEditWorkspace: React.PropTypes.bool,
+    canEditFolder: React.PropTypes.bool,
+    canEditCampaign: React.PropTypes.bool,
+    canEditOrder: React.PropTypes.bool,
+    canEditReport: React.PropTypes.bool,
+    canBrowseReports: React.PropTypes.bool,
+    isLoggedIn: React.PropTypes.bool,
+    isRegularUser: React.PropTypes.bool,
+    isAdmin: React.PropTypes.bool
   },
   render () {
     const {props, context} = this

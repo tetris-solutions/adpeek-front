@@ -4,28 +4,26 @@ import {contextualize} from './higher-order/contextualize'
 import get from 'lodash/get'
 import endsWith from 'lodash/endsWith'
 
-const {PropTypes} = React
-
 const FolderReport = React.createClass({
   displayName: 'Folder-Report',
   propTypes: {
-    report: PropTypes.object,
-    location: PropTypes.object,
-    metaData: PropTypes.object,
-    params: PropTypes.object.isRequired,
-    dispatch: PropTypes.func,
-    folder: PropTypes.shape({
-      account: PropTypes.shape({
-        external_id: PropTypes.string,
-        tetris_id: PropTypes.string,
-        platform: PropTypes.string
+    report: React.PropTypes.object,
+    location: React.PropTypes.object,
+    metaData: React.PropTypes.object,
+    params: React.PropTypes.object.isRequired,
+    dispatch: React.PropTypes.func,
+    folder: React.PropTypes.shape({
+      account: React.PropTypes.shape({
+        external_id: React.PropTypes.string,
+        tetris_id: React.PropTypes.string,
+        platform: React.PropTypes.string
       }),
-      entities: PropTypes.shape({
-        campaigns: PropTypes.array,
-        adSets: PropTypes.array,
-        keywords: PropTypes.array,
-        adGroups: PropTypes.array,
-        ads: PropTypes.array
+      entities: React.PropTypes.shape({
+        campaigns: React.PropTypes.array,
+        adSets: React.PropTypes.array,
+        keywords: React.PropTypes.array,
+        adGroups: React.PropTypes.array,
+        ads: React.PropTypes.array
       })
     })
   },

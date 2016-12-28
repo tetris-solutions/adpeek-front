@@ -2,15 +2,13 @@ import cx from 'classnames'
 import debounce from 'lodash/debounce'
 import React from 'react'
 
-const {PropTypes} = React
-
 export const HeaderSearchBox = React.createClass({
   displayName: 'Header-Search-Box',
   propTypes: {
-    className: PropTypes.string,
-    value: PropTypes.any,
-    defaultValue: PropTypes.any,
-    onChange: PropTypes.func
+    className: React.PropTypes.string,
+    value: React.PropTypes.any,
+    defaultValue: React.PropTypes.any,
+    onChange: React.PropTypes.func
   },
   getInitialState () {
     return {

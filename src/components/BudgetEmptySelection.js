@@ -3,8 +3,6 @@ import React from 'react'
 import {Button} from './Button'
 import {Form, Content, Header, Footer} from './Card'
 
-const {PropTypes} = React
-
 function BudgetEmptySelection ({
   createBudget,
   amount,
@@ -40,9 +38,9 @@ function BudgetEmptySelection ({
 
 BudgetEmptySelection.displayName = 'Budget-Empty-Selection'
 BudgetEmptySelection.propTypes = {
-  createBudget: PropTypes.func,
-  available: PropTypes.number,
-  amount: PropTypes.number
+  createBudget: React.PropTypes.func,
+  available: React.PropTypes.number,
+  amount: React.PropTypes.number
 }
 
 export default BudgetEmptySelection

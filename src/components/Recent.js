@@ -28,8 +28,6 @@ const style = csjs`
   margin-left: 1em;
   transform: translateY(-20%);
 }`
-
-const {PropTypes} = React
 const levels = ['company', 'workspace', 'folder', 'campaign', 'order', 'report']
 const calcPath = params => compact(map(levels, name => params[name] && `${name}/${params[name]}`))
   .join('/')
@@ -38,11 +36,11 @@ const Recent = React.createClass({
   displayName: 'Recent',
   mixins: [styled(style)],
   propTypes: {
-    dispatch: PropTypes.func.isRequired,
-    params: PropTypes.object.isRequired,
-    icon: PropTypes.string.isRequired,
-    level: PropTypes.string.isRequired,
-    node: PropTypes.object.isRequired
+    dispatch: React.PropTypes.func.isRequired,
+    params: React.PropTypes.object.isRequired,
+    icon: React.PropTypes.string.isRequired,
+    level: React.PropTypes.string.isRequired,
+    node: React.PropTypes.object.isRequired
   },
   getList () {
     return this.props.node[camelCase(`recent ${this.props.level}`)]

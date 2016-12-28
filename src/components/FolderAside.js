@@ -8,8 +8,6 @@ import {deleteFolderAction} from '../actions/delete-folder'
 import {contextualize} from './higher-order/contextualize'
 import ReportLink from './Report/ReportLink'
 
-const {PropTypes} = React
-
 export function FolderAside ({
   dispatch,
   folder,
@@ -67,18 +65,18 @@ export function FolderAside ({
 
 FolderAside.displayName = 'Folder-Aside'
 FolderAside.contextTypes = {
-  router: PropTypes.object,
-  location: PropTypes.object
+  router: React.PropTypes.object,
+  location: React.PropTypes.object
 }
 FolderAside.propTypes = {
-  dispatch: PropTypes.func,
-  folder: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string
+  dispatch: React.PropTypes.func,
+  folder: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    name: React.PropTypes.string
   }),
-  params: PropTypes.shape({
-    company: PropTypes.string,
-    workspace: PropTypes.string
+  params: React.PropTypes.shape({
+    company: React.PropTypes.string,
+    workspace: React.PropTypes.string
   })
 }
 

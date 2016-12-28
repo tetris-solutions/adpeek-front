@@ -1,4 +1,4 @@
-import {PropTypes} from 'react'
+import React from 'react'
 import find from 'lodash/find'
 import get from 'lodash/get'
 import {loadDashCampaignsAction} from '../../actions/load-dash-campaigns'
@@ -7,15 +7,15 @@ import omit from 'lodash/omit'
 
 export default {
   contextTypes: {
-    router: PropTypes.object,
-    messages: PropTypes.object
+    router: React.PropTypes.object,
+    messages: React.PropTypes.object
   },
   propTypes: {
-    params: PropTypes.object,
-    company: PropTypes.shape({
-      dashCampaigns: PropTypes.array
+    params: React.PropTypes.object,
+    company: React.PropTypes.shape({
+      dashCampaigns: React.PropTypes.array
     }).isRequired,
-    dispatch: PropTypes.func.isRequired
+    dispatch: React.PropTypes.func.isRequired
   },
   getInitialState () {
     return {

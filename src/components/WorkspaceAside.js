@@ -8,8 +8,6 @@ import {Navigation, NavLink, NavBt, NavBts, Name} from './Navigation'
 import Recent from './Recent'
 import ReportLink from './Report/ReportLink'
 
-const {PropTypes} = React
-
 export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
   const {company} = params
 
@@ -65,17 +63,17 @@ export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
 
 WorkspaceAside.displayName = 'Workspace-Aside'
 WorkspaceAside.contextTypes = {
-  router: PropTypes.object
+  router: React.PropTypes.object
 }
 WorkspaceAside.propTypes = {
-  dispatch: PropTypes.func,
-  workspace: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string
+  dispatch: React.PropTypes.func,
+  workspace: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    name: React.PropTypes.string
   }),
-  params: PropTypes.shape({
-    company: PropTypes.string,
-    workspace: PropTypes.string
+  params: React.PropTypes.shape({
+    company: React.PropTypes.string,
+    workspace: React.PropTypes.string
   })
 }
 

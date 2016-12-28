@@ -12,7 +12,7 @@ import {styled} from './mixins/styled'
 import get from 'lodash/get'
 
 const yes = () => true
-const {PropTypes} = React
+
 const getSuggestionValue = property('text')
 
 function preventSubmit (e) {
@@ -114,24 +114,24 @@ function Suggestion ({text}) {
 
 Suggestion.displayName = 'Suggestion'
 Suggestion.propTypes = {
-  text: PropTypes.string
+  text: React.PropTypes.string
 }
 
 export const AutoSelect = React.createClass({
   displayName: 'Auto-Select',
   mixins: [styled(style)],
   propTypes: {
-    disabled: PropTypes.bool,
-    prefix: PropTypes.string,
-    onChange: PropTypes.func,
-    selected: PropTypes.shape({
-      text: PropTypes.string,
-      value: PropTypes.string
+    disabled: React.PropTypes.bool,
+    prefix: React.PropTypes.string,
+    onChange: React.PropTypes.func,
+    selected: React.PropTypes.shape({
+      text: React.PropTypes.string,
+      value: React.PropTypes.string
     }),
-    placeholder: PropTypes.string,
-    options: PropTypes.arrayOf(PropTypes.shape({
-      value: PropTypes.string,
-      text: PropTypes.string
+    placeholder: React.PropTypes.string,
+    options: React.PropTypes.arrayOf(React.PropTypes.shape({
+      value: React.PropTypes.string,
+      text: React.PropTypes.string
     })).isRequired
   },
   getDefaultProps () {

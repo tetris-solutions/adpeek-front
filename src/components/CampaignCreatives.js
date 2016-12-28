@@ -16,8 +16,6 @@ import chunk from 'lodash/chunk'
 import {loadKeywordsRelevanceAction} from '../actions/load-keywords-relevance'
 import CalculateRelevanceButton from './CalculateRelevanceButton'
 
-const {PropTypes} = React
-
 export function loadKeywordsRelevance () {
   this.setState({calculatingRelevance: true})
 
@@ -47,15 +45,15 @@ export function loadKeywordsRelevance () {
 export const CampaignCreatives = React.createClass({
   displayName: 'Campaign-Creatives',
   propTypes: {
-    dispatch: PropTypes.func,
-    campaign: PropTypes.shape({
-      adGroupsReport: PropTypes.shape({
-        url: PropTypes.string
+    dispatch: React.PropTypes.func,
+    campaign: React.PropTypes.shape({
+      adGroupsReport: React.PropTypes.shape({
+        url: React.PropTypes.string
       }),
-      platform: PropTypes.string,
-      adGroups: PropTypes.array
+      platform: React.PropTypes.string,
+      adGroups: React.PropTypes.array
     }),
-    params: PropTypes.object
+    params: React.PropTypes.object
   },
   getInitialState () {
     return {

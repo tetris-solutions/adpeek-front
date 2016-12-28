@@ -4,8 +4,6 @@ import {Link} from 'react-router'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
 
-const {PropTypes} = React
-
 export function OrdersBreadcrumb ({params: {company, workspace, folder}}) {
   const scope = join(compact([
     `company/${company}`,
@@ -24,10 +22,10 @@ export function OrdersBreadcrumb ({params: {company, workspace, folder}}) {
 
 OrdersBreadcrumb.displayName = 'Orders-Breadcrumb'
 OrdersBreadcrumb.propTypes = {
-  params: PropTypes.shape({
-    company: PropTypes.string,
-    workspace: PropTypes.string,
-    folder: PropTypes.string
+  params: React.PropTypes.shape({
+    company: React.PropTypes.string,
+    workspace: React.PropTypes.string,
+    folder: React.PropTypes.string
   })
 }
 

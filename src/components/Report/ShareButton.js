@@ -9,20 +9,18 @@ import {pushSuccessMessageAction} from '../../actions/push-success-message-actio
 import {Button} from '../Button'
 import {MenuItem} from '../DropdownMenu'
 
-const {PropTypes} = React
-
 const ShareDialog = React.createClass({
   displayName: 'Share-Dialog',
   propTypes: {
-    id: PropTypes.string.isRequired,
-    shareUrl: PropTypes.string,
-    close: PropTypes.func.isRequired
+    id: React.PropTypes.string.isRequired,
+    shareUrl: React.PropTypes.string,
+    close: React.PropTypes.func.isRequired
   },
   contextTypes: {
-    tree: PropTypes.object.isRequired,
-    params: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    messages: PropTypes.object.isRequired
+    tree: React.PropTypes.object.isRequired,
+    params: React.PropTypes.object.isRequired,
+    location: React.PropTypes.object.isRequired,
+    messages: React.PropTypes.object.isRequired
   },
   getInitialState () {
     return {isLoading: true}
@@ -94,7 +92,7 @@ const ShareButton = props => (
 
 ShareButton.displayName = 'Share-Button'
 ShareButton.propTypes = {
-  shareUrl: PropTypes.string
+  shareUrl: React.PropTypes.string
 }
 
 export default ShareButton

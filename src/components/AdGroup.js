@@ -15,15 +15,13 @@ const style = csjs`
   text-align: center;
   text-shadow: 1px 2px rgba(0, 0, 0, 0.1)
 }`
-const {PropTypes} = React
-
 export const AdGroup = React.createClass({
   displayName: 'AdGroup',
   mixins: [styled(style)],
   propTypes: {
-    name: PropTypes.string,
-    ads: PropTypes.array,
-    keywords: PropTypes.array
+    name: React.PropTypes.string,
+    ads: React.PropTypes.array,
+    keywords: React.PropTypes.array
   },
   render () {
     const {name, ads, keywords} = this.props

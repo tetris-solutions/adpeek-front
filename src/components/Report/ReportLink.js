@@ -2,22 +2,20 @@ import React from 'react'
 import {loadReportsAction} from '../../actions/load-reports'
 import get from 'lodash/get'
 
-const {PropTypes} = React
-
 const ReportLink = React.createClass({
   displayName: 'Report-Link',
   propTypes: {
-    tag: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.func
+    tag: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.func
     ]).isRequired,
-    params: PropTypes.object.isRequired,
-    children: PropTypes.node.isRequired,
-    reports: PropTypes.array,
-    dispatch: PropTypes.func.isRequired
+    params: React.PropTypes.object.isRequired,
+    children: React.PropTypes.node.isRequired,
+    reports: React.PropTypes.array,
+    dispatch: React.PropTypes.func.isRequired
   },
   contextTypes: {
-    router: PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired
   },
   getInitialState () {
     return {isLoading: false}

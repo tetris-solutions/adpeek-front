@@ -3,8 +3,6 @@ import Select from './Select'
 import {branch} from 'baobab-react/higher-order'
 import {changeLocaleAction} from 'tetris-iso/actions'
 
-const {PropTypes} = React
-
 const makeChangeEventHandler = dispatch => function onChange ({target: {value}}) {
   dispatch(changeLocaleAction, value)
 }
@@ -19,9 +17,9 @@ export function LocaleSelector ({dispatch, locale, userLocale}) {
 }
 
 LocaleSelector.propTypes = {
-  dispatch: PropTypes.func,
-  locale: PropTypes.string,
-  userLocale: PropTypes.string
+  dispatch: React.PropTypes.func,
+  locale: React.PropTypes.string,
+  userLocale: React.PropTypes.string
 }
 
 LocaleSelector.displayName = 'Locale-Selector'

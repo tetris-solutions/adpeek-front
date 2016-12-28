@@ -39,15 +39,13 @@ const style = csjs`
   width: 100%;
 }`
 
-const {PropTypes} = React
-
 export const Card = React.createClass({
   display: 'Card',
   mixins: [styled(style)],
   propTypes: {
-    size: PropTypes.oneOf(['small', 'large', 'full']),
-    tag: PropTypes.string,
-    children: PropTypes.node.isRequired
+    size: React.PropTypes.oneOf(['small', 'large', 'full']),
+    tag: React.PropTypes.string,
+    children: React.PropTypes.node.isRequired
   },
   getDefaultProps () {
     return {
@@ -70,7 +68,7 @@ export const Card = React.createClass({
 export const Form = React.createClass({
   displayName: 'Form',
   propTypes: {
-    onSubmit: PropTypes.func.isRequired
+    onSubmit: React.PropTypes.func.isRequired
   },
   render () {
     return <Card {...this.props} tag='form'/>
@@ -89,9 +87,9 @@ Content.defaultProps = {
 }
 Content.displayName = 'Content'
 Content.propTypes = {
-  tag: PropTypes.string,
-  className: PropTypes.string,
-  children: PropTypes.node.isRequired
+  tag: React.PropTypes.string,
+  className: React.PropTypes.string,
+  children: React.PropTypes.node.isRequired
 }
 
 export function Header ({children, color, textColor}) {
@@ -110,9 +108,9 @@ Header.defaultProps = {
 }
 Header.displayName = 'Header'
 Header.propTypes = {
-  color: PropTypes.string,
-  textColor: PropTypes.string,
-  children: PropTypes.node.isRequired
+  color: React.PropTypes.string,
+  textColor: React.PropTypes.string,
+  children: React.PropTypes.node.isRequired
 }
 
 export function Footer ({children, multipleButtons}) {
@@ -128,6 +126,6 @@ export function Footer ({children, multipleButtons}) {
 
 Footer.displayName = 'Footer'
 Footer.propTypes = {
-  multipleButtons: PropTypes.bool,
-  children: PropTypes.node
+  multipleButtons: React.PropTypes.bool,
+  children: React.PropTypes.node
 }

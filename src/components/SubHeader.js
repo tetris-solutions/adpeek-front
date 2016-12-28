@@ -12,8 +12,6 @@ const style = csjs`
 .row button {
   text-transform: none;
 }`
-const {PropTypes} = React
-
 export const SubHeaderButton = props => {
   const {tag: Tag, children} = props
 
@@ -26,8 +24,8 @@ export const SubHeaderButton = props => {
 
 SubHeaderButton.displayName = 'Sub-Header-Button'
 SubHeaderButton.propTypes = {
-  children: PropTypes.node.isRequired,
-  tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string])
+  children: React.PropTypes.node.isRequired,
+  tag: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.string])
 }
 
 const SubHeader = ({title, children}) => (
@@ -42,8 +40,8 @@ const SubHeader = ({title, children}) => (
 
 SubHeader.displayName = 'Sub-Header'
 SubHeader.propTypes = {
-  title: PropTypes.node,
-  children: PropTypes.node
+  title: React.PropTypes.node,
+  children: React.PropTypes.node
 }
 
 export default styledFnComponent(SubHeader, style)

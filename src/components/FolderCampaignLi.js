@@ -2,8 +2,6 @@ import React from 'react'
 import Checkbox from './Checkbox'
 import {Link} from 'react-router'
 
-const {PropTypes} = React
-
 export function FolderCampaignLi ({id, name, status, readOnly}, {params}) {
   const campaignUri = `/company/${params.company}/workspace/${params.workspace}/folder/${params.folder}/campaign/${id}/creatives`
 
@@ -26,16 +24,16 @@ export function FolderCampaignLi ({id, name, status, readOnly}, {params}) {
 
 FolderCampaignLi.displayName = 'Folder-Campaign-Li'
 FolderCampaignLi.propTypes = {
-  readOnly: PropTypes.bool,
-  id: PropTypes.string,
-  name: PropTypes.string,
-  status: PropTypes.shape({
-    icon: PropTypes.string,
-    description: PropTypes.string
+  readOnly: React.PropTypes.bool,
+  id: React.PropTypes.string,
+  name: React.PropTypes.string,
+  status: React.PropTypes.shape({
+    icon: React.PropTypes.string,
+    description: React.PropTypes.string
   })
 }
 FolderCampaignLi.contextTypes = {
-  params: PropTypes.object
+  params: React.PropTypes.object
 }
 
 export default FolderCampaignLi

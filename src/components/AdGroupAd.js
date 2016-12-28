@@ -36,8 +36,6 @@ const style = csjs`
   margin: .7em 0 .5em;
 }`
 
-const {PropTypes} = React
-
 function inferDisplayUrl (final_urls, path_1, path_2) {
   if (!final_urls || !final_urls[0]) return null
 
@@ -102,17 +100,17 @@ function AdGroupAd ({
 
 AdGroupAd.displayName = 'AdGroup-Ad'
 AdGroupAd.propTypes = {
-  id: PropTypes.string,
-  headline: PropTypes.string,
-  headline_part_1: PropTypes.string,
-  headline_part_2: PropTypes.string,
-  display_url: PropTypes.string,
-  description: PropTypes.string,
-  description_1: PropTypes.string,
-  description_2: PropTypes.string,
-  final_urls: PropTypes.array,
-  path_1: PropTypes.string,
-  path_2: PropTypes.string
+  id: React.PropTypes.string,
+  headline: React.PropTypes.string,
+  headline_part_1: React.PropTypes.string,
+  headline_part_2: React.PropTypes.string,
+  display_url: React.PropTypes.string,
+  description: React.PropTypes.string,
+  description_1: React.PropTypes.string,
+  description_2: React.PropTypes.string,
+  final_urls: React.PropTypes.array,
+  path_1: React.PropTypes.string,
+  path_2: React.PropTypes.string
 }
 
 export default styledFnComponent(AdGroupAd, style)

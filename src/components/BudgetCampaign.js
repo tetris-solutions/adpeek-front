@@ -1,8 +1,6 @@
 import React from 'react'
 import campaignType from '../propTypes/campaign'
 
-const {PropTypes} = React
-
 function BudgetCampaign ({campaign, actionIcon, onClick}) {
   function onIconClick (e) {
     e.preventDefault()
@@ -27,8 +25,8 @@ function BudgetCampaign ({campaign, actionIcon, onClick}) {
 BudgetCampaign.displayName = 'Budget-Campaign'
 BudgetCampaign.propTypes = {
   campaign: campaignType.isRequired,
-  actionIcon: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired
+  actionIcon: React.PropTypes.string.isRequired,
+  onClick: React.PropTypes.func.isRequired
 }
 
 export default BudgetCampaign

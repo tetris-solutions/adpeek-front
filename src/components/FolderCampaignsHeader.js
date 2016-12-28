@@ -4,8 +4,6 @@ import HeaderSearchBox from './HeaderSearchBox'
 import SubHeader from './SubHeader'
 import {Button} from './Button'
 
-const {PropTypes} = React
-
 export const FolderCampaignsHeader = ({onChange, isLoading, onClickRefresh}) => (
   <SubHeader>
     <Button
@@ -22,12 +20,12 @@ export const FolderCampaignsHeader = ({onChange, isLoading, onClickRefresh}) => 
 
 FolderCampaignsHeader.displayName = 'Campaigns-Header'
 FolderCampaignsHeader.propTypes = {
-  isLoading: PropTypes.bool,
-  company: PropTypes.string,
-  workspace: PropTypes.string,
-  folder: PropTypes.string,
-  onClickRefresh: PropTypes.func,
-  onChange: PropTypes.func
+  isLoading: React.PropTypes.bool,
+  company: React.PropTypes.string,
+  workspace: React.PropTypes.string,
+  folder: React.PropTypes.string,
+  onClickRefresh: React.PropTypes.func,
+  onChange: React.PropTypes.func
 }
 
 export default FolderCampaignsHeader

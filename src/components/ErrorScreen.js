@@ -5,8 +5,6 @@ import {forgetError} from 'tetris-iso/actions'
 import Message from 'tetris-iso/Message'
 import {Button} from './Button'
 
-const {PropTypes} = React
-
 function ErrorScreen ({error, dispatch}, {router}) {
   function goBack () {
     dispatch(forgetError)
@@ -48,14 +46,14 @@ function ErrorScreen ({error, dispatch}, {router}) {
 
 ErrorScreen.displayName = 'Error-Screen'
 ErrorScreen.contextTypes = {
-  router: PropTypes.object.isRequired
+  router: React.PropTypes.object.isRequired
 }
 ErrorScreen.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  error: PropTypes.shape({
-    status: PropTypes.number,
-    message: PropTypes.string,
-    stack: PropTypes.string
+  dispatch: React.PropTypes.func.isRequired,
+  error: React.PropTypes.shape({
+    status: React.PropTypes.number,
+    message: React.PropTypes.string,
+    stack: React.PropTypes.string
   }).isRequired
 }
 export default branch({error: ['error']}, ErrorScreen)

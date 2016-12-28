@@ -2,8 +2,6 @@ import React from 'react'
 import Checkbox from './Checkbox'
 import TextMessage from 'intl-messageformat'
 import {Link} from 'react-router'
-const {PropTypes} = React
-
 export function FolderCampaignLooseLi ({external_id, name, status, platform, is_adwords_video, folder, readOnly}, {locales, messages, params}) {
   const serialized = JSON.stringify({
     name,
@@ -55,23 +53,23 @@ FolderCampaignLooseLi.defaultProps = {
   is_adwords_video: false
 }
 FolderCampaignLooseLi.contextTypes = {
-  params: PropTypes.object,
-  messages: PropTypes.object,
-  locales: PropTypes.string
+  params: React.PropTypes.object,
+  messages: React.PropTypes.object,
+  locales: React.PropTypes.string
 }
 FolderCampaignLooseLi.propTypes = {
-  readOnly: PropTypes.bool,
-  platform: PropTypes.string,
-  external_id: PropTypes.string,
-  name: PropTypes.string,
-  is_adwords_video: PropTypes.bool,
-  folder: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string
+  readOnly: React.PropTypes.bool,
+  platform: React.PropTypes.string,
+  external_id: React.PropTypes.string,
+  name: React.PropTypes.string,
+  is_adwords_video: React.PropTypes.bool,
+  folder: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    name: React.PropTypes.string
   }),
-  status: PropTypes.shape({
-    icon: PropTypes.string,
-    description: PropTypes.string
+  status: React.PropTypes.shape({
+    icon: React.PropTypes.string,
+    description: React.PropTypes.string
   })
 }
 export default FolderCampaignLooseLi

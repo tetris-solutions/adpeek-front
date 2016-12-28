@@ -1,7 +1,5 @@
 import React from 'react'
 import cx from 'classnames'
-
-const {PropTypes} = React
 const isBrowser = typeof document !== 'undefined'
 
 function checkBetween (first, last) {
@@ -46,10 +44,10 @@ function checkBetween (first, last) {
 export const Checkbox = React.createClass({
   displayName: 'Checkbox',
   propTypes: {
-    checked: PropTypes.bool,
-    name: PropTypes.string.isRequired,
-    label: PropTypes.node,
-    value: PropTypes.string
+    checked: React.PropTypes.bool,
+    name: React.PropTypes.string.isRequired,
+    label: React.PropTypes.node,
+    value: React.PropTypes.string
   },
   getDefaultProps () {
     return {

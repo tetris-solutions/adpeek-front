@@ -50,8 +50,6 @@ const style = csjs`
   text-align: center !important;
 }`
 
-const {PropTypes} = React
-
 class Sortable {
   constructor (content, sortKey) {
     this.content = content
@@ -101,10 +99,10 @@ const THeader = ({columns, attributes, sortPairs, toggle}) => (
 
 THeader.displayName = 'Report-Result-THeader'
 THeader.propTypes = {
-  columns: PropTypes.array,
-  sortPairs: PropTypes.object,
-  toggle: PropTypes.func,
-  attributes: PropTypes.object
+  columns: React.PropTypes.array,
+  sortPairs: React.PropTypes.object,
+  toggle: React.PropTypes.func,
+  attributes: React.PropTypes.object
 }
 
 function Cell ({attribute: {is_metric, type}, value}, {locales, moment}) {
@@ -141,15 +139,15 @@ Cell.defaultProps = {
   }
 }
 Cell.contextTypes = {
-  locales: PropTypes.string.isRequired,
-  moment: PropTypes.func.isRequired
+  locales: React.PropTypes.string.isRequired,
+  moment: React.PropTypes.func.isRequired
 }
 Cell.displayName = 'Report-Result-Cell'
 Cell.propTypes = {
-  value: PropTypes.any,
-  attribute: PropTypes.shape({
-    is_metric: PropTypes.bool.isRequired,
-    type: PropTypes.string
+  value: React.PropTypes.any,
+  attribute: React.PropTypes.shape({
+    is_metric: React.PropTypes.bool.isRequired,
+    type: React.PropTypes.string
   }).isRequired
 }
 
@@ -166,9 +164,9 @@ const TBody = ({rows, columns, attributes}) => (
 
 TBody.displayName = 'Report-Result-TBody'
 TBody.propTypes = {
-  rows: PropTypes.arrayOf(PropTypes.object),
-  columns: PropTypes.array,
-  attributes: PropTypes.object
+  rows: React.PropTypes.arrayOf(React.PropTypes.object),
+  columns: React.PropTypes.array,
+  attributes: React.PropTypes.object
 }
 
 const EmptyTBody = ({isLoading, columns}) => (
@@ -183,8 +181,8 @@ const EmptyTBody = ({isLoading, columns}) => (
 
 EmptyTBody.displayName = 'Report-Result-Empty-TBody'
 EmptyTBody.propTypes = {
-  isLoading: PropTypes.bool.isRequired,
-  columns: PropTypes.array.isRequired
+  isLoading: React.PropTypes.bool.isRequired,
+  columns: React.PropTypes.array.isRequired
 }
 EmptyTBody.defaultProps = {
   isLoading: false
@@ -193,11 +191,11 @@ EmptyTBody.defaultProps = {
 const ReportModuleTableTH = React.createClass({
   displayName: 'Header',
   propTypes: {
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    is_metric: PropTypes.bool,
-    toggle: PropTypes.func,
-    order: PropTypes.oneOf(['asc', 'desc'])
+    id: React.PropTypes.string.isRequired,
+    name: React.PropTypes.string.isRequired,
+    is_metric: React.PropTypes.bool,
+    toggle: React.PropTypes.func,
+    order: React.PropTypes.oneOf(['asc', 'desc'])
   },
   onClick () {
     this.props.toggle(this.props.id)
@@ -230,16 +228,16 @@ const ReportModuleTable = React.createClass({
   displayName: 'Module-Table',
   mixins: [styled(style)],
   propTypes: {
-    sort: PropTypes.array,
-    change: PropTypes.func,
-    limit: PropTypes.number,
-    isLoading: PropTypes.bool,
-    name: PropTypes.string,
+    sort: React.PropTypes.array,
+    change: React.PropTypes.func,
+    limit: React.PropTypes.number,
+    isLoading: React.PropTypes.bool,
+    name: React.PropTypes.string,
     reportParams: reportParamsType,
-    query: PropTypes.object,
+    query: React.PropTypes.object,
     entity: entityType,
-    attributes: PropTypes.object.isRequired,
-    result: PropTypes.array.isRequired
+    attributes: React.PropTypes.object.isRequired,
+    result: React.PropTypes.array.isRequired
   },
   getHeaderName (_, header) {
     const {attributes} = this.props

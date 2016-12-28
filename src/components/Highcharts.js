@@ -39,7 +39,6 @@ function looksLikeAnEventHandler (name) {
   return name.length > 2 && name.substr(0, 2) === 'on' && isUpperCase(name[2])
 }
 
-const {createElement, createClass, Children, PropTypes} = React
 const defaultConfig = {
   credits: {
     enabled: false
@@ -87,7 +86,7 @@ function parseChildren (child, parent) {
   }
 
   if (isArray(child)) {
-    Children.forEach(child, x => parseChildren(x, parent))
+    React.Children.forEach(child, x => parseChildren(x, parent))
     return
   }
 
@@ -130,7 +129,7 @@ function parseChildren (child, parent) {
     parent[type] = node
   }
 
-  Children.forEach(props.children, children =>
+  React.Children.forEach(props.children, children =>
     parseChildren(children, node))
 }
 
@@ -171,13 +170,13 @@ function hasChanged (configA, configB) {
   return !isEqualWith(newOptionsForComparision, oldOptionsForComparison, customComparison)
 }
 
-export const Chart = createClass({
+export const Chart = React.createClass({
   displayName: 'Highcharts',
   propTypes: {
-    tag: PropTypes.string,
-    children: PropTypes.node,
-    className: PropTypes.string,
-    style: PropTypes.object
+    tag: React.PropTypes.string,
+    children: React.PropTypes.node,
+    className: React.PropTypes.string,
+    style: React.PropTypes.object
   },
   getDefaultProps () {
     return {
@@ -237,7 +236,7 @@ export const Chart = createClass({
   render () {
     const {tag, className, style} = this.props
 
-    return createElement(tag, {
+    return React.createElement(tag, {
       ref: 'container',
       className,
       style

@@ -2,16 +2,14 @@ import React from 'react'
 import {contextualize} from './higher-order/contextualize'
 import Reports from './Report/List'
 
-const {PropTypes} = React
-
 // @todo abstract boilerplate into a HOC
 
 export const FolderReports = React.createClass({
   displayName: 'Folder-Reports',
   propTypes: {
-    dispatch: PropTypes.func.isRequired,
-    params: PropTypes.object.isRequired,
-    folder: PropTypes.object
+    dispatch: React.PropTypes.func.isRequired,
+    params: React.PropTypes.object.isRequired,
+    folder: React.PropTypes.object
   },
   render () {
     const {params, dispatch, folder: {id, reports}} = this.props

@@ -5,25 +5,23 @@ import get from 'lodash/get'
 import values from 'lodash/values'
 import endsWith from 'lodash/endsWith'
 
-const {PropTypes} = React
-
 const WorkspaceReport = React.createClass({
   displayName: 'Workspace-Report',
   propTypes: {
-    report: PropTypes.object,
-    location: PropTypes.object,
-    metaData: PropTypes.object,
-    params: PropTypes.object.isRequired,
-    dispatch: PropTypes.func,
-    workspace: PropTypes.shape({
-      entities: PropTypes.shape({
-        campaigns: PropTypes.array,
-        adSets: PropTypes.array,
-        keywords: PropTypes.array,
-        adGroups: PropTypes.array,
-        ads: PropTypes.array
+    report: React.PropTypes.object,
+    location: React.PropTypes.object,
+    metaData: React.PropTypes.object,
+    params: React.PropTypes.object.isRequired,
+    dispatch: React.PropTypes.func,
+    workspace: React.PropTypes.shape({
+      entities: React.PropTypes.shape({
+        campaigns: React.PropTypes.array,
+        adSets: React.PropTypes.array,
+        keywords: React.PropTypes.array,
+        adGroups: React.PropTypes.array,
+        ads: React.PropTypes.array
       }),
-      accounts: PropTypes.object
+      accounts: React.PropTypes.object
     })
   },
   render () {

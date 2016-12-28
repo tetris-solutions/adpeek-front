@@ -3,8 +3,6 @@ import csjs from 'csjs'
 import {styledFnComponent} from './higher-order/styled-fn-component'
 import omit from 'lodash/omit'
 import {Link} from 'react-router'
-
-const {PropTypes} = React
 const style = csjs`
 .wrapper {
   width: 270px;
@@ -67,12 +65,12 @@ NavBt.defaultProps = {
   tag: 'a'
 }
 NavBt.propTypes = {
-  tag: PropTypes.any,
-  href: PropTypes.string,
-  to: PropTypes.string,
-  icon: PropTypes.string,
-  onClick: PropTypes.func,
-  children: PropTypes.node
+  tag: React.PropTypes.any,
+  href: React.PropTypes.string,
+  to: React.PropTypes.string,
+  icon: React.PropTypes.string,
+  onClick: React.PropTypes.func,
+  children: React.PropTypes.node
 }
 
 export const NavLink = props => <NavBt {...props} tag={Link}/>
@@ -94,7 +92,7 @@ Name.displayName = 'Name'
 NavBts.displayName = 'Nav-Buttons'
 
 Name.propTypes = NavBts.propTypes = {
-  children: PropTypes.node.isRequired
+  children: React.PropTypes.node.isRequired
 }
 
 const Wrapper = ({icon, img, children}) => (
@@ -108,9 +106,9 @@ const Wrapper = ({icon, img, children}) => (
 
 Wrapper.displayName = 'Navigation'
 Wrapper.propTypes = {
-  icon: PropTypes.string,
-  img: PropTypes.string,
-  children: PropTypes.node
+  icon: React.PropTypes.string,
+  img: React.PropTypes.string,
+  children: React.PropTypes.node
 }
 
 export const Navigation = styledFnComponent(Wrapper, style)

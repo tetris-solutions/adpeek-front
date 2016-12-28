@@ -16,26 +16,24 @@ import FolderFormMixin from './mixins/FolderForm'
 import Page from './Page'
 import SubHeader from './SubHeader'
 
-const {PropTypes} = React
-
 export const CreateFolder = React.createClass({
   displayName: 'Create-Folder',
   mixins: [FormMixin, FolderFormMixin],
   propTypes: {
-    dispatch: PropTypes.func,
-    company: PropTypes.object,
-    medias: PropTypes.array,
-    kpis: PropTypes.object,
-    params: PropTypes.shape({
-      company: PropTypes.string,
-      workspace: PropTypes.string
+    dispatch: React.PropTypes.func,
+    company: React.PropTypes.object,
+    medias: React.PropTypes.array,
+    kpis: React.PropTypes.object,
+    params: React.PropTypes.shape({
+      company: React.PropTypes.string,
+      workspace: React.PropTypes.string
     }),
-    workspace: PropTypes.shape({
-      accounts: PropTypes.object
+    workspace: React.PropTypes.shape({
+      accounts: React.PropTypes.object
     })
   },
   contextTypes: {
-    router: PropTypes.object
+    router: React.PropTypes.object
   },
   getInitialState () {
     return {

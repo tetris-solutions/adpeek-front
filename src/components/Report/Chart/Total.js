@@ -4,8 +4,6 @@ import {styled} from '../../mixins/styled'
 import head from 'lodash/head'
 import get from 'lodash/get'
 import {prettyNumber} from '../../../functions/pretty-number'
-
-const {PropTypes} = React
 const style = csjs`
 .wrapper {
   display: table;
@@ -34,15 +32,15 @@ const TotalChart = React.createClass({
   displayName: 'Total-Chart',
   mixins: [styled(style)],
   propTypes: {
-    name: PropTypes.string.isRequired,
-    attributes: PropTypes.object,
-    query: PropTypes.shape({
-      metrics: PropTypes.array
+    name: React.PropTypes.string.isRequired,
+    attributes: React.PropTypes.object,
+    query: React.PropTypes.shape({
+      metrics: React.PropTypes.array
     }).isRequired,
-    result: PropTypes.array.isRequired
+    result: React.PropTypes.array.isRequired
   },
   contextTypes: {
-    locales: PropTypes.string
+    locales: React.PropTypes.string
   },
   render () {
     const {query: {metrics}, name, result, attributes} = this.props

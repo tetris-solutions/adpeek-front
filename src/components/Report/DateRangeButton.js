@@ -4,8 +4,6 @@ import DateRangePicker from '../DateRangePicker'
 import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
 import {Button} from '../Button'
 
-const {PropTypes} = React
-
 const DateRangeSelector = ({startDate, endDate, close, onChange}) => (
   <div className='mdl-grid'>
     <div className='mdl-cell mdl-cell--12-col'>
@@ -29,10 +27,10 @@ const DateRangeSelector = ({startDate, endDate, close, onChange}) => (
 
 DateRangeSelector.displayName = 'Date-Range-Modal'
 DateRangeSelector.propTypes = {
-  onChange: PropTypes.func,
-  close: PropTypes.func,
-  startDate: PropTypes.object,
-  endDate: PropTypes.object
+  onChange: React.PropTypes.func,
+  close: React.PropTypes.func,
+  startDate: React.PropTypes.object,
+  endDate: React.PropTypes.object
 }
 
 function DateRangeButton ({disabled, className}, {moment, reportParams: {from, to}, changeDateRange}) {
@@ -67,12 +65,12 @@ function DateRangeButton ({disabled, className}, {moment, reportParams: {from, t
 
 DateRangeButton.displayName = 'Report-Date-Range'
 DateRangeButton.propTypes = {
-  className: PropTypes.string.isRequired,
-  disabled: PropTypes.bool
+  className: React.PropTypes.string.isRequired,
+  disabled: React.PropTypes.bool
 }
 DateRangeButton.contextTypes = {
-  moment: PropTypes.func.isRequired,
-  reportParams: PropTypes.object.isRequired,
-  changeDateRange: PropTypes.func.isRequired
+  moment: React.PropTypes.func.isRequired,
+  reportParams: React.PropTypes.object.isRequired,
+  changeDateRange: React.PropTypes.func.isRequired
 }
 export default DateRangeButton

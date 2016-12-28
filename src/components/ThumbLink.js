@@ -111,8 +111,6 @@ const style = csjs`
   margin-right: .3em;
 }`
 
-const {PropTypes} = React
-
 const backgroundStyle = img => ({
   background: `url(${img}) center/cover no-repeat`
 })
@@ -125,7 +123,7 @@ export const BottomLine = ({children}) => (
 
 BottomLine.displayName = 'Bottom-Line'
 BottomLine.propTypes = {
-  children: PropTypes.node.isRequired
+  children: React.PropTypes.node.isRequired
 }
 
 export const Title = ({children}) => (
@@ -136,7 +134,7 @@ export const Title = ({children}) => (
 
 Title.displayName = 'Title'
 Title.propTypes = {
-  children: PropTypes.node.isRequired
+  children: React.PropTypes.node.isRequired
 }
 
 export const Cap = ({children, bg = 'primary-dark'}) => (
@@ -149,8 +147,8 @@ export const Cap = ({children, bg = 'primary-dark'}) => (
 
 Cap.displayName = 'Cap'
 Cap.propTypes = {
-  bg: PropTypes.string,
-  children: PropTypes.node
+  bg: React.PropTypes.string,
+  children: React.PropTypes.node
 }
 
 export function ThumbLink ({to, title, img, children, sad}) {
@@ -169,11 +167,11 @@ export function ThumbLink ({to, title, img, children, sad}) {
 
 ThumbLink.displayName = 'Thumb-Link'
 ThumbLink.propTypes = {
-  sad: PropTypes.bool,
-  children: PropTypes.node,
-  img: PropTypes.string,
-  to: PropTypes.string,
-  title: PropTypes.string
+  sad: React.PropTypes.bool,
+  children: React.PropTypes.node,
+  img: React.PropTypes.string,
+  to: React.PropTypes.string,
+  title: React.PropTypes.string
 }
 
 export const Info = ({children}) => (
@@ -183,8 +181,8 @@ export const Info = ({children}) => (
 )
 Info.displayName = 'Info'
 Info.propTypes = {
-  style: PropTypes.object,
-  children: PropTypes.node.isRequired
+  style: React.PropTypes.object,
+  children: React.PropTypes.node.isRequired
 }
 
 /**
@@ -204,7 +202,7 @@ export const Gear = ({children}) => (
 
 Gear.displayName = 'Gear'
 Gear.propTypes = {
-  children: PropTypes.node.isRequired
+  children: React.PropTypes.node.isRequired
 }
 
 const Parent = ({children}) => (
@@ -214,7 +212,7 @@ const Parent = ({children}) => (
 )
 Parent.displayName = 'Container'
 Parent.propTypes = {
-  children: PropTypes.node
+  children: React.PropTypes.node
 }
 
 export const Container = styledFnComponent(Parent, style)

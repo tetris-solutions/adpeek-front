@@ -12,23 +12,21 @@ import Page from './Page'
 import {loadKeywordsRelevance} from './CampaignCreatives'
 import CalculateRelevanceButton from './CalculateRelevanceButton'
 
-const {PropTypes} = React
-
 export const FolderCreatives = React.createClass({
   displayName: 'Folder-Creatives',
   propTypes: {
-    dispatch: PropTypes.func,
-    folder: PropTypes.shape({
-      adGroups: PropTypes.array,
-      adGroupsReport: PropTypes.shape({
-        url: PropTypes.string
+    dispatch: React.PropTypes.func,
+    folder: React.PropTypes.shape({
+      adGroups: React.PropTypes.array,
+      adGroupsReport: React.PropTypes.shape({
+        url: React.PropTypes.string
       }),
-      account: PropTypes.shape({
-        platform: PropTypes.string
+      account: React.PropTypes.shape({
+        platform: React.PropTypes.string
       }),
-      campaigns: PropTypes.array
+      campaigns: React.PropTypes.array
     }),
-    params: PropTypes.object
+    params: React.PropTypes.object
   },
   getInitialState () {
     return {

@@ -16,26 +16,24 @@ import {Tabs, Tab} from './Tabs'
 import BudgetCampaign from './BudgetCampaign'
 import BudgetEditFolderCampaigns from './BudgetEditFolderCampaigns'
 
-const {PropTypes} = React
-
 const notUnknown = ({id}) => id !== 'UNKNOWN'
 
 export const BudgetEdit = React.createClass({
   displayName: 'Budget-Edit',
   propTypes: {
-    close: PropTypes.func,
-    remove: PropTypes.func,
-    deliveryMethods: PropTypes.array,
-    removeCampaign: PropTypes.func,
-    change: PropTypes.func,
-    max: PropTypes.number,
+    close: React.PropTypes.func,
+    remove: React.PropTypes.func,
+    deliveryMethods: React.PropTypes.array,
+    removeCampaign: React.PropTypes.func,
+    change: React.PropTypes.func,
+    max: React.PropTypes.number,
     budget: budgetType,
-    folderCampaigns: PropTypes.array,
-    showFolderCampaigns: PropTypes.bool,
-    addCampaigns: PropTypes.func
+    folderCampaigns: React.PropTypes.array,
+    showFolderCampaigns: React.PropTypes.bool,
+    addCampaigns: React.PropTypes.func
   },
   contextTypes: {
-    messages: PropTypes.object
+    messages: React.PropTypes.object
   },
   onChangeMode ({target: {checked}}) {
     this.props.change('mode', checked ? 'percentage' : 'amount')

@@ -6,8 +6,6 @@ import keys from 'lodash/keys'
 import React from 'react'
 import {branch} from 'baobab-react/higher-order'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
-
-const {PropTypes} = React
 const isRouteParam = {
   company: true,
   workspace: true,
@@ -112,7 +110,7 @@ export function contextualize (Component, baseCursors, ...names) {
 
     ParamsInjector.displayName = `Contextualize(${Component.displayName}, ${propsNames})`
     ParamsInjector.contextTypes = {
-      params: PropTypes.object.isRequired
+      params: React.PropTypes.object.isRequired
     }
 
     return ParamsInjector
@@ -124,16 +122,16 @@ export function contextualize (Component, baseCursors, ...names) {
   const paramsShape = {}
 
   function addToDynamicPropTypes (name) {
-    PropsInjector.propTypes[name] = PropTypes.any
+    PropsInjector.propTypes[name] = React.PropTypes.any
 
     if (isRouteParam[name]) {
-      paramsShape[name] = PropTypes.string
+      paramsShape[name] = React.PropTypes.string
     }
   }
 
   forEach(names, addToDynamicPropTypes)
 
-  PropsInjector.propTypes.params = PropTypes.shape(paramsShape)
+  PropsInjector.propTypes.params = React.PropTypes.shape(paramsShape)
 
   function resolveCursors ({params}, {tree}) {
     const cursors = assign({}, baseCursors)

@@ -11,22 +11,20 @@ import reportMetaDataType from '../../../propTypes/report-meta-data'
 import moduleType from '../../../propTypes/report-module'
 import Controller from './Controller'
 
-const {PropTypes} = React
-
 const ModuleContainer = React.createClass({
   displayName: 'Module-Container',
   propTypes: {
-    editable: PropTypes.bool,
+    editable: React.PropTypes.bool,
     module: moduleType.isRequired,
     metaData: reportMetaDataType.isRequired
   },
   contextTypes: {
-    reportEntities: PropTypes.arrayOf(reportEntityType).isRequired
+    reportEntities: React.PropTypes.arrayOf(reportEntityType).isRequired
   },
   childContextTypes: {
-    entities: PropTypes.object,
-    activeOnly: PropTypes.bool,
-    toggleActiveOnly: PropTypes.func
+    entities: React.PropTypes.object,
+    activeOnly: React.PropTypes.bool,
+    toggleActiveOnly: React.PropTypes.func
   },
   getInitialState () {
     return {

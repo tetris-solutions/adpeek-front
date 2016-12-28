@@ -14,38 +14,36 @@ import reportEntityType from '../../../../propTypes/report-entity'
 import reportModuleType from '../../../../propTypes/report-module'
 import Editor from './Editor'
 
-const {PropTypes} = React
-
 const editableFields = ['description', 'name', 'type', 'dimensions', 'metrics', 'rows', 'cols', 'entity', 'limit', 'sort', 'filters']
 const MAX_ACCOUNTS = 15
 
 const ModuleEdit = React.createClass({
   displayName: 'Editor-Controller',
   contextTypes: {
-    attributes: PropTypes.object.isRequired,
-    messages: PropTypes.object.isRequired,
-    locales: PropTypes.string.isRequired,
-    moment: PropTypes.func.isRequired,
-    module: PropTypes.object.isRequired,
-    entities: PropTypes.object.isRequired,
-    getUsedAccounts: PropTypes.func.isRequired,
-    activeOnly: PropTypes.bool.isRequired
+    attributes: React.PropTypes.object.isRequired,
+    messages: React.PropTypes.object.isRequired,
+    locales: React.PropTypes.string.isRequired,
+    moment: React.PropTypes.func.isRequired,
+    module: React.PropTypes.object.isRequired,
+    entities: React.PropTypes.object.isRequired,
+    getUsedAccounts: React.PropTypes.func.isRequired,
+    activeOnly: React.PropTypes.bool.isRequired
   },
   propTypes: {
-    close: PropTypes.func,
-    save: PropTypes.func
+    close: React.PropTypes.func,
+    save: React.PropTypes.func
   },
   childContextTypes: {
-    draft: PropTypes.shape({
+    draft: React.PropTypes.shape({
       module: reportModuleType,
       entity: reportEntityType
     }),
-    addEntity: PropTypes.func,
-    removeEntity: PropTypes.func,
-    addAttribute: PropTypes.func,
-    removeAttribute: PropTypes.func,
-    change: PropTypes.func,
-    onChangeProperty: PropTypes.func
+    addEntity: React.PropTypes.func,
+    removeEntity: React.PropTypes.func,
+    addAttribute: React.PropTypes.func,
+    removeAttribute: React.PropTypes.func,
+    change: React.PropTypes.func,
+    onChangeProperty: React.PropTypes.func
   },
   getChildContext () {
     return {

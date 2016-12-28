@@ -4,8 +4,6 @@ import {Button} from './Button'
 import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
 import flow from 'lodash/flow'
 
-const {PropTypes} = React
-
 const Prompt = ({entityName, onConfirm, onCancel}) => (
   <div className='mdl-grid'>
     <div className='mdl-cell mdl-cell--12-col'>
@@ -30,9 +28,9 @@ const Prompt = ({entityName, onConfirm, onCancel}) => (
 
 Prompt.displayName = 'Prompt'
 Prompt.propTypes = {
-  entityName: PropTypes.node.isRequired,
-  onConfirm: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired
+  entityName: React.PropTypes.node.isRequired,
+  onConfirm: React.PropTypes.func.isRequired,
+  onCancel: React.PropTypes.func.isRequired
 }
 
 const DeleteButton = ({tag, className, children, entityName, onClick}) => (
@@ -48,14 +46,14 @@ const DeleteButton = ({tag, className, children, entityName, onClick}) => (
 
 DeleteButton.displayName = 'Delete-Buttton'
 DeleteButton.propTypes = {
-  tag: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func
+  tag: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.func
   ]),
-  className: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
-  entityName: PropTypes.node.isRequired
+  className: React.PropTypes.string,
+  onClick: React.PropTypes.func.isRequired,
+  children: React.PropTypes.node.isRequired,
+  entityName: React.PropTypes.node.isRequired
 }
 
 export const DeleteSpan = props => <DeleteButton {...props} tag='span'/>

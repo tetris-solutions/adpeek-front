@@ -11,14 +11,12 @@ import {branch} from 'baobab-react/higher-order'
 import Page from './Page'
 import SubHeader from './SubHeader'
 
-const {PropTypes} = React
-
 export const CreateWorkspace = React.createClass({
   displayName: 'Create-Workspace',
   mixins: [FormMixin, WorkspaceForm],
   propTypes: {
-    dispatch: PropTypes.func,
-    params: PropTypes.object
+    dispatch: React.PropTypes.func,
+    params: React.PropTypes.object
   },
   onSubmit (e) {
     e.preventDefault()

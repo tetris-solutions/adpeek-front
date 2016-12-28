@@ -4,8 +4,6 @@ import {Link} from 'react-router'
 import Message from 'tetris-iso/Message'
 import {Navigation, NavBt, NavBts, Name} from './Navigation'
 
-const {PropTypes} = React
-
 export const CampaignAside = ({params: {company, workspace, folder}, campaign}) =>
   <Navigation icon='format_shapes'>
     <Name>
@@ -20,10 +18,10 @@ export const CampaignAside = ({params: {company, workspace, folder}, campaign}) 
 
 CampaignAside.displayName = 'Campaign-Aside'
 CampaignAside.propTypes = {
-  params: PropTypes.object,
-  campaign: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string
+  params: React.PropTypes.object,
+  campaign: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    name: React.PropTypes.string
   })
 }
 

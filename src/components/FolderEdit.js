@@ -17,35 +17,33 @@ import AutoSelect from './AutoSelect'
 import Page from './Page'
 import SubHeader from './SubHeader'
 
-const {PropTypes} = React
-
 export const EditFolder = React.createClass({
   displayName: 'Edit-Folder',
   mixins: [FormMixin, FolderFormMixin],
   propTypes: {
-    dispatch: PropTypes.func,
-    company: PropTypes.object,
-    medias: PropTypes.array,
-    params: PropTypes.shape({
-      company: PropTypes.string,
-      workspace: PropTypes.string
+    dispatch: React.PropTypes.func,
+    company: React.PropTypes.object,
+    medias: React.PropTypes.array,
+    params: React.PropTypes.shape({
+      company: React.PropTypes.string,
+      workspace: React.PropTypes.string
     }),
-    kpis: PropTypes.object,
-    folder: PropTypes.shape({
-      id: PropTypes.string,
-      account: PropTypes.object,
-      name: PropTypes.string,
-      tag: PropTypes.string,
-      workspace_account: PropTypes.string,
-      media: PropTypes.string,
-      kpi: PropTypes.string
+    kpis: React.PropTypes.object,
+    folder: React.PropTypes.shape({
+      id: React.PropTypes.string,
+      account: React.PropTypes.object,
+      name: React.PropTypes.string,
+      tag: React.PropTypes.string,
+      workspace_account: React.PropTypes.string,
+      media: React.PropTypes.string,
+      kpi: React.PropTypes.string
     }),
-    workspace: PropTypes.shape({
-      accounts: PropTypes.object
+    workspace: React.PropTypes.shape({
+      accounts: React.PropTypes.object
     })
   },
   contextTypes: {
-    router: PropTypes.object
+    router: React.PropTypes.object
   },
   componentWillMount () {
     this.setState(pick(this.props.folder, [

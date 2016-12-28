@@ -15,8 +15,6 @@ import AttributeList from './AttributeList'
 import Input from '../../../Input'
 import {Tabs, Tab} from '../../../Tabs'
 import Entities from './Entities'
-
-const {PropTypes} = React
 const clean = str => trim(lowerCase(deburr(str)))
 
 const containsSearchvalue = searchValue =>
@@ -35,12 +33,12 @@ const sorted = ls => sortBy(ls, 'name')
 const Lists = React.createClass({
   displayName: 'Lists',
   contextTypes: {
-    report: PropTypes.object.isRequired,
-    messages: PropTypes.object.isRequired,
-    selectable: PropTypes.object.isRequired,
-    draft: PropTypes.object.isRequired,
-    addAttribute: PropTypes.func.isRequired,
-    removeAttribute: PropTypes.func.isRequired
+    report: React.PropTypes.object.isRequired,
+    messages: React.PropTypes.object.isRequired,
+    selectable: React.PropTypes.object.isRequired,
+    draft: React.PropTypes.object.isRequired,
+    addAttribute: React.PropTypes.func.isRequired,
+    removeAttribute: React.PropTypes.func.isRequired
   },
   getInitialState () {
     return {searchValue: ''}

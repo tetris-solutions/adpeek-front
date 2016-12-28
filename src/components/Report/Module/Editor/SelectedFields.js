@@ -36,14 +36,12 @@ function Field ({item: {name, remove, id}}) {
   )
 }
 
-const {PropTypes} = React
-
 Field.displayName = 'Field'
 Field.propTypes = {
-  item: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    remove: PropTypes.func.isRequired
+  item: React.PropTypes.shape({
+    id: React.PropTypes.string.isRequired,
+    name: React.PropTypes.string.isRequired,
+    remove: React.PropTypes.func.isRequired
   }).isRequired
 }
 
@@ -64,10 +62,10 @@ const SelectedFields = React.createClass({
   displayName: 'Selected-Fields',
   mixins: [styled(style)],
   contextTypes: {
-    draft: PropTypes.object.isRequired,
-    attributes: PropTypes.object.isRequired,
-    removeAttribute: PropTypes.func.isRequired,
-    change: PropTypes.func.isRequired
+    draft: React.PropTypes.object.isRequired,
+    attributes: React.PropTypes.object.isRequired,
+    removeAttribute: React.PropTypes.func.isRequired,
+    change: React.PropTypes.func.isRequired
   },
   onReorder (event, movedItem, previousIndex, nextIndex, fieldSort) {
     const {draft: {module}, change} = this.context

@@ -2,8 +2,6 @@ import csjs from 'csjs'
 import React from 'react'
 
 import {styledFnComponent} from './higher-order/styled-fn-component'
-
-const {PropTypes} = React
 const style = csjs`
 .verticallyAligned {
   display: inline-flex;
@@ -27,9 +25,9 @@ VerticalAlign.defaultProps = {
 }
 VerticalAlign.displayName = 'Vertical-Align'
 VerticalAlign.propTypes = {
-  style: PropTypes.object,
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string
+  style: React.PropTypes.object,
+  children: React.PropTypes.node.isRequired,
+  className: React.PropTypes.string
 }
 
 export default styledFnComponent(VerticalAlign, style)

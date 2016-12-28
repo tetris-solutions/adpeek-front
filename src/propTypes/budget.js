@@ -1,12 +1,10 @@
 import React from 'react'
 import campaignPropType from './campaign'
 
-const {PropTypes} = React
-
-export default PropTypes.shape({
-  id: PropTypes.string,
-  name: PropTypes.string,
-  percentage: PropTypes.number,
-  amount: PropTypes.number,
-  campaigns: PropTypes.arrayOf(campaignPropType)
+export default React.PropTypes.shape({
+  id: React.PropTypes.string,
+  name: React.PropTypes.string,
+  percentage: React.PropTypes.number,
+  amount: React.PropTypes.number,
+  campaigns: React.PropTypes.arrayOf(campaignPropType)
 })

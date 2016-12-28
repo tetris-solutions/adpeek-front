@@ -78,8 +78,6 @@ const style = csjs`
   color: #004465
 }`
 
-const {PropTypes} = React
-
 function TextAd ({onClick, className, headline, description, selectable}) {
   return (
     <li onClick={onClick} className={className} data-selectable={selectable ? true : undefined}>
@@ -94,11 +92,11 @@ function TextAd ({onClick, className, headline, description, selectable}) {
 
 TextAd.displayName = 'Text-Ad'
 TextAd.propTypes = {
-  className: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
-  headline: PropTypes.string,
-  description: PropTypes.string,
-  selectable: PropTypes.bool
+  className: React.PropTypes.string.isRequired,
+  onClick: React.PropTypes.func.isRequired,
+  headline: React.PropTypes.string,
+  description: React.PropTypes.string,
+  selectable: React.PropTypes.bool
 }
 
 const GenericItem = ({onClick, className, id, name, selectable}) => (
@@ -109,11 +107,11 @@ const GenericItem = ({onClick, className, id, name, selectable}) => (
 
 GenericItem.displayName = 'Generic-Item'
 GenericItem.propTypes = {
-  className: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
-  name: PropTypes.string,
-  id: PropTypes.string.isRequired,
-  selectable: PropTypes.bool
+  className: React.PropTypes.string.isRequired,
+  onClick: React.PropTypes.func.isRequired,
+  name: React.PropTypes.string,
+  id: React.PropTypes.string.isRequired,
+  selectable: React.PropTypes.bool
 }
 
 const AttributeItem = React.createClass({
@@ -125,14 +123,14 @@ const AttributeItem = React.createClass({
     }
   },
   propTypes: {
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string,
-    type: PropTypes.string,
-    urls: PropTypes.array,
-    headline: PropTypes.string,
-    description: PropTypes.string,
-    selected: PropTypes.bool.isRequired,
-    toggle: PropTypes.func
+    id: React.PropTypes.string.isRequired,
+    name: React.PropTypes.string,
+    type: React.PropTypes.string,
+    urls: React.PropTypes.array,
+    headline: React.PropTypes.string,
+    description: React.PropTypes.string,
+    selected: React.PropTypes.bool.isRequired,
+    toggle: React.PropTypes.func
   },
   onClick (e) {
     e.persist()

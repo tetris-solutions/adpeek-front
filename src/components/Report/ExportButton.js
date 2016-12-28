@@ -8,8 +8,6 @@ import get from 'lodash/get'
 import some from 'lodash/some'
 import {Button} from '../Button'
 import {MenuItem} from '../DropdownMenu'
-
-const {PropTypes} = React
 const style = csjs`
 .cards > div {
   display: inline-block;
@@ -40,9 +38,9 @@ const Format = ({icon, onClick, children}) => (
 
 Format.displayName = 'Format'
 Format.propTypes = {
-  icon: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired
+  icon: React.PropTypes.string.isRequired,
+  onClick: React.PropTypes.func.isRequired,
+  children: React.PropTypes.node.isRequired
 }
 
 const ExportOptions = ({pdf, xls, cancel}) => (
@@ -71,9 +69,9 @@ const ExportOptions = ({pdf, xls, cancel}) => (
 
 ExportOptions.displayName = 'Pick-Type'
 ExportOptions.propTypes = {
-  xls: PropTypes.func.isRequired,
-  pdf: PropTypes.func.isRequired,
-  cancel: PropTypes.func.isRequired
+  xls: React.PropTypes.func.isRequired,
+  pdf: React.PropTypes.func.isRequired,
+  cancel: React.PropTypes.func.isRequired
 }
 const PickType = styledFnComponent(ExportOptions, style)
 
@@ -82,12 +80,12 @@ const notReady = ({isLoading, result}) => isLoading || !result
 const ReportExportButton = React.createClass({
   displayName: 'Report-Export-Button',
   propTypes: {
-    create: PropTypes.func.isRequired,
-    isCreatingReport: PropTypes.bool.isRequired
+    create: React.PropTypes.func.isRequired,
+    isCreatingReport: React.PropTypes.bool.isRequired
   },
   contextTypes: {
-    location: PropTypes.object.isRequired,
-    report: PropTypes.object.isRequired
+    location: React.PropTypes.object.isRequired,
+    report: React.PropTypes.object.isRequired
   },
   getInitialState () {
     return {

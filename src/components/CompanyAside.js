@@ -5,8 +5,6 @@ import {Navigation, NavLink, NavBt, NavBts, Name} from './Navigation'
 import Recent from './Recent'
 import ReportLink from './Report/ReportLink'
 
-const {PropTypes} = React
-
 export const CompanyAside = ({company, params, dispatch}) => {
   const baseUrl = `/company/${company.id}`
 
@@ -55,11 +53,11 @@ export const CompanyAside = ({company, params, dispatch}) => {
 
 CompanyAside.displayName = 'Company-Aside'
 CompanyAside.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  params: PropTypes.object.isRequired,
-  company: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string
+  dispatch: React.PropTypes.func.isRequired,
+  params: React.PropTypes.object.isRequired,
+  company: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    name: React.PropTypes.string
   })
 }
 

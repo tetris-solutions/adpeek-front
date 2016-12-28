@@ -10,8 +10,6 @@ const style = csjs`
   padding: 0 .5em
 }`
 
-const {PropTypes} = React
-
 const colorPerQualityScore = {
   UNKNOWN: {bg: 'grey-200', text: 'grey-900'},
   BELOW_AVERAGE: {bg: 'red-200', text: 'grey-900'},
@@ -29,11 +27,11 @@ export const Keyword = ({text, status, criterion_use, match_type, relevance}) =>
 
 Keyword.displayName = 'AdGroup-Keyword'
 Keyword.propTypes = {
-  relevance: PropTypes.oneOf(['UNKNOWN', 'BELOW_AVERAGE', 'AVERAGE', 'ABOVE_AVERAGE']),
-  text: PropTypes.string,
-  status: PropTypes.string,
-  criterion_use: PropTypes.string,
-  match_type: PropTypes.string
+  relevance: React.PropTypes.oneOf(['UNKNOWN', 'BELOW_AVERAGE', 'AVERAGE', 'ABOVE_AVERAGE']),
+  text: React.PropTypes.string,
+  status: React.PropTypes.string,
+  criterion_use: React.PropTypes.string,
+  match_type: React.PropTypes.string
 }
 
 export default styledFnComponent(Keyword, style)

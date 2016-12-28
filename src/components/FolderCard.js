@@ -8,8 +8,6 @@ import {DeleteSpan} from './DeleteButton'
 import ReportLink from './Report/ReportLink'
 import FolderStats from './FolderStats'
 
-const {PropTypes} = React
-
 const DeleteFolder = ({params, dispatch, id, name}) => (
   <MenuItem
     icon='delete'
@@ -21,10 +19,10 @@ const DeleteFolder = ({params, dispatch, id, name}) => (
 )
 DeleteFolder.displayName = 'Delete-Folder'
 DeleteFolder.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  params: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired
+  id: React.PropTypes.string.isRequired,
+  name: React.PropTypes.string.isRequired,
+  params: React.PropTypes.object.isRequired,
+  dispatch: React.PropTypes.func.isRequired
 }
 
 const FolderCard = ({id, account: {platform}, name, stats, reports, editable, dispatch, params}) => {
@@ -76,16 +74,16 @@ const FolderCard = ({id, account: {platform}, name, stats, reports, editable, di
 
 FolderCard.displayName = 'FolderCard'
 FolderCard.propTypes = {
-  id: PropTypes.string.isRequired,
-  account: PropTypes.shape({
-    platform: PropTypes.string
+  id: React.PropTypes.string.isRequired,
+  account: React.PropTypes.shape({
+    platform: React.PropTypes.string
   }).isRequired,
-  name: PropTypes.string.isRequired,
-  stats: PropTypes.object,
-  reports: PropTypes.array,
-  editable: PropTypes.bool.isRequired,
-  dispatch: PropTypes.func.isRequired,
-  params: PropTypes.object.isRequired
+  name: React.PropTypes.string.isRequired,
+  stats: React.PropTypes.object,
+  reports: React.PropTypes.array,
+  editable: React.PropTypes.bool.isRequired,
+  dispatch: React.PropTypes.func.isRequired,
+  params: React.PropTypes.object.isRequired
 }
 
 export default FolderCard

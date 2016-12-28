@@ -85,8 +85,6 @@ const style = csjs`
 .locale {
   margin: 0 2em;
 }`
-
-const {PropTypes} = React
 const userType = (company, isAdmin) =>
   get(
     company, 'role.name',
@@ -95,12 +93,12 @@ const userType = (company, isAdmin) =>
       : <Message>regularUser</Message>
   )
 const pTypes = {
-  name: PropTypes.string,
-  avatar: PropTypes.string,
-  email: PropTypes.string,
-  is_admin: PropTypes.bool,
-  company: PropTypes.object,
-  logout: PropTypes.func.isRequired
+  name: React.PropTypes.string,
+  avatar: React.PropTypes.string,
+  email: React.PropTypes.string,
+  is_admin: React.PropTypes.bool,
+  company: React.PropTypes.object,
+  logout: React.PropTypes.func.isRequired
 }
 
 const UserOptions = ({name, avatar, email, is_admin, company, logout}) => (
@@ -147,12 +145,12 @@ const Header = React.createClass({
   displayName: 'Header',
   mixins: [styled(style)],
   propTypes: {
-    dispatch: PropTypes.func.isRequired,
-    user: PropTypes.shape({
-      name: PropTypes.string
+    dispatch: React.PropTypes.func.isRequired,
+    user: React.PropTypes.shape({
+      name: React.PropTypes.string
     }),
-    hideLogin: PropTypes.bool.isRequired,
-    company: PropTypes.object
+    hideLogin: React.PropTypes.bool.isRequired,
+    company: React.PropTypes.object
   },
   loginRoundTrip () {
     this.props.dispatch(logoutAction)

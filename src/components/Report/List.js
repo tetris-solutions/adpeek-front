@@ -18,8 +18,6 @@ import {deleteReportAction} from '../../actions/delete-report'
 import ShareButton from './ShareButton'
 
 const cleanStr = str => trim(deburr(lowerCase(str)))
-const {PropTypes} = React
-
 const Report = ({dispatch, params, shareUrl, path, id, name}) => (
   <ThumbLink to={`${path}/report/${id}`} title={name}>
     <Title>{name}</Title>
@@ -55,21 +53,21 @@ const Report = ({dispatch, params, shareUrl, path, id, name}) => (
 
 Report.displayName = 'Report'
 Report.propTypes = {
-  id: PropTypes.string,
-  shareUrl: PropTypes.string,
-  path: PropTypes.string,
-  name: PropTypes.string,
-  dispatch: PropTypes.func.isRequired,
-  params: PropTypes.object.isRequired
+  id: React.PropTypes.string,
+  shareUrl: React.PropTypes.string,
+  path: React.PropTypes.string,
+  name: React.PropTypes.string,
+  dispatch: React.PropTypes.func.isRequired,
+  params: React.PropTypes.object.isRequired
 }
 
 export const Reports = React.createClass({
   displayName: 'Reports',
   propTypes: {
-    dispatch: PropTypes.func.isRequired,
-    params: PropTypes.object.isRequired,
-    reports: PropTypes.array,
-    path: PropTypes.string
+    dispatch: React.PropTypes.func.isRequired,
+    params: React.PropTypes.object.isRequired,
+    reports: React.PropTypes.array,
+    path: React.PropTypes.string
   },
   getInitialState () {
     return {

@@ -12,20 +12,18 @@ import WorkspaceForm from './mixins/WorkspaceForm'
 import Page from './Page'
 import SubHeader from './SubHeader'
 
-const {PropTypes} = React
-
 export const WorkspaceEdit = React.createClass({
   displayName: 'Workspace-Edit',
   mixins: [FormMixin, WorkspaceForm],
   propTypes: {
-    dispatch: PropTypes.func.isRequired,
-    params: PropTypes.shape({
-      workspace: PropTypes.string,
-      company: PropTypes.string
+    dispatch: React.PropTypes.func.isRequired,
+    params: React.PropTypes.shape({
+      workspace: React.PropTypes.string,
+      company: React.PropTypes.string
     }),
-    workspace: PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string
+    workspace: React.PropTypes.shape({
+      id: React.PropTypes.string,
+      name: React.PropTypes.string
     })
   },
   onSubmit (e) {

@@ -44,8 +44,6 @@ const style = csjs`
 .subTree {
   margin-left: .7em;
 }`
-
-const {PropTypes} = React
 const ids = ({ids, id}) => ids || id
 
 function hierarchy (attributes, levels, mount = false) {
@@ -96,13 +94,13 @@ function hierarchy (attributes, levels, mount = false) {
 const Group = React.createClass({
   displayName: 'Group',
   propTypes: {
-    selection: PropTypes.string,
-    ids: PropTypes.array.isRequired,
-    name: PropTypes.node.isRequired,
-    children: PropTypes.node.isRequired,
-    select: PropTypes.func.isRequired,
-    unselect: PropTypes.func.isRequired,
-    openByDefault: PropTypes.bool
+    selection: React.PropTypes.string,
+    ids: React.PropTypes.array.isRequired,
+    name: React.PropTypes.node.isRequired,
+    children: React.PropTypes.node.isRequired,
+    select: React.PropTypes.func.isRequired,
+    unselect: React.PropTypes.func.isRequired,
+    openByDefault: React.PropTypes.bool
   },
   getDefaultProps () {
     return {
@@ -152,7 +150,7 @@ const List = ({children}) => <ul className={`${style.list}`}>{children}</ul>
 
 List.displayName = 'List'
 List.propTypes = {
-  children: PropTypes.node.isRequired
+  children: React.PropTypes.node.isRequired
 }
 
 const AttributeList = ({attributes, selectedAttributes, levels, remove, add}) => {
@@ -201,12 +199,12 @@ const AttributeList = ({attributes, selectedAttributes, levels, remove, add}) =>
 
 AttributeList.displayName = 'Attribute-List'
 AttributeList.propTypes = {
-  levels: PropTypes.array,
-  attributes: PropTypes.array.isRequired,
-  selectedAttributes: PropTypes.array.isRequired,
-  isIdSelected: PropTypes.bool,
-  remove: PropTypes.func.isRequired,
-  add: PropTypes.func.isRequired
+  levels: React.PropTypes.array,
+  attributes: React.PropTypes.array.isRequired,
+  selectedAttributes: React.PropTypes.array.isRequired,
+  isIdSelected: React.PropTypes.bool,
+  remove: React.PropTypes.func.isRequired,
+  add: React.PropTypes.func.isRequired
 }
 
 export default styledFnComponent(AttributeList, style)

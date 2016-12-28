@@ -4,8 +4,6 @@ import csjs from 'csjs'
 import {contextualize} from './higher-order/contextualize'
 import Input from './Input'
 import AutoBudgetLogs from './AutoBudgetLogs'
-
-const {PropTypes} = React
 const style = csjs`
 `
 
@@ -13,14 +11,14 @@ export const OrderAutoBudget = React.createClass({
   displayName: 'OrderAutoBudget',
   mixins: [styled(style)],
   contextTypes: {
-    router: PropTypes.object,
-    moment: PropTypes.func
+    router: React.PropTypes.object,
+    moment: React.PropTypes.func
   },
   propTypes: {
-    order: PropTypes.object,
-    folder: PropTypes.object,
-    routeParams: PropTypes.object,
-    params: PropTypes.object
+    order: React.PropTypes.object,
+    folder: React.PropTypes.object,
+    routeParams: React.PropTypes.object,
+    params: React.PropTypes.object
   },
   onChangeDay (e) {
     const {company, workspace, folder, order} = this.props.params

@@ -9,8 +9,6 @@ import React from 'react'
 import orderType from '../propTypes/order'
 import Highcharts from './Highcharts'
 import {styled} from './mixins/styled'
-
-const {PropTypes} = React
 const style = csjs`
 .orderPieChart {
   height: 70vh
@@ -20,13 +18,13 @@ export const OrderPie = React.createClass({
   displayName: 'Order-Pie',
   mixins: [styled(style)],
   propTypes: {
-    selectedBudgetId: PropTypes.string,
-    remainingAmount: PropTypes.number,
+    selectedBudgetId: React.PropTypes.string,
+    remainingAmount: React.PropTypes.number,
     order: orderType,
-    selectBudget: PropTypes.func
+    selectBudget: React.PropTypes.func
   },
   contextTypes: {
-    messages: PropTypes.object
+    messages: React.PropTypes.object
   },
   selectPoint (index, id) {
     this.props.selectBudget(id === 'remaining' ? null : index)

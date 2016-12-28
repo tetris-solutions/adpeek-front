@@ -6,8 +6,6 @@ import reportParamsType from '../../../propTypes/report-params'
 import {loadCreativeAction} from '../../../actions/load-creative'
 import {contextualize} from '../../higher-order/contextualize'
 import {styled} from '../../mixins/styled'
-
-const {PropTypes} = React
 const style = csjs`
 .post {
   width: 256px;
@@ -48,8 +46,8 @@ function Creative ({thumbnail, body}) {
 
 Creative.displayName = 'Creative'
 Creative.propTypes = {
-  thumbnail: PropTypes.string,
-  body: PropTypes.string
+  thumbnail: React.PropTypes.string,
+  body: React.PropTypes.string
 }
 
 const AdCreative = React.createClass({
@@ -57,18 +55,18 @@ const AdCreative = React.createClass({
   mixins: [styled(style)],
   propTypes: {
     reportParams: reportParamsType,
-    params: PropTypes.shape({
-      company: PropTypes.string,
-      account: PropTypes.string
+    params: React.PropTypes.shape({
+      company: React.PropTypes.string,
+      account: React.PropTypes.string
     }),
-    company: PropTypes.shape({
-      creatives: PropTypes.array
+    company: React.PropTypes.shape({
+      creatives: React.PropTypes.array
     }),
-    account: PropTypes.string,
-    dispatch: PropTypes.func,
-    creative: PropTypes.object,
-    creative_id: PropTypes.string,
-    name: PropTypes.string
+    account: React.PropTypes.string,
+    dispatch: React.PropTypes.func,
+    creative: React.PropTypes.object,
+    creative_id: React.PropTypes.string,
+    name: React.PropTypes.string
   },
   componentDidMount () {
     const {reportParams, creative_id, dispatch, params} = this.props

@@ -1,14 +1,12 @@
 import React from 'react'
 
-const {PropTypes} = React
-
 export default {
-  result: PropTypes.array,
-  query: PropTypes.shape({
-    dimensions: PropTypes.array,
-    metrics: PropTypes.array
+  result: React.PropTypes.array,
+  query: React.PropTypes.shape({
+    dimensions: React.PropTypes.array,
+    metrics: React.PropTypes.array
   }),
-  entity: PropTypes.shape({
-    id: PropTypes.string
+  entity: React.PropTypes.shape({
+    id: React.PropTypes.string
   }).isRequired
 }

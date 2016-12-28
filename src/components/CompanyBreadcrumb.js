@@ -3,8 +3,6 @@ import {Link} from 'react-router'
 
 import {contextualize} from './higher-order/contextualize'
 
-const {PropTypes} = React
-
 export function CompanyBreadcrumb ({company: {id, name}}, {messages: {companyBreadcrumb}}) {
   return (
     <Link to={`/company/${id}`} title={companyBreadcrumb}>
@@ -16,13 +14,13 @@ export function CompanyBreadcrumb ({company: {id, name}}, {messages: {companyBre
 
 CompanyBreadcrumb.displayName = 'Company-Breadcrumb'
 CompanyBreadcrumb.propTypes = {
-  company: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.tring
+  company: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    name: React.PropTypes.tring
   })
 }
 CompanyBreadcrumb.contextTypes = {
-  messages: PropTypes.object
+  messages: React.PropTypes.object
 }
 
 export default contextualize(CompanyBreadcrumb, 'company')

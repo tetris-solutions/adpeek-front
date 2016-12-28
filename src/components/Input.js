@@ -9,8 +9,6 @@ import TextMessage from 'intl-messageformat'
 import {prettyNumber} from '../functions/pretty-number'
 import omit from 'lodash/omit'
 
-const {PropTypes} = React
-
 function notEmptyString (value) {
   return value !== '' && value !== undefined && value !== null
 }
@@ -18,23 +16,23 @@ function notEmptyString (value) {
 export const Input = React.createClass({
   displayName: 'Input',
   propTypes: {
-    children: PropTypes.node,
-    readOnly: PropTypes.bool,
-    type: PropTypes.string,
-    min: PropTypes.number,
-    max: PropTypes.number,
-    className: PropTypes.string,
-    value: PropTypes.any,
-    defaultValue: PropTypes.any,
-    error: PropTypes.string,
-    label: PropTypes.string,
-    name: PropTypes.string.isRequired,
-    onChange: PropTypes.func,
-    format: PropTypes.oneOf(['currency', 'percentage', 'decimal'])
+    children: React.PropTypes.node,
+    readOnly: React.PropTypes.bool,
+    type: React.PropTypes.string,
+    min: React.PropTypes.number,
+    max: React.PropTypes.number,
+    className: React.PropTypes.string,
+    value: React.PropTypes.any,
+    defaultValue: React.PropTypes.any,
+    error: React.PropTypes.string,
+    label: React.PropTypes.string,
+    name: React.PropTypes.string.isRequired,
+    onChange: React.PropTypes.func,
+    format: React.PropTypes.oneOf(['currency', 'percentage', 'decimal'])
   },
   contextTypes: {
-    messages: PropTypes.object,
-    locales: PropTypes.string
+    messages: React.PropTypes.object,
+    locales: React.PropTypes.string
   },
   getDefaultProps () {
     return {

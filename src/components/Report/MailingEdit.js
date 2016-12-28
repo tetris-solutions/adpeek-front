@@ -24,8 +24,6 @@ import without from 'lodash/without'
 import uniq from 'lodash/uniq'
 import range from 'lodash/range'
 import includes from 'lodash/includes'
-
-const {PropTypes} = React
 const ranges = [
   'today',
   'yesterday',
@@ -48,8 +46,8 @@ const Middle = ({className, children}) => (
 
 Middle.displayName = 'Middle'
 Middle.propTypes = {
-  className: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired
+  className: React.PropTypes.string.isRequired,
+  children: React.PropTypes.node.isRequired
 }
 
 const RangeSelect = ({value, onChange}, {messages}) => (
@@ -65,11 +63,11 @@ const RangeSelect = ({value, onChange}, {messages}) => (
 
 RangeSelect.displayName = 'Range-Select'
 RangeSelect.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func.isRequired
+  value: React.PropTypes.string,
+  onChange: React.PropTypes.func.isRequired
 }
 RangeSelect.contextTypes = {
-  messages: PropTypes.object
+  messages: React.PropTypes.object
 }
 
 const daysOfWeek = moment => {
@@ -118,17 +116,17 @@ const PeriodicitySelector = (props, {messages, moment}) => (
 )
 PeriodicitySelector.displayName = 'Periodicity'
 PeriodicitySelector.propTypes = {
-  day_of_week: PropTypes.number,
-  day_of_month: PropTypes.number,
-  date: PropTypes.string,
-  periodicity: PropTypes.oneOf(['daily', 'weekly', 'monthly']).isRequired,
-  onChangePeriodicity: PropTypes.func.isRequired,
-  onChangeDayOfWeek: PropTypes.func.isRequired,
-  onChangeDayOfMonth: PropTypes.func.isRequired
+  day_of_week: React.PropTypes.number,
+  day_of_month: React.PropTypes.number,
+  date: React.PropTypes.string,
+  periodicity: React.PropTypes.oneOf(['daily', 'weekly', 'monthly']).isRequired,
+  onChangePeriodicity: React.PropTypes.func.isRequired,
+  onChangeDayOfWeek: React.PropTypes.func.isRequired,
+  onChangeDayOfMonth: React.PropTypes.func.isRequired
 }
 PeriodicitySelector.contextTypes = {
-  moment: PropTypes.func.isRequired,
-  messages: PropTypes.object.isRequired
+  moment: React.PropTypes.func.isRequired,
+  messages: React.PropTypes.object.isRequired
 }
 
 const Email = ({drop, dead, email}, {messages}) => (
@@ -151,12 +149,12 @@ const Email = ({drop, dead, email}, {messages}) => (
 
 Email.displayName = 'Email'
 Email.propTypes = {
-  drop: PropTypes.func.isRequired,
-  email: PropTypes.string.isRequired,
-  dead: PropTypes.bool.isRequired
+  drop: React.PropTypes.func.isRequired,
+  email: React.PropTypes.string.isRequired,
+  dead: React.PropTypes.bool.isRequired
 }
 Email.contextTypes = {
-  messages: PropTypes.object.isRequired
+  messages: React.PropTypes.object.isRequired
 }
 
 const validEmail = str => Boolean(str.match(/\S+@\S+\.\S+/))
@@ -164,35 +162,35 @@ const validEmail = str => Boolean(str.match(/\S+@\S+\.\S+/))
 const MailingEdit = React.createClass({
   mixins: [FormMixin],
   propTypes: {
-    params: PropTypes.object.isRequired,
-    mailing: PropTypes.shape({
-      id: PropTypes.string,
-      date_range: PropTypes.oneOf(ranges),
-      disabled: PropTypes.bool,
-      schedule: PropTypes.shape({
-        id: PropTypes.string,
-        day_of_week: PropTypes.number,
-        day_of_month: PropTypes.number,
-        date: PropTypes.string
+    params: React.PropTypes.object.isRequired,
+    mailing: React.PropTypes.shape({
+      id: React.PropTypes.string,
+      date_range: React.PropTypes.oneOf(ranges),
+      disabled: React.PropTypes.bool,
+      schedule: React.PropTypes.shape({
+        id: React.PropTypes.string,
+        day_of_week: React.PropTypes.number,
+        day_of_month: React.PropTypes.number,
+        date: React.PropTypes.string
       }),
-      emails: PropTypes.array,
-      report: PropTypes.shape({
-        id: PropTypes.string,
-        name: PropTypes.string
+      emails: React.PropTypes.array,
+      report: React.PropTypes.shape({
+        id: React.PropTypes.string,
+        name: React.PropTypes.string
       }),
-      workspace: PropTypes.shape({
-        id: PropTypes.string,
-        name: PropTypes.string
+      workspace: React.PropTypes.shape({
+        id: React.PropTypes.string,
+        name: React.PropTypes.string
       }),
-      folder: PropTypes.shape({
-        id: PropTypes.string,
-        name: PropTypes.string
+      folder: React.PropTypes.shape({
+        id: React.PropTypes.string,
+        name: React.PropTypes.string
       })
     }).isRequired
   },
   contextTypes: {
-    tree: PropTypes.object.isRequired,
-    router: PropTypes.object.isRequired
+    tree: React.PropTypes.object.isRequired,
+    router: React.PropTypes.object.isRequired
   },
   getInitialState () {
     let {mailing} = this.props

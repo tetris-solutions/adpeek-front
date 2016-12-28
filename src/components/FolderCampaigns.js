@@ -17,30 +17,28 @@ import {unlinkCampaignsAction} from '../actions/unlink-campaign'
 import {contextualize} from './higher-order/contextualize'
 import Page from './Page'
 
-const {PropTypes} = React
-
 const cleanStr = str => deburr(lowerCase(str))
 const hasFolder = ({folder}) => folder ? 1 : 0
 
 const FolderCampaigns = React.createClass({
   displayName: 'Folder-Campaigns',
   propTypes: {
-    dispatch: PropTypes.func,
-    folder: PropTypes.shape({
-      id: PropTypes.string,
-      looseCampaigns: PropTypes.array,
-      campaigns: PropTypes.array
+    dispatch: React.PropTypes.func,
+    folder: React.PropTypes.shape({
+      id: React.PropTypes.string,
+      looseCampaigns: React.PropTypes.array,
+      campaigns: React.PropTypes.array
     }),
-    params: PropTypes.shape({
-      company: PropTypes.string,
-      workspace: PropTypes.string,
-      folder: PropTypes.string
+    params: React.PropTypes.shape({
+      company: React.PropTypes.string,
+      workspace: React.PropTypes.string,
+      folder: React.PropTypes.string
     })
   },
   contextTypes: {
-    messages: PropTypes.shape({
-      unlinkCampaignsCallToAction: PropTypes.string,
-      linkCampaignsCallToAction: PropTypes.string
+    messages: React.PropTypes.shape({
+      unlinkCampaignsCallToAction: React.PropTypes.string,
+      linkCampaignsCallToAction: React.PropTypes.string
     })
   },
   getInitialState () {

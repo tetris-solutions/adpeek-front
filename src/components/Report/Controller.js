@@ -17,38 +17,36 @@ import {loadReportAction} from '../../actions/load-report'
 import {setDefaultReportAction} from '../../actions/set-default-report'
 
 import ReportScreen from './Screen'
-
-const {PropTypes} = React
 const getAccountKey = ({tetris_account, ad_account}) => `${tetris_account}:${ad_account}`
 const insertId = a => assign({}, a, {id: getAccountKey(a)})
 
 const ReportController = React.createClass({
   displayName: 'Report-Controller',
   propTypes: {
-    children: PropTypes.node,
-    reportLiteMode: PropTypes.bool,
-    editMode: PropTypes.bool,
+    children: React.PropTypes.node,
+    reportLiteMode: React.PropTypes.bool,
+    editMode: React.PropTypes.bool,
     report: reportType.isRequired,
-    metaData: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired,
-    params: PropTypes.object.isRequired,
-    accounts: PropTypes.arrayOf(PropTypes.shape({
-      ad_account: PropTypes.string,
-      plaftorm: PropTypes.string,
-      tetris_account: PropTypes.string
+    metaData: React.PropTypes.object.isRequired,
+    dispatch: React.PropTypes.func.isRequired,
+    params: React.PropTypes.object.isRequired,
+    accounts: React.PropTypes.arrayOf(React.PropTypes.shape({
+      ad_account: React.PropTypes.string,
+      plaftorm: React.PropTypes.string,
+      tetris_account: React.PropTypes.string
     })),
-    entities: PropTypes.arrayOf(entityType).isRequired
+    entities: React.PropTypes.arrayOf(entityType).isRequired
   },
   contextTypes: {
-    router: PropTypes.object,
-    messages: PropTypes.object,
-    location: PropTypes.object,
-    moment: PropTypes.func
+    router: React.PropTypes.object,
+    messages: React.PropTypes.object,
+    location: React.PropTypes.object,
+    moment: React.PropTypes.func
   },
   childContextTypes: {
-    report: PropTypes.object,
-    reportEntities: PropTypes.array,
-    changeDateRange: PropTypes.func,
+    report: React.PropTypes.object,
+    reportEntities: React.PropTypes.array,
+    changeDateRange: React.PropTypes.func,
     reportParams: reportParamsType
   },
   getChildContext () {

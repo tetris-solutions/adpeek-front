@@ -14,8 +14,6 @@ import compact from 'lodash/compact'
 import qs from 'query-string'
 import Fence from '../Fence'
 
-const {PropTypes} = React
-
 function ReportScreen (props, context) {
   const {favoriteReport, report, reportLiteMode, children, downloadReport, isCreatingReport} = props
   const {messages, params: {company, workspace, folder}, location: {query: {from, to}}} = context
@@ -88,16 +86,16 @@ function ReportScreen (props, context) {
 }
 ReportScreen.displayName = 'Report-Screen'
 ReportScreen.propTypes = {
-  reportLiteMode: PropTypes.bool,
-  downloadReport: PropTypes.func.isRequired,
-  favoriteReport: PropTypes.func.isRequired,
-  report: PropTypes.object.isRequired,
-  children: PropTypes.node.isRequired,
-  isCreatingReport: PropTypes.bool.isRequired
+  reportLiteMode: React.PropTypes.bool,
+  downloadReport: React.PropTypes.func.isRequired,
+  favoriteReport: React.PropTypes.func.isRequired,
+  report: React.PropTypes.object.isRequired,
+  children: React.PropTypes.node.isRequired,
+  isCreatingReport: React.PropTypes.bool.isRequired
 }
 ReportScreen.contextTypes = {
-  messages: PropTypes.object.isRequired,
-  params: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired
+  messages: React.PropTypes.object.isRequired,
+  params: React.PropTypes.object.isRequired,
+  location: React.PropTypes.object.isRequired
 }
 export default ReportScreen

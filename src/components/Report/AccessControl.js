@@ -36,8 +36,6 @@ const style = csjs`
   text-align: left;
 }`
 
-const {PropTypes} = React
-
 function CardButton ({callToAction, onClick, icon, description}) {
   return (
     <div className={`${style.card} mdl-card mdl-shadow--2dp`}>
@@ -58,10 +56,10 @@ function CardButton ({callToAction, onClick, icon, description}) {
 }
 CardButton.displayName = 'Card-Button'
 CardButton.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  callToAction: PropTypes.node.isRequired,
-  icon: PropTypes.string.isRequired,
-  description: PropTypes.node.isRequired
+  onClick: React.PropTypes.func.isRequired,
+  callToAction: React.PropTypes.node.isRequired,
+  icon: React.PropTypes.string.isRequired,
+  description: React.PropTypes.node.isRequired
 }
 
 function Options ({user, report, makePublic, unlock, setAsDefault, close, canEdit}) {
@@ -127,13 +125,13 @@ function Options ({user, report, makePublic, unlock, setAsDefault, close, canEdi
 
 Options.displayName = 'Options'
 Options.propTypes = {
-  user: PropTypes.object.isRequired,
-  report: PropTypes.object.isRequired,
-  makePublic: PropTypes.func.isRequired,
-  unlock: PropTypes.func.isRequired,
-  setAsDefault: PropTypes.func.isRequired,
-  close: PropTypes.func.isRequired,
-  canEdit: PropTypes.bool.isRequired
+  user: React.PropTypes.object.isRequired,
+  report: React.PropTypes.object.isRequired,
+  makePublic: React.PropTypes.func.isRequired,
+  unlock: React.PropTypes.func.isRequired,
+  setAsDefault: React.PropTypes.func.isRequired,
+  close: React.PropTypes.func.isRequired,
+  canEdit: React.PropTypes.bool.isRequired
 }
 
 const ReportAccessControl = React.createClass({
@@ -145,10 +143,10 @@ const ReportAccessControl = React.createClass({
     }
   },
   propTypes: {
-    dispatch: PropTypes.func.isRequired,
-    report: PropTypes.object.isRequired,
-    params: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired
+    dispatch: React.PropTypes.func.isRequired,
+    report: React.PropTypes.object.isRequired,
+    params: React.PropTypes.object.isRequired,
+    user: React.PropTypes.object.isRequired
   },
   componentWillMount () {
     const {dispatch, report, params} = this.props

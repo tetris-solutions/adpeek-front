@@ -6,8 +6,6 @@ import Message from 'tetris-iso/Message'
 import BudgetCampaign from './BudgetCampaign'
 import groupBy from 'lodash/groupBy'
 import {Button} from './Button'
-
-const {PropTypes} = React
 const enhance = withState('isExpanded', 'setVisibility', false)
 
 function BudgetEditFolderCampaigns ({add, isExpanded, setVisibility, campaigns}) {
@@ -51,10 +49,10 @@ function BudgetEditFolderCampaigns ({add, isExpanded, setVisibility, campaigns})
 
 BudgetEditFolderCampaigns.displayName = 'Budget-Edit-Folder-Campaigns'
 BudgetEditFolderCampaigns.propTypes = {
-  isExpanded: PropTypes.bool.isRequired,
-  setVisibility: PropTypes.func.isRequired,
-  campaigns: PropTypes.array.isRequired,
-  add: PropTypes.func.isRequired
+  isExpanded: React.PropTypes.bool.isRequired,
+  setVisibility: React.PropTypes.func.isRequired,
+  campaigns: React.PropTypes.array.isRequired,
+  add: React.PropTypes.func.isRequired
 }
 
 export default enhance(BudgetEditFolderCampaigns)

@@ -3,8 +3,6 @@ import {Link} from 'react-router'
 
 import {contextualize} from './higher-order/contextualize'
 
-const {PropTypes} = React
-
 export function OrderBreadcrumb ({params: {company, workspace, folder}, order}, {messages: {orderBreadcrumb}}) {
   return (
     <Link to={`/company/${company}/workspace/${workspace}/folder/${folder}/order/${order.id}`} title={orderBreadcrumb}>
@@ -16,18 +14,18 @@ export function OrderBreadcrumb ({params: {company, workspace, folder}, order}, 
 
 OrderBreadcrumb.displayName = 'Order-Breadcrumb'
 OrderBreadcrumb.propTypes = {
-  order: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string
+  order: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    name: React.PropTypes.string
   }),
-  params: PropTypes.shape({
-    company: PropTypes.string,
-    workspace: PropTypes.string,
-    folder: PropTypes.string
+  params: React.PropTypes.shape({
+    company: React.PropTypes.string,
+    workspace: React.PropTypes.string,
+    folder: React.PropTypes.string
   })
 }
 OrderBreadcrumb.contextTypes = {
-  messages: PropTypes.object
+  messages: React.PropTypes.object
 }
 
 export default contextualize(OrderBreadcrumb, 'order')

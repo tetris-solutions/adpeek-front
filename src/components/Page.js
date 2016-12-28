@@ -5,8 +5,6 @@ import has from 'lodash/fp/has'
 import property from 'lodash/property'
 import csjs from 'csjs'
 // import LocaleSelector from './LocaleSelector'
-
-const {PropTypes} = React
 const hasSubNav = has('aside')
 const getSubNav = property('aside')
 
@@ -48,10 +46,10 @@ const Page = React.createClass({
   displayName: 'Page',
   mixins: [styled(style)],
   propTypes: {
-    children: PropTypes.node.isRequired
+    children: React.PropTypes.node.isRequired
   },
   contextTypes: {
-    routes: PropTypes.array.isRequired
+    routes: React.PropTypes.array.isRequired
   },
   getInitialState () {
     return {

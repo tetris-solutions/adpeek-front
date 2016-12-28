@@ -1,13 +1,11 @@
 import React from 'react'
 
-const {PropTypes} = React
-
-export default PropTypes.shape({
-  accounts: PropTypes.arrayOf(PropTypes.shape({
-    ad_account: PropTypes.string.isRequired,
-    tetris_account: PropTypes.string.isRequired,
-    platform: PropTypes.string.isRequired
+export default React.PropTypes.shape({
+  accounts: React.PropTypes.arrayOf(React.PropTypes.shape({
+    ad_account: React.PropTypes.string.isRequired,
+    tetris_account: React.PropTypes.string.isRequired,
+    platform: React.PropTypes.string.isRequired
   })),
-  from: PropTypes.string.isRequired,
-  to: PropTypes.string.isRequired
+  from: React.PropTypes.string.isRequired,
+  to: React.PropTypes.string.isRequired
 })

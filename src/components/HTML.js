@@ -89,12 +89,10 @@ const HTML = ({payload, children, css}) => (
   </html>
 )
 
-const {PropTypes} = React
-
 HTML.propTypes = {
-  css: PropTypes.string,
-  payload: PropTypes.object,
-  children: PropTypes.node
+  css: React.PropTypes.string,
+  payload: React.PropTypes.object,
+  children: React.PropTypes.node
 }
 
 export default HTML

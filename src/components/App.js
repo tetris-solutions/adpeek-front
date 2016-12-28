@@ -4,21 +4,19 @@ import find from 'lodash/find'
 import findLast from 'lodash/findLast'
 import {sendHitAction} from '../actions/send-hit'
 
-const {PropTypes} = React
-
 const levels = ['company', 'workspace', 'folder', 'campaign', 'report', 'order']
 const App = React.createClass({
   displayName: 'App',
   propTypes: {
-    children: PropTypes.node.isRequired,
-    params: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired
+    children: React.PropTypes.node.isRequired,
+    params: React.PropTypes.object.isRequired,
+    location: React.PropTypes.object.isRequired
   },
   contextTypes: {
-    tree: PropTypes.object.isRequired
+    tree: React.PropTypes.object.isRequired
   },
   childContextTypes: {
-    company: PropTypes.object
+    company: React.PropTypes.object
   },
   componentDidMount () {
     this.track()

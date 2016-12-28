@@ -15,8 +15,6 @@ import VerticalAlign from '../../../VerticalAlign'
 import sortBy from 'lodash/sortBy'
 import find from 'lodash/find'
 import {Button} from '../../../Button'
-
-const {PropTypes} = React
 const operators = ['contains', 'equals', 'less than', 'greater than', 'between']
 const limitOperators = ['equals']
 
@@ -85,21 +83,21 @@ const Filter = ({id, attribute, operator, value, secondary, options, drop, chang
 
 Filter.displayName = 'Filter'
 Filter.propTypes = {
-  id: PropTypes.number.isRequired,
-  attribute: PropTypes.string,
-  operator: PropTypes.oneOf(operators).isRequired,
-  value: PropTypes.any,
-  secondary: PropTypes.any,
-  options: PropTypes.array.isRequired,
-  drop: PropTypes.func.isRequired,
-  change: PropTypes.func.isRequired,
-  metaData: PropTypes.shape({
-    type: PropTypes.string
+  id: React.PropTypes.number.isRequired,
+  attribute: React.PropTypes.string,
+  operator: React.PropTypes.oneOf(operators).isRequired,
+  value: React.PropTypes.any,
+  secondary: React.PropTypes.any,
+  options: React.PropTypes.array.isRequired,
+  drop: React.PropTypes.func.isRequired,
+  change: React.PropTypes.func.isRequired,
+  metaData: React.PropTypes.shape({
+    type: React.PropTypes.string
   }).isRequired
 }
 
 Filter.contextTypes = {
-  messages: PropTypes.object.isRequired
+  messages: React.PropTypes.object.isRequired
 }
 
 const EditFilters = React.createClass({
@@ -110,10 +108,10 @@ const EditFilters = React.createClass({
     }
   },
   contextTypes: {
-    messages: PropTypes.object.isRequired,
-    draft: PropTypes.object.isRequired,
-    change: PropTypes.func.isRequired,
-    selectable: PropTypes.object.isRequired
+    messages: React.PropTypes.object.isRequired,
+    draft: React.PropTypes.object.isRequired,
+    change: React.PropTypes.func.isRequired,
+    selectable: React.PropTypes.object.isRequired
   },
   parseFilters () {
     const {draft: {module}} = this.context

@@ -13,8 +13,6 @@ import {canSkipReportEditPrompt} from '../../functions/can-skip-report-edit-prom
 import NameInput from './NameInput'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
-
-const {PropTypes} = React
 const createModule = () => window.event$.emit('report.onNewModuleClick')
 
 export function ReportAside ({report, dispatch}, {messages, locales, router, location: {pathname, search}, params}) {
@@ -81,19 +79,19 @@ export function ReportAside ({report, dispatch}, {messages, locales, router, loc
 
 ReportAside.displayName = 'Report-Aside'
 ReportAside.propTypes = {
-  dispatch: PropTypes.func,
-  user: PropTypes.object,
-  report: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string
+  dispatch: React.PropTypes.func,
+  user: React.PropTypes.object,
+  report: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    name: React.PropTypes.string
   })
 }
 ReportAside.contextTypes = {
-  messages: PropTypes.object,
-  locales: PropTypes.string,
-  router: PropTypes.object,
-  location: PropTypes.object,
-  params: PropTypes.object
+  messages: React.PropTypes.object,
+  locales: React.PropTypes.string,
+  router: React.PropTypes.object,
+  location: React.PropTypes.object,
+  params: React.PropTypes.object
 }
 
 export default contextualize(ReportAside, 'report', 'user')

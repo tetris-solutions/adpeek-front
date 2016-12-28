@@ -7,8 +7,6 @@ import {Container, Gear, Title, ThumbLink} from './ThumbLink'
 import {DropdownMenu, MenuItem} from './DropdownMenu'
 import {Link} from 'react-router'
 
-const {PropTypes} = React
-
 const Companies = ({user}) => (
   <div>
     <SubHeader title={<Message>companyList</Message>}/>
@@ -34,8 +32,8 @@ const Companies = ({user}) => (
 
 Companies.displayName = 'Companies'
 Companies.propTypes = {
-  user: PropTypes.shape({
-    companies: PropTypes.array
+  user: React.PropTypes.shape({
+    companies: React.PropTypes.array
   }).isRequired
 }
 

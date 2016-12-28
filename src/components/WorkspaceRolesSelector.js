@@ -4,15 +4,13 @@ import CheckBox from './Checkbox'
 import includes from 'lodash/includes'
 import {contextualize} from './higher-order/contextualize'
 
-const {PropTypes} = React
-
 export const WorkspaceRolesSelector = React.createClass({
   displayName: 'Workspace-Roles-Selector',
   propTypes: {
-    company: PropTypes.shape({
-      roles: PropTypes.array
+    company: React.PropTypes.shape({
+      roles: React.PropTypes.array
     }),
-    roles: PropTypes.array
+    roles: React.PropTypes.array
   },
   render () {
     const selectedRoles = this.props.roles

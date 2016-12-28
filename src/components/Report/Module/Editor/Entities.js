@@ -3,19 +3,17 @@ import React from 'react'
 import AttributeList from './AttributeList'
 import FilterSwitch from './FilterSwitch'
 
-const {PropTypes} = React
-
 const Entities = React.createClass({
   contextTypes: {
-    report: PropTypes.object.isRequired,
-    messages: PropTypes.object.isRequired,
-    draft: PropTypes.object.isRequired,
-    entities: PropTypes.object.isRequired,
-    addEntity: PropTypes.func.isRequired,
-    removeEntity: PropTypes.func.isRequired
+    report: React.PropTypes.object.isRequired,
+    messages: React.PropTypes.object.isRequired,
+    draft: React.PropTypes.object.isRequired,
+    entities: React.PropTypes.object.isRequired,
+    addEntity: React.PropTypes.func.isRequired,
+    removeEntity: React.PropTypes.func.isRequired
   },
   propTypes: {
-    items: PropTypes.array.isRequired
+    items: React.PropTypes.array.isRequired
   },
   getFolderLevel () {
     return {

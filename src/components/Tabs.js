@@ -2,8 +2,6 @@ import find from 'lodash/find'
 import map from 'lodash/map'
 import React from 'react'
 
-const {Children, PropTypes} = React
-
 function TabHeader ({children, switchTab, id, active}) {
   function onClick (e) {
     e.preventDefault()
@@ -19,17 +17,17 @@ function TabHeader ({children, switchTab, id, active}) {
 
 TabHeader.displayName = 'Tab-Header'
 TabHeader.propTypes = {
-  active: PropTypes.bool.isRequired,
-  id: PropTypes.string.isRequired,
-  switchTab: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired
+  active: React.PropTypes.bool.isRequired,
+  id: React.PropTypes.string.isRequired,
+  switchTab: React.PropTypes.func.isRequired,
+  children: React.PropTypes.node.isRequired
 }
 
 export const Tabs = React.createClass({
   displayName: 'Tabs',
   propTypes: {
-    children: PropTypes.node.isRequired,
-    onChangeTab: PropTypes.func
+    children: React.PropTypes.node.isRequired,
+    onChangeTab: React.PropTypes.func
   },
   getInitialState () {
     return {
@@ -47,7 +45,7 @@ export const Tabs = React.createClass({
     }
   },
   findActiveTab (props = this.props) {
-    const children = Children.toArray(props.children)
+    const children = React.Children.toArray(props.children)
     const activeOne = find(children, ({props: {active}}) => active) || children[0]
 
     return activeOne ? activeOne.props.id : null
@@ -60,7 +58,7 @@ export const Tabs = React.createClass({
   },
   render () {
     const {activeTab} = this.state
-    const children = Children.toArray(this.props.children)
+    const children = React.Children.toArray(this.props.children)
 
     return (
       <div className='mdl-tabs is-upgraded' ref='wrapper'>
@@ -88,7 +86,7 @@ export function Tab ({children, id}) {
 
 Tab.displayName = 'Tab-Content'
 Tab.propTypes = {
-  id: PropTypes.string.isRequired,
-  title: PropTypes.node.isRequired,
-  children: PropTypes.node.isRequired
+  id: React.PropTypes.string.isRequired,
+  title: React.PropTypes.node.isRequired,
+  children: React.PropTypes.node.isRequired
 }

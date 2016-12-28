@@ -1,16 +1,14 @@
 import React from 'react'
 import cx from 'classnames'
-
-const {PropTypes} = React
 const isBrowser = typeof document !== 'undefined'
 
 export const Switch = React.createClass({
   displayName: 'Switch',
   propTypes: {
-    name: PropTypes.string,
-    onChange: PropTypes.func,
-    label: PropTypes.node,
-    checked: PropTypes.bool
+    name: React.PropTypes.string,
+    onChange: React.PropTypes.func,
+    label: React.PropTypes.node,
+    checked: React.PropTypes.bool
   },
   getInitialState () {
     return {

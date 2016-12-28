@@ -3,20 +3,18 @@ import Checkbox from './Checkbox'
 import Input from './Input'
 import OrderDateRange from './OrderDateRange'
 
-const {PropTypes} = React
-
 export const Editable = React.createClass({
   displayName: 'Editable',
   propTypes: {
-    index: PropTypes.number,
-    name: PropTypes.string,
-    start: PropTypes.string,
-    end: PropTypes.string,
-    auto_budget: PropTypes.bool,
-    amount: PropTypes.number
+    index: React.PropTypes.number,
+    name: React.PropTypes.string,
+    start: React.PropTypes.string,
+    end: React.PropTypes.string,
+    auto_budget: React.PropTypes.bool,
+    amount: React.PropTypes.number
   },
   contextTypes: {
-    moment: PropTypes.func
+    moment: React.PropTypes.func
   },
   getInitialState () {
     return {

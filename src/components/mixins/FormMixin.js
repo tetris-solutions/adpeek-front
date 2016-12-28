@@ -3,8 +3,6 @@ import isEmpty from 'lodash/isEmpty'
 import assign from 'lodash/assign'
 import omit from 'lodash/omit'
 
-const {PropTypes} = React
-
 export default {
   getChildContext () {
     return {
@@ -12,10 +10,10 @@ export default {
     }
   },
   childContextTypes: {
-    submitInProgress: PropTypes.bool.isRequired
+    submitInProgress: React.PropTypes.bool.isRequired
   },
   contextTypes: {
-    messages: PropTypes.object
+    messages: React.PropTypes.object
   },
   getInitialState () {
     return {

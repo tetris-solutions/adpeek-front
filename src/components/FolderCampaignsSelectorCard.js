@@ -16,14 +16,12 @@ const style = csjs`
   height: 50vh
 }`
 
-const {PropTypes} = React
-
 const InactiveCampaigns = React.createClass({
   displayName: 'Inactive-Campaigns',
   propTypes: {
-    campaigns: PropTypes.array.isRequired,
-    renderer: PropTypes.func.isRequired,
-    readOnly: PropTypes.bool.isRequired
+    campaigns: React.PropTypes.array.isRequired,
+    renderer: React.PropTypes.func.isRequired,
+    readOnly: React.PropTypes.bool.isRequired
   },
   getInitialState () {
     return {
@@ -64,20 +62,20 @@ export const FolderCampaignsSelector = React.createClass({
   displayName: 'Campaigns-Selector',
   mixins: [styled(style)],
   propTypes: {
-    campaigns: PropTypes.array.isRequired,
-    renderer: PropTypes.func.isRequired,
-    readOnly: PropTypes.bool.isRequired,
-    isLoading: PropTypes.bool,
-    headerColor: PropTypes.string,
-    headerTextColor: PropTypes.string,
-    title: PropTypes.node,
-    label: PropTypes.string,
-    onSelected: PropTypes.func
+    campaigns: React.PropTypes.array.isRequired,
+    renderer: React.PropTypes.func.isRequired,
+    readOnly: React.PropTypes.bool.isRequired,
+    isLoading: React.PropTypes.bool,
+    headerColor: React.PropTypes.string,
+    headerTextColor: React.PropTypes.string,
+    title: React.PropTypes.node,
+    label: React.PropTypes.string,
+    onSelected: React.PropTypes.func
   },
   contextTypes: {
-    messages: PropTypes.shape({
-      selectAllCampaigns: PropTypes.string,
-      deselectAllCampaigns: PropTypes.string
+    messages: React.PropTypes.shape({
+      selectAllCampaigns: React.PropTypes.string,
+      deselectAllCampaigns: React.PropTypes.string
     })
   },
   getInitialState () {

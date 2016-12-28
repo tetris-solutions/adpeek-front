@@ -33,8 +33,6 @@ const typeComponent = {
   table: Table,
   total: Total
 }
-const {PropTypes} = React
-
 const ChartSpinner = () => (
   <div className={`${style.spinner}`}>
     <Spinner/>
@@ -53,16 +51,16 @@ const ChartContainer = React.createClass({
   displayName: 'Chart',
   mixins: [styled(style)],
   propTypes: {
-    height: PropTypes.number.isRequired,
-    change: PropTypes.func
+    height: React.PropTypes.number.isRequired,
+    change: React.PropTypes.func
   },
   contextTypes: {
-    messages: PropTypes.object,
-    locales: PropTypes.string,
+    messages: React.PropTypes.object,
+    locales: React.PropTypes.string,
     module: reportModuleType.isRequired,
     entity: reportEntityType.isRequired,
-    attributes: PropTypes.object.isRequired,
-    reportParams: PropTypes.object.isRequired
+    attributes: React.PropTypes.object.isRequired,
+    reportParams: React.PropTypes.object.isRequired
   },
   getInitialState () {
     return {

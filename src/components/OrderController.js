@@ -18,8 +18,6 @@ import {loadOrdersAction} from '../actions/load-orders'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import {saveOrderAction} from '../actions/save-order'
 import {spawnAutoBudgetAction} from '../actions/spawn-auto-budget'
-
-const {PropTypes} = React
 const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
 const toPercentage = (value, total) => floor((value / total) * 100, 2)
 const fromPercentage = (value, total) => floor((value / 100) * total, 2)
@@ -56,21 +54,21 @@ function defaultBudgetName ({budgetLabel}, index) {
 export const OrderController = React.createClass({
   displayName: 'Order-Controller',
   propTypes: {
-    deliveryMethods: PropTypes.array,
+    deliveryMethods: React.PropTypes.array,
     order: orderType,
-    params: PropTypes.shape({
-      company: PropTypes.string,
-      workspace: PropTypes.string,
-      folder: PropTypes.string,
-      order: PropTypes.string
+    params: React.PropTypes.shape({
+      company: React.PropTypes.string,
+      workspace: React.PropTypes.string,
+      folder: React.PropTypes.string,
+      order: React.PropTypes.string
     }),
-    dispatch: PropTypes.func,
-    campaigns: PropTypes.array,
-    maxCampaignsPerBudget: PropTypes.number
+    dispatch: React.PropTypes.func,
+    campaigns: React.PropTypes.array,
+    maxCampaignsPerBudget: React.PropTypes.number
   },
   contextTypes: {
-    router: PropTypes.object,
-    messages: PropTypes.object
+    router: React.PropTypes.object,
+    messages: React.PropTypes.object
   },
   getInitialState () {
     return {

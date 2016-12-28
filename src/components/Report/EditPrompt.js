@@ -8,8 +8,6 @@ import join from 'lodash/join'
 import compact from 'lodash/compact'
 import {Button} from '../Button'
 
-const {PropTypes} = React
-
 const ReportEditPrompt = React.createClass({
   displayName: 'Report-Edit-Prompt',
   getInitialState () {
@@ -18,15 +16,15 @@ const ReportEditPrompt = React.createClass({
     }
   },
   propTypes: {
-    children: PropTypes.node.isRequired,
-    className: PropTypes.string.isRequired,
-    report: PropTypes.object.isRequired,
-    params: PropTypes.object.isRequired
+    children: React.PropTypes.node.isRequired,
+    className: React.PropTypes.string.isRequired,
+    report: React.PropTypes.object.isRequired,
+    params: React.PropTypes.object.isRequired
   },
   contextTypes: {
-    messages: PropTypes.object,
-    locales: PropTypes.string,
-    router: PropTypes.object
+    messages: React.PropTypes.object,
+    locales: React.PropTypes.string,
+    router: React.PropTypes.object
   },
   open () {
     this.setState({isModalOpen: true})

@@ -20,8 +20,6 @@ import Comments from './Comments'
 import Message from 'tetris-iso/Message'
 import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
 import {prettyNumber} from '../../../functions/pretty-number'
-
-const {PropTypes} = React
 const reportContext = [
   'report',
   'reportParams',
@@ -71,34 +69,34 @@ const CroppedResultAlert = ({module, size}, {messages, locales}) => (
 )
 CroppedResultAlert.displayName = 'Cropped-Result-Alert'
 CroppedResultAlert.propTypes = {
-  module: PropTypes.string.isRequired,
-  size: PropTypes.number.isRequired
+  module: React.PropTypes.string.isRequired,
+  size: React.PropTypes.number.isRequired
 }
 CroppedResultAlert.contextTypes = {
-  messages: PropTypes.object.isRequired,
-  locales: PropTypes.string.isRequired
+  messages: React.PropTypes.object.isRequired,
+  locales: React.PropTypes.string.isRequired
 }
 
 const ModuleController = React.createClass({
   displayName: 'Module-Controller',
   propTypes: {
-    params: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired,
-    editable: PropTypes.bool,
+    params: React.PropTypes.object.isRequired,
+    dispatch: React.PropTypes.func.isRequired,
+    editable: React.PropTypes.bool,
     module: moduleType.isRequired,
-    attributes: PropTypes.object.isRequired,
+    attributes: React.PropTypes.object.isRequired,
     entity: reportEntityType.isRequired
   },
   contextTypes: {
-    messages: PropTypes.object.isRequired,
-    report: PropTypes.object.isRequired,
+    messages: React.PropTypes.object.isRequired,
+    report: React.PropTypes.object.isRequired,
     reportParams: reportParamsType.isRequired
   },
   childContextTypes: {
     entity: reportEntityType,
-    attributes: PropTypes.object,
-    module: PropTypes.object,
-    getUsedAccounts: PropTypes.func
+    attributes: React.PropTypes.object,
+    module: React.PropTypes.object,
+    getUsedAccounts: React.PropTypes.func
   },
   getChildContext () {
     return {

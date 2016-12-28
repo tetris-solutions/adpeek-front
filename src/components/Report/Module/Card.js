@@ -8,16 +8,14 @@ const style = csjs`
   width: 100%;
 }`
 
-const {PropTypes} = React
-
 const ModuleCard = React.createClass({
   displayName: 'Module-Card',
   mixins: [styled(style)],
   propTypes: {
-    children: PropTypes.node.isRequired
+    children: React.PropTypes.node.isRequired
   },
   contextTypes: {
-    module: PropTypes.object.isRequired
+    module: React.PropTypes.object.isRequired
   },
   componentWillReceiveProps (props, {module: {cols, rows}}) {
     const {module} = this.context

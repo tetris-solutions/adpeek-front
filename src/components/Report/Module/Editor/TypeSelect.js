@@ -1,8 +1,6 @@
 import React from 'react'
 import Select from '../../../Select'
 
-const {PropTypes} = React
-
 function TypeSelect ({onChange, value}, {messages}) {
   return (
     <Select label='moduleType' name='type' onChange={onChange} value={value}>
@@ -27,11 +25,11 @@ function TypeSelect ({onChange, value}, {messages}) {
 
 TypeSelect.displayName = 'Type-Select'
 TypeSelect.contextTypes = {
-  messages: PropTypes.object
+  messages: React.PropTypes.object
 }
 TypeSelect.propTypes = {
-  onChange: PropTypes.func,
-  value: PropTypes.string
+  onChange: React.PropTypes.func,
+  value: React.PropTypes.string
 }
 
 export default TypeSelect

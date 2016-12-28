@@ -4,17 +4,15 @@ import Helmet from 'react-helmet'
 import join from 'lodash/join'
 import compact from 'lodash/compact'
 
-const {PropTypes} = React
-
 const DocTitle = React.createClass({
   displayName: 'Doc-Title',
   propTypes: {
-    report: PropTypes.object,
-    order: PropTypes.object,
-    campaign: PropTypes.object,
-    folder: PropTypes.object,
-    workspace: PropTypes.object,
-    company: PropTypes.object
+    report: React.PropTypes.object,
+    order: React.PropTypes.object,
+    campaign: React.PropTypes.object,
+    folder: React.PropTypes.object,
+    workspace: React.PropTypes.object,
+    company: React.PropTypes.object
   },
   componentDidMount () {
     this.checkpoint()

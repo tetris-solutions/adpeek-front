@@ -1,8 +1,6 @@
 import React from 'react'
 import {Button} from './Button'
 import Message from 'tetris-iso/Message'
-
-const {PropTypes} = React
 const btClass = 'mdl-button mdl-color-text--grey-100'
 
 function DownloadReportButton ({loading, extract, report}) {
@@ -25,10 +23,10 @@ function DownloadReportButton ({loading, extract, report}) {
 
 DownloadReportButton.displayName = 'Download-Report-Button'
 DownloadReportButton.propTypes = {
-  loading: PropTypes.bool,
-  extract: PropTypes.func,
-  report: PropTypes.shape({
-    url: PropTypes.string
+  loading: React.PropTypes.bool,
+  extract: React.PropTypes.func,
+  report: React.PropTypes.shape({
+    url: React.PropTypes.string
   })
 }
 

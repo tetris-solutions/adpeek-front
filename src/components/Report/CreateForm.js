@@ -10,23 +10,21 @@ import SubHeader from '../SubHeader'
 import join from 'lodash/join'
 import compact from 'lodash/compact'
 
-const {PropTypes} = React
-
 const ReportCreate = React.createClass({
   displayName: 'Create-Report',
   mixins: [FormMixin],
   contextTypes: {
-    router: PropTypes.object,
-    tree: PropTypes.object
+    router: React.PropTypes.object,
+    tree: React.PropTypes.object
   },
   propTypes: {
-    location: PropTypes.shape({
-      query: PropTypes.object
+    location: React.PropTypes.shape({
+      query: React.PropTypes.object
     }).isRequired,
-    params: PropTypes.shape({
-      company: PropTypes.string,
-      workspace: PropTypes.string,
-      folder: PropTypes.string
+    params: React.PropTypes.shape({
+      company: React.PropTypes.string,
+      workspace: React.PropTypes.string,
+      folder: React.PropTypes.string
     }).isRequired
   },
   handleSubmit (e) {

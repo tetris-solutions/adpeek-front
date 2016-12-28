@@ -7,8 +7,6 @@ import {deleteOrderAction} from '../actions/delete-order'
 import {contextualize} from './higher-order/contextualize'
 import {Navigation, Name, NavBt, NavBts} from './Navigation'
 
-const {PropTypes} = React
-
 export function OrderAside ({params, order, dispatch}, {router}) {
   const {company, workspace, folder} = params
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${folder}`
@@ -46,18 +44,18 @@ export function OrderAside ({params, order, dispatch}, {router}) {
 
 OrderAside.displayName = 'Order-Aside'
 OrderAside.contextTypes = {
-  router: PropTypes.object
+  router: React.PropTypes.object
 }
 OrderAside.propTypes = {
-  dispatch: PropTypes.func,
-  order: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string
+  dispatch: React.PropTypes.func,
+  order: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    name: React.PropTypes.string
   }),
-  params: PropTypes.shape({
-    company: PropTypes.string,
-    workspace: PropTypes.string,
-    folder: PropTypes.string
+  params: React.PropTypes.shape({
+    company: React.PropTypes.string,
+    workspace: React.PropTypes.string,
+    folder: React.PropTypes.string
   })
 }
 

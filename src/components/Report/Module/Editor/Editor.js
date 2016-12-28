@@ -28,27 +28,25 @@ const style = csjs`
   float: right;
   margin-right: 1em
 }`
-const {PropTypes} = React
-
 const Editor = React.createClass({
   displayName: 'Editor',
   mixins: [styled(style)],
   contextTypes: {
-    draft: PropTypes.object.isRequired,
-    messages: PropTypes.object.isRequired,
-    attributes: PropTypes.object.isRequired
+    draft: React.PropTypes.object.isRequired,
+    messages: React.PropTypes.object.isRequired,
+    attributes: React.PropTypes.object.isRequired
   },
   propTypes: {
-    maxAccounts: PropTypes.number.isRequired,
-    numberOfSelectedAccounts: PropTypes.number.isRequired,
-    isInvalid: PropTypes.bool.isRequired,
-    isLoading: PropTypes.bool.isRequired,
-    save: PropTypes.func.isRequired,
-    redraw: PropTypes.func.isRequired,
-    cancel: PropTypes.func.isRequired
+    maxAccounts: React.PropTypes.number.isRequired,
+    numberOfSelectedAccounts: React.PropTypes.number.isRequired,
+    isInvalid: React.PropTypes.bool.isRequired,
+    isLoading: React.PropTypes.bool.isRequired,
+    save: React.PropTypes.func.isRequired,
+    redraw: React.PropTypes.func.isRequired,
+    cancel: React.PropTypes.func.isRequired
   },
   childContextTypes: {
-    selectable: PropTypes.object
+    selectable: React.PropTypes.object
   },
   getChildContext () {
     const {attributes, draft} = this.context

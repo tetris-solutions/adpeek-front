@@ -13,8 +13,6 @@ import Fence from './Fence'
 import SubHeader from './SubHeader'
 import Page from './Page'
 import {Button} from './Button'
-
-const {PropTypes} = React
 const notPercentage = budget => budget && budget.mode === 'amount'
 
 export function OrderEdit ({
@@ -93,21 +91,21 @@ export function OrderEdit ({
 
 OrderEdit.displayName = 'Order-Edit'
 OrderEdit.propTypes = {
-  showFolderCampaigns: PropTypes.bool,
-  runAutoBudget: PropTypes.func,
-  save: PropTypes.func,
-  createBudget: PropTypes.func,
-  removeBudget: PropTypes.func,
-  removeCampaign: PropTypes.func,
-  remainingAmount: PropTypes.number,
-  remainingValue: PropTypes.number,
-  addCampaigns: PropTypes.func,
-  selectBudget: PropTypes.func,
-  changeOrderField: PropTypes.func,
-  changeBudgetField: PropTypes.func,
+  showFolderCampaigns: React.PropTypes.bool,
+  runAutoBudget: React.PropTypes.func,
+  save: React.PropTypes.func,
+  createBudget: React.PropTypes.func,
+  removeBudget: React.PropTypes.func,
+  removeCampaign: React.PropTypes.func,
+  remainingAmount: React.PropTypes.number,
+  remainingValue: React.PropTypes.number,
+  addCampaigns: React.PropTypes.func,
+  selectBudget: React.PropTypes.func,
+  changeOrderField: React.PropTypes.func,
+  changeBudgetField: React.PropTypes.func,
   budget: budgetType,
   order: orderType,
-  folderCampaigns: PropTypes.arrayOf(campaignType)
+  folderCampaigns: React.PropTypes.arrayOf(campaignType)
 }
 
 export default OrderEdit

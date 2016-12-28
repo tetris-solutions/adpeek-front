@@ -2,21 +2,19 @@ import React from 'react'
 import Header from './Header'
 import {branch} from 'baobab-react/higher-order'
 
-const {PropTypes} = React
-
 const UI = React.createClass({
   displayName: 'UI',
   propTypes: {
-    hideLogin: PropTypes.bool,
-    children: PropTypes.node.isRequired,
-    userId: PropTypes.string,
-    isGuest: PropTypes.bool,
-    isAdmin: PropTypes.bool
+    hideLogin: React.PropTypes.bool,
+    children: React.PropTypes.node.isRequired,
+    userId: React.PropTypes.string,
+    isGuest: React.PropTypes.bool,
+    isAdmin: React.PropTypes.bool
   },
   childContextTypes: {
-    isLoggedIn: PropTypes.bool,
-    isGuest: PropTypes.bool,
-    isAdmin: PropTypes.bool
+    isLoggedIn: React.PropTypes.bool,
+    isGuest: React.PropTypes.bool,
+    isAdmin: React.PropTypes.bool
   },
   getDefaultProps () {
     return {

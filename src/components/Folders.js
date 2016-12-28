@@ -17,15 +17,13 @@ import FolderCard from './FolderCard'
 
 const cleanStr = str => trim(deburr(lowerCase(str)))
 
-const {PropTypes} = React
-
 export const Folders = React.createClass({
   displayName: 'Folders',
   propTypes: {
-    dispatch: PropTypes.func.isRequired,
-    params: PropTypes.object.isRequired,
-    company: PropTypes.object,
-    workspace: PropTypes.object
+    dispatch: React.PropTypes.func.isRequired,
+    params: React.PropTypes.object.isRequired,
+    company: React.PropTypes.object,
+    workspace: React.PropTypes.object
   },
   getInitialState () {
     return {

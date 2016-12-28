@@ -2,8 +2,6 @@ import csjs from 'csjs'
 import map from 'lodash/map'
 import React from 'react'
 import {styled} from '../../../mixins/styled'
-
-const {PropTypes} = React
 const style = csjs`
 .grid {
   padding-top: 0;
@@ -40,8 +38,8 @@ const EditSize = React.createClass({
   displayName: 'Edit-Size',
   mixins: [styled(style)],
   contextTypes: {
-    draft: PropTypes.object.isRequired,
-    change: PropTypes.func.isRequired
+    draft: React.PropTypes.object.isRequired,
+    change: React.PropTypes.func.isRequired
   },
   onSelect (cols, rows) {
     return e => {

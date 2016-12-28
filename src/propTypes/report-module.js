@@ -1,32 +1,30 @@
 import React from 'react'
 
-const {PropTypes} = React
-
-export default PropTypes.shape({
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  type: PropTypes.oneOf([
+export default React.PropTypes.shape({
+  id: React.PropTypes.string.isRequired,
+  name: React.PropTypes.string.isRequired,
+  type: React.PropTypes.oneOf([
     'column',
     'line',
     'pie',
     'table',
     'total'
   ]),
-  entity: PropTypes.string.isRequired,
-  cols: PropTypes.oneOf([12, 8, 6, 4]).isRequired,
-  rows: PropTypes.oneOf([1, 2, 3, 4, 5, 6]).isRequired,
-  dimensions: PropTypes.arrayOf(PropTypes.string).isRequired,
-  metrics: PropTypes.arrayOf(PropTypes.string).isRequired,
-  filters: PropTypes.shape({
-    id: PropTypes.arrayOf(PropTypes.string)
+  entity: React.PropTypes.string.isRequired,
+  cols: React.PropTypes.oneOf([12, 8, 6, 4]).isRequired,
+  rows: React.PropTypes.oneOf([1, 2, 3, 4, 5, 6]).isRequired,
+  dimensions: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+  metrics: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+  filters: React.PropTypes.shape({
+    id: React.PropTypes.arrayOf(React.PropTypes.string)
   }).isRequired,
 
   // [["_fields_", ["id", "clicks", "impressions", "cost"]], ["clicks", "desc"]]
-  sort: PropTypes.arrayOf(
-    PropTypes.arrayOf(
-      PropTypes.oneOfType([
-        PropTypes.array,
-        PropTypes.string
+  sort: React.PropTypes.arrayOf(
+    React.PropTypes.arrayOf(
+      React.PropTypes.oneOfType([
+        React.PropTypes.array,
+        React.PropTypes.string
       ])
     )
   )

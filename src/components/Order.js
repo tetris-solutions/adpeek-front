@@ -7,8 +7,6 @@ import flatten from 'lodash/flatten'
 import map from 'lodash/map'
 import assign from 'lodash/assign'
 import filter from 'lodash/filter'
-
-const {PropTypes} = React
 const notAdwordsVideo = ({is_adwords_video}) => !is_adwords_video
 
 function normalizeAdset (adset) {
@@ -53,17 +51,17 @@ export function Order ({deliveryMethods, dispatch, params, order, folder, status
 
 Order.displayName = 'Order'
 Order.propTypes = {
-  statuses: PropTypes.array,
-  dispatch: PropTypes.func,
-  deliveryMethods: PropTypes.array,
-  params: PropTypes.object,
-  folder: PropTypes.object,
-  order: PropTypes.any
+  statuses: React.PropTypes.array,
+  dispatch: React.PropTypes.func,
+  deliveryMethods: React.PropTypes.array,
+  params: React.PropTypes.object,
+  folder: React.PropTypes.object,
+  order: React.PropTypes.any
 }
 Order.contextTypes = {
-  moment: PropTypes.func,
-  locales: PropTypes.string,
-  messages: PropTypes.object
+  moment: React.PropTypes.func,
+  locales: React.PropTypes.string,
+  messages: React.PropTypes.object
 }
 
 export default contextualize(Order, {deliveryMethods: ['deliveryMethods'], statuses: ['statuses']}, 'folder', 'order')

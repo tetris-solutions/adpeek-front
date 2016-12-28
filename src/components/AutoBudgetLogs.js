@@ -14,19 +14,17 @@ const style = csjs`
   float: right;
 }`
 const money = n => isNumber(n) ? '$ ' + n.toFixed(2) : '?'
-
-const {PropTypes} = React
-const budgetPropTypes = PropTypes.shape({
-  name: PropTypes.string,
-  amount: PropTypes.number,
-  external_id: PropTypes.string,
-  delivery_method: PropTypes.oneOf(['STANDARD', 'ACCELERATED'])
+const budgetPropTypes = React.PropTypes.shape({
+  name: React.PropTypes.string,
+  amount: React.PropTypes.number,
+  external_id: React.PropTypes.string,
+  delivery_method: React.PropTypes.oneOf(['STANDARD', 'ACCELERATED'])
 })
-const amountPropTypes = PropTypes.shape({
-  previous: PropTypes.number,
-  total: PropTypes.number,
-  today: PropTypes.number,
-  average: PropTypes.number
+const amountPropTypes = React.PropTypes.shape({
+  previous: React.PropTypes.number,
+  total: React.PropTypes.number,
+  today: React.PropTypes.number,
+  average: React.PropTypes.number
 })
 
 const Timestamp = ({children}, {moment}) => (
@@ -34,10 +32,10 @@ const Timestamp = ({children}, {moment}) => (
 )
 Timestamp.displayName = 'Timestamp'
 Timestamp.propTypes = {
-  children: PropTypes.string
+  children: React.PropTypes.string
 }
 Timestamp.contextTypes = {
-  moment: PropTypes.func
+  moment: React.PropTypes.func
 }
 
 const ActionHeader = ({children}) => (
@@ -45,7 +43,7 @@ const ActionHeader = ({children}) => (
 )
 ActionHeader.displayName = 'Action-Header'
 ActionHeader.propTypes = {
-  children: PropTypes.node
+  children: React.PropTypes.node
 }
 
 const DefaultActionComponent = ({message, timestamp}) => (
@@ -57,8 +55,8 @@ const DefaultActionComponent = ({message, timestamp}) => (
 
 DefaultActionComponent.displayName = 'Unknown-Action'
 DefaultActionComponent.propTypes = {
-  message: PropTypes.string,
-  timestamp: PropTypes.string
+  message: React.PropTypes.string,
+  timestamp: React.PropTypes.string
 }
 
 const CalculateBudgetAmount = ({amount, timestamp}) => (
@@ -99,7 +97,7 @@ const CalculateBudgetAmount = ({amount, timestamp}) => (
 CalculateBudgetAmount.displayName = 'Calculate-Budget-Amount'
 CalculateBudgetAmount.propTypes = {
   amount: amountPropTypes,
-  timestamp: PropTypes.string
+  timestamp: React.PropTypes.string
 }
 
 const CalculateAdsetAmount = ({amount, timestamp}) => (
@@ -140,7 +138,7 @@ const CalculateAdsetAmount = ({amount, timestamp}) => (
 CalculateAdsetAmount.displayName = 'Calculate-Adset-Amount'
 CalculateAdsetAmount.propTypes = {
   amount: amountPropTypes,
-  timestamp: PropTypes.string
+  timestamp: React.PropTypes.string
 }
 
 const LoadCampaignBudget = ({current_budget, timestamp}) => (
@@ -183,7 +181,7 @@ const LoadCampaignBudget = ({current_budget, timestamp}) => (
 LoadCampaignBudget.displayName = 'Load-Campaign-Budget'
 LoadCampaignBudget.propTypes = {
   current_budget: budgetPropTypes,
-  timestamp: PropTypes.string
+  timestamp: React.PropTypes.string
 }
 
 const LoadCampaignCost = ({cost, timestamp}) => (
@@ -219,12 +217,12 @@ const LoadCampaignCost = ({cost, timestamp}) => (
 
 LoadCampaignCost.displayName = 'Load-Campaign-Cost'
 LoadCampaignCost.propTypes = {
-  cost: PropTypes.shape({
-    closed: PropTypes.number,
-    today: PropTypes.number,
-    total: PropTypes.number
+  cost: React.PropTypes.shape({
+    closed: React.PropTypes.number,
+    today: React.PropTypes.number,
+    total: React.PropTypes.number
   }),
-  timestamp: PropTypes.string
+  timestamp: React.PropTypes.string
 }
 
 const LoadAdsetCost = ({cost, timestamp}) => (
@@ -239,12 +237,12 @@ const LoadAdsetCost = ({cost, timestamp}) => (
 
 LoadAdsetCost.displayName = 'Load-Adset-Cost'
 LoadAdsetCost.propTypes = {
-  cost: PropTypes.shape({
-    closed: PropTypes.number,
-    today: PropTypes.number,
-    total: PropTypes.number
+  cost: React.PropTypes.shape({
+    closed: React.PropTypes.number,
+    today: React.PropTypes.number,
+    total: React.PropTypes.number
   }),
-  timestamp: PropTypes.string
+  timestamp: React.PropTypes.string
 }
 
 const LoadAdsetInfo = ({info, timestamp}) => (
@@ -280,12 +278,12 @@ const LoadAdsetInfo = ({info, timestamp}) => (
 
 LoadAdsetInfo.displayName = 'Load-Adset-Info'
 LoadAdsetInfo.propTypes = {
-  info: PropTypes.shape({
-    daily_budget: PropTypes.number,
-    lifetime_budget: PropTypes.number,
-    budget_remaining: PropTypes.number
+  info: React.PropTypes.shape({
+    daily_budget: React.PropTypes.number,
+    lifetime_budget: React.PropTypes.number,
+    budget_remaining: React.PropTypes.number
   }),
-  timestamp: PropTypes.string
+  timestamp: React.PropTypes.string
 }
 
 const CreateBudget = ({timestamp, budget}) => (
@@ -327,7 +325,7 @@ const CreateBudget = ({timestamp, budget}) => (
 
 CreateBudget.displayName = 'Create-Budget'
 CreateBudget.propTypes = {
-  timestamp: PropTypes.string,
+  timestamp: React.PropTypes.string,
   budget: budgetPropTypes
 }
 
@@ -389,12 +387,12 @@ const SetCampaignBudget = ({timestamp, old_budget, new_budget}) => (
 
 SetCampaignBudget.displayName = 'Set-Campaign-Budget'
 SetCampaignBudget.propTypes = {
-  timestamp: PropTypes.string,
+  timestamp: React.PropTypes.string,
   old_budget: budgetPropTypes,
-  new_budget: PropTypes.shape({
-    external_id: PropTypes.string,
-    name: PropTypes.string,
-    delivery_method: PropTypes.string,
+  new_budget: React.PropTypes.shape({
+    external_id: React.PropTypes.string,
+    name: React.PropTypes.string,
+    delivery_method: React.PropTypes.string,
     amount: amountPropTypes
   })
 }
@@ -451,7 +449,7 @@ const UpdateBudget = ({budget, changes, timestamp}) => (
 
 UpdateBudget.displayName = 'Update-Budget'
 UpdateBudget.propTypes = {
-  timestamp: PropTypes.string,
+  timestamp: React.PropTypes.string,
   budget: budgetPropTypes,
   changes: budgetPropTypes
 }
@@ -508,11 +506,11 @@ const UpdateAdset = ({adset, changes, timestamp}) => (
 
 UpdateAdset.displayName = 'Update-Adset'
 UpdateAdset.propTypes = {
-  timestamp: PropTypes.string,
-  adset: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string,
-    external_id: PropTypes.string
+  timestamp: React.PropTypes.string,
+  adset: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    name: React.PropTypes.string,
+    external_id: React.PropTypes.string
   }),
   changes: amountPropTypes
 }
@@ -550,7 +548,7 @@ const Budget = ({entries}) => (
 
 Budget.displayName = 'Budget-Actions'
 Budget.propTypes = {
-  entries: PropTypes.array
+  entries: React.PropTypes.array
 }
 
 function campaignAction (entry, index) {
@@ -571,7 +569,7 @@ const Campaign = ({entries}) => (
 )
 Campaign.displayName = 'Campaign-Actions'
 Campaign.propTypes = {
-  entries: PropTypes.array
+  entries: React.PropTypes.array
 }
 
 function adSetAction (entry, index) {
@@ -593,7 +591,7 @@ const AdSet = ({entries}) => (
 
 AdSet.displayName = 'AdSet-Actions'
 AdSet.propTypes = {
-  entries: PropTypes.array
+  entries: React.PropTypes.array
 }
 
 function ABLogs ({logs, platform}) {
@@ -623,8 +621,8 @@ function ABLogs ({logs, platform}) {
 }
 ABLogs.displayName = 'Auto-Budget-Logs'
 ABLogs.propTypes = {
-  logs: PropTypes.array,
-  platform: PropTypes.string
+  logs: React.PropTypes.array,
+  platform: React.PropTypes.string
 }
 
 export const AutoBudgetLogs = styledFnComponent(ABLogs, style)

@@ -4,8 +4,6 @@ import get from 'lodash/get'
 import React from 'react'
 
 import AdCreative from './TableCreative'
-
-const {PropTypes} = React
 const TextAd = ({description, headline}) => (
   <div>
     <strong>{headline}</strong>
@@ -16,8 +14,8 @@ const TextAd = ({description, headline}) => (
 
 TextAd.displayName = 'Text-Ad'
 TextAd.propTypes = {
-  description: PropTypes.string.isRequired,
-  headline: PropTypes.string.isRequired
+  description: React.PropTypes.string.isRequired,
+  headline: React.PropTypes.string.isRequired
 }
 
 const ImageAd = ({urls, name}) => (
@@ -29,10 +27,10 @@ const ImageAd = ({urls, name}) => (
 
 ImageAd.displayName = 'Image-Ad'
 ImageAd.propTypes = {
-  name: PropTypes.string.isRequired,
-  urls: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.string,
-    value: PropTypes.string
+  name: React.PropTypes.string.isRequired,
+  urls: React.PropTypes.arrayOf(React.PropTypes.shape({
+    key: React.PropTypes.string,
+    value: React.PropTypes.string
   }))
 }
 
@@ -56,8 +54,8 @@ function TemplateAd ({urls, name}) {
 
 TemplateAd.displayName = 'Template-Ad'
 TemplateAd.propTypes = {
-  urls: PropTypes.array,
-  name: PropTypes.string.isRequired
+  urls: React.PropTypes.array,
+  name: React.PropTypes.string.isRequired
 }
 
 function ReportModuleTableAd (props) {
@@ -88,12 +86,12 @@ function ReportModuleTableAd (props) {
 
 ReportModuleTableAd.displayName = 'Report-Module-Table-Ad'
 ReportModuleTableAd.propTypes = {
-  id: PropTypes.string.isRequired,
-  creative_id: PropTypes.string,
-  name: PropTypes.string,
-  type: PropTypes.string,
-  description: PropTypes.string,
-  headline: PropTypes.string
+  id: React.PropTypes.string.isRequired,
+  creative_id: React.PropTypes.string,
+  name: React.PropTypes.string,
+  type: React.PropTypes.string,
+  description: React.PropTypes.string,
+  headline: React.PropTypes.string
 }
 
 export default ReportModuleTableAd

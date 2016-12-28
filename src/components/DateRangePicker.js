@@ -1,8 +1,6 @@
 import React from 'react'
 import {DateRange} from 'react-date-range'
 
-const {PropTypes} = React
-
 const calculateRanges = ({today, yesterday, pastWeek, currentMonth, pastMonth, last30Days}) => ({
   [today]: {
     startDate (now) {
@@ -65,13 +63,13 @@ function DateRangePicker (props, {messages}) {
 
 DateRangePicker.displayName = 'Date-Range-Picker'
 DateRangePicker.propTypes = {
-  ranges: PropTypes.object,
-  startDate: PropTypes.object,
-  endDate: PropTypes.object,
-  onChange: PropTypes.func.isRequired
+  ranges: React.PropTypes.object,
+  startDate: React.PropTypes.object,
+  endDate: React.PropTypes.object,
+  onChange: React.PropTypes.func.isRequired
 }
 DateRangePicker.contextTypes = {
-  messages: PropTypes.object
+  messages: React.PropTypes.object
 }
 
 export default DateRangePicker

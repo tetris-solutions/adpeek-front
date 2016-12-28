@@ -10,8 +10,6 @@ const style = csjs`
 .select option {
   color: #333
 }`
-
-const {PropTypes} = React
 const selectFields = [
   'disabled',
   'name',
@@ -25,14 +23,14 @@ export const Select = React.createClass({
   displayName: 'Select',
   mixins: [styled(style)],
   propTypes: {
-    children: PropTypes.node,
-    disabled: PropTypes.bool,
-    value: PropTypes.any,
-    defaultValue: PropTypes.any,
-    error: PropTypes.string,
-    label: PropTypes.string,
-    name: PropTypes.string.isRequired,
-    onChange: PropTypes.func
+    children: React.PropTypes.node,
+    disabled: React.PropTypes.bool,
+    value: React.PropTypes.any,
+    defaultValue: React.PropTypes.any,
+    error: React.PropTypes.string,
+    label: React.PropTypes.string,
+    name: React.PropTypes.string.isRequired,
+    onChange: React.PropTypes.func
   },
   getInitialState () {
     return {

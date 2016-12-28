@@ -79,7 +79,7 @@ const style = csjs`
   transform: translateY(-.4em);
   padding-left: .3em;
 }`
-const {PropTypes} = React
+
 const cleanStr = str => trim(deburr(lowerCase(str)))
 
 const num = val => !isNumber(val) ? 0 : val
@@ -172,9 +172,9 @@ const Period = ({cost, budget, locales}) => (
 
 Period.displayName = 'Period'
 Period.propTypes = Daily.propTypes = {
-  locales: PropTypes.string,
-  budget: PropTypes.number,
-  cost: PropTypes.number
+  locales: React.PropTypes.string,
+  budget: React.PropTypes.number,
+  cost: React.PropTypes.number
 }
 
 const Stats = ({open, yesterday}, {locales, location: {query}}) => (
@@ -195,18 +195,18 @@ Stats.defaultProps = {
   }
 }
 Stats.propTypes = {
-  open: PropTypes.shape({
-    budget: PropTypes.number,
-    cost: PropTypes.number
+  open: React.PropTypes.shape({
+    budget: React.PropTypes.number,
+    cost: React.PropTypes.number
   }),
-  yesterday: PropTypes.shape({
-    budget: PropTypes.number,
-    cost: PropTypes.number
+  yesterday: React.PropTypes.shape({
+    budget: React.PropTypes.number,
+    cost: React.PropTypes.number
   })
 }
 Stats.contextTypes = {
-  locales: PropTypes.string.isRequired,
-  location: PropTypes.object.isRequired
+  locales: React.PropTypes.string.isRequired,
+  location: React.PropTypes.object.isRequired
 }
 
 const Workspace = ({company, workspace, del, fave, unfave}) => (
@@ -255,28 +255,28 @@ const Workspace = ({company, workspace, del, fave, unfave}) => (
 )
 Workspace.displayName = 'Workspace'
 Workspace.propTypes = {
-  company: PropTypes.string,
-  workspace: PropTypes.object,
-  del: PropTypes.func.isRequired,
-  fave: PropTypes.func.isRequired,
-  unfave: PropTypes.func.isRequired
+  company: React.PropTypes.string,
+  workspace: React.PropTypes.object,
+  del: React.PropTypes.func.isRequired,
+  fave: React.PropTypes.func.isRequired,
+  unfave: React.PropTypes.func.isRequired
 }
 Workspace.contextTypes = {
-  router: PropTypes.object
+  router: React.PropTypes.object
 }
 
 export const Workspaces = React.createClass({
   displayName: 'Workspaces',
   mixins: [styled(style)],
   propTypes: {
-    location: PropTypes.object,
-    dispatch: PropTypes.func,
-    company: PropTypes.shape({
-      workspaces: PropTypes.array
+    location: React.PropTypes.object,
+    dispatch: React.PropTypes.func,
+    company: React.PropTypes.shape({
+      workspaces: React.PropTypes.array
     })
   },
   contextTypes: {
-    router: PropTypes.object
+    router: React.PropTypes.object
   },
   getInitialState () {
     return {

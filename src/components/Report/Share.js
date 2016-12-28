@@ -6,8 +6,6 @@ import {inferLevelFromParams} from '../../functions/infer-level-from-params'
 
 import get from 'lodash/get'
 
-const {PropTypes} = React
-
 function Wrapper (props) {
   const {accounts, metaData, location, report, dispatch, params, level} = props
   const node = props[level]
@@ -27,26 +25,26 @@ function Wrapper (props) {
 
 Wrapper.displayName = 'Report-Wrapper'
 Wrapper.propTypes = {
-  metaData: PropTypes.object,
-  report: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
-  accounts: PropTypes.array.isRequired,
-  dispatch: PropTypes.func.isRequired,
-  params: PropTypes.object.isRequired,
-  level: PropTypes.string.isRequired
+  metaData: React.PropTypes.object,
+  report: React.PropTypes.object.isRequired,
+  location: React.PropTypes.object.isRequired,
+  accounts: React.PropTypes.array.isRequired,
+  dispatch: React.PropTypes.func.isRequired,
+  params: React.PropTypes.object.isRequired,
+  level: React.PropTypes.string.isRequired
 }
 
 const Share = React.createClass({
   displayName: 'Report-Share',
   propTypes: {
-    location: PropTypes.object.isRequired
+    location: React.PropTypes.object.isRequired
   },
   contextTypes: {
-    tree: PropTypes.object.isRequired
+    tree: React.PropTypes.object.isRequired
   },
   childContextTypes: {
-    params: PropTypes.object,
-    company: PropTypes.object
+    params: React.PropTypes.object,
+    company: React.PropTypes.object
   },
   componentWillMount () {
     const {params} = this.getReportShare()

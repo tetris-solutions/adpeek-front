@@ -14,24 +14,22 @@ import SubHeader, {SubHeaderButton} from './SubHeader'
 import Page from './Page'
 import Order from './OrderThumb'
 import Switch from './Switch'
-
-const {PropTypes} = React
 const cleanStr = str => trim(deburr(lowerCase(str)))
 
 export const Orders = React.createClass({
   displayName: 'Orders',
   contextTypes: {
-    moment: PropTypes.func.isRequired,
-    location: PropTypes.object,
-    params: PropTypes.shape({
-      company: PropTypes.string,
-      workspace: PropTypes.string,
-      folder: PropTypes.string
+    moment: React.PropTypes.func.isRequired,
+    location: React.PropTypes.object,
+    params: React.PropTypes.shape({
+      company: React.PropTypes.string,
+      workspace: React.PropTypes.string,
+      folder: React.PropTypes.string
     })
   },
   propTypes: {
-    dispatch: PropTypes.func.isRequired,
-    orders: PropTypes.array.isRequired
+    dispatch: React.PropTypes.func.isRequired,
+    orders: React.PropTypes.array.isRequired
   },
   getInitialState () {
     return {
