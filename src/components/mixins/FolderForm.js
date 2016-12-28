@@ -1,5 +1,4 @@
 import {PropTypes} from 'react'
-import ReactDOM from 'react-dom'
 import find from 'lodash/find'
 import get from 'lodash/get'
 import {loadDashCampaignsAction} from '../../actions/load-dash-campaigns'
@@ -80,31 +79,31 @@ export default {
       this.update({errors, [name]: value})
     }
   },
-  getPlatform () {
+  getPlatform (workspace_account) {
+    if (!workspace_account) return null
+
     if (this.props.folder) {
       return this.props.folder.account.platform
     }
 
-    const {workspace: {accounts}} = this.props
-    /**
-     *
-     * @type {HTMLFormElement}
-     */
-    const form = ReactDOM.findDOMNode(this).querySelector('form')
-    const selectedAccount = form.elements.workspace_account.value
-    const account = find(accounts, {id: selectedAccount})
+    const account = find(this.props.workspace.accounts, {id: workspace_account})
 
     return account.platform
   },
-  loadKPI (kpi = null) {
-    this.props.dispatch(
-      loadKPIMetadataAction,
-      kpi || this.state.kpi,
-      this.getPlatform()
-    )
+  loadKPI (kpi, workspace_account) {
+    kpi = kpi || this.state.kpi
+    const platform = this.getPlatform(workspace_account || this.state.workspace_account)
+
+    if (!kpi || !platform) {
+      return
+    }
+
+    this.props.dispatch(loadKPIMetadataAction, kpi, platform)
   },
   getKPIFormat () {
-    const type = get(this.props, ['kpis', this.getPlatform(), this.state.kpi, 'type'])
+    const platform = this.getPlatform(this.state.workspace_account)
+    const {kpi} = this.state
+    const type = get(this.props, ['kpis', platform, kpi, 'type'])
 
     switch (type) {
       case 'percentage':
@@ -116,7 +115,7 @@ export default {
   },
   update (changes) {
     if (changes.kpi || changes.workspace_account) {
-      this.loadKPI(changes.kpi)
+      this.loadKPI(changes.kpi, changes.workspace_account)
 
       changes.kpi_goal = 0
     }

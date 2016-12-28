@@ -124,9 +124,9 @@ export const CreateFolder = React.createClass({
                 <option value=''/>
 
                 {map(accounts,
-                  ({id, platform, name}, index) => (
+                  ({id, platform_name, name}, index) => (
                     <option key={index} value={id}>
-                      {`${platform} :: ${name}`}
+                      {`${platform_name} :: ${name}`}
                     </option>
                   ))}
 

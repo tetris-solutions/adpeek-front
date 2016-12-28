@@ -58,7 +58,7 @@ export const Input = React.createClass({
     }
 
     const state = {
-      value,
+      value: value === undefined ? '' : value,
       isDirty: notEmptyString(value)
     }
 
@@ -237,10 +237,12 @@ export const Input = React.createClass({
 
         <Tag {...inputProps}/>
 
-        {label && (
-          <label className='mdl-textfield__label'>
-            <Message>{label + 'Label'}</Message>
-          </label>)}
+        {isString(label)
+          ? (
+            <label className='mdl-textfield__label'>
+              <Message>{label + 'Label'}</Message>
+            </label>)
+          : label}
 
         {error && (<span className='mdl-textfield__error'>{error}</span>)}
         {children}
