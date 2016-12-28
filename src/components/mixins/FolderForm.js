@@ -70,5 +70,12 @@ export default {
       value: id,
       text: `${id} :: ${name || '???'}`
     }
+  },
+  loadKPIMetadata () {
+    if (this.state.kpi) {
+
+    } else {
+
+    }
   }
 }

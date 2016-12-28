@@ -116,8 +116,8 @@ export const Input = React.createClass({
 
     return Number(
       cleanValue
-        .replace(/[^0-9-.]/g, '')
-        .replace(/\D$/g, '')
+        .replace(/[^0-9-.]/g, '') // clean up
+        .replace(/\D$/g, '') // ignore trailing decimal separator << 100. => 100 >>
     )
   },
   formatNumber (val, format = this.props.format, locale = this.context.locales) {

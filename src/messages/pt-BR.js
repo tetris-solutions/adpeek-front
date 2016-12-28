@@ -302,5 +302,6 @@ module.exports = {
         Você está visualizando apenas as primeiras 1.000 linhas do total de <strong>{size}</strong>.`,
   spawnMailing: 'Enviar agora',
   unsubscribedEmail: 'Usuário saiu da lista',
-  emptyMailing: 'Sua lista de emails está vazia'
+  emptyMailing: 'Sua lista de emails está vazia',
+  kpiGoalLabel: 'Meta KPI'
 }

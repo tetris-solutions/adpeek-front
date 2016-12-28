@@ -302,5 +302,6 @@ module.exports = {
         The displayed result contains only the first thousand lines out of <strong>{size}</strong>.`,
   spawnMailing: 'Run mailing',
   unsubscribedEmail: 'User has unsubscribed from list',
-  emptyMailing: 'Your email list is empty'
+  emptyMailing: 'Your email list is empty',
+  kpiGoalLabel: 'KPI Goal'
 }
