@@ -1,7 +1,6 @@
 import find from 'lodash/find'
 import get from 'lodash/get'
 import map from 'lodash/map'
-import omit from 'lodash/omit'
 import pick from 'lodash/pick'
 import FormMixin from './mixins/FormMixin'
 import Message from 'tetris-iso/Message'
@@ -31,8 +30,10 @@ export const EditFolder = React.createClass({
       company: PropTypes.string,
       workspace: PropTypes.string
     }),
+    kpis: PropTypes.object,
     folder: PropTypes.shape({
       id: PropTypes.string,
+      account: PropTypes.object,
       name: PropTypes.string,
       tag: PropTypes.string,
       workspace_account: PropTypes.string,
@@ -56,6 +57,9 @@ export const EditFolder = React.createClass({
       'kpi_goal'
     ]))
   },
+  componentDidMount () {
+    this.loadKPI()
+  },
   /**
    * handles submit event
    * @param {Event} e submit event
@@ -73,8 +77,8 @@ export const EditFolder = React.createClass({
       dash_campaign: get(elements, 'dash_campaign.value', null),
       tag: elements.tag.value || null,
       media: elements.media.value,
-      kpi: elements.kpi.value,
-      kpi_goal: elements.kpi_goal.inputMaskToNumber()
+      kpi: this.state.kpi,
+      kpi_goal: this.state.kpi_goal
     }
 
     if (folder.tag) {
@@ -90,12 +94,6 @@ export const EditFolder = React.createClass({
       .then(navigateToUpdatedFolder)
       .catch(this.handleSubmitException)
       .then(this.posSubmit)
-  },
-  saveAndDismiss (name) {
-    return ({target: {value}}) => {
-      const errors = omit(this.state.errors, name)
-      this.setState({errors, [name]: value})
-    }
   },
   render () {
     const {medias, company, workspace: {accounts}} = this.props
@@ -184,7 +182,8 @@ export const EditFolder = React.createClass({
                 type='number'
                 label='kpiGoal'
                 name='kpi_goal'
-                value={kpi_goal || ''}
+                value={kpi_goal}
+                format={this.getKPIFormat()}
                 onChange={this.saveAndDismiss('kpi_goal')}/>
 
               {this.isConnectedToDash()
@@ -204,7 +203,7 @@ export const EditFolder = React.createClass({
                 name='tag'
                 label='folderTag'
                 error={errors.tag}
-                value={tag}
+                value={tag || ''}
                 onChange={this.saveAndDismiss('tag')}/>
 
               <br/>
@@ -226,4 +225,4 @@ export const EditFolder = React.createClass({
   }
 })
 
-export default contextualize(EditFolder, {medias: ['medias']}, 'folder', 'workspace', 'company')
+export default contextualize(EditFolder, {kpis: ['kpis'], medias: ['medias']}, 'folder', 'workspace', 'company')

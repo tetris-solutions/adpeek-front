@@ -25,6 +25,7 @@ export const CreateFolder = React.createClass({
     dispatch: PropTypes.func,
     company: PropTypes.object,
     medias: PropTypes.array,
+    kpis: PropTypes.object,
     params: PropTypes.shape({
       company: PropTypes.string,
       workspace: PropTypes.string
@@ -38,6 +39,9 @@ export const CreateFolder = React.createClass({
   },
   getInitialState () {
     return {
+      kpi: '',
+      kpi_goal: 0,
+      workspace_account: '',
       showTagCheckbox: false,
       selectedMedia: ''
     }
@@ -58,8 +62,8 @@ export const CreateFolder = React.createClass({
       dash_campaign: get(elements, 'dash_campaign.value', null),
       tag: elements.tag.value || null,
       media: elements.media.value,
-      kpi: elements.kpi.value,
-      kpi_goal: elements.kpi_goal.inputMaskToNumber()
+      kpi: this.state.kpi,
+      kpi_goal: this.state.kpi_goal
     }
 
     if (folder.tag) {
@@ -92,7 +96,7 @@ export const CreateFolder = React.createClass({
   },
   render () {
     const {medias, company, workspace: {accounts}} = this.props
-    const {errors, selectedMedia, showTagCheckbox, dashCampaign} = this.state
+    const {errors, kpi, kpi_goal, workspace_account, selectedMedia, showTagCheckbox, dashCampaign} = this.state
 
     return (
       <div>
@@ -114,7 +118,8 @@ export const CreateFolder = React.createClass({
                 name='workspace_account'
                 label='externalAccount'
                 error={errors.workspace_account}
-                onChange={this.dismissError}>
+                value={workspace_account}
+                onChange={this.saveAndDismiss('workspace_account')}>
 
                 <option value=''/>
 
@@ -148,7 +153,8 @@ export const CreateFolder = React.createClass({
                 name='kpi'
                 label='kpi'
                 error={errors.kpi}
-                onChange={this.dismissError}>
+                value={kpi}
+                onChange={this.saveAndDismiss('kpi')}>
 
                 <option value=''/>
 
@@ -163,7 +169,10 @@ export const CreateFolder = React.createClass({
               <Input
                 type='number'
                 label='kpiGoal'
-                name='kpi_goal'/>
+                name='kpi_goal'
+                value={kpi_goal}
+                format={this.getKPIFormat()}
+                onChange={this.saveAndDismiss('kpi_goal')}/>
 
               {this.isConnectedToDash()
                 ? (

@@ -1,7 +1,10 @@
 import {PropTypes} from 'react'
+import ReactDOM from 'react-dom'
 import find from 'lodash/find'
 import get from 'lodash/get'
 import {loadDashCampaignsAction} from '../../actions/load-dash-campaigns'
+import {loadKPIMetadataAction} from '../../actions/load-kpi-meta-data'
+import omit from 'lodash/omit'
 
 export default {
   contextTypes: {
@@ -71,11 +74,53 @@ export default {
       text: `${id} :: ${name || '???'}`
     }
   },
-  loadKPIMetadata () {
-    if (this.state.kpi) {
-
-    } else {
-
+  saveAndDismiss (name) {
+    return ({target: {value}}) => {
+      const errors = omit(this.state.errors, name)
+      this.update({errors, [name]: value})
     }
+  },
+  getPlatform () {
+    if (this.props.folder) {
+      return this.props.folder.account.platform
+    }
+
+    const {workspace: {accounts}} = this.props
+    /**
+     *
+     * @type {HTMLFormElement}
+     */
+    const form = ReactDOM.findDOMNode(this).querySelector('form')
+    const selectedAccount = form.elements.workspace_account.value
+    const account = find(accounts, {id: selectedAccount})
+
+    return account.platform
+  },
+  loadKPI (kpi = null) {
+    this.props.dispatch(
+      loadKPIMetadataAction,
+      kpi || this.state.kpi,
+      this.getPlatform()
+    )
+  },
+  getKPIFormat () {
+    const type = get(this.props, ['kpis', this.getPlatform(), this.state.kpi, 'type'])
+
+    switch (type) {
+      case 'percentage':
+      case 'currency':
+        return type
+      default:
+        return 'decimal'
+    }
+  },
+  update (changes) {
+    if (changes.kpi || changes.workspace_account) {
+      this.loadKPI(changes.kpi)
+
+      changes.kpi_goal = 0
+    }
+
+    this.setState(changes)
   }
 }
