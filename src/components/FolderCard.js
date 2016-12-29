@@ -25,7 +25,7 @@ DeleteFolder.propTypes = {
   dispatch: React.PropTypes.func.isRequired
 }
 
-const FolderCard = ({id, account: {platform}, name, stats, reports, editable, dispatch, params}) => {
+const FolderCard = ({id, account: {platform}, kpi_goal, name, stats, reports, editable, dispatch, params}) => {
   const {company, workspace} = params
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${id}`
 
@@ -35,7 +35,7 @@ const FolderCard = ({id, account: {platform}, name, stats, reports, editable, di
         {name}
       </Cap>
 
-      <FolderStats params={params} stats={stats} id={id}/>
+      <FolderStats params={params} stats={stats} id={id} kpi_goal={kpi_goal}/>
 
       <Gear>
         <DropdownMenu>
@@ -75,6 +75,7 @@ const FolderCard = ({id, account: {platform}, name, stats, reports, editable, di
 FolderCard.displayName = 'FolderCard'
 FolderCard.propTypes = {
   id: React.PropTypes.string.isRequired,
+  kpi_goal: React.PropTypes.number,
   account: React.PropTypes.shape({
     platform: React.PropTypes.string
   }).isRequired,

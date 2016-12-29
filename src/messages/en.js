@@ -303,5 +303,7 @@ module.exports = {
   spawnMailing: 'Run mailing',
   unsubscribedEmail: 'User has unsubscribed from list',
   emptyMailing: 'Your email list is empty',
-  kpiGoalLabel: 'KPI Goal'
+  kpiGoalLabel: 'KPI Goal',
+  kpiGoalMetricTitle: '{metric} Goal',
+  kpiGoalMetricResult: '{currentValue} of {goal}'
 }

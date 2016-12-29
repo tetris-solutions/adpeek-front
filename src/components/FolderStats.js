@@ -9,6 +9,7 @@ import {styled} from './mixins/styled'
 import map from 'lodash/map'
 import isNumber from 'lodash/isNumber'
 import get from 'lodash/get'
+import last from 'lodash/last'
 
 const style = csjs`
 .wrapper {
@@ -97,7 +98,7 @@ Rail.contextTypes = {
   locales: React.PropTypes.string.isRequired
 }
 
-const Period = ({start, end}, {moment}) => (
+const Period = ({start, end}, {moment, locales}) => (
   <div>
     <div className={`${style.label}`}>
       <Message>orderRangeTitle</Message>:
@@ -108,6 +109,7 @@ const Period = ({start, end}, {moment}) => (
     </div>
   </div>
 )
+Period.displayName = 'Period'
 Period.propTypes = {
   start: React.PropTypes.string,
   end: React.PropTypes.string
@@ -116,11 +118,54 @@ Period.contextTypes = {
   moment: React.PropTypes.func.isRequired
 }
 
-const Stats = ({selectedSeries, selectBudget, selectKPI, stats, labelFormatter, pointFormatter}) => (
+const Goal = ({series, metric, kpi_goal}, {locales}) => {
+  const currentValue = get(last(series), get(metric, 'id'))
+
+  return (
+    <div>
+      <div className={`${style.label}`}>
+        <Message metric={get(metric, 'name')}>kpiGoalMetricTitle</Message>:
+        <br/>
+
+        <Message
+          currentValue={currentValue
+            ? prettyNumber(currentValue, get(metric, 'type'), locales)
+            : '--'}
+          goal={kpi_goal
+            ? prettyNumber(kpi_goal, get(metric, 'type'), locales)
+            : '--'}>
+          kpiGoalMetricResult
+        </Message>
+      </div>
+    </div>
+  )
+}
+
+Goal.displayName = 'Goal'
+
+Goal.propTypes = {
+  series: React.PropTypes.array,
+  metric: React.PropTypes.shape({
+    id: React.PropTypes.string,
+    type: React.PropTypes.string,
+    name: React.PropTypes.string
+  }),
+  kpi_goal: React.PropTypes.number
+}
+Goal.contextTypes = {
+  locales: React.PropTypes.string.isRequired
+}
+
+const Stats = ({selectedSeries, selectBudget, selectKPI, stats, labelFormatter, pointFormatter, kpi_goal}) => (
   <div className={`${style.wrapper}`}>
     <Rail
       cost={get(stats, 'order.cost')}
       amount={get(stats, 'order.amount')}/>
+
+    <Goal
+      kpi_goal={kpi_goal}
+      series={stats.series}
+      metric={stats.metric}/>
 
     <Period
       start={get(stats, 'order.start')}
@@ -181,6 +226,7 @@ const Stats = ({selectedSeries, selectBudget, selectKPI, stats, labelFormatter, 
 
 Stats.displayName = 'Stats'
 Stats.propTypes = {
+  kpi_goal: React.PropTypes.number,
   selectedSeries: React.PropTypes.oneOf(['budget', 'kpi']).isRequired,
   selectBudget: React.PropTypes.func.isRequired,
   selectKPI: React.PropTypes.func.isRequired,
@@ -204,7 +250,8 @@ const FolderStats = React.createClass({
   propTypes: {
     id: React.PropTypes.string,
     params: React.PropTypes.object,
-    stats: React.PropTypes.object
+    stats: React.PropTypes.object,
+    kpi_goal: React.PropTypes.number
   },
   contextTypes: {
     tree: React.PropTypes.object.isRequired,
@@ -269,6 +316,7 @@ const FolderStats = React.createClass({
   render () {
     return (
       <Stats
+        kpi_goal={this.props.kpi_goal}
         stats={this.props.stats}
         selectedSeries={this.state.selectedSeries}
         selectBudget={this.selectBudget}
