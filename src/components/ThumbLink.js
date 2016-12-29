@@ -1,4 +1,5 @@
 import React from 'react'
+import assign from 'lodash/assign'
 import csjs from 'csjs'
 import {Link} from 'react-router'
 import {styledFnComponent} from './higher-order/styled-fn-component'
@@ -151,9 +152,9 @@ Cap.propTypes = {
   children: React.PropTypes.node
 }
 
-export function ThumbLink ({to, title, img, children, sad}) {
+export function ThumbLink ({to, title, img, children, sad, style: css}) {
   const props = {
-    style: img ? backgroundStyle(img) : undefined,
+    style: assign({}, css, img ? backgroundStyle(img) : undefined),
     className: `mdl-shadow--2dp ${style.card} ${sad ? style.sad : ''}`,
     to
   }
@@ -167,6 +168,7 @@ export function ThumbLink ({to, title, img, children, sad}) {
 
 ThumbLink.displayName = 'Thumb-Link'
 ThumbLink.propTypes = {
+  style: React.PropTypes.object,
   sad: React.PropTypes.bool,
   children: React.PropTypes.node,
   img: React.PropTypes.string,

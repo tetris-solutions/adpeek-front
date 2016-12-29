@@ -13,14 +13,18 @@ import last from 'lodash/last'
 
 const style = csjs`
 .wrapper {
-  height: 180px;
+  padding: 1em .5em;
+}
+.section {
+  margin-bottom: .5em;
 }
 .chart {
-  width: 230px;
+  width: 100%;
   height: 150px;
 }
 .label {
   color: grey;
+  font-weight: 500;
 }
 .bt {
   font-size: 9pt;
@@ -45,6 +49,20 @@ const style = csjs`
 .rail > div {
   border-radius: 3px;
   height: 4px;
+}
+.stats {
+  padding: 0 1em 0 .5em;
+  font-size: smaller;
+}
+.numbers {
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: small;
+}
+.numbers > strong {
+  font-size: 105%;
 }`
 
 const labelStyle = {
@@ -59,24 +77,19 @@ const num = val => !isNumber(val) ? 0 : val
 const division = (a, b) => b === 0 ? 0 : a / b
 
 const Rail = ({cost, amount}, {locales}) => (
-  <div>
+  <div className={`${style.section}`}>
     <div className={`${style.label}`}>
       <Message>investmentLabel</Message>:
     </div>
 
     <div className={`${style.stats}`}>
       <div className={`${style.numbers}`}>
-        <strong>
+        <strong className='mdl-color-text--blue-A700'>
           {!isNumber(cost)
             ? '--'
             : prettyNumber(cost, 'currency', locales)}
         </strong>
-        <span className='mdl-color-text--grey-600'>
-          {' / '}
-          {!isNumber(amount)
-            ? '--'
-            : prettyNumber(amount, 'currency', locales)}
-        </span>
+        <span>{' / ' + (!isNumber(amount) ? '--' : prettyNumber(amount, 'currency', locales))}</span>
       </div>
       <div className={`mdl-color--grey-300 ${style.rail}`}>
         <div
@@ -99,10 +112,11 @@ Rail.contextTypes = {
 }
 
 const Period = ({start, end}, {moment, locales}) => (
-  <div>
+  <div className={`${style.section}`}>
     <div className={`${style.label}`}>
       <Message>orderRangeTitle</Message>:
-      <br/>
+    </div>
+    <div className={`${style.stats}`}>
       {start
         ? moment(start).format('D/MMM') + ' - ' + moment(end).format('D/MMM')
         : '---'}
@@ -122,11 +136,11 @@ const Goal = ({series, metric, kpi_goal}, {locales}) => {
   const currentValue = get(last(series), get(metric, 'id'))
 
   return (
-    <div>
+    <div className={`${style.section}`}>
       <div className={`${style.label}`}>
         <Message metric={get(metric, 'name')}>kpiGoalMetricTitle</Message>:
-        <br/>
-
+      </div>
+      <div className={`${style.stats}`}>
         <Message
           currentValue={currentValue
             ? prettyNumber(currentValue, get(metric, 'type'), locales)
@@ -157,7 +171,7 @@ Goal.contextTypes = {
 }
 
 const Stats = ({selectedSeries, selectBudget, selectKPI, stats, labelFormatter, pointFormatter, kpi_goal}) => (
-  <div className={`${style.wrapper}`}>
+  <div className={`${style.wrapper} mdl-color-text--grey-600`}>
     <Rail
       cost={get(stats, 'order.cost')}
       amount={get(stats, 'order.amount')}/>
@@ -175,14 +189,11 @@ const Stats = ({selectedSeries, selectBudget, selectKPI, stats, labelFormatter, 
       <Message>investmentLabel</Message>
     </span>
 
-    {stats.metric
-      ? (
-        <span className={cx({[style.bt]: true, [style.selected]: selectedSeries === 'kpi'})} onClick={selectKPI}>
-          {stats.metric.name}
-        </span>
-      ) : null}
+    <span className={cx({[style.bt]: true, [style.selected]: selectedSeries === 'kpi'})} onClick={selectKPI}>
+      {get(stats, 'metric.name', '...')}
+    </span>
 
-    <Highcharts className={String(style.chart)}>
+    <Highcharts className={`${style.chart}`}>
       <title>{null}</title>
 
       <plot-options>

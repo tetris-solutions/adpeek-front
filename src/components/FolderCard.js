@@ -30,7 +30,7 @@ const FolderCard = ({id, account: {platform}, kpi_goal, name, stats, reports, ed
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${id}`
 
   return (
-    <ThumbLink to={folderUrl} title={name}>
+    <ThumbLink to={folderUrl} title={name} style={{width: 280}}>
       <Cap bg={platform === 'adwords' ? 'amber-800' : 'blue-900'}>
         {name}
       </Cap>
