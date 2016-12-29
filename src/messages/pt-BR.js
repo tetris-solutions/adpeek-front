@@ -305,5 +305,5 @@ module.exports = {
   emptyMailing: 'Sua lista de emails está vazia',
   kpiGoalLabel: 'Meta KPI',
   kpiGoalMetricTitle: 'Meta - {metric}',
-  kpiGoalMetricResult: '{currentValue} of {goal}'
+  kpiGoalMetricResult: '{currentValue} de {goal}'
 }
