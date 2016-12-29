@@ -7,6 +7,8 @@ import cx from 'classnames'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
 import map from 'lodash/map'
+import isNumber from 'lodash/isNumber'
+import get from 'lodash/get'
 
 const style = csjs`
 .wrapper {
@@ -15,6 +17,9 @@ const style = csjs`
 .chart {
   width: 230px;
   height: 150px;
+}
+.label {
+  color: grey;
 }
 .bt {
   font-size: 9pt;
@@ -28,6 +33,17 @@ const style = csjs`
 }
 .selected {
   color: #283593;
+}
+.rail {
+  background-color: grey;
+  overflow: hidden;
+  border-radius: 3px;
+  padding: 2px;
+  margin-bottom: 1em;
+}
+.rail > div {
+  border-radius: 3px;
+  height: 4px;
 }`
 
 const labelStyle = {
@@ -38,28 +54,88 @@ const dt = str => {
   return new Date(year, month - 1, day)
 }
 
+const num = val => !isNumber(val) ? 0 : val
+const division = (a, b) => b === 0 ? 0 : a / b
+
+const Rail = ({cost, amount}, {locales}) => (
+  <div>
+    <div className={`${style.label}`}>
+      <Message>investmentLabel</Message>:
+    </div>
+
+    <div className={`${style.stats}`}>
+      <div className={`${style.numbers}`}>
+        <strong>
+          {!isNumber(cost)
+            ? '--'
+            : prettyNumber(cost, 'currency', locales)}
+        </strong>
+        <span className='mdl-color-text--grey-600'>
+          {' / '}
+          {!isNumber(amount)
+            ? '--'
+            : prettyNumber(amount, 'currency', locales)}
+        </span>
+      </div>
+      <div className={`mdl-color--grey-300 ${style.rail}`}>
+        <div
+          style={{width: Math.min(100, Math.floor(100 * division(num(cost), num(amount)))) + '%'}}
+          className={num(cost) > num(amount)
+            ? 'mdl-color--red-800'
+            : 'mdl-color--primary'}/>
+      </div>
+    </div>
+  </div>
+)
+
+Rail.displayName = 'Rail'
+Rail.propTypes = {
+  amount: React.PropTypes.number,
+  cost: React.PropTypes.number
+}
+Rail.contextTypes = {
+  locales: React.PropTypes.string.isRequired
+}
+
+const Period = ({start, end}, {moment}) => (
+  <div>
+    <div className={`${style.label}`}>
+      <Message>orderRangeTitle</Message>:
+      <br/>
+      {start
+        ? moment(start).format('D/MMM') + ' - ' + moment(end).format('D/MMM')
+        : '---'}
+    </div>
+  </div>
+)
+Period.propTypes = {
+  start: React.PropTypes.string,
+  end: React.PropTypes.string
+}
+Period.contextTypes = {
+  moment: React.PropTypes.func.isRequired
+}
+
 const Stats = ({selectedSeries, selectBudget, selectKPI, stats, labelFormatter, pointFormatter}) => (
   <div className={`${style.wrapper}`}>
-    <span
-      className={cx({
-        [style.bt]: true,
-        [style.selected]: selectedSeries === 'budget'
-      })}
-      onClick={selectBudget}>
+    <Rail
+      cost={get(stats, 'order.cost')}
+      amount={get(stats, 'order.amount')}/>
+
+    <Period
+      start={get(stats, 'order.start')}
+      end={get(stats, 'order.end')}/>
+
+    <span className={cx({[style.bt]: true, [style.selected]: selectedSeries === 'budget'})} onClick={selectBudget}>
       <Message>investmentLabel</Message>
     </span>
 
     {stats.metric
       ? (
-        <span
-          className={cx({
-            [style.bt]: true,
-            [style.selected]: selectedSeries === 'kpi'
-          })}
-          onClick={selectKPI}>
+        <span className={cx({[style.bt]: true, [style.selected]: selectedSeries === 'kpi'})} onClick={selectKPI}>
           {stats.metric.name}
-        </span>)
-      : null}
+        </span>
+      ) : null}
 
     <Highcharts className={String(style.chart)}>
       <title>{null}</title>
@@ -102,6 +178,7 @@ const Stats = ({selectedSeries, selectBudget, selectKPI, stats, labelFormatter, 
     </Highcharts>
   </div>
 )
+
 Stats.displayName = 'Stats'
 Stats.propTypes = {
   selectedSeries: React.PropTypes.oneOf(['budget', 'kpi']).isRequired,
@@ -116,6 +193,9 @@ Stats.propTypes = {
   }).isRequired,
   labelFormatter: React.PropTypes.func.isRequired,
   pointFormatter: React.PropTypes.func.isRequired
+}
+Stats.contextTypes = {
+  locales: React.PropTypes.string.isRequired
 }
 
 const FolderStats = React.createClass({
