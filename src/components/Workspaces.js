@@ -27,6 +27,7 @@ import bind from 'lodash/bind'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
 import {prettyNumber} from '../functions/pretty-number'
+import ReportLink from './Report/ReportLink'
 
 const style = csjs`
 .sober {
@@ -209,7 +210,7 @@ Stats.contextTypes = {
   location: React.PropTypes.object.isRequired
 }
 
-const Workspace = ({company, workspace, del, fave, unfave}) => (
+const Workspace = ({company, workspace, del, fave, unfave, dispatch}) => (
   <ThumbLink to={`/company/${company}/workspace/${workspace.id}`} title={workspace.name}>
     <Cap>{workspace.name}</Cap>
     <Stats {...(workspace.stats || {})}/>
@@ -238,6 +239,14 @@ const Workspace = ({company, workspace, del, fave, unfave}) => (
           </Message>
         </HeaderMenuItem>
 
+        <ReportLink
+          tag={MenuItem}
+          params={{company, workspace: workspace.id}}
+          reports={workspace.reports}
+          dispatch={dispatch}>
+          <Message>workspaceReport</Message>
+        </ReportLink>
+
         <Fence canEditWorkspace>
           <MenuItem tag={Link} to={`/company/${company}/workspace/${workspace.id}/edit`} icon='mode_edit'>
             <Message>editWorkspace</Message>
@@ -255,8 +264,9 @@ const Workspace = ({company, workspace, del, fave, unfave}) => (
 )
 Workspace.displayName = 'Workspace'
 Workspace.propTypes = {
-  company: React.PropTypes.string,
-  workspace: React.PropTypes.object,
+  dispatch: React.PropTypes.func.isRequired,
+  company: React.PropTypes.string.isRequired,
+  workspace: React.PropTypes.object.isRequired,
   del: React.PropTypes.func.isRequired,
   fave: React.PropTypes.func.isRequired,
   unfave: React.PropTypes.func.isRequired
@@ -309,7 +319,7 @@ export const Workspaces = React.createClass({
   },
   render () {
     const searchValue = cleanStr(this.state.searchValue)
-    const {company: {id, workspaces}} = this.props
+    const {dispatch, company: {id, workspaces}} = this.props
     const matchingWorkspaces = searchValue
       ? filter(workspaces, ({name}) => includes(cleanStr(name), searchValue))
       : workspaces
@@ -338,6 +348,7 @@ export const Workspaces = React.createClass({
 
             {map(groupedByFaveStatus.true, (workspace, index) =>
               <Workspace
+                dispatch={dispatch}
                 fave={bind(this.favoriteWorkspace, null, workspace.id)}
                 unfave={bind(this.unfavoriteWorkspace, null, workspace.id)}
                 del={bind(this.deleteWorkspace, null, workspace.id)}
@@ -351,6 +362,7 @@ export const Workspaces = React.createClass({
             {anyNormie && <h5><Message>workspaceList</Message></h5>}
             {map(groupedByFaveStatus.false, (workspace, index) =>
               <Workspace
+                dispatch={dispatch}
                 fave={bind(this.favoriteWorkspace, null, workspace.id)}
                 unfave={bind(this.unfavoriteWorkspace, null, workspace.id)}
                 del={bind(this.deleteWorkspace, null, workspace.id)}

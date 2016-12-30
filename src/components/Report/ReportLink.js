@@ -55,7 +55,8 @@ const ReportLink = React.createClass({
     const mainReportId = get(reports, [0, 'id'])
 
     if (!mainReportId) {
-      throw new Error('Could not find report', 404)
+      // @todo check permissions
+      return `${baseUrl}/reports`
     }
 
     return `${baseUrl}/report/${mainReportId}`
