@@ -12,8 +12,10 @@ import AttributeItem from './AttributeItem'
 import forEach from 'lodash/forEach'
 import groupBy from 'lodash/groupBy'
 import flatten from 'lodash/flatten'
-import sortBy from 'lodash/sortBy'
+import orderBy from 'lodash/orderBy'
 import assign from 'lodash/assign'
+import head from 'lodash/head'
+import tail from 'lodash/tail'
 
 const style = csjs`
 .list {
@@ -46,7 +48,7 @@ const style = csjs`
 }`
 const ids = ({ids, id}) => ids || id
 
-function hierarchy (attributes, levels, mount = false) {
+function buildTree (attributes, levels, mount = false) {
   function extend (attr) {
     attr = assign({}, attr)
 
@@ -72,23 +74,25 @@ function hierarchy (attributes, levels, mount = false) {
     attributes = compact(map(attributes, extend))
   }
 
-  const {id: level, openByDefault} = levels[0]
+  const {id: level, openByDefault} = head(levels)
   const grouped = groupBy(attributes, `${level}.id`)
-  const subLevel = levels.slice(1)
+  const innerLevel = tail(levels)
 
-  forEach(grouped, (branches, id) => {
-    const list = hierarchy(branches, subLevel)
+  forEach(grouped, (items, id) => {
+    const sample = head(items)
+    const list = buildTree(items, innerLevel)
 
     grouped[id] = {
       id,
-      name: get(branches, [0, level, 'name']),
+      shared: get(sample, [level, 'shared']),
+      name: get(sample, [level, 'name']),
       ids: flatten(map(list, ids)),
       openByDefault,
       list: list
     }
   })
 
-  return sortBy(grouped, 'name')
+  return orderBy(grouped, ['shared', 'name'], ['desc', 'asc'])
 }
 
 const Group = React.createClass({
@@ -190,9 +194,11 @@ const AttributeList = ({attributes, selectedAttributes, levels, remove, add}) =>
     )
   }
 
+  const items = buildTree(attributes, levels, true)
+
   return (
     <List>
-      {map(hierarchy(attributes, levels, true), node)}
+      {map(items, node)}
     </List>
   )
 }

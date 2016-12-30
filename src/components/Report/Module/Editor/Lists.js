@@ -11,10 +11,10 @@ import head from 'lodash/head'
 import split from 'lodash/split'
 import React from 'react'
 import AttributeList from './AttributeList'
-// import EntityTree from './EntityTree'
 import Input from '../../../Input'
 import {Tabs, Tab} from '../../../Tabs'
 import Entities from './Entities'
+
 const clean = str => trim(lowerCase(deburr(str)))
 
 const containsSearchvalue = searchValue =>
@@ -53,20 +53,24 @@ const Lists = React.createClass({
   attributeLevels () {
     const {messages, report} = this.context
 
-    return report.platform ? undefined : [{
-      id: 'platform',
-      openByDefault: true,
-      mount ({id}) {
-        const platform = includes(id, ':')
-          ? head(split(id, ':'))
-          : 'shared'
+    return report.platform
+      ? undefined
+      : [{
+        id: 'platform',
+        openByDefault: true,
+        mount ({id}) {
+          const shared = !includes(id, ':')
+          const platform = shared
+            ? 'shared'
+            : head(split(id, ':'))
 
-        return {
-          id: platform,
-          name: messages[platform + 'Level']
+          return {
+            id: platform,
+            shared,
+            name: messages[platform + 'Level']
+          }
         }
-      }
-    }]
+      }]
   },
   render () {
     const {searchValue} = this.state
