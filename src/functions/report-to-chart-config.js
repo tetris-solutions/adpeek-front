@@ -3,6 +3,7 @@ import groupBy from 'lodash/groupBy'
 import find from 'lodash/find'
 import forEach from 'lodash/forEach'
 import get from 'lodash/get'
+import memoize from 'lodash/memoize'
 import includes from 'lodash/includes'
 import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
@@ -24,6 +25,7 @@ const cropped = comment => comment.length > 100
   ? comment.substr(0, 100) + '...'
   : comment
 
+const mockEntity = {name: '---'}
 const types = {
   linear: {
     type: 'linear'
@@ -143,18 +145,13 @@ export function reportToChartConfig (type, props) {
 
   const series = []
 
+  const getEntityById = memoize(id => find(entity.list, {id}) || mockEntity)
+
   function walk (points, xValue) {
     const firstPoint = points[0]
 
-    let referenceEntity
-
-    if (firstPoint.id !== undefined) {
-      referenceEntity = find(entity.list, {id: firstPoint.id})
-      if (!referenceEntity) return
-    }
-
     if (isIdBased) {
-      categories.push(referenceEntity.name)
+      categories.push(getEntityById(firstPoint.id).name)
     } else if (
       xAxisDimension === 'qualityscore' ||
       isString(firstPoint[xAxisDimension])
@@ -164,6 +161,7 @@ export function reportToChartConfig (type, props) {
 
     function pointIterator (point, index) {
       const pointDimensions = pick(point, dimensions)
+      const referenceEntity = getEntityById(point.id)
 
       function metricIterator (metric, yAxisIndex) {
         const seriesSignature = assign({metric}, pointDimensions)
