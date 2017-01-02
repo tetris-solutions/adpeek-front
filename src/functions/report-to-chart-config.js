@@ -32,11 +32,13 @@ const types = {
   },
   datetime: {
     type: 'datetime',
+    headerFormat: '%a %d, %B, %Y',
     sortable: true
   },
   time: {
     type: 'datetime',
-    format: '%H:%M',
+    headerFormat: '%H:%M',
+    labelFormat: '%H:%M',
     sortable: true
   }
 }
@@ -267,10 +269,13 @@ export function reportToChartConfig (type, props) {
     series
   }
 
-  if (xAxis.format) {
-    config.tooltip.headerFormat = `<b>{point.x:${xAxis.format}}</b><br/>`
+  if (xAxis.headerFormat) {
+    config.tooltip.headerFormat = `<b>{point.x:${xAxis.headerFormat}}</b><br/>`
+  }
+
+  if (xAxis.labelFormat) {
     config.xAxis.labels = {
-      format: `{value:${xAxis.format}}`
+      format: `{value:${xAxis.labelFormat}}`
     }
   }
 
@@ -288,7 +293,13 @@ export function reportToChartConfig (type, props) {
   function pointFormatter () {
     const attribute = attributes[this.options.metric]
     const value = prettyNumber(this.y, attribute.type, props.locales)
-    return `<span style="color: ${this.color}">${attribute.name}:</span> <b>${value}</b><br/>`
+    const {seriesSignature} = this.series.options
+
+    const metricName = Object.keys(seriesSignature).length > 1
+      ? this.series.name // if series is not just a simple metric, use it's previously calculated name on tooltip
+      : attribute.name
+
+    return `<span style="color: ${this.color}">${metricName}:</span> <b>${value}</b><br/>`
   }
 
   set(config, ['plotOptions', 'series', 'tooltip', 'pointFormatter'], pointFormatter)
