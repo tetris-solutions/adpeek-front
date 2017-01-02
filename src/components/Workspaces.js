@@ -128,13 +128,17 @@ const Daily = ({budget, cost, locales}) => {
     label = prettyNumber(ratio, 'percentage', locales)
   }
 
+  const currency = n => isNumber(n)
+    ? prettyNumber(n, 'currency', locales)
+    : 'R$ --'
+
   return (
     <div>
       <div className={`${style.label}`}>
         <Message>investmentDayLabel</Message>:
       </div>
 
-      <div className={`${style.stats} ${color}`}>
+      <div className={`${style.stats} ${color}`} title={`${currency(cost)} / ${currency(budget)}`}>
         <i className='material-icons'>{icon}</i>
         <span className={`${style.iconLabel}`}>{label}</span>
       </div>
