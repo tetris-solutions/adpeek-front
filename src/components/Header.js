@@ -152,19 +152,12 @@ const Header = React.createClass({
     hideLogin: React.PropTypes.bool.isRequired,
     company: React.PropTypes.object
   },
-  contextTypes: {
-    tree: React.PropTypes.object.isRequired
-  },
   loginRoundTrip () {
     this.props.dispatch(logoutAction)
 
     window.location.href = process.env.FRONT_URL + '/login?next=' + window.location.href
   },
   render () {
-    const headerColor = this.context.tree.get('debugMode')
-      ? 'grey-900'
-      : 'primary-dark'
-
     const {user, company, hideLogin} = this.props
     let GoHome, homeProps, leftButton
 
@@ -185,7 +178,7 @@ const Header = React.createClass({
     }
 
     return (
-      <header className={`mdl-layout__header mdl-color--${headerColor} ${style.header}`}>
+      <header className={`mdl-layout__header mdl-color--primary-dark ${style.header}`}>
         <div className={`mdl-layout__header-row ${style.row}`}>
           <GoHome {...homeProps}>
             <img className={String(style.tetris)} src={'/img/tetris-logo.png'}/>

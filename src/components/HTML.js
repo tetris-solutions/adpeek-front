@@ -42,14 +42,16 @@ const gTMScript = process.env.NODE_ENV === 'production'
   ? <script dangerouslySetInnerHTML={{__html: gTMSrc}}/>
   : null
 
-const gTMIFrame = process.env.NODE_ENV === 'production' ? (
-  <noscript>
-    <iframe
-      src={`https://www.googletagmanager.com/ns.html?id=${process.env.GOOGLE_TAG_MANAGER_ID}`}
-      height='0' width='0'
-      style={{display: 'none', visibility: 'hidden'}}/>
-  </noscript>
-) : null
+const gTMIFrame = process.env.NODE_ENV === 'production'
+  ? (
+    <noscript>
+      <iframe
+        src={`https://www.googletagmanager.com/ns.html?id=${process.env.GOOGLE_TAG_MANAGER_ID}`}
+        height='0' width='0'
+        style={{display: 'none', visibility: 'hidden'}}/>
+    </noscript>
+  )
+  : null
 
 const revSuffix = process.env.BUILD_PROD ? `.${revision.short()}` : ''
 
@@ -65,7 +67,11 @@ const HTML = ({payload, children, css}) => (
 
       <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' type='text/css'/>
       <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons'/>
-      <link rel='stylesheet' href='https://code.getmdl.io/1.2.1/material.blue-indigo.min.css'/>
+
+      <link
+        rel='stylesheet'
+        href={`https://code.getmdl.io/1.2.1/material.${payload.debugMode ? 'brown-deep_purple' : 'blue-indigo'}.min.css`}/>
+
       <link rel='stylesheet' href='/css/mdl-selectfield.min.css'/>
       <link rel='stylesheet' href='/css/animate.min.css'/>
       <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css'/>
