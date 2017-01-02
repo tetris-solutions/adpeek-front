@@ -115,7 +115,7 @@ export const BudgetEdit = React.createClass({
                 onChange={this.onChangeValue}
                 value={value}
                 max={max}
-                min={1}/>
+                min={0.01}/>
             </VerticalAlign>
 
             <div className='mdl-cell mdl-cell--3-col'>
@@ -127,7 +127,7 @@ export const BudgetEdit = React.createClass({
                 label='value'
                 name='value'
                 max={max}
-                min={1}/>
+                min={0.01}/>
             </div>
           </div>
 
