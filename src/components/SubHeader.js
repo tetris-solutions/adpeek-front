@@ -28,9 +28,10 @@ SubHeaderButton.propTypes = {
   tag: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.string])
 }
 
-const SubHeader = ({title, children}) => (
+const SubHeader = ({title, children}, {tree}) => (
   <header className='mdl-layout__header'>
-    <div className={`mdl-layout__header-row mdl-color--primary-dark ${style.row}`}>
+    <div
+      className={`mdl-layout__header-row mdl-color--${tree.get('debugMode') ? 'grey-800' : 'primary-dark'} ${style.row}`}>
       <Breadcrumbs title={title}/>
       <div className='mdl-layout-spacer'/>
       <span>{children}</span>
@@ -42,6 +43,9 @@ SubHeader.displayName = 'Sub-Header'
 SubHeader.propTypes = {
   title: React.PropTypes.node,
   children: React.PropTypes.node
+}
+SubHeader.contextTypes = {
+  tree: React.PropTypes.object.isRequired
 }
 
 export default styledFnComponent(SubHeader, style)
