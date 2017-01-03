@@ -1,6 +1,9 @@
 import assign from 'lodash/assign'
 import head from 'lodash/head'
+import memoize from 'lodash/memoize'
+import get from 'lodash/get'
 import omit from 'lodash/omit'
+import slice from 'lodash/slice'
 import isEqual from 'lodash/isEqual'
 import forEach from 'lodash/forEach'
 import isArray from 'lodash/isArray'
@@ -29,6 +32,7 @@ function loadReportModuleResult (query, isCrossPlatform, config) {
 }
 
 const lastCall = {}
+const largeResultCache = {}
 
 function dealWithException (tree, params, {message, account: numbersAccount, code}) {
   if (code === 403 && numbersAccount) {
@@ -59,6 +63,10 @@ function dealWithException (tree, params, {message, account: numbersAccount, cod
 }
 
 export function loadReportModuleResultAction (tree, params, id, query, attributes) {
+  const sortConfig = query.sort
+
+  query = omit(query, 'sort')
+
   const isCrossPlatform = inferLevelFromParams(params) !== 'folder'
   const moduleCursor = tree.select(getDeepCursor(tree, compact([
     'user',
@@ -69,6 +77,7 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
     'modules',
     id
   ])))
+
   const isCursorOk = () => moduleCursor && moduleCursor.tree
   const sameQuery = () => isEqual(query, moduleCursor.get('query'))
 
@@ -77,33 +86,66 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
   const isLoadingCursor = moduleCursor.select('isLoading')
   const myCall = lastCall[id] = Date.now()
 
-  function cropped (result) {
-    const sortCol = find(query.sort, ([name]) => (
+  const getSortOptions = memoize(() => {
+    const sortCol = find(sortConfig, ([name]) => (
       includes(query.dimensions, name) ||
       includes(query.metrics, name)
     ))
 
-    if (sortCol) {
-      const [field, order] = sortCol
-      result = orderBy(result, [field], [order])
-    }
+    if (!sortCol) return null
 
-    return result.slice(0, RESULT_LENGTH_LIMIT)
+    const [field, order] = sortCol
+
+    return {field, order}
+  })
+
+  function reorder (result, field, order) {
+    moduleCursor.set('sortCol', {
+      field,
+      order
+    })
+
+    return orderBy(result, [field], [order])
   }
 
-  function saveResult (result) {
+  function sortConfigHasChanged () {
+    const sortOpts = getSortOptions()
+    const currentSortCol = moduleCursor.get('sortCol')
+
+    return (
+      get(sortOpts, 'field') !== get(currentSortCol, 'field') ||
+      get(sortOpts, 'order') !== get(currentSortCol, 'order')
+    )
+  }
+
+  function cropped (result) {
+    const sortOpts = getSortOptions()
+
+    if (sortOpts) {
+      result = reorder(result, sortOpts.field, sortOpts.order)
+    }
+
+    return slice(result, 0, RESULT_LENGTH_LIMIT)
+  }
+
+  function updateModuleResult (result) {
     result = isArray(result)
       ? result
       : []
 
-    const tooLarge = result.length > RESULT_LENGTH_LIMIT
+    if (result.length > RESULT_LENGTH_LIMIT) {
+      largeResultCache[id] = result
 
-    moduleCursor.set('cropped', tooLarge
-      ? {size: result.length}
-      : false)
+      moduleCursor.set('cropped', {size: result.length})
 
-    moduleCursor.set('result', normalizeResult(attributes,
-      tooLarge ? cropped(result) : result))
+      result = cropped(result)
+    } else {
+      delete largeResultCache[id]
+
+      moduleCursor.set('cropped', null)
+    }
+
+    moduleCursor.set('result', normalizeResult(attributes, result))
   }
 
   function onSuccess (response) {
@@ -111,10 +153,11 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
 
     if (isCursorOk()) {
       moduleCursor.set('query', query)
-      saveResult(response.data.result)
+      updateModuleResult(response.data.result)
     }
 
-    forEach(response.data.exceptions, e => dealWithException(tree, params, e))
+    forEach(response.data.exceptions,
+      e => dealWithException(tree, params, e))
 
     tree.commit()
 
@@ -122,14 +165,21 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
   }
 
   function makeTheCall () {
-    if (!isCursorOk() || sameQuery()) {
+    if (!isCursorOk()) return
+
+    if (sameQuery()) {
+      if (largeResultCache[id] && sortConfigHasChanged()) {
+        updateModuleResult(largeResultCache[id])
+      }
+
+      tree.commit()
       return
     }
 
     isLoadingCursor.set(true)
     tree.commit()
 
-    loadReportModuleResult(omit(query, 'sort'), isCrossPlatform, getApiFetchConfig(tree))
+    loadReportModuleResult(query, isCrossPlatform, getApiFetchConfig(tree))
       .then(saveResponseTokenAsCookie)
       .then(onSuccess)
       .catch(pushResponseErrorToState(tree))
@@ -139,12 +189,6 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
     if (lastCall[id] === myCall) {
       makeTheCall()
     }
-  }
-
-  if (sameQuery()) {
-    saveResult(moduleCursor.get('result'))
-    tree.commit()
-    return
   }
 
   if (isLoadingCursor.get()) {
