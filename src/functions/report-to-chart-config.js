@@ -147,7 +147,6 @@ export function reportToChartConfig (type, props) {
   dimensions = without(dimensions, xAxisDimension)
 
   const series = []
-  const multipleMetrics = size(metrics) > 1
   const getEntityById = memoize(id => find(entity.list, {id}) || mockEntity)
 
   function walk (points, xValue) {
@@ -168,7 +167,7 @@ export function reportToChartConfig (type, props) {
 
       function metricIterator (metric, yAxisIndex) {
         const seriesSignature = assign(
-          multipleMetrics ? {metric} : {},
+          size(metrics) > 1 || isEmpty(pointDimensions) ? {metric} : {},
           pointDimensions
         )
 
