@@ -363,7 +363,7 @@ const MailingEdit = React.createClass({
     const noEmails = isEmpty(mailing.emails) && !validEmail(newEmail)
 
     return (
-      <Form onSubmit={this.handleSubmit}>
+      <Form onSubmit={this.handleSubmit} style={{minWidth: 500}}>
         <Header>
           <Message report={mailing.report.name}>
             reportMailingFormTitle
