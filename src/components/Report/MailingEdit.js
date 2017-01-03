@@ -320,12 +320,7 @@ const MailingEdit = React.createClass({
       emails: uniq(emails.concat([newEmail]))
     })
   },
-  onChangeEmail ({target: {value}}) {
-    this.setState({newEmail: value})
-  },
-  handleSubmit (e) {
-    e.preventDefault()
-
+  send () {
     const {state: {newEmail}, props: {params}, context: {router, tree}} = this
     const mailing = assign({}, this.state.mailing)
 
@@ -334,11 +329,17 @@ const MailingEdit = React.createClass({
     }
 
     const save = mailing.id ? updateMailingReportAction : createMailingReportAction
+    let mailingId = mailing.id
 
-    save(tree, params, mailing)
-      .then(response => loadMailingListAction(tree, params).then(() => response))
-      .then(() => router.push(this.getMailingUrl()))
+    return save(tree, params, mailing)
+      .then(response => {
+        mailingId = mailingId || response.data.id
+
+        loadMailingListAction(tree, params)
+      })
       .then(() => pushSuccessMessageAction(tree))
+      .then(() => router.push(this.getMailingUrl()))
+      .then(() => mailingId)
   },
   addOnEnter (e) {
     if (e.which === 13) {
@@ -349,8 +350,15 @@ const MailingEdit = React.createClass({
   run () {
     const {tree} = this.context
 
-    spawnReportMailingAction(tree, this.props.mailing.id)
-      .then(() => pushSuccessMessageAction(tree))
+    this.send().then(id => spawnReportMailingAction(tree, id))
+  },
+  onChangeEmail ({target: {value}}) {
+    this.setState({newEmail: value})
+  },
+  handleSubmit (e) {
+    e.preventDefault()
+
+    this.send()
   },
   render () {
     const {mailing, newEmail} = this.state
@@ -447,22 +455,25 @@ const MailingEdit = React.createClass({
             <Message>cancel</Message>
           </Link>
 
-          {mailing.id &&
-          <Button className='mdl-button' onClick={this.run}>
-            <Message>spawnMailing</Message>
-          </Button>}
-
           {!params.report && (
             <Link to={this.getReportUrl()} className='mdl-button'>
               <Message>mailingReportLink</Message>
             </Link>)}
 
-          <Submit
-            disabled={noEmails}
-            className='mdl-button mdl-button--primary'
-            style={{float: 'right'}}>
-            <Message>save</Message>
-          </Submit>
+          <span style={{float: 'right'}}>
+            <Button
+              disabled={noEmails}
+              className='mdl-button'
+              onClick={this.run}>
+              <Message>saveAndRun</Message>
+            </Button>
+
+            <Submit
+              disabled={noEmails}
+              className='mdl-button mdl-button--primary'>
+              <Message>save</Message>
+            </Submit>
+          </span>
         </Footer>
       </Form>
     )

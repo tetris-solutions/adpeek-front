@@ -301,6 +301,7 @@ module.exports = {
         <strong>{module}</strong> result is too large and was cropped for performance reasons.
         The displayed result contains only the first thousand lines out of <strong>{size}</strong>.`,
   spawnMailing: 'Run mailing',
+  saveAndRun: 'Save & Run',
   unsubscribedEmail: 'User has unsubscribed from list',
   emptyMailing: 'Your email list is empty',
   kpiGoalLabel: 'KPI Goal',
