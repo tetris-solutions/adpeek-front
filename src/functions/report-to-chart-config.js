@@ -3,6 +3,7 @@ import groupBy from 'lodash/groupBy'
 import find from 'lodash/find'
 import forEach from 'lodash/forEach'
 import get from 'lodash/get'
+import size from 'lodash/size'
 import memoize from 'lodash/memoize'
 import includes from 'lodash/includes'
 import isEmpty from 'lodash/isEmpty'
@@ -21,7 +22,7 @@ import isDate from 'lodash/isDate'
 
 const isEntityId = d => d === 'id' || d === 'name'
 const notEntityId = negate(isEntityId)
-const cropped = comment => comment.length > 100
+const cropped = comment => size(comment) > 100
   ? comment.substr(0, 100) + '...'
   : comment
 
@@ -146,7 +147,7 @@ export function reportToChartConfig (type, props) {
   dimensions = without(dimensions, xAxisDimension)
 
   const series = []
-
+  const multipleMetrics = size(metrics) > 1
   const getEntityById = memoize(id => find(entity.list, {id}) || mockEntity)
 
   function walk (points, xValue) {
@@ -166,7 +167,10 @@ export function reportToChartConfig (type, props) {
       const referenceEntity = getEntityById(point.id)
 
       function metricIterator (metric, yAxisIndex) {
-        const seriesSignature = assign({metric}, pointDimensions)
+        const seriesSignature = assign(
+          multipleMetrics ? {metric} : {},
+          pointDimensions
+        )
 
         function getNewSeries () {
           const descriptors = map(seriesSignature, (val, key) => `${key}(${val})`)
@@ -186,7 +190,7 @@ export function reportToChartConfig (type, props) {
             nameParts.unshift(referenceEntity.name)
           }
 
-          if (nameParts.length) {
+          if (!isEmpty(nameParts)) {
             newSeries.name = nameParts.join(', ')
           }
 
@@ -251,7 +255,7 @@ export function reportToChartConfig (type, props) {
         return {
           id: date,
           x: Date.UTC(year, month - 1, day),
-          title: String(groupOfComments.length),
+          title: String(size(groupOfComments)),
           text: join(map(groupOfComments, ({user, body}) => `<strong>${user.name}</strong>: ${cropped(body)}`), '<br/>')
         }
       })
@@ -286,20 +290,15 @@ export function reportToChartConfig (type, props) {
     }
   }
 
-  if (categories.length) {
+  if (!isEmpty(categories)) {
     config.xAxis.categories = categories
   }
 
   function pointFormatter () {
     const attribute = attributes[this.options.metric]
     const value = prettyNumber(this.y, attribute.type, props.locales)
-    const {seriesSignature} = this.series.options
 
-    const metricName = Object.keys(seriesSignature).length > 1
-      ? this.series.name // if series is not just a simple metric, use it's previously calculated name on tooltip
-      : attribute.name
-
-    return `<span style="color: ${this.color}">${metricName}:</span> <b>${value}</b><br/>`
+    return `<span style="color: ${this.color}">${this.series.name}:</span> <b>${value}</b><br/>`
   }
 
   set(config, ['plotOptions', 'series', 'tooltip', 'pointFormatter'], pointFormatter)
