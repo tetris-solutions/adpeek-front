@@ -14,6 +14,9 @@ const style = csjs`
 .strong {
   display: inline;
   white-space: nowrap;
+}
+.icon {
+  float: right;
 }`
 const dFormat = 'DD/MMM'
 
@@ -44,6 +47,11 @@ const Order = ({dispatch, amount, auto_budget, start, end, company, workspace, f
 
       <Title>
         {prettyNumber(amount, 'currency', locales)}
+
+        <i className={`material-icons mdl-color-text--grey-600 ${style.icon}`}>{
+          auto_budget
+            ? 'play_arrow'
+            : 'pause'}</i>
       </Title>
 
       <Gear>
