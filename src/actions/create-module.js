@@ -2,15 +2,17 @@ import assign from 'lodash/assign'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {POST} from '@tetris/http'
 import compact from 'lodash/compact'
-
+import {inferLevelFromParams} from '../functions/infer-level-from-params'
 import {getDeepCursor} from '../functions/get-deep-cursor'
 
-function createModule (company, report, module, config) {
-  return POST(`${process.env.ADPEEK_API_URL}/company/${company}/report/${report}/module`,
+function createModule (entity, entityId, report, module, config) {
+  return POST(`${process.env.ADPEEK_API_URL}/${entity}/${entityId}/report/${report}/module`,
     assign({body: module}, config))
 }
 
-export function createModuleReportAction (tree, {company, workspace, folder, report}, module) {
+export function createModuleReportAction (tree, params, module) {
+  const {company, workspace, folder, report} = params
+  const level = inferLevelFromParams(params)
   const path = compact([
     'user',
     ['companies', company],
@@ -20,7 +22,7 @@ export function createModuleReportAction (tree, {company, workspace, folder, rep
     'modules'
   ])
 
-  return createModule(company, report, module, getApiFetchConfig(tree))
+  return createModule(level, params[level], report, module, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .then(function onSuccess (response) {
       path.push(response.data.id)

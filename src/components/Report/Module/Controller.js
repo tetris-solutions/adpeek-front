@@ -135,6 +135,7 @@ const ModuleController = React.createClass({
     return {
       metrics: module.metrics,
       dimensions: module.dimensions,
+      sort: module.sort,
       to: reportParams.to,
       from: reportParams.from,
       accounts: this.getUsedAccounts(module.filters.id),

@@ -1,9 +1,12 @@
 import assign from 'lodash/assign'
 import head from 'lodash/head'
+import omit from 'lodash/omit'
 import isEqual from 'lodash/isEqual'
 import forEach from 'lodash/forEach'
 import isArray from 'lodash/isArray'
 import find from 'lodash/find'
+import orderBy from 'lodash/orderBy'
+import includes from 'lodash/includes'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {POST} from '@tetris/http'
 import {normalizeResult} from '../functions/normalize-result'
@@ -69,29 +72,46 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
   const isCursorOk = () => moduleCursor && moduleCursor.tree
   const sameQuery = () => isEqual(query, moduleCursor.get('query'))
 
-  if (!isCursorOk() || !isvalidReportQuery(moduleCursor.get('type'), query) || sameQuery()) return
+  if (!isCursorOk() || !isvalidReportQuery(moduleCursor.get('type'), query)) return
 
   const isLoadingCursor = moduleCursor.select('isLoading')
   const myCall = lastCall[id] = Date.now()
+
+  function cropped (result) {
+    const sortCol = find(query.sort, ([name]) => (
+      includes(query.dimensions, name) ||
+      includes(query.metrics, name)
+    ))
+
+    if (sortCol) {
+      const [field, order] = sortCol
+      result = orderBy(result, [field], [order])
+    }
+
+    return result.slice(0, RESULT_LENGTH_LIMIT)
+  }
+
+  function saveResult (result) {
+    result = isArray(result)
+      ? result
+      : []
+
+    const tooLarge = result.length > RESULT_LENGTH_LIMIT
+
+    moduleCursor.set('cropped', tooLarge
+      ? {size: result.length}
+      : false)
+
+    moduleCursor.set('result', normalizeResult(attributes,
+      tooLarge ? cropped(result) : result))
+  }
 
   function onSuccess (response) {
     isLoadingCursor.set(false)
 
     if (isCursorOk()) {
       moduleCursor.set('query', query)
-
-      const result = isArray(response.data.result)
-        ? response.data.result
-        : []
-
-      const tooLarge = result.length > RESULT_LENGTH_LIMIT
-
-      moduleCursor.set('cropped', tooLarge
-        ? {size: result.length}
-        : false)
-
-      moduleCursor.set('result', normalizeResult(attributes,
-        tooLarge ? result.slice(0, RESULT_LENGTH_LIMIT) : result))
+      saveResult(response.data.result)
     }
 
     forEach(response.data.exceptions, e => dealWithException(tree, params, e))
@@ -109,7 +129,7 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
     isLoadingCursor.set(true)
     tree.commit()
 
-    loadReportModuleResult(query, isCrossPlatform, getApiFetchConfig(tree))
+    loadReportModuleResult(omit(query, 'sort'), isCrossPlatform, getApiFetchConfig(tree))
       .then(saveResponseTokenAsCookie)
       .then(onSuccess)
       .catch(pushResponseErrorToState(tree))
@@ -119,6 +139,12 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
     if (lastCall[id] === myCall) {
       makeTheCall()
     }
+  }
+
+  if (sameQuery()) {
+    saveResult(moduleCursor.get('result'))
+    tree.commit()
+    return
   }
 
   if (isLoadingCursor.get()) {
