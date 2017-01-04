@@ -24,6 +24,9 @@ const style = csjs`
   position: absolute;
   bottom: 20px;
   right: 20px;
+}
+.hidden {
+  display: none
 }`
 
 const typeComponent = {
@@ -51,7 +54,6 @@ const ChartContainer = React.createClass({
   displayName: 'Chart',
   mixins: [styled(style)],
   propTypes: {
-    height: React.PropTypes.number.isRequired,
     change: React.PropTypes.func
   },
   contextTypes: {
@@ -85,7 +87,6 @@ const ChartContainer = React.createClass({
 
     return (
       nextState.renderHiddenTable !== this.state.renderHiddenTable ||
-      nextProps.height !== this.props.height ||
       newModule.comments !== oldModule.comments ||
       newModule.sort !== oldModule.sort ||
       newModule.limit !== oldModule.limit ||
@@ -99,7 +100,7 @@ const ChartContainer = React.createClass({
   render () {
     const {renderHiddenTable} = this.state
     const {module, locales, reportParams, entity, attributes} = this.context
-    const {height, change} = this.props
+    const {change} = this.props
     const Chart = typeComponent[module.type]
 
     const config = {
@@ -121,10 +122,10 @@ const ChartContainer = React.createClass({
     }
 
     return (
-      <div style={{position: 'relative', height}}>
+      <div>
         <div className={`${style.wrap}`}>
           <Chart {...config}/>
-          <div ref='interface' style={{display: 'none'}} data-interface>
+          <div ref='interface' className={`${style.hidden}`} data-interface>
             {renderHiddenTable
               ? <Table {...config}/>
               : null}

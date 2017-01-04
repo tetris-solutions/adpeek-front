@@ -54,6 +54,10 @@ const gTMIFrame = process.env.NODE_ENV === 'production'
   : null
 
 const revSuffix = process.env.BUILD_PROD ? `.${revision.short()}` : ''
+const hardCodedStyle = `
+.react-resizable-handle {
+  z-index: 3;
+}`
 
 const HTML = ({payload, children, css}) => (
   <html>
@@ -80,6 +84,7 @@ const HTML = ({payload, children, css}) => (
 
       <style dangerouslySetInnerHTML={{__html: paceCss}}/>
       <style id='style-injection' dangerouslySetInnerHTML={{__html: css}}/>
+      <style dangerouslySetInnerHTML={{__html: hardCodedStyle}}/>
 
       {gTMScript}
       <script src='https://cdn.rawgit.com/HubSpot/pace/v1.0.0/pace.min.js' async/>
