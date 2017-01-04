@@ -18,10 +18,9 @@ import filter from 'lodash/filter'
 import includes from 'lodash/includes'
 import {Button} from '../../Button'
 import Comments from './Comments'
-import Message from 'tetris-iso/Message'
-import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
-import {prettyNumber} from '../../../functions/pretty-number'
+import CroppedResultDialog from './CroppedResultDialog'
 import TextMessage from 'intl-messageformat'
+import DescriptionDialog from './DescriptionDialog'
 
 const reportContext = [
   'report',
@@ -37,48 +36,6 @@ const reportContext = [
 ]
 
 const getAccountKeyFromId = id => id.substr(0, id.lastIndexOf(':'))
-
-const CroppedResultAlert = ({module, size}, {messages, locales}) => (
-  <ButtonWithPrompt
-    tag={props => <Button {...props} title={messages.croppedResultAlertTitle}/>}
-    label={<i className='material-icons'>error</i>}
-    className='mdl-button mdl-button--icon'>
-    {({dismiss}) => (
-      <div className='mdl-grid'>
-        <div className='mdl-cell mdl-cell--12-col'>
-          <h3>
-            <Message>croppedResultAlertTitle</Message>
-          </h3>
-        </div>
-        <div className='mdl-cell mdl-cell--12-col'>
-          <blockquote style={{fontSize: '12pt'}}>
-            <Message html module={module} size={prettyNumber(size, 'decimal', locales)}>
-              croppedResultAlertBody
-            </Message>
-          </blockquote>
-          <br/>
-          <br/>
-          <hr/>
-        </div>
-
-        <div className='mdl-cell mdl-cell--12-col'>
-          <Button onClick={dismiss} className='mdl-button mdl-button--primary'>
-            <Message>close</Message>
-          </Button>
-        </div>
-      </div>
-    )}
-  </ButtonWithPrompt>
-)
-CroppedResultAlert.displayName = 'Cropped-Result-Alert'
-CroppedResultAlert.propTypes = {
-  module: React.PropTypes.string.isRequired,
-  size: React.PropTypes.number.isRequired
-}
-CroppedResultAlert.contextTypes = {
-  messages: React.PropTypes.object.isRequired,
-  locales: React.PropTypes.string.isRequired
-}
 
 const ModuleController = React.createClass({
   displayName: 'Module-Controller',
@@ -203,9 +160,11 @@ const ModuleController = React.createClass({
       <ModuleCard>
         <div className='mdl-card__menu'>
           {module.cropped &&
-          <CroppedResultAlert
+          <CroppedResultDialog
             size={module.cropped.size}
             module={module.name}/>}
+
+          {module.description && <DescriptionDialog module={module}/>}
 
           <Comments {...{dispatch, module, params}}/>
 
