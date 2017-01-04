@@ -91,14 +91,14 @@ export function serializeReportModules (modules, type) {
     Highcharts.downloadURL = originalDownloadMethod
   }
 
-  const exportChart = ({id, name, el, comments}) =>
+  const exportChart = ({id, name, el, comments, description}) =>
     new Promise(function resolveSerializedModule (resolve) {
       const isTable = el.querySelector('table')
 
       function exportHC () {
         const highChart = el.querySelector('div[data-highcharts-chart]')
         // hack highcharts download method
-        Highcharts.downloadURL = img => resolve({name, img, comments})
+        Highcharts.downloadURL = img => resolve({name, img, comments, description})
         highChart.HCharts.exportChartLocal()
       }
 
@@ -106,6 +106,7 @@ export function serializeReportModules (modules, type) {
         const table = el.querySelector('table')
         const module = {
           comments,
+          description,
           name,
           headers: [],
           rows: []

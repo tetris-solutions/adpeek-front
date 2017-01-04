@@ -36,7 +36,7 @@ const DescriptionDialog = ({module}, {messages}) => (
 )
 DescriptionDialog.displayName = 'Description-Dialog'
 DescriptionDialog.propTypes = {
-  module: React.PropTypes.string.isRequired
+  module: React.PropTypes.object.isRequired
 }
 DescriptionDialog.contextTypes = {
   messages: React.PropTypes.object.isRequired
