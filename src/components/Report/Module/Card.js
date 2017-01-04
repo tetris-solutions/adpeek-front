@@ -24,7 +24,7 @@ const ModuleCard = React.createClass({
     this.repaintChart = cols !== module.cols || rows !== module.rows
   },
   componentDidMount () {
-    this.resizer = () => this.reflow()
+    this.resizer = () => setTimeout(this.reflow, 1000)
     window.event$.on('aside-toggle', this.resizer)
   },
   componentDidUpdate () {
