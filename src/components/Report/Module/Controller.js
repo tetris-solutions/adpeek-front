@@ -8,7 +8,6 @@ import reportParamsType from '../../../propTypes/report-params'
 import ModuleCard from './Card'
 import {deleteModuleAction} from '../../../actions/delete-module'
 import {loadReportModuleResultAction} from '../../../actions/load-report-module-result'
-import {cloneModuleAction} from '../../../actions/clone-module'
 import {updateModuleAction} from '../../../actions/update-module'
 import Editor from './Editor/Controller'
 import Modal from 'tetris-iso/Modal'
@@ -43,10 +42,10 @@ const ModuleController = React.createClass({
     params: React.PropTypes.object.isRequired,
     dispatch: React.PropTypes.func.isRequired,
     editable: React.PropTypes.bool,
+    clone: React.PropTypes.func.isRequired,
     module: moduleType.isRequired,
     attributes: React.PropTypes.object.isRequired,
     entity: reportEntityType.isRequired,
-    openModuleEditor: React.PropTypes.func.isRequired,
     editMode: React.PropTypes.bool.isRequired
   },
   contextTypes: {
@@ -133,18 +132,11 @@ const ModuleController = React.createClass({
     return dispatch(updateModuleAction, params, module.id, moduleChanges, persistChanges)
   },
   clone () {
-    const {params, dispatch, module} = this.props
+    const {module} = this.props
     const {messages: {copyOfName}, locales} = this.context
+    const name = new TextMessage(copyOfName, locales).format({name: module.name})
 
-    const newModule = {
-      index: module.index,
-      name: new TextMessage(copyOfName, locales).format({name: module.name})
-    }
-
-    return dispatch(cloneModuleAction, params, module.id, newModule)
-      .then(response => {
-        this.props.openModuleEditor(response.data.id)
-      })
+    this.props.clone(module.id, name)
   },
   openModal () {
     this.setState({editMode: true})

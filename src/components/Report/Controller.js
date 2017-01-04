@@ -16,6 +16,7 @@ import {serializeReportModules} from '../../functions/seralize-report-modules'
 import {loadReportAction} from '../../actions/load-report'
 import {setDefaultReportAction} from '../../actions/set-default-report'
 import {updateReportLayoutAction} from '../../actions/update-report-layout'
+import {cloneModuleAction} from '../../actions/clone-module'
 import GridLayout, {WidthProvider} from 'react-grid-layout'
 import ReportScreen from './Screen'
 
@@ -119,6 +120,20 @@ const ReportController = React.createClass({
       }
     })
   },
+  cloneModule (id, name) {
+    const {params, dispatch, report} = this.props
+    const lastY = max(map(report.modules, 'y'))
+    const y = (isNumber(lastY) ? lastY : -1) + 1
+
+    const newModule = {
+      name,
+      y,
+      x: 0
+    }
+
+    return dispatch(cloneModuleAction, params, id, newModule)
+      .then(response => this.openModuleEditor(response.data.id))
+  },
   downloadReport (type, config) {
     const {dispatch, params, report} = this.props
     const {grid} = this.refs
@@ -205,7 +220,7 @@ const ReportController = React.createClass({
                     module={module}
                     editable={editMode}
                     metaData={get(metaData, module.entity)}
-                    openModuleEditor={this.openModuleEditor}
+                    clone={this.cloneModule}
                     editMode={openModule === module.id}/>
                 </div>)}
             </Grid>
