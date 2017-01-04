@@ -17,10 +17,12 @@ import {loadReportAction} from '../../actions/load-report'
 import {setDefaultReportAction} from '../../actions/set-default-report'
 import {updateReportLayoutAction} from '../../actions/update-report-layout'
 import {cloneModuleAction} from '../../actions/clone-module'
-import GridLayout, {WidthProvider} from 'react-grid-layout'
+import GridLayout from 'react-grid-layout'
+import sizeMe from 'react-sizeme'
 import ReportScreen from './Screen'
 
-const Grid = WidthProvider(GridLayout)
+const Grid = sizeMe()(props => <GridLayout width={props.size.width} {...props}/>)
+
 const getAccountKey = ({tetris_account, ad_account}) => `${tetris_account}:${ad_account}`
 const insertId = a => assign({}, a, {id: getAccountKey(a)})
 
