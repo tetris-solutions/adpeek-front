@@ -157,7 +157,6 @@ module.exports = {
   invalidAttributePermutation: 'Erro - {inserted} não pode ser selecionado junto com {list}',
   filterLabel: 'Filtrar',
   moduleContent: 'Configurar Relatório',
-  moduleSize: 'Configurar Tamanho',
   filterModuleResult: 'Filtrar Resultado',
   reports: 'Relatórios',
   // breadcrumbs

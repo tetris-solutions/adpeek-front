@@ -158,7 +158,6 @@ module.exports = {
   invalidAttributePermutation: 'Selection canceled - {inserted} can not be used with {list}',
   filterLabel: 'Filter',
   moduleContent: 'Report Options',
-  moduleSize: 'Module Size',
   filterModuleResult: 'Filter Result',
   reports: 'Reports',
   // breadcrumbs

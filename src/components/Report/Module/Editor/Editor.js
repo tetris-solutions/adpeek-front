@@ -3,7 +3,6 @@ import csjs from 'csjs'
 import Message from 'tetris-iso/Message'
 import DateRangeButton from '../../DateRangeButton'
 import Lists from './Lists'
-import Size from './Size'
 import Description from './Description'
 import Filters from './Filters'
 import Preview from './Preview'
@@ -108,10 +107,6 @@ const Editor = React.createClass({
             <Tabs>
               <Tab id='module-content' title={messages.moduleContent}>
                 <Preview />
-              </Tab>
-              <Tab id='module-size' title={messages.moduleSize}>
-                <br/>
-                <Size />
               </Tab>
               <Tab id='module-description' title={messages.moduleDescriptionTitle}>
                 <Description />
