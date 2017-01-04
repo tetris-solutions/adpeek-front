@@ -186,6 +186,7 @@ module.exports = {
   editReportPromptTitle: 'Confirm report edit',
   editReportPromptBody: 'You\'re about to open the shared report <strong>{name}</strong> for editing, are you\'re sure about this?',
   cloneReport: 'Clone Report',
+  cloneModule: 'Clone Module',
   deleteReport: 'Delete Report',
   checkDefaultReport: 'Set as Default',
   checkDefaultReportDescription: 'Make Report the default',

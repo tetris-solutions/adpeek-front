@@ -158,9 +158,14 @@ const ReportController = React.createClass({
 
     return {accounts, from, to}
   },
+  openModuleEditor (id) {
+    this.setState({
+      openModule: id
+    })
+  },
   render () {
     const {params, dispatch, children, reportLiteMode, editMode, metaData, report} = this.props
-    const {isCreatingReport} = this.state
+    const {isCreatingReport, openModule} = this.state
 
     return (
       <ReportScreen
@@ -171,7 +176,7 @@ const ReportController = React.createClass({
         isCreatingReport={isCreatingReport}
         shareUrl={report.shareUrl}>
 
-        <div className='mdl-grid' ref='grid'>{map(sortBy(report.modules, 'index'), (module, index) =>
+        <div className='mdl-grid' ref='grid'>{map(sortBy(report.modules, ['index', 'creation']), (module, index) =>
           <div
             key={module.id}
             data-module-id={module.id}
@@ -183,7 +188,9 @@ const ReportController = React.createClass({
               dispatch={dispatch}
               module={module}
               editable={editMode}
-              metaData={get(metaData, module.entity)}/>
+              metaData={get(metaData, module.entity)}
+              openModuleEditor={this.openModuleEditor}
+              editMode={openModule === module.id}/>
           </div>)}
         </div>
 

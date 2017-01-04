@@ -8,6 +8,7 @@ import reportParamsType from '../../../propTypes/report-params'
 import ModuleCard from './Card'
 import {deleteModuleAction} from '../../../actions/delete-module'
 import {loadReportModuleResultAction} from '../../../actions/load-report-module-result'
+import {cloneModuleAction} from '../../../actions/clone-module'
 import {updateModuleAction} from '../../../actions/update-module'
 import Editor from './Editor/Controller'
 import Modal from 'tetris-iso/Modal'
@@ -20,6 +21,8 @@ import Comments from './Comments'
 import Message from 'tetris-iso/Message'
 import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
 import {prettyNumber} from '../../../functions/pretty-number'
+import TextMessage from 'intl-messageformat'
+
 const reportContext = [
   'report',
   'reportParams',
@@ -85,10 +88,13 @@ const ModuleController = React.createClass({
     editable: React.PropTypes.bool,
     module: moduleType.isRequired,
     attributes: React.PropTypes.object.isRequired,
-    entity: reportEntityType.isRequired
+    entity: reportEntityType.isRequired,
+    openModuleEditor: React.PropTypes.func.isRequired,
+    editMode: React.PropTypes.bool.isRequired
   },
   contextTypes: {
     messages: React.PropTypes.object.isRequired,
+    locales: React.PropTypes.string.isRequired,
     report: React.PropTypes.object.isRequired,
     reportParams: reportParamsType.isRequired
   },
@@ -117,6 +123,11 @@ const ModuleController = React.createClass({
   componentDidMount () {
     this.fetchResult = debounce(this.startResultLoadingAction, 1000)
     this.fetchResult(this.getChartQuery())
+  },
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.editMode && !this.props.editMode) {
+      this.openModal()
+    }
   },
   componentDidUpdate () {
     this.fetchResult(this.getChartQuery())
@@ -164,6 +175,20 @@ const ModuleController = React.createClass({
 
     return dispatch(updateModuleAction, params, module.id, moduleChanges, persistChanges)
   },
+  clone () {
+    const {params, dispatch, module} = this.props
+    const {messages: {copyOfName}, locales} = this.context
+
+    const newModule = {
+      index: module.index,
+      name: new TextMessage(copyOfName, locales).format({name: module.name})
+    }
+
+    return dispatch(cloneModuleAction, params, module.id, newModule)
+      .then(response => {
+        this.props.openModuleEditor(response.data.id)
+      })
+  },
   openModal () {
     this.setState({editMode: true})
   },
@@ -172,6 +197,7 @@ const ModuleController = React.createClass({
   },
   render () {
     const {params, dispatch, module, editable} = this.props
+    const {messages: {untitledModule: defaultName, cloneModule: cloneLabel}} = this.context
 
     return (
       <ModuleCard>
@@ -185,6 +211,12 @@ const ModuleController = React.createClass({
 
           {editable &&
 
+          <Button className='mdl-button mdl-button--icon' title={cloneLabel} onClick={this.clone}>
+            <i className='material-icons'>content_copy</i>
+          </Button>}
+
+          {editable &&
+
           <Button className='mdl-button mdl-button--icon' onClick={this.openModal}>
             <i className='material-icons'>create</i>
           </Button>}
@@ -194,7 +226,7 @@ const ModuleController = React.createClass({
           <DeleteButton
             className='mdl-button mdl-button--icon'
             onClick={this.remove}
-            entityName={module.name || this.context.messages.untitledModule}>
+            entityName={module.name || defaultName}>
             <i className='material-icons'>clear</i>
           </DeleteButton>}
         </div>

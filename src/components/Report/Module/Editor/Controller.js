@@ -236,7 +236,7 @@ const ModuleEdit = React.createClass({
     const ids = map(this.getDraftEntity().list, 'id')
     const canSafelyAssumeFullSelection = (
       activeOnly &&
-      diff(ids, draftModule.filters.id).length === 0
+      isEmpty(diff(ids, draftModule.filters.id))
     )
 
     if (canSafelyAssumeFullSelection) {
