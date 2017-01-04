@@ -74,6 +74,8 @@ const HTML = ({payload, children, css}) => (
 
       <link rel='stylesheet' href='/css/mdl-selectfield.min.css'/>
       <link rel='stylesheet' href='/css/animate.min.css'/>
+      <link rel='stylesheet' href='/css/react-grid-layout.css'/>
+      <link rel='stylesheet' href='/css/react-resizable.css'/>
       <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css'/>
 
       <style dangerouslySetInnerHTML={{__html: paceCss}}/>

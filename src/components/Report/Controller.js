@@ -4,7 +4,6 @@ import assign from 'lodash/assign'
 import map from 'lodash/map'
 import max from 'lodash/max'
 import uniqBy from 'lodash/uniqBy'
-import sortBy from 'lodash/sortBy'
 import React from 'react'
 import entityType from '../../propTypes/report-entity'
 import reportType from '../../propTypes/report'
@@ -15,8 +14,10 @@ import {exportReportAction} from '../../actions/export-report'
 import {serializeReportModules} from '../../functions/seralize-report-modules'
 import {loadReportAction} from '../../actions/load-report'
 import {setDefaultReportAction} from '../../actions/set-default-report'
-
+import GridLayout, {WidthProvider} from 'react-grid-layout'
 import ReportScreen from './Screen'
+
+const Grid = WidthProvider(GridLayout)
 const getAccountKey = ({tetris_account, ad_account}) => `${tetris_account}:${ad_account}`
 const insertId = a => assign({}, a, {id: getAccountKey(a)})
 
@@ -167,6 +168,9 @@ const ReportController = React.createClass({
     const {params, dispatch, children, reportLiteMode, editMode, metaData, report} = this.props
     const {isCreatingReport, openModule} = this.state
 
+    const layout = map(report.modules,
+      ({id: i, x, y, rows: h, cols: w}) => ({i, x, y, w, h, static: !editMode}))
+
     return (
       <ReportScreen
         report={report}
@@ -176,22 +180,21 @@ const ReportController = React.createClass({
         isCreatingReport={isCreatingReport}
         shareUrl={report.shareUrl}>
 
-        <div className='mdl-grid' ref='grid'>{map(sortBy(report.modules, ['index', 'creation']), (module, index) =>
-          <div
-            key={module.id}
-            data-module-id={module.id}
-            data-module-type={module.type}
-            className={`mdl-cell mdl-cell--${module.cols}-col`}>
-
-            <Module
-              params={params}
-              dispatch={dispatch}
-              module={module}
-              editable={editMode}
-              metaData={get(metaData, module.entity)}
-              openModuleEditor={this.openModuleEditor}
-              editMode={openModule === module.id}/>
-          </div>)}
+        <div className='mdl-grid' ref='grid'>
+          <div className='mdl-cell mdl-cell--12-col'>
+            <Grid layout={layout} rowHeight={100}>{map(report.modules, (module, index) =>
+              <div key={module.id} data-module-id={module.id} data-module-type={module.type}>
+                <Module
+                  params={params}
+                  dispatch={dispatch}
+                  module={module}
+                  editable={editMode}
+                  metaData={get(metaData, module.entity)}
+                  openModuleEditor={this.openModuleEditor}
+                  editMode={openModule === module.id}/>
+              </div>)}
+            </Grid>
+          </div>
         </div>
 
         {children || null}

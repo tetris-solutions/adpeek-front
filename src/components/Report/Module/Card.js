@@ -2,11 +2,16 @@ import csjs from 'csjs'
 import React from 'react'
 import Chart from '../Chart/Chart'
 import {styled} from '../../mixins/styled'
+import sizeMe from 'react-sizeme'
 
 const style = csjs`
 .card, .content, .content > div {
   width: 100%;
+  height: 100%;
 }`
+
+const ChartRenderer = sizeMe({monitorHeight: true})(props =>
+  <Chart height={props.size.height}/>)
 
 const ModuleCard = React.createClass({
   displayName: 'Module-Card',
@@ -46,7 +51,7 @@ const ModuleCard = React.createClass({
     return (
       <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
         <div ref='chartWrapper' className={`mdl-card__title mdl-card--expand ${style.content}`}>
-          <Chart height={this.context.module.rows * 100}/>
+          <ChartRenderer />
         </div>
         {this.props.children}
       </div>
