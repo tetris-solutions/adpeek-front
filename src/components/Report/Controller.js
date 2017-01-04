@@ -14,6 +14,7 @@ import {exportReportAction} from '../../actions/export-report'
 import {serializeReportModules} from '../../functions/seralize-report-modules'
 import {loadReportAction} from '../../actions/load-report'
 import {setDefaultReportAction} from '../../actions/set-default-report'
+import {updateReportLayoutAction} from '../../actions/update-report-layout'
 import GridLayout, {WidthProvider} from 'react-grid-layout'
 import ReportScreen from './Screen'
 
@@ -164,6 +165,17 @@ const ReportController = React.createClass({
       openModule: id
     })
   },
+  onLayoutChange (layout) {
+    if (!this.layoutInstalled) {
+      this.layoutInstalled = true
+      return
+    }
+
+    const {params, dispatch} = this.props
+
+    Promise.resolve()
+      .then(() => dispatch(updateReportLayoutAction, params, layout))
+  },
   render () {
     const {params, dispatch, children, reportLiteMode, editMode, metaData, report} = this.props
     const {isCreatingReport, openModule} = this.state
@@ -182,17 +194,18 @@ const ReportController = React.createClass({
 
         <div className='mdl-grid' ref='grid'>
           <div className='mdl-cell mdl-cell--12-col'>
-            <Grid layout={layout} rowHeight={100}>{map(report.modules, (module, index) =>
-              <div key={module.id} data-module-id={module.id} data-module-type={module.type}>
-                <Module
-                  params={params}
-                  dispatch={dispatch}
-                  module={module}
-                  editable={editMode}
-                  metaData={get(metaData, module.entity)}
-                  openModuleEditor={this.openModuleEditor}
-                  editMode={openModule === module.id}/>
-              </div>)}
+            <Grid layout={layout} rowHeight={100} onLayoutChange={this.onLayoutChange}>
+              {map(report.modules, (module, index) =>
+                <div key={module.id} data-module-id={module.id} data-module-type={module.type}>
+                  <Module
+                    params={params}
+                    dispatch={dispatch}
+                    module={module}
+                    editable={editMode}
+                    metaData={get(metaData, module.entity)}
+                    openModuleEditor={this.openModuleEditor}
+                    editMode={openModule === module.id}/>
+                </div>)}
             </Grid>
           </div>
         </div>

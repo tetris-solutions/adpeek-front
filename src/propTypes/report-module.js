@@ -11,8 +11,8 @@ export default React.PropTypes.shape({
     'total'
   ]),
   entity: React.PropTypes.string.isRequired,
-  cols: React.PropTypes.oneOf([12, 8, 6, 4]).isRequired,
-  rows: React.PropTypes.oneOf([1, 2, 3, 4, 5, 6]).isRequired,
+  cols: React.PropTypes.number.isRequired,
+  rows: React.PropTypes.number.isRequired,
   dimensions: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
   metrics: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
   filters: React.PropTypes.shape({
