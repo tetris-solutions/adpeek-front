@@ -2,6 +2,7 @@ import get from 'lodash/get'
 import isNumber from 'lodash/isNumber'
 import assign from 'lodash/assign'
 import map from 'lodash/map'
+import size from 'lodash/size'
 import max from 'lodash/max'
 import uniqBy from 'lodash/uniqBy'
 import React from 'react'
@@ -102,14 +103,15 @@ const ReportController = React.createClass({
   },
   addNewModule () {
     const {report, params, dispatch} = this.props
-    const {messages} = this.context
-    const lastIndex = max(map(report.modules, 'index'))
-    const index = (isNumber(lastIndex) ? lastIndex : -1) + 1
+    const {messages: {module: defaultModuleName}} = this.context
+    const lastY = max(map(report.modules, 'y'))
+    const y = (isNumber(lastY) ? lastY : -1) + 1
 
     dispatch(createModuleReportAction, params, {
       type: 'line',
-      name: messages.module + ' ' + (index + 1),
-      index,
+      name: defaultModuleName + ' ' + size(report.modules),
+      x: 0,
+      y,
       entity: 'Campaign',
       filters: {
         id: [],
