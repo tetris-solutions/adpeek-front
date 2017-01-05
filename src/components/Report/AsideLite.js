@@ -8,7 +8,7 @@ const AsideLite = ({report}) => (
 
     {report.description &&
     <blockquote
-      style={{fontSize: '9pt', margin: '0 2em'}}
+      style={{fontSize: '10pt', margin: '0 2em'}}
       dangerouslySetInnerHTML={{__html: report.description.replace(/\n/g, '<br/>')}}/>}
   </Navigation>
 )
