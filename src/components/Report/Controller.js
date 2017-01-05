@@ -1,15 +1,16 @@
-import get from 'lodash/get'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import isEqual from 'lodash/isEqual'
 import isNumber from 'lodash/isNumber'
 import assign from 'lodash/assign'
 import map from 'lodash/map'
+import pick from 'lodash/pick'
 import size from 'lodash/size'
 import max from 'lodash/max'
 import uniqBy from 'lodash/uniqBy'
-import React from 'react'
 import entityType from '../../propTypes/report-entity'
 import reportType from '../../propTypes/report'
 import reportParamsType from '../../propTypes/report-params'
-import Module from './Module/Container'
 import {createModuleReportAction} from '../../actions/create-module'
 import {exportReportAction} from '../../actions/export-report'
 import {serializeReportModules} from '../../functions/seralize-report-modules'
@@ -17,14 +18,12 @@ import {loadReportAction} from '../../actions/load-report'
 import {setDefaultReportAction} from '../../actions/set-default-report'
 import {updateReportLayoutAction} from '../../actions/update-report-layout'
 import {cloneModuleAction} from '../../actions/clone-module'
-import GridLayout from 'react-grid-layout'
-import sizeMe from 'react-sizeme'
 import ReportScreen from './Screen'
-
-const Grid = sizeMe()(props => <GridLayout width={props.size.width} {...props}/>)
+import ReportGrid from './Grid'
 
 const getAccountKey = ({tetris_account, ad_account}) => `${tetris_account}:${ad_account}`
 const insertId = a => assign({}, a, {id: getAccountKey(a)})
+const cleanLayout = l => pick(l, 'i', 'x', 'y', 'w', 'h', 'static')
 
 const ReportController = React.createClass({
   displayName: 'Report-Controller',
@@ -65,7 +64,8 @@ const ReportController = React.createClass({
   },
   getInitialState () {
     return {
-      isCreatingReport: false
+      isCreatingReport: false,
+      layout: this.calculateLayout()
     }
   },
   componentDidMount () {
@@ -79,6 +79,7 @@ const ReportController = React.createClass({
   componentWillReceiveProps (nextProps, nextContext) {
     this.ensureDateRange(nextContext)
   },
+
   ensureDateRange (context = this.context) {
     if (!context.location.query.from) {
       this.navigateToNewRange(this.getCurrentRange(), 'replace', context)
@@ -138,10 +139,10 @@ const ReportController = React.createClass({
   },
   downloadReport (type, config) {
     const {dispatch, params, report} = this.props
-    const {grid} = this.refs
+    const container = ReactDOM.findDOMNode(this)
 
     function getModuleElement ({id, name, comments, description}) {
-      const el = grid.querySelector(`div[data-module-id="${id}"]`)
+      const el = container.querySelector(`div[data-module-id="${id}"]`)
 
       return {id, el, name, comments, description}
     }
@@ -184,23 +185,41 @@ const ReportController = React.createClass({
       openModule: id
     })
   },
-  onLayoutChange (layout) {
-    if (!this.layoutInstalled) {
-      this.layoutInstalled = true
-      return
+  calculateLayout (layout = null) {
+    const {report, editMode} = this.props
+
+    if (layout) {
+      layout = map(layout, m => assign(cleanLayout(m), {static: !editMode}))
+    } else {
+      layout = map(report.modules, ({id: i, x, y, rows: h, cols: w}) => ({
+        i,
+        x,
+        y,
+        w,
+        h,
+        static: !editMode
+      }))
     }
 
+    return this.state && isEqual(this.state.layout, layout)
+      ? this.state.layout
+      : layout
+  },
+  onLayoutChange (layout) {
     const {params, dispatch} = this.props
 
-    Promise.resolve()
-      .then(() => dispatch(updateReportLayoutAction, params, layout))
+    layout = this.calculateLayout(layout)
+
+    if (layout !== this.state.layout) {
+      this.setState({layout}, () => {
+        dispatch(updateReportLayoutAction, params, layout)
+      })
+    }
   },
+
   render () {
     const {params, dispatch, children, reportLiteMode, editMode, metaData, report} = this.props
-    const {isCreatingReport, openModule} = this.state
-
-    const layout = map(report.modules,
-      ({id: i, x, y, rows: h, cols: w}) => ({i, x, y, w, h, static: !editMode}))
+    const {isCreatingReport, openModule, layout} = this.state
 
     return (
       <ReportScreen
@@ -211,23 +230,16 @@ const ReportController = React.createClass({
         isCreatingReport={isCreatingReport}
         shareUrl={report.shareUrl}>
 
-        <div className='mdl-grid' ref='grid'>
-          <div className='mdl-cell mdl-cell--12-col'>
-            <Grid layout={layout} rowHeight={100} onLayoutChange={this.onLayoutChange}>
-              {map(report.modules, (module, index) =>
-                <div key={module.id} data-module-id={module.id} data-module-type={module.type}>
-                  <Module
-                    params={params}
-                    dispatch={dispatch}
-                    module={module}
-                    editable={editMode}
-                    metaData={get(metaData, module.entity)}
-                    clone={this.cloneModule}
-                    editMode={openModule === module.id}/>
-                </div>)}
-            </Grid>
-          </div>
-        </div>
+        <ReportGrid
+          report={report}
+          openModule={openModule}
+          cloneModule={this.cloneModule}
+          onLayoutChange={this.onLayoutChange}
+          editMode={editMode}
+          layout={layout}
+          params={params}
+          dispatch={dispatch}
+          metaData={metaData}/>
 
         {children || null}
       </ReportScreen>
