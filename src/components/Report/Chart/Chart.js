@@ -12,6 +12,7 @@ import Table from './Table'
 import Total from './Total'
 import {styled} from '../../mixins/styled'
 import {pure} from 'recompose'
+import log from 'loglevel'
 
 const style = csjs`
 .wrap {
@@ -51,11 +52,14 @@ const emptyQuery = {
 const emptyResult = []
 
 const A4Ratio = 674 / 1032
+const counters = {}
 
 const Chart_ = props => {
   const Chart = typeComponent[props.type]
 
-  // console.log('re-render module', props.name, 'chart')
+  counters[props.id] = (counters[props.id] || 0) + 1
+
+  log.info(`${counters[props.name]}) render module ${props.name} chart`)
 
   return (
     <div>
@@ -84,6 +88,7 @@ Chart_.propTypes = {
   reportParams: React.PropTypes.object,
   sourceWidth: React.PropTypes.number,
   sourceHeight: React.PropTypes.number,
+  id: React.PropTypes.string,
   name: React.PropTypes.string,
   messages: React.PropTypes.object,
   attributes: React.PropTypes.object,
@@ -134,6 +139,9 @@ const ChartContainer = React.createClass({
     const {change} = this.props
 
     const config = {
+      id: module.id,
+      name: module.name,
+
       change,
       renderHiddenTable,
       type: module.type,
@@ -144,7 +152,6 @@ const ChartContainer = React.createClass({
       reportParams: reportParams,
       sourceWidth: 1200,
       sourceHeight: floor(1200 * A4Ratio),
-      name: module.name,
       messages: this.context.messages,
       attributes: attributes,
       entity: entity,

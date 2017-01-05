@@ -20,6 +20,7 @@ import Comments from './Comments'
 import CroppedResultDialog from './CroppedResultDialog'
 import TextMessage from 'intl-messageformat'
 import DescriptionDialog from './DescriptionDialog'
+import log from 'loglevel'
 
 const reportContext = [
   'report',
@@ -99,7 +100,7 @@ const ModuleController = React.createClass({
     const {reportParams} = this.context
     const {module, entity} = this.props
 
-    return {
+    const query = {
       metrics: module.metrics,
       dimensions: module.dimensions,
       sort: module.sort,
@@ -109,17 +110,40 @@ const ModuleController = React.createClass({
       filters: module.filters,
       entity: entity.id
     }
+
+    const $query = JSON.stringify(query)
+
+    if ($query !== this.$query) {
+      this.$query = $query
+      this.rawQuery = query
+      log.info(`${module.name} has a new query`)
+    } else {
+      log.debug(`${module.name} skipped a query change`)
+    }
+
+    return this.rawQuery
   },
   getUsedAccounts (ids) {
     const {report: {platform}, reportParams: {accounts}} = this.context
 
-    if (platform) {
-      return accounts
+    if (platform === this.$platform && accounts === this.$accounts) {
+      log.debug(`${this.props.module.name} skipped account change`)
+      return this.$usedAccounts
     }
 
-    const usedAccountKeys = uniq(map(ids, getAccountKeyFromId))
+    log.info(`${this.props.module.name} is updating accounts`)
 
-    return filter(accounts, ({id}) => includes(usedAccountKeys, id))
+    this.$platform = platform
+    this.$accounts = accounts
+
+    if (platform) {
+      this.$usedAccounts = accounts
+    } else {
+      const usedAccountKeys = uniq(map(ids, getAccountKeyFromId))
+      this.$usedAccounts = filter(accounts, ({id}) => includes(usedAccountKeys, id))
+    }
+
+    return this.$usedAccounts
   },
   remove () {
     const {params, dispatch, module} = this.props

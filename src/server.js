@@ -4,6 +4,9 @@ import {setAppRoutes} from './routes/express'
 import defaultState from './default-state'
 import {getRoutes} from './routes/ui'
 import HTML from './components/HTML'
+import loglevel from 'loglevel'
+
+loglevel.setLevel('error')
 
 const config = {
   getWebpackConfig () {

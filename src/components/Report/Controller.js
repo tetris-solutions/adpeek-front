@@ -228,7 +228,6 @@ const ReportController = React.createClass({
       })
     }
   },
-
   render () {
     const {params, dispatch, reportLiteMode, editMode, metaData, report} = this.props
     const {isCreatingReport, openModule, layout} = this.state
