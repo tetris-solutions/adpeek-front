@@ -27,17 +27,21 @@ const FolderReport = React.createClass({
       })
     })
   },
+  getAccounts () {
+    this._accounts = this._accounts || [this.props.folder.account]
+
+    return this._accounts
+  },
   render () {
     const {metaData, folder, location} = this.props
-    const {account} = folder
 
     return (
       <ReportContainer
         {...this.props}
         editMode={endsWith(location.pathname, '/edit')}
-        metaData={get(metaData, account.platform)}
+        metaData={get(metaData, folder.account.platform)}
         {...folder.entities}
-        accounts={[account]}/>
+        accounts={this.getAccounts()}/>
     )
   }
 })

@@ -28,7 +28,6 @@ const cleanLayout = l => pick(l, 'i', 'x', 'y', 'w', 'h', 'static')
 const ReportController = React.createClass({
   displayName: 'Report-Controller',
   propTypes: {
-    children: React.PropTypes.node,
     reportLiteMode: React.PropTypes.bool,
     editMode: React.PropTypes.bool,
     report: reportType.isRequired,
@@ -180,10 +179,18 @@ const ReportController = React.createClass({
       .then(this.reloadReport)
   },
   getReportParams () {
-    const {from, to} = this.getCurrentRange()
-    const accounts = uniqBy(map(this.props.accounts, insertId), 'id')
+    const range = this.getCurrentRange()
+    const anyChange = !this._reportParams || (
+        this._reportParams.from !== range.from ||
+        this._reportParams.to !== range.to
+      )
 
-    return {accounts, from, to}
+    if (anyChange) {
+      const accounts = uniqBy(map(this.props.accounts, insertId), 'id')
+      this._reportParams = {accounts, from: range.from, to: range.to}
+    }
+
+    return this._reportParams
   },
   openModuleEditor (id) {
     this.setState({
@@ -223,7 +230,7 @@ const ReportController = React.createClass({
   },
 
   render () {
-    const {params, dispatch, children, reportLiteMode, editMode, metaData, report} = this.props
+    const {params, dispatch, reportLiteMode, editMode, metaData, report} = this.props
     const {isCreatingReport, openModule, layout} = this.state
 
     return (
@@ -246,7 +253,6 @@ const ReportController = React.createClass({
           dispatch={dispatch}
           metaData={metaData}/>
 
-        {children || null}
       </ReportScreen>
     )
   }

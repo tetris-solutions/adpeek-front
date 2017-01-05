@@ -15,6 +15,8 @@ import SubHeader from '../SubHeader'
 import LoadingHorizontal from '../LoadingHorizontal'
 import Message from 'tetris-iso/Message'
 import pick from 'lodash/pick'
+import {pure} from 'recompose'
+
 const empty = []
 
 const transformAccount = ({external_id, tetris_id, platform}) => ({
@@ -38,31 +40,33 @@ Placeholder.propTypes = {
   reportLiteMode: React.PropTypes.bool
 }
 
-const ReportContainer = React.createClass({
+const propTypes = {
+  children: React.PropTypes.node,
+  reportLiteMode: React.PropTypes.bool,
+  editMode: React.PropTypes.bool,
+  isGuestUser: React.PropTypes.bool,
+  dispatch: React.PropTypes.func.isRequired,
+  report: React.PropTypes.object.isRequired,
+  params: React.PropTypes.object.isRequired,
+  metaData: React.PropTypes.object,
+  campaigns: React.PropTypes.array,
+  adSets: React.PropTypes.array,
+  adGroups: React.PropTypes.array,
+  ads: React.PropTypes.array,
+  keywords: React.PropTypes.array,
+  accounts: React.PropTypes.arrayOf(React.PropTypes.shape({
+    external_id: React.PropTypes.string,
+    tetris_id: React.PropTypes.string,
+    platform: React.PropTypes.string
+  })).isRequired
+}
+
+const Container = React.createClass({
   displayName: 'Report-Container',
   contextTypes: {
     messages: React.PropTypes.object
   },
-  propTypes: {
-    children: React.PropTypes.node,
-    reportLiteMode: React.PropTypes.bool,
-    editMode: React.PropTypes.bool,
-    isGuestUser: React.PropTypes.bool,
-    dispatch: React.PropTypes.func.isRequired,
-    report: React.PropTypes.object.isRequired,
-    params: React.PropTypes.object.isRequired,
-    metaData: React.PropTypes.object,
-    campaigns: React.PropTypes.array,
-    adSets: React.PropTypes.array,
-    adGroups: React.PropTypes.array,
-    ads: React.PropTypes.array,
-    keywords: React.PropTypes.array,
-    accounts: React.PropTypes.arrayOf(React.PropTypes.shape({
-      external_id: React.PropTypes.string,
-      tetris_id: React.PropTypes.string,
-      platform: React.PropTypes.string
-    })).isRequired
-  },
+  propTypes,
   getInitialState () {
     return {isLoading: true}
   },
@@ -205,8 +209,14 @@ const ReportContainer = React.createClass({
     Promise.all(promises)
       .then(() => this.setState({isLoading: false}))
   },
+  getAccounts () {
+    this._accounts = this._accounts || map(this.props.accounts, transformAccount)
+
+    return this._accounts
+  },
   render () {
-    const {reportLiteMode, accounts} = this.props
+    const {reportLiteMode} = this.props
+
     if (this.state.isLoading) {
       return (
         <Placeholder reportLiteMode={reportLiteMode}>
@@ -217,14 +227,21 @@ const ReportContainer = React.createClass({
       )
     }
 
+    // console.log('re-render report container')
+
     return (
       <ReportController
         {...this.props}
-        accounts={map(accounts, transformAccount)}
+        accounts={this.getAccounts()}
         entities={this.getEntities()}/>
     )
   }
 })
+
+const Report_ = props => <Container {...props} />
+Report_.propTypes = propTypes
+
+const ReportContainer = pure(Report_)
 
 const R = props =>
   props.children

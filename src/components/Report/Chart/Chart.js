@@ -55,6 +55,8 @@ const A4Ratio = 674 / 1032
 const Chart_ = props => {
   const Chart = typeComponent[props.type]
 
+  // console.log('re-render module', props.name, 'chart')
+
   return (
     <div>
       <div className={`${style.wrap}`}>

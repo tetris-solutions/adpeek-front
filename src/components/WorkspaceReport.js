@@ -24,9 +24,13 @@ const WorkspaceReport = React.createClass({
       accounts: React.PropTypes.object
     })
   },
+  getAccounts () {
+    this._accounts = this._accounts || values(this.props.workspace.accounts)
+
+    return this._accounts
+  },
   render () {
     const {metaData, workspace, location} = this.props
-    const {accounts} = workspace
 
     return (
       <ReportContainer
@@ -34,7 +38,7 @@ const WorkspaceReport = React.createClass({
         editMode={endsWith(location.pathname, '/edit')}
         metaData={get(metaData, '_')}
         {...workspace.entities}
-        accounts={values(accounts)}/>
+        accounts={this.getAccounts()}/>
     )
   }
 })
