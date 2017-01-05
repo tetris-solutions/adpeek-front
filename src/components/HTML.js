@@ -74,7 +74,7 @@ const HTML = ({payload, children, css}) => (
 
       <link
         rel='stylesheet'
-        href={`https://code.getmdl.io/1.2.1/material.${payload.debugMode ? 'brown-deep_purple' : 'blue-indigo'}.min.css`}/>
+        href={`https://code.getmdl.io/1.3.0/material.${payload.debugMode ? 'brown-deep_purple' : 'blue-indigo'}.min.css`}/>
 
       <link rel='stylesheet' href='/css/mdl-selectfield.min.css'/>
       <link rel='stylesheet' href='/css/animate.min.css'/>
@@ -88,7 +88,7 @@ const HTML = ({payload, children, css}) => (
 
       {gTMScript}
       <script src='https://cdn.rawgit.com/HubSpot/pace/v1.0.0/pace.min.js' async/>
-      <script src='https://code.getmdl.io/1.2.1/material.min.js' defer/>
+      <script src='https://code.getmdl.io/1.3.0/material.min.js' defer/>
       <script
         id='state-injection'
         dangerouslySetInnerHTML={{__html: `var backendPayload = ${JSON.stringify(payload)}`}}/>

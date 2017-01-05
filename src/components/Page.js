@@ -4,7 +4,7 @@ import findLast from 'lodash/findLast'
 import has from 'lodash/fp/has'
 import property from 'lodash/property'
 import csjs from 'csjs'
-// import LocaleSelector from './LocaleSelector'
+
 const hasSubNav = has('aside')
 const getSubNav = property('aside')
 
@@ -15,6 +15,7 @@ const style = csjs`
   min-height: calc(100% - 64px);
   width: 100%;
   position: absolute;
+  background: #e0e0e0;
 }
 .content {
   flex: 1;
