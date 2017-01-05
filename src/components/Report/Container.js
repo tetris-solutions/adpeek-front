@@ -16,6 +16,7 @@ import LoadingHorizontal from '../LoadingHorizontal'
 import Message from 'tetris-iso/Message'
 import pick from 'lodash/pick'
 import {pure} from 'recompose'
+import log from 'loglevel'
 
 const empty = []
 
@@ -227,7 +228,7 @@ const Container = React.createClass({
       )
     }
 
-    // console.log('re-render report container')
+    log.debug('render report <Container/>')
 
     return (
       <ReportController
