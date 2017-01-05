@@ -1,5 +1,7 @@
 import csjs from 'csjs'
+import ReactDOM from 'react-dom'
 import floor from 'lodash/floor'
+import pick from 'lodash/pick'
 import React from 'react'
 import reportEntityType from '../../../propTypes/report-entity'
 import reportModuleType from '../../../propTypes/report-module'
@@ -50,6 +52,69 @@ const emptyResult = []
 
 const A4Ratio = 674 / 1032
 
+const chartProps = [
+  'change',
+  'locales',
+  'sort',
+  'limit',
+  'isLoading',
+  'reportParams',
+  'sourceWidth',
+  'sourceHeight',
+  'name',
+  'messages',
+  'attributes',
+  'entity',
+  'result',
+  'comments',
+  'query'
+]
+
+class HardChart extends React.PureComponent {
+  render () {
+    const {type, renderHiddenTable, isLoading} = this.props
+    const config = pick(this.props, chartProps)
+    const Chart = typeComponent[type]
+
+    // console.log('will render', config.name)
+
+    return (
+      <div>
+        <div className={`${style.wrap}`}>
+          <Chart {...config}/>
+          <div className={`${style.hidden}`} data-interface>
+            {renderHiddenTable
+              ? <Table {...config}/>
+              : null}
+          </div>
+        </div>
+        {isLoading ? <ChartSpinner/> : null}
+      </div>
+    )
+  }
+}
+
+HardChart.displayName = 'Hard-Chart'
+HardChart.propTypes = {
+  change: React.PropTypes.func.isRequired,
+  renderHiddenTable: React.PropTypes.bool,
+  type: React.PropTypes.string,
+  locales: React.PropTypes.string,
+  sort: React.PropTypes.array,
+  limit: React.PropTypes.number,
+  isLoading: React.PropTypes.bool,
+  reportParams: React.PropTypes.object,
+  sourceWidth: React.PropTypes.number,
+  sourceHeight: React.PropTypes.number,
+  name: React.PropTypes.string,
+  messages: React.PropTypes.object,
+  attributes: React.PropTypes.object,
+  entity: React.PropTypes.object,
+  result: React.PropTypes.array,
+  comments: React.PropTypes.array,
+  query: React.PropTypes.object
+}
+
 const ChartContainer = React.createClass({
   displayName: 'Chart',
   mixins: [styled(style)],
@@ -79,32 +144,19 @@ const ChartContainer = React.createClass({
       }))
   },
   componentDidMount () {
-    this.refs.interface.renderAsTable = this.renderAsTable
-  },
-  shouldComponentUpdate (nextProps, nextState, nextContext) {
-    const newModule = nextContext.module
-    const oldModule = this.context.module
+    const intr = ReactDOM.findDOMNode(this).querySelector('[data-interface]')
 
-    return (
-      nextState.renderHiddenTable !== this.state.renderHiddenTable ||
-      newModule.comments !== oldModule.comments ||
-      newModule.sort !== oldModule.sort ||
-      newModule.limit !== oldModule.limit ||
-      newModule.cols !== oldModule.cols ||
-      newModule.isLoading !== oldModule.isLoading ||
-      newModule.result !== oldModule.result ||
-      newModule.name !== oldModule.name ||
-      newModule.type !== oldModule.type
-    )
+    intr.renderAsTable = this.renderAsTable
   },
   render () {
     const {renderHiddenTable} = this.state
     const {module, locales, reportParams, entity, attributes} = this.context
     const {change} = this.props
-    const Chart = typeComponent[module.type]
 
     const config = {
       change,
+      renderHiddenTable,
+      type: module.type,
       locales: locales,
       sort: module.sort,
       limit: module.limit,
@@ -122,17 +174,7 @@ const ChartContainer = React.createClass({
     }
 
     return (
-      <div>
-        <div className={`${style.wrap}`}>
-          <Chart {...config}/>
-          <div ref='interface' className={`${style.hidden}`} data-interface>
-            {renderHiddenTable
-              ? <Table {...config}/>
-              : null}
-          </div>
-        </div>
-        {module.isLoading ? <ChartSpinner/> : null}
-      </div>
+      <HardChart {...config}/>
     )
   }
 })

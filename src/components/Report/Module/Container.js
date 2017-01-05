@@ -11,6 +11,8 @@ import reportMetaDataType from '../../../propTypes/report-meta-data'
 import moduleType from '../../../propTypes/report-module'
 import Controller from './Controller'
 
+const keyed = reportEntities => keyBy(reportEntities, 'id')
+
 const ModuleContainer = React.createClass({
   displayName: 'Module-Container',
   propTypes: {
@@ -38,18 +40,11 @@ const ModuleContainer = React.createClass({
       toggleActiveOnly: this.toggleActiveOnly
     }
   },
-  getEntities () {
-    const {reportEntities} = this.context
-    const entities = keyBy(reportEntities, 'id')
-    const {activeOnly} = this.state
-    const {module} = this.props
-
-    // console.log('recalculate module', module.name, 'entities')
-
+  calculateEntities ({entities, moduleEntity, moduleIds, activeOnly}) {
     function filterByStatus (entity) {
       if (activeOnly) {
-        const whiteList = module.entity === entity.id
-          ? module.filters.id
+        const whiteList = moduleEntity === entity.id
+          ? moduleIds
           : []
 
         entity = assign({}, entity)
@@ -99,6 +94,36 @@ const ModuleContainer = React.createClass({
     }
 
     return entities
+  },
+  entitiesSource () {
+    const {reportEntities} = this.context
+    const {activeOnly} = this.state
+    const {module} = this.props
+
+    return {
+      reportEntities,
+      activeOnly,
+      moduleEntity: module.entity,
+      moduleIds: module.filters.id
+    }
+  },
+  getEntities () {
+    const newSource = this.entitiesSource()
+    const anyChange = !this._source || (
+        this._source.reportEntities !== newSource.reportEntities ||
+        this._source.activeOnly !== newSource.activeOnly ||
+        this._source.moduleIds !== newSource.moduleIds ||
+        this._source.moduleEntity !== newSource.moduleEntity
+      )
+
+    if (anyChange) {
+      newSource.entities = keyed(newSource.reportEntities)
+
+      this._source = newSource
+      this._entities = this.calculateEntities(this._source)
+    }
+
+    return this._entities
   },
   toggleActiveOnly () {
     this.setState({

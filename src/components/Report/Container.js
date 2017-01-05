@@ -153,16 +153,11 @@ const ReportContainer = React.createClass({
     return val !== this._source[name]
   },
   getEntities () {
-    if (this._source) {
-      const newSource = this.entitiesSource()
-      const anyChange = some(newSource, this.differs)
+    const newSource = this.entitiesSource()
+    const anyChange = !this._source || some(newSource, this.differs)
 
-      if (anyChange) {
-        this._source = newSource
-        this._entities = this.calculateEntities(newSource)
-      }
-    } else {
-      this._source = this.entitiesSource()
+    if (anyChange) {
+      this._source = newSource
       this._entities = this.calculateEntities(this._source)
     }
 
