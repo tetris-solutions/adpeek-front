@@ -78,8 +78,13 @@ const ReportController = React.createClass({
   },
   componentWillReceiveProps (nextProps, nextContext) {
     this.ensureDateRange(nextContext)
-  },
 
+    const layout = this.calculateLayout(null, nextProps)
+
+    if (layout !== this.state.layout) {
+      this.setState({layout})
+    }
+  },
   ensureDateRange (context = this.context) {
     if (!context.location.query.from) {
       this.navigateToNewRange(this.getCurrentRange(), 'replace', context)
@@ -185,8 +190,8 @@ const ReportController = React.createClass({
       openModule: id
     })
   },
-  calculateLayout (layout = null) {
-    const {report, editMode} = this.props
+  calculateLayout (layout = null, props = this.props) {
+    const {report, editMode} = props
 
     if (layout) {
       layout = map(layout, m => assign(cleanLayout(m), {static: !editMode}))
@@ -231,7 +236,7 @@ const ReportController = React.createClass({
         shareUrl={report.shareUrl}>
 
         <ReportGrid
-          report={report}
+          modules={report.modules}
           openModule={openModule}
           cloneModule={this.cloneModule}
           onLayoutChange={this.onLayoutChange}

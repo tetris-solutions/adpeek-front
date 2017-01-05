@@ -10,7 +10,7 @@ const Grid = sizeMe()(props => <GridLayout width={props.size.width} {...props}/>
 class ReportGrid extends React.PureComponent {
   render () {
     const {
-      report,
+      modules,
       onLayoutChange,
       cloneModule,
       editMode,
@@ -25,7 +25,7 @@ class ReportGrid extends React.PureComponent {
       <div className='mdl-grid'>
         <div className='mdl-cell mdl-cell--12-col'>
           <Grid layout={layout} rowHeight={100} onLayoutChange={onLayoutChange}>
-            {map(report.modules, (module, index) =>
+            {map(modules, (module, index) =>
               <div key={module.id} data-module-id={module.id} data-module-type={module.type}>
                 <Module
                   params={params}
@@ -45,7 +45,7 @@ class ReportGrid extends React.PureComponent {
 
 ReportGrid.displayName = 'Report-Grid'
 ReportGrid.propTypes = {
-  report: React.PropTypes.object.isRequired,
+  modules: React.PropTypes.object.isRequired,
   cloneModule: React.PropTypes.func.isRequired,
   onLayoutChange: React.PropTypes.func.isRequired,
   editMode: React.PropTypes.bool.isRequired,
