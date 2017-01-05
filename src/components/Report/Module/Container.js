@@ -44,6 +44,8 @@ const ModuleContainer = React.createClass({
     const {activeOnly} = this.state
     const {module} = this.props
 
+    // console.log('recalculate module', module.name, 'entities')
+
     function filterByStatus (entity) {
       if (activeOnly) {
         const whiteList = module.entity === entity.id

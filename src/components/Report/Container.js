@@ -1,4 +1,5 @@
 import React from 'react'
+import some from 'lodash/some'
 import head from 'lodash/head'
 import uniq from 'lodash/uniq'
 import includes from 'lodash/includes'
@@ -74,10 +75,20 @@ const ReportContainer = React.createClass({
   getPlatforms () {
     return uniq(map(this.props.accounts, 'platform'))
   },
-  getEntities () {
+  entitiesSource () {
     const {messages} = this.context
     const {campaigns, adSets, adGroups, ads, keywords} = this.props
 
+    return {
+      messages,
+      campaigns,
+      adSets,
+      ads,
+      keywords,
+      adGroups
+    }
+  },
+  calculateEntities ({messages, campaigns, adSets, ads, keywords, adGroups}) {
     const entities = [{
       id: 'Campaign',
       name: messages.campaigns,
@@ -137,6 +148,25 @@ const ReportContainer = React.createClass({
     }
 
     return entities
+  },
+  differs (val, name) {
+    return val !== this._source[name]
+  },
+  getEntities () {
+    if (this._source) {
+      const newSource = this.entitiesSource()
+      const anyChange = some(newSource, this.differs)
+
+      if (anyChange) {
+        this._source = newSource
+        this._entities = this.calculateEntities(newSource)
+      }
+    } else {
+      this._source = this.entitiesSource()
+      this._entities = this.calculateEntities(this._source)
+    }
+
+    return this._entities
   },
   loadEntities (account) {
     const {campaigns, params, dispatch} = this.props
