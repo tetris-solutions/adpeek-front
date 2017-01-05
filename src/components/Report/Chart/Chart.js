@@ -63,7 +63,7 @@ const Chart_ = props => {
 
   return (
     <div>
-      <div className={`${style.wrap}`}>
+      <div className={`${style.wrap}`} style={{height: props.height}}>
         <Chart {...props}/>
         <div className={`${style.hidden}`} data-interface>
           {props.renderHiddenTable
@@ -76,9 +76,16 @@ const Chart_ = props => {
   )
 }
 
+Chart_.defaultProps = {
+  height: '100%'
+}
 Chart_.displayName = 'Pure-Chart'
 Chart_.propTypes = {
   change: React.PropTypes.func,
+  height: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.number
+  ]),
   renderHiddenTable: React.PropTypes.bool,
   type: React.PropTypes.string,
   locales: React.PropTypes.string,
@@ -104,7 +111,8 @@ const ChartContainer = React.createClass({
   displayName: 'Chart',
   mixins: [styled(style)],
   propTypes: {
-    change: React.PropTypes.func
+    change: React.PropTypes.func,
+    height: React.PropTypes.number
   },
   contextTypes: {
     messages: React.PropTypes.object,
@@ -136,12 +144,12 @@ const ChartContainer = React.createClass({
   render () {
     const {renderHiddenTable} = this.state
     const {module, locales, reportParams, entity, attributes} = this.context
-    const {change} = this.props
+    const {change, height} = this.props
 
     const config = {
       id: module.id,
       name: module.name,
-
+      height: height,
       change,
       renderHiddenTable,
       type: module.type,
