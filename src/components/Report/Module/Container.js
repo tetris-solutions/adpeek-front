@@ -10,6 +10,7 @@ import reportEntityType from '../../../propTypes/report-entity'
 import reportMetaDataType from '../../../propTypes/report-meta-data'
 import moduleType from '../../../propTypes/report-module'
 import Controller from './Controller'
+import {pure} from 'recompose'
 
 const keyed = reportEntities => keyBy(reportEntities, 'id')
 
@@ -18,9 +19,7 @@ const ModuleContainer = React.createClass({
   propTypes: {
     editable: React.PropTypes.bool,
     module: moduleType.isRequired,
-    metaData: reportMetaDataType.isRequired
-  },
-  contextTypes: {
+    metaData: reportMetaDataType.isRequired,
     reportEntities: React.PropTypes.arrayOf(reportEntityType).isRequired
   },
   childContextTypes: {
@@ -96,9 +95,8 @@ const ModuleContainer = React.createClass({
     return entities
   },
   entitiesSource () {
-    const {reportEntities} = this.context
     const {activeOnly} = this.state
-    const {module} = this.props
+    const {module, reportEntities} = this.props
 
     return {
       reportEntities,
@@ -147,4 +145,15 @@ const ModuleContainer = React.createClass({
   }
 })
 
-export default ModuleContainer
+const Module_ = props => <ModuleContainer {...props}/>
+Module_.displayName = 'Pure-Module'
+
+const HardModule = pure(Module_)
+
+const Upper = (props, {reportEntities}) => <HardModule {...props} reportEntities={reportEntities}/>
+
+Upper.contextTypes = {
+  reportEntities: React.PropTypes.arrayOf(reportEntityType).isRequired
+}
+
+export default Upper

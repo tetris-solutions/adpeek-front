@@ -4,42 +4,37 @@ import React from 'react'
 import Module from './Module/Container'
 import GridLayout from 'react-grid-layout'
 import sizeMe from 'react-sizeme'
+import {pure} from 'recompose'
 
-class ReportGrid extends React.PureComponent {
-  render () {
-    const {
-      modules,
-      onLayoutChange,
-      cloneModule,
-      editMode,
-      layout,
-      params,
-      dispatch,
-      metaData,
-      openModule,
-      width
-    } = this.props
+const Grid_ = ({
+  modules,
+  onLayoutChange,
+  cloneModule,
+  editMode,
+  layout,
+  params,
+  dispatch,
+  metaData,
+  openModule,
+  width
+}) => (
+  <GridLayout layout={layout} width={width} rowHeight={100} onLayoutChange={onLayoutChange}>
+    {map(modules, (module, index) =>
+      <div key={module.id} data-module-id={module.id} data-module-type={module.type}>
+        <Module
+          params={params}
+          dispatch={dispatch}
+          module={module}
+          editable={editMode}
+          metaData={get(metaData, module.entity)}
+          clone={cloneModule}
+          editMode={openModule === module.id}/>
+      </div>)}
+  </GridLayout>
+)
 
-    return (
-      <GridLayout layout={layout} width={width} rowHeight={100} onLayoutChange={onLayoutChange}>
-        {map(modules, (module, index) =>
-          <div key={module.id} data-module-id={module.id} data-module-type={module.type}>
-            <Module
-              params={params}
-              dispatch={dispatch}
-              module={module}
-              editable={editMode}
-              metaData={get(metaData, module.entity)}
-              clone={cloneModule}
-              editMode={openModule === module.id}/>
-          </div>)}
-      </GridLayout>
-    )
-  }
-}
-
-ReportGrid.displayName = 'Report-Grid'
-ReportGrid.propTypes = {
+Grid_.displayName = 'Pure-Grid'
+Grid_.propTypes = {
   modules: React.PropTypes.object.isRequired,
   cloneModule: React.PropTypes.func.isRequired,
   onLayoutChange: React.PropTypes.func.isRequired,
@@ -52,6 +47,7 @@ ReportGrid.propTypes = {
   width: React.PropTypes.number
 }
 
+const ReportGrid = pure(Grid_)
 const DynamicGrid = props => <ReportGrid width={props.size.width} {...props}/>
 
 DynamicGrid.propTypes = {

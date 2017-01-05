@@ -1,7 +1,6 @@
 import csjs from 'csjs'
 import ReactDOM from 'react-dom'
 import floor from 'lodash/floor'
-import pick from 'lodash/pick'
 import React from 'react'
 import reportEntityType from '../../../propTypes/report-entity'
 import reportModuleType from '../../../propTypes/report-module'
@@ -12,6 +11,7 @@ import Spinner from '../../Spinner'
 import Table from './Table'
 import Total from './Total'
 import {styled} from '../../mixins/styled'
+import {pure} from 'recompose'
 
 const style = csjs`
 .wrap {
@@ -52,51 +52,27 @@ const emptyResult = []
 
 const A4Ratio = 674 / 1032
 
-const chartProps = [
-  'change',
-  'locales',
-  'sort',
-  'limit',
-  'isLoading',
-  'reportParams',
-  'sourceWidth',
-  'sourceHeight',
-  'name',
-  'messages',
-  'attributes',
-  'entity',
-  'result',
-  'comments',
-  'query'
-]
+const Chart_ = props => {
+  const Chart = typeComponent[props.type]
 
-class HardChart extends React.PureComponent {
-  render () {
-    const {type, renderHiddenTable, isLoading} = this.props
-    const config = pick(this.props, chartProps)
-    const Chart = typeComponent[type]
-
-    // console.log('will render', config.name)
-
-    return (
-      <div>
-        <div className={`${style.wrap}`}>
-          <Chart {...config}/>
-          <div className={`${style.hidden}`} data-interface>
-            {renderHiddenTable
-              ? <Table {...config}/>
-              : null}
-          </div>
+  return (
+    <div>
+      <div className={`${style.wrap}`}>
+        <Chart {...props}/>
+        <div className={`${style.hidden}`} data-interface>
+          {props.renderHiddenTable
+            ? <Table {...props}/>
+            : null}
         </div>
-        {isLoading ? <ChartSpinner/> : null}
       </div>
-    )
-  }
+      {props.isLoading ? <ChartSpinner/> : null}
+    </div>
+  )
 }
 
-HardChart.displayName = 'Hard-Chart'
-HardChart.propTypes = {
-  change: React.PropTypes.func.isRequired,
+Chart_.displayName = 'Pure-Chart'
+Chart_.propTypes = {
+  change: React.PropTypes.func,
   renderHiddenTable: React.PropTypes.bool,
   type: React.PropTypes.string,
   locales: React.PropTypes.string,
@@ -114,6 +90,8 @@ HardChart.propTypes = {
   comments: React.PropTypes.array,
   query: React.PropTypes.object
 }
+
+const HardChart = pure(Chart_)
 
 const ChartContainer = React.createClass({
   displayName: 'Chart',
