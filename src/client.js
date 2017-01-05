@@ -5,14 +5,13 @@ const {extend: extendBaseContext} = require('tetris-iso/base-context')
 const loglevel = require('loglevel')
 
 extendBaseContext('company', 'router', 'location', 'isGuest', 'isAdmin', 'isLoggedIn')
-createClient(getRoutes, defaultState)
+const tree = createClient(getRoutes, defaultState)
 
 const Emitter = require('emmett')
 window.event$ = new Emitter()
 
+loglevel.setLevel(tree.get('debugMode') ? 'debug' : 'warn')
+
 if (process.env.NODE_ENV !== 'production') {
   window.Perf = require('react-addons-perf')
-  loglevel.setLevel('debug')
-} else {
-  loglevel.setLevel('warn')
 }
