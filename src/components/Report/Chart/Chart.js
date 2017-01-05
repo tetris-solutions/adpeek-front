@@ -59,7 +59,7 @@ const Chart_ = props => {
 
   counters[props.id] = (counters[props.id] || 0) + 1
 
-  log.info(`${counters[props.name]}) render module ${props.name} chart`)
+  log.info(`${counters[props.id]}) render module ${props.name} chart`)
 
   return (
     <div>
