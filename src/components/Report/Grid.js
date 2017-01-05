@@ -38,11 +38,11 @@ Grid_.propTypes = {
   modules: React.PropTypes.object.isRequired,
   cloneModule: React.PropTypes.func.isRequired,
   onLayoutChange: React.PropTypes.func.isRequired,
-  editMode: React.PropTypes.bool.isRequired,
   layout: React.PropTypes.array.isRequired,
   params: React.PropTypes.object.isRequired,
   dispatch: React.PropTypes.func.isRequired,
   metaData: React.PropTypes.object.isRequired,
+  editMode: React.PropTypes.bool,
   openModule: React.PropTypes.string,
   width: React.PropTypes.number
 }

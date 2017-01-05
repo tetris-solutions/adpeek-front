@@ -29,9 +29,7 @@ const transformAccount = ({external_id, tetris_id, platform}) => ({
 const Placeholder = ({reportLiteMode, children}) => (
   <div>
     <SubHeader/>
-    {reportLiteMode
-      ? children
-      : <Page>{children}</Page>}
+    <Page>{children}</Page>
   </div>
 )
 
@@ -215,11 +213,9 @@ const Container = React.createClass({
     return this._accounts
   },
   render () {
-    const {reportLiteMode} = this.props
-
     if (this.state.isLoading) {
       return (
-        <Placeholder reportLiteMode={reportLiteMode}>
+        <Placeholder>
           <LoadingHorizontal>
             <Message>loadingReport</Message>
           </LoadingHorizontal>

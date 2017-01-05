@@ -296,6 +296,7 @@ module.exports = {
   commentDescription: 'Comment by {user}',
   moduleDescriptionTitle: 'Module Description',
   moduleDescriptionPlaceholder: 'Write a description for this module',
+  reportDescriptionPlaceholder: 'Write a description for this report',
   croppedResultAlertTitle: 'Partial result',
   croppedResultAlertBody: `
         <strong>{module}</strong> result is too large and was cropped for performance reasons.

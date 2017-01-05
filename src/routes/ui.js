@@ -37,6 +37,7 @@ import OrderAutoBudget from '../components/OrderAutoBudget'
 import OrderBreadCrumb from '../components/OrderBreadcrumb'
 import OrdersBreadCrumb from '../components/OrdersBreadcrumb'
 import ReportAside from '../components/Report/Aside'
+import ReportAsideLite from '../components/Report/AsideLite'
 import ReportBread from '../components/Report/Breadcrumb'
 import ReportsBread from '../components/Report/ListBreadcrumb'
 import WorkspaceAside from '../components/WorkspaceAside'
@@ -91,6 +92,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
       <Route onEnter={protectRoute}>
         <Route
           path='share/report/:reportShare'
+          aside={ReportAsideLite}
           breadcrumb={[CompanyBreadcrumb, WorkspaceBreadcrumb, FolderBreadcrumb, ReportBread]}
           component={ReportShare}/>
 

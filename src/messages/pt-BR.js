@@ -296,6 +296,7 @@ module.exports = {
   commentDescription: 'Comentário de {user}',
   moduleDescriptionTitle: 'Descrição do Módulo',
   moduleDescriptionPlaceholder: 'Escreva uma descrição para este módulo',
+  reportDescriptionPlaceholder: 'Escreva uma descrição para seu relatório',
   croppedResultAlertTitle: 'Resultado incompleto',
   croppedResultAlertBody: `
         O resultado de <strong>{module}</strong> é muito extenso e por questões de performance foi limitado.

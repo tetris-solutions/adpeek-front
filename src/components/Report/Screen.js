@@ -65,7 +65,8 @@ function ReportScreen (props, context) {
                 create={downloadReport}
                 isCreatingReport={isCreatingReport}/>
 
-              {!reportLiteMode && <MenuItem tag={Link} to={`${reportUrl}/mailing?skipEmptyList=true`} icon='mail_outline'>
+              {!reportLiteMode &&
+              <MenuItem tag={Link} to={`${reportUrl}/mailing?skipEmptyList=true`} icon='mail_outline'>
                 <Message>reportMailing</Message>
               </MenuItem>}
 
@@ -77,9 +78,7 @@ function ReportScreen (props, context) {
           </Button>
         </SubHeader>
 
-        {!reportLiteMode
-          ? <Page>{children}</Page>
-          : children}
+        <Page>{children}</Page>
       </div>}
     </Fence>
   )
