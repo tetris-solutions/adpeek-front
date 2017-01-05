@@ -11,6 +11,7 @@ import reportMetaDataType from '../../../propTypes/report-meta-data'
 import moduleType from '../../../propTypes/report-module'
 import Controller from './Controller'
 import {pure} from 'recompose'
+import log from 'loglevel'
 
 const keyed = reportEntities => keyBy(reportEntities, 'id')
 
@@ -40,6 +41,8 @@ const ModuleContainer = React.createClass({
     }
   },
   calculateEntities ({entities, moduleEntity, moduleIds, activeOnly}) {
+    log.info(`will mount ${this.props.module.name} entities`)
+
     function filterByStatus (entity) {
       if (activeOnly) {
         const whiteList = moduleEntity === entity.id

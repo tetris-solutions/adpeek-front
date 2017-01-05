@@ -1,5 +1,4 @@
 import React from 'react'
-import some from 'lodash/some'
 import head from 'lodash/head'
 import uniq from 'lodash/uniq'
 import includes from 'lodash/includes'
@@ -17,6 +16,7 @@ import Message from 'tetris-iso/Message'
 import pick from 'lodash/pick'
 import {pure} from 'recompose'
 import log from 'loglevel'
+import equals from 'shallowequal'
 
 const empty = []
 
@@ -94,6 +94,8 @@ const Container = React.createClass({
     }
   },
   calculateEntities ({messages, campaigns, adSets, ads, keywords, adGroups}) {
+    log.info('will mount report entities')
+
     const entities = [{
       id: 'Campaign',
       name: messages.campaigns,
@@ -154,12 +156,9 @@ const Container = React.createClass({
 
     return entities
   },
-  differs (val, name) {
-    return val !== this._source[name]
-  },
   getEntities () {
     const newSource = this.entitiesSource()
-    const anyChange = !this._source || some(newSource, this.differs)
+    const anyChange = !this._source || !equals(this._source, newSource)
 
     if (anyChange) {
       this._source = newSource
