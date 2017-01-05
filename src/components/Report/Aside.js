@@ -43,7 +43,18 @@ export function ReportAside ({report, dispatch}, {messages, locales, router, loc
         <Navigation icon='trending_up'>
           {inEditMode
             ? <NameInput dispatch={dispatch} params={params} report={report}/>
-            : <Name>{report.name}</Name>}
+            : (
+              <div>
+                <Name>{report.name}</Name>
+
+                {report.description &&
+                <blockquote
+                  style={{fontSize: '10pt', margin: '0 2em'}}
+                  dangerouslySetInnerHTML={{__html: report.description.replace(/\n/g, '<br/>')}}/>}
+
+                <hr/>
+              </div>
+            )}
 
           <NavBts>
             {inEditMode && canEditReport && (
