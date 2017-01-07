@@ -79,7 +79,7 @@ export function ReportAside ({report, dispatch}, {messages, locales, router, loc
                 <Message>deleteReport</Message>
               </NavBt>)}
 
-            <NavBt tag={Link} to={canBrowseReports ? `${scopeUrl}/reports` : scopeUrl} icon='close'>
+            <NavBt tag={Link} to={inEditMode ? reportUrl : (canBrowseReports ? `${scopeUrl}/reports` : scopeUrl)} icon='close'>
               <Message>oneLevelUpNavigation</Message>
             </NavBt>
           </NavBts>
