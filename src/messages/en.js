@@ -307,5 +307,8 @@ module.exports = {
   emptyMailing: 'Your email list is empty',
   kpiGoalLabel: 'KPI Goal',
   kpiGoalMetricTitle: '{metric} Goal',
-  kpiGoalMetricResult: '{currentValue} of {goal}'
+  kpiGoalMetricResult: '{currentValue} of {goal}',
+  privateReportTooltip: 'Only you can see this report',
+  companyReportTooltip: 'Anyone in your company can see this report',
+  globalReportTooltip: 'This is a builtin report'
 }

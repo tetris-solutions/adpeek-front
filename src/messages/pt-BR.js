@@ -307,5 +307,8 @@ module.exports = {
   emptyMailing: 'Sua lista de emails está vazia',
   kpiGoalLabel: 'Meta KPI',
   kpiGoalMetricTitle: 'Meta - {metric}',
-  kpiGoalMetricResult: '{currentValue} de {goal}'
+  kpiGoalMetricResult: '{currentValue} de {goal}',
+  privateReportTooltip: 'Apenas você pode ver este relatório',
+  companyReportTooltip: 'Relatório compartilhado com seus colegas de trabalho',
+  globalReportTooltip: 'Esse é um relatório padrão do Manager'
 }

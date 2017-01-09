@@ -21,51 +21,77 @@ import csjs from 'csjs'
 
 const style = csjs`
 .descr {
+  display: inline-block;
   font-size: x-small;
   line-height: 1.2em;
   height: calc(1.2em * 3);
   overflow: hidden;
+  width: calc(100% - 30px);
+}
+.icon {
+  float: right;
+  padding-top: .4em;
 }`
 
 const cleanStr = str => trim(deburr(lowerCase(str)))
 
-const Report = ({dispatch, params, shareUrl, path, id, name, description}) => (
-  <ThumbLink to={`${path}/report/${id}`} title={name}>
-    <Cap>{name}</Cap>
-    <BottomLine>
-      <div className={`${style.descr}`}>
-        {description}
-      </div>
-    </BottomLine>
-    <Fence canEditReport>{({canEditReport}) =>
-      <Gear>
-        <DropdownMenu>
-          <ShareButton {...{id, shareUrl}}/>
-
-          <MenuItem tag={Link} to={`${path}/report/${id}/mailing?skipEmptyList=true`} icon='mail_outline'>
-            <Message>reportMailing</Message>
-          </MenuItem>
-
-          {canEditReport &&
-
-          <MenuItem tag={Link} icon='mode_edit' to={`${path}/report/${id}/edit`}>
-            <Message>editReport</Message>
-          </MenuItem>}
-
-          {canEditReport &&
-
-          <MenuItem
-            tag={DeleteSpan}
-            entityName={name}
-            icon='delete'
-            onClick={() => dispatch(deleteReportAction, params, id)}>
-            <Message>deleteReport</Message>
-          </MenuItem>}
-        </DropdownMenu>
-      </Gear>}
-    </Fence>
-  </ThumbLink>
+const I = ({icon, title}) => (
+  <i className={`material-icons mdl-color-text--grey-600 ${style.icon}`} title={title}>{icon}</i>
 )
+
+I.propTypes = {
+  icon: React.PropTypes.string.isRequired,
+  title: React.PropTypes.string.isRequired
+}
+
+function Report ({dispatch, params, shareUrl, path, id, name, is_private, is_global, description}, {messages}) {
+  let icon = <I icon='people' title={messages.companyReportTooltip}/>
+
+  if (is_private) {
+    icon = <I icon='lock' title={messages.privateReportTooltip}/>
+  } else if (is_global) {
+    icon = <I icon='public' title={messages.globalReportTooltip}/>
+  }
+
+  return (
+    <ThumbLink to={`${path}/report/${id}`} title={name}>
+      <Cap>{name}</Cap>
+      <BottomLine>
+        <div className={`${style.descr}`}>
+          {description}
+        </div>
+        {icon}
+      </BottomLine>
+      <Fence canEditReport>{({canEditReport}) =>
+        <Gear>
+          <DropdownMenu>
+            <ShareButton {...{id, shareUrl}}/>
+
+            <MenuItem tag={Link} to={`${path}/report/${id}/mailing?skipEmptyList=true`} icon='mail_outline'>
+              <Message>reportMailing</Message>
+            </MenuItem>
+
+            {canEditReport &&
+
+            <MenuItem tag={Link} icon='mode_edit' to={`${path}/report/${id}/edit`}>
+              <Message>editReport</Message>
+            </MenuItem>}
+
+            {canEditReport &&
+
+            <MenuItem
+              tag={DeleteSpan}
+              entityName={name}
+              icon='delete'
+              onClick={() => dispatch(deleteReportAction, params, id)}>
+              <Message>deleteReport</Message>
+            </MenuItem>}
+          </DropdownMenu>
+        </Gear>}
+      </Fence>
+    </ThumbLink>
+  )
+}
 
 Report.displayName = 'Report'
 Report.propTypes = {
@@ -75,7 +101,12 @@ Report.propTypes = {
   name: React.PropTypes.string,
   description: React.PropTypes.string,
   dispatch: React.PropTypes.func.isRequired,
-  params: React.PropTypes.object.isRequired
+  params: React.PropTypes.object.isRequired,
+  is_private: React.PropTypes.bool,
+  is_global: React.PropTypes.bool
+}
+Report.contextTypes = {
+  messages: React.PropTypes.object.isRequired
 }
 
 export const Reports = React.createClass({
