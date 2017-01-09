@@ -160,6 +160,7 @@ const ReportController = React.createClass({
       .then(modules => dispatch(exportReportAction, params, type, assign({
         id: report.id,
         name: report.name,
+        description: report.description,
         modules
       }, config)))
       .then(response => this.setState({isCreatingReport: false},
