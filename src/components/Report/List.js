@@ -37,6 +37,12 @@ const style = csjs`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+.update {
+  font-size: x-small;
+  position: absolute;
+  margin-top: .5em;
+  right: 1em;
 }`
 
 const cleanStr = str => trim(deburr(lowerCase(str)))
@@ -50,7 +56,7 @@ I.propTypes = {
   title: React.PropTypes.string.isRequired
 }
 
-function Report ({dispatch, params, shareUrl, path, id, name, author, is_private, is_global, description}, {messages}) {
+function Report ({dispatch, params, shareUrl, path, id, name, author, last_update, is_private, is_global, description}, {messages, moment}) {
   let icon = <I icon='people' title={messages.companyReportTooltip}/>
 
   if (is_private) {
@@ -62,6 +68,11 @@ function Report ({dispatch, params, shareUrl, path, id, name, author, is_private
   return (
     <ThumbLink to={`${path}/report/${id}`} title={name}>
       <Cap>{name}</Cap>
+
+      {last_update && <small className={`mdl-color-text--grey-500 ${style.update}`}>
+        <Message timeago={moment(last_update).fromNow()}>updatedTimeAgo</Message>
+      </small>}
+
       <BottomLine>
         {author && <div className={`${style.author}`}>
           <Message html name={author.name}>
@@ -109,6 +120,7 @@ Report.displayName = 'Report'
 Report.propTypes = {
   id: React.PropTypes.string,
   author: React.PropTypes.object,
+  last_update: React.PropTypes.string,
   shareUrl: React.PropTypes.string,
   path: React.PropTypes.string,
   name: React.PropTypes.string,
@@ -119,7 +131,8 @@ Report.propTypes = {
   is_global: React.PropTypes.bool
 }
 Report.contextTypes = {
-  messages: React.PropTypes.object.isRequired
+  messages: React.PropTypes.object.isRequired,
+  moment: React.PropTypes.func.isRequired
 }
 
 export const Reports = React.createClass({

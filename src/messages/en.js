@@ -311,5 +311,6 @@ module.exports = {
   privateReportTooltip: 'Only you can see this report',
   companyReportTooltip: 'Anyone in your company can see this report',
   globalReportTooltip: 'This is a builtin report',
-  createdByName: 'Created by <strong>{name}</strong>'
+  createdByName: 'Created by <strong>{name}</strong>',
+  updatedTimeAgo: 'Last update {timeago}'
 }
