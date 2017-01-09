@@ -310,5 +310,6 @@ module.exports = {
   kpiGoalMetricResult: '{currentValue} of {goal}',
   privateReportTooltip: 'Only you can see this report',
   companyReportTooltip: 'Anyone in your company can see this report',
-  globalReportTooltip: 'This is a builtin report'
+  globalReportTooltip: 'This is a builtin report',
+  createdByName: 'Created by <strong>{name}</strong>'
 }

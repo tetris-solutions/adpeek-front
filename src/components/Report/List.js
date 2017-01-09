@@ -31,6 +31,12 @@ const style = csjs`
 .icon {
   float: right;
   padding-top: .4em;
+}
+.author {
+  margin-bottom: .3em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }`
 
 const cleanStr = str => trim(deburr(lowerCase(str)))
@@ -44,7 +50,7 @@ I.propTypes = {
   title: React.PropTypes.string.isRequired
 }
 
-function Report ({dispatch, params, shareUrl, path, id, name, is_private, is_global, description}, {messages}) {
+function Report ({dispatch, params, shareUrl, path, id, name, author, is_private, is_global, description}, {messages}) {
   let icon = <I icon='people' title={messages.companyReportTooltip}/>
 
   if (is_private) {
@@ -57,10 +63,14 @@ function Report ({dispatch, params, shareUrl, path, id, name, is_private, is_glo
     <ThumbLink to={`${path}/report/${id}`} title={name}>
       <Cap>{name}</Cap>
       <BottomLine>
-        <div className={`${style.descr}`}>
-          <span>
-            {description}
-          </span>
+        {author && <div className={`${style.author}`}>
+          <Message html name={author.name}>
+            createdByName
+          </Message>
+        </div>}
+
+        <div className={`mdl-color-text--grey-700 ${style.descr}`}>
+          <em>{description}</em>
         </div>
         {icon}
       </BottomLine>
@@ -98,6 +108,7 @@ function Report ({dispatch, params, shareUrl, path, id, name, is_private, is_glo
 Report.displayName = 'Report'
 Report.propTypes = {
   id: React.PropTypes.string,
+  author: React.PropTypes.object,
   shareUrl: React.PropTypes.string,
   path: React.PropTypes.string,
   name: React.PropTypes.string,
