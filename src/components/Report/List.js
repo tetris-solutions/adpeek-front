@@ -1,9 +1,10 @@
 import React from 'react'
+import {styled} from '../mixins/styled'
 import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
 import Fence from '../Fence'
 import Page from '../Page'
-import {Container, Title, ThumbLink, Gear} from '../ThumbLink'
+import {Container, BottomLine, ThumbLink, Gear, Cap} from '../ThumbLink'
 import {DropdownMenu, MenuItem} from '../DropdownMenu'
 import SubHeader, {SubHeaderButton} from '../SubHeader'
 import {Link} from 'react-router'
@@ -16,11 +17,26 @@ import SearchBox from '../HeaderSearchBox'
 import {DeleteSpan} from '../DeleteButton'
 import {deleteReportAction} from '../../actions/delete-report'
 import ShareButton from './ShareButton'
+import csjs from 'csjs'
+
+const style = csjs`
+.descr {
+  font-size: x-small;
+  line-height: 1.2em;
+  height: calc(1.2em * 3);
+  overflow: hidden;
+}`
 
 const cleanStr = str => trim(deburr(lowerCase(str)))
-const Report = ({dispatch, params, shareUrl, path, id, name}) => (
+
+const Report = ({dispatch, params, shareUrl, path, id, name, description}) => (
   <ThumbLink to={`${path}/report/${id}`} title={name}>
-    <Title>{name}</Title>
+    <Cap>{name}</Cap>
+    <BottomLine>
+      <div className={`${style.descr}`}>
+        {description}
+      </div>
+    </BottomLine>
     <Fence canEditReport>{({canEditReport}) =>
       <Gear>
         <DropdownMenu>
@@ -57,12 +73,14 @@ Report.propTypes = {
   shareUrl: React.PropTypes.string,
   path: React.PropTypes.string,
   name: React.PropTypes.string,
+  description: React.PropTypes.string,
   dispatch: React.PropTypes.func.isRequired,
   params: React.PropTypes.object.isRequired
 }
 
 export const Reports = React.createClass({
   displayName: 'Reports',
+  mixins: [styled(style)],
   propTypes: {
     dispatch: React.PropTypes.func.isRequired,
     params: React.PropTypes.object.isRequired,

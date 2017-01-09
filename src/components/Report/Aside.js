@@ -13,9 +13,41 @@ import {canSkipReportEditPrompt} from '../../functions/can-skip-report-edit-prom
 import NameInput from './NameInput'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
-const createModule = () => window.event$.emit('report.onNewModuleClick')
+import replace from 'lodash/replace'
 
-export function ReportAside ({report, dispatch}, {messages, locales, router, location: {pathname, search}, params}) {
+const createModule = () => window.event$.emit('report.onNewModuleClick')
+const withLineBreaks = str => replace(str, /\n/g, '<br/>')
+const blockStyle = {fontSize: '10pt', margin: '0 2em'}
+
+const ReportHeader = props => {
+  if (props.inEditMode) {
+    return <NameInput {...props}/>
+  }
+
+  const {report: {name, description}} = props
+
+  return (
+    <div>
+      <Name>{name}</Name>
+
+      {description && (
+        <blockquote
+          style={blockStyle}
+          dangerouslySetInnerHTML={{__html: withLineBreaks(description)}}/>
+      )}
+
+      <hr/>
+    </div>
+  )
+}
+
+ReportHeader.displayName = 'Header'
+ReportHeader.propTypes = {
+  report: React.PropTypes.object.isRequired,
+  inEditMode: React.PropTypes.bool.isRequired
+}
+
+export function ReportAside ({report, user, dispatch}, {messages, locales, router, location: {pathname, search}, params}) {
   const {company, workspace, folder} = params
 
   const scopeUrl = '/' +
@@ -37,55 +69,66 @@ export function ReportAside ({report, dispatch}, {messages, locales, router, loc
   const cloneUrl = `${scopeUrl}/reports/new?clone=${report.id}&name=${cloneName}`
   const reportUrl = `${scopeUrl}/report/${report.id}`
 
-  return (
-    <Fence canEditReport canBrowseReports>
-      {({canEditReport, canBrowseReports}) =>
-        <Navigation icon='trending_up'>
-          {inEditMode
-            ? <NameInput dispatch={dispatch} params={params} report={report}/>
-            : (
-              <div>
-                <Name>{report.name}</Name>
+  /* eslint-disable */
+  function navigation ({canEditReport, canBrowseReports}) {
+    /* eslint-enable */
 
-                {report.description &&
-                <blockquote
-                  style={{fontSize: '10pt', margin: '0 2em'}}
-                  dangerouslySetInnerHTML={{__html: report.description.replace(/\n/g, '<br/>')}}/>}
+    const isGlobalReport = !report.company
 
-                <hr/>
-              </div>
-            )}
+    if (isGlobalReport && !user.is_admin) {
+      canEditReport = false
+    }
 
-          <NavBts>
-            {inEditMode && canEditReport && (
-              <NavBt onClick={createModule} icon='add'>
-                <Message>newModule</Message>
-              </NavBt>)}
+    let backUrl = `${reportUrl}${search}`
 
-            {canEditReport && !inEditMode && shouldSkipEditPrompt && (
-              <NavBt tag={Link} to={`${reportUrl}/edit${search}`} icon='create'>
-                <Message>editReport</Message>
-              </NavBt>)}
+    if (!inEditMode) {
+      backUrl = canBrowseReports ? `${scopeUrl}/reports` : scopeUrl
+    }
 
-            {canEditReport && !inEditMode && !shouldSkipEditPrompt && (
-              <NavBt tag={ReportEditPrompt} report={report} params={params} icon='create'/>)}
+    return (
+      <Navigation icon='trending_up'>
+        <ReportHeader {...{dispatch, params, report, inEditMode}}/>
 
-            {canEditReport && <NavBt tag={Link} to={cloneUrl} icon='content_copy'>
+        <NavBts>
+          {inEditMode && canEditReport && (
+            <NavBt onClick={createModule} icon='add'>
+              <Message>newModule</Message>
+            </NavBt>)}
+
+          {canEditReport && !inEditMode && shouldSkipEditPrompt && (
+            <NavBt tag={Link} to={`${reportUrl}/edit${search}`} icon='create'>
+              <Message>editReport</Message>
+            </NavBt>)}
+
+          {canEditReport && !inEditMode && !shouldSkipEditPrompt && (
+            <NavBt
+              tag={ReportEditPrompt}
+              report={report}
+              params={params}
+              icon='create'/>)}
+
+          {canEditReport && (
+            <NavBt tag={Link} to={cloneUrl} icon='content_copy'>
               <Message>cloneReport</Message>
-            </NavBt>}
+            </NavBt>)}
 
-            {canEditReport && (
-              <NavBt tag={DeleteButton} entityName={report.name} onClick={deleteReport} icon='delete'>
-                <Message>deleteReport</Message>
-              </NavBt>)}
+          {canEditReport && (
+            <NavBt tag={DeleteButton} entityName={report.name} onClick={deleteReport} icon='delete'>
+              <Message>deleteReport</Message>
+            </NavBt>)}
 
-            <NavBt tag={Link} to={inEditMode ? reportUrl : (canBrowseReports ? `${scopeUrl}/reports` : scopeUrl)} icon='close'>
-              <Message>oneLevelUpNavigation</Message>
-            </NavBt>
-          </NavBts>
-        </Navigation>}
-    </Fence>
-  )
+          <NavBt
+            tag={Link}
+            to={backUrl}
+            icon='close'>
+            <Message>oneLevelUpNavigation</Message>
+          </NavBt>
+        </NavBts>
+      </Navigation>
+    )
+  }
+
+  return <Fence canEditReport canBrowseReports>{navigation}</Fence>
 }
 
 ReportAside.displayName = 'Report-Aside'
