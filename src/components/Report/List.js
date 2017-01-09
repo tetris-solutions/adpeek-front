@@ -28,6 +28,11 @@ const style = csjs`
   overflow: hidden;
   width: calc(100% - 30px);
 }
+.descr > div {
+  display: flex;
+  height: 100%;
+  align-items: center
+}
 .icon {
   float: right;
   padding-top: .4em;
@@ -58,7 +63,9 @@ function Report ({dispatch, params, shareUrl, path, id, name, is_private, is_glo
       <Cap>{name}</Cap>
       <BottomLine>
         <div className={`${style.descr}`}>
-          {description}
+          <div>
+            {description}
+          </div>
         </div>
         {icon}
       </BottomLine>
