@@ -2,6 +2,7 @@ import concat from 'lodash/concat'
 import csjs from 'csjs'
 import cx from 'classnames'
 import find from 'lodash/find'
+import isObject from 'lodash/isPlainObject'
 import isString from 'lodash/isString'
 import compact from 'lodash/compact'
 import forEach from 'lodash/forEach'
@@ -58,6 +59,10 @@ class Sortable {
 }
 
 function normalizeForSorting (val) {
+  if (isObject(val) && val.value !== undefined && val.raw !== undefined) {
+    return val.value
+  }
+
   return (
     isNumber(val) || isString(val) || isDate(val)
   ) ? val : -Infinity
@@ -105,8 +110,15 @@ THeader.propTypes = {
   attributes: React.PropTypes.object
 }
 
-function Cell ({attribute: {is_metric, type}, value}, {locales, moment}) {
+function Cell ({attribute: {is_metric, type, is_percentage}, value: raw}, {locales, moment}) {
   const tdProps = {}
+
+  let value = raw
+
+  if (type === 'special') {
+    value = raw.value
+    type = is_percentage ? 'percentage' : type
+  }
 
   if (isNumber(value)) {
     tdProps['data-raw'] = JSON.stringify(value)
