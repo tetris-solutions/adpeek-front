@@ -21,7 +21,7 @@ const Description = React.createClass({
   },
   componentWillMount () {
     this.setState({
-      description: this.savedDescription()
+      description: this.savedDescription() || ''
     })
   },
   componentDidMount () {

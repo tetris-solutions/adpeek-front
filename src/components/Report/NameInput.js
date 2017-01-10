@@ -53,7 +53,7 @@ const NameInput = React.createClass({
           <div className='mdl-textfield' style={tStyle}>
             <textarea
               placeholder={this.context.messages.reportDescriptionPlaceholder}
-              value={description}
+              value={description || ''}
               onChange={this.onChange}
               className='mdl-textfield__input'
               rows={3}
