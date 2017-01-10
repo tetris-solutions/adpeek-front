@@ -118,11 +118,13 @@ function Cell ({attribute: {is_metric, type, is_percentage}, value: raw}, {local
 
   let value = raw
 
-  if (type === 'special' && isObject(value)) {
-    value = raw.value
+  if (type === 'special') {
+    if (isObject(value)) {
+      value = raw.value
 
-    if (isString(raw.raw)) {
-      tdProps.title = raw.raw
+      if (isString(raw.raw)) {
+        tdProps.title = raw.raw
+      }
     }
 
     if (is_percentage) {
