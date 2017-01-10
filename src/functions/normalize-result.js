@@ -4,6 +4,8 @@ import mapValues from 'lodash/mapValues'
 import find from 'lodash/find'
 import indexOf from 'lodash/indexOf'
 import toLower from 'lodash/toLower'
+import isString from 'lodash/isString'
+import isObject from 'lodash/isPlainObject'
 
 const months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
 
@@ -25,6 +27,16 @@ export function normalizeResult (attributes, result) {
     const attribute = find(attributes, ['id', field])
 
     if (!attribute) return value
+
+    if (
+      attribute.type === 'special' &&
+      isObject(value) && !(
+        isString(value.raw) &&
+        value.raw.match(/[^0-9\s,.%]/) // raw value is not simply a number
+      )
+    ) {
+      return value.value
+    }
 
     let date
 

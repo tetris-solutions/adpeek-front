@@ -6,6 +6,7 @@ import get from 'lodash/get'
 import size from 'lodash/size'
 import memoize from 'lodash/memoize'
 import includes from 'lodash/includes'
+import isObject from 'lodash/isPlainObject'
 import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
 import isString from 'lodash/isString'
@@ -90,6 +91,10 @@ const emptyResultChart = ({isLoading, messages: {loadingReport, emptyReportResul
   }
 })
 
+const readType = attr => attr.type === 'special' && attr.is_percentage
+  ? 'percentage'
+  : attr.type
+
 export function reportToChartConfig (type, props) {
   const {comments, query, entity, attributes} = props
   const {metrics} = query
@@ -111,8 +116,11 @@ export function reportToChartConfig (type, props) {
     },
     labels: {
       formatter () {
-        const attribute = attributes[metric]
-        return prettyNumber(this.value, attribute.type, props.locales)
+        return prettyNumber(
+          this.value,
+          readType(attributes[metric]),
+          props.locales
+        )
       }
     },
     opposite: index % 2 !== 0
@@ -205,12 +213,24 @@ export function reportToChartConfig (type, props) {
           series.push(seriesConfig)
         }
 
-        const y = Number(point[metric])
+        const isSpecialPoint = isObject(point[metric]) && point[metric].value !== undefined
+
         const pointConfig = {
           metric,
-          id: index,
-          // @todo maybe cast string values somehow?
-          y: isNaN(y) ? null : y
+          id: index
+        }
+
+        if (isSpecialPoint) {
+          pointConfig.y = point[metric].value
+          pointConfig.raw = point[metric].raw
+          pointConfig.marker = {
+            enabled: true,
+            fillColor: '#414141',
+            symbol: 'circle'
+          }
+        } else {
+          const value = Number(point[metric])
+          pointConfig.y = isNaN(value) ? null : value
         }
 
         if (type === 'pie') {
@@ -295,9 +315,13 @@ export function reportToChartConfig (type, props) {
 
   function pointFormatter () {
     const attribute = attributes[this.options.metric]
-    const value = prettyNumber(this.y, attribute.type, props.locales)
+    const value = prettyNumber(this.y, readType(attribute), props.locales)
 
-    return `<span style="color: ${this.color}">${this.series.name}:</span> <b>${value}</b><br/>`
+    return `
+        <span style="color: ${this.color}">${this.series.name}:</span>
+        <b>${value}</b>
+        ${this.options.raw ? `<em>${this.options.raw}</em>` : ''}
+        <br/>`
   }
 
   set(config, ['plotOptions', 'series', 'tooltip', 'pointFormatter'], pointFormatter)
