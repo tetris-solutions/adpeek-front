@@ -86,7 +86,8 @@ const ReportController = React.createClass({
     }
   },
   ensureDateRange (context = this.context) {
-    if (!context.location.query.from) {
+    const {from, to} = context.location.query
+    if (!from || !to) {
       this.navigateToNewRange(this.getCurrentRange(), 'replace', context)
     }
   },
@@ -94,8 +95,8 @@ const ReportController = React.createClass({
     let {location: {query: {from, to}}} = this.context
     const {moment} = this.context
 
-    from = from || moment().subtract(30, 'days').format('YYYY-MM-DD')
     to = to || moment().format('YYYY-MM-DD')
+    from = from || moment(to).subtract(30, 'days').format('YYYY-MM-DD')
 
     return {from, to}
   },

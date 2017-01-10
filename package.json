@@ -64,7 +64,7 @@
     "recompose": "^0.20.2",
     "shallowequal": "^0.2.2",
     "stable": "^0.1.5",
-    "tetris-iso": "^0.4.4",
+    "tetris-iso": "^0.4.5",
     "winston": "^2.2.0",
     "winston-logstash": "^0.2.11"
   },
