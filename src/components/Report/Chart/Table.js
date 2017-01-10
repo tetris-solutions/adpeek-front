@@ -49,6 +49,9 @@ const style = csjs`
   font-size: medium !important;
   font-style: italic !important;
   text-align: center !important;
+}
+.cell[title] {
+  font-style: italic;
 }`
 
 class Sortable {
@@ -117,7 +120,14 @@ function Cell ({attribute: {is_metric, type, is_percentage}, value: raw}, {local
 
   if (type === 'special') {
     value = raw.value
-    type = is_percentage ? 'percentage' : type
+
+    if (isString(raw.raw)) {
+      tdProps.title = raw.raw
+    }
+
+    if (is_percentage) {
+      type = 'percentage'
+    }
   }
 
   if (isNumber(value)) {
@@ -137,7 +147,7 @@ function Cell ({attribute: {is_metric, type, is_percentage}, value: raw}, {local
   }
 
   return (
-    <td className={is_metric ? '' : 'mdl-data-table__cell--non-numeric'} {...tdProps}>
+    <td className={is_metric ? `${style.cell}` : `${style.cell} mdl-data-table__cell--non-numeric`} {...tdProps}>
       {isString(value) || React.isValidElement(value)
         ? value
         : '---'}
