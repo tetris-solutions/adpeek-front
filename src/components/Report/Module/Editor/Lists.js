@@ -76,8 +76,8 @@ const Lists = React.createClass({
     const {searchValue} = this.state
     const {messages, draft, addAttribute, removeAttribute} = this.context
 
-    const selectable = sorted(matching(this.context.selectable, searchValue))
-    const items = sorted(matching(draft.entity.list, searchValue))
+    const selectable = sorted(matching(this.context.selectable, clean(searchValue)))
+    const items = sorted(matching(draft.entity.list, clean(searchValue)))
     const dimensions = filter(selectable, 'is_dimension')
     const metrics = filter(selectable, 'is_metric')
     const attrLevels = this.attributeLevels()
