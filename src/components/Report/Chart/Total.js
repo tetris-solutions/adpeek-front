@@ -4,6 +4,9 @@ import {styled} from '../../mixins/styled'
 import head from 'lodash/head'
 import get from 'lodash/get'
 import {prettyNumber} from '../../../functions/pretty-number'
+import isObject from 'lodash/isObject'
+import isString from 'lodash/isString'
+
 const style = csjs`
 .wrapper {
   display: table;
@@ -23,6 +26,9 @@ const style = csjs`
   text-align: center;
   vertical-align: middle;
   font-size: 64px;
+}
+.content[title] {
+  font-style: italic;
 }
 .empty {
   color: grey;
@@ -45,8 +51,30 @@ const TotalChart = React.createClass({
   render () {
     const {query: {metrics}, name, result, attributes} = this.props
     const metric = head(metrics)
-    const value = get(result, [0, metric])
-    const type = get(attributes, [metric, 'type'])
+    const is_percentage = get(attributes, [metric, 'is_percentage'])
+    const divProps = {
+      className: `${style.content}`
+    }
+
+    const raw = get(result, [0, metric])
+
+    let value = raw
+    let type = get(attributes, [metric, 'type'])
+
+    if (type === 'special') {
+      if (isObject(value)) {
+        value = raw.value
+
+        if (isString(raw.raw)) {
+          divProps.title = raw.raw
+        }
+      }
+
+      if (is_percentage) {
+        type = 'percentage'
+      }
+    }
+
     const {locales} = this.context
 
     return (
@@ -55,10 +83,10 @@ const TotalChart = React.createClass({
           {name}
         </h5>
 
-        <div className={String(style.content)}>
-          {value === undefined ? (
-            <span className={String(style.empty)}>---</span>
-          ) : prettyNumber(value, type, locales)}
+        <div {...divProps}>
+          {value === undefined
+            ? <span className={String(style.empty)}>---</span>
+            : prettyNumber(value, type, locales)}
         </div>
       </div>
     )
