@@ -78,32 +78,32 @@ function getCursorToEntity (entity, tree, params, cursor = [], path = null) {
  * HOC that injects route/context dependent properties in a component
  * @param {Function} Component component to extend
  * @param {Object|String} baseCursors cursors that will be passed directly into baobab-react's branch function
- * @param {...String} names context dependent properties names
+ * @param {...String} propNames context dependent properties names
  * @return {Function} the extended react component
  */
-export function contextualize (Component, baseCursors, ...names) {
-  const propsCache = {}
+export function contextualize (Component, baseCursors, ...propNames) {
+  const injectedProps = {}
 
   if (!isObject(baseCursors)) {
-    names.unshift(baseCursors)
+    propNames.unshift(baseCursors)
     baseCursors = {}
   }
 
-  function PropsInjector (props) {
-    function updateCacheForProp (name) {
-      if (isRouteParam[name] && !props.params[name]) {
-        propsCache[name] = null
+  function PropsInjector (parentProps) {
+    function injectProp (name) {
+      if (isRouteParam[name] && !parentProps.params[name]) {
+        injectedProps[name] = null
       } else {
-        propsCache[name] = props[name] || propsCache[name]
+        injectedProps[name] = parentProps[name] || injectedProps[name] || null
       }
     }
 
-    forEach(names, updateCacheForProp)
+    forEach(propNames, injectProp)
 
-    return <Component {...props} {...propsCache} />
+    return <Component {...parentProps} {...injectedProps} />
   }
 
-  const propsNames = keys(baseCursors).concat(names).join(', ')
+  const propsNames = keys(baseCursors).concat(propNames).join(', ')
 
   function injectParams (Child) {
     const ParamsInjector = (props, {params}) => <Child {...props} params={params}/>
@@ -129,7 +129,7 @@ export function contextualize (Component, baseCursors, ...names) {
     }
   }
 
-  forEach(names, addToDynamicPropTypes)
+  forEach(propNames, addToDynamicPropTypes)
 
   PropsInjector.propTypes.params = React.PropTypes.shape(paramsShape)
 
@@ -150,7 +150,7 @@ export function contextualize (Component, baseCursors, ...names) {
       }
     }
 
-    forEach(names, findCursorFor)
+    forEach(propNames, findCursorFor)
 
     return cursors
   }

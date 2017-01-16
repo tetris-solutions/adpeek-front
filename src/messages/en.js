@@ -312,5 +312,7 @@ module.exports = {
   companyReportTooltip: 'Anyone in your company can see this report',
   globalReportTooltip: 'This is a builtin report',
   createdByName: 'Created by <strong>{name}</strong>',
-  updatedTimeAgo: 'Last update {timeago}'
+  updatedTimeAgo: 'Last update {timeago}',
+  notFoundTitle: 'Not Found!',
+  notFoundBody: 'The object you tried to access does not exist or you don\'t have permission to view it.'
 }

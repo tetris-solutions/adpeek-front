@@ -312,5 +312,7 @@ module.exports = {
   companyReportTooltip: 'Relatório compartilhado com seus colegas de trabalho',
   globalReportTooltip: 'Esse é um relatório padrão do Manager',
   createdByName: 'Criado por <strong>{name}</strong>',
-  updatedTimeAgo: 'Modificado {timeago}'
+  updatedTimeAgo: 'Modificado {timeago}',
+  notFoundTitle: 'Não encontrado!',
+  notFoundBody: 'O objeto que você está tentando acessar não existe ou não é acessível para o seu usuário.'
 }

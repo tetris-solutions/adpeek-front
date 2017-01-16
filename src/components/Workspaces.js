@@ -11,7 +11,7 @@ import Message from 'tetris-iso/Message'
 import React from 'react'
 import Fence from './Fence'
 import SearchBox from './HeaderSearchBox'
-import {contextualize} from './higher-order/contextualize'
+import {requires} from './higher-order/not-nullable'
 import {Container, ThumbLink, BottomLine, Cap, Gear} from './ThumbLink'
 import {DropdownMenu, MenuItem, HeaderMenuItem} from './DropdownMenu'
 import SubHeader, {SubHeaderButton} from './SubHeader'
@@ -380,4 +380,4 @@ export const Workspaces = React.createClass({
   }
 })
 
-export default contextualize(Workspaces, 'company')
+export default requires(Workspaces, 'company')
