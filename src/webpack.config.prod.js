@@ -18,14 +18,38 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': passEnv()
     }),
-    new webpack.optimize.UglifyJsPlugin({})
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
+      mangle: {
+        screw_ie8: true,
+        keep_fnames: true
+      },
+      compress: {
+        screw_ie8: true
+      },
+      comments: false
+    })
   ],
   module: {
-    loaders: [{
+    rules: [{
       test: /\.js?$/,
       exclude: /node_modules/,
       include: __dirname,
-      loader: 'babel'
+      loader: 'babel-loader',
+      query: {
+        presets: [
+          [
+            'es2015',
+            {
+              modules: false
+            }
+          ],
+          'react'
+        ]
+      }
     }]
   }
 }

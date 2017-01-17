@@ -29,27 +29,27 @@ module.exports = {
   },
   plugins: plugins,
   module: {
-    loaders: [{
+    rules: [{
       test: /\.js?$/,
       exclude: /node_modules/,
       include: __dirname,
-      loader: 'babel',
-      query: {
-        plugins: [
-          ['react-transform', {
-            transforms: [
-              {
-                transform: 'react-transform-hmr',
-                imports: ['react'],
-                locals: ['module']
-              }, {
-                transform: 'react-transform-catch-errors',
-                imports: ['react', 'redbox-react']
-              }
-            ]
-          }]
-        ]
-      }
+      loader: 'babel-loader'
+      // query: {
+      //   plugins: [
+      //     ['react-transform', {
+      //       transforms: [
+      //         {
+      //           transform: 'react-transform-hmr',
+      //           imports: ['react'],
+      //           locals: ['module']
+      //         }, {
+      //           transform: 'react-transform-catch-errors',
+      //           imports: ['react', 'redbox-react']
+      //         }
+      //       ]
+      //     }]
+      //   ]
+      // }
     }]
   }
 }
