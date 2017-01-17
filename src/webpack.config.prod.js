@@ -12,7 +12,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, '..', 'public', 'js'),
     filename: 'client.' + revision.short() + '.js',
-    publicPath: '/'
+    publicPath: '/js/'
   },
   plugins: [
     new webpack.DefinePlugin({
