@@ -7,8 +7,7 @@ var plugins = [
   new webpack.DefinePlugin({
     'process.env': passEnv()
   }),
-  new webpack.HotModuleReplacementPlugin(),
-  new webpack.NoErrorsPlugin()
+  new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
 ]
 
 if (process.env.banal) {
@@ -19,7 +18,6 @@ module.exports = {
   devtool: 'eval',
   context: __dirname,
   entry: [
-    'webpack-hot-middleware/client',
     path.resolve(__dirname, 'client.js')
   ],
   output: {

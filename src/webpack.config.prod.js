@@ -18,6 +18,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': passEnv()
     }),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.LoaderOptionsPlugin({
       minimize: true
     }),
