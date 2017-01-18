@@ -8,9 +8,6 @@ import {load, component} from '../loader'
 
 import DocTitle from '../components/DocTitle'
 
-import CampaignCreatives from '../components/CampaignCreatives'
-import FolderCreatives from '../components/FolderCreatives'
-
 import CampaignAside from '../components/CampaignAside'
 import CampaignBreadcrumb from '../components/CampaignBreadcrumb'
 import Campaigns from '../components/FolderCampaigns'
@@ -180,10 +177,10 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                      onEnter={preload(folder)}>
 
                 <IndexRoute component={Campaigns} onEnter={preload(campaigns)}/>
-                <Route path='creatives' component={FolderCreatives} onEnter={preload(campaigns)}/>
+                <Route path='creatives' {...component(load.FolderCreatives)} onEnter={preload(campaigns)}/>
 
                 <Route path='campaign/:campaign' aside={CampaignAside} breadcrumb={CampaignBreadcrumb}>
-                  <Route path='creatives' component={CampaignCreatives}/>
+                  <Route path='creatives' {...component(load.CampaignCreatives)}/>
                 </Route>
 
                 {getReportRoutes(load.FolderReport, load.FolderReports, preload(campaigns))}

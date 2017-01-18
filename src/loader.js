@@ -89,6 +89,11 @@ const orderCloning = render => require.ensure([], require => render({
   company: require('./components/CompanyOrdersCloning')
 }))
 
+const creatives = render => require.ensure([], require => render({
+  campaign: require('./components/CampaignCreatives'),
+  folder: require('./components/FolderCreatives')
+}))
+
 export const load = {
   App: screen(render => require.ensure([], require => render(require('./components/App')))),
   Unsub: screen(render => require.ensure([], require => render(require('./components/Report/Unsub')))),
@@ -113,5 +118,8 @@ export const load = {
 
   CompanyOrdersCloning: screen(orderCloning, 'company'),
   WorkspaceOrdersCloning: screen(orderCloning, 'workspace'),
-  FolderOrdersCloning: screen(orderCloning, 'folder')
+  FolderOrdersCloning: screen(orderCloning, 'folder'),
+
+  CampaignCreatives: screen(creatives, 'campaign'),
+  FolderCreatives: screen(creatives, 'folder')
 }
