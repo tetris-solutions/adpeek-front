@@ -80,7 +80,10 @@ const breadcrumbs = render => require.ensure([], require => render({
   folder: require('./components/FolderBreadcrumb'),
   workspace: require('./components/WorkspaceBreadcrumb'),
   report: require('./components/Report/Breadcrumb'),
-  reportList: require('./components/Report/ListBreadcrumb')
+  reports: require('./components/Report/ListBreadcrumb'),
+  campaign: require('./components/CampaignBreadcrumb'),
+  order: require('./components/OrderBreadcrumb'),
+  orders: require('./components/OrdersBreadcrumb')
 }))
 
 const orderCloning = render => require.ensure([], require => render({
@@ -117,8 +120,11 @@ export const load = {
   WorkspaceReports: screen(reportListSection, 'workspace'),
   FolderReports: screen(reportListSection, 'folder'),
 
+  CampaignBreadcrumb: piece(breadcrumbs, 'campaign'),
+  OrderBreadCrumb: piece(breadcrumbs, 'order'),
+  OrdersBreadCrumb: piece(breadcrumbs, 'orders'),
   ReportBreadcrumb: piece(breadcrumbs, 'report'),
-  ReportsBreadcrumb: piece(breadcrumbs, 'reportList'),
+  ReportsBreadcrumb: piece(breadcrumbs, 'reports'),
   CompanyBreadcrumb: piece(breadcrumbs, 'company'),
   WorkspaceBreadcrumb: piece(breadcrumbs, 'workspace'),
   FolderBreadcrumb: piece(breadcrumbs, 'folder'),
@@ -133,5 +139,8 @@ export const load = {
   WorkspaceCreate: screen(forms, 'workspaceCreate'),
   WorkspaceEdit: screen(forms, 'workspaceEdit'),
   FolderCreate: screen(forms, 'folderCreate'),
-  FolderEdit: screen(forms, 'folderEdit')
+  FolderEdit: screen(forms, 'folderEdit'),
+
+  Order: screen(render => require.ensure([], require => render(require('./components/Order')))),
+  OrderAutoBudget: screen(render => require.ensure([], require => render(require('./components/OrderAutoBudget'))))
 }

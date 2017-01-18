@@ -9,7 +9,7 @@ import {load, component} from '../loader'
 import DocTitle from '../components/DocTitle'
 
 import CampaignAside from '../components/CampaignAside'
-import CampaignBreadcrumb from '../components/CampaignBreadcrumb'
+
 import Campaigns from '../components/FolderCampaigns'
 import CompanyAside from '../components/CompanyAside'
 
@@ -22,12 +22,7 @@ import FolderOrders from '../components/FolderOrders'
 import CompanyOrders from '../components/CompanyOrders'
 import WorkspaceOrders from '../components/WorkspaceOrders'
 
-import Order from '../components/Order'
-
 import OrderAside from '../components/OrderAside'
-import OrderAutoBudget from '../components/OrderAutoBudget'
-import OrderBreadCrumb from '../components/OrderBreadcrumb'
-import OrdersBreadCrumb from '../components/OrdersBreadcrumb'
 
 import WorkspaceAside from '../components/WorkspaceAside'
 
@@ -122,7 +117,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
             {getReportRoutes(load.CompanyReport, load.CompanyReports, preload(savedAccounts))}
 
-            <Route path='orders' breadcrumb={OrdersBreadCrumb} onEnter={preload(orders)}>
+            <Route path='orders' breadcrumb={load.OrdersBreadCrumb} onEnter={preload(orders)}>
               <IndexRoute component={CompanyOrders}/>
               <Route path='clone' {...component(load.CompanyOrdersCloning)}/>
             </Route>
@@ -158,7 +153,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 </Route>
               </Route>
 
-              <Route path='orders' breadcrumb={OrdersBreadCrumb} onEnter={preload(orders)}>
+              <Route path='orders' breadcrumb={load.OrdersBreadCrumb} onEnter={preload(orders)}>
                 <IndexRoute component={WorkspaceOrders}/>
                 <Route path='clone' {...component(load.WorkspaceOrdersCloning)}/>
               </Route>
@@ -175,31 +170,29 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 <IndexRoute component={Campaigns} onEnter={preload(campaigns)}/>
                 <Route path='creatives' {...component(load.FolderCreatives)} onEnter={preload(campaigns)}/>
 
-                <Route path='campaign/:campaign' aside={CampaignAside} breadcrumb={CampaignBreadcrumb}>
+                <Route path='campaign/:campaign' aside={CampaignAside} breadcrumb={load.CampaignBreadcrumb}>
                   <Route path='creatives' {...component(load.CampaignCreatives)}/>
                 </Route>
 
                 {getReportRoutes(load.FolderReport, load.FolderReports, preload(campaigns))}
 
-                <Route path='orders' breadcrumb={OrdersBreadCrumb} onEnter={preload(orders)}>
+                <Route path='orders' breadcrumb={load.OrdersBreadCrumb} onEnter={preload(orders)}>
                   <IndexRoute component={FolderOrders}/>
                   <Route path='clone' {...component(load.FolderOrdersCloning)}/>
                 </Route>
 
-                <Route breadcrumb={OrdersBreadCrumb}
+                <Route breadcrumb={load.OrdersBreadCrumb}
                        onEnter={preload(deliveryMethods, campaignsWithAdsets, orders)}>
 
-                  <Route
-                    aside={OrderAside}
-                    path='order/:order'
-                    breadcrumb={OrderBreadCrumb}>
+                  <Route aside={OrderAside} path='order/:order' breadcrumb={load.OrderBreadCrumb}>
+                    <IndexRoute onEnter={preload(budgets)} {...component(load.Order)}/>
 
-                    <IndexRoute onEnter={preload(budgets)} component={Order}/>
-                    <Route path='autobudget' onEnter={preload(autoBudgetLogs)} component={OrderAutoBudget}/>
-                    <Route path='autobudget/:day' onEnter={preload(autoBudgetLogs)} component={OrderAutoBudget}/>
+                    <Route path='autobudget(/:day)'
+                           onEnter={preload(autoBudgetLogs)}
+                           {...component(load.OrderAutoBudget)}/>
                   </Route>
 
-                  <Route path='create/order' component={Order}/>
+                  <Route path='create/order' {...component(load.Order)}/>
                 </Route>
 
                 <Route path='edit' onEnter={preload(medias, accounts)} {...component(load.FolderEdit)}/>
