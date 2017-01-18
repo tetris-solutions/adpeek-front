@@ -1,6 +1,7 @@
 // esse arquivo é escrito em commonjs e js legado
 // pra que o usuário possa rodar `webpack` normalmente da pasta src
 
+const includes = require('lodash/includes')
 const webpack = require('webpack')
 const path = require('path')
 const dotenv = require('dotenv')
@@ -11,24 +12,19 @@ dotenv.config({
   silent: true
 })
 
-const entry = {
-  main: path.resolve(__dirname, 'client.js'),
-  vendor: [
-    'moment',
-    'react',
-    'react-dom',
-    'baobab',
-    'baobab-react/higher-order',
-    'react-router'
-  ]
-}
+const entry = path.resolve(__dirname, 'client.js')
 
 const envs = new webpack.DefinePlugin({
   'process.env': passEnv()
 })
 const ignore = new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+
 const commons = new webpack.optimize.CommonsChunkPlugin({
-  names: ['vendor', 'manifest']
+  // names: ['vendor', 'manifest'],
+  name: 'vendor',
+  minChunks: module => {
+    return includes(module.resource, '/node_modules/')
+  }
 })
 
 module.exports = !process.env.BUILD_PROD

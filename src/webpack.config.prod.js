@@ -1,4 +1,3 @@
-const webpack = require('webpack')
 const path = require('path')
 const revision = require('git-rev-sync')
 
@@ -9,24 +8,12 @@ module.exports = ({envs, entry, commons, ignore}) => {
     entry,
     output: {
       path: path.resolve(__dirname, '..', 'public', 'js'),
-      filename: 'client.' + revision.short() + '.[name].js',
+      filename: 'client.' + revision.short() + '.js',
       publicPath: '/js/'
     },
     plugins: [
       envs,
-      ignore,
-      commons,
-      new webpack.optimize.UglifyJsPlugin({
-        sourceMap: true,
-        mangle: {
-          screw_ie8: true,
-          keep_fnames: true
-        },
-        compress: {
-          screw_ie8: true
-        },
-        comments: false
-      })
+      ignore
     ],
     module: {
       rules: [{

@@ -4,8 +4,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 module.exports = ({entry, commons, envs, ignore}) => {
   const plugins = [
     envs,
-    ignore,
-    commons
+    ignore
   ]
 
   if (process.env.banal) {
@@ -18,7 +17,7 @@ module.exports = ({entry, commons, envs, ignore}) => {
     entry,
     output: {
       path: path.resolve(__dirname, '..', 'public', 'js'),
-      filename: 'client.[name].js',
+      filename: 'client.js',
       publicPath: '/js/'
     },
     plugins: plugins,

@@ -135,11 +135,23 @@ const orderLevel = provide => require.ensure([], require => provide({
   aside: require('./components/OrderAside')
 }))
 
+const unsub = provide => require.ensure([],
+  require => provide(require('./components/Report/Unsub')))
+
+const mailing = provide => require.ensure([],
+  require => provide(require('./components/Report/Mailing')))
+
+const companies = provide => require.ensure([],
+  require => provide(require('./components/Companies')))
+
+const autoBudget = provide => require.ensure([],
+  require => provide(require('./components/OrderAutoBudget')))
+
 export const component = {
-  Unsub: screen(provide => require.ensure([], require => provide(require('./components/Report/Unsub')))),
-  Mailing: screen(provide => require.ensure([], require => provide(require('./components/Report/Mailing')))),
-  Companies: screen(provide => require.ensure([], require => provide(require('./components/Companies')))),
-  OrderAutoBudget: screen(provide => require.ensure([], require => provide(require('./components/OrderAutoBudget')))),
+  Unsub: screen(unsub),
+  Mailing: screen(mailing),
+  Companies: screen(companies),
+  OrderAutoBudget: screen(autoBudget),
 
   FolderReport: screen(reportSection, 'folder'),
   WorkspaceReport: screen(reportSection, 'workspace'),
