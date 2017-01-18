@@ -81,9 +81,13 @@ const breadcrumbs = render => require.ensure([], require => render({
   workspace: require('./components/WorkspaceBreadcrumb'),
   report: require('./components/Report/Breadcrumb'),
   reports: require('./components/Report/ListBreadcrumb'),
-  campaign: require('./components/CampaignBreadcrumb'),
   order: require('./components/OrderBreadcrumb'),
   orders: require('./components/OrdersBreadcrumb')
+}))
+
+const campaign = render => require.ensure([], require => render({
+  aside: require('./components/CampaignAside'),
+  breadcrumb: require('./components/CampaignBreadcrumb')
 }))
 
 const orderCloning = render => require.ensure([], require => render({
@@ -101,13 +105,41 @@ const forms = render => require.ensure([], require => render({
   folderCreate: require('./components/FolderCreate'),
   folderEdit: require('./components/FolderEdit'),
   workspaceCreate: require('./components/WorkspaceCreate'),
-  workspaceEdit: require('./components/WorkspaceEdit')
+  workspaceEdit: require('./components/WorkspaceEdit'),
+  reportCreate: require('./components/Report/CreateForm')
+}))
+
+const companyLevel = render => require.ensure([], require => render({
+  aside: require('./components/CompanyAside'),
+  workspaces: require('./components/CompanyWorkspaces')
+}))
+
+const workspaceLevel = render => require.ensure([], require => render({
+  aside: require('./components/WorkspaceAside'),
+  folders: require('./components/WorkspaceFolders')
+}))
+
+const folderLevel = render => require.ensure([], require => render({
+  aside: require('./components/FolderAside'),
+  campaigns: require('./components/FolderCampaigns')
+}))
+
+const orderList = render => require.ensure([], require => render({
+  folder: require('./components/FolderOrders'),
+  workspace: require('./components/WorkspaceOrders'),
+  company: require('./components/CompanyOrders')
+}))
+
+const orderLevel = render => require.ensure([], require => render({
+  editor: require('./components/Order'),
+  aside: require('./components/OrderAside')
 }))
 
 export const load = {
-  App: screen(render => require.ensure([], require => render(require('./components/App')))),
   Unsub: screen(render => require.ensure([], require => render(require('./components/Report/Unsub')))),
   Mailing: screen(render => require.ensure([], require => render(require('./components/Report/Mailing')))),
+  Companies: screen(render => require.ensure([], require => render(require('./components/Companies')))),
+  OrderAutoBudget: screen(render => require.ensure([], require => render(require('./components/OrderAutoBudget')))),
 
   FolderReport: screen(reportSection, 'folder'),
   WorkspaceReport: screen(reportSection, 'workspace'),
@@ -120,7 +152,6 @@ export const load = {
   WorkspaceReports: screen(reportListSection, 'workspace'),
   FolderReports: screen(reportListSection, 'folder'),
 
-  CampaignBreadcrumb: piece(breadcrumbs, 'campaign'),
   OrderBreadCrumb: piece(breadcrumbs, 'order'),
   OrdersBreadCrumb: piece(breadcrumbs, 'orders'),
   ReportBreadcrumb: piece(breadcrumbs, 'report'),
@@ -140,7 +171,24 @@ export const load = {
   WorkspaceEdit: screen(forms, 'workspaceEdit'),
   FolderCreate: screen(forms, 'folderCreate'),
   FolderEdit: screen(forms, 'folderEdit'),
+  ReportCreate: screen(forms, 'reportCreate'),
 
-  Order: screen(render => require.ensure([], require => render(require('./components/Order')))),
-  OrderAutoBudget: screen(render => require.ensure([], require => render(require('./components/OrderAutoBudget'))))
+  CampaignBreadcrumb: piece(campaign, 'breadcrumb'),
+  CampaignAside: piece(campaign, 'aside'),
+
+  CompanyWorkspaces: screen(companyLevel, 'workspaces'),
+  CompanyAside: piece(companyLevel, 'aside'),
+
+  WorkspaceFolders: screen(workspaceLevel, 'folders'),
+  WorkspaceAside: piece(workspaceLevel, 'aside'),
+
+  FolderCampaigns: screen(folderLevel, 'campaigns'),
+  FolderAside: piece(folderLevel, 'aside'),
+
+  FolderOrders: screen(orderList, 'folder'),
+  WorkspaceOrders: screen(orderList, 'workspace'),
+  CompanyOrders: screen(orderList, 'company'),
+
+  Order: screen(orderLevel, 'editor'),
+  OrderAside: piece(orderLevel, 'aside')
 }
