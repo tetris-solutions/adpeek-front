@@ -87,7 +87,7 @@
     "react-addons-test-utils": "^15.2.1",
     "rimraf": "^2.5.2",
     "shelljs": "^0.6.0",
-    "webpack": "^2.2.0-rc.7",
+    "webpack": "^2.2.0",
     "webpack-bundle-analyzer": "^2.2.0",
     "webpack-dev-middleware": "^1.9.0",
     "webpack-hot-middleware": "^2.15.0"
