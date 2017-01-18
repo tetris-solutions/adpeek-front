@@ -25,7 +25,7 @@ function bypass (getComponent) {
   return {component}
 }
 
-export const component = isServer
+export const render = isServer
   ? bypass
   : fn => ({
     getComponent (nextState, callback) {
@@ -60,7 +60,7 @@ export const piece = (loader, name = null) =>
     }
   })
 
-const reportSection = render => require.ensure([], require => render({
+const reportSection = provide => require.ensure([], require => provide({
   folder: require('./components/FolderReport'),
   workspace: require('./components/WorkspaceReport'),
   company: require('./components/CompanyReport'),
@@ -69,13 +69,13 @@ const reportSection = render => require.ensure([], require => render({
   asideLite: require('./components/Report/AsideLite')
 }))
 
-const reportListSection = render => require.ensure([], require => render({
+const reportListSection = provide => require.ensure([], require => provide({
   company: require('./components/CompanyReports'),
   workspace: require('./components/WorkspaceReports'),
   folder: require('./components/FolderReports')
 }))
 
-const breadcrumbs = render => require.ensure([], require => render({
+const breadcrumbs = provide => require.ensure([], require => provide({
   company: require('./components/CompanyBreadcrumb'),
   folder: require('./components/FolderBreadcrumb'),
   workspace: require('./components/WorkspaceBreadcrumb'),
@@ -85,23 +85,23 @@ const breadcrumbs = render => require.ensure([], require => render({
   orders: require('./components/OrdersBreadcrumb')
 }))
 
-const campaign = render => require.ensure([], require => render({
+const campaign = provide => require.ensure([], require => provide({
   aside: require('./components/CampaignAside'),
   breadcrumb: require('./components/CampaignBreadcrumb')
 }))
 
-const orderCloning = render => require.ensure([], require => render({
+const orderCloning = provide => require.ensure([], require => provide({
   folder: require('./components/FolderOrdersCloning'),
   workspace: require('./components/WorkspaceOrdersCloning'),
   company: require('./components/CompanyOrdersCloning')
 }))
 
-const creatives = render => require.ensure([], require => render({
+const creatives = provide => require.ensure([], require => provide({
   campaign: require('./components/CampaignCreatives'),
   folder: require('./components/FolderCreatives')
 }))
 
-const forms = render => require.ensure([], require => render({
+const forms = provide => require.ensure([], require => provide({
   folderCreate: require('./components/FolderCreate'),
   folderEdit: require('./components/FolderEdit'),
   workspaceCreate: require('./components/WorkspaceCreate'),
@@ -109,37 +109,37 @@ const forms = render => require.ensure([], require => render({
   reportCreate: require('./components/Report/CreateForm')
 }))
 
-const companyLevel = render => require.ensure([], require => render({
+const companyLevel = provide => require.ensure([], require => provide({
   aside: require('./components/CompanyAside'),
   workspaces: require('./components/CompanyWorkspaces')
 }))
 
-const workspaceLevel = render => require.ensure([], require => render({
+const workspaceLevel = provide => require.ensure([], require => provide({
   aside: require('./components/WorkspaceAside'),
   folders: require('./components/WorkspaceFolders')
 }))
 
-const folderLevel = render => require.ensure([], require => render({
+const folderLevel = provide => require.ensure([], require => provide({
   aside: require('./components/FolderAside'),
   campaigns: require('./components/FolderCampaigns')
 }))
 
-const orderList = render => require.ensure([], require => render({
+const orderList = provide => require.ensure([], require => provide({
   folder: require('./components/FolderOrders'),
   workspace: require('./components/WorkspaceOrders'),
   company: require('./components/CompanyOrders')
 }))
 
-const orderLevel = render => require.ensure([], require => render({
+const orderLevel = provide => require.ensure([], require => provide({
   editor: require('./components/Order'),
   aside: require('./components/OrderAside')
 }))
 
-export const load = {
-  Unsub: screen(render => require.ensure([], require => render(require('./components/Report/Unsub')))),
-  Mailing: screen(render => require.ensure([], require => render(require('./components/Report/Mailing')))),
-  Companies: screen(render => require.ensure([], require => render(require('./components/Companies')))),
-  OrderAutoBudget: screen(render => require.ensure([], require => render(require('./components/OrderAutoBudget')))),
+export const component = {
+  Unsub: screen(provide => require.ensure([], require => provide(require('./components/Report/Unsub')))),
+  Mailing: screen(provide => require.ensure([], require => provide(require('./components/Report/Mailing')))),
+  Companies: screen(provide => require.ensure([], require => provide(require('./components/Companies')))),
+  OrderAutoBudget: screen(provide => require.ensure([], require => provide(require('./components/OrderAutoBudget')))),
 
   FolderReport: screen(reportSection, 'folder'),
   WorkspaceReport: screen(reportSection, 'workspace'),
