@@ -1,5 +1,4 @@
 import csjs from 'csjs'
-import find from 'lodash/find'
 import isNumber from 'lodash/isNumber'
 import map from 'lodash/map'
 import round from 'lodash/round'
@@ -35,18 +34,6 @@ export const OrderPie = React.createClass({
   onLegendClick (e) {
     e.preventDefault()
     this.selectPoint(e.target.options.index, e.target.options.id)
-  },
-  componentWillReceiveProps ({selectedBudgetId, order: {budgets}}) {
-    const {chart} = this.refs.chart
-    const points = chart.series[0].data
-
-    if (budgets.length === points.length) {
-      setTimeout(function sliceSelectedBudget () {
-        const point = find(chart.series[0].data, ['options.id', selectedBudgetId])
-        point.select()
-        chart.redraw()
-      }, 300)
-    }
   },
   render () {
     const {messages: {availableBudget, budgetLabel}} = this.context

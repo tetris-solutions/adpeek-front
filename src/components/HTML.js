@@ -92,7 +92,9 @@ const HTML = ({payload, children, css}) => (
       <script
         id='state-injection'
         dangerouslySetInnerHTML={{__html: `var backendPayload = ${JSON.stringify(payload)}`}}/>
-      <script src={`/js/client${revSuffix}.js`} defer/>
+      <script src={`/js/client${revSuffix}.manifest.js`} defer/>
+      <script src={`/js/client${revSuffix}.vendor.js`} defer/>
+      <script src={`/js/client${revSuffix}.main.js`} defer/>
     </head>
     <body>
       <div id='app' dangerouslySetInnerHTML={{__html: children}}/>

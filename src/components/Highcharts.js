@@ -14,22 +14,9 @@ import isString from 'lodash/isString'
 import lowerCase from 'lodash/toLower'
 import merge from 'lodash/merge'
 import omit from 'lodash/omit'
-import Highcharts from 'highcharts/highstock'
 import React from 'react'
 
-const isBrowser = typeof document !== 'undefined'
-
-if (isBrowser) {
-  require('highcharts/modules/exporting')(Highcharts)
-  require('highcharts/modules/offline-exporting.src')(Highcharts)
-  window.Highcharts = Highcharts
-
-  Highcharts.setOptions({
-    global: {
-      useUTC: false
-    }
-  })
-}
+let Highcharts
 
 function isUpperCase (letter) {
   return letter !== letter.toLowerCase()
@@ -244,4 +231,27 @@ export const Chart = React.createClass({
   }
 })
 
-export default Chart
+export default React.createClass({
+  displayName: 'Loader',
+  componentDidMount () {
+    require.ensure([], require => {
+      Highcharts = require('highcharts/highstock')
+
+      require('highcharts/modules/exporting')(Highcharts)
+      require('highcharts/modules/offline-exporting.src')(Highcharts)
+
+      window.Highcharts = Highcharts
+
+      Highcharts.setOptions({
+        global: {
+          useUTC: false
+        }
+      })
+
+      this.forceUpdate()
+    })
+  },
+  render () {
+    return Highcharts ? <Chart {...this.props}/> : null
+  }
+})
