@@ -19,9 +19,6 @@ module.exports = {
       'process.env': passEnv()
     }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true
-    }),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
       mangle: {
@@ -39,18 +36,7 @@ module.exports = {
       test: /\.js?$/,
       exclude: /node_modules/,
       include: __dirname,
-      loader: 'babel-loader',
-      query: {
-        presets: [
-          [
-            'es2015',
-            {
-              modules: false
-            }
-          ],
-          'react'
-        ]
-      }
+      loader: 'babel-loader'
     }]
   }
 }

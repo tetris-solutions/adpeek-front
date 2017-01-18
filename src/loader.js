@@ -83,6 +83,12 @@ const breadcrumbs = render => require.ensure([], require => render({
   reportList: require('./components/Report/ListBreadcrumb')
 }))
 
+const orderCloning = render => require.ensure([], require => render({
+  folder: require('./components/FolderOrdersCloning'),
+  workspace: require('./components/WorkspaceOrdersCloning'),
+  company: require('./components/CompanyOrdersCloning')
+}))
+
 export const load = {
   App: screen(render => require.ensure([], require => render(require('./components/App')))),
   Unsub: screen(render => require.ensure([], require => render(require('./components/Report/Unsub')))),
@@ -103,5 +109,9 @@ export const load = {
   ReportsBreadcrumb: piece(breadcrumbs, 'reportList'),
   CompanyBreadcrumb: piece(breadcrumbs, 'company'),
   WorkspaceBreadcrumb: piece(breadcrumbs, 'workspace'),
-  FolderBreadcrumb: piece(breadcrumbs, 'folder')
+  FolderBreadcrumb: piece(breadcrumbs, 'folder'),
+
+  CompanyOrdersCloning: screen(orderCloning, 'company'),
+  WorkspaceOrdersCloning: screen(orderCloning, 'workspace'),
+  FolderOrdersCloning: screen(orderCloning, 'folder')
 }

@@ -7,24 +7,29 @@ import {IndexRoute, Route} from 'react-router'
 import {load, component} from '../loader'
 
 import DocTitle from '../components/DocTitle'
+
 import CampaignCreatives from '../components/CampaignCreatives'
+import FolderCreatives from '../components/FolderCreatives'
+
 import CampaignAside from '../components/CampaignAside'
 import CampaignBreadcrumb from '../components/CampaignBreadcrumb'
 import Campaigns from '../components/FolderCampaigns'
 import CompanyAside from '../components/CompanyAside'
-import CompanyOrders from '../components/CompanyOrders'
-import CompanyOrdersCloning from '../components/CompanyOrdersCloning'
+
 import CreateFolder from '../components/FolderCreate'
 import CreateWorkspace from '../components/WorkspaceCreate'
-import FolderCreatives from '../components/FolderCreatives'
+
 import FolderAside from '../components/FolderAside'
 import FolderEdit from '../components/FolderEdit'
-import FolderOrders from '../components/FolderOrders'
-import FolderOrdersCloning from '../components/FolderOrdersCloning'
 import Folders from '../components/Folders'
 import Companies from '../components/Companies'
 
+import FolderOrders from '../components/FolderOrders'
+import CompanyOrders from '../components/CompanyOrders'
+import WorkspaceOrders from '../components/WorkspaceOrders'
+
 import Order from '../components/Order'
+
 import OrderAside from '../components/OrderAside'
 import OrderAutoBudget from '../components/OrderAutoBudget'
 import OrderBreadCrumb from '../components/OrderBreadcrumb'
@@ -32,8 +37,7 @@ import OrdersBreadCrumb from '../components/OrdersBreadcrumb'
 
 import WorkspaceAside from '../components/WorkspaceAside'
 import WorkspaceEdit from '../components/WorkspaceEdit'
-import WorkspaceOrders from '../components/WorkspaceOrders'
-import WorkspaceOrdersCloning from '../components/WorkspaceOrdersCloning'
+
 import Workspaces from '../components/Workspaces'
 import ErrorScreen from '../components/ErrorScreen'
 import ReportCreate from '../components/Report/CreateForm'
@@ -127,7 +131,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
             <Route path='orders' breadcrumb={OrdersBreadCrumb} onEnter={preload(orders)}>
               <IndexRoute component={CompanyOrders}/>
-              <Route path='clone' component={CompanyOrdersCloning}/>
+              <Route path='clone' {...component(load.CompanyOrdersCloning)}/>
             </Route>
 
             <Route path='create/workspace' component={CreateWorkspace} onEnter={preload(roles)}/>
@@ -163,7 +167,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
               <Route path='orders' breadcrumb={OrdersBreadCrumb} onEnter={preload(orders)}>
                 <IndexRoute component={WorkspaceOrders}/>
-                <Route path='clone' component={WorkspaceOrdersCloning}/>
+                <Route path='clone' {...component(load.WorkspaceOrdersCloning)}/>
               </Route>
 
               <Route path='edit' onEnter={preload(roles)} component={WorkspaceEdit}/>
@@ -186,7 +190,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
                 <Route path='orders' breadcrumb={OrdersBreadCrumb} onEnter={preload(orders)}>
                   <IndexRoute component={FolderOrders}/>
-                  <Route path='clone' component={FolderOrdersCloning}/>
+                  <Route path='clone' {...component(load.FolderOrdersCloning)}/>
                 </Route>
 
                 <Route breadcrumb={OrdersBreadCrumb}
