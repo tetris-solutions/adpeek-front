@@ -1,4 +1,9 @@
-const screen = fn => (nextState, callback) => fn(comp => callback(null, comp.default))
+const screen = (fn, name = null) =>
+  (nextState, callback) =>
+    fn(comp => callback(null, name
+      ? comp[name].default
+      : comp.default))
+
 const isServer = typeof document === 'undefined'
 
 if (isServer) {
@@ -19,6 +24,7 @@ function bypass (getComponent) {
 
 export const component = isServer ? bypass : getComponent => ({getComponent})
 
-export default {
-  App: screen(render => require.ensure([], require => render(require('./App'))))
+export const load = {
+  App: screen(render => require.ensure([], require => render(require('./components/App')))),
+  Unsub: screen(render => require.ensure([], require => render(require('./components/Report/Unsub'))))
 }

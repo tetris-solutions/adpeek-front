@@ -4,7 +4,7 @@ import {loadUserCompaniesActionRouterAdaptor as companies} from 'tetris-iso/acti
 import {root} from 'baobab-react/higher-order'
 import {IndexRoute, Route} from 'react-router'
 
-import loaders, {component} from '../components/loaders'
+import {load, component} from '../loaders'
 
 import DocTitle from '../components/DocTitle'
 import CampaignCreatives from '../components/CampaignCreatives'
@@ -50,7 +50,6 @@ import Workspaces from '../components/Workspaces'
 import ErrorScreen from '../components/ErrorScreen'
 import ReportShare from '../components/Report/Share'
 import Mailing from '../components/Report/Mailing'
-import Unsub from '../components/Report/Unsub'
 
 import {loadWorkspaceAccountsActionRouterAdaptor as accounts} from '../actions/load-accounts'
 import {loadAutoBudgetLogsActionRouterAdaptor as autoBudgetLogs} from '../actions/load-autobudget-logs'
@@ -108,7 +107,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
       <Route
         path='mailing/:mailing/unsubscribe/:email'
         onEnter={preload(unsub)}
-        component={Unsub}/>
+        {...component(load.Unsub)}/>
 
       <Route onEnter={protectRoute}>
         <Route
@@ -117,7 +116,9 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
           breadcrumb={[CompanyBreadcrumb, WorkspaceBreadcrumb, FolderBreadcrumb, ReportBread]}
           component={ReportShare}/>
 
-        <Route onEnter={preload(companies)} {...component(loaders.App)}>
+        <Route onEnter={preload(companies)}
+               {...component(load.App)}>
+
           <IndexRoute component={Companies}/>
           <Route
             path='company/:company'
