@@ -13,11 +13,8 @@ import CampaignBreadcrumb from '../components/CampaignBreadcrumb'
 import Campaigns from '../components/FolderCampaigns'
 import CompanyAside from '../components/CompanyAside'
 
-import CreateFolder from '../components/FolderCreate'
-import CreateWorkspace from '../components/WorkspaceCreate'
-
 import FolderAside from '../components/FolderAside'
-import FolderEdit from '../components/FolderEdit'
+
 import Folders from '../components/Folders'
 import Companies from '../components/Companies'
 
@@ -33,7 +30,6 @@ import OrderBreadCrumb from '../components/OrderBreadcrumb'
 import OrdersBreadCrumb from '../components/OrdersBreadcrumb'
 
 import WorkspaceAside from '../components/WorkspaceAside'
-import WorkspaceEdit from '../components/WorkspaceEdit'
 
 import Workspaces from '../components/Workspaces'
 import ErrorScreen from '../components/ErrorScreen'
@@ -131,7 +127,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
               <Route path='clone' {...component(load.CompanyOrdersCloning)}/>
             </Route>
 
-            <Route path='create/workspace' component={CreateWorkspace} onEnter={preload(roles)}/>
+            <Route path='create/workspace' {...component(load.WorkspaceCreate)} onEnter={preload(roles)}/>
 
             <Route path='workspace/:workspace'
                    breadcrumb={load.WorkspaceBreadcrumb}
@@ -167,9 +163,9 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 <Route path='clone' {...component(load.WorkspaceOrdersCloning)}/>
               </Route>
 
-              <Route path='edit' onEnter={preload(roles)} component={WorkspaceEdit}/>
+              <Route path='edit' onEnter={preload(roles)} {...component(load.WorkspaceEdit)}/>
 
-              <Route path='create/folder' component={CreateFolder} onEnter={preload(medias, accounts)}/>
+              <Route path='create/folder' {...component(load.FolderCreate)} onEnter={preload(medias, accounts)}/>
 
               <Route path='folder/:folder'
                      aside={FolderAside}
@@ -206,7 +202,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                   <Route path='create/order' component={Order}/>
                 </Route>
 
-                <Route path='edit' onEnter={preload(medias, accounts)} component={FolderEdit}/>
+                <Route path='edit' onEnter={preload(medias, accounts)} {...component(load.FolderEdit)}/>
               </Route>
             </Route>
           </Route>

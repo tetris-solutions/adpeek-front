@@ -94,6 +94,13 @@ const creatives = render => require.ensure([], require => render({
   folder: require('./components/FolderCreatives')
 }))
 
+const forms = render => require.ensure([], require => render({
+  folderCreate: require('./components/FolderCreate'),
+  folderEdit: require('./components/FolderEdit'),
+  workspaceCreate: require('./components/WorkspaceCreate'),
+  workspaceEdit: require('./components/WorkspaceEdit')
+}))
+
 export const load = {
   App: screen(render => require.ensure([], require => render(require('./components/App')))),
   Unsub: screen(render => require.ensure([], require => render(require('./components/Report/Unsub')))),
@@ -121,5 +128,10 @@ export const load = {
   FolderOrdersCloning: screen(orderCloning, 'folder'),
 
   CampaignCreatives: screen(creatives, 'campaign'),
-  FolderCreatives: screen(creatives, 'folder')
+  FolderCreatives: screen(creatives, 'folder'),
+
+  WorkspaceCreate: screen(forms, 'workspaceCreate'),
+  WorkspaceEdit: screen(forms, 'workspaceEdit'),
+  FolderCreate: screen(forms, 'folderCreate'),
+  FolderEdit: screen(forms, 'folderEdit')
 }
