@@ -9,6 +9,9 @@ import {styled} from './mixins/styled'
 const style = csjs`
 .select option {
   color: #333
+}
+.select option[disabled] {
+  color: rgb(200, 200, 200)
 }`
 const selectFields = [
   'disabled',
