@@ -1,19 +1,21 @@
+'use strict'
+
 const path = require('path')
 const revision = require('git-rev-sync')
 
-module.exports = ({envs, entry, commons, ignore}) => {
+module.exports = function (config) {
   return {
     devtool: 'source-map',
     context: __dirname,
-    entry,
+    entry: config.entry,
     output: {
       path: path.resolve(__dirname, '..', 'public', 'js'),
       filename: 'client.' + revision.short() + '.js',
       publicPath: '/js/'
     },
     plugins: [
-      envs,
-      ignore
+      config.envs,
+      config.ignore
     ],
     module: {
       rules: [{

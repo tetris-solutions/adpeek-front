@@ -1,5 +1,4 @@
-// esse arquivo é escrito em commonjs e js legado
-// pra que o usuário possa rodar `webpack` normalmente da pasta src
+'use strict'
 
 const includes = require('lodash/includes')
 const webpack = require('webpack')

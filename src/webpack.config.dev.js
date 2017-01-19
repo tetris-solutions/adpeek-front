@@ -1,10 +1,12 @@
+'use strict'
+
 const path = require('path')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
-module.exports = ({entry, commons, envs, ignore}) => {
+module.exports = function (config) {
   const plugins = [
-    envs,
-    ignore
+    config.envs,
+    config.ignore
   ]
 
   if (process.env.banal) {
@@ -14,7 +16,7 @@ module.exports = ({entry, commons, envs, ignore}) => {
   return {
     devtool: 'eval',
     context: __dirname,
-    entry,
+    entry: config.entry,
     output: {
       path: path.resolve(__dirname, '..', 'public', 'js'),
       filename: 'client.js',
