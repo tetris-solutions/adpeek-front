@@ -157,8 +157,8 @@ export const CreateFolder = React.createClass({
                 <option value=''/>
 
                 {map(get(find(medias, {id: selectedMedia}), 'kpis'),
-                  ({id, name}, index) => (
-                    <option key={index} value={id}>
+                  ({id, name, disabled}, index) => (
+                    <option key={index} value={id} disabled={disabled}>
                       {name}
                     </option>
                   ))}

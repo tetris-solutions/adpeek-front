@@ -169,8 +169,8 @@ export const EditFolder = React.createClass({
                 <option value=''/>
 
                 {map(get(find(medias, {id: media}), 'kpis'),
-                  ({id, name}, index) => (
-                    <option key={index} value={id}>
+                  ({id, name, disabled}, index) => (
+                    <option key={index} value={id} disabled={disabled}>
                       {name}
                     </option>
                   ))}
