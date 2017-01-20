@@ -3,7 +3,7 @@ import Message from 'tetris-iso/Message'
 import Highcharts from './Highcharts'
 import {prettyNumber} from '../functions/pretty-number'
 import {loadFolderStatsAction} from '../actions/load-folder-stats'
-import cx from 'classnames'
+import compact from 'lodash/compact'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
 import map from 'lodash/map'
@@ -20,24 +20,11 @@ const style = csjs`
 }
 .chart {
   width: 100%;
-  height: 150px;
+  height: 180px;
 }
 .label {
   color: grey;
   font-weight: 500;
-}
-.bt {
-  font-size: 9pt;
-  cursor: pointer;
-  display: inline-block;
-  padding: .3em .7em;
-  color: #9e9e9e;
-}
-.bt:hover {
-  background: rgba(0, 0, 0, 0.1)
-}
-.selected {
-  color: #283593;
 }
 .rail {
   background-color: grey;
@@ -170,7 +157,7 @@ Goal.contextTypes = {
   locales: React.PropTypes.string.isRequired
 }
 
-const Stats = ({selectedSeries, selectBudget, selectKPI, stats, labelFormatter, pointFormatter, kpi_goal}) => (
+const Stats = ({stats, kpi_goal}, {messages, locales}) => (
   <div className={`${style.wrapper} mdl-color-text--grey-600`}>
     <Rail
       cost={get(stats, 'order.cost')}
@@ -185,15 +172,32 @@ const Stats = ({selectedSeries, selectBudget, selectKPI, stats, labelFormatter, 
       start={get(stats, 'order.start')}
       end={get(stats, 'order.end')}/>
 
-    <span className={cx({[style.bt]: true, [style.selected]: selectedSeries === 'budget'})} onClick={selectBudget}>
-      <Message>investmentLabel</Message>
-    </span>
+    <Highcharts
+      config={{
+        yAxis: compact([
+          {
+            id: 'budget',
+            title: {
+              text: null
+            },
+            labels: {
+              enabled: false
+            }
+          },
+          stats.metric && {
+            id: stats.metric.id,
+            title: {
+              text: null
+            },
+            labels: {
+              enabled: false
+            }
+          }
+        ])
+      }}
+      className={`${style.chart}`}
+      onClick={e => e.preventDefault()}>
 
-    <span className={cx({[style.bt]: true, [style.selected]: selectedSeries === 'kpi'})} onClick={selectKPI}>
-      {get(stats, 'metric.name', '...')}
-    </span>
-
-    <Highcharts className={`${style.chart}`} onClick={e => e.preventDefault()}>
       <title>{null}</title>
 
       <plot-options>
@@ -206,6 +210,12 @@ const Stats = ({selectedSeries, selectBudget, selectKPI, stats, labelFormatter, 
         </line>
       </plot-options>
 
+      <legend>
+        <item-style>
+          <font-size>8pt</font-size>
+        </item-style>
+      </legend>
+
       <tooltip
         headerFormat=''/>
 
@@ -215,22 +225,34 @@ const Stats = ({selectedSeries, selectBudget, selectKPI, stats, labelFormatter, 
         <labels style={labelStyle}/>
       </x-axis>
 
-      <y-axis>
-        <title>{null}</title>
-        <labels enabled={false}/>
-      </y-axis>
+      <line id='budget' name={messages.investmentLabel}>
+        <y-axis>budget</y-axis>
+        <tooltip pointFormatter={function () {
+          return `<span style="font-weight: bold; color: ${this.color}">${prettyNumber(this.y, 'currency', locales)}</span>`
+        }}/>
 
-      <line id={selectedSeries}>
-        <tooltip pointFormatter={pointFormatter}/>
         {map(stats.series, (x, index) =>
           <point
-            key={`${x.date}-${selectedSeries}-${index}`}
-            id={`${x.date}-${selectedSeries}-${index}`}
+            key={`${x.date}-budget-${index}`}
+            id={`${x.date}-budget-${index}`}
             x={dt(x.date)}
-            y={selectedSeries === 'kpi'
-              ? x[stats.metric.id]
-              : x.cost}/>)}
+            y={x.cost}/>)}
       </line>
+
+      {stats.metric && (
+        <line id={stats.metric.id} name={stats.metric.name}>
+          <y-axis>{stats.metric.id}</y-axis>
+          <tooltip pointFormatter={function () {
+            return `<span style="font-weight: bold; color: ${this.color}">${prettyNumber(this.y, stats.metric.type, locales)}</span>`
+          }}/>
+
+          {map(stats.series, (x, index) =>
+            <point
+              key={`${x.date}-${stats.metric.id}-${index}`}
+              id={`${x.date}-${stats.metric.id}-${index}`}
+              x={dt(x.date)}
+              y={x[stats.metric.id]}/>)}
+        </line>)}
     </Highcharts>
   </div>
 )
@@ -238,20 +260,16 @@ const Stats = ({selectedSeries, selectBudget, selectKPI, stats, labelFormatter, 
 Stats.displayName = 'Stats'
 Stats.propTypes = {
   kpi_goal: React.PropTypes.number,
-  selectedSeries: React.PropTypes.oneOf(['budget', 'kpi']).isRequired,
-  selectBudget: React.PropTypes.func.isRequired,
-  selectKPI: React.PropTypes.func.isRequired,
   stats: React.PropTypes.shape({
     metric: React.PropTypes.object,
     series: React.PropTypes.arrayOf(React.PropTypes.shape({
       date: React.PropTypes.string,
       cost: React.PropTypes.number
     }))
-  }).isRequired,
-  labelFormatter: React.PropTypes.func.isRequired,
-  pointFormatter: React.PropTypes.func.isRequired
+  }).isRequired
 }
 Stats.contextTypes = {
+  messages: React.PropTypes.object.isRequired,
   locales: React.PropTypes.string.isRequired
 }
 
@@ -274,14 +292,6 @@ const FolderStats = React.createClass({
       stats: {}
     }
   },
-  getInitialState () {
-    return {
-      selectedSeries: 'budget'
-    }
-  },
-  componentWillMount () {
-    this.setupFormatters()
-  },
   componentDidMount () {
     loadFolderStatsAction(
       this.context.tree,
@@ -289,50 +299,11 @@ const FolderStats = React.createClass({
       this.props.id
     )
   },
-  setupFormatters () {
-    const component = this
-
-    this.labelFormatter = function () {
-      const {locales} = component.context
-      const {selectedSeries} = component.state
-      const {stats} = component.props
-
-      const metricView = selectedSeries === 'kpi'
-      const seriesType = metricView ? stats.metric.type : 'currency'
-
-      return prettyNumber(this.value, seriesType, locales)
-    }
-
-    this.pointFormatter = function () {
-      const {locales} = component.context
-      const {selectedSeries} = component.state
-      const {stats} = component.props
-
-      const metricView = selectedSeries === 'kpi'
-      const seriesType = metricView ? stats.metric.type : 'currency'
-      const value = prettyNumber(this.y, seriesType, locales)
-
-      return `<span style="font-weight: bold; color: ${this.color}">${value}</span>`
-    }
-  },
-  selectKPI (e) {
-    e.preventDefault()
-    this.setState({selectedSeries: 'kpi'})
-  },
-  selectBudget (e) {
-    e.preventDefault()
-    this.setState({selectedSeries: 'budget'})
-  },
   render () {
     return (
       <Stats
         kpi_goal={this.props.kpi_goal}
-        stats={this.props.stats}
-        selectedSeries={this.state.selectedSeries}
-        selectBudget={this.selectBudget}
-        selectKPI={this.selectKPI}
-        labelFormatter={this.labelFormatter}
-        pointFormatter={this.pointFormatter}/>
+        stats={this.props.stats}/>
     )
   }
 })
