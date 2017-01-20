@@ -211,4 +211,4 @@ export const CreateFolder = React.createClass({
   }
 })
 
-export default contextualize(CreateFolder, {medias: ['medias']}, 'workspace', 'company')
+export default contextualize(CreateFolder, {kpis: ['kpis'], medias: ['medias']}, 'workspace', 'company')
