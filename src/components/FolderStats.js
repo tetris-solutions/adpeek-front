@@ -193,7 +193,7 @@ const Stats = ({selectedSeries, selectBudget, selectKPI, stats, labelFormatter, 
       {get(stats, 'metric.name', '...')}
     </span>
 
-    <Highcharts className={`${style.chart}`}>
+    <Highcharts className={`${style.chart}`} onClick={e => e.preventDefault()}>
       <title>{null}</title>
 
       <plot-options>
@@ -206,8 +206,8 @@ const Stats = ({selectedSeries, selectBudget, selectKPI, stats, labelFormatter, 
         </line>
       </plot-options>
 
-      <legend enabled={false}/>
-      <tooltip enabled={false}/>
+      <tooltip
+        headerFormat=''/>
 
       <x-axis>
         <type>datetime</type>
@@ -217,7 +217,7 @@ const Stats = ({selectedSeries, selectBudget, selectKPI, stats, labelFormatter, 
 
       <y-axis>
         <title>{null}</title>
-        <labels style={labelStyle} formatter={labelFormatter}/>
+        <labels enabled={false}/>
       </y-axis>
 
       <line id={selectedSeries}>
@@ -293,7 +293,7 @@ const FolderStats = React.createClass({
     const component = this
 
     this.labelFormatter = function () {
-      const {locales} = component
+      const {locales} = component.context
       const {selectedSeries} = component.state
       const {stats} = component.props
 
@@ -304,16 +304,15 @@ const FolderStats = React.createClass({
     }
 
     this.pointFormatter = function () {
-      const {messages, locales} = component
+      const {locales} = component.context
       const {selectedSeries} = component.state
       const {stats} = component.props
 
       const metricView = selectedSeries === 'kpi'
       const seriesType = metricView ? stats.metric.type : 'currency'
-      const seriesName = metricView ? stats.metric.name : messages.investmentLabel
-
       const value = prettyNumber(this.y, seriesType, locales)
-      return `<span style="color: ${this.color}">${seriesName}:</span> <b>${value}</b><br/>`
+
+      return `<span style="font-weight: bold; color: ${this.color}">${value}</span>`
     }
   },
   selectKPI (e) {

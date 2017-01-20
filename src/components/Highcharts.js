@@ -1,3 +1,5 @@
+import React from 'react'
+import pick from 'lodash/pick'
 import camelCase from 'lodash/camelCase'
 import cloneDeep from 'lodash/cloneDeep'
 import diff from 'lodash/differenceWith'
@@ -14,7 +16,6 @@ import isString from 'lodash/isString'
 import lowerCase from 'lodash/toLower'
 import merge from 'lodash/merge'
 import omit from 'lodash/omit'
-import React from 'react'
 
 let Highcharts
 
@@ -221,13 +222,11 @@ export const Chart = React.createClass({
     return false
   },
   render () {
-    const {tag, className, style} = this.props
+    const props = pick(this.props, 'className', 'style', 'onClick')
 
-    return React.createElement(tag, {
-      ref: 'container',
-      className,
-      style
-    })
+    props.ref = 'container'
+
+    return React.createElement(this.props.tag, props)
   }
 })
 
