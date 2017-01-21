@@ -6,3 +6,4 @@ node_modules
 /public/js/*client.*
 .env
 .vscode
+bundle-stats.json

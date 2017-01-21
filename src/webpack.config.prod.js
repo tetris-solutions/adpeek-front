@@ -1,5 +1,6 @@
 'use strict'
 
+const webpack = require('webpack')
 const path = require('path')
 const revision = require('git-rev-sync')
 
@@ -15,7 +16,8 @@ module.exports = function (config) {
     },
     plugins: [
       config.envs,
-      config.ignore
+      config.ignore,
+      new webpack.optimize.AggressiveMergingPlugin()
     ],
     module: {
       rules: [{
