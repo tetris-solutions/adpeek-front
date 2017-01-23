@@ -28,6 +28,11 @@ export const Channel = React.createClass({
     params: React.PropTypes.object.isRequired
   },
   componentDidMount () {
+    if (!this.props.channel) {
+      this.load()
+    }
+  },
+  load () {
     const {tree, params} = this.context
 
     loadFolderChannelAction(tree, params, this.props.id)
