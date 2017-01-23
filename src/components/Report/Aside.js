@@ -58,8 +58,10 @@ export function ReportAside ({report, user, dispatch}, {messages, locales, route
     ]), '/')
 
   const deleteReport = () => {
-    router.push(`${scopeUrl}/reports`)
     dispatch(deleteReportAction, params, report.id)
+      .then(() => {
+        router.push(`${scopeUrl}/reports`)
+      })
   }
 
   const inEditMode = endsWith(pathname, '/edit')

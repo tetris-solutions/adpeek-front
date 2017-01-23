@@ -12,8 +12,10 @@ export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
   const {company} = params
 
   function onClick () {
-    router.replace(`/company/${company}`)
     dispatch(deleteWorkspaceAction, workspace.id)
+      .then(() => {
+        router.replace(`/company/${company}`)
+      })
   }
 
   const baseUrl = `/company/${company}/workspace/${workspace.id}`
