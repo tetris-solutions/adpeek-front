@@ -20,12 +20,10 @@ export const CreateWorkspace = React.createClass({
   },
   onSubmit (e) {
     e.preventDefault()
-    const {params: {company}} = this.props
-    const data = this.serializeWorkspaceForm(e.target)
-    const action = createWorkspaceAction
-    const redirectUrl = `/company/${company}`
 
-    this.saveWorkspace(data, action, redirectUrl)
+    const data = this.serializeWorkspaceForm(e.target)
+
+    this.saveWorkspace(data, createWorkspaceAction)
   },
   render () {
     const {errors} = this.state

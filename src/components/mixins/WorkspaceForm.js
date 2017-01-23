@@ -21,17 +21,18 @@ export default {
   /**
    * @param {Object} data workspace object
    * @param {Function} action action that will be dispatched
-   * @param {String} redirectUrl final url
    * @return {Promise} promise that resolves once action is complete
    */
-  saveWorkspace (data, action, redirectUrl) {
-    const {dispatch, params: {company}} = this.props
+  saveWorkspace (data, action) {
+    const {dispatch, params: {company, workspace}} = this.props
 
     this.preSubmit()
 
     return dispatch(action, company, data)
+      .then(response => {
+        this.context.router.push(`/company/${company}/workspace/${workspace || response.data.id}`)
+      })
       .then(() => dispatch(pushSuccessMessageAction))
-      .then(() => this.context.router.push(redirectUrl))
       .catch(this.handleSubmitException)
       .then(this.posSubmit)
   },

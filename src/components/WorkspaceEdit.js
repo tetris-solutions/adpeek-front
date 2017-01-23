@@ -28,14 +28,12 @@ export const WorkspaceEdit = React.createClass({
   },
   onSubmit (e) {
     e.preventDefault()
-    const {params: {workspace, company}} = this.props
 
     const data = this.serializeWorkspaceForm(e.target)
-    data.id = workspace
-    const redirectUrl = `/company/${company}/workspace/${workspace}`
-    const action = updateWorkspaceAction
 
-    this.saveWorkspace(data, action, redirectUrl)
+    data.id = this.props.params.workspace
+
+    this.saveWorkspace(data, updateWorkspaceAction)
   },
   onChangeName ({target: {value}}) {
     const errors = omit(this.state.errors, 'name')
