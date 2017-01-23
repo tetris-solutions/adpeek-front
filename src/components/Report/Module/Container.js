@@ -81,6 +81,7 @@ const ModuleContainer = React.createClass({
     switch (moduleEntity) {
       case 'AdSet':
       case 'AdGroup':
+      case 'Video':
       case 'Search':
       case 'Audience':
         isSelected = countBy(selectedIds, toCampaignId(toLower(moduleEntity), 'campaign'))
@@ -127,6 +128,10 @@ const ModuleContainer = React.createClass({
 
     if (entities.Audience) {
       entities.Audience = filterByParent(entities.Audience, entities.Campaign, 'campaign_id')
+    }
+
+    if (entities.Video) {
+      entities.Video = filterByParent(entities.Video, entities.Campaign, 'campaign_id')
     }
 
     if (entities.AdGroup) {

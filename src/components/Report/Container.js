@@ -52,6 +52,7 @@ const propTypes = {
   adSets: React.PropTypes.array,
   adGroups: React.PropTypes.array,
   ads: React.PropTypes.array,
+  videos: React.PropTypes.array,
   keywords: React.PropTypes.array,
   accounts: React.PropTypes.arrayOf(React.PropTypes.shape({
     external_id: React.PropTypes.string,
@@ -80,7 +81,7 @@ const Container = React.createClass({
   },
   entitiesSource () {
     const {messages} = this.context
-    const {campaigns, adSets, adGroups, ads, keywords} = this.props
+    const {campaigns, adSets, adGroups, ads, keywords, videos} = this.props
 
     return {
       messages,
@@ -88,10 +89,11 @@ const Container = React.createClass({
       adSets,
       ads,
       keywords,
-      adGroups
+      adGroups,
+      videos
     }
   },
-  calculateEntities ({messages, campaigns, adSets, ads, keywords, adGroups}) {
+  calculateEntities ({messages, campaigns, adSets, ads, keywords, adGroups, videos}) {
     log.info('will mount report entities')
 
     const entities = [{
@@ -128,6 +130,12 @@ const Container = React.createClass({
           id: 'AdGroup',
           name: messages.adGroups,
           list: adGroups || empty
+        })
+
+        entities.push({
+          id: 'Video',
+          name: messages.videos,
+          list: videos || empty
         })
 
         entities.push({

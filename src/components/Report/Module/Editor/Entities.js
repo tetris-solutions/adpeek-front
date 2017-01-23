@@ -114,6 +114,7 @@ const Entities = React.createClass({
       case 'AdSet':
       case 'Search':
       case 'Audience':
+      case 'Video':
       case 'AdGroup':
         return [this.getTopLevel(), this.getCampaignLevel(entities)]
       case 'Ad':
