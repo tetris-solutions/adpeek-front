@@ -84,11 +84,13 @@ function serializeTr (tr, type) {
  */
 export function serializeReportModules (modules, type) {
   const {Highcharts} = window
-  const originalDownloadMethod = Highcharts.downloadURL
+  const originalDownloadMethod = Highcharts ? Highcharts.downloadURL : null
   const exportedModules = []
 
   function restoreOriginalDownloadMethod () {
-    Highcharts.downloadURL = originalDownloadMethod
+    if (originalDownloadMethod) {
+      Highcharts.downloadURL = originalDownloadMethod
+    }
   }
 
   const exportChart = ({id, name, el, comments, description}) =>

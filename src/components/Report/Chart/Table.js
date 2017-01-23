@@ -20,6 +20,7 @@ import {prettyNumber} from '../../../functions/pretty-number'
 import entityType from '../../../propTypes/report-entity'
 import reportParamsType from '../../../propTypes/report-params'
 import Ad from './TableAd'
+import Video from './TableVideo'
 import {styled} from '../../mixins/styled'
 import isDate from 'lodash/isDate'
 import includes from 'lodash/includes'
@@ -292,6 +293,10 @@ const ReportModuleTable = React.createClass({
     }
 
     const sortKey = item.name || item.headline || id
+
+    if (entityId === 'Video') {
+      return new Sortable(<Video {...item} />, sortKey)
+    }
 
     if (entityId === 'Ad') {
       return new Sortable(<Ad {...item} reportParams={reportParams}/>, sortKey)
