@@ -26,22 +26,23 @@ function serializeTableCell (td, type) {
     }
   }
   const hasNonNumericClass = includes(tableCell.className, 'non-numeric')
+  const cellInnerText = trim(tableCell.innerText)
 
   const cell = {
     align: hasNonNumericClass ? 'left' : 'right',
-    content: trim(tableCell.innerText)
+    content: cellInnerText
   }
 
   if (type === 'xls') {
     const value = tableCell.dataset.raw
       ? JSON.parse(tableCell.dataset.raw)
-      : trim(tableCell.innerText)
+      : cellInnerText
 
     assign(cell, {
       content: value,
       date: tableCell.dataset.date !== undefined,
-      percentage: isNumber(value) && includes(tableCell.innerText, '%'),
-      currency: isNumber(value) && includes(tableCell.innerText, '$')
+      percentage: isNumber(value) && includes(cellInnerText, '%'),
+      currency: isNumber(value) && includes(cellInnerText, '$')
     })
   }
 
@@ -54,9 +55,9 @@ function serializeTableCell (td, type) {
   }
 
   if (cellStrongElement) {
-    cell.title = trim(tableCell.innerText)
+    cell.title = trim(cellStrongElement.innerText)
     cell.content = startsWith(cell.content, cell.title)
-      ? trim(cell.content.substr(cell.title.length))
+      ? trim(cellInnerText.substr(cell.title.length))
       : cell.content
   }
 

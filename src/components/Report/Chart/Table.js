@@ -1,4 +1,7 @@
 import concat from 'lodash/concat'
+import get from 'lodash/get'
+import {contextualize} from '../../higher-order/contextualize'
+import {pure} from 'recompose'
 import csjs from 'csjs'
 import cx from 'classnames'
 import find from 'lodash/find'
@@ -20,7 +23,7 @@ import {prettyNumber} from '../../../functions/pretty-number'
 import entityType from '../../../propTypes/report-entity'
 import reportParamsType from '../../../propTypes/report-params'
 import Ad from './TableAd'
-import Video from './TableVideo'
+import Video, {Channel} from './TableVideo'
 import {styled} from '../../mixins/styled'
 import isDate from 'lodash/isDate'
 import includes from 'lodash/includes'
@@ -253,6 +256,7 @@ const ReportModuleTable = React.createClass({
   displayName: 'Module-Table',
   mixins: [styled(style)],
   propTypes: {
+    channels: React.PropTypes.object,
     sort: React.PropTypes.array,
     change: React.PropTypes.func,
     limit: React.PropTypes.number,
@@ -263,6 +267,11 @@ const ReportModuleTable = React.createClass({
     entity: entityType,
     attributes: React.PropTypes.object.isRequired,
     result: React.PropTypes.array.isRequired
+  },
+  getDefaultProps () {
+    return {
+      channels: {}
+    }
   },
   getHeaderName (_, header) {
     const {attributes} = this.props
@@ -303,6 +312,11 @@ const ReportModuleTable = React.createClass({
     }
 
     return new Sortable(item.name || id, sortKey)
+  },
+  getChannelColumn (channelId) {
+    const data = get(this.props.channels, channelId, {})
+
+    return new Sortable(<Channel id={channelId} {...data}/>, get(data, 'channel.title', channelId))
   },
   getRowCompareFn () {
     const {sort, query: {metrics, dimensions}} = this.props
@@ -345,10 +359,14 @@ const ReportModuleTable = React.createClass({
       const normalizeRow = row => {
         const parsedRow = {}
 
-        forEach(columns, value => {
-          parsedRow[value] = value === 'id'
-            ? this.getEntityComponentById(row[value])
-            : row[value]
+        forEach(columns, field => {
+          if (field === 'id') {
+            parsedRow[field] = this.getEntityComponentById(row[field])
+          } else if (field === 'channelid') {
+            parsedRow[field] = this.getChannelColumn(row[field])
+          } else {
+            parsedRow[field] = row[field]
+          }
         })
 
         return parsedRow.id === null ? null : parsedRow
@@ -387,4 +405,30 @@ const ReportModuleTable = React.createClass({
   }
 })
 
-export default ReportModuleTable
+const HardChart = pure(ReportModuleTable)
+
+const VideoWrapper = props => (
+  <HardChart {...props} channels={props.company.channels}/>
+)
+
+VideoWrapper.displayName = 'Video-Table-Wrapper'
+VideoWrapper.propTypes = {
+  company: React.PropTypes.object
+}
+
+const WithChannel = contextualize(VideoWrapper, 'company')
+
+const Wrapper = props => {
+  if (props.entity.id === 'Video') {
+    return <WithChannel {...props}/>
+  }
+
+  return <HardChart {...props}/>
+}
+
+Wrapper.displayName = 'Table-Wrapper'
+Wrapper.propTypes = {
+  entity: entityType
+}
+
+export default Wrapper
