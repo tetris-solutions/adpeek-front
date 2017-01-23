@@ -45,6 +45,7 @@ export const Checkbox = React.createClass({
   displayName: 'Checkbox',
   propTypes: {
     checked: React.PropTypes.bool,
+    disabled: React.PropTypes.bool,
     name: React.PropTypes.string.isRequired,
     label: React.PropTypes.node,
     value: React.PropTypes.string
@@ -89,13 +90,14 @@ export const Checkbox = React.createClass({
     this.setState({checked: target.checked}, onCheckStateChanged)
   },
   render () {
-    const {label, name, value} = this.props
+    const {label, name, value, disabled} = this.props
     const classes = cx('mdl-checkbox',
       isBrowser && 'mdl-js-checkbox mdl-js-ripple-effect')
 
     return (
       <label className={classes} ref='wrapper'>
         <input
+          disabled={disabled}
           ref='input'
           name={name}
           type='checkbox'
@@ -104,10 +106,9 @@ export const Checkbox = React.createClass({
           onChange={this.onChange}
           value={value}/>
 
-        {label ? (
-          <span className='mdl-checkbox__label'>
-            {label}
-          </span>) : null}
+        {label
+          ? <span className='mdl-checkbox__label'>{label}</span>
+          : null}
       </label>
     )
   }

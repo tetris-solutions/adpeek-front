@@ -13,16 +13,21 @@ export const WorkspaceRolesSelector = React.createClass({
     roles: React.PropTypes.array
   },
   render () {
-    const selectedRoles = this.props.roles
+    const {company: {roles: allRoles, role: {id: myRole}}, roles: selectedRoles} = this.props
+
     return (
       <fieldset>
-        {map(this.props.company.roles, ({id, name}, index) => (
+        {map(allRoles, ({id, name}, index) => (
           <div className='mdl-grid' key={index}>
             <div className='mdl-cell mdl-cell--4-col'>
               {index === 0 && 'Grupos:'}
             </div>
             <div className='mdl-cell mdl-cell--8-col'>
-              <CheckBox name={`role_${id}`} label={name} checked={includes(selectedRoles, id)} />
+              <CheckBox
+                name={`role_${id}`}
+                label={name}
+                disabled={id === myRole}
+                checked={id === myRole || includes(selectedRoles, id)}/>
             </div>
           </div>
         ))}
