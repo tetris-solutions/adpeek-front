@@ -123,7 +123,7 @@ export function contextualize (Component, baseCursors, ...propNames) {
     return ParamsInjector
   }
 
-  PropsInjector.displayName = 'Props-Injector'
+  PropsInjector.displayName = `withProps(${Component.displayName})`
   PropsInjector.propTypes = {}
 
   const paramsShape = {}

@@ -42,12 +42,10 @@ function matches (watchedPath, updatedPath) {
   return true
 }
 
-function isRelevantUpdate (watchedPath, {data: {paths}}) {
+function findRelatedChangePath (watchedPath, {data: {paths}}) {
   for (let i = 0; i < paths.length; i++) {
     if (matches(watchedPath, paths[i])) {
-      loglevel.debug(`receiving update on ${paths[i]}, will update ${watchedPath}`)
-
-      return true
+      return paths[i]
     }
   }
 
@@ -84,7 +82,11 @@ export function branch (mapping, Component) {
 
     onUpdate (event) {
       forEach(this.cursors, path => {
-        if (isRelevantUpdate(path, event)) {
+        const changedPath = findRelatedChangePath(path, event)
+
+        if (changedPath) {
+          loglevel.debug(`${Component.displayName}) update triggered by change on ${changedPath}`)
+          this.refresh()
           return false
         }
       })
