@@ -111,7 +111,7 @@ const forms = provide => require.ensure([], require => provide({
 
 const companyLevel = provide => require.ensure([], require => provide({
   aside: require('./components/CompanyAside'),
-  workspaces: require('./components/CompanyWorkspaces')
+  workspaces: require('./components/CompanyWorkspaces/List')
 }))
 
 const workspaceLevel = provide => require.ensure([], require => provide({
