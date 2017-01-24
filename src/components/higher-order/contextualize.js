@@ -19,17 +19,17 @@ const searchPath = {
   company: [['company', 'companies']]
 }
 
-searchPath.workspace = searchPath.company.concat([['workspace', 'workspaces']])
-searchPath.folder = searchPath.workspace.concat([['folder', 'folders']])
+const s = name => [[name, name + 's']]
 
-searchPath.campaign = searchPath.folder.concat([['campaign', 'campaigns']])
-searchPath.order = searchPath.folder.concat([['order', 'orders']])
+searchPath.workspace = searchPath.company.concat(s('workspace'))
+searchPath.folder = searchPath.workspace.concat(s('folder'))
 
-searchPath.report = params => {
-  const level = inferLevelFromParams(params)
+searchPath.campaign = searchPath.folder.concat(s('campaign'))
+searchPath.order = searchPath.folder.concat(s('order'))
 
-  return searchPath[level].concat([['report', 'reports']])
-}
+searchPath.report = params => searchPath[inferLevelFromParams(params)].concat(s('report'))
+
+searchPath.module = params => searchPath.report(params).concat(s('module'))
 
 /**
  * nope

@@ -5,6 +5,19 @@ import Module from './Module/Container'
 import GridLayout from 'react-grid-layout'
 import sizeMe from 'react-sizeme'
 import {pure} from 'recompose'
+import {contextualize} from '../higher-order/contextualize'
+
+let ModuleWrapper = props => (
+  <Module {...props} metaData={get(props.metaData, props.module.entity)}/>
+)
+
+ModuleWrapper.displayName = 'Module-Wrapper'
+ModuleWrapper.propTypes = {
+  metaData: React.PropTypes.object.isRequired,
+  module: React.PropTypes.object.isRequired
+}
+
+ModuleWrapper = contextualize(ModuleWrapper, 'module')
 
 const Grid_ = ({
   modules,
@@ -19,16 +32,14 @@ const Grid_ = ({
   width
 }) => (
   <GridLayout layout={layout} width={width} rowHeight={100} onLayoutChange={onLayoutChange}>
-    {map(modules, (module, index) =>
-      <div key={module.id} data-module-id={module.id} data-module-type={module.type}>
-        <Module
-          params={params}
-          dispatch={dispatch}
-          module={module}
+    {map(modules, ({id, type}, index) =>
+      <div key={id} data-module-id={id} data-module-type={type}>
+        <ModuleWrapper
+          params={{module: id}}
           editable={editMode}
-          metaData={get(metaData, module.entity)}
           clone={cloneModule}
-          editMode={openModule === module.id}/>
+          metaData={metaData}
+          editMode={openModule === id}/>
       </div>)}
   </GridLayout>
 )

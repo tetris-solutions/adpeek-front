@@ -1,4 +1,3 @@
-import keyBy from 'lodash/keyBy'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {GET} from '@tetris/http'
 import assign from 'lodash/assign'
@@ -19,7 +18,7 @@ function keepOldReportMetaData (newReport, oldReport) {
 
   const mergeOldModule = module => assign({}, get(oldReport, ['modules', module.id]), module)
 
-  newReport.modules = keyBy(map(newReport.modules, mergeOldModule), 'id')
+  newReport.modules = map(newReport.modules, mergeOldModule)
 
   return newReport
 }
