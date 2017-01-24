@@ -1,6 +1,6 @@
 import React from 'react'
 import Header from './Header'
-import {branch} from 'baobab-react/higher-order'
+import {branch} from './higher-order/branch'
 
 const UI = React.createClass({
   displayName: 'UI',

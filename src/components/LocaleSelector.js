@@ -1,6 +1,6 @@
 import React from 'react'
 import Select from './Select'
-import {branch} from 'baobab-react/higher-order'
+import {branch} from './higher-order/branch'
 import {changeLocaleAction} from 'tetris-iso/actions'
 
 const makeChangeEventHandler = dispatch => function onChange ({target: {value}}) {

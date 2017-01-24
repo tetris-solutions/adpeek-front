@@ -1,18 +1,18 @@
 import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
 import React from 'react'
-import {branch} from 'baobab-react/higher-order'
+import {branch} from './higher-order/branch'
 import SubHeader from './SubHeader'
 import {Container, Gear, Title, ThumbLink} from './ThumbLink'
 import {DropdownMenu, MenuItem} from './DropdownMenu'
 import {Link} from 'react-router'
 import ReportLink from './Report/ReportLink'
 
-const Companies = ({user, dispatch}) => (
+const Companies = ({companies, dispatch}) => (
   <div>
     <SubHeader title={<Message>companyList</Message>}/>
     <Container>
-      {map(user.companies, ({id, name, reports, icon}) =>
+      {map(companies, ({id, name, reports, icon}) =>
         <ThumbLink key={id} title={name} to={`/company/${id}`} img={icon}>
           {icon ? null : <Title>{name}</Title>}
           <Gear>
@@ -43,9 +43,7 @@ const Companies = ({user, dispatch}) => (
 Companies.displayName = 'Companies'
 Companies.propTypes = {
   dispatch: React.PropTypes.func.isRequired,
-  user: React.PropTypes.shape({
-    companies: React.PropTypes.array
-  }).isRequired
+  companies: React.PropTypes.array
 }
 
-export default branch({user: ['user']}, Companies)
+export default branch({companies: ['user', 'companies']}, Companies)

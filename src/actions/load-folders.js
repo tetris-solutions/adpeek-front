@@ -1,6 +1,6 @@
 import {GET} from '@tetris/http'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
-import {saveResponseData} from '../functions/save-response-data'
+import {mergeList} from '../functions/save-response-data'
 
 export function loadWorkspaceFolders (workspace, config) {
   return GET(`${process.env.ADPEEK_API_URL}/workspace/${workspace}/folders`, config)
@@ -9,7 +9,7 @@ export function loadWorkspaceFolders (workspace, config) {
 export function loadWorkspaceFoldersAction (tree, company, workspace, token) {
   return loadWorkspaceFolders(workspace, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
-    .then(saveResponseData(tree, [
+    .then(mergeList(tree, [
       'user',
       ['companies', company],
       ['workspaces', workspace],

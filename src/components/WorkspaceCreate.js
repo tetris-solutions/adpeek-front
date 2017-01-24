@@ -7,7 +7,7 @@ import RolesSelector from './WorkspaceRolesSelector'
 import {createWorkspaceAction} from '../actions/create-workspace'
 import {Form, Content, Header, Footer} from './Card'
 import WorkspaceForm from './mixins/WorkspaceForm'
-import {branch} from 'baobab-react/higher-order'
+import {branch} from './higher-order/branch'
 import Page from './Page'
 import SubHeader from './SubHeader'
 

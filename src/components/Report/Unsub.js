@@ -1,5 +1,5 @@
 import React from 'react'
-import {branch} from 'baobab-react/higher-order'
+import {branch} from '../higher-order/branch'
 import UI from '../UI'
 import {Card, Header, Content} from '../Card'
 import Message from 'tetris-iso/Message'

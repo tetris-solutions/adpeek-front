@@ -4,7 +4,7 @@ import forEach from 'lodash/forEach'
 import isObject from 'lodash/isObject'
 import keys from 'lodash/keys'
 import React from 'react'
-import {branch} from 'baobab-react/higher-order'
+import {branch} from './branch'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
 const isRouteParam = {
   company: true,
@@ -155,9 +155,5 @@ export function contextualize (Component, baseCursors, ...propNames) {
     return cursors
   }
 
-  const Branch = branch(resolveCursors, PropsInjector)
-
-  Branch.displayName = 'State-Tree-Branch'
-
-  return injectParams(Branch)
+  return injectParams(branch(resolveCursors, PropsInjector))
 }
