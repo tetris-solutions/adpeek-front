@@ -6,6 +6,7 @@ import keys from 'lodash/keys'
 import React from 'react'
 import {branch} from './branch'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
+
 const isRouteParam = {
   company: true,
   workspace: true,
@@ -14,6 +15,7 @@ const isRouteParam = {
   report: true,
   campaign: true
 }
+
 const searchPath = {
   company: [['company', 'companies']]
 }
@@ -106,9 +108,14 @@ export function contextualize (Component, baseCursors, ...propNames) {
   const propsNames = keys(baseCursors).concat(propNames).join(', ')
 
   function injectParams (Child) {
-    const ParamsInjector = (props, {params}) => <Child {...props} params={params}/>
+    const ParamsInjector = (props, context) => {
+      return <Child {...props} params={assign({}, props.params, context.params)}/>
+    }
 
     ParamsInjector.displayName = `Contextualize(${Component.displayName}, ${propsNames})`
+    ParamsInjector.propTypes = {
+      params: React.PropTypes.object
+    }
     ParamsInjector.contextTypes = {
       params: React.PropTypes.object.isRequired
     }
