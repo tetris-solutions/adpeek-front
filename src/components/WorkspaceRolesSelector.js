@@ -1,5 +1,6 @@
 import React from 'react'
 import map from 'lodash/map'
+import Message from 'tetris-iso/Message'
 import CheckBox from './Checkbox'
 import includes from 'lodash/includes'
 import {contextualize} from './higher-order/contextualize'
@@ -20,7 +21,9 @@ export const WorkspaceRolesSelector = React.createClass({
         {map(allRoles, ({id, name}, index) => (
           <div className='mdl-grid' key={index}>
             <div className='mdl-cell mdl-cell--4-col'>
-              {index === 0 && 'Grupos:'}
+              {index === 0 && (
+                <Message>rolesLabel</Message>
+              )}
             </div>
             <div className='mdl-cell mdl-cell--8-col'>
               <CheckBox

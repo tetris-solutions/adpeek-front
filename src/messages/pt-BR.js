@@ -316,5 +316,6 @@ module.exports = {
   createdByName: 'Criado por <strong>{name}</strong>',
   updatedTimeAgo: 'Modificado {timeago}',
   notFoundTitle: 'Não encontrado!',
-  notFoundBody: 'O objeto que você está tentando acessar não existe ou não é acessível para o seu usuário.'
+  notFoundBody: 'O objeto que você está tentando acessar não existe ou não é acessível para o seu usuário.',
+  rolesLabel: 'Grupos'
 }
