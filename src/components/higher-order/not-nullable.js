@@ -1,7 +1,6 @@
 import React from 'react'
 import {contextualize} from './contextualize'
 import every from 'lodash/every'
-import join from 'lodash/join'
 import Message from 'tetris-iso/Message'
 import {Card, Content, Header, Footer} from '../Card'
 import {Link} from 'react-router'
@@ -34,7 +33,7 @@ export function notNullable (Component, ...requiredProps) {
     )
   }
 
-  N.displayName = `notNullable(${join(requiredProps)})`
+  N.displayName = `guard(${Component.displayName})`
   N.contextTypes = {
     tree: React.PropTypes.object.isRequired,
     messages: React.PropTypes.object.isRequired

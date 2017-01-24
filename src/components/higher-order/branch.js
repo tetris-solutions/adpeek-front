@@ -12,27 +12,25 @@ const mappingToCursors = (mapping, props, context) =>
     ? mapping(props, context)
     : mapping
 
-/**
- * @param {Array} watchedPath path a
- * @param {Array} updatedPath path b
- * @return {boolean} does it
- */
 function matches (watchedPath, updatedPath) {
   if (!isArray(watchedPath) || !isArray(updatedPath)) {
     return false
   }
 
-  if (updatedPath.length - watchedPath.length > 1) {
+  const levelsBellow = updatedPath.length - watchedPath.length
+
+  if (levelsBellow > 1 || levelsBellow < 0) {
     return false
   }
 
   for (let i = 0; i < watchedPath.length; i++) {
-    if (i >= updatedPath.length) {
-      break
-    }
+    const watchedPart = isNumber(watchedPath[i])
+      ? String(watchedPath[i])
+      : watchedPath[i]
 
-    const watchedPart = isNumber(watchedPath[i]) ? String(watchedPath[i]) : watchedPath[i]
-    const updatedPart = isNumber(updatedPath[i]) ? String(updatedPath[i]) : updatedPath[i]
+    const updatedPart = isNumber(updatedPath[i])
+      ? String(updatedPath[i])
+      : updatedPath[i]
 
     if (watchedPart !== updatedPart) {
       return false
@@ -97,7 +95,9 @@ export function branch (mapping, Component) {
     }
 
     componentWillUnmount () {
-      this.release()
+      if (this.release) {
+        this.release()
+      }
     }
 
     render () {

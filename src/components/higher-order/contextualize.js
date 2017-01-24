@@ -2,7 +2,6 @@ import assign from 'lodash/assign'
 import findIndex from 'lodash/findIndex'
 import forEach from 'lodash/forEach'
 import isObject from 'lodash/isObject'
-import keys from 'lodash/keys'
 import React from 'react'
 import {branch} from './branch'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
@@ -105,14 +104,12 @@ export function contextualize (Component, baseCursors, ...propNames) {
     return <Component {...parentProps} {...injectedProps} />
   }
 
-  const propsNames = keys(baseCursors).concat(propNames).join(', ')
-
-  function injectParams (Child) {
+  function injectParams (Branch) {
     const ParamsInjector = (props, context) => {
-      return <Child {...props} params={assign({}, props.params, context.params)}/>
+      return <Branch {...props} params={assign({}, props.params, context.params)}/>
     }
 
-    ParamsInjector.displayName = `Contextualize(${Component.displayName}, ${propsNames})`
+    ParamsInjector.displayName = `contextualize(${Branch.displayName}>)`
     ParamsInjector.propTypes = {
       params: React.PropTypes.object
     }
@@ -123,7 +120,7 @@ export function contextualize (Component, baseCursors, ...propNames) {
     return ParamsInjector
   }
 
-  PropsInjector.displayName = `withProps(${Component.displayName})`
+  PropsInjector.displayName = `wrap(${Component.displayName})`
   PropsInjector.propTypes = {}
 
   const paramsShape = {}
