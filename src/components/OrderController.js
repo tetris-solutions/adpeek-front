@@ -18,6 +18,7 @@ import {loadOrdersAction} from '../actions/load-orders'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import {saveOrderAction} from '../actions/save-order'
 import {spawnAutoBudgetAction} from '../actions/spawn-auto-budget'
+
 const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
 const toPercentage = (value, total) => floor((value / total) * 100, 2)
 const fromPercentage = (value, total) => floor((value / 100) * total, 2)
@@ -73,6 +74,7 @@ export const OrderController = React.createClass({
   },
   getInitialState () {
     return {
+      dirty: false,
       order: normalizeOrder(cloneDeep(this.props.order)),
       selectedBudgetIndex: null
     }
@@ -81,11 +83,10 @@ export const OrderController = React.createClass({
     this.context.router.setRouteLeaveHook(this.props.route, this.onLeave)
   },
   onLeave () {
-    return !this.dirty || window.confirm(this.context.messages.leaveOrderPrompt)
+    return !this.state.dirty || window.confirm(this.context.messages.leaveOrderPrompt)
   },
   updateOrder (order) {
-    this.dirty = true
-    this.setState({order})
+    this.setState({order, dirty: true})
   },
   selectBudget (selectedBudgetIndex) {
     if (selectedBudgetIndex === this.state.selectedBudgetIndex) {
@@ -223,7 +224,9 @@ export const OrderController = React.createClass({
 
     order.folder = params.folder
 
-    function onSuccess (response) {
+    const onSuccess = response => {
+      this.setState({dirty: false})
+
       const url = `/company/${params.company}/workspace/${params.workspace}/folder/${params.folder}/order/${response.data.id}`
 
       const reloadStuff = isNewOrder
