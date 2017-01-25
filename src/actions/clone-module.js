@@ -4,6 +4,7 @@ import {PUT} from '@tetris/http'
 import compact from 'lodash/compact'
 import {getDeepCursor} from '../functions/get-deep-cursor'
 import qs from 'query-string'
+import {touchReport} from './touch-report'
 
 function cloneModule (params, module, newModule, config) {
   return PUT(`${process.env.ADPEEK_API_URL}/module/${module}/clone?${qs.stringify(params)}`,
@@ -13,22 +14,20 @@ function cloneModule (params, module, newModule, config) {
 export function cloneModuleAction (tree, params, module, newModule) {
   const {company, workspace, folder, report} = params
 
-  const path = compact([
-    'user',
-    ['companies', company],
-    workspace && ['workspaces', workspace],
-    folder && ['folders', folder],
-    ['reports', report]
-  ])
-
   return cloneModule(params, module, newModule, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .then(function onSuccess (response) {
-      path.push(['modules', response.data.id])
+      const modulesCursor = getDeepCursor(tree, compact([
+        'user',
+        ['companies', company],
+        workspace && ['workspaces', workspace],
+        folder && ['folders', folder],
+        ['reports', report],
+        'modules'
+      ]))
 
-      const cursor = getDeepCursor(tree, path)
-
-      tree.set(cursor, response.data)
+      tree.push(modulesCursor, response.data)
+      touchReport(tree, params)
       tree.commit()
 
       return response

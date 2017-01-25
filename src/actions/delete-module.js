@@ -2,6 +2,7 @@ import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} 
 import {DELETE} from '@tetris/http'
 import compact from 'lodash/compact'
 import {getDeepCursor} from '../functions/get-deep-cursor'
+import {touchReport} from './touch-report'
 
 function deleteModule (company, module, config) {
   return DELETE(`${process.env.ADPEEK_API_URL}/company/${company}/module/${module}`, config)
@@ -19,6 +20,8 @@ export function deleteModuleAction (tree, params, moduleId) {
         ['reports', params.report],
         ['modules', moduleId]
       ])))
+
+      touchReport(tree, params)
       tree.commit()
 
       return response

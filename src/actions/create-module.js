@@ -4,6 +4,7 @@ import {POST} from '@tetris/http'
 import compact from 'lodash/compact'
 import {inferLevelFromParams} from '../functions/infer-level-from-params'
 import {getDeepCursor} from '../functions/get-deep-cursor'
+import {touchReport} from './touch-report'
 
 function createModule (entity, entityId, report, module, config) {
   return POST(`${process.env.ADPEEK_API_URL}/${entity}/${entityId}/report/${report}/module`,
@@ -13,22 +14,21 @@ function createModule (entity, entityId, report, module, config) {
 export function createModuleReportAction (tree, params, module) {
   const {company, workspace, folder, report} = params
   const level = inferLevelFromParams(params)
-  const path = compact([
-    'user',
-    ['companies', company],
-    workspace && ['workspaces', workspace],
-    folder && ['folders', folder],
-    ['reports', report]
-  ])
 
   return createModule(level, params[level], report, module, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .then(function onSuccess (response) {
-      path.push(['modules', response.data.id])
+      const modulesCursor = getDeepCursor(tree, compact([
+        'user',
+        ['companies', company],
+        workspace && ['workspaces', workspace],
+        folder && ['folders', folder],
+        ['reports', report],
+        'modules'
+      ]))
 
-      const cursor = getDeepCursor(tree, path)
-
-      tree.set(cursor, response.data)
+      tree.push(modulesCursor, response.data)
+      touchReport(tree, params)
       tree.commit()
 
       return response
