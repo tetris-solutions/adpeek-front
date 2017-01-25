@@ -14,18 +14,19 @@ const mappingToCursors = (mapping, props, context) =>
 
 export function branch (mapping, Component, maxWatchDepth = 1) {
   function matches (watchedPath, updatedPath) {
-    const nope = () => loglevel.debug(`${Component.displayName}) wont update because changes on ${updatedPath} should not reflect on ${watchedPath}`)
+    function reject () {
+      loglevel.debug(`${Component.displayName}) wont update because changes on ${updatedPath} should not reflect on ${watchedPath}`)
+      return false
+    }
 
     if (!isArray(watchedPath) || !isArray(updatedPath)) {
-      nope()
-      return false
+      return reject()
     }
 
     const levelsBellow = updatedPath.length - watchedPath.length
 
     if (levelsBellow > maxWatchDepth || levelsBellow < 0) {
-      nope()
-      return false
+      return reject()
     }
 
     for (let i = 0; i < watchedPath.length; i++) {
@@ -38,8 +39,7 @@ export function branch (mapping, Component, maxWatchDepth = 1) {
         : updatedPath[i]
 
       if (watchedPart !== updatedPart) {
-        nope()
-        return false
+        return reject()
       }
     }
 
