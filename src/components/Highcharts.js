@@ -178,6 +178,13 @@ export const Chart = React.createClass({
   },
   componentDidMount () {
     this.draw()
+    window.event$.on('aside-toggle', this.resizer)
+  },
+  componentWillUnmount () {
+    window.event$.off('aside-toggle', this.resizer)
+  },
+  resizer () {
+    this.chart.reflow()
   },
   draw () {
     this.refs.container.HCharts = this.chart = Highcharts.chart(

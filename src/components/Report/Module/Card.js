@@ -23,18 +23,11 @@ const ModuleCard = React.createClass({
 
     this.repaintChart = cols !== module.cols || rows !== module.rows
   },
-  componentDidMount () {
-    this.resizer = () => setTimeout(this.reflow, 1000)
-    window.event$.on('aside-toggle', this.resizer)
-  },
   componentDidUpdate () {
     if (this.repaintChart) {
       delete this.repaintChart
       this.reflow()
     }
-  },
-  componentWillUnmount () {
-    window.event$.off('aside-toggle', this.resizer)
   },
   reflow () {
     const resizedChart = this.refs.chartWrapper.querySelector('div[data-highcharts-chart]')

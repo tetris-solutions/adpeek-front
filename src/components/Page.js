@@ -1,12 +1,10 @@
 import React from 'react'
 import {styled} from './mixins/styled'
 import findLast from 'lodash/findLast'
-import has from 'lodash/fp/has'
 import property from 'lodash/property'
 import csjs from 'csjs'
 
-const hasSubNav = has('aside')
-const getSubNav = property('aside')
+const getAside = property('aside')
 
 const style = csjs`
 .page {
@@ -78,13 +76,15 @@ const Page = React.createClass({
     }
   },
   render () {
-    const SubNav = getSubNav(findLast(this.context.routes, hasSubNav))
+    const Aside = getAside(findLast(this.context.routes, getAside))
     const caret = this.state.isNavOpen ? '◀' : '▶'
 
     return (
       <div className={String(style.page)}>
         <nav className={`mdl-shadow--6dp ${style.nav}`}>
-          {SubNav && this.state.isNavOpen ? <SubNav /> : null}
+          {Aside && this.state.isNavOpen
+            ? <Aside/>
+            : null}
           <div onClick={this.toggleNav} className={String(style.caret)}>
             <span>{caret}</span>
           </div>

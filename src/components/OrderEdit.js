@@ -65,23 +65,24 @@ export function OrderEdit ({
               selectBudget={selectBudget}/>
           </div>
           <div className='mdl-cell mdl-cell--7-col'>
-            {budget ? (
-              <BudgetEdit
-                close={closeBudget}
-                remove={removeBudget}
-                folderCampaigns={folderCampaigns}
-                removeCampaign={removeCampaign}
-                addCampaigns={addCampaigns}
-                key={budget.id}
-                showFolderCampaigns={showFolderCampaigns}
-                max={remainingValue + budget.value}
-                budget={budget}
-                change={changeBudgetField}/>
-            ) : (
-              <EmptySelectionCard
-                available={remainingAmount}
-                amount={order.amount}
-                createBudget={createBudget}/>)}
+            {budget
+              ? (
+                <BudgetEdit
+                  close={closeBudget}
+                  remove={removeBudget}
+                  folderCampaigns={folderCampaigns}
+                  removeCampaign={removeCampaign}
+                  addCampaigns={addCampaigns}
+                  key={budget.id}
+                  showFolderCampaigns={showFolderCampaigns}
+                  max={remainingValue + budget.value}
+                  budget={budget}
+                  change={changeBudgetField}/>
+              ) : (
+                <EmptySelectionCard
+                  available={remainingAmount}
+                  amount={order.amount}
+                  createBudget={createBudget}/>)}
           </div>
         </div>
       </Page>

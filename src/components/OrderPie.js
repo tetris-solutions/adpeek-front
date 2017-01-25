@@ -4,10 +4,10 @@ import map from 'lodash/map'
 import round from 'lodash/round'
 import size from 'lodash/size'
 import React from 'react'
-
 import orderType from '../propTypes/order'
-import Highcharts from './Highcharts'
+import Chart from './Highcharts'
 import {styled} from './mixins/styled'
+
 const style = csjs`
 .orderPieChart {
   height: 70vh
@@ -46,7 +46,7 @@ export const OrderPie = React.createClass({
     }
 
     return (
-      <Highcharts ref='chart' className={String(style.orderPieChart)}>
+      <Chart className={String(style.orderPieChart)}>
         <credits enabled={false}/>
 
         <chart
@@ -96,7 +96,7 @@ export const OrderPie = React.createClass({
             {availableBudget}
           </point>
         </pie>
-      </Highcharts>
+      </Chart>
     )
   }
 })

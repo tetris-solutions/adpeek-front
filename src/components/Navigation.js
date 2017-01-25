@@ -1,8 +1,9 @@
 import React from 'react'
 import csjs from 'csjs'
-import {styledFnComponent} from './higher-order/styled-fn-component'
+import {styled} from './mixins/styled'
 import omit from 'lodash/omit'
 import {Link} from 'react-router'
+
 const style = csjs`
 .wrapper {
   width: 270px;
@@ -95,20 +96,27 @@ Name.propTypes = NavBts.propTypes = {
   children: React.PropTypes.node.isRequired
 }
 
-const Wrapper = ({icon, img, children}) => (
-  <div className={`${style.wrapper}`}>
-    {img
-      ? <img className={`${style.img}`} src={img}/>
-      : <i className={`material-icons ${style.icon}`}>{icon}</i>}
-    {children}
-  </div>
-)
+export const Navigation = React.createClass({
+  displayName: 'Navigation',
+  mixins: [styled(style)],
+  propTypes: {
+    icon: React.PropTypes.string,
+    img: React.PropTypes.string,
+    children: React.PropTypes.node
+  },
+  componentDidMount () {
+    window.event$.emit('aside-toggle')
+  },
+  render () {
+    const {icon, img, children} = this.props
 
-Wrapper.displayName = 'Navigation'
-Wrapper.propTypes = {
-  icon: React.PropTypes.string,
-  img: React.PropTypes.string,
-  children: React.PropTypes.node
-}
-
-export const Navigation = styledFnComponent(Wrapper, style)
+    return (
+      <div className={`${style.wrapper}`}>
+        {img
+          ? <img className={`${style.img}`} src={img}/>
+          : <i className={`material-icons ${style.icon}`}>{icon}</i>}
+        {children}
+      </div>
+    )
+  }
+})
