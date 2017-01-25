@@ -19,8 +19,7 @@ function sendModuleChanges (tree, params, moduleId) {
     params.workspace && ['workspaces', params.workspace],
     params.folder && ['folders', params.folder],
     ['reports', params.report],
-    'modules',
-    moduleId
+    ['modules', moduleId]
   ]))
   const level = inferLevelFromParams(params)
   const moduleChanges = omit(tree.get(cursorPath), 'result', 'query', 'isLoading')
@@ -39,8 +38,7 @@ export function updateModuleAction (tree, params, moduleId, moduleChanges, persi
     params.workspace && ['workspaces', params.workspace],
     params.folder && ['folders', params.folder],
     ['reports', params.report],
-    'modules',
-    moduleId
+    ['modules', moduleId]
   ]))
 
   tree.merge(cursorPath, moduleChanges)

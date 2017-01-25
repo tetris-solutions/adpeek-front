@@ -17,8 +17,7 @@ export function deleteModuleAction (tree, {company, workspace, folder, report}, 
         workspace && ['workspaces', workspace],
         folder && ['folders', folder],
         ['reports', report],
-        'modules',
-        moduleId,
+        ['modules', moduleId],
         ['comments', commentId]
       ])))
       tree.commit()

@@ -18,14 +18,13 @@ export function updateReportLayoutAction (tree, {company, workspace, folder, rep
     ['companies', company],
     workspace && ['workspaces', workspace],
     folder && ['folders', folder],
-    ['reports', report],
-    'modules'
+    ['reports', report]
   ]))
 
   layout = map(layout, ({i: id, x, y, h: rows, w: cols}) => ({id, x, y, rows, cols}))
 
   forEach(layout, module => {
-    tree.merge(modulesPath.concat([module.id]), module)
+    tree.merge(modulesPath.concat([['modules', module.id]]), module)
   })
 
   tree.commit()

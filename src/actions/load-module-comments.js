@@ -21,8 +21,7 @@ export function loadModuleCommentsAction (tree, params, {from, to}, module) {
       params.workspace && ['workspaces', params.workspace],
       params.folder && ['folders', params.folder],
       ['reports', params.report],
-      'modules',
-      module,
+      ['modules', module],
       'comments'
     ])))
     .catch(pushResponseErrorToState(tree))

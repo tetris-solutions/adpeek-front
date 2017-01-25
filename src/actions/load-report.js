@@ -1,7 +1,7 @@
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {GET} from '@tetris/http'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import findIndex from 'lodash/findIndex'
 import assign from 'lodash/assign'
-import get from 'lodash/get'
 import map from 'lodash/map'
 import {saveResponseData} from '../functions/save-response-data'
 import compact from 'lodash/compact'
@@ -12,11 +12,13 @@ function loadReport (level, id, report, guest, config) {
 }
 
 function keepOldReportMetaData (newReport, oldReport) {
-  if (oldReport && oldReport.metaData && !newReport.metaData) {
-    newReport.metaData = oldReport.metaData
-  }
+  if (!oldReport) return newReport
 
-  const mergeOldModule = module => assign({}, get(oldReport, ['modules', module.id]), module)
+  newReport.metaData = newReport.metaData || oldReport.metaData
+
+  const mergeOldModule = module => assign({},
+    findIndex(oldReport.modules, {id: module.id}),
+    module)
 
   newReport.modules = map(newReport.modules, mergeOldModule)
 

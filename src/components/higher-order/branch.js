@@ -12,45 +12,50 @@ const mappingToCursors = (mapping, props, context) =>
     ? mapping(props, context)
     : mapping
 
-function matches (watchedPath, updatedPath) {
-  if (!isArray(watchedPath) || !isArray(updatedPath)) {
-    return false
-  }
+export function branch (mapping, Component, maxWatchDepth = 1) {
+  function matches (watchedPath, updatedPath) {
+    const nope = () => loglevel.debug(`${Component.displayName}) wont update because changes on ${updatedPath} should not reflect on ${watchedPath}`)
 
-  const levelsBellow = updatedPath.length - watchedPath.length
-
-  if (levelsBellow > 1 || levelsBellow < 0) {
-    return false
-  }
-
-  for (let i = 0; i < watchedPath.length; i++) {
-    const watchedPart = isNumber(watchedPath[i])
-      ? String(watchedPath[i])
-      : watchedPath[i]
-
-    const updatedPart = isNumber(updatedPath[i])
-      ? String(updatedPath[i])
-      : updatedPath[i]
-
-    if (watchedPart !== updatedPart) {
+    if (!isArray(watchedPath) || !isArray(updatedPath)) {
+      nope()
       return false
     }
-  }
 
-  return true
-}
+    const levelsBellow = updatedPath.length - watchedPath.length
 
-function findRelatedChangePath (watchedPath, {data: {paths}}) {
-  for (let i = 0; i < paths.length; i++) {
-    if (matches(watchedPath, paths[i])) {
-      return paths[i]
+    if (levelsBellow > maxWatchDepth || levelsBellow < 0) {
+      nope()
+      return false
     }
+
+    for (let i = 0; i < watchedPath.length; i++) {
+      const watchedPart = isNumber(watchedPath[i])
+        ? String(watchedPath[i])
+        : watchedPath[i]
+
+      const updatedPart = isNumber(updatedPath[i])
+        ? String(updatedPath[i])
+        : updatedPath[i]
+
+      if (watchedPart !== updatedPart) {
+        nope()
+        return false
+      }
+    }
+
+    return true
   }
 
-  return false
-}
+  function findRelatedChangePath (watchedPath, {data: {paths}}) {
+    for (let i = 0; i < paths.length; i++) {
+      if (matches(watchedPath, paths[i])) {
+        return paths[i]
+      }
+    }
 
-export function branch (mapping, Component) {
+    return false
+  }
+
   class ComposedComponent extends React.Component {
     componentWillMount () {
       const {tree} = this.context

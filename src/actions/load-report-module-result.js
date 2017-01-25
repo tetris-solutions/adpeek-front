@@ -74,8 +74,7 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
     params.workspace && ['workspaces', params.workspace],
     params.folder && ['folders', params.folder],
     ['reports', params.report],
-    'modules',
-    id
+    ['modules', id]
   ])))
 
   const isCursorOk = () => moduleCursor && moduleCursor.tree

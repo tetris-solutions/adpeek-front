@@ -23,8 +23,7 @@ export function createModuleCommentAction (tree, params, module, comment) {
         workspace && ['workspaces', workspace],
         folder && ['folders', folder],
         ['reports', report],
-        'modules',
-        module,
+        ['modules', module],
         ['comments', response.data.id]
       ])
 

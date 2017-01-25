@@ -18,14 +18,13 @@ export function createModuleReportAction (tree, params, module) {
     ['companies', company],
     workspace && ['workspaces', workspace],
     folder && ['folders', folder],
-    ['reports', report],
-    'modules'
+    ['reports', report]
   ])
 
   return createModule(level, params[level], report, module, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .then(function onSuccess (response) {
-      path.push(response.data.id)
+      path.push(['modules', response.data.id])
 
       const cursor = getDeepCursor(tree, path)
 
