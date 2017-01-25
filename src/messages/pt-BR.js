@@ -243,6 +243,7 @@ module.exports = {
   oneLevelUpNavigation: 'Fechar',
   containsOperator: 'Contém',
   equalsOperator: 'Igual',
+  notEqualsOperator: 'Diferente',
   lessThanOperator: 'Menor ou igual',
   greaterThanOperator: 'Maior ou igual',
   betweenOperator: 'Entre',

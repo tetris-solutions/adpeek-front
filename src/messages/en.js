@@ -243,6 +243,7 @@ module.exports = {
   oneLevelUpNavigation: 'Back',
   containsOperator: 'Contains',
   equalsOperator: 'Equals',
+  notEqualsOperator: 'Not equals',
   lessThanOperator: 'Less than',
   greaterThanOperator: 'Greater than',
   betweenOperator: 'Between',

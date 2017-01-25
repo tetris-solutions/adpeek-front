@@ -15,8 +15,9 @@ import VerticalAlign from '../../../VerticalAlign'
 import sortBy from 'lodash/sortBy'
 import find from 'lodash/find'
 import {Button} from '../../../Button'
-const operators = ['contains', 'equals', 'less than', 'greater than', 'between']
+const operators = ['contains', 'equals', 'not equals', 'less than', 'greater than', 'between']
 const limitOperators = ['equals']
+const fixedOperators = ['equals', 'not equals']
 
 const numTypes = [
   'integer',
@@ -49,24 +50,33 @@ const Filter = ({id, attribute, operator, value, secondary, options, drop, chang
     </div>
     <div className='mdl-cell mdl-cell--3-col'>
       <Select name={`filters.${id}.operator`} value={operator} onChange={change('operator')}>
-        {map(attribute === 'limit' ? limitOperators : operators, op =>
-          <option key={op} value={op}>
+        {map(attribute === 'limit' ? limitOperators : (metaData.values ? fixedOperators : operators),
+          op => <option key={op} value={op}>
             {messages[`${camelCase(op)}Operator`]}
           </option>)}
       </Select>
     </div>
-    <div className='mdl-cell mdl-cell--2-col'>
-      <Input
-        type={inputType(metaData.type)}
-        name={`filters.${id}.value`}
-        value={value}
-        onChange={change('value')}/>
+    <div className='mdl-cell mdl-cell--2-col'>{metaData.values
+      ? (
+        <Select name={`filters.${id}.value`} value={value} onChange={change('value')}>
+          <option value=''/>
+          {map(metaData.values, (name, value) =>
+            <option key={value} value={value}>
+              {name}
+            </option>)}
+        </Select>
+      ) : (
+        <Input
+          type={inputType(metaData.type)}
+          name={`filters.${id}.value`}
+          value={value}
+          onChange={change('value')}/>)}
     </div>
     <div className='mdl-cell mdl-cell--2-col'>
       <Input
         type={inputType(metaData.type)}
         name={`filters.${id}.secondary`}
-        disabled={operator !== 'between'}
+        disabled={Boolean(metaData.values) || operator !== 'between'}
         value={secondary}
         onChange={change('secondary')}/>
     </div>
