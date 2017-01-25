@@ -17,7 +17,7 @@ function getCampaignAdsets (campaign) {
   return map(campaign.adsets, normalizeAdset)
 }
 
-export function Order ({deliveryMethods, dispatch, params, order, folder, statuses}, {messages: {newOrderName}, moment, locales}) {
+export function Order ({deliveryMethods, dispatch, params, order, folder, statuses, route}, {messages: {newOrderName}, moment, locales}) {
   function defaultOrder () {
     const nextMonth = moment().add(1, 'month')
     return {
@@ -39,6 +39,7 @@ export function Order ({deliveryMethods, dispatch, params, order, folder, status
 
   return (
     <OrderController
+      route={route}
       key={params.order || 'new-order'}
       params={params}
       deliveryMethods={deliveryMethods}
@@ -51,6 +52,7 @@ export function Order ({deliveryMethods, dispatch, params, order, folder, status
 
 Order.displayName = 'Order'
 Order.propTypes = {
+  route: React.PropTypes.object,
   statuses: React.PropTypes.array,
   dispatch: React.PropTypes.func,
   deliveryMethods: React.PropTypes.array,

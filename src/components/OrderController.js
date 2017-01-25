@@ -54,6 +54,7 @@ function defaultBudgetName ({budgetLabel}, index) {
 export const OrderController = React.createClass({
   displayName: 'Order-Controller',
   propTypes: {
+    route: React.PropTypes.object.isRequired,
     deliveryMethods: React.PropTypes.array,
     order: orderType,
     params: React.PropTypes.shape({
@@ -76,6 +77,16 @@ export const OrderController = React.createClass({
       selectedBudgetIndex: null
     }
   },
+  componentDidMount () {
+    this.context.router.setRouteLeaveHook(this.props.route, this.onLeave)
+  },
+  onLeave () {
+    return !this.dirty || window.confirm(this.context.messages.leaveOrderPrompt)
+  },
+  updateOrder (order) {
+    this.dirty = true
+    this.setState({order})
+  },
   selectBudget (selectedBudgetIndex) {
     if (selectedBudgetIndex === this.state.selectedBudgetIndex) {
       selectedBudgetIndex = null
@@ -91,7 +102,7 @@ export const OrderController = React.createClass({
     const {selectedBudgetIndex, order} = this.state
     order.budgets[selectedBudgetIndex] = budget
 
-    this.setState({order})
+    this.updateOrder(order)
   },
   changeCurrentBudget (changes) {
     this.setCurrentBudget(
@@ -122,9 +133,7 @@ export const OrderController = React.createClass({
       ? fieldOrChanges
       : {[fieldOrChanges]: value}
 
-    const order = assign({}, this.state.order, changes)
-
-    this.setState({order})
+    this.updateOrder(assign({}, this.state.order, changes))
   },
   changeBudgetField (field, value) {
     if (field === 'mode') {
@@ -182,7 +191,7 @@ export const OrderController = React.createClass({
       campaigns: []
     })
 
-    this.setState({selectedBudgetIndex: order.budgets.length})
+    this.selectBudget(order.budgets.length)
     this.changeOrderField('budgets', order.budgets.concat([newBudget]))
   },
   removeBudget () {
@@ -190,10 +199,8 @@ export const OrderController = React.createClass({
 
     order.budgets.splice(selectedBudgetIndex, 1)
 
-    this.setState({
-      order,
-      selectedBudgetIndex: null
-    })
+    this.updateOrder(order)
+    this.selectBudget(null)
   },
   run () {
     const {params, dispatch} = this.props
