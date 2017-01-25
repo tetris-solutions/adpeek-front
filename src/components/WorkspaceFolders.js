@@ -1,4 +1,5 @@
 import deburr from 'lodash/deburr'
+import orderBy from 'lodash/orderBy'
 import filter from 'lodash/filter'
 import includes from 'lodash/includes'
 import lowerCase from 'lodash/toLower'
@@ -57,7 +58,7 @@ export const Folders = React.createClass({
               <h5>
                 <Message>folderList</Message>
               </h5>
-              {map(matchingFolders, (folder, index) =>
+              {map(orderBy(matchingFolders, ['creation'], ['desc']), (folder, index) =>
                 <FolderCard
                   key={index}
                   {...folder}

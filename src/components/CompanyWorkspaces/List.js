@@ -1,5 +1,6 @@
 import trim from 'lodash/trim'
 import deburr from 'lodash/deburr'
+import orderBy from 'lodash/orderBy'
 import lowerCase from 'lodash/toLower'
 import filter from 'lodash/filter'
 import forEach from 'lodash/forEach'
@@ -72,13 +73,14 @@ export const Workspaces = React.createClass({
   render () {
     const searchValue = cleanStr(this.state.searchValue)
     const {company: {id, workspaces}} = this.props
-    const matchingWorkspaces = searchValue
-      ? filter(workspaces, ({name}) => includes(cleanStr(name), searchValue))
-      : workspaces
+    const matchingWorkspaces = orderBy(
+      searchValue
+        ? filter(workspaces, ({name}) => includes(cleanStr(name), searchValue))
+        : workspaces,
+      ['creation'], ['desc']
+    )
 
-    const groupedByFaveStatus = groupBy(matchingWorkspaces, ({favorite}) => Boolean(favorite))
-    const anyFave = Boolean(groupedByFaveStatus.true)
-    const anyNormie = Boolean(groupedByFaveStatus.false)
+    const list = groupBy(matchingWorkspaces, ({favorite}) => favorite ? 'favorites' : 'others')
 
     return (
       <div>
@@ -93,12 +95,12 @@ export const Workspaces = React.createClass({
         </SubHeader>
         <Page>
           <Container>
-            {anyFave && (
+            {list.favorites && (
               <h5>
                 <Message>faveWorkspaceList</Message>
               </h5>)}
 
-            {map(groupedByFaveStatus.true, (workspace, index) =>
+            {map(list.favorites, (workspace, index) =>
               <Workspace
                 key={workspace.id}
                 params={{workspace: workspace.id}}
@@ -106,11 +108,11 @@ export const Workspaces = React.createClass({
                 unfave={bind(this.unfavoriteWorkspace, null, workspace.id)}
                 del={bind(this.deleteWorkspace, null, workspace.id)}/>)}
 
-            {anyFave && <br/>}
-            {anyFave && <br/>}
+            {list.favorites && <br/>}
+            {list.favorites && <br/>}
 
-            {anyNormie && <h5><Message>workspaceList</Message></h5>}
-            {map(groupedByFaveStatus.false, (workspace, index) =>
+            {list.others && <h5><Message>workspaceList</Message></h5>}
+            {map(list.others, (workspace, index) =>
               <Workspace
                 key={workspace.id}
                 params={{workspace: workspace.id}}

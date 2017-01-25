@@ -1,6 +1,7 @@
 import React from 'react'
 import {styled} from '../mixins/styled'
 import map from 'lodash/map'
+import orderBy from 'lodash/orderBy'
 import Message from 'tetris-iso/Message'
 import Fence from '../Fence'
 import Page from '../Page'
@@ -171,14 +172,13 @@ export const Reports = React.createClass({
           <SearchBox onChange={this.onChange}/>
         </SubHeader>
         <Page>
-          <Container>
-            {map(matchingReports, (report, index) =>
-              <Report
-                key={index}
-                {...report}
-                dispatch={dispatch}
-                params={params}
-                path={path}/>)}
+          <Container>{map(orderBy(matchingReports, ['creation'], ['desc']), (report, index) =>
+            <Report
+              key={index}
+              {...report}
+              dispatch={dispatch}
+              params={params}
+              path={path}/>)}
           </Container>
         </Page>
       </div>

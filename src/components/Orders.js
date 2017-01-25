@@ -1,4 +1,5 @@
 import deburr from 'lodash/deburr'
+import orderBy from 'lodash/orderBy'
 import filter from 'lodash/filter'
 import includes from 'lodash/includes'
 import lowerCase from 'lodash/toLower'
@@ -91,7 +92,7 @@ export const Orders = React.createClass({
               <h5>
                 <Message>orders</Message>
               </h5>
-              {map(matchingOrders, (order, index) =>
+              {map(orderBy(matchingOrders, ['creation'], ['desc']), (order, index) =>
                 <Order {...order} dispatch={this.props.dispatch} key={index}/>)}
             </Container>
           </Page>

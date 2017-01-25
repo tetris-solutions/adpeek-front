@@ -1,4 +1,5 @@
 import React from 'react'
+import orderBy from 'lodash/sortBy'
 import Message from 'tetris-iso/Message'
 import Page from '../Page'
 import isEmpty from 'lodash/isEmpty'
@@ -217,7 +218,7 @@ const List = React.createClass({
             onChange={this.onSwitch}/>
         </span>
 
-        {map(mailings, mailing =>
+        {map(orderBy(mailings, ['creation'], ['desc']), mailing =>
           <MailingLink
             {...this.props}
             key={mailing.id}
