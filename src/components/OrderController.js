@@ -81,9 +81,20 @@ export const OrderController = React.createClass({
   },
   componentDidMount () {
     this.context.router.setRouteLeaveHook(this.props.route, this.onLeave)
+    window.addEventListener('beforeunload', this.onUnload)
+  },
+  componentWillUnmount () {
+    window.removeEventListener('beforeunload', this.onUnload)
+  },
+  onUnload (e) {
+    if (this.state.dirty) {
+      e.returnValue = this.context.messages.leaveOrderPrompt
+    }
   },
   onLeave () {
-    return !this.state.dirty || window.confirm(this.context.messages.leaveOrderPrompt)
+    return this.state.dirty
+      ? this.context.messages.leaveOrderPrompt
+      : true
   },
   updateOrder (order) {
     this.setState({order, dirty: true})
