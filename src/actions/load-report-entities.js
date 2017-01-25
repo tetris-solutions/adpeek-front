@@ -1,7 +1,6 @@
 import {GET} from '@tetris/http'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {saveResponseData} from '../functions/save-response-data'
-import assign from 'lodash/assign'
 import compact from 'lodash/compact'
 import uniqBy from 'lodash/uniqBy'
 import map from 'lodash/map'
@@ -44,24 +43,25 @@ function _loadReportEntitiesAction (tree, params, query) {
     return item
   }
 
-  function mergeNewEntities (entities, node) {
-    entities.campaigns = map(entities.campaigns, setStatus)
+  function mergeNewEntities (newEntities, oldEntities) {
+    newEntities.campaigns = map(newEntities.campaigns, setStatus)
 
-    forEach(entities, (localList, name) => {
-      entities[name] = uniqBy(concat(
-        get(node, `entities.${name}`, []),
-        map(localList, normalize)
+    forEach(newEntities, (newList, entityName) => {
+      newEntities[entityName] = uniqBy(concat(
+        map(newList, normalize),
+        get(oldEntities, entityName, [])
       ), 'id')
     })
 
-    return assign({}, node, {entities})
+    return newEntities
   }
 
   const path = compact([
     'user',
     ['companies', company],
     workspace && ['workspaces', workspace],
-    folder && ['folders', folder]
+    folder && ['folders', folder],
+    'entities'
   ])
 
   return loadReportEntities(level, params[level], getApiFetchConfig(tree), query)

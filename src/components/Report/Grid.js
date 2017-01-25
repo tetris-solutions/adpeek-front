@@ -46,7 +46,7 @@ const Grid_ = ({
 
 Grid_.displayName = 'Pure-Grid'
 Grid_.propTypes = {
-  modules: React.PropTypes.object.isRequired,
+  modules: React.PropTypes.array.isRequired,
   cloneModule: React.PropTypes.func.isRequired,
   onLayoutChange: React.PropTypes.func.isRequired,
   layout: React.PropTypes.array.isRequired,

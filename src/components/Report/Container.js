@@ -2,7 +2,6 @@ import React from 'react'
 import head from 'lodash/head'
 import uniq from 'lodash/uniq'
 import includes from 'lodash/includes'
-import concat from 'lodash/concat'
 import ReportController from './Controller'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
 import {loadReportEntitiesAction} from '../../actions/load-report-entities'
@@ -67,9 +66,6 @@ const Container = React.createClass({
     messages: React.PropTypes.object
   },
   propTypes,
-  getInitialState () {
-    return {isLoading: true}
-  },
   componentDidMount () {
     this.load()
   },
@@ -207,13 +203,8 @@ const Container = React.createClass({
       : this.loadMultiPlatformMetaData(entity)
   },
   load () {
-    const promises = concat(
-      map(this.getEntities(), ({id}) => this.loadMetaData(id)),
-      map(this.props.accounts, this.loadEntities)
-    )
-
-    Promise.all(promises)
-      .then(() => this.setState({isLoading: false}))
+    map(this.getEntities(), ({id}) => this.loadMetaData(id))
+    map(this.props.accounts, this.loadEntities)
   },
   getAccounts () {
     this._accounts = this._accounts || map(this.props.accounts, transformAccount)
@@ -221,7 +212,7 @@ const Container = React.createClass({
     return this._accounts
   },
   render () {
-    if (this.state.isLoading) {
+    if (!this.props.metaData || !this.props.campaigns) {
       return (
         <Placeholder>
           <LoadingHorizontal>
