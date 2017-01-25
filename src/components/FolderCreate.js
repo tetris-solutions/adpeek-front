@@ -1,5 +1,6 @@
 import React from 'react'
 import FormMixin from './mixins/FormMixin'
+import concat from 'lodash/concat'
 import Message from 'tetris-iso/Message'
 import Input from './Input'
 import {createFolderAction} from '../actions/create-folder'
@@ -182,8 +183,11 @@ export const CreateFolder = React.createClass({
                       disabled={this.state.isLoadingDashCampaigns}
                       placeholder={this.context.messages.dashCampaignLabel}
                       onChange={this.onChangeDashCampaign}
-                      options={map(company.dashCampaigns, this.normalizeDashCampaignOption)}
-                      selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}/>
+                      selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}
+                      options={concat({
+                        value: this.CREATE_CAMPAIGN_FLAG,
+                        text: this.context.messages.newDashCampaign
+                      }, map(company.dashCampaigns, this.normalizeDashCampaignOption))}/>
                   </div>
                 ) : null}
 

@@ -319,5 +319,6 @@ module.exports = {
   notFoundTitle: 'Not Found!',
   notFoundBody: 'The object you tried to access does not exist or you don\'t have permission to view it.',
   rolesLabel: 'Roles',
-  leaveOrderPrompt: 'Your Order has unsaved changes, do you really want to leave?'
+  leaveOrderPrompt: 'Your Order has unsaved changes, do you really want to leave?',
+  newDashCampaign: 'New Dash Campaign'
 }

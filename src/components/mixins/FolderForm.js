@@ -6,6 +6,7 @@ import {loadKPIMetadataAction} from '../../actions/load-kpi-meta-data'
 import omit from 'lodash/omit'
 
 export default {
+  CREATE_CAMPAIGN_FLAG: '+1',
   contextTypes: {
     router: React.PropTypes.object,
     messages: React.PropTypes.object
@@ -58,11 +59,13 @@ export default {
   },
   onChangeDashCampaign (dashCampaign) {
     if (dashCampaign) {
-      this.setState({
-        dashCampaign: find(this.props.company.dashCampaigns, {
+      dashCampaign = dashCampaign.value === this.CREATE_CAMPAIGN_FLAG
+        ? {id: this.CREATE_CAMPAIGN_FLAG, name: dashCampaign.text}
+        : find(this.props.company.dashCampaigns, {
           id: dashCampaign.value
         })
-      })
+
+      this.setState({dashCampaign})
     } else {
       this.setState({dashCampaign: null})
     }
