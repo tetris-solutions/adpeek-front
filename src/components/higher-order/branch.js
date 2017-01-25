@@ -6,6 +6,7 @@ import forEach from 'lodash/forEach'
 import assign from 'lodash/assign'
 import debounce from 'lodash/debounce'
 import loglevel from 'loglevel'
+import find from 'lodash/find'
 
 const mappingToCursors = (mapping, props, context) =>
   isFunction(mapping)
@@ -46,7 +47,7 @@ export function branch (mapping, Component, maxWatchDepth = 1) {
     return true
   }
 
-  function findRelatedChangePath (watchedPath, {data: {paths}}) {
+  function matchUpdatedPath (watchedPath, {data: {paths}}) {
     for (let i = 0; i < paths.length; i++) {
       if (matches(watchedPath, paths[i])) {
         return paths[i]
@@ -84,15 +85,13 @@ export function branch (mapping, Component, maxWatchDepth = 1) {
     }
 
     onUpdate (event) {
-      forEach(this.cursors, path => {
-        const changedPath = findRelatedChangePath(path, event)
+      const relatedToEvent = path => matchUpdatedPath(path, event)
+      const changedPath = find(this.cursors, relatedToEvent)
 
-        if (changedPath) {
-          loglevel.debug(`${Component.displayName}) update triggered by change on ${changedPath}`)
-          this.refresh()
-          return false
-        }
-      })
+      if (changedPath) {
+        loglevel.debug(`${Component.displayName}) update triggered by change on ${changedPath}`)
+        this.refresh()
+      }
     }
 
     componentWillReceiveProps (props, context) {

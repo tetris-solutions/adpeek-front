@@ -18,7 +18,15 @@ const ReportLink = React.createClass({
     router: React.PropTypes.object.isRequired
   },
   getInitialState () {
-    return {isLoading: false}
+    return {
+      isLoading: false,
+      hasFired: false
+    }
+  },
+  componentDidUpdate () {
+    if (this.state.hasFired && this.props.reports) {
+      this.context.router.push(this.getUrl())
+    }
   },
   loadReports () {
     const {reports, dispatch, params} = this.props
@@ -28,15 +36,12 @@ const ReportLink = React.createClass({
     this.setState({isLoading: true})
 
     return dispatch(loadReportsAction, params, true)
-      .then(() => this.setState({isLoading: false}))
+      .then(() => this.setState({hasFired: true}))
   },
   onClick () {
     if (this.state.isLoading) return
 
     this.loadReports()
-      .then(() => {
-        this.context.router.push(this.getUrl())
-      })
   },
   getUrl () {
     const {params, reports} = this.props
