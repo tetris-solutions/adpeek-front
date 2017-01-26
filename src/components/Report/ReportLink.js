@@ -24,7 +24,8 @@ const ReportLink = React.createClass({
     }
   },
   componentDidUpdate () {
-    if (this.state.hasFired && this.props.reports) {
+    if (!this.gone && this.state.hasFired && this.props.reports) {
+      this.gone = true
       this.context.router.push(this.getUrl())
     }
   },

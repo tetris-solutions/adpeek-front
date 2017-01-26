@@ -93,7 +93,7 @@ export function branch (mapping, Component = ByPass, maxWatchDepth = 1) {
       this.refresh = debounce(() => {
         if (this.dead) return
         this.forceUpdate()
-      }, 300)
+      }, 1000)
 
       this.onUpdate = this.onUpdate.bind(this)
 

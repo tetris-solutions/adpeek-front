@@ -7,6 +7,7 @@ import {deleteFolderAction} from '../actions/delete-folder'
 import {DeleteSpan} from './DeleteButton'
 import ReportLink from './Report/ReportLink'
 import FolderStats from './FolderStats'
+import {node} from './higher-order/branch'
 
 const DeleteFolder = ({params, dispatch, id, name}) => (
   <MenuItem
@@ -87,4 +88,14 @@ FolderCard.propTypes = {
   params: React.PropTypes.object.isRequired
 }
 
-export default FolderCard
+const Wrapper = props => (
+  <FolderCard {...props} {...props.folder}/>
+)
+Wrapper.displayName = 'Wrapper'
+Wrapper.propTypes = {
+  folder: React.PropTypes.object,
+  dispatch: React.PropTypes.func,
+  params: React.PropTypes.object
+}
+
+export default node('folders', 'folder', Wrapper)

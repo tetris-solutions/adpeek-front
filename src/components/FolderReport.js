@@ -1,6 +1,6 @@
 import React from 'react'
 import ReportContainer from './Report/Container'
-import {contextualize} from './higher-order/contextualize'
+import {node, branch} from './higher-order/branch'
 import get from 'lodash/get'
 import endsWith from 'lodash/endsWith'
 
@@ -9,7 +9,7 @@ const FolderReport = React.createClass({
   propTypes: {
     report: React.PropTypes.object,
     location: React.PropTypes.object,
-    metaData: React.PropTypes.object,
+    reportMetaData: React.PropTypes.object,
     params: React.PropTypes.object.isRequired,
     dispatch: React.PropTypes.func,
     folder: React.PropTypes.shape({
@@ -33,7 +33,7 @@ const FolderReport = React.createClass({
     return this._accounts
   },
   render () {
-    const {metaData, folder, location} = this.props
+    const {reportMetaData: metaData, folder, location} = this.props
 
     return (
       <ReportContainer
@@ -46,4 +46,4 @@ const FolderReport = React.createClass({
   }
 })
 
-export default contextualize(FolderReport, {metaData: ['reportMetaData']}, 'folder', 'report')
+export default node('workspace', 'folder', branch('reportMetaData', FolderReport))

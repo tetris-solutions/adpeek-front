@@ -66,10 +66,10 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
         component={node(level, 'report')}
         aside={component.ReportAside}
         breadcrumb={component.ReportBreadcrumb}
-        onEnter={preload(report)}
-        {...render(rConfig[level].item)}>
+        onEnter={preload(report)}>
 
-        <Route path='edit'/>
+        <IndexRoute {...render(rConfig[level].item)}/>
+        <Route path='edit' {...render(rConfig[level].item)}/>
         <Route
           path='mailing(/:mailing)'
           onEnter={preload(mailings)}
@@ -165,7 +165,11 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 <Route breadcrumb={component.OrdersBreadCrumb}
                        onEnter={preload(deliveryMethods, campaignsWithAdsets, orders)}>
 
-                  <Route aside={component.OrderAside} path='order/:order' breadcrumb={component.OrderBreadCrumb}>
+                  <Route
+                    aside={component.OrderAside}
+                    path='order/:order'
+                    breadcrumb={component.OrderBreadCrumb}>
+
                     <IndexRoute onEnter={preload(budgets)} {...render(component.Order)}/>
 
                     <Route path='autobudget(/:day)'
