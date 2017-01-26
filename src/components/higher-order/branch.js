@@ -164,38 +164,36 @@ export function derivative (parent, name, resolverOrComponent, Component) {
     : () => name
 
   Component = Component || resolverOrComponent
-  let Branch
 
-  function setup (parentContext) {
-    Branch = branch((props, context) => {
-      const {tree, cursors} = parentContext
-      const parentPath = cursors[isString(parent) ? parent : parent(props, context)]
+  return React.createClass({
+    displayName: `${name}(${Component.displayName})`,
+    contextTypes: {
+      tree: React.PropTypes.object.isRequired,
+      cursors: React.PropTypes.object.isRequired
+    },
+    componentWillMount () {
+      const solver = (props, context) => {
+        const {tree, cursors} = this.context
+        const parentPath = cursors[isString(parent) ? parent : parent(props, context)]
 
-      if (!parentPath) return {}
+        if (!parentPath) return {}
 
-      const parentValue = tree.get(parentPath)
-      const subPath = resolver(parentValue, props, context)
+        const parentValue = tree.get(parentPath)
+        const subPath = resolver(parentValue, props, context)
 
-      return subPath === 0 || subPath
-        ? {[name]: concat(parentPath, subPath)}
-        : {}
-    }, Component)
-  }
+        return subPath === 0 || subPath
+          ? {[name]: concat(parentPath, subPath)}
+          : {}
+      }
 
-  function Derivative (props, context) {
-    if (!Branch) setup(context)
+      this.Branch = branch(solver, Component)
+    },
+    render () {
+      const {Branch} = this
 
-    return <Branch {...props}/>
-  }
-
-  Derivative.displayName = `${name}(${Component.displayName})`
-  Derivative.contextTypes = {
-    tree: React.PropTypes.object.isRequired,
-    cursors: React.PropTypes.object.isRequired
-  }
-
-  return Derivative
-  // return pure(Derivative)
+      return <Branch {...this.props}/>
+    }
+  })
 }
 
 export const collection = derivative
