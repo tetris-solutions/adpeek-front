@@ -4,7 +4,6 @@ import React from 'react'
 import Module from './Module/Container'
 import GridLayout from 'react-grid-layout'
 import sizeMe from 'react-sizeme'
-import {pure} from 'recompose'
 import {derivative} from '../higher-order/branch'
 import findIndex from 'lodash/findIndex'
 
@@ -25,7 +24,7 @@ ModuleWrapper = derivative(
   ModuleWrapper
 )
 
-const Grid_ = ({
+const ReportGrid = ({
   modules,
   onLayoutChange,
   cloneModule,
@@ -50,8 +49,8 @@ const Grid_ = ({
   </GridLayout>
 )
 
-Grid_.displayName = 'Pure-Grid'
-Grid_.propTypes = {
+ReportGrid.displayName = 'Pure-Grid'
+ReportGrid.propTypes = {
   modules: React.PropTypes.array.isRequired,
   cloneModule: React.PropTypes.func.isRequired,
   onLayoutChange: React.PropTypes.func.isRequired,
@@ -64,7 +63,6 @@ Grid_.propTypes = {
   width: React.PropTypes.number
 }
 
-const ReportGrid = pure(Grid_)
 const DynamicGrid = props => <ReportGrid width={props.size.width} {...props}/>
 
 DynamicGrid.propTypes = {

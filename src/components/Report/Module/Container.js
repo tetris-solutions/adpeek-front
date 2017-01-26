@@ -16,7 +16,6 @@ import reportEntityType from '../../../propTypes/report-entity'
 import reportMetaDataType from '../../../propTypes/report-meta-data'
 import moduleType from '../../../propTypes/report-module'
 import Controller from './Controller'
-import {pure} from 'recompose'
 import log from 'loglevel'
 
 const keyed = reportEntities => keyBy(reportEntities, 'id')
@@ -201,12 +200,7 @@ const ModuleContainer = React.createClass({
   }
 })
 
-const Module_ = props => <ModuleContainer {...props}/>
-Module_.displayName = 'Pure-Module'
-
-const HardModule = pure(Module_)
-
-const Upper = (props, {reportEntities}) => <HardModule {...props} reportEntities={reportEntities}/>
+const Upper = (props, {reportEntities}) => <ModuleContainer {...props} reportEntities={reportEntities}/>
 
 Upper.contextTypes = {
   reportEntities: React.PropTypes.arrayOf(reportEntityType).isRequired

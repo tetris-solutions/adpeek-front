@@ -90,7 +90,9 @@ const ModuleController = React.createClass({
     this.fetchResult(this.getChartQuery())
   },
   startResultLoadingAction (query) {
-    if (!query) return
+    if (!query) {
+      return
+    }
 
     const {params, dispatch, module, attributes} = this.props
 

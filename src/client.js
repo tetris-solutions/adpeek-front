@@ -5,7 +5,7 @@ import {extend as extendBaseContext} from 'tetris-iso/base-context'
 import loglevel from 'loglevel'
 import Emitter from 'emmett'
 
-extendBaseContext('company', 'router', 'location', 'isGuest', 'isAdmin', 'isLoggedIn')
+extendBaseContext('company', 'router', 'location', 'isGuest', 'isAdmin', 'isLoggedIn', 'cursors')
 const tree = createClient(getRoutes, defaultState)
 
 window.event$ = new Emitter()

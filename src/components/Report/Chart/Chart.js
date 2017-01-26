@@ -11,7 +11,6 @@ import Spinner from '../../Spinner'
 import Table from './Table'
 import Total from './Total'
 import {styled} from '../../mixins/styled'
-import {pure} from 'recompose'
 import log from 'loglevel'
 
 const style = csjs`
@@ -54,8 +53,8 @@ const emptyResult = []
 const A4Ratio = 674 / 1032
 const counters = {}
 
-const Chart_ = props => {
-  const Chart = typeComponent[props.type]
+const Chart = props => {
+  const Renderer = typeComponent[props.type]
 
   counters[props.id] = (counters[props.id] || 0) + 1
 
@@ -64,7 +63,7 @@ const Chart_ = props => {
   return (
     <div>
       <div className={`${style.wrap}`} style={{height: props.height}}>
-        <Chart {...props}/>
+        <Renderer {...props}/>
         <div className={`${style.hidden}`} data-interface>
           {props.renderHiddenTable
             ? <Table {...props}/>
@@ -76,11 +75,11 @@ const Chart_ = props => {
   )
 }
 
-Chart_.defaultProps = {
+Chart.defaultProps = {
   height: '100%'
 }
-Chart_.displayName = 'Pure-Chart'
-Chart_.propTypes = {
+Chart.displayName = 'Pure-Chart'
+Chart.propTypes = {
   change: React.PropTypes.func,
   height: React.PropTypes.oneOfType([
     React.PropTypes.string,
@@ -104,8 +103,6 @@ Chart_.propTypes = {
   comments: React.PropTypes.array,
   query: React.PropTypes.object
 }
-
-const HardChart = pure(Chart_)
 
 const ChartContainer = React.createClass({
   displayName: 'Chart',
@@ -169,7 +166,7 @@ const ChartContainer = React.createClass({
     }
 
     return (
-      <HardChart {...config}/>
+      <Chart {...config}/>
     )
   }
 })

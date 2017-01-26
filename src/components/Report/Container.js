@@ -13,7 +13,6 @@ import SubHeader from '../SubHeader'
 import LoadingHorizontal from '../LoadingHorizontal'
 import Message from 'tetris-iso/Message'
 import pick from 'lodash/pick'
-import {pure} from 'recompose'
 import log from 'loglevel'
 import equals from 'shallowequal'
 
@@ -233,15 +232,13 @@ const Container = React.createClass({
   }
 })
 
-const Report_ = props => <Container {...props} />
-Report_.propTypes = propTypes
-
-const ReportContainer = pure(Report_)
+const Report = props => <Container {...props} />
+Report.propTypes = propTypes
 
 const R = props =>
   props.children
     ? props.children
-    : <ReportContainer {...props}/>
+    : <Report {...props}/>
 
 R.displayName = 'Report-Wrapper'
 R.propTypes = {

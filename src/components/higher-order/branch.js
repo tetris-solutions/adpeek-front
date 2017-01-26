@@ -93,7 +93,7 @@ export function branch (mapping, Component = ByPass, maxWatchDepth = 1) {
       this.refresh = debounce(() => {
         if (this.dead) return
         this.forceUpdate()
-      }, 1000)
+      }, 500)
 
       this.onUpdate = this.onUpdate.bind(this)
 
@@ -180,7 +180,7 @@ export function derivative (parent, name, resolverOrComponent, Component) {
     componentWillMount () {
       const solver = (props, context) => {
         const {tree, cursors} = this.context
-        const parentPath = cursors[parent]
+        const parentPath = cursors[isString(parent) ? parent : parent(props, context)]
 
         if (!parentPath) return {}
 

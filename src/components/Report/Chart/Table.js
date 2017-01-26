@@ -1,7 +1,6 @@
 import concat from 'lodash/concat'
 import get from 'lodash/get'
-import {contextualize} from '../../higher-order/contextualize'
-import {pure} from 'recompose'
+import {node} from '../../higher-order/branch'
 import csjs from 'csjs'
 import cx from 'classnames'
 import find from 'lodash/find'
@@ -405,10 +404,8 @@ const ReportModuleTable = React.createClass({
   }
 })
 
-const HardChart = pure(ReportModuleTable)
-
 const VideoWrapper = props => (
-  <HardChart {...props} channels={props.company.channels}/>
+  <ReportModuleTable {...props} channels={props.company.channels}/>
 )
 
 VideoWrapper.displayName = 'Video-Table-Wrapper'
@@ -416,14 +413,14 @@ VideoWrapper.propTypes = {
   company: React.PropTypes.object
 }
 
-const WithChannel = contextualize(VideoWrapper, 'company')
+const WithChannel = node('user', 'company', VideoWrapper)
 
 const Wrapper = props => {
   if (props.entity.id === 'Video') {
     return <WithChannel {...props}/>
   }
 
-  return <HardChart {...props}/>
+  return <ReportModuleTable {...props}/>
 }
 
 Wrapper.displayName = 'Table-Wrapper'
