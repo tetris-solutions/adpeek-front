@@ -1,5 +1,7 @@
 import React from 'react'
 import isFunction from 'lodash/isFunction'
+import findIndex from 'lodash/findIndex'
+import isString from 'lodash/isString'
 import isArray from 'lodash/isArray'
 import isNumber from 'lodash/isNumber'
 import forEach from 'lodash/forEach'
@@ -7,13 +9,28 @@ import assign from 'lodash/assign'
 import debounce from 'lodash/debounce'
 import loglevel from 'loglevel'
 import find from 'lodash/find'
+import concat from 'lodash/concat'
+import omit from 'lodash/omit'
 
 const mappingToCursors = (mapping, props, context) =>
   isFunction(mapping)
     ? mapping(props, context)
     : mapping
 
-export function branch (mapping, Component, maxWatchDepth = 1) {
+const ByPass = props => props.children
+  ? React.cloneElement(props.children, omit(props, 'children'))
+  : null
+
+ByPass.displayName = 'Node'
+ByPass.propTypes = {
+  children: React.PropTypes.node
+}
+
+export function branch (mapping, Component = ByPass, maxWatchDepth = 1) {
+  if (isString(mapping)) {
+    mapping = {[mapping]: [mapping]}
+  }
+
   function matches (watchedPath, updatedPath) {
     function reject () {
       loglevel.debug(`${Component.displayName}) wont update because changes on ${updatedPath} should not reflect on ${watchedPath}`)
@@ -57,13 +74,17 @@ export function branch (mapping, Component, maxWatchDepth = 1) {
     return false
   }
 
-  class ComposedComponent extends React.Component {
+  class Branch extends React.Component {
     componentWillMount () {
       const {tree} = this.context
 
       this.dispatcher = (fn, ...args) => fn(tree, ...args)
+    }
 
-      this.cursors = mappingToCursors(mapping, this.props, this.context)
+    getChildContext () {
+      return {
+        cursors: assign({}, this.context.cursors, this.getCursors())
+      }
     }
 
     componentDidMount () {
@@ -86,16 +107,12 @@ export function branch (mapping, Component, maxWatchDepth = 1) {
 
     onUpdate (event) {
       const relatedToEvent = path => matchUpdatedPath(path, event)
-      const changedPath = find(this.cursors, relatedToEvent)
+      const changedPath = find(this.getCursors(), relatedToEvent)
 
       if (changedPath) {
         loglevel.debug(`${Component.displayName}) update triggered by change on ${changedPath}`)
         this.refresh()
       }
-    }
-
-    componentWillReceiveProps (props, context) {
-      this.cursors = mappingToCursors(mapping, props, context)
     }
 
     componentWillUnmount () {
@@ -104,23 +121,113 @@ export function branch (mapping, Component, maxWatchDepth = 1) {
       }
     }
 
+    getCursors () {
+      return mappingToCursors(
+        mapping,
+        this.extendedProps(),
+        this.context
+      )
+    }
+
+    getParams () {
+      return assign({}, this.context.params, this.props.params)
+    }
+
+    extendedProps () {
+      return assign({}, this.props, {
+        params: this.getParams()
+      })
+    }
+
     render () {
       const {tree} = this.context
-      const suppl = {dispatch: this.dispatcher}
-      const props = assign({}, this.props)
+      const props = this.extendedProps()
 
-      forEach(this.cursors, (path, name) => {
+      props.dispatch = this.dispatcher
+
+      forEach(this.getCursors(), (path, name) => {
         props[name] = tree.get(path) || null
       })
 
-      return <Component {...props} {...suppl} />
+      return <Component {...props} />
     }
   }
 
-  ComposedComponent.displayName = `branch(${Component.displayName})`
-  ComposedComponent.contextTypes = {
-    tree: React.PropTypes.object.isRequired
+  Branch.displayName = `branch(${Component.displayName})`
+  Branch.contextTypes = {
+    tree: React.PropTypes.object.isRequired,
+    cursors: React.PropTypes.object,
+    params: React.PropTypes.object
+  }
+  Branch.propTypes = {
+    params: React.PropTypes.object
+  }
+  Branch.childContextTypes = {
+    cursors: React.PropTypes.object
   }
 
-  return ComposedComponent
+  return Branch
 }
+
+export function derivative (parent, name, resolverOrComponent, Component) {
+  const resolver = Component
+    ? resolverOrComponent
+    : () => name
+
+  Component = Component || resolverOrComponent
+
+  class Derivative extends React.Component {
+    componentWillMount () {
+      const solver = (props, context) => {
+        const {tree, cursors} = this.context
+        const parentPath = cursors[parent]
+
+        if (!parentPath) return {}
+
+        const parentValue = tree.get(parentPath)
+        const subPath = resolver(parentValue, props, context)
+
+        return subPath === 0 || subPath
+          ? {[name]: concat(parentPath, subPath)}
+          : {}
+      }
+
+      this.Branch = branch(solver, Component)
+    }
+
+    render () {
+      const {Branch} = this
+
+      return <Branch {...this.props}/>
+    }
+  }
+
+  Derivative.displayName = `${name}(${Component.displayName})`
+  Derivative.contextTypes = {
+    tree: React.PropTypes.object.isRequired,
+    cursors: React.PropTypes.object.isRequired
+  }
+
+  return Derivative
+}
+
+export const collection = derivative
+
+const plural = name => name === 'company' ? 'companies' : name + 's'
+
+export const node = (parent, name, Component = ByPass) =>
+  derivative(parent, name, (node, {params}) => {
+    if (!node) return null
+
+    const list = isArray(node)
+      ? node
+      : node[plural(name)]
+
+    const index = findIndex(list, {id: params[name]})
+
+    if (index === -1) return null
+
+    return list === node
+      ? index
+      : [plural(name), index]
+  }, Component)

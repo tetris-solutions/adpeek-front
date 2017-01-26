@@ -5,7 +5,8 @@ import Module from './Module/Container'
 import GridLayout from 'react-grid-layout'
 import sizeMe from 'react-sizeme'
 import {pure} from 'recompose'
-import {contextualize} from '../higher-order/contextualize'
+import {derivative} from '../higher-order/branch'
+import findIndex from 'lodash/findIndex'
 
 let ModuleWrapper = props => (
   <Module {...props} metaData={get(props.metaData, props.module.entity)}/>
@@ -17,7 +18,12 @@ ModuleWrapper.propTypes = {
   module: React.PropTypes.object.isRequired
 }
 
-ModuleWrapper = contextualize(ModuleWrapper, 'module')
+ModuleWrapper = derivative(
+  'report',
+  'module',
+  ({modules}, {id}) => ['modules', findIndex(modules, {id})],
+  ModuleWrapper
+)
 
 const Grid_ = ({
   modules,
@@ -35,7 +41,7 @@ const Grid_ = ({
     {map(modules, ({id, type}, index) =>
       <div key={id} data-module-id={id} data-module-type={type}>
         <ModuleWrapper
-          params={{module: id}}
+          id={id}
           editable={editMode}
           clone={cloneModule}
           metaData={metaData}

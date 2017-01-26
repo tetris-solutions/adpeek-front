@@ -19,6 +19,16 @@ export function deleteMailingAction (tree, params, mailingId) {
         params.report && ['reports', params.report],
         ['mailings', mailingId]
       ])))
+
+      tree.set(getDeepCursor(tree, compact([
+        'user',
+        ['companies', params.company],
+        params.workspace && ['workspaces', params.workspace],
+        params.folder && ['folders', params.folder],
+        params.report && ['reports', params.report],
+        'timestamp'
+      ])), (new Date()).toISOString())
+
       tree.commit()
 
       return response

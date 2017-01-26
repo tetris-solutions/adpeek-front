@@ -1,5 +1,4 @@
 import React from 'react'
-import {contextualize} from './contextualize'
 import every from 'lodash/every'
 import Message from 'tetris-iso/Message'
 import {Card, Content, Header, Footer} from '../Card'
@@ -41,5 +40,3 @@ export function notNullable (Component, ...requiredProps) {
 
   return N
 }
-
-export const requires = (Comp, ...names) => contextualize(notNullable(Comp, ...names), ...names)

@@ -11,6 +11,8 @@ import DocTitle from '../components/DocTitle'
 import App from '../components/App'
 import ErrorScreen from '../components/ErrorScreen'
 
+import {node, branch} from '../components/higher-order/branch'
+
 import {loadWorkspaceAccountsActionRouterAdaptor as accounts} from '../actions/load-accounts'
 import {loadAutoBudgetLogsActionRouterAdaptor as autoBudgetLogs} from '../actions/load-autobudget-logs'
 import {loadBudgetsActionRouterAdaptor as budgets} from '../actions/load-budgets'
@@ -41,14 +43,31 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
   const _ = bind.placeholder
   const campaignsWithAdsets = bind(campaigns, null, _, _, 'include-adsets')
 
-  const getReportRoutes = (ITEM, LS, onEnter) => (
-    <Route breadcrumb={component.ReportsBreadcrumb} onEnter={onEnter}>
+  const rConfig = {
+    company: {
+      item: component.CompanyReport,
+      list: component.CompanyReports,
+      action: preload(savedAccounts)
+    },
+    workspace: {
+      item: component.WorkspaceReport,
+      list: component.WorkspaceReports
+    },
+    folder: {
+      item: component.FolderReport,
+      list: component.FolderReports,
+      action: preload(campaigns)
+    }
+  }
+  const getReportRoutes = level => (
+    <Route breadcrumb={component.ReportsBreadcrumb} onEnter={rConfig[level].action}>
       <Route
         path='report/:report'
+        component={node(level, 'report')}
         aside={component.ReportAside}
         breadcrumb={component.ReportBreadcrumb}
         onEnter={preload(report)}
-        {...render(ITEM)}>
+        {...render(rConfig[level].item)}>
 
         <Route path='edit'/>
         <Route
@@ -59,7 +78,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
       </Route>
 
       <Route path='reports'>
-        <IndexRoute onEnter={preload(reports)} {...render(LS)}/>
+        <IndexRoute onEnter={preload(reports)} {...render(rConfig[level].list)}/>
         <Route path='new' {...render(component.ReportCreate)}/>
       </Route>
     </Route>
@@ -73,7 +92,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
         onEnter={preload(unsub)}
         {...render(component.Unsub)}/>
 
-      <Route onEnter={protectRoute}>
+      <Route onEnter={protectRoute} component={branch('user')}>
         <Route
           path='share/report/:reportShare'
           aside={component.ReportAsideLite}
@@ -85,6 +104,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
           <IndexRoute {...render(component.Companies)}/>
           <Route
             path='company/:company'
+            component={node('user', 'company')}
             breadcrumb={component.CompanyBreadcrumb}
             onEnter={preload(statuses)}
             aside={component.CompanyAside}>
@@ -93,7 +113,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
             <Route path='mailing(/:mailing)' onEnter={preload(mailings)} {...render(component.Mailing)}/>
 
-            {getReportRoutes(component.CompanyReport, component.CompanyReports, preload(savedAccounts))}
+            {getReportRoutes('company')}
 
             <Route path='orders' breadcrumb={component.OrdersBreadCrumb} onEnter={preload(orders)}>
               <IndexRoute {...render(component.CompanyOrders)}/>
@@ -103,13 +123,14 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
             <Route path='create/workspace' {...render(component.WorkspaceCreate)} onEnter={preload(roles)}/>
 
             <Route path='workspace/:workspace'
+                   component={node('company', 'workspace')}
                    breadcrumb={component.WorkspaceBreadcrumb}
                    onEnter={preload(workspace)}
                    aside={component.WorkspaceAside}>
 
               <IndexRoute {...render(component.WorkspaceFolders)} onEnter={preload(folders)}/>
 
-              {getReportRoutes(component.WorkspaceReport, component.WorkspaceReports)}
+              {getReportRoutes('workspace')}
 
               <Route path='orders' breadcrumb={component.OrdersBreadCrumb} onEnter={preload(orders)}>
                 <IndexRoute {...render(component.WorkspaceOrders)}/>
@@ -121,6 +142,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
               <Route path='create/folder' {...render(component.FolderCreate)} onEnter={preload(medias, accounts)}/>
 
               <Route path='folder/:folder'
+                     component={node('workspace', 'folder')}
                      aside={component.FolderAside}
                      breadcrumb={component.FolderBreadcrumb}
                      onEnter={preload(folder)}>
@@ -128,11 +150,12 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 <IndexRoute {...render(component.FolderCampaigns)} onEnter={preload(campaigns)}/>
                 <Route path='creatives' {...render(component.FolderCreatives)} onEnter={preload(campaigns)}/>
 
-                <Route path='campaign/:campaign' aside={component.CampaignAside} breadcrumb={component.CampaignBreadcrumb}>
+                <Route path='campaign/:campaign' aside={component.CampaignAside}
+                       breadcrumb={component.CampaignBreadcrumb}>
                   <Route path='creatives' {...render(component.CampaignCreatives)}/>
                 </Route>
 
-                {getReportRoutes(component.FolderReport, component.FolderReports, preload(campaigns))}
+                {getReportRoutes('folder')}
 
                 <Route path='orders' breadcrumb={component.OrdersBreadCrumb} onEnter={preload(orders)}>
                   <IndexRoute {...render(component.FolderOrders)}/>
