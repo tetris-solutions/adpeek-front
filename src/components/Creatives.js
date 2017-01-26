@@ -1,15 +1,14 @@
 import React from 'react'
+import {Button} from './Button'
 import AdGroups from './AdGroups'
 import Message from 'tetris-iso/Message'
 import {loadAdGroupsAction} from '../actions/load-adgroups'
 import {createAdGroupsReportAction} from '../actions/create-folder-adgroups-report'
 import NotImplemented from './NotImplemented'
 import LoadingHorizontal from './LoadingHorizontal'
-import DownloadReportButton from './DownloadReportButton'
 import SubHeader from './SubHeader'
 import Page from './Page'
 import {loadKeywordsRelevanceAction} from '../actions/load-keywords-relevance'
-import CalculateRelevanceButton from './CalculateRelevanceButton'
 import flatten from 'lodash/flatten'
 import map from 'lodash/map'
 import uniq from 'lodash/uniq'
@@ -25,6 +24,7 @@ export const Creatives = React.createClass({
   },
   getInitialState () {
     return {
+      calculatingRelevance: false,
       isLoading: this.isAdwords()
     }
   },
@@ -90,18 +90,23 @@ export const Creatives = React.createClass({
     const inner = this.isAdwords()
       ? <AdGroups adGroups={adGroups}/>
       : <NotImplemented />
+    const btClass = 'mdl-button mdl-color-text--grey-100'
 
     return (
       <div>
         <SubHeader title={<Message>creatives</Message>}>
-          <CalculateRelevanceButton
-            done={calculatingRelevance === false}
-            start={this.loadKeywordsRelevance}
-            isCalculating={calculatingRelevance === true}/>
+          <Button className={btClass} disabled={calculatingRelevance} onClick={this.loadKeywordsRelevance}>
+            {calculatingRelevance
+              ? <Message>calculating</Message>
+              : <Message>calculateKeywordsRelevance</Message>}
+          </Button>
 
-          <DownloadReportButton
-            loading={creatingReport}
-            extract={this.extractReport}/>
+          <Button disabled={creatingReport || isLoading} onClick={this.extractReport} className={btClass}>
+            {creatingReport || isLoading
+              ? <Message>creatingReport</Message>
+              : <Message>extractReport</Message>}
+          </Button>
+
         </SubHeader>
         <Page>{isLoading
           ? (
