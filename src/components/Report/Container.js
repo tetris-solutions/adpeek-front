@@ -1,4 +1,5 @@
 import React from 'react'
+import concat from 'lodash/concat'
 import head from 'lodash/head'
 import uniq from 'lodash/uniq'
 import includes from 'lodash/includes'
@@ -65,6 +66,9 @@ const Container = React.createClass({
     messages: React.PropTypes.object
   },
   propTypes,
+  getInitialState () {
+    return {isLoading: true}
+  },
   componentDidMount () {
     this.load()
   },
@@ -202,8 +206,13 @@ const Container = React.createClass({
       : this.loadMultiPlatformMetaData(entity)
   },
   load () {
-    map(this.getEntities(), ({id}) => this.loadMetaData(id))
-    map(this.props.accounts, this.loadEntities)
+    const promises = concat(
+      map(this.getEntities(), ({id}) => this.loadMetaData(id)),
+      map(this.props.accounts, this.loadEntities)
+    )
+
+    Promise.all(promises)
+      .then(() => this.setState({isLoading: false}))
   },
   getAccounts () {
     this._accounts = this._accounts || map(this.props.accounts, transformAccount)
@@ -211,7 +220,7 @@ const Container = React.createClass({
     return this._accounts
   },
   render () {
-    if (!this.props.metaData || !this.props.campaigns) {
+    if (this.state.isLoading || !this.props.metaData || !this.props.campaigns) {
       return (
         <Placeholder>
           <LoadingHorizontal>

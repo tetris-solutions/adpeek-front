@@ -1,5 +1,4 @@
 import React from 'react'
-// import {pure} from 'recompose'
 import isFunction from 'lodash/isFunction'
 import findIndex from 'lodash/findIndex'
 import isString from 'lodash/isString'
