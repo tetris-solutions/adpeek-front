@@ -1,5 +1,5 @@
 import React from 'react'
-import {pure} from 'recompose'
+// import {pure} from 'recompose'
 import isFunction from 'lodash/isFunction'
 import findIndex from 'lodash/findIndex'
 import isString from 'lodash/isString'
@@ -194,7 +194,8 @@ export function derivative (parent, name, resolverOrComponent, Component) {
     cursors: React.PropTypes.object.isRequired
   }
 
-  return pure(Derivative)
+  return Derivative
+  // return pure(Derivative)
 }
 
 export const collection = derivative
