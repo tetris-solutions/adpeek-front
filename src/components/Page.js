@@ -68,7 +68,7 @@ const Page = React.createClass({
     }
   },
   onAsideVisibilityChange () {
-    window.event$.emit('aside-toggle')
+    setTimeout(() => window.event$.emit('aside-toggle'), 300)
 
     try {
       window.localStorage.setItem('openSideNav', this.state.isNavOpen)
