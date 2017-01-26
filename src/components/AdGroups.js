@@ -57,9 +57,9 @@ export const AdGroups = React.createClass({
         <div className='mdl-cell mdl-cell--12-col'>
           <div ref='wrapper' className={`${style.wrapper}`}>
             <div className={`${style.grid}`} ref='grid' style={gridStyle}>
-              {map(adGroups, adGroup => (
-                <div key={adGroup.id} className={`${style.column}`}>
-                  <AdGroup {...adGroup}/>
+              {map(adGroups, ({id}) => (
+                <div key={id} className={`${style.column}`}>
+                  <AdGroup params={{adGroup: id}}/>
                 </div>
               ))}
             </div>

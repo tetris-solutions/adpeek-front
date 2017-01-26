@@ -46,6 +46,8 @@ const style = csjs`
   margin: 0 .5em 0 1em;
 }
 .name {
+  word-wrap: break-word;
+  overflow: hidden;
   margin-left: 20px;
 }`
 

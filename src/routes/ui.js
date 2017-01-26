@@ -145,13 +145,16 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                      component={node('workspace', 'folder')}
                      aside={component.FolderAside}
                      breadcrumb={component.FolderBreadcrumb}
-                     onEnter={preload(folder)}>
+                     onEnter={preload(folder, campaigns)}>
 
-                <IndexRoute {...render(component.FolderCampaigns)} onEnter={preload(campaigns)}/>
-                <Route path='creatives' {...render(component.FolderCreatives)} onEnter={preload(campaigns)}/>
+                <IndexRoute {...render(component.FolderCampaigns)}/>
+                <Route path='creatives' {...render(component.FolderCreatives)}/>
 
-                <Route path='campaign/:campaign' aside={component.CampaignAside}
-                       breadcrumb={component.CampaignBreadcrumb}>
+                <Route
+                  component={node('folder', 'campaign')}
+                  path='campaign/:campaign'
+                  aside={component.CampaignAside}
+                  breadcrumb={component.CampaignBreadcrumb}>
                   <Route path='creatives' {...render(component.CampaignCreatives)}/>
                 </Route>
 

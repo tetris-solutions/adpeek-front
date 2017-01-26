@@ -1,4 +1,6 @@
 import React from 'react'
+import {node} from './higher-order/branch'
+import {pure} from 'recompose'
 import AdGroupAd from './AdGroupAd'
 import AdGroupKeyword from './AdGroupKeyword'
 import map from 'lodash/map'
@@ -38,28 +40,39 @@ export const AdGroup = React.createClass({
           ))}
         </div>
 
-        {criterions.BIDDABLE ? (
-          <div>
-            <h5>
-              <Message>biddableKeywords</Message>
-            </h5>
-            {map(criterions.BIDDABLE, keyword => (
-              <AdGroupKeyword key={keyword.id} {...keyword}/>
-            ))}
-          </div>) : null}
+        {criterions.BIDDABLE
+          ? (
+            <div>
+              <h5>
+                <Message>biddableKeywords</Message>
+              </h5>
+              {map(criterions.BIDDABLE, keyword => (
+                <AdGroupKeyword key={keyword.id} {...keyword}/>
+              ))}
+            </div>) : null}
 
-        {criterions.NEGATIVE ? (
-          <div>
-            <h5>
-              <Message>negativeKeywords</Message>
-            </h5>
-            {map(criterions.NEGATIVE, keyword => (
-              <AdGroupKeyword key={keyword.id} {...keyword}/>
-            ))}
-          </div>) : null}
+        {criterions.NEGATIVE
+          ? (
+            <div>
+              <h5>
+                <Message>negativeKeywords</Message>
+              </h5>
+              {map(criterions.NEGATIVE, keyword => (
+                <AdGroupKeyword key={keyword.id} {...keyword}/>
+              ))}
+            </div>) : null}
       </div>
     )
   }
 })
 
-export default AdGroup
+const AdGroupWrapper = props => <AdGroup {...props} {...props.adGroup}/>
+
+AdGroupWrapper.displayName = 'AdGroup'
+AdGroupWrapper.propTypes = {
+  adGroup: React.PropTypes.object
+}
+
+const level = ({params}) => params.campaign ? 'campaign' : 'folder'
+
+export default node(level, 'adGroup', pure(AdGroupWrapper))

@@ -1,6 +1,5 @@
 import React from 'react'
 import AdGroups from './AdGroups'
-import {contextualize} from './higher-order/contextualize'
 import Message from 'tetris-iso/Message'
 import {loadCampaignAdGroupsAction} from '../actions/load-campaign-adgroups'
 import NotImplemented from './NotImplemented'
@@ -136,4 +135,4 @@ export const CampaignCreatives = React.createClass({
   }
 })
 
-export default contextualize(CampaignCreatives, 'campaign')
+export default CampaignCreatives

@@ -1,6 +1,5 @@
 import React from 'react'
 import AdGroups from './AdGroups'
-import {contextualize} from './higher-order/contextualize'
 import Message from 'tetris-iso/Message'
 import {loadFolderAdGroupsAction} from '../actions/load-folder-adgroups'
 import {createFolderAdGroupsReportAction} from '../actions/create-folder-adgroups-report'
@@ -105,4 +104,4 @@ export const FolderCreatives = React.createClass({
   }
 })
 
-export default contextualize(FolderCreatives, 'folder')
+export default FolderCreatives
