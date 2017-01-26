@@ -1,107 +1,19 @@
 import React from 'react'
-import AdGroups from './AdGroups'
-import Message from 'tetris-iso/Message'
-import {loadFolderAdGroupsAction} from '../actions/load-folder-adgroups'
-import {createFolderAdGroupsReportAction} from '../actions/create-folder-adgroups-report'
-import NotImplemented from './NotImplemented'
-import LoadingHorizontal from './LoadingHorizontal'
-import DownloadReportButton from './DownloadReportButton'
-import SubHeader from './SubHeader'
-import Page from './Page'
-import {loadKeywordsRelevance} from './CampaignCreatives'
-import CalculateRelevanceButton from './CalculateRelevanceButton'
+import Creatives from './Creatives'
 
-export const FolderCreatives = React.createClass({
-  displayName: 'Folder-Creatives',
-  propTypes: {
-    dispatch: React.PropTypes.func,
-    folder: React.PropTypes.shape({
-      adGroups: React.PropTypes.array,
-      adGroupsReport: React.PropTypes.shape({
-        url: React.PropTypes.string
-      }),
-      account: React.PropTypes.shape({
-        platform: React.PropTypes.string
-      }),
-      campaigns: React.PropTypes.array
-    }),
-    params: React.PropTypes.object
-  },
-  getInitialState () {
-    return {
-      isLoading: this.isAdwords()
-    }
-  },
-  isAdwords () {
-    return this.props.folder.account.platform === 'adwords'
-  },
-  componentDidMount () {
-    if (this.isAdwords()) {
-      this.loadAdGroups()
-    }
-  },
-  onReportCreated () {
-    this.setState({creatingReport: false})
+const FolderCreatives = ({folder, dispatch, params}) => (
+  <Creatives
+    dispatch={dispatch}
+    params={params}
+    adGroups={folder.adGroups}
+    platform={folder.account.platform}/>
+)
 
-    window.location.href = this.props.folder.adGroupsReport.url
-  },
-  loadAdGroups () {
-    const {params, dispatch} = this.props
-
-    this.loadingAdGroups = dispatch(loadFolderAdGroupsAction,
-      params.company,
-      params.workspace,
-      params.folder)
-      .then(() => this.setState({isLoading: false}))
-  },
-  onAdGroupsLoaded () {
-    const {folder: {adGroups}, dispatch, params} = this.props
-
-    dispatch(createFolderAdGroupsReportAction,
-      params.company,
-      params.workspace,
-      params.folder,
-      adGroups)
-      .then(this.onReportCreated)
-  },
-  extractReport () {
-    if (!this.isAdwords()) return
-
-    this.setState({creatingReport: true})
-
-    this.loadingAdGroups.then(this.onAdGroupsLoaded)
-  },
-  loadKeywordsRelevance,
-  render () {
-    const {creatingReport, isLoading, calculatingRelevance} = this.state
-    const {folder} = this.props
-    const inner = folder.account.platform === 'adwords'
-      ? <AdGroups adGroups={folder.adGroups}/>
-      : <NotImplemented />
-
-    return (
-      <div>
-        <SubHeader title={<Message>creatives</Message>}>
-          <CalculateRelevanceButton
-            done={calculatingRelevance === false}
-            start={this.loadKeywordsRelevance}
-            isCalculating={calculatingRelevance === true}/>
-
-          <DownloadReportButton
-            loading={creatingReport}
-            extract={this.extractReport}
-            report={folder.adGroupsReport}/>
-        </SubHeader>
-        <Page>
-          {isLoading ? (
-            <LoadingHorizontal>
-              <Message>loadingAds</Message>
-            </LoadingHorizontal>
-          ) : inner}
-        </Page>
-      </div>
-    )
-  }
-})
+FolderCreatives.displayName = 'Folder-Creatives'
+FolderCreatives.propTypes = {
+  folder: React.PropTypes.object,
+  dispatch: React.PropTypes.func,
+  params: React.PropTypes.object
+}
 
 export default FolderCreatives
