@@ -4,6 +4,7 @@ import Highcharts from './Highcharts'
 import {prettyNumber} from '../functions/pretty-number'
 import {loadFolderStatsAction} from '../actions/load-folder-stats'
 import compact from 'lodash/compact'
+import {pure} from 'recompose'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
 import map from 'lodash/map'
@@ -157,7 +158,7 @@ Goal.contextTypes = {
   locales: React.PropTypes.string.isRequired
 }
 
-const Stats = ({stats, kpi_goal}, {messages, locales}) => (
+let Stats = ({stats, kpi_goal}, {messages, locales}) => (
   <div className={`${style.wrapper} mdl-color-text--grey-600`}>
     <Rail
       cost={get(stats, 'order.cost')}
@@ -272,6 +273,8 @@ Stats.contextTypes = {
   messages: React.PropTypes.object.isRequired,
   locales: React.PropTypes.string.isRequired
 }
+
+Stats = pure(Stats)
 
 const FolderStats = React.createClass({
   displayName: 'Folder-Stats',

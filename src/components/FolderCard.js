@@ -73,7 +73,7 @@ const FolderCard = ({id, account: {platform}, kpi_goal, name, stats, reports, ed
   )
 }
 
-FolderCard.displayName = 'FolderCard'
+FolderCard.displayName = 'Card'
 FolderCard.propTypes = {
   id: React.PropTypes.string.isRequired,
   kpi_goal: React.PropTypes.number,
@@ -88,14 +88,14 @@ FolderCard.propTypes = {
   params: React.PropTypes.object.isRequired
 }
 
-const Wrapper = props => (
+const Folder = props => (
   <FolderCard {...props} {...props.folder}/>
 )
-Wrapper.displayName = 'Wrapper'
-Wrapper.propTypes = {
+Folder.displayName = 'Folder'
+Folder.propTypes = {
   folder: React.PropTypes.object,
   dispatch: React.PropTypes.func,
   params: React.PropTypes.object
 }
 
-export default node('folders', 'folder', Wrapper)
+export default node('folders', 'folder', Folder)

@@ -1,4 +1,5 @@
 import React from 'react'
+import {pure} from 'recompose'
 import isFunction from 'lodash/isFunction'
 import findIndex from 'lodash/findIndex'
 import isString from 'lodash/isString'
@@ -74,19 +75,29 @@ export function branch (mapping, Component = ByPass, maxWatchDepth = 1) {
     return false
   }
 
-  class Branch extends React.Component {
+  return React.createClass({
+    displayName: `branch(${Component.displayName})`,
+    contextTypes: {
+      tree: React.PropTypes.object.isRequired,
+      cursors: React.PropTypes.object,
+      params: React.PropTypes.object
+    },
+    childContextTypes: {
+      cursors: React.PropTypes.object
+    },
+    propTypes: {
+      params: React.PropTypes.object
+    },
     componentWillMount () {
       const {tree} = this.context
 
       this.dispatcher = (fn, ...args) => fn(tree, ...args)
-    }
-
+    },
     getChildContext () {
       return {
         cursors: assign({}, this.context.cursors, this.getCursors())
       }
-    }
-
+    },
     componentDidMount () {
       const {tree} = this.context
 
@@ -95,16 +106,13 @@ export function branch (mapping, Component = ByPass, maxWatchDepth = 1) {
         this.forceUpdate()
       }, 500)
 
-      this.onUpdate = this.onUpdate.bind(this)
-
       tree.on('update', this.onUpdate)
 
       this.release = () => {
         this.dead = true
         tree.off('update', this.onUpdate)
       }
-    }
-
+    },
     onUpdate (event) {
       const relatedToEvent = path => matchUpdatedPath(path, event)
       const changedPath = find(this.getCursors(), relatedToEvent)
@@ -113,32 +121,28 @@ export function branch (mapping, Component = ByPass, maxWatchDepth = 1) {
         loglevel.debug(`${Component.displayName}) update triggered by change on ${changedPath}`)
         this.refresh()
       }
-    }
-
+    },
     componentWillUnmount () {
       if (this.release) {
         this.release()
       }
-    }
-
+    },
     getCursors () {
       return mappingToCursors(
         mapping,
         this.extendedProps(),
         this.context
       )
-    }
-
+    },
     getParams () {
       return assign({}, this.context.params, this.props.params)
-    }
+    },
 
     extendedProps () {
       return assign({}, this.props, {
         params: this.getParams()
       })
-    }
-
+    },
     render () {
       const {tree} = this.context
       const props = this.extendedProps()
@@ -151,22 +155,7 @@ export function branch (mapping, Component = ByPass, maxWatchDepth = 1) {
 
       return <Component {...props} />
     }
-  }
-
-  Branch.displayName = `branch(${Component.displayName})`
-  Branch.contextTypes = {
-    tree: React.PropTypes.object.isRequired,
-    cursors: React.PropTypes.object,
-    params: React.PropTypes.object
-  }
-  Branch.propTypes = {
-    params: React.PropTypes.object
-  }
-  Branch.childContextTypes = {
-    cursors: React.PropTypes.object
-  }
-
-  return Branch
+  })
 }
 
 export function derivative (parent, name, resolverOrComponent, Component) {
@@ -175,31 +164,28 @@ export function derivative (parent, name, resolverOrComponent, Component) {
     : () => name
 
   Component = Component || resolverOrComponent
+  let Branch
 
-  class Derivative extends React.Component {
-    componentWillMount () {
-      const solver = (props, context) => {
-        const {tree, cursors} = this.context
-        const parentPath = cursors[isString(parent) ? parent : parent(props, context)]
+  function setup (parentContext) {
+    Branch = branch((props, context) => {
+      const {tree, cursors} = parentContext
+      const parentPath = cursors[isString(parent) ? parent : parent(props, context)]
 
-        if (!parentPath) return {}
+      if (!parentPath) return {}
 
-        const parentValue = tree.get(parentPath)
-        const subPath = resolver(parentValue, props, context)
+      const parentValue = tree.get(parentPath)
+      const subPath = resolver(parentValue, props, context)
 
-        return subPath === 0 || subPath
-          ? {[name]: concat(parentPath, subPath)}
-          : {}
-      }
+      return subPath === 0 || subPath
+        ? {[name]: concat(parentPath, subPath)}
+        : {}
+    }, Component)
+  }
 
-      this.Branch = branch(solver, Component)
-    }
+  function Derivative (props, context) {
+    if (!Branch) setup(context)
 
-    render () {
-      const {Branch} = this
-
-      return <Branch {...this.props}/>
-    }
+    return <Branch {...props}/>
   }
 
   Derivative.displayName = `${name}(${Component.displayName})`
@@ -208,7 +194,7 @@ export function derivative (parent, name, resolverOrComponent, Component) {
     cursors: React.PropTypes.object.isRequired
   }
 
-  return Derivative
+  return pure(Derivative)
 }
 
 export const collection = derivative
