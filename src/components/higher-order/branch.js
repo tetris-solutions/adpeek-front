@@ -178,6 +178,9 @@ export function derivative (parent, name, resolverOrComponent, Component) {
         if (!parentPath) return {}
 
         const parentValue = tree.get(parentPath)
+
+        if (!parentValue) return {}
+
         const subPath = resolver(parentValue, props, context)
 
         return subPath === 0 || subPath
