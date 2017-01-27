@@ -5,6 +5,7 @@ import csjs from 'csjs'
 import {styledFnComponent} from './higher-order/styled-fn-component'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
+import startsWith from 'lodash/startsWith'
 
 const style = csjs`
 .wrapper {
@@ -36,6 +37,9 @@ const style = csjs`
   margin: .7em 0 .5em;
 }`
 
+const w3 = 'www.'
+const stripW3 = str => startsWith(str, w3) ? str.substr(w3.length) : str
+
 function inferDisplayUrl (final_urls, path_1, path_2) {
   if (!final_urls || !final_urls[0]) return null
 
@@ -43,7 +47,7 @@ function inferDisplayUrl (final_urls, path_1, path_2) {
     .replace(/.*?:\/\//g, '')
     .split('/')[0]
 
-  const url = join(compact([`www.${path_0}`, path_1, path_2]), '/')
+  const url = join(compact([`www.${stripW3(path_0)}`, path_1, path_2]), '/')
 
   return url.replace(/\/$/g, '')
 }
@@ -67,7 +71,7 @@ function AdGroupAd ({
       <div className={`mdl-color--yellow-200 ${style.box}`}>
         {headline
           ? <h5>{headline}</h5>
-          : <h6>{headline_part_1} {headline_part_2}</h6>}
+          : <h6>{headline_part_1}<br/>{headline_part_2}</h6>}
 
         <a href={`http://${display_url}`} target='_blank'>
           {display_url}
