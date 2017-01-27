@@ -7,7 +7,7 @@ const screen = (loader, name = null) =>
       ? comp[name].default
       : comp.default))
 
-const isServer = typeof document === 'undefined'
+// const isServer = typeof document === 'undefined'
 
 // if (isServer) {
 // eslint-disable
@@ -41,13 +41,14 @@ export const piece = (loader, name = null) =>
   React.createClass({
     displayName: 'Piece',
     componentWillMount () {
-      if (isServer) {
-        this.inject(noop)
-      }
+      this.inject(noop)
+      // if (isServer) {
+      //   this.inject(noop)
+      // }
     },
-    componentDidMount () {
-      this.inject(() => this.forceUpdate())
-    },
+    // componentDidMount () {
+    //   this.inject(() => this.forceUpdate())
+    // },
     inject (callback) {
       loader(comp => {
         this.Component = name
