@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router'
 import {DropdownMenu, MenuItem} from './DropdownMenu'
 import {Button} from './Button'
 import AdGroups from './AdGroups'
@@ -15,6 +16,12 @@ import map from 'lodash/map'
 import uniq from 'lodash/uniq'
 import chunk from 'lodash/chunk'
 
+const statusIcons = {
+  enabled: 'play_arrow',
+  enabled_or_paused: 'pause',
+  all: 'playlist_add_check'
+}
+
 export const Creatives = React.createClass({
   displayName: 'Creatives',
   propTypes: {
@@ -23,11 +30,13 @@ export const Creatives = React.createClass({
     platform: React.PropTypes.string,
     params: React.PropTypes.object
   },
+  contextTypes: {
+    location: React.PropTypes.object.isRequired
+  },
   getInitialState () {
     return {
       calculatingRelevance: false,
-      isLoading: this.isAdwords(),
-      statusFilter: 'enabled'
+      isLoading: this.isAdwords()
     }
   },
   isAdwords () {
@@ -35,6 +44,15 @@ export const Creatives = React.createClass({
   },
   componentDidMount () {
     if (this.isAdwords()) {
+      this.loadAdGroups()
+    }
+  },
+  componentWillReceiveProps (props, {location: {query}}) {
+    const newFilter = query.filter || 'enabled'
+    const currentFilter = this.getStatusFilter()
+
+    if (!this.state.isLoading && newFilter !== currentFilter) {
+      this.setState({isLoading: true})
       this.loadAdGroups()
     }
   },
@@ -46,7 +64,7 @@ export const Creatives = React.createClass({
   loadAdGroups () {
     const {params, dispatch} = this.props
 
-    this.loadingAdGroups = dispatch(loadAdGroupsAction, params, this.state.statusFilter)
+    this.loadingAdGroups = dispatch(loadAdGroupsAction, params, this.getStatusFilter())
       .then(() => this.setState({isLoading: false}))
   },
   onAdGroupsLoaded () {
@@ -86,27 +104,21 @@ export const Creatives = React.createClass({
       })
       .then(() => this.setState({calculatingRelevance: false}))
   },
-  setStatusFilter (statusFilter) {
-    if (statusFilter === this.state.statusFilter) {
-      return
-    }
-    this.setState({statusFilter, isLoading: true}, this.loadAdGroups)
+  getStatusFilter () {
+    return this.context.location.query.filter || 'enabled'
   },
   statusProps (status) {
-    const icons = {
-      enabled: 'play_arrow',
-      enabled_or_paused: 'pause',
-      all: 'playlist_add_check'
-    }
-
+    const {location: {pathname}} = this.context
     const props = {
-      onClick: () => this.setStatusFilter(status),
-      icon: icons[status],
+      icon: statusIcons[status],
       disabled: this.state.isLoading
     }
 
-    if (status === this.state.statusFilter) {
+    if (status === this.getStatusFilter()) {
       props.tag = 'strong'
+    } else {
+      props.to = `${pathname}?filter=${status}`
+      props.tag = Link
     }
 
     return props
