@@ -5,7 +5,7 @@ const FolderCreatives = ({folder, dispatch, params, cursors}) => (
   <Creatives
     dispatch={dispatch}
     params={params}
-    adGroupsWithRelevance={() => cursors.folder.adGroups}
+    getAdGroupsWithRelevance={() => cursors.folder.adGroups}
     adGroups={folder.adGroups}
     platform={folder.account.platform}/>
 )

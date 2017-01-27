@@ -5,7 +5,7 @@ const CampaignCreatives = ({campaign, dispatch, params, cursors}) => (
   <Creatives
     dispatch={dispatch}
     params={params}
-    adGroupsWithRelevance={() => cursors.campaign.adGroups}
+    getAdGroupsWithRelevance={() => cursors.campaign.adGroups}
     adGroups={campaign.adGroups}
     platform={campaign.platform}/>
 )
