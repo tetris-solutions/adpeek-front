@@ -3,14 +3,14 @@ import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} 
 import {saveResponseData} from '../functions/save-response-data'
 import compact from 'lodash/compact'
 
-function loadAdGroups (level, id, config) {
-  return GET(`${process.env.ADPEEK_API_URL}/${level}/${id}/adgroups`, config)
+function loadAdGroups (level, id, filter, config) {
+  return GET(`${process.env.ADPEEK_API_URL}/${level}/${id}/adgroups?filter=${filter}`, config)
 }
 
-export function loadAdGroupsAction (tree, {company, workspace, folder, campaign}) {
+export function loadAdGroupsAction (tree, {company, workspace, folder, campaign}, filter) {
   const level = campaign ? 'campaign' : 'folder'
 
-  return loadAdGroups(level, campaign || folder, getApiFetchConfig(tree))
+  return loadAdGroups(level, campaign || folder, filter, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .then(saveResponseData(tree, compact([
       'user',

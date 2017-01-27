@@ -320,5 +320,8 @@ module.exports = {
   notFoundBody: 'O objeto que você está tentando acessar não existe ou não é acessível para o seu usuário.',
   rolesLabel: 'Grupos',
   leaveOrderPrompt: 'Você tem alterações não salvas no Pedido, tem certeza que deseja sair?',
-  newDashCampaign: 'Nova Campanha Dash'
+  newDashCampaign: 'Nova Campanha Dash',
+  enabledFilterLabel: 'Ativo',
+  enabledOrPausedFilterLabel: 'Ativo ou Pausado',
+  allFilterLabel: 'Todos'
 }

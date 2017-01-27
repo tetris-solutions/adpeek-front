@@ -1,4 +1,5 @@
 import React from 'react'
+import {DropdownMenu, MenuItem} from './DropdownMenu'
 import {Button} from './Button'
 import AdGroups from './AdGroups'
 import Message from 'tetris-iso/Message'
@@ -25,7 +26,8 @@ export const Creatives = React.createClass({
   getInitialState () {
     return {
       calculatingRelevance: false,
-      isLoading: this.isAdwords()
+      isLoading: this.isAdwords(),
+      statusFilter: 'enabled'
     }
   },
   isAdwords () {
@@ -44,7 +46,7 @@ export const Creatives = React.createClass({
   loadAdGroups () {
     const {params, dispatch} = this.props
 
-    this.loadingAdGroups = dispatch(loadAdGroupsAction, params)
+    this.loadingAdGroups = dispatch(loadAdGroupsAction, params, this.state.statusFilter)
       .then(() => this.setState({isLoading: false}))
   },
   onAdGroupsLoaded () {
@@ -84,29 +86,70 @@ export const Creatives = React.createClass({
       })
       .then(() => this.setState({calculatingRelevance: false}))
   },
+  setStatusFilter (statusFilter) {
+    if (statusFilter === this.state.statusFilter) {
+      return
+    }
+    this.setState({statusFilter, isLoading: true}, this.loadAdGroups)
+  },
+  statusProps (status) {
+    const icons = {
+      enabled: 'play_arrow',
+      enabled_or_paused: 'pause',
+      all: 'playlist_add_check'
+    }
+
+    const props = {
+      onClick: () => this.setStatusFilter(status),
+      icon: icons[status],
+      disabled: this.state.isLoading
+    }
+
+    if (status === this.state.statusFilter) {
+      props.tag = 'strong'
+    }
+
+    return props
+  },
   render () {
     const {creatingReport, isLoading, calculatingRelevance} = this.state
     const {adGroups} = this.props
     const inner = this.isAdwords()
       ? <AdGroups adGroups={adGroups}/>
       : <NotImplemented />
-    const btClass = 'mdl-button mdl-color-text--grey-100'
 
     return (
       <div>
         <SubHeader title={<Message>creatives</Message>}>
-          <Button className={btClass} disabled={calculatingRelevance} onClick={this.loadKeywordsRelevance}>
-            {calculatingRelevance
-              ? <Message>calculating</Message>
-              : <Message>calculateKeywordsRelevance</Message>}
-          </Button>
+          <Button className='mdl-button mdl-js-button mdl-button--icon'>
+            <i className='material-icons'>more_vert</i>
 
-          <Button disabled={creatingReport || isLoading} onClick={this.extractReport} className={btClass}>
-            {creatingReport || isLoading
-              ? <Message>creatingReport</Message>
-              : <Message>extractReport</Message>}
-          </Button>
+            <DropdownMenu>
+              <MenuItem {...this.statusProps('enabled')}>
+                <Message>enabledFilterLabel</Message>
+              </MenuItem>
 
+              <MenuItem {...this.statusProps('enabled_or_paused')}>
+                <Message>enabledOrPausedFilterLabel</Message>
+              </MenuItem>
+
+              <MenuItem {...this.statusProps('all')} divider>
+                <Message>allFilterLabel</Message>
+              </MenuItem>
+
+              <MenuItem disabled={calculatingRelevance} onClick={this.loadKeywordsRelevance} icon='insert_chart'>
+                {calculatingRelevance
+                  ? <Message>calculating</Message>
+                  : <Message>calculateKeywordsRelevance</Message>}
+              </MenuItem>
+
+              <MenuItem disabled={creatingReport || isLoading} onClick={this.extractReport} icon='file_download'>
+                {creatingReport || isLoading
+                  ? <Message>creatingReport</Message>
+                  : <Message>extractReport</Message>}
+              </MenuItem>
+            </DropdownMenu>
+          </Button>
         </SubHeader>
         <Page>{isLoading
           ? (

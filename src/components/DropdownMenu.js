@@ -43,10 +43,15 @@ const style = csjs`
 export const MenuItem = props => {
   const {divider, children, tag: Tag, icon} = props
   const ico = icon ? <i className={`material-icons ${style.ico}`}>{icon}</i> : null
+  const btProps = omit(props, 'children', 'icon', 'tag', 'divider')
+
+  if (btProps.disabled) {
+    delete btProps.onClick
+  }
 
   return (
     <li className={`mdl-menu__item ${style.item} ${divider ? 'mdl-menu__item--full-bleed-divider' : ''}`}>
-      <Tag {...omit(props, 'children', 'icon', 'tag', 'divider')}>
+      <Tag {...btProps}>
         {ico}
         {children}
       </Tag>
