@@ -136,7 +136,6 @@ export function branch (mapping, Component = ByPass, maxWatchDepth = 1) {
     getParams () {
       return assign({}, this.context.params, this.props.params)
     },
-
     extendedProps () {
       return assign({}, this.props, {
         params: this.getParams()
@@ -146,10 +145,18 @@ export function branch (mapping, Component = ByPass, maxWatchDepth = 1) {
       const {tree} = this.context
       const props = this.extendedProps()
 
+      props.cursors = {}
       props.dispatch = this.dispatcher
 
       forEach(this.getCursors(), (path, name) => {
         props[name] = tree.get(path) || null
+
+        Object.defineProperty(props.cursors, name, {
+          get () {
+            return tree.get(path)
+          },
+          enumerable: true
+        })
       })
 
       return <Component {...props} />

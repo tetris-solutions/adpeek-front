@@ -27,6 +27,7 @@ export const Creatives = React.createClass({
   propTypes: {
     dispatch: React.PropTypes.func,
     adGroups: React.PropTypes.array,
+    adGroupsWithRelevance: React.PropTypes.func,
     platform: React.PropTypes.string,
     params: React.PropTypes.object
   },
@@ -67,9 +68,9 @@ export const Creatives = React.createClass({
       .then(() => this.setState({isLoading: false}))
   },
   onAdGroupsLoaded () {
-    const {adGroups, dispatch, params} = this.props
+    const {adGroupsWithRelevance, dispatch, params} = this.props
 
-    dispatch(createAdGroupsReportAction, params, adGroups)
+    dispatch(createAdGroupsReportAction, params, adGroupsWithRelevance())
       .then(this.onReportCreated)
   },
   extractReport () {

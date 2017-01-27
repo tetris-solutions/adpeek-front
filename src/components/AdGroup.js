@@ -35,9 +35,7 @@ export const AdGroup = React.createClass({
           {name}
         </header>
         <div>
-          {map(ads, ad => (
-            <AdGroupAd key={ad.id} {...ad}/>
-          ))}
+          {map(ads, ad => <AdGroupAd key={ad.id} {...ad}/>)}
         </div>
 
         {criterions.BIDDABLE

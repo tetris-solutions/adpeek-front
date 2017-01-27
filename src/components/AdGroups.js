@@ -31,7 +31,7 @@ function fitWrapper (wrapper) {
 }
 
 export const AdGroups = React.createClass({
-  displayName: '-AdGroups',
+  displayName: 'AdGroups',
   mixins: [styled(style)],
   propTypes: {
     adGroups: React.PropTypes.array
