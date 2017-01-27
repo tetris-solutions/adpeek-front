@@ -52,8 +52,7 @@ export const Creatives = React.createClass({
     const currentFilter = this.getStatusFilter()
 
     if (!this.state.isLoading && newFilter !== currentFilter) {
-      this.setState({isLoading: true})
-      this.loadAdGroups()
+      this.setState({isLoading: true}, this.loadAdGroups)
     }
   },
   onReportCreated (response) {
