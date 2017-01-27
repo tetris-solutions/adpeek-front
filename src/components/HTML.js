@@ -69,6 +69,7 @@ const HTML = ({payload, children, css}) => (
         .rewind()
         .title.toComponent()}
 
+      <link rel='shortcut icon' type='image/png' href='/img/favicon.png'/>
       <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' type='text/css'/>
       <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons'/>
 
