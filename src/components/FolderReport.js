@@ -1,6 +1,6 @@
 import React from 'react'
 import ReportContainer from './Report/Container'
-import {node, branch} from './higher-order/branch'
+import {branch} from './higher-order/branch'
 import get from 'lodash/get'
 import endsWith from 'lodash/endsWith'
 
@@ -46,4 +46,4 @@ const FolderReport = React.createClass({
   }
 })
 
-export default node('workspace', 'folder', branch('reportMetaData', FolderReport))
+export default branch('reportMetaData', FolderReport)

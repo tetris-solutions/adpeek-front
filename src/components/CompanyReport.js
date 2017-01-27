@@ -1,6 +1,6 @@
 import React from 'react'
 import ReportContainer from './Report/Container'
-import {contextualize} from './higher-order/contextualize'
+import {branch} from './higher-order/branch'
 import get from 'lodash/get'
 import endsWith from 'lodash/endsWith'
 
@@ -9,7 +9,7 @@ const CompanyReport = React.createClass({
   propTypes: {
     report: React.PropTypes.object,
     location: React.PropTypes.object,
-    metaData: React.PropTypes.object,
+    reportMetaData: React.PropTypes.object,
     params: React.PropTypes.object.isRequired,
     dispatch: React.PropTypes.func,
     company: React.PropTypes.shape({
@@ -28,7 +28,7 @@ const CompanyReport = React.createClass({
     })
   },
   render () {
-    const {metaData, company, location} = this.props
+    const {reportMetaData: metaData, company, location} = this.props
 
     return (
       <ReportContainer
@@ -41,4 +41,4 @@ const CompanyReport = React.createClass({
   }
 })
 
-export default contextualize(CompanyReport, {metaData: ['reportMetaData']}, 'company', 'report')
+export default branch('reportMetaData', CompanyReport)

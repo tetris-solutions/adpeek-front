@@ -1,6 +1,6 @@
 import React from 'react'
 import ReportContainer from './Report/Container'
-import {contextualize} from './higher-order/contextualize'
+import {branch} from './higher-order/branch'
 import get from 'lodash/get'
 import values from 'lodash/values'
 import endsWith from 'lodash/endsWith'
@@ -10,7 +10,7 @@ const WorkspaceReport = React.createClass({
   propTypes: {
     report: React.PropTypes.object,
     location: React.PropTypes.object,
-    metaData: React.PropTypes.object,
+    reportMetaData: React.PropTypes.object,
     params: React.PropTypes.object.isRequired,
     dispatch: React.PropTypes.func,
     workspace: React.PropTypes.shape({
@@ -30,7 +30,7 @@ const WorkspaceReport = React.createClass({
     return this._accounts
   },
   render () {
-    const {metaData, workspace, location} = this.props
+    const {reportMetaData: metaData, workspace, location} = this.props
 
     return (
       <ReportContainer
@@ -43,4 +43,4 @@ const WorkspaceReport = React.createClass({
   }
 })
 
-export default contextualize(WorkspaceReport, {metaData: ['reportMetaData']}, 'workspace', 'report')
+export default branch('reportMetaData', WorkspaceReport)

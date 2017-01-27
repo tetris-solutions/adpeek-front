@@ -80,12 +80,12 @@ const notReady = ({isLoading, result}) => isLoading || !result
 const ReportExportButton = React.createClass({
   displayName: 'Report-Export-Button',
   propTypes: {
+    cursors: React.PropTypes.object.isRequired,
     create: React.PropTypes.func.isRequired,
     isCreatingReport: React.PropTypes.bool.isRequired
   },
   contextTypes: {
-    location: React.PropTypes.object.isRequired,
-    report: React.PropTypes.object.isRequired
+    location: React.PropTypes.object.isRequired
   },
   getInitialState () {
     return {
@@ -119,7 +119,7 @@ const ReportExportButton = React.createClass({
     this.setState({isModalOpen: false})
   },
   export (type, metaData) {
-    const {report: {modules}} = this.context
+    const {report: {modules}} = this.props.cursors
     const stillLoading = some(modules, notReady)
 
     if (stillLoading) {
@@ -153,4 +153,4 @@ const ReportExportButton = React.createClass({
   }
 })
 
-export default contextualize(ReportExportButton, 'company', 'folder', 'workspace')
+export default contextualize(ReportExportButton, 'company', 'folder', 'workspace', 'report')
