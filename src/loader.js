@@ -9,11 +9,11 @@ const screen = (loader, name = null) =>
 
 const isServer = typeof document === 'undefined'
 
-if (isServer) {
-  /* eslint-disable */
-  eval('require.ensure = function (nope, fn) {fn(require);}')
-  /* eslint-enable */
-}
+// if (isServer) {
+// eslint-disable
+// eval('require.ensure = function (nope, fn) {fn(require);}')
+// eslint-enable
+// }
 
 function bypass (getComponent) {
   let component
@@ -25,13 +25,17 @@ function bypass (getComponent) {
   return {component}
 }
 
-export const render = isServer
-  ? bypass
-  : fn => ({
-    getComponent (nextState, callback) {
-      fn(nextState, callback)
-    }
-  })
+export const render = bypass
+
+const tempSyncEnsure = fn => fn()
+
+// export const render = isServer
+//   ? bypass
+//   : fn => ({
+//     getComponent (nextState, callback) {
+//       fn(nextState, callback)
+//     }
+//   })
 
 export const piece = (loader, name = null) =>
   React.createClass({
@@ -60,7 +64,7 @@ export const piece = (loader, name = null) =>
     }
   })
 
-const reportSection = provide => require.ensure([], require => provide({
+const reportSection = provide => tempSyncEnsure(() => provide({
   folder: require('./components/FolderReport'),
   workspace: require('./components/WorkspaceReport'),
   company: require('./components/CompanyReport'),
@@ -69,13 +73,13 @@ const reportSection = provide => require.ensure([], require => provide({
   asideLite: require('./components/Report/AsideLite')
 }))
 
-const reportListSection = provide => require.ensure([], require => provide({
+const reportListSection = provide => tempSyncEnsure(() => provide({
   company: require('./components/CompanyReports'),
   workspace: require('./components/WorkspaceReports'),
   folder: require('./components/FolderReports')
 }))
 
-const breadcrumbs = provide => require.ensure([], require => provide({
+const breadcrumbs = provide => tempSyncEnsure(() => provide({
   company: require('./components/CompanyBreadcrumb'),
   folder: require('./components/FolderBreadcrumb'),
   workspace: require('./components/WorkspaceBreadcrumb'),
@@ -85,23 +89,23 @@ const breadcrumbs = provide => require.ensure([], require => provide({
   orders: require('./components/OrdersBreadcrumb')
 }))
 
-const campaign = provide => require.ensure([], require => provide({
+const campaign = provide => tempSyncEnsure(() => provide({
   aside: require('./components/CampaignAside'),
   breadcrumb: require('./components/CampaignBreadcrumb')
 }))
 
-const orderCloning = provide => require.ensure([], require => provide({
+const orderCloning = provide => tempSyncEnsure(() => provide({
   folder: require('./components/FolderOrdersCloning'),
   workspace: require('./components/WorkspaceOrdersCloning'),
   company: require('./components/CompanyOrdersCloning')
 }))
 
-const creatives = provide => require.ensure([], require => provide({
+const creatives = provide => tempSyncEnsure(() => provide({
   campaign: require('./components/CampaignCreatives'),
   folder: require('./components/FolderCreatives')
 }))
 
-const forms = provide => require.ensure([], require => provide({
+const forms = provide => tempSyncEnsure(() => provide({
   folderCreate: require('./components/FolderCreate'),
   folderEdit: require('./components/FolderEdit'),
   workspaceCreate: require('./components/WorkspaceCreate'),
@@ -109,43 +113,43 @@ const forms = provide => require.ensure([], require => provide({
   reportCreate: require('./components/Report/CreateForm')
 }))
 
-const companyLevel = provide => require.ensure([], require => provide({
+const companyLevel = provide => tempSyncEnsure(() => provide({
   aside: require('./components/CompanyAside'),
   workspaces: require('./components/CompanyWorkspaces/List')
 }))
 
-const workspaceLevel = provide => require.ensure([], require => provide({
+const workspaceLevel = provide => tempSyncEnsure(() => provide({
   aside: require('./components/WorkspaceAside'),
   folders: require('./components/WorkspaceFolders')
 }))
 
-const folderLevel = provide => require.ensure([], require => provide({
+const folderLevel = provide => tempSyncEnsure(() => provide({
   aside: require('./components/FolderAside'),
   campaigns: require('./components/FolderCampaigns')
 }))
 
-const orderList = provide => require.ensure([], require => provide({
+const orderList = provide => tempSyncEnsure(() => provide({
   folder: require('./components/FolderOrders'),
   workspace: require('./components/WorkspaceOrders'),
   company: require('./components/CompanyOrders')
 }))
 
-const orderLevel = provide => require.ensure([], require => provide({
+const orderLevel = provide => tempSyncEnsure(() => provide({
   editor: require('./components/Order'),
   aside: require('./components/OrderAside')
 }))
 
-const unsub = provide => require.ensure([],
-  require => provide(require('./components/Report/Unsub')))
+const unsub = provide => tempSyncEnsure(() =>
+  provide(require('./components/Report/Unsub')))
 
-const mailing = provide => require.ensure([],
-  require => provide(require('./components/Report/Mailing')))
+const mailing = provide => tempSyncEnsure(() =>
+  provide(require('./components/Report/Mailing')))
 
-const companies = provide => require.ensure([],
-  require => provide(require('./components/Companies')))
+const companies = provide => tempSyncEnsure(() =>
+  provide(require('./components/Companies')))
 
-const autoBudget = provide => require.ensure([],
-  require => provide(require('./components/OrderAutoBudget')))
+const autoBudget = provide => tempSyncEnsure(() =>
+  provide(require('./components/OrderAutoBudget')))
 
 export const component = {
   Unsub: screen(unsub),
