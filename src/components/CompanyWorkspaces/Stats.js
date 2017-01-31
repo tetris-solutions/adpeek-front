@@ -105,22 +105,19 @@ Period.propTypes = Daily.propTypes = {
 }
 
 const EmptyStats = ({lastOrder}, {moment}) => (
-  <div className={`${style.statsWrap} mdl-color-text--grey-600`}>
-    <br/><br/>
+  <div className={`${style.statsWrap} ${style.empty} mdl-color-text--grey-600`}>
+    <br/>
     {lastOrder
       ? (
-        <div>
-          <div className={`${style.label}`}>
-            <Message>lastActiveOrder</Message>:
-          </div>
-          <div className={`${style.stats}`}>
-            <small>{moment(lastOrder.end).fromNow()}</small>
-          </div>
-        </div>
+        <h6>
+          <Message>lastActiveOrder</Message>:
+          <br/>
+          <small>{moment(lastOrder.end).fromNow()}</small>
+        </h6>
       ) : (
-        <div className={`${style.label}`}>
+        <h6>
           <Message>noActiveOrder</Message>
-        </div>
+        </h6>
       )}
   </div>
 )

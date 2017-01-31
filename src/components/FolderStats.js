@@ -14,6 +14,7 @@ import last from 'lodash/last'
 
 const style = csjs`
 .wrapper {
+  height: 334px;
   padding: 1em .5em;
 }
 .section {
@@ -51,6 +52,9 @@ const style = csjs`
 }
 .numbers > strong {
   font-size: 105%;
+}
+.empty {
+  text-align: center;
 }`
 
 const labelStyle = {
@@ -281,6 +285,33 @@ Stats.contextTypes = {
 
 Stats = pure(Stats)
 
+const EmptyStats = ({lastOrder}, {moment}) => (
+  <div className={`${style.wrapper} ${style.empty} mdl-color-text--grey-600`}>
+    <br/><br/><br/><br/>
+    <div className={`${style.section}`}>{lastOrder
+      ? (
+        <h6>
+          <Message>lastActiveOrder</Message>:
+          <small>
+            {moment(lastOrder.end).fromNow()}
+          </small>
+        </h6>
+      ) : (
+        <h6>
+          <Message>noActiveOrder</Message>
+        </h6>)}
+    </div>
+  </div>
+)
+
+EmptyStats.displayName = 'Empty-Stats'
+EmptyStats.propTypes = {
+  lastOrder: React.PropTypes.object
+}
+EmptyStats.contextTypes = {
+  moment: React.PropTypes.func
+}
+
 const FolderStats = React.createClass({
   displayName: 'Folder-Stats',
   mixins: [styled(style)],
@@ -308,11 +339,11 @@ const FolderStats = React.createClass({
     )
   },
   render () {
-    return (
-      <Stats
-        kpi_goal={this.props.kpi_goal}
-        stats={this.props.stats}/>
-    )
+    const {kpi_goal, stats} = this.props
+
+    return !stats.orders || stats.orders.current
+      ? <Stats kpi_goal={kpi_goal} stats={stats}/>
+      : <EmptyStats lastOrder={stats.orders.last}/>
   }
 })
 

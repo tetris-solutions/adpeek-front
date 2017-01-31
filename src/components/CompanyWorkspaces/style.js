@@ -51,4 +51,7 @@ export default csjs`
   display: inline-block;
   transform: translateY(-.4em);
   padding-left: .3em;
+}
+.empty {
+  text-align: center;
 }`
