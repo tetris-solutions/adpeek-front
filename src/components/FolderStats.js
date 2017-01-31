@@ -161,8 +161,8 @@ Goal.contextTypes = {
 let Stats = ({stats, kpi_goal}, {messages, locales}) => (
   <div className={`${style.wrapper} mdl-color-text--grey-600`}>
     <Rail
-      cost={get(stats, 'order.cost')}
-      amount={get(stats, 'order.amount')}/>
+      cost={get(stats, 'orders.current.cost')}
+      amount={get(stats, 'orders.current.amount')}/>
 
     <Goal
       kpi_goal={kpi_goal}
@@ -170,8 +170,8 @@ let Stats = ({stats, kpi_goal}, {messages, locales}) => (
       metric={stats.metric}/>
 
     <Period
-      start={get(stats, 'order.start')}
-      end={get(stats, 'order.end')}/>
+      start={get(stats, 'orders.current.start')}
+      end={get(stats, 'orders.current.end')}/>
 
     <Highcharts
       config={{
