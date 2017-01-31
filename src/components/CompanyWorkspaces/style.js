@@ -31,6 +31,7 @@ export default csjs`
   height: 4px;
 }
 .statsWrap {
+  height: 140px;
   padding: 1em 0 5em .7em;
 }
 .stats {

@@ -323,5 +323,7 @@ module.exports = {
   newDashCampaign: 'New Dash Campaign',
   enabledFilterLabel: 'Enabled',
   enabledOrPausedFilterLabel: 'Enabled or Paused',
-  allFilterLabel: 'All'
+  allFilterLabel: 'All',
+  noActiveOrder: 'No active Orders',
+  lastActiveOrder: 'Last active Order'
 }

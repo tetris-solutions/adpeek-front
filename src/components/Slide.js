@@ -16,8 +16,10 @@ export const Slide = React.createClass({
     }
   },
   componentDidMount () {
-    window.componentHandler.upgradeElement(this.refs.input)
-    this.refs.input.addEventListener('change', this.props.onChange)
+    const {input} = this.refs
+
+    window.componentHandler.upgradeElement(input)
+    input.addEventListener('input', this.props.onChange)
   },
   componentWillReceiveProps ({value, min, max, step}) {
     const {input} = this.refs

@@ -21,6 +21,7 @@ const style = csjs`
 .card {
   background: white;
   display: inline-block;
+  vertical-align: top;
   position: relative;
   width: 230px;
   min-height: 230px;

@@ -3,6 +3,7 @@ import {contextualize} from './higher-order/contextualize'
 import Helmet from 'react-helmet'
 import join from 'lodash/join'
 import compact from 'lodash/compact'
+import loglevel from 'loglevel'
 
 const DocTitle = React.createClass({
   displayName: 'Doc-Title',
@@ -30,11 +31,13 @@ const DocTitle = React.createClass({
     try {
       this.trackGA()
     } catch (e) {
+      loglevel.error(e)
     }
 
     try {
       this.trackPIWIK()
     } catch (e) {
+      loglevel.error(e)
     }
   },
   trackPIWIK () {

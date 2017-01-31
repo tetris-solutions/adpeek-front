@@ -154,8 +154,13 @@ Goal.propTypes = {
   }),
   kpi_goal: React.PropTypes.number
 }
+
 Goal.contextTypes = {
   locales: React.PropTypes.string.isRequired
+}
+
+function preventDefault (e) {
+  e.preventDefault()
 }
 
 let Stats = ({stats, kpi_goal}, {messages, locales}) => (
@@ -197,7 +202,7 @@ let Stats = ({stats, kpi_goal}, {messages, locales}) => (
         ])
       }}
       className={`${style.chart}`}
-      onClick={e => e.preventDefault()}>
+      onClick={preventDefault}>
 
       <title>{null}</title>
 

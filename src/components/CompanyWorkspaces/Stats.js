@@ -104,12 +104,43 @@ Period.propTypes = Daily.propTypes = {
   cost: React.PropTypes.number
 }
 
-const Stats = ({open, yesterday}, {locales, location: {query}}) => (
-  <div className={`${style.statsWrap}`}>
-    <Period {...open} locales={locales}/>
-    <Daily {...yesterday} locales={locales}/>
+const EmptyStats = ({lastOrder}, {moment}) => (
+  <div className={`${style.statsWrap} mdl-color-text--grey-600`}>
+    <br/><br/>
+    {lastOrder
+      ? (
+        <div>
+          <div className={`${style.label}`}>
+            <Message>lastActiveOrder</Message>:
+          </div>
+          <div className={`${style.stats}`}>
+            <small>{moment(lastOrder.end).fromNow()}</small>
+          </div>
+        </div>
+      ) : (
+        <div className={`${style.label}`}>
+          <Message>noActiveOrder</Message>
+        </div>
+      )}
   </div>
 )
+
+EmptyStats.displayName = 'Empty-Stats'
+EmptyStats.propTypes = {
+  lastOrder: React.PropTypes.object
+}
+EmptyStats.contextTypes = {
+  moment: React.PropTypes.func
+}
+
+const Stats = ({open, yesterday, orders}, {locales, location: {query}}) => orders && !orders.count
+  ? <EmptyStats lastOrder={orders ? orders.last : null}/>
+  : (
+    <div className={`${style.statsWrap}`}>
+      <Period {...open} locales={locales}/>
+      <Daily {...yesterday} locales={locales}/>
+    </div>
+  )
 
 Stats.displayName = 'Stats'
 
@@ -132,6 +163,10 @@ Stats.propTypes = {
   yesterday: React.PropTypes.shape({
     budget: React.PropTypes.number,
     cost: React.PropTypes.number
+  }),
+  orders: React.PropTypes.shape({
+    count: React.PropTypes.number,
+    last: React.PropTypes.object
   })
 }
 
