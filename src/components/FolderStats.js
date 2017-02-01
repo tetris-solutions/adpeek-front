@@ -55,6 +55,9 @@ const style = csjs`
 }
 .empty {
   text-align: center;
+}
+.empty h6 > small {
+  font-size: .8em;
 }`
 
 const labelStyle = {
@@ -294,6 +297,7 @@ const EmptyStats = ({lastOrder}, {moment}) => (
       ? (
         <h6>
           <Message>lastActiveOrder</Message>:
+          <br/>
           <small>
             {moment(lastOrder.end).fromNow()}
           </small>

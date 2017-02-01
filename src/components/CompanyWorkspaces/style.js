@@ -54,4 +54,7 @@ export default csjs`
 }
 .empty {
   text-align: center;
+}
+.empty h6 > small {
+  font-size: .8em;
 }`
