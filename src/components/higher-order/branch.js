@@ -6,8 +6,6 @@ import isArray from 'lodash/isArray'
 import isNumber from 'lodash/isNumber'
 import forEach from 'lodash/forEach'
 import assign from 'lodash/assign'
-import debounce from 'lodash/debounce'
-import loglevel from 'loglevel'
 import find from 'lodash/find'
 import concat from 'lodash/concat'
 import omit from 'lodash/omit'
@@ -32,19 +30,14 @@ export function branch (mapping, Component = ByPass, maxWatchDepth = 1) {
   }
 
   function matches (watchedPath, updatedPath) {
-    function reject () {
-      loglevel.debug(`${Component.displayName}) wont update because changes on ${updatedPath} should not reflect on ${watchedPath}`)
-      return false
-    }
-
     if (!isArray(watchedPath) || !isArray(updatedPath)) {
-      return reject()
+      return false
     }
 
     const levelsBellow = updatedPath.length - watchedPath.length
 
     if (levelsBellow > maxWatchDepth || levelsBellow < 0) {
-      return reject()
+      return false
     }
 
     for (let i = 0; i < watchedPath.length; i++) {
@@ -57,7 +50,7 @@ export function branch (mapping, Component = ByPass, maxWatchDepth = 1) {
         : updatedPath[i]
 
       if (watchedPart !== updatedPart) {
-        return reject()
+        return false
       }
     }
 
@@ -100,11 +93,6 @@ export function branch (mapping, Component = ByPass, maxWatchDepth = 1) {
     componentDidMount () {
       const {tree} = this.context
 
-      this.refresh = debounce(() => {
-        if (this.dead) return
-        this.forceUpdate()
-      }, 500)
-
       tree.on('update', this.onUpdate)
 
       this.release = () => {
@@ -117,7 +105,6 @@ export function branch (mapping, Component = ByPass, maxWatchDepth = 1) {
       const changedPath = find(this.getCursors(), relatedToEvent)
 
       if (changedPath) {
-        loglevel.debug(`${Component.displayName}) update triggered by change on ${changedPath}`)
         this.refresh()
       }
     },
@@ -141,6 +128,11 @@ export function branch (mapping, Component = ByPass, maxWatchDepth = 1) {
         params: this.getParams()
       })
     },
+    refresh () {
+      if (!this.dead) {
+        this.forceUpdate()
+      }
+    },
     render () {
       const {tree} = this.context
       const props = this.extendedProps()
@@ -149,7 +141,9 @@ export function branch (mapping, Component = ByPass, maxWatchDepth = 1) {
       props.dispatch = this.dispatcher
 
       forEach(this.getCursors(), (path, name) => {
-        props[name] = tree.get(path) || null
+        const val = tree.get(path)
+
+        props[name] = val === undefined ? null : val
 
         Object.defineProperty(props.cursors, name, {
           get () {
@@ -186,7 +180,7 @@ export function derivative (parent, name, resolverOrComponent, Component) {
 
         const parentValue = tree.get(parentPath)
 
-        if (!parentValue) return {}
+        if (parentValue === undefined) return {}
 
         const subPath = resolver(parentValue, props, context)
 

@@ -2,30 +2,6 @@ import React from 'react'
 import Helmet from 'react-helmet'
 import revision from 'git-rev-sync'
 
-const paceCss = `
-.pace {
-  -webkit-pointer-events: none;
-  pointer-events: none;
-
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-}
-
-.pace-inactive {
-  display: none;
-}
-
-.pace .pace-progress {
-  background: #7fcc7e;
-  position: fixed;
-  z-index: 2000;
-  top: 0;
-  right: 100%;
-  width: 100%;
-  height: 2px;
-}`
-
 const gTMSrc = `(function (w, d, s, l, i) {
   w[l] = w[l] || [];
   w[l].push({
@@ -83,12 +59,10 @@ const HTML = ({payload, children, css}) => (
       <link rel='stylesheet' href='/css/react-resizable.css'/>
       <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css'/>
 
-      <style dangerouslySetInnerHTML={{__html: paceCss}}/>
       <style id='style-injection' dangerouslySetInnerHTML={{__html: css}}/>
       <style dangerouslySetInnerHTML={{__html: hardCodedStyle}}/>
 
       {gTMScript}
-      <script src='https://cdn.rawgit.com/HubSpot/pace/v1.0.0/pace.min.js' async/>
       <script src='https://code.getmdl.io/1.3.0/material.min.js' defer/>
       <script
         id='state-injection'

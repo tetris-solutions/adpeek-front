@@ -12,6 +12,7 @@ import App from '../components/App'
 import ErrorScreen from '../components/ErrorScreen'
 
 import {node, branch} from '../components/higher-order/branch'
+import {intercept} from '../functions/intercept-preload'
 
 import {loadWorkspaceAccountsActionRouterAdaptor as accounts} from '../actions/load-accounts'
 import {loadAutoBudgetLogsActionRouterAdaptor as autoBudgetLogs} from '../actions/load-autobudget-logs'
@@ -43,6 +44,8 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
   const _ = bind.placeholder
   const campaignsWithAdsets = bind(campaigns, null, _, _, 'include-adsets')
 
+  preload = intercept(tree, preload)
+
   const rConfig = {
     company: {
       item: component.CompanyReport,
@@ -59,6 +62,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
       action: preload(campaigns)
     }
   }
+
   const getReportRoutes = level => (
     <Route breadcrumb={component.ReportsBreadcrumb} onEnter={rConfig[level].action}>
       <Route

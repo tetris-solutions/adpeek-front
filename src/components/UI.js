@@ -1,6 +1,7 @@
 import React from 'react'
 import Header from './Header'
 import {branch} from './higher-order/branch'
+import Loading from './Loading'
 
 const UI = React.createClass({
   displayName: 'UI',
@@ -40,6 +41,7 @@ const UI = React.createClass({
           </main>
         </div>
         <div className='mdl-layout__obfuscator'/>
+        <Loading/>
       </div>
     )
   }
