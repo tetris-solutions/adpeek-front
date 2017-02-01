@@ -7,6 +7,9 @@ import flatten from 'lodash/flatten'
 import map from 'lodash/map'
 import assign from 'lodash/assign'
 import filter from 'lodash/filter'
+import findLast from 'lodash/findLast'
+import includes from 'lodash/includes'
+
 const notAdwordsVideo = ({is_adwords_video}) => !is_adwords_video
 
 function normalizeAdset (adset) {
@@ -17,7 +20,9 @@ function getCampaignAdsets (campaign) {
   return map(campaign.adsets, normalizeAdset)
 }
 
-export function Order ({deliveryMethods, dispatch, params, order, folder, statuses, route}, {messages: {newOrderName}, moment, locales}) {
+const isOrderRoute = ({path}) => includes(path, 'order')
+
+export function Order ({deliveryMethods, dispatch, params, order, folder, statuses, routes}, {messages: {newOrderName}, moment, locales}) {
   function defaultOrder () {
     const nextMonth = moment().add(1, 'month')
     return {
@@ -39,7 +44,7 @@ export function Order ({deliveryMethods, dispatch, params, order, folder, status
 
   return (
     <OrderController
-      route={route}
+      route={findLast(routes, isOrderRoute)}
       key={params.order || 'new-order'}
       params={params}
       deliveryMethods={deliveryMethods}
@@ -52,7 +57,7 @@ export function Order ({deliveryMethods, dispatch, params, order, folder, status
 
 Order.displayName = 'Order'
 Order.propTypes = {
-  route: React.PropTypes.object,
+  routes: React.PropTypes.array,
   statuses: React.PropTypes.array,
   dispatch: React.PropTypes.func,
   deliveryMethods: React.PropTypes.array,
