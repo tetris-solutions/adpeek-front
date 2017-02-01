@@ -13,9 +13,12 @@ function monthNameToIndex (name) {
   return indexOf(months, toLower(name))
 }
 
-function zeroedMoment () {
-  return moment().month(0).date(1).hour(0).minute(0).second(0)
+function zeroedMoment (str) {
+  return str
+    ? moment(str).hour(0).minute(0).second(0).millisecond(0)
+    : moment().month(0).date(1).hour(0).minute(0).second(0).millisecond(0)
 }
+
 const prefixless = name => name.substr(name.indexOf(':') + 1)
 /**
  * @param {Object} attributes attributes for type mapping
@@ -52,7 +55,7 @@ export function normalizeResult (attributes, result) {
         date._format_ = 'HH:mm'
         break
       case 'month':
-        date = moment(value).toDate()
+        date = zeroedMoment(value).toDate()
         date._format_ = 'MMMM/YY'
         break
       case 'monthofyear':
@@ -60,7 +63,7 @@ export function normalizeResult (attributes, result) {
         date._format_ = 'MMMM'
         break
       case 'date':
-        date = moment(value).toDate()
+        date = zeroedMoment(value).toDate()
         date._format_ = 'DD/MM/YYYY'
         date._simple_ = true
         break

@@ -240,7 +240,7 @@ export function reportToChartConfig (type, props) {
         }
 
         if (isDate(point[xAxisDimension])) {
-          pointConfig.x = point[xAxisDimension]
+          pointConfig.x = point[xAxisDimension].getTime()
         }
 
         seriesConfig.data.push(pointConfig)

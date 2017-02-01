@@ -62,7 +62,11 @@ const labelStyle = {
 }
 const dt = str => {
   const [year, month, day] = str.split('-')
-  return new Date(year, month - 1, day)
+  const d = new Date(year, month - 1, day)
+
+  d.setHours(0, 0, 0, 0)
+
+  return d.getTime()
 }
 
 const num = val => !isNumber(val) ? 0 : val
@@ -227,7 +231,15 @@ let Stats = ({stats, kpi_goal}, {messages, locales}) => (
       </legend>
 
       <tooltip
-        headerFormat=''/>
+        useHTML
+        shared
+        formatter={function () {
+          return this.points.map(point => `
+            <span style="font-weight: bold; color: ${point.color}">
+              ${prettyNumber(point.y, point.series.options.metric.type, locales)}
+            </span>`
+          ).join('<br/>')
+        }}/>
 
       <x-axis>
         <type>datetime</type>
@@ -235,12 +247,7 @@ let Stats = ({stats, kpi_goal}, {messages, locales}) => (
         <labels style={labelStyle}/>
       </x-axis>
 
-      <line id='budget' name={messages.investmentLabel}>
-        <y-axis>budget</y-axis>
-        <tooltip pointFormatter={function () {
-          return `<span style="font-weight: bold; color: ${this.color}">${prettyNumber(this.y, 'currency', locales)}</span>`
-        }}/>
-
+      <line id='budget' name={messages.investmentLabel} metric={{type: 'currency'}} yAxis='budget'>
         {map(stats.series, (x, index) =>
           <point
             key={`${x.date}-budget-${index}`}
@@ -250,12 +257,7 @@ let Stats = ({stats, kpi_goal}, {messages, locales}) => (
       </line>
 
       {stats.metric && (
-        <line id={stats.metric.id} name={stats.metric.name}>
-          <y-axis>{stats.metric.id}</y-axis>
-          <tooltip pointFormatter={function () {
-            return `<span style="font-weight: bold; color: ${this.color}">${prettyNumber(this.y, stats.metric.type, locales)}</span>`
-          }}/>
-
+        <line id={stats.metric.id} name={stats.metric.name} metric={stats.metric} yAxis={stats.metric.id}>
           {map(stats.series, (x, index) =>
             <point
               key={`${x.date}-${stats.metric.id}-${index}`}
