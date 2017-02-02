@@ -120,7 +120,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
             {getReportRoutes('company')}
 
             <Route path='orders' breadcrumb={component.OrdersBreadCrumb} onEnter={preload(orders)}>
-              <IndexRoute {...render(component.CompanyOrders)}/>
+              <IndexRoute {...render(component.Orders)}/>
               <Route path='clone' {...render(component.CompanyOrdersCloning)}/>
             </Route>
 
@@ -137,7 +137,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
               {getReportRoutes('workspace')}
 
               <Route path='orders' breadcrumb={component.OrdersBreadCrumb} onEnter={preload(orders)}>
-                <IndexRoute {...render(component.WorkspaceOrders)}/>
+                <IndexRoute {...render(component.Orders)}/>
                 <Route path='clone' {...render(component.WorkspaceOrdersCloning)}/>
               </Route>
 
@@ -165,7 +165,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 {getReportRoutes('folder')}
 
                 <Route path='orders' breadcrumb={component.OrdersBreadCrumb} onEnter={preload(orders)}>
-                  <IndexRoute {...render(component.FolderOrders)}/>
+                  <IndexRoute {...render(component.Orders)}/>
                   <Route path='clone' {...render(component.FolderOrdersCloning)}/>
                 </Route>
 

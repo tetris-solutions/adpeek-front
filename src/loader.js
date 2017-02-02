@@ -123,12 +123,6 @@ const folderLevel = provide => tempSyncEnsure(() => provide({
   campaigns: require('./components/FolderCampaigns')
 }))
 
-const orderList = provide => tempSyncEnsure(() => provide({
-  folder: require('./components/FolderOrders'),
-  workspace: require('./components/WorkspaceOrders'),
-  company: require('./components/CompanyOrders')
-}))
-
 const orderLevel = provide => tempSyncEnsure(() => provide({
   editor: require('./components/Order'),
   aside: require('./components/OrderAside')
@@ -148,6 +142,9 @@ const autoBudget = provide => tempSyncEnsure(() =>
 
 const reportList = provide => tempSyncEnsure(() =>
   provide(require('./components/Report/List')))
+
+const orderList = provide => tempSyncEnsure(() =>
+  provide(require('./components/Orders')))
 
 export const component = {
   Unsub: screen(unsub),
@@ -197,9 +194,7 @@ export const component = {
   FolderCampaigns: screen(folderLevel, 'campaigns'),
   FolderAside: piece(folderLevel, 'aside'),
 
-  FolderOrders: screen(orderList, 'folder'),
-  WorkspaceOrders: screen(orderList, 'workspace'),
-  CompanyOrders: screen(orderList, 'company'),
+  Orders: screen(orderList),
 
   Order: screen(orderLevel, 'editor'),
   OrderAside: piece(orderLevel, 'aside')

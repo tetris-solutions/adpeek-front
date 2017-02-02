@@ -15,6 +15,9 @@ import SubHeader, {SubHeaderButton} from './SubHeader'
 import Page from './Page'
 import Order from './OrderThumb'
 import Switch from './Switch'
+import {collection} from './higher-order/branch'
+import {inferLevelFromParams} from '../functions/infer-level-from-params'
+
 const cleanStr = str => trim(deburr(lowerCase(str)))
 
 export const Orders = React.createClass({
@@ -102,4 +105,4 @@ export const Orders = React.createClass({
   }
 })
 
-export default Orders
+export default collection(({params}) => inferLevelFromParams(params), 'orders', Orders)
