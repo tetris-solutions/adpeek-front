@@ -1,5 +1,9 @@
 import React from 'react'
+import compact from 'lodash/compact'
+import join from 'lodash/join'
 import {styled} from '../mixins/styled'
+import {collection} from '../higher-order/branch'
+import {inferLevelFromParams} from '../../functions/infer-level-from-params'
 import map from 'lodash/map'
 import orderBy from 'lodash/orderBy'
 import Message from 'tetris-iso/Message'
@@ -186,4 +190,19 @@ export const Reports = React.createClass({
   }
 })
 
-export default Reports
+const Wrapper = props =>
+  <Reports {...props} path={'/' + (
+    join(compact([
+      `company/${props.params.company}`,
+      props.params.workspace && `workspace/${props.params.workspace}`,
+      props.params.folder && `folder/${props.params.folder}`
+    ]), '/')
+  )}/>
+
+Wrapper.displayName = 'Report-List-Wrapper'
+Wrapper.propTypes = {
+  reports: React.PropTypes.array,
+  params: React.PropTypes.object
+}
+
+export default collection(({params}) => inferLevelFromParams(params), 'reports', Wrapper)

@@ -49,16 +49,16 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
   const rConfig = {
     company: {
       item: component.CompanyReport,
-      list: component.CompanyReports,
+      list: component.ReportList,
       action: preload(savedAccounts)
     },
     workspace: {
       item: component.WorkspaceReport,
-      list: component.WorkspaceReports
+      list: component.ReportList
     },
     folder: {
       item: component.FolderReport,
-      list: component.FolderReports,
+      list: component.ReportList,
       action: preload(campaigns)
     }
   }
@@ -82,7 +82,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
       </Route>
 
       <Route path='reports'>
-        <IndexRoute onEnter={preload(reports)} {...render(rConfig[level].list)}/>
+        <IndexRoute onEnter={preload(reports)} {...render(component.ReportList)}/>
         <Route path='new' {...render(component.ReportCreate)}/>
       </Route>
     </Route>

@@ -74,12 +74,6 @@ const reportSection = provide => tempSyncEnsure(() => provide({
   asideLite: require('./components/Report/AsideLite')
 }))
 
-const reportListSection = provide => tempSyncEnsure(() => provide({
-  company: require('./components/CompanyReports'),
-  workspace: require('./components/WorkspaceReports'),
-  folder: require('./components/FolderReports')
-}))
-
 const breadcrumbs = provide => tempSyncEnsure(() => provide({
   company: require('./components/CompanyBreadcrumb'),
   folder: require('./components/FolderBreadcrumb'),
@@ -152,6 +146,9 @@ const companies = provide => tempSyncEnsure(() =>
 const autoBudget = provide => tempSyncEnsure(() =>
   provide(require('./components/OrderAutoBudget')))
 
+const reportList = provide => tempSyncEnsure(() =>
+  provide(require('./components/Report/List')))
+
 export const component = {
   Unsub: screen(unsub),
   Mailing: screen(mailing),
@@ -165,9 +162,7 @@ export const component = {
   ReportAside: piece(reportSection, 'aside'),
   ReportAsideLite: piece(reportSection, 'asideLite'),
 
-  CompanyReports: screen(reportListSection, 'company'),
-  WorkspaceReports: screen(reportListSection, 'workspace'),
-  FolderReports: screen(reportListSection, 'folder'),
+  ReportList: screen(reportList),
 
   OrderBreadCrumb: piece(breadcrumbs, 'order'),
   OrdersBreadCrumb: piece(breadcrumbs, 'orders'),
