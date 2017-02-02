@@ -61,6 +61,7 @@
     "react-router": "^3.0.2",
     "react-sizeme": "^2.2.0",
     "recompose": "^0.20.2",
+    "scrollto-with-animation": "^4.3.3",
     "shallowequal": "^0.2.2",
     "stable": "^0.1.5",
     "tetris-iso": "^0.5.3",

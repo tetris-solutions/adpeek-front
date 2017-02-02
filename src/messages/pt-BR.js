@@ -326,5 +326,5 @@ module.exports = {
   allFilterLabel: 'Todos',
   noActiveOrder: 'Não há pedidos ativos',
   lastActiveOrder: 'Último pedido ativo',
-  moduleIndexLabel: 'Módulos'
+  moduleIndexLabel: 'Índice'
 }

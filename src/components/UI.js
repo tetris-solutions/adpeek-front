@@ -36,7 +36,7 @@ const UI = React.createClass({
       <div className='mdl-layout__container'>
         <div className='mdl-layout mdl-layout--fixed-header is-upgraded'>
           <Header hideLogin={hideLogin}/>
-          <main className='mdl-layout__content mdl-color--grey-300'>
+          <main id='main' className='mdl-layout__content mdl-color--grey-300'>
             {children}
           </main>
         </div>

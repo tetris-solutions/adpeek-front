@@ -4,10 +4,29 @@ import {NavBt} from '../Navigation'
 import {collection} from '../higher-order/branch'
 import {DropdownMenu, MenuItem} from '../DropdownMenu'
 import map from 'lodash/map'
+import scrollTo from 'scrollto-with-animation'
+
+/**
+ *
+ * @param {HTMLElement} el elem
+ * @return {Number} scroll top
+ */
+function top (el) {
+  return el.getBoundingClientRect().top
+}
+
+const scrollToModule = id => () => {
+  const main = document.querySelector('#main')
+  const module = main.querySelector(`[data-module-id="${id}"]`)
+
+  if (!module) return
+
+  scrollTo(main, 'scrollTop', top(module) - top(main))
+}
 
 let Modules = ({modules}) =>
   <DropdownMenu>{map(modules, ({id, name}) =>
-    <MenuItem key={id}>
+    <MenuItem onClick={scrollToModule(id)} key={id}>
       {name}
     </MenuItem>)}
   </DropdownMenu>
