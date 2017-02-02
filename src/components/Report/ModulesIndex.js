@@ -5,6 +5,7 @@ import {collection} from '../higher-order/branch'
 import {DropdownMenu, MenuItem} from '../DropdownMenu'
 import map from 'lodash/map'
 import scrollTo from 'scrollto-with-animation'
+import sortBy from 'lodash/sortBy'
 
 /**
  *
@@ -25,7 +26,7 @@ const scrollToModule = id => () => {
 }
 
 let Modules = ({modules}) =>
-  <DropdownMenu>{map(modules, ({id, name}) =>
+  <DropdownMenu>{map(sortBy(modules, 'y'), ({id, name}) =>
     <MenuItem onClick={scrollToModule(id)} key={id}>
       {name}
     </MenuItem>)}
