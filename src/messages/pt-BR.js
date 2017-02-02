@@ -325,5 +325,6 @@ module.exports = {
   enabledOrPausedFilterLabel: 'Ativo ou Pausado',
   allFilterLabel: 'Todos',
   noActiveOrder: 'Não há pedidos ativos',
-  lastActiveOrder: 'Último pedido ativo'
+  lastActiveOrder: 'Último pedido ativo',
+  moduleIndexLabel: 'Módulos'
 }

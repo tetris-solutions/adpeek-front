@@ -81,8 +81,8 @@ HeaderMenuItem.propTypes = {
   children: React.PropTypes.node.isRequired
 }
 
-const DMenu = ({children, provide}) => (
-  <Tooltip provide={provide}>
+const DMenu = ({children, provide, hover}) => (
+  <Tooltip provide={provide} hover={hover}>
     <div className={`mdl-menu__container is-visible ${style.menu}`}>
       <ul className={`mdl-menu ${style.options}`}>
         {children}
@@ -92,12 +92,14 @@ const DMenu = ({children, provide}) => (
 )
 
 DMenu.defaultProps = {
-  provide: []
+  provide: [],
+  hover: false
 }
 DMenu.displayName = 'Dropdown-Menu'
 DMenu.propTypes = {
   children: React.PropTypes.node.isRequired,
-  provide: React.PropTypes.array
+  provide: React.PropTypes.array,
+  hover: React.PropTypes.bool
 }
 
 export const DropdownMenu = styledFnComponent(DMenu, style)
