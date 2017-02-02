@@ -26,8 +26,11 @@ export function toggleOrderAutoBudgetAction (tree, {company, workspace, folder},
   return action(order, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .then(r => {
-      tree.set(cursor, !autoBudget)
+      cursor.pop()
+
+      tree.merge(cursor, {auto_budget: !autoBudget})
       tree.commit()
+
       return r
     })
     .catch(pushResponseErrorToState(tree))
