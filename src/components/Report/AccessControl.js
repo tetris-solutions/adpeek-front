@@ -7,11 +7,14 @@ import {setDefaultReportAction} from '../../actions/set-default-report'
 import {updateReportAction} from '../../actions/update-report'
 import csjs from 'csjs'
 import {styled} from '../mixins/styled'
+import {branch} from '../higher-order/branch'
 import Fence from '../Fence'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
 import {Button} from '../Button'
-import {MenuItem} from '../DropdownMenu'
+import {DropdownMenu, MenuItem} from '../DropdownMenu'
 import {loadReportAction} from '../../actions/load-report'
+import map from 'lodash/map'
+import find from 'lodash/find'
 
 const style = csjs`
 .card {
@@ -34,9 +37,47 @@ const style = csjs`
 }
 .button {
   text-align: left;
+}
+.empty {
+  font-size: large;
+  text-align: center;
+  margin: 2em auto;
+  width: 20em;
 }`
 
-function CardButton ({callToAction, onClick, icon, description}) {
+const CallToAction = ({children, onClick}) =>
+  <a className={`${style.button} mdl-button`} onClick={onClick}>
+    <Message>{children}</Message>
+  </a>
+
+CallToAction.displayName = 'Call-To-Action'
+CallToAction.propTypes = {
+  children: React.PropTypes.string,
+  onClick: React.PropTypes.func
+}
+
+let MediaSelector = ({selected, setMedia, medias}) =>
+  <a className={`${style.button} mdl-button`}>
+    {selected
+      ? find(medias, {id: selected}).name
+      : <Message>setReportMedia</Message>}
+
+    <DropdownMenu>{map(medias, ({id, name}, index) =>
+      <MenuItem key={index} onClick={() => setMedia(id)}>
+        {name}
+      </MenuItem>)}
+    </DropdownMenu>
+  </a>
+
+MediaSelector.displayName = 'Media-Selector'
+MediaSelector.propTypes = {
+  selected: React.PropTypes.string,
+  setMedia: React.PropTypes.func,
+  medias: React.PropTypes.array
+}
+MediaSelector = branch('medias', MediaSelector)
+
+function CardButton ({button, icon, description}) {
   return (
     <div className={`${style.card} mdl-card mdl-shadow--2dp`}>
       <div className={`${style.title} mdl-card__title mdl-card--expand`}>
@@ -45,9 +86,7 @@ function CardButton ({callToAction, onClick, icon, description}) {
         </h5>
       </div>
       <div className={`${style.actions} mdl-card__actions mdl-card--border`}>
-        <a className={`${style.button} mdl-button`} onClick={onClick}>
-          {callToAction}
-        </a>
+        {button}
         <div className='mdl-layout-spacer'/>
         <i className='material-icons'>{icon}</i>
       </div>
@@ -56,22 +95,22 @@ function CardButton ({callToAction, onClick, icon, description}) {
 }
 CardButton.displayName = 'Card-Button'
 CardButton.propTypes = {
-  onClick: React.PropTypes.func.isRequired,
-  callToAction: React.PropTypes.node.isRequired,
+  button: React.PropTypes.node.isRequired,
   icon: React.PropTypes.string.isRequired,
   description: React.PropTypes.node.isRequired
 }
 
-function Options ({user, report, makePublic, unlock, setAsDefault, close, canEdit}) {
+function Options ({user, report, setMedia, makePublic, unlock, setAsDefault, close, canEdit}) {
   const setAsDefaultDescription = report.is_default_report
     ? <Message>uncheckDefaultReportDescription</Message>
     : <Message>checkDefaultReportDescription</Message>
 
   const setAsDefaultCallToAction = report.is_default_report
-    ? <Message>uncheckDefaultReport</Message>
-    : <Message>checkDefaultReport</Message>
+    ? 'uncheckDefaultReport'
+    : 'checkDefaultReport'
 
   const showMakeGlobal = user.is_admin && !report.is_global
+  const showSetMedia = report.level === 'folder' && report.is_global && user.is_admin
   const showMakePublic = report.is_private
   const showMakeDefault = canEdit && !report.is_private
   const noPossibleOptions = !(showMakeGlobal || showMakeDefault || showMakePublic)
@@ -86,7 +125,7 @@ function Options ({user, report, makePublic, unlock, setAsDefault, close, canEdi
         <br/>
 
         {noPossibleOptions && (
-          <p style={{fontSize: 'large', textAlign: 'center', margin: '2em auto', width: '20em'}}>
+          <p className={`${style.empty}`}>
             <Message>emptyAccessControlOptions</Message>
           </p>)}
 
@@ -94,23 +133,26 @@ function Options ({user, report, makePublic, unlock, setAsDefault, close, canEdi
           <CardButton
             description={<Message>makeReportGlobalDescription</Message>}
             icon='public'
-            callToAction={<Message>makeReportGlobal</Message>}
-            onClick={makePublic}/>)}
+            button={<CallToAction onClick={makePublic}>makeReportGlobal</CallToAction>}/>)}
+
+        {showSetMedia && (
+          <CardButton
+            description={<Message>setReportMediaDescription</Message>}
+            icon='perm_media'
+            button={<MediaSelector selected={report.media} setMedia={setMedia}/>}/>)}
 
         {showMakePublic && (
           <CardButton
             disabled={!report.is_private}
             description={<Message>makeReportPublicDescription</Message>}
             icon='lock_outline'
-            callToAction={<Message>makeReportPublic</Message>}
-            onClick={unlock}/>)}
+            button={<CallToAction onClick={unlock}>makeReportPublic</CallToAction>}/>)}
 
         {showMakeDefault && (
           <CardButton
             description={setAsDefaultDescription}
             icon={report.is_default_report ? 'indeterminate_check_box' : 'check_box'}
-            callToAction={setAsDefaultCallToAction}
-            onClick={setAsDefault}/>)}
+            button={<CallToAction onClick={setAsDefault}>{setAsDefaultCallToAction}</CallToAction>}/>)}
 
         <br/>
         <hr/>
@@ -129,6 +171,7 @@ Options.propTypes = {
   report: React.PropTypes.object.isRequired,
   makePublic: React.PropTypes.func.isRequired,
   unlock: React.PropTypes.func.isRequired,
+  setMedia: React.PropTypes.func.isRequired,
   setAsDefault: React.PropTypes.func.isRequired,
   close: React.PropTypes.func.isRequired,
   canEdit: React.PropTypes.bool.isRequired
@@ -161,6 +204,9 @@ const ReportAccessControl = React.createClass({
 
     this.unlock = () =>
       dispatch(updateReportAction, params, {id: report.id, is_private: false})
+
+    this.setMedia = media =>
+      dispatch(updateReportAction, params, {id: report.id, media})
   },
   open () {
     this.setState({isModalOpen: true})
@@ -185,21 +231,20 @@ const ReportAccessControl = React.createClass({
 
     return (
       <MenuItem icon='visibility' onClick={this.open}>
-        <Message>reportAccessControl</Message>
-        {this.state.isModalOpen ? (
-          <Modal size='large' onEscPress={this.close}>
+        <Message>reportAccessControl</Message>{this.state.isModalOpen ? (
+          <Modal onEscPress={this.close}>
             <Fence {...fencePerms}>{permissions => (
               <Options
                 canEdit={permissions[canEditPermission]}
                 setAsDefault={this.setAsDefault}
+                setMedia={this.setMedia}
                 unlock={this.unlock}
                 makePublic={this.makePublic}
                 close={this.close}
                 report={report}
                 user={user}/>)}
             </Fence>
-          </Modal>
-        ) : null}
+          </Modal>) : null}
       </MenuItem>
     )
   }

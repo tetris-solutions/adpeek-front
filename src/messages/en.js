@@ -177,6 +177,8 @@ module.exports = {
   reportAccessControl: 'Access Control',
   makeReportGlobal: 'Share Globally',
   makeReportGlobalDescription: 'Share report with other companies',
+  setReportMediaDescription: 'Define a media for this report',
+  setReportMedia: 'Select media',
   makeReportPublic: 'Share with Company',
   makeReportPublicDescription: 'Share report with your coworkers',
   favoriteReport: 'Favorite',

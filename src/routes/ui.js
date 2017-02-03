@@ -50,16 +50,17 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
     company: {
       item: component.CompanyReport,
       list: component.ReportList,
-      action: preload(savedAccounts)
+      action: preload(medias, savedAccounts)
     },
     workspace: {
       item: component.WorkspaceReport,
-      list: component.ReportList
+      list: component.ReportList,
+      action: preload(medias)
     },
     folder: {
       item: component.FolderReport,
       list: component.ReportList,
-      action: preload(campaigns)
+      action: preload(medias, campaigns)
     }
   }
 
