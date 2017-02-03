@@ -1,12 +1,12 @@
-import Message from 'tetris-iso/Message'
 import React from 'react'
+import Message from 'tetris-iso/Message'
+import ReportLink from './Report/ReportLink'
 import endsWith from 'lodash/endsWith'
 import Fence from './Fence'
 import {Navigation, NavBt, NavLink, NavBts, Name} from './Navigation'
 import DeleteButton from './DeleteButton'
 import {deleteFolderAction} from '../actions/delete-folder'
 import {contextualize} from './higher-order/contextualize'
-import ReportLink from './Report/ReportLink'
 
 export function FolderAside ({
   dispatch,

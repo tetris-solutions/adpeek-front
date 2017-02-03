@@ -278,6 +278,7 @@ module.exports = {
   sharedLevel: 'Shared',
   tooManyAccounts: 'You have selected {selected} accounts, the max is {max}',
   calculateKeywordsRelevance: 'Calculate relevance',
+  calculateAdsKPI: 'Calculate {kpi}',
   reportMailing: 'Mailing',
   newMailing: 'New Mailing',
   mailingRangeLabel: 'Report date range',

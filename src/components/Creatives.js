@@ -11,6 +11,7 @@ import LoadingHorizontal from './LoadingHorizontal'
 import SubHeader from './SubHeader'
 import Page from './Page'
 import {loadKeywordsRelevanceAction} from '../actions/load-keywords-relevance'
+import {loadAdsKPIAction} from '../actions/load-ads-kpi'
 import flatten from 'lodash/flatten'
 import map from 'lodash/map'
 import uniq from 'lodash/uniq'
@@ -26,6 +27,7 @@ export const Creatives = React.createClass({
   displayName: 'Creatives',
   propTypes: {
     dispatch: React.PropTypes.func,
+    kpi: React.PropTypes.string.isRequired,
     adGroups: React.PropTypes.array,
     getAdGroupsWithRelevance: React.PropTypes.func,
     platform: React.PropTypes.string,
@@ -36,6 +38,7 @@ export const Creatives = React.createClass({
   },
   getInitialState () {
     return {
+      calculatingKPI: false,
       calculatingRelevance: false,
       isLoading: this.isAdwords()
     }
@@ -104,6 +107,28 @@ export const Creatives = React.createClass({
 
     return promise
   },
+  loadAdsKPI () {
+    this.setState({calculatingKPI: true})
+
+    this.loadingAdGroups.then(this.bulkLoadAdsKPI)
+      .then(() => this.setState({calculatingKPI: false}))
+  },
+  bulkLoadAdsKPI () {
+    const {dispatch, params, adGroups} = this.props
+
+    const ads = uniq(flatten(map(adGroups, ({ads}) => map(ads, 'id'))))
+
+    const chunks = chunk(ads, 500)
+
+    let promise = Promise.resolve()
+
+    chunks.forEach(adsChunk => {
+      promise = promise.then(() =>
+        dispatch(loadAdsKPIAction, params, adsChunk))
+    })
+
+    return promise
+  },
   getStatusFilter () {
     return this.context.location.query.filter || 'enabled'
   },
@@ -124,8 +149,9 @@ export const Creatives = React.createClass({
     return props
   },
   render () {
-    const {creatingReport, isLoading, calculatingRelevance} = this.state
-    const {adGroups} = this.props
+    const {creatingReport, calculatingKPI, isLoading, calculatingRelevance} = this.state
+    const {adGroups, kpi} = this.props
+
     const inner = this.isAdwords()
       ? <AdGroups adGroups={adGroups}/>
       : <NotImplemented />
@@ -153,6 +179,12 @@ export const Creatives = React.createClass({
                 {calculatingRelevance
                   ? <Message>calculating</Message>
                   : <Message>calculateKeywordsRelevance</Message>}
+              </MenuItem>
+
+              <MenuItem disabled={calculatingKPI} onClick={this.loadAdsKPI} icon='insert_chart'>
+                {calculatingKPI
+                  ? <Message>calculating</Message>
+                  : <Message kpi={kpi}>calculateAdsKPI</Message>}
               </MenuItem>
 
               <MenuItem disabled={creatingReport || isLoading} onClick={this.extractReport} icon='file_download'>
