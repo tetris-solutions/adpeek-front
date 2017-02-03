@@ -44,10 +44,10 @@ const calculateRanges = ({today, yesterday, pastWeek, currentMonth, pastMonth, l
   },
   [last30Days]: {
     startDate (now) {
-      return now.subtract(30, 'days')
+      return now.subtract(31, 'days')
     },
     endDate (now) {
-      return now
+      return now.subtract(1, 'day')
     }
   }
 })

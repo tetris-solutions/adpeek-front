@@ -30,7 +30,7 @@ const ShareDialog = React.createClass({
   },
   load () {
     const {params, location, tree} = this.context
-    const to = location.query.to || moment().format('YYYY-MM-DD')
+    const to = location.query.to || moment().subtract(1, 'day').format('YYYY-MM-DD')
     const from = location.query.from || moment(to).subtract(30, 'days').format('YYYY-MM-DD')
 
     loadReportShareUrlAction(tree, params, this.props.id, {from, to})

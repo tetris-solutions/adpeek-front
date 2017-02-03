@@ -95,7 +95,7 @@ const ReportController = React.createClass({
     let {location: {query: {from, to}}} = this.context
     const {moment} = this.context
 
-    to = to || moment().format('YYYY-MM-DD')
+    to = to || moment().subtract(1, 'day').format('YYYY-MM-DD')
     from = from || moment(to).subtract(30, 'days').format('YYYY-MM-DD')
 
     return {from, to}
