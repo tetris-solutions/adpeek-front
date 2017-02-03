@@ -26,8 +26,13 @@ const style = csjs`
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.box a {
-  white-space: normal;
+.anchor {
+  white-space: nowrap;
+  height: 2em;
+  overflow: hidden;
+  display: block;
+  text-overflow: ellipsis;
+  line-height: 2em;
 }
 .box > h6 {
   margin: 0 0 .5em;
@@ -73,7 +78,7 @@ function AdGroupAd ({
           ? <h5>{headline}</h5>
           : <h6>{headline_part_1}<br/>{headline_part_2}</h6>}
 
-        <a href={`http://${display_url}`} target='_blank'>
+        <a className={`${style.anchor}`} title={display_url} href={`http://${display_url}`} target='_blank'>
           {display_url}
         </a>
 
@@ -84,20 +89,18 @@ function AdGroupAd ({
           : null}
       </div>
 
-      {map(final_urls,
-        (url, index) => (
-          <div className={`mdl-color--yellow-200 ${style.box}`} key={index}>
-            <strong>
-              <Message>finalUrl</Message>
-            </strong>
-            <br/>
-            <div className={`${style.finalUrl}`}>
-              <a href={url} target='_blank'>
-                {url}
-              </a>
-            </div>
+      {map(final_urls, (url, index) =>
+        <div className={`mdl-color--yellow-200 ${style.box}`} key={index}>
+          <strong>
+            <Message>finalUrl</Message>
+          </strong>
+          <br/>
+          <div className={`${style.finalUrl}`}>
+            <a className={`${style.anchor}`} href={url} title={url} target='_blank'>
+              {url}
+            </a>
           </div>
-        ))}
+        </div>)}
     </div>
   )
 }
