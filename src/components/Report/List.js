@@ -75,7 +75,7 @@ function Report (props, {moment}) {
           <em>{description}</em>
         </div>
 
-        <Icon {...props} className={`${style.icon}`}/>
+        <Icon {...props} className={`mdl-color-text--grey-600 ${style.icon}`}/>
       </BottomLine>
       <Fence canEditReport>{({canEditReport}) =>
         <Gear>

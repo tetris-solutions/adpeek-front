@@ -13,7 +13,7 @@ function Icon ({className, is_private, is_global}, {messages}) {
   }
 
   return (
-    <i className={`material-icons mdl-color-text--grey-600 ${className || ''}`} title={title}>
+    <i className={`material-icons ${className || ''}`} title={title}>
       {icon}
     </i>
   )
