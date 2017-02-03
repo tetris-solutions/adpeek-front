@@ -32,7 +32,7 @@ export function setAppRoutes (app, render) {
   const _ = bind.placeholder
   const campaignsWithAdsets = bind(campaigns, null, _, _, 'include-adsets')
 
-  const ensureLoad = (...args) => preload(statuses, companies, ...args)
+  const ensureLoad = (...args) => preload(statuses, medias, companies, ...args)
 
   app.get('/mailing/:mailing/unsubscribe/:email',
     preload(unsub),
@@ -151,7 +151,7 @@ export function setAppRoutes (app, render) {
 
   app.get('/company/:company/workspace/:workspace/create/folder',
     protect,
-    ensureLoad(medias, workspace, accounts),
+    ensureLoad(workspace, accounts),
     render)
 
   const subFolderActions = [workspace, folder, campaigns]
@@ -233,6 +233,6 @@ export function setAppRoutes (app, render) {
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/edit',
     protect,
-    ensureLoad(medias, workspace, accounts, folder),
+    ensureLoad(workspace, accounts, folder),
     render)
 }

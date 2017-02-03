@@ -50,17 +50,16 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
     company: {
       item: component.CompanyReport,
       list: component.ReportList,
-      action: preload(medias, savedAccounts)
+      action: preload(savedAccounts)
     },
     workspace: {
       item: component.WorkspaceReport,
-      list: component.ReportList,
-      action: preload(medias)
+      list: component.ReportList
     },
     folder: {
       item: component.FolderReport,
       list: component.ReportList,
-      action: preload(medias, campaigns)
+      action: preload(campaigns)
     }
   }
 
@@ -104,14 +103,14 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
           breadcrumb={[component.CompanyBreadcrumb, component.WorkspaceBreadcrumb, component.FolderBreadcrumb, component.ReportBreadcrumb]}
           {...render(component.ReportShare)}/>
 
-        <Route onEnter={preload(companies)} component={App}>
+        <Route onEnter={preload(medias, statuses, companies)} component={App}>
 
           <IndexRoute {...render(component.Companies)}/>
+
           <Route
             path='company/:company'
             component={node('user', 'company')}
             breadcrumb={component.CompanyBreadcrumb}
-            onEnter={preload(statuses)}
             aside={component.CompanyAside}>
 
             <IndexRoute {...render(component.CompanyWorkspaces)} onEnter={preload(workspaces)}/>
@@ -144,7 +143,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
               <Route path='edit' onEnter={preload(roles)} {...render(component.WorkspaceEdit)}/>
 
-              <Route path='create/folder' {...render(component.FolderCreate)} onEnter={preload(medias, accounts)}/>
+              <Route path='create/folder' {...render(component.FolderCreate)} onEnter={preload(accounts)}/>
 
               <Route path='folder/:folder'
                      component={node('workspace', 'folder')}
@@ -188,7 +187,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                   <Route path='create/order' {...render(component.Order)}/>
                 </Route>
 
-                <Route path='edit' onEnter={preload(medias, accounts)} {...render(component.FolderEdit)}/>
+                <Route path='edit' onEnter={preload(accounts)} {...render(component.FolderEdit)}/>
               </Route>
             </Route>
           </Route>
