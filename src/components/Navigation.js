@@ -1,4 +1,5 @@
 import React from 'react'
+import isString from 'lodash/isString'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
 import omit from 'lodash/omit'
@@ -102,7 +103,7 @@ export const Navigation = React.createClass({
   displayName: 'Navigation',
   mixins: [styled(style)],
   propTypes: {
-    icon: React.PropTypes.string,
+    icon: React.PropTypes.node,
     img: React.PropTypes.string,
     children: React.PropTypes.node
   },
@@ -112,11 +113,21 @@ export const Navigation = React.createClass({
   render () {
     const {icon, img, children} = this.props
 
+    let navIcon = null
+
+    if (img) {
+      navIcon = <img className={`${style.img}`} src={img}/>
+    } else if (isString(icon)) {
+      navIcon = <i className={`material-icons ${style.icon}`}>{icon}</i>
+    } else if (React.isValidElement(icon)) {
+      navIcon = React.cloneElement(icon, {
+        className: '' + style.icon
+      })
+    }
+
     return (
       <div className={`${style.wrapper}`}>
-        {img
-          ? <img className={`${style.img}`} src={img}/>
-          : <i className={`material-icons ${style.icon}`}>{icon}</i>}
+        {navIcon}
         {children}
       </div>
     )

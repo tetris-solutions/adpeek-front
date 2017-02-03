@@ -1,9 +1,10 @@
 import React from 'react'
 import {contextualize} from '../higher-order/contextualize'
 import {Navigation, Name} from '../Navigation'
+import Icon from './Icon'
 
 const AsideLite = ({report}) => (
-  <Navigation icon='trending_up'>
+  <Navigation icon={<Icon {...report}/>}>
     <Name>{report.name}</Name>
 
     {report.description &&

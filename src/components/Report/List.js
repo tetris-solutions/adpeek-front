@@ -23,6 +23,7 @@ import {DeleteSpan} from '../DeleteButton'
 import {deleteReportAction} from '../../actions/delete-report'
 import ShareButton from './ShareButton'
 import csjs from 'csjs'
+import Icon from './Icon'
 
 const style = csjs`
 .descr {
@@ -52,23 +53,8 @@ const style = csjs`
 
 const cleanStr = str => trim(deburr(lowerCase(str)))
 
-const I = ({icon, title}) => (
-  <i className={`material-icons mdl-color-text--grey-600 ${style.icon}`} title={title}>{icon}</i>
-)
-
-I.propTypes = {
-  icon: React.PropTypes.string.isRequired,
-  title: React.PropTypes.string.isRequired
-}
-
-function Report ({dispatch, params, shareUrl, path, id, name, author, last_update, is_private, is_global, description}, {messages, moment}) {
-  let icon = <I icon='people' title={messages.companyReportTooltip}/>
-
-  if (is_private) {
-    icon = <I icon='lock' title={messages.privateReportTooltip}/>
-  } else if (is_global) {
-    icon = <I icon='public' title={messages.globalReportTooltip}/>
-  }
+function Report (props, {moment}) {
+  const {dispatch, params, shareUrl, path, id, name, author, last_update, description} = props
 
   return (
     <ThumbLink to={`${path}/report/${id}`} title={name}>
@@ -88,7 +74,8 @@ function Report ({dispatch, params, shareUrl, path, id, name, author, last_updat
         <div className={`mdl-color-text--grey-700 ${style.descr}`}>
           <em>{description}</em>
         </div>
-        {icon}
+
+        <Icon {...props} className={`${style.icon}`}/>
       </BottomLine>
       <Fence canEditReport>{({canEditReport}) =>
         <Gear>

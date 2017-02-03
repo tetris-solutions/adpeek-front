@@ -15,6 +15,7 @@ import compact from 'lodash/compact'
 import join from 'lodash/join'
 import replace from 'lodash/replace'
 import ModulesIndex from './ModulesIndex'
+import Icon from './Icon'
 
 const createModule = () => window.event$.emit('report.onNewModuleClick')
 const withLineBreaks = str => replace(str, /\n/g, '<br/>')
@@ -89,7 +90,7 @@ export function ReportAside ({report, user, dispatch}, {messages, locales, route
     }
 
     return (
-      <Navigation icon='trending_up'>
+      <Navigation icon={<Icon {...report}/>}>
         <ReportHeader {...{dispatch, params, report, inEditMode}}/>
 
         <NavBts>
