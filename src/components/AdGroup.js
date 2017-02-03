@@ -21,13 +21,14 @@ export const AdGroup = React.createClass({
   displayName: 'AdGroup',
   mixins: [styled(style)],
   propTypes: {
+    folder: React.PropTypes.object,
     status: React.PropTypes.string,
     name: React.PropTypes.string,
     ads: React.PropTypes.array,
     keywords: React.PropTypes.array
   },
   render () {
-    const {name, status, ads, keywords} = this.props
+    const {name, status, ads, keywords, folder} = this.props
     const criterions = groupBy(keywords, 'criterion_use')
     let color, textColor
 
@@ -53,7 +54,7 @@ export const AdGroup = React.createClass({
           {name}
         </header>
         <div>
-          {map(ads, ad => <AdGroupAd key={ad.id} {...ad}/>)}
+          {map(ads, ad => <AdGroupAd key={ad.id} {...ad} folder={folder}/>)}
         </div>
 
         {criterions.BIDDABLE

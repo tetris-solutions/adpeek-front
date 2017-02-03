@@ -27,7 +27,7 @@ export const Creatives = React.createClass({
   displayName: 'Creatives',
   propTypes: {
     dispatch: React.PropTypes.func,
-    kpi: React.PropTypes.string.isRequired,
+    folder: React.PropTypes.object.isRequired,
     adGroups: React.PropTypes.array,
     getAdGroupsWithRelevance: React.PropTypes.func,
     platform: React.PropTypes.string,
@@ -114,7 +114,7 @@ export const Creatives = React.createClass({
       .then(() => this.setState({calculatingKPI: false}))
   },
   bulkLoadAdsKPI () {
-    const {dispatch, params, adGroups} = this.props
+    const {dispatch, params, adGroups, folder} = this.props
 
     const ads = uniq(flatten(map(adGroups, ({ads}) => map(ads, 'id'))))
 
@@ -124,7 +124,7 @@ export const Creatives = React.createClass({
 
     chunks.forEach(adsChunk => {
       promise = promise.then(() =>
-        dispatch(loadAdsKPIAction, params, adsChunk))
+        dispatch(loadAdsKPIAction, params, adsChunk, folder.kpi_metric.id))
     })
 
     return promise
@@ -150,10 +150,10 @@ export const Creatives = React.createClass({
   },
   render () {
     const {creatingReport, calculatingKPI, isLoading, calculatingRelevance} = this.state
-    const {adGroups, kpi} = this.props
+    const {adGroups, folder} = this.props
 
     const inner = this.isAdwords()
-      ? <AdGroups adGroups={adGroups}/>
+      ? <AdGroups folder={folder} adGroups={adGroups}/>
       : <NotImplemented />
 
     return (
@@ -184,7 +184,7 @@ export const Creatives = React.createClass({
               <MenuItem disabled={calculatingKPI} onClick={this.loadAdsKPI} icon='insert_chart'>
                 {calculatingKPI
                   ? <Message>calculating</Message>
-                  : <Message kpi={kpi}>calculateAdsKPI</Message>}
+                  : <Message kpi={folder.kpi_name}>calculateAdsKPI</Message>}
               </MenuItem>
 
               <MenuItem disabled={creatingReport || isLoading} onClick={this.extractReport} icon='file_download'>

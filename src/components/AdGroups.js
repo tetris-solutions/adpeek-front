@@ -34,7 +34,8 @@ export const AdGroups = React.createClass({
   displayName: 'AdGroups',
   mixins: [styled(style)],
   propTypes: {
-    adGroups: React.PropTypes.array
+    adGroups: React.PropTypes.array,
+    folder: React.PropTypes.object
   },
   getDefaultProps () {
     return {
@@ -45,7 +46,7 @@ export const AdGroups = React.createClass({
     fitWrapper(this.refs.wrapper)
   },
   render () {
-    const {adGroups} = this.props
+    const {adGroups, folder} = this.props
     const gridStyle = {}
 
     if (isBrowser) {
@@ -59,7 +60,7 @@ export const AdGroups = React.createClass({
             <div className={`${style.grid}`} ref='grid' style={gridStyle}>
               {map(adGroups, ({id}) => (
                 <div key={id} className={`${style.column}`}>
-                  <AdGroup params={{adGroup: id}}/>
+                  <AdGroup folder={folder} params={{adGroup: id}}/>
                 </div>
               ))}
             </div>

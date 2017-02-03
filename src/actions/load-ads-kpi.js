@@ -27,17 +27,8 @@ function findAdPaths (adGroups, adId) {
   return paths
 }
 
-export function loadAdsKPIAction (tree, {company, workspace, folder, campaign}, ads) {
-  const folderKPI = tree.get(getDeepCursor(tree, compact([
-    'user',
-    ['companies', company],
-    ['workspaces', workspace],
-    ['folders', folder],
-    'kpi_metric',
-    'id'
-  ])))
-
-  return loadAdsKPI(folder, ads, folderKPI, getApiFetchConfig(tree))
+export function loadAdsKPIAction (tree, {company, workspace, folder, campaign}, ads, metric) {
+  return loadAdsKPI(folder, ads, metric, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .then(function onSuccess (response) {
       const result = response.data
