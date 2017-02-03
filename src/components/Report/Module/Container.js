@@ -35,7 +35,7 @@ const ModuleContainer = React.createClass({
   },
   getInitialState () {
     return {
-      activeOnly: true
+      activeOnly: false
     }
   },
   getChildContext () {
