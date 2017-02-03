@@ -83,26 +83,26 @@ export const Creatives = React.createClass({
   loadKeywordsRelevance () {
     this.setState({calculatingRelevance: true})
 
-    this.loadingAdGroups
-      .then(() => {
-        const {dispatch, params, adGroups} = this.props
-
-        const keywordList =
-          uniq(flatten(map(adGroups,
-            ({keywords}) => map(keywords, 'id'))))
-
-        const chunks = chunk(keywordList, 500)
-
-        let promise = Promise.resolve()
-
-        chunks.forEach(keywords => {
-          promise = promise.then(() =>
-            dispatch(loadKeywordsRelevanceAction, params, keywords))
-        })
-
-        return promise
-      })
+    this.loadingAdGroups.then(this.bulkLoadRelevance)
       .then(() => this.setState({calculatingRelevance: false}))
+  },
+  bulkLoadRelevance () {
+    const {dispatch, params, adGroups} = this.props
+
+    const keywordList =
+      uniq(flatten(map(adGroups,
+        ({keywords}) => map(keywords, 'id'))))
+
+    const chunks = chunk(keywordList, 500)
+
+    let promise = Promise.resolve()
+
+    chunks.forEach(keywords => {
+      promise = promise.then(() =>
+        dispatch(loadKeywordsRelevanceAction, params, keywords))
+    })
+
+    return promise
   },
   getStatusFilter () {
     return this.context.location.query.filter || 'enabled'
