@@ -124,7 +124,7 @@ export const Creatives = React.createClass({
 
     chunks.forEach(adsChunk => {
       promise = promise.then(() =>
-        dispatch(loadAdsKPIAction, params, adsChunk, folder.kpi_metric.id))
+        dispatch(loadAdsKPIAction, params, adsChunk, folder))
     })
 
     return promise
@@ -153,7 +153,7 @@ export const Creatives = React.createClass({
     const {adGroups, folder} = this.props
 
     const inner = this.isAdwords()
-      ? <AdGroups folder={folder} adGroups={adGroups}/>
+      ? <AdGroups adGroups={adGroups}/>
       : <NotImplemented />
 
     return (

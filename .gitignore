@@ -4,6 +4,6 @@ node_modules
 *.log
 .nyc_output
 /public/js/*client.*
-.env
+*.env
 .vscode
 bundle-stats.json
