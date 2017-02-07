@@ -155,7 +155,7 @@ const Header = React.createClass({
   loginRoundTrip () {
     this.props.dispatch(logoutAction)
 
-    window.location.href = process.env.FRONT_URL + '/login?next=' + window.location.href
+    window.location.href = process.env.FRONT_URL + '/login?next=' + encodeURIComponent(window.location.href)
   },
   render () {
     const {user, company, hideLogin} = this.props
