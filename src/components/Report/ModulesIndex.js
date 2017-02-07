@@ -6,6 +6,17 @@ import {DropdownMenu, MenuItem} from '../DropdownMenu'
 import map from 'lodash/map'
 import scrollTo from 'scrollto-with-animation'
 import sortBy from 'lodash/sortBy'
+import {styledFnComponent} from '../higher-order/styled-fn-component'
+import csjs from 'csjs'
+
+const style = csjs`
+.item {
+  display: block;
+  max-width: 15em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}`
 
 /**
  *
@@ -28,7 +39,9 @@ const scrollToModule = id => () => {
 let Modules = ({modules}) =>
   <DropdownMenu>{map(sortBy(modules, 'y'), ({id, name}) =>
     <MenuItem onClick={scrollToModule(id)} key={id}>
-      {name}
+      <span title={name} className={`${style.item}`}>
+        {name}
+      </span>
     </MenuItem>)}
   </DropdownMenu>
 
@@ -47,4 +60,4 @@ const ModulesIndex = props => (
 
 ModulesIndex.displayName = 'Modules-Index'
 
-export default ModulesIndex
+export default styledFnComponent(ModulesIndex, style)
