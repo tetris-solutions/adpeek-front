@@ -2,14 +2,17 @@ pipeline {
     agent any
 
     stages {
+        stage('Checkout') {
+          yarn
+        }
         stage('Build') {
             steps {
-                echo 'Building..'
+                sh 'npm run bundle'
             }
         }
-        stage('Test'){
+        stage('Test') {
             steps {
-                echo 'Testing..'
+                echo 'Testing... jk'
             }
         }
         stage('Deploy') {
