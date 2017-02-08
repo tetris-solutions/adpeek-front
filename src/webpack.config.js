@@ -26,6 +26,6 @@ const commons = new webpack.optimize.CommonsChunkPlugin({
   }
 })
 
-module.exports = !process.env.BUILD_PROD
+module.exports = process.env.DEV_SERVER
   ? require('./webpack.config.dev')({entry, commons, ignore, envs})
   : require('./webpack.config.prod')({entry, commons, ignore, envs})

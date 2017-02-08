@@ -29,7 +29,7 @@ const gTMIFrame = process.env.NODE_ENV === 'production'
   )
   : null
 
-const revSuffix = process.env.BUILD_PROD ? `.${revision.short()}` : ''
+const revisionSuffix = process.env.DEV_SERVER ? '' : `.${revision.short()}`
 const hardCodedStyle = `
 .react-resizable-handle {
   z-index: 3;
@@ -67,7 +67,7 @@ const HTML = ({payload, children, css}) => (
       <script
         id='state-injection'
         dangerouslySetInnerHTML={{__html: `var backendPayload = ${JSON.stringify(payload)}`}}/>
-      <script src={`/js/client${revSuffix}.js`} defer/>
+      <script src={`/js/client${revisionSuffix}.js`} defer/>
     </head>
     <body>
       <div id='app' dangerouslySetInnerHTML={{__html: children}}/>
