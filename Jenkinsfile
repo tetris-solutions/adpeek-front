@@ -16,7 +16,7 @@ pipeline {
           }
         }
 
-        sh 'chmod 640 .env'
+        sh 'chmod 644 .env'
       }
     }
     stage('Build') {
@@ -43,6 +43,8 @@ pipeline {
         echo 'Deploying....'
         sh "mkdir -p ${env.target_dir}/${env.BUILD_NUMBER}"
         sh "tar -zxf build.${env.BUILD_NUMBER}.tar.gz -C ${env.target_dir}/${env.BUILD_NUMBER}"
+        sh 'pm2 delete manager || true'
+        sh "pm2 start ${env.target_dir}/${env.BUILD_NUMBER}/bin/cmd.js --name=manager"
         sh "ln -fs ${env.target_dir}/${env.BUILD_NUMBER}/public ${env.target_dir}/assets"
       }
     }
