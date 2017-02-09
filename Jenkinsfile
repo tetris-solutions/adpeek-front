@@ -3,6 +3,7 @@ pipeline {
   environment {
     production_env = credentials('production.env')
     homolog_env = credentials('homolog.env')
+    target_dir = "/var/www/manager-client"
   }
   stages {
     stage('Provision') {
@@ -40,20 +41,21 @@ pipeline {
     stage('Deploy') {
       steps {
         echo 'Deploying....'
-        sh "mkdir -p /var/www/manager-client/${env.BUILD_NUMBER}"
-        sh "tar -zxf build.${env.BUILD_NUMBER}.tar.gz -C /var/www/manager-client/${env.BUILD_NUMBER}"
+        sh "mkdir -p ${env.target_dir}/${env.BUILD_NUMBER}"
+        sh "tar -zxf build.${env.BUILD_NUMBER}.tar.gz -C ${env.target_dir}/${env.BUILD_NUMBER}"
+        sh "ln -fs ${env.target_dir}/${env.BUILD_NUMBER}/public ${env.target_dir}/assets"
       }
     }
   }
   post {
     failure {
       slackSend channel: '#general',
-        color: 'red',
+        color: 'RED',
         message: "Pipeline ${currentBuild.fullDisplayName} @ ${env.TETRIS_ENV} failed to build; check 'em ${env.BUILD_URL}"
     }
     success {
       slackSend channel: '#general',
-        color: 'green',
+        color: 'good',
         message: "Finished building ${currentBuild.fullDisplayName} @ ${env.TETRIS_ENV}; check 'em ${env.BUILD_URL}"
     }
     always {
