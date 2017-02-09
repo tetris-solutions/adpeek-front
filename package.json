@@ -9,7 +9,7 @@
     "node": ">=4.0.0"
   },
   "scripts": {
-    "compile": "rimraf lib && babel src -d lib",
+    "compile": "rimraf lib && babel --quiet src -d lib",
     "bundle": "webpack --config src/webpack.config.js --optimize-minimize",
     "analyze": "webpack --config src/webpack.config.js --optimize-minimize --profile --json > bundle-stats.json",
     "start": "bin/cmd.js",
