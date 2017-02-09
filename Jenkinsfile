@@ -14,6 +14,8 @@ pipeline {
             sh "cp ${env.production_env} .env"
           }
         }
+
+        sh 'chmod 600 .env'
       }
     }
     stage('Checkout') {
