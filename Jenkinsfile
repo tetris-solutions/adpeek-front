@@ -15,7 +15,7 @@ pipeline {
           }
         }
 
-        sh 'chmod 600 .env'
+        sh 'chmod 640 .env'
       }
     }
     stage('Build') {
