@@ -33,7 +33,7 @@ pipeline {
       steps {
         sh 'rm -rf node_modules'
         sh 'yarn install --production'
-        sh 'tar -zcvf build.tar.gz .env package.json bin lib public node_modules'
+        sh 'tar -zcf build.tar.gz .env package.json bin lib public node_modules'
       }
     }
     stage('Deploy') {
