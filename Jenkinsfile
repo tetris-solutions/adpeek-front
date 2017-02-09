@@ -5,7 +5,7 @@ pipeline {
     homolog_env = credentials('homolog.env')
   }
   stages {
-    stage('Provisioning') {
+    stage('Provision') {
       steps {
         script {
           if (env.TETRIS_ENV == 'homolog') {
@@ -18,14 +18,9 @@ pipeline {
         sh 'chmod 600 .env'
       }
     }
-    stage('Checkout') {
+    stage('Build') {
       steps {
         sh 'yarn'
-      }
-    }
-    stage('Build') {
-      when { environment name: 'TETRIS_ENV', value: 'homolog' }
-      steps {
         sh 'npm run bundle'
       }
     }
