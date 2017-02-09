@@ -45,4 +45,20 @@ pipeline {
       }
     }
   }
+  post {
+    failure {
+      slackSend channel: '#general',
+        color: 'RED',
+        message: "Pipeline ${currentBuild.fullDisplayName} @ ${env.TETRIS_ENV} failed to build."
+    }
+    success {
+      slackSend channel: '#general',
+        color: 'good',
+        message: "Finished building ${currentBuild.fullDisplayName} @ ${env.TETRIS_ENV}."
+    }
+    always {
+      echo 'The End'
+      deleteDir()
+    }
+  }
 }
