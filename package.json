@@ -64,7 +64,7 @@
     "scrollto-with-animation": "^4.3.3",
     "shallowequal": "^0.2.2",
     "stable": "^0.1.5",
-    "tetris-iso": "^0.5.8",
+    "tetris-iso": "^0.5.9",
     "winston": "^2.2.0",
     "winston-logstash": "^0.2.11"
   },

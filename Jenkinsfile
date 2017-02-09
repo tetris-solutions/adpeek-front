@@ -49,12 +49,12 @@ pipeline {
     failure {
       slackSend channel: '#general',
         color: 'RED',
-        message: "Pipeline ${currentBuild.fullDisplayName} @ ${env.TETRIS_ENV} failed to build."
+        message: "Pipeline ${currentBuild.fullDisplayName} @ ${env.TETRIS_ENV} failed to build; check 'em ${env.BUILD_URL}"
     }
     success {
       slackSend channel: '#general',
         color: 'good',
-        message: "Finished building ${currentBuild.fullDisplayName} @ ${env.TETRIS_ENV}."
+        message: "Finished building ${currentBuild.fullDisplayName} @ ${env.TETRIS_ENV}; check 'em ${env.BUILD_URL}"
     }
     always {
       echo 'The End'
