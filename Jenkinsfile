@@ -5,16 +5,15 @@ pipeline {
     homolog_env = credentials('homolog.env')
   }
   stages {
-    stage('Provisioning HOMOLOG') {
-      when { environment name: 'TETRIS_ENV', value: 'homolog' }
+    stage('Provisioning') {
       steps {
-        sh "cp ${env.homolog_env} .env"
-      }
-    }
-    stage('Provisioning PRODUCTION') {
-      when { environment name: 'TETRIS_ENV', value: 'production' }
-      steps {
-        sh "cp ${env.production_env} .env"
+        script {
+          if (env.TETRIS_ENV == 'homolog') {
+            sh "cp ${env.homolog_env} .env"
+          } else {
+            sh "cp ${env.production_env} .env"
+          }
+        }
       }
     }
     stage('Checkout') {
@@ -26,12 +25,18 @@ pipeline {
       when { environment name: 'TETRIS_ENV', value: 'homolog' }
       steps {
         sh 'npm run bundle'
-        sh 'tar -zcvf build.tar.gz lib public/js/*client*'
       }
     }
     stage('Test') {
       steps {
         echo 'Testing... jk'
+      }
+    }
+    stage ('Archive') {
+      steps {
+        sh 'rm -rf node_modules'
+        sh 'yarn install --production'
+        sh 'tar -zcvf build.tar.gz .env package.json bin lib public node_modules'
       }
     }
     stage('Deploy') {
