@@ -10,7 +10,7 @@
   },
   "scripts": {
     "compile": "rimraf lib && babel src -d lib",
-    "bundle": "webpack --config src/webpack.config.js --optimize-minimize --progress",
+    "bundle": "webpack --config src/webpack.config.js --optimize-minimize",
     "analyze": "webpack --config src/webpack.config.js --optimize-minimize --profile --json > bundle-stats.json",
     "start": "bin/cmd.js",
     "start:dev": "DEV_SERVER=true nodemon src/main.js",
