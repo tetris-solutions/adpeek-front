@@ -8,7 +8,7 @@ pipeline {
       }
     }
     stage('Build') {
-      when { return env.TETRIS_ENV == 'homolog' }
+      when { environment name: 'TETRIS_ENV', value: 'homolog' }
       steps {
         sh 'npm run bundle'
         sh 'tar -zcvf build.tar.gz lib public/js/*client*'
