@@ -34,11 +34,14 @@ pipeline {
         sh 'rm -rf node_modules'
         sh 'yarn install --production'
         sh 'tar -zcf build.tar.gz .env package.json bin lib public node_modules'
+        archive 'build.tar.gz'
       }
     }
     stage('Deploy') {
       steps {
         echo 'Deploying....'
+        sh "mkdir -p /var/www/manager-client/${env.BUILD_TIMESTAMP}"
+        sh "tar -zxf build.tar.gz -C /var/www/manager-client/${env.BUILD_TIMESTAMP}"
       }
     }
   }
