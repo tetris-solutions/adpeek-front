@@ -2,7 +2,7 @@
 
 const webpack = require('webpack')
 const path = require('path')
-const revision = require('git-rev-sync')
+const pkg = require('../package.json')
 
 module.exports = function (config) {
   return {
@@ -11,7 +11,7 @@ module.exports = function (config) {
     entry: config.entry,
     output: {
       path: path.resolve(__dirname, '..', 'public', 'js'),
-      filename: 'client.' + revision.short() + '.js',
+      filename: 'client.' + pkg.version + '.js',
       publicPath: '/js/'
     },
     plugins: [

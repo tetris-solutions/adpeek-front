@@ -1,6 +1,5 @@
 import React from 'react'
 import Helmet from 'react-helmet'
-import revision from 'git-rev-sync'
 
 const gTMSrc = `(function (w, d, s, l, i) {
   w[l] = w[l] || [];
@@ -29,7 +28,7 @@ const gTMIFrame = process.env.NODE_ENV === 'production'
   )
   : null
 
-const revisionSuffix = process.env.DEV_SERVER ? '' : `.${revision.short()}`
+const revisionSuffix = process.env.DEV_SERVER ? '' : `.${require('../../package.json').version}`
 const hardCodedStyle = `
 .react-resizable-handle {
   z-index: 3;

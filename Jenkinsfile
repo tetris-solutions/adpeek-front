@@ -33,27 +33,27 @@ pipeline {
       steps {
         sh 'rm -rf node_modules'
         sh 'yarn install --production'
-        sh 'tar -zcf build.tar.gz .env package.json bin lib public node_modules'
-        archive 'build.tar.gz'
+        sh "tar -zcf build.${env.BUILD_NUMBER}.tar.gz .env package.json bin lib public node_modules"
+        archive "build.${env.BUILD_NUMBER}.tar.gz"
       }
     }
     stage('Deploy') {
       steps {
         echo 'Deploying....'
-        sh "mkdir -p /var/www/manager-client/${env.BUILD_TIMESTAMP}"
-        sh "tar -zxf build.tar.gz -C /var/www/manager-client/${env.BUILD_TIMESTAMP}"
+        sh "mkdir -p /var/www/manager-client/${env.BUILD_NUMBER}"
+        sh "tar -zxf build.${env.BUILD_NUMBER}.tar.gz -C /var/www/manager-client/${env.BUILD_NUMBER}"
       }
     }
   }
   post {
     failure {
       slackSend channel: '#general',
-        color: 'RED',
+        color: 'red',
         message: "Pipeline ${currentBuild.fullDisplayName} @ ${env.TETRIS_ENV} failed to build; check 'em ${env.BUILD_URL}"
     }
     success {
       slackSend channel: '#general',
-        color: 'good',
+        color: 'green',
         message: "Finished building ${currentBuild.fullDisplayName} @ ${env.TETRIS_ENV}; check 'em ${env.BUILD_URL}"
     }
     always {
