@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-    production_env = credentials('prod.env')
+    production_env = credentials('production.env')
     homolog_env = credentials('homolog.env')
   }
   stages {
