@@ -45,7 +45,9 @@ pipeline {
       steps {
         sh "mkdir -p ${env.htdocs}/${env.BUILD_NUMBER}"
         sh "tar -zxf build.${env.BUILD_NUMBER}.tar.gz -C ${env.htdocs}/${env.BUILD_NUMBER}"
-        sh "pm2 delete manager && pm2 start ${env.htdocs}/${env.BUILD_NUMBER}/bin/cmd.js --name=manager"
+        sh "psy rm manager"
+        sh "psy start -n manager -- ${env.htdocs}/${env.BUILD_NUMBER}/bin/cmd.js"
+        sh "psy ls"
         sh "rm ${env.htdocs}/assets && ln -s ${env.htdocs}/${env.BUILD_NUMBER}/public ${env.htdocs}/assets"
       }
     }
