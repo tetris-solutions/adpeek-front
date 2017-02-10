@@ -48,7 +48,7 @@ pipeline {
         sh "psy rm manager"
         sh "psy start -n manager -- ${env.htdocs}/${env.BUILD_NUMBER}/bin/cmd.js"
         sh "psy ls"
-        sh "rm ${env.htdocs}/assets"
+        sh "rm -f ${env.htdocs}/assets"
         sh "ln -s ${env.htdocs}/${env.BUILD_NUMBER}/public ${env.htdocs}/assets"
       }
     }
