@@ -3,7 +3,6 @@ pipeline {
   environment {
     production_env = credentials('production.env')
     homolog_env = credentials('homolog.env')
-    target_dir = "/var/www/manager-client"
   }
   stages {
     stage('Provision') {
@@ -38,13 +37,16 @@ pipeline {
         archive "build.${env.BUILD_NUMBER}.tar.gz"
       }
     }
-    stage('Deploy') {
+    stage('Deploy HOMOLOG') {
+      when { environment name: 'DEPLOY_TO', value: 'homolog' }
+      environment {
+        htdocs = "/var/www/manager-client"
+      }
       steps {
-        sh "mkdir -p ${env.target_dir}/${env.BUILD_NUMBER}"
-        sh "tar -zxf build.${env.BUILD_NUMBER}.tar.gz -C ${env.target_dir}/${env.BUILD_NUMBER}"
-        sh 'pm2 delete manager || true'
-        sh "pm2 start ${env.target_dir}/${env.BUILD_NUMBER}/bin/cmd.js --name=manager"
-        sh "ln -fs ${env.target_dir}/${env.BUILD_NUMBER}/public ${env.target_dir}/assets"
+        sh "mkdir -p ${env.htdocs}/${env.BUILD_NUMBER}"
+        sh "tar -zxf build.${env.BUILD_NUMBER}.tar.gz -C ${env.htdocs}/${env.BUILD_NUMBER}"
+        sh "pm2 delete manager && pm2 start ${env.htdocs}/${env.BUILD_NUMBER}/bin/cmd.js --name=manager"
+        sh "rm ${env.htdocs}/assets && ln -s ${env.htdocs}/${env.BUILD_NUMBER}/public ${env.htdocs}/assets"
       }
     }
   }
