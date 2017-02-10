@@ -37,7 +37,7 @@ export function prettyNumber (value, type = 'decimal', locale = 'en-US') {
   /**
    * @type {String}
    */
-  const formatted = Intl.NumberFormat(locale, options).format(value)
+  const formatted = new Intl.NumberFormat(locale, options).format(value)
 
   return formatted
     .replace('$', '$ ')
