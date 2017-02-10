@@ -55,12 +55,12 @@ pipeline {
   }
   post {
     failure {
-      slackSend channel: '#general',
+      slackSend channel: '#ops',
         color: 'RED',
         message: "Oops! ${currentBuild.fullDisplayName} failed to build for ${env.TETRIS_ENV}: ${env.BUILD_URL}"
     }
     success {
-      slackSend channel: '#general',
+      slackSend channel: '#ops',
         color: 'good',
         message: "THIS JUST IN... ${currentBuild.fullDisplayName} built for ${env.TETRIS_ENV}, deployed to ${env.DEPLOY_TO}: ${env.BUILD_URL}"
     }
