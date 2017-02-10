@@ -48,7 +48,8 @@ pipeline {
         sh "psy rm manager"
         sh "psy start -n manager -- ${env.htdocs}/${env.BUILD_NUMBER}/bin/cmd.js"
         sh "psy ls"
-        sh "rm ${env.htdocs}/assets && ln -s ${env.htdocs}/${env.BUILD_NUMBER}/public ${env.htdocs}/assets"
+        sh "rm ${env.htdocs}/assets"
+        sh "ln -s ${env.htdocs}/${env.BUILD_NUMBER}/public ${env.htdocs}/assets"
       }
     }
   }
@@ -56,12 +57,12 @@ pipeline {
     failure {
       slackSend channel: '#general',
         color: 'RED',
-        message: "Pipeline ${currentBuild.fullDisplayName} @ ${env.TETRIS_ENV} failed to build; check 'em ${env.BUILD_URL}"
+        message: "Oops! ${currentBuild.fullDisplayName} failed to build for ${env.TETRIS_ENV}: ${env.BUILD_URL}"
     }
     success {
       slackSend channel: '#general',
         color: 'good',
-        message: "Finished building ${currentBuild.fullDisplayName} @ ${env.TETRIS_ENV}; check 'em ${env.BUILD_URL}"
+        message: "THIS JUST IN... ${currentBuild.fullDisplayName} built for ${env.TETRIS_ENV}, deployed to ${env.DEPLOY_TO}: ${env.BUILD_URL}"
     }
     always {
       echo 'The End'
