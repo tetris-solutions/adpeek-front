@@ -40,7 +40,6 @@ pipeline {
     }
     stage('Deploy') {
       steps {
-        echo 'Deploying....'
         sh "mkdir -p ${env.target_dir}/${env.BUILD_NUMBER}"
         sh "tar -zxf build.${env.BUILD_NUMBER}.tar.gz -C ${env.target_dir}/${env.BUILD_NUMBER}"
         sh 'pm2 delete manager || true'
