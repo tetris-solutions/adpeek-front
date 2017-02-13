@@ -15,7 +15,7 @@ const config = {
   defaultState,
   publicPath: path.resolve(__dirname, '..', 'public'),
   messagesFile: path.resolve(__dirname, 'messages', 'index.js'),
-  port: 3001,
+  port: 3003,
   setAppRoutes,
   getRoutes,
   HTML: HTML
