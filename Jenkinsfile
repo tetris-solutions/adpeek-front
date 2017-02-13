@@ -53,21 +53,21 @@ pipeline {
         sh "ln -s ${env.htdocs}/${env.BUILD_NUMBER}/public ${env.htdocs}/assets"
       }
     }
-  }
-  stage('Deploy PROD') {
-    when { environment name: 'DEPLOY_TO', value: 'production' }
-    environment {
-      htdocs = "/var/www/manager-client"
-    }
-    steps {
-      sh "mkdir -p ${env.htdocs}/${env.BUILD_NUMBER}"
-      sh "scp -i ${env.ssh_key} build.${env.BUILD_NUMBER}.tar.gz ubuntu@tetris.co:."
-      //sh "tar -zxf build.${env.BUILD_NUMBER}.tar.gz -C ${env.htdocs}/${env.BUILD_NUMBER}"
-      //sh "psy rm manager"
-      //sh "psy start -n manager -- ${env.htdocs}/${env.BUILD_NUMBER}/bin/cmd.js"
-      //sh "psy ls"
-      //sh "rm -f ${env.htdocs}/assets"
-      //sh "ln -s ${env.htdocs}/${env.BUILD_NUMBER}/public ${env.htdocs}/assets"
+    stage('Deploy PROD') {
+      when { environment name: 'DEPLOY_TO', value: 'production' }
+      environment {
+        htdocs = "/var/www/manager-client"
+      }
+      steps {
+        sh "mkdir -p ${env.htdocs}/${env.BUILD_NUMBER}"
+        sh "scp -i ${env.ssh_key} build.${env.BUILD_NUMBER}.tar.gz ubuntu@tetris.co:."
+        //sh "tar -zxf build.${env.BUILD_NUMBER}.tar.gz -C ${env.htdocs}/${env.BUILD_NUMBER}"
+        //sh "psy rm manager"
+        //sh "psy start -n manager -- ${env.htdocs}/${env.BUILD_NUMBER}/bin/cmd.js"
+        //sh "psy ls"
+        //sh "rm -f ${env.htdocs}/assets"
+        //sh "ln -s ${env.htdocs}/${env.BUILD_NUMBER}/public ${env.htdocs}/assets"
+      }
     }
   }
   post {
