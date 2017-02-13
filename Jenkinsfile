@@ -70,7 +70,6 @@ pipeline {
       //sh "ln -s ${env.htdocs}/${env.BUILD_NUMBER}/public ${env.htdocs}/assets"
     }
   }
-  }
   post {
     failure {
       slackSend channel: '#ops',
