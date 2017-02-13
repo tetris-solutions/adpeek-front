@@ -39,30 +39,18 @@ pipeline {
         archive "build.${env.BUILD_NUMBER}.tar.gz"
       }
     }
-    stage('Deploy HOMOLOG') {
-      when { environment name: 'DEPLOY_TO', value: 'homolog' }
-      steps {
-        sh "mkdir -p ${env.htdocs}/${env.BUILD_NUMBER}"
-        sh "tar -zxf build.${env.BUILD_NUMBER}.tar.gz -C ${env.htdocs}/${env.BUILD_NUMBER}"
-        sh "psy rm manager"
-        sh "psy start -n manager -- ${env.htdocs}/${env.BUILD_NUMBER}/bin/cmd.js"
-        sh "psy ls"
-        sh "rm -f ${env.htdocs}/assets"
-        sh "ln -s ${env.htdocs}/${env.BUILD_NUMBER}/public ${env.htdocs}/assets"
-      }
-    }
-    stage('Deploy PROD') {
-      when { environment name: 'DEPLOY_TO', value: 'production' }
+    stage('Deploy') {
       steps {
         sh "cp ${env.ssh_key} tetris.pem"
         sh "chmod 600 tetris.pem"
-        sh "scp -i tetris.pem -o StrictHostKeyChecking=no build.${env.BUILD_NUMBER}.tar.gz ubuntu@tetris.co:."
-        sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@tetris.co 'mkdir -p ${env.htdocs}/${env.BUILD_NUMBER}'"
-        sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@tetris.co 'tar -zxf build.${env.BUILD_NUMBER}.tar.gz -C ${env.htdocs}/${env.BUILD_NUMBER}'"
-        sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@tetris.co 'pm2 delete manager || true'"
-        sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@tetris.co 'pm2 start ${env.htdocs}/${env.BUILD_NUMBER}/bin/cmd.js --name=manager'"
-        sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@tetris.co 'rm -f ${env.htdocs}/assets'"
-        sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@tetris.co 'ln -s ${env.htdocs}/${env.BUILD_NUMBER}/public ${env.htdocs}/assets'"
+        sh "scp -i tetris.pem -o StrictHostKeyChecking=no build.${env.BUILD_NUMBER}.tar.gz ubuntu@${env.DEPLOY_TO}:."
+        sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@${env.DEPLOY_TO} 'mkdir -p ${env.htdocs}/${env.BUILD_NUMBER}'"
+        sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@${env.DEPLOY_TO} 'tar -zxf build.${env.BUILD_NUMBER}.tar.gz -C ${env.htdocs}/${env.BUILD_NUMBER}'"
+        sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@${env.DEPLOY_TO} 'rm build.${env.BUILD_NUMBER}.tar.gz'"
+        sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@${env.DEPLOY_TO} 'pm2 delete manager || true'"
+        sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@${env.DEPLOY_TO} 'pm2 start ${env.htdocs}/${env.BUILD_NUMBER}/bin/cmd.js --name=manager'"
+        sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@${env.DEPLOY_TO} 'rm -f ${env.htdocs}/assets'"
+        sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@${env.DEPLOY_TO} 'ln -s ${env.htdocs}/${env.BUILD_NUMBER}/public ${env.htdocs}/assets'"
       }
     }
   }
