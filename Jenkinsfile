@@ -53,9 +53,6 @@ pipeline {
     }
     stage('Deploy PROD') {
       when { environment name: 'DEPLOY_TO', value: 'production' }
-      environment {
-        htdocs = "/var/www/manager-client"
-      }
       steps {
         sh "cp ${env.ssh_key} tetris.pem"
         sh "chmod 600 tetris.pem"
