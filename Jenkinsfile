@@ -61,7 +61,6 @@ pipeline {
         sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@tetris.co 'tar -zxf build.${env.BUILD_NUMBER}.tar.gz -C ${env.htdocs}/${env.BUILD_NUMBER}'"
         sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@tetris.co 'pm2 delete manager || true'"
         sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@tetris.co 'pm2 start ${env.htdocs}/${env.BUILD_NUMBER}/bin/cmd.js --name=manager'"
-        sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@tetris.co 'pm2 ls'"
         sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@tetris.co 'rm -f ${env.htdocs}/assets'"
         sh "ssh -i tetris.pem -o StrictHostKeyChecking=no -t ubuntu@tetris.co 'ln -s ${env.htdocs}/${env.BUILD_NUMBER}/public ${env.htdocs}/assets'"
       }
