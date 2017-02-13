@@ -61,7 +61,7 @@ pipeline {
     }
     steps {
       sh "mkdir -p ${env.htdocs}/${env.BUILD_NUMBER}"
-      sh "scp -i $${env.ssh_key} build.${env.BUILD_NUMBER}.tar.gz ubuntu@tetris.co:."
+      sh "scp -i ${env.ssh_key} build.${env.BUILD_NUMBER}.tar.gz ubuntu@tetris.co:."
       //sh "tar -zxf build.${env.BUILD_NUMBER}.tar.gz -C ${env.htdocs}/${env.BUILD_NUMBER}"
       //sh "psy rm manager"
       //sh "psy start -n manager -- ${env.htdocs}/${env.BUILD_NUMBER}/bin/cmd.js"
