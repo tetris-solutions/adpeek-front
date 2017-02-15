@@ -8,6 +8,15 @@ import isString from 'lodash/isString'
 import isObject from 'lodash/isPlainObject'
 
 const months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
+const daysOfWeek = {
+  sunday: 0,
+  monday: 1,
+  tuesday: 2,
+  wednesday: 3,
+  thursday: 4,
+  friday: 5,
+  saturday: 6
+}
 
 function monthNameToIndex (name) {
   return indexOf(months, toLower(name))
@@ -20,6 +29,7 @@ function zeroedMoment (str) {
 }
 
 const prefixless = name => name.substr(name.indexOf(':') + 1)
+
 /**
  * @param {Object} attributes attributes for type mapping
  * @param {Array} result result array
@@ -66,6 +76,14 @@ export function normalizeResult (attributes, result) {
         date = zeroedMoment(value).toDate()
         date._format_ = 'DD/MM/YYYY'
         date._simple_ = true
+        break
+      case 'dayofweek':
+        date = zeroedMoment().weekday(daysOfWeek[toLower(value)] || 0).toDate()
+        date._format_ = 'dddd'
+        break
+      case 'week':
+        date = zeroedMoment(value).toDate()
+        date._format_ = 'W'
         break
       case 'hourly_stats_aggregated_by_advertiser_time_zone':
       case 'hourly_stats_aggregated_by_audience_time_zone':

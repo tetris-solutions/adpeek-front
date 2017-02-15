@@ -42,6 +42,18 @@ const types = {
     headerFormat: '%H:%M',
     labelFormat: '%H:%M',
     sortable: true
+  },
+  dayOfWeek: {
+    type: 'datetime',
+    headerFormat: '%A',
+    labelFormat: '%A',
+    sortable: true
+  },
+  year: {
+    type: 'datetime',
+    headerFormat: '%Y',
+    labelFormat: '%Y',
+    sortable: true
   }
 }
 
@@ -51,6 +63,10 @@ function detectXAxis (result, xAxisDimensions) {
     case 'hourly_stats_aggregated_by_advertiser_time_zone':
     case 'hourly_stats_aggregated_by_audience_time_zone':
       return types.time
+    case 'dayofweek':
+      return types.dayOfWeek
+    case 'year':
+      return types.year
   }
 
   /**
