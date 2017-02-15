@@ -254,6 +254,20 @@ export default React.createClass({
         }
       })
 
+      Highcharts.dateFormats = {
+        W (timestamp) {
+          const date = new Date(timestamp)
+          const day = date.getUTCDay() === 0 ? 7 : date.getUTCDay()
+
+          date.setDate(date.getUTCDate() + 4 - day)
+
+          const dayNumber = Math.floor((date.getTime() - new Date(date.getUTCFullYear(), 0, 1, -6)) / 86400000)
+          const w = 1 + Math.floor(dayNumber / 7)
+
+          return ('0' + w).substr(-2)
+        }
+      }
+
       this.forceUpdate()
     })
   },

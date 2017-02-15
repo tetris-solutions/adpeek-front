@@ -43,7 +43,7 @@ const types = {
     labelFormat: '%H:%M',
     sortable: true
   },
-  dayOfWeek: {
+  dayofweek: {
     type: 'datetime',
     headerFormat: '%A',
     labelFormat: '%A',
@@ -54,6 +54,30 @@ const types = {
     headerFormat: '%Y',
     labelFormat: '%Y',
     sortable: true
+  },
+  week: {
+    type: 'datetime',
+    headerFormat: '%W - %d, %B, %Y',
+    labelFormat: '%d/%B',
+    sortable: true
+  },
+  monthofyear: {
+    type: 'datetime',
+    headerFormat: '%B',
+    labelFormat: '%B',
+    sortable: true
+  },
+  month: {
+    type: 'datetime',
+    headerFormat: '%B, %Y',
+    labelFormat: '%b, %Y',
+    sortable: true
+  },
+  quarter: {
+    type: 'datetime',
+    headerFormat: '%B, %Y',
+    labelFormat: '%b, %Y',
+    sortable: true
   }
 }
 
@@ -63,10 +87,13 @@ function detectXAxis (result, xAxisDimensions) {
     case 'hourly_stats_aggregated_by_advertiser_time_zone':
     case 'hourly_stats_aggregated_by_audience_time_zone':
       return types.time
+    case 'quarter':
     case 'dayofweek':
-      return types.dayOfWeek
+    case 'month':
+    case 'monthofyear':
+    case 'week':
     case 'year':
-      return types.year
+      return types[xAxisDimensions]
   }
 
   /**

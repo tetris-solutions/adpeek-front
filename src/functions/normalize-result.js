@@ -83,7 +83,11 @@ export function normalizeResult (attributes, result) {
         break
       case 'week':
         date = zeroedMoment(value).toDate()
-        date._format_ = 'W'
+        date._format_ = 'W, D/MMM'
+        break
+      case 'quarter':
+        date = zeroedMoment(value).toDate()
+        date._format_ = 'MMMM/YY'
         break
       case 'hourly_stats_aggregated_by_advertiser_time_zone':
       case 'hourly_stats_aggregated_by_audience_time_zone':
