@@ -74,13 +74,14 @@ export function ReportAside ({report, user, dispatch}, {messages, locales, route
   const reportUrl = `${scopeUrl}/report/${report.id}`
 
   /* eslint-disable */
-  function navigation ({canEditReport, canBrowseReports}) {
+  function navigation ({canEditReport: hasEditPermission, canBrowseReports}) {
     /* eslint-enable */
 
     const isGlobalReport = !report.company
+    let canUpdateReport = hasEditPermission
 
     if (isGlobalReport && !user.is_admin) {
-      canEditReport = false
+      canUpdateReport = false
     }
 
     let backUrl = `${reportUrl}${search}`
@@ -96,29 +97,29 @@ export function ReportAside ({report, user, dispatch}, {messages, locales, route
         <NavBts>
           <ModulesIndex/>
 
-          {inEditMode && canEditReport && (
+          {inEditMode && hasEditPermission && (
             <NavBt onClick={createModule} icon='add'>
               <Message>newModule</Message>
             </NavBt>)}
 
-          {canEditReport && !inEditMode && shouldSkipEditPrompt && (
+          {canUpdateReport && !inEditMode && shouldSkipEditPrompt && (
             <NavBt tag={Link} to={`${reportUrl}/edit${search}`} icon='create'>
               <Message>editReport</Message>
             </NavBt>)}
 
-          {canEditReport && !inEditMode && !shouldSkipEditPrompt && (
+          {canUpdateReport && !inEditMode && !shouldSkipEditPrompt && (
             <NavBt
               tag={ReportEditPrompt}
               report={report}
               params={params}
               icon='create'/>)}
 
-          {canEditReport && (
+          {hasEditPermission && (
             <NavBt tag={Link} to={cloneUrl} icon='content_copy'>
               <Message>cloneReport</Message>
             </NavBt>)}
 
-          {canEditReport && (
+          {canUpdateReport && (
             <NavBt tag={DeleteButton} entityName={report.name} onClick={deleteReport} icon='delete'>
               <Message>deleteReport</Message>
             </NavBt>)}
