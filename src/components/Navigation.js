@@ -8,7 +8,8 @@ import {Link} from 'react-router'
 const style = csjs`
 .wrapper {
   width: 270px;
-  margin: 10px 0;
+  padding: 10px 0;
+  transition: margin-top .3s;
 }
 .wrapper > hr {
   width: 80%;
@@ -109,6 +110,30 @@ export const Navigation = React.createClass({
   },
   componentDidMount () {
     window.event$.emit('aside-toggle')
+
+    document.querySelector('#app main')
+      .addEventListener('scroll', this.onScroll)
+  },
+  componentWillUnmount () {
+    this.dead = true
+
+    document.querySelector('#app main')
+      .removeEventListener('scroll', this.onScroll)
+  },
+  onScroll () {
+    window.requestAnimationFrame(() => {
+      if (this.dead) return
+
+      const {nav} = this.refs
+      const main = document.querySelector('#app main')
+      const header = document.querySelector('#app header')
+      const slideHeight = main.scrollTop - header.clientHeight
+      const maxSlide = nav.parentElement.clientHeight - nav.clientHeight
+
+      nav.style.marginTop = slideHeight > 0
+        ? Math.min(slideHeight, maxSlide) + 'px'
+        : ''
+    })
   },
   render () {
     const {icon, img, children} = this.props
@@ -126,7 +151,7 @@ export const Navigation = React.createClass({
     }
 
     return (
-      <div className={`${style.wrapper}`}>
+      <div ref='nav' className={`${style.wrapper}`}>
         {navIcon}
         {children}
       </div>
