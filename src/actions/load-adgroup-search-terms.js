@@ -3,6 +3,7 @@ import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} 
 import forEach from 'lodash/forEach'
 import {getDeepCursor} from '../functions/get-deep-cursor'
 import assign from 'lodash/assign'
+import compact from 'lodash/compact'
 
 function loadAdGroupSearchTerms (level, id, adGroups, config) {
   return POST(`${process.env.ADPEEK_API_URL}/${level}/${id}/search-terms`, assign({body: adGroups}, config))
@@ -13,7 +14,7 @@ export function loadAdGroupSearchTermsAction (tree, {company, workspace, folder,
     .then(saveResponseTokenAsCookie)
     .then(function onSuccess (response) {
       forEach(response.data, (searchTerms, adGroup) => {
-        const path = getDeepCursor(tree, [
+        const path = getDeepCursor(tree, compact([
           'user',
           ['companies', company],
           ['workspaces', workspace],
@@ -21,7 +22,7 @@ export function loadAdGroupSearchTermsAction (tree, {company, workspace, folder,
           campaign && ['campaigns', campaign],
           ['adGroups', adGroup],
           'searchTerms'
-        ])
+        ]))
 
         tree.set(path, searchTerms)
       })
