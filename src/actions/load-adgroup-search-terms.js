@@ -1,22 +1,32 @@
-import {GET} from '@tetris/http'
+import {POST} from '@tetris/http'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
-import {saveResponseData} from '../functions/save-response-data'
+import forEach from 'lodash/forEach'
+import {getDeepCursor} from '../functions/get-deep-cursor'
+import assign from 'lodash/assign'
 
-function loadAdgroupSearchTerms (campaign, adGroup, config) {
-  return GET(`${process.env.ADPEEK_API_URL}/campaign/${campaign}/adgroup/${adGroup}/search-terms`, config)
+function loadAdGroupSearchTerms (level, id, adGroups, config) {
+  return POST(`${process.env.ADPEEK_API_URL}/${level}/${id}/search-terms`, assign({body: adGroups}, config))
 }
 
-export function loadAdgroupSearchTermsAction (tree, {company, workspace, folder, campaign, adGroup}) {
-  return loadAdgroupSearchTerms(campaign, adGroup, getApiFetchConfig(tree))
+export function loadAdGroupSearchTermsAction (tree, {company, workspace, folder, campaign}, adGroups) {
+  return loadAdGroupSearchTerms(campaign ? 'campaign' : 'folder', campaign || folder, adGroups, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
-    .then(saveResponseData(tree, [
-      'user',
-      ['companies', company],
-      ['workspaces', workspace],
-      folder && ['folder', folder],
-      ['campaigns', campaign],
-      ['adGroups', adGroup],
-      'searchTerms'
-    ]))
+    .then(function onSuccess (response) {
+      forEach(response.data, (searchTerms, adGroup) => {
+        const path = getDeepCursor(tree, [
+          'user',
+          ['companies', company],
+          ['workspaces', workspace],
+          folder && ['folder', folder],
+          ['campaigns', campaign],
+          ['adGroups', adGroup],
+          'searchTerms'
+        ])
+
+        tree.set(path, searchTerms)
+      })
+
+      return response
+    })
     .catch(pushResponseErrorToState(tree))
 }

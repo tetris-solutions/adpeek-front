@@ -5,7 +5,7 @@ import {Button} from './Button'
 import AdGroups from './AdGroups'
 import Message from 'tetris-iso/Message'
 import {loadAdGroupsAction} from '../actions/load-adgroups'
-import {loadAdgroupSearchTermsAction} from '../actions/load-adgroup-search-terms'
+import {loadAdGroupSearchTermsAction} from '../actions/load-adgroup-search-terms'
 import {createAdGroupsReportAction} from '../actions/create-folder-adgroups-report'
 import NotImplemented from './NotImplemented'
 import LoadingHorizontal from './LoadingHorizontal'
@@ -17,8 +17,6 @@ import flatten from 'lodash/flatten'
 import map from 'lodash/map'
 import uniq from 'lodash/uniq'
 import chunk from 'lodash/chunk'
-import forEach from 'lodash/forEach'
-import assign from 'lodash/assign'
 
 const statusIcons = {
   enabled: 'play_arrow',
@@ -142,15 +140,7 @@ export const Creatives = React.createClass({
   fetchSearchTerms () {
     const {dispatch, params, adGroups} = this.props
 
-    let promise = Promise.resolve()
-
-    forEach(adGroups, ({id: adGroup, campaign_id: campaign}) => {
-      promise = promise.then(() =>
-        dispatch(loadAdgroupSearchTermsAction,
-          assign({campaign, adGroup}, params)))
-    })
-
-    return promise
+    return dispatch(loadAdGroupSearchTermsAction, params, map(adGroups, 'id'))
   },
   getStatusFilter () {
     return this.context.location.query.filter || 'enabled'
