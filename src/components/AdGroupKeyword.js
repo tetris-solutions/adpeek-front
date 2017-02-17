@@ -19,7 +19,7 @@ const colorPerQualityScore = {
 
 const color = qualityScore => colorPerQualityScore[qualityScore] || colorPerQualityScore.UNKNOWN
 
-export const Keyword = ({text, status, criterion_use, match_type, relevance}) => (
+export const Keyword = ({text, match_type, relevance}) => (
   <div className={`${style.keyword} mdl-color-text--${color(relevance).text} mdl-color--${color(relevance).bg}`}>
     {match_type === 'EXACT' ? `[${text}]` : text}
   </div>
@@ -30,7 +30,6 @@ Keyword.propTypes = {
   relevance: React.PropTypes.oneOf(['UNKNOWN', 'BELOW_AVERAGE', 'AVERAGE', 'ABOVE_AVERAGE']),
   text: React.PropTypes.string,
   status: React.PropTypes.string,
-  criterion_use: React.PropTypes.string,
   match_type: React.PropTypes.string
 }
 

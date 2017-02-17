@@ -22,12 +22,13 @@ export const AdGroup = React.createClass({
   mixins: [styled(style)],
   propTypes: {
     status: React.PropTypes.string,
+    searchTerms: React.PropTypes.array,
     name: React.PropTypes.string,
     ads: React.PropTypes.array,
     keywords: React.PropTypes.array
   },
   render () {
-    const {name, status, ads, keywords} = this.props
+    const {name, status, ads, keywords, searchTerms} = this.props
     const criterions = groupBy(keywords, 'criterion_use')
     let color, textColor
 
@@ -76,6 +77,17 @@ export const AdGroup = React.createClass({
               {map(criterions.NEGATIVE, keyword => (
                 <AdGroupKeyword key={keyword.id} {...keyword}/>
               ))}
+            </div>) : null}
+
+        {searchTerms
+          ? (
+            <div>
+              <h5>
+                <Message>searchTerms</Message>
+              </h5>
+              {map(searchTerms,
+                ({query, impressions}, index) =>
+                  <AdGroupKeyword key={index} text={query}/>)}
             </div>) : null}
       </div>
     )

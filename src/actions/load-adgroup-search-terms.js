@@ -17,8 +17,8 @@ export function loadAdGroupSearchTermsAction (tree, {company, workspace, folder,
           'user',
           ['companies', company],
           ['workspaces', workspace],
-          folder && ['folder', folder],
-          ['campaigns', campaign],
+          ['folders', folder],
+          campaign && ['campaigns', campaign],
           ['adGroups', adGroup],
           'searchTerms'
         ])

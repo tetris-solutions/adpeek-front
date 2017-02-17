@@ -331,5 +331,6 @@ module.exports = {
   noActiveOrder: 'No active Orders',
   lastActiveOrder: 'Last active Order',
   moduleIndexLabel: 'Index',
-  loadSearchTerms: 'Load Search Terms'
+  loadSearchTerms: 'Load Search Terms',
+  searchTerms: 'Search Terms'
 }
