@@ -110,6 +110,7 @@ module.exports = {
   loadingAds: 'Carregando criativos...',
   loadingReport: 'Carregando relatório...',
   loadingCampaigns: 'Carregando campanhas...',
+  loading: 'Carregando...',
   calculating: 'Calculando...',
   extractReport: 'Baixar',
   creatingReport: 'Gerando Relatório...',
@@ -329,5 +330,6 @@ module.exports = {
   allFilterLabel: 'Todos',
   noActiveOrder: 'Não há pedidos ativos',
   lastActiveOrder: 'Último pedido ativo',
-  moduleIndexLabel: 'Índice'
+  moduleIndexLabel: 'Índice',
+  loadSearchTerms: 'Carregar Termos Pesquisados'
 }

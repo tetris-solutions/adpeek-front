@@ -5,6 +5,7 @@ import {Button} from './Button'
 import AdGroups from './AdGroups'
 import Message from 'tetris-iso/Message'
 import {loadAdGroupsAction} from '../actions/load-adgroups'
+import {loadAdgroupSearchTermsAction} from '../actions/load-adgroup-search-terms'
 import {createAdGroupsReportAction} from '../actions/create-folder-adgroups-report'
 import NotImplemented from './NotImplemented'
 import LoadingHorizontal from './LoadingHorizontal'
@@ -16,6 +17,8 @@ import flatten from 'lodash/flatten'
 import map from 'lodash/map'
 import uniq from 'lodash/uniq'
 import chunk from 'lodash/chunk'
+import forEach from 'lodash/forEach'
+import assign from 'lodash/assign'
 
 const statusIcons = {
   enabled: 'play_arrow',
@@ -38,6 +41,7 @@ export const Creatives = React.createClass({
   },
   getInitialState () {
     return {
+      loadingSearchTerms: false,
       calculatingKPI: false,
       calculatingRelevance: false,
       isLoading: this.isAdwords()
@@ -129,6 +133,25 @@ export const Creatives = React.createClass({
 
     return promise
   },
+  loadSearchTerms () {
+    this.setState({loadingSearchTerms: true})
+
+    this.loadingAdGroups.then(this.fetchSearchTerms)
+      .then(() => this.setState({loadingSearchTerms: false}))
+  },
+  fetchSearchTerms () {
+    const {dispatch, params, adGroups} = this.props
+
+    let promise = Promise.resolve()
+
+    forEach(adGroups, ({id: adGroup, campaign_id: campaign}) => {
+      promise = promise.then(() =>
+        dispatch(loadAdgroupSearchTermsAction,
+          assign({campaign, adGroup}, params)))
+    })
+
+    return promise
+  },
   getStatusFilter () {
     return this.context.location.query.filter || 'enabled'
   },
@@ -149,7 +172,14 @@ export const Creatives = React.createClass({
     return props
   },
   render () {
-    const {creatingReport, calculatingKPI, isLoading, calculatingRelevance} = this.state
+    const {
+      loadingSearchTerms,
+      creatingReport,
+      calculatingKPI,
+      isLoading,
+      calculatingRelevance
+    } = this.state
+
     const {adGroups, folder} = this.props
 
     const inner = this.isAdwords()
@@ -185,6 +215,12 @@ export const Creatives = React.createClass({
                 {calculatingKPI
                   ? <Message>calculating</Message>
                   : <Message kpi={folder.kpi_name}>calculateAdsKPI</Message>}
+              </MenuItem>
+
+              <MenuItem disabled={loadingSearchTerms} onClick={this.loadSearchTerms} icon='search'>
+                {loadingSearchTerms
+                  ? <Message>loading</Message>
+                  : <Message>loadSearchTerms</Message>}
               </MenuItem>
 
               <MenuItem disabled={creatingReport || isLoading} onClick={this.extractReport} icon='file_download'>
