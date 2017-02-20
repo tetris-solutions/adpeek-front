@@ -135,6 +135,7 @@ module.exports = {
   campaigns: 'Campaigns',
   placementLevel: 'Placement',
   searchLevel: 'Search Query',
+  locationLevel: 'Geolocation',
   audienceLevel: 'Audience',
   adGroups: 'AdGroups',
   videos: 'Videos',

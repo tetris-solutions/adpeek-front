@@ -120,6 +120,12 @@ const Container = React.createClass({
         })
 
         entities.push({
+          id: 'Location',
+          name: messages.locationLevel,
+          list: adGroups
+        })
+
+        entities.push({
           id: 'Audience',
           name: messages.audienceLevel,
           list: adGroups

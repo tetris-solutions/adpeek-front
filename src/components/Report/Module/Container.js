@@ -83,6 +83,7 @@ const ModuleContainer = React.createClass({
       case 'Video':
       case 'Search':
       case 'Audience':
+      case 'Location':
         isSelected = countBy(selectedIds, toCampaignId(toLower(moduleEntity), 'campaign'))
         break
       case 'Ad':
@@ -117,25 +118,11 @@ const ModuleContainer = React.createClass({
 
     entities.Campaign = filterByStatus(entities.Campaign)
 
-    if (entities.AdSet) {
-      entities.AdSet = filterByParent(entities.AdSet, entities.Campaign, 'campaign_id')
-    }
-
-    if (entities.Search) {
-      entities.Search = filterByParent(entities.Search, entities.Campaign, 'campaign_id')
-    }
-
-    if (entities.Audience) {
-      entities.Audience = filterByParent(entities.Audience, entities.Campaign, 'campaign_id')
-    }
-
-    if (entities.Video) {
-      entities.Video = filterByParent(entities.Video, entities.Campaign, 'campaign_id')
-    }
-
-    if (entities.AdGroup) {
-      entities.AdGroup = filterByParent(entities.AdGroup, entities.Campaign, 'campaign_id')
-    }
+    forEach(['AdGroup', 'AdSet', 'Search', 'Audience', 'Video', 'Location'], level => {
+      if (entities[level]) {
+        entities[level] = filterByParent(entities[level], entities.Campaign, 'campaign_id')
+      }
+    })
 
     if (entities.Ad) {
       entities.Ad = entities.AdSet
