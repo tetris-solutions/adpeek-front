@@ -17,7 +17,7 @@ import {getDeepCursor} from '../functions/get-deep-cursor'
 import {isvalidReportQuery} from '../functions/is-valid-report-query'
 import compact from 'lodash/compact'
 import {inferLevelFromParams} from '../functions/infer-level-from-params'
-import {hydrateReportResult} from './load-location-criteria'
+import {replaceCriteriaIdWithName} from './load-location-criteria'
 
 const RESULT_LENGTH_LIMIT = 1000
 
@@ -147,7 +147,7 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
 
     return Promise.resolve()
       .then(() => query.entity === 'Location'
-        ? hydrateReportResult(tree, result)
+        ? replaceCriteriaIdWithName(tree, result)
         : result)
       .then(() => {
         moduleCursor.set('result', normalizeResult(attributes, result))

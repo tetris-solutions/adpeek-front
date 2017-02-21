@@ -1,28 +1,44 @@
-import {GET} from '@tetris/http'
+import {POST} from '@tetris/http'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
-import map from 'lodash/map'
-import set from 'lodash/set'
 import toLower from 'lodash/toLower'
+import assign from 'lodash/assign'
+import forEach from 'lodash/forEach'
+import keys from 'lodash/keys'
+import isEmpty from 'lodash/isEmpty'
 
-function loadLocationCriteria (id, config) {
-  return GET(`${process.env.ADPEEK_API_URL}/location-criteria/${id}`, config)
+function loadCriteriaName (ids, config) {
+  return POST(`${process.env.ADPEEK_API_URL}/location-criteria`,
+    assign({}, config, {body: ids}))
 }
 
-const register = {}
+const onGoingCalls = {}
 
-export function loadLocationCriteriaAction (tree, id) {
-  register[id] = register[id] || loadLocationCriteria(id, getApiFetchConfig(tree))
-      .then(saveResponseTokenAsCookie)
-      .then(function onSuccess (response) {
-        delete register[id]
+export function loadCriteriaNameAction (tree, ids) {
+  function onSuccess (response) {
+    tree.set('locationCriteria',
+      assign({},
+        response.data,
+        tree.get('locationCriteria')))
 
-        tree.set(['locationCriteria', id], response.data)
+    tree.commit()
 
-        return response
-      })
-      .catch(pushResponseErrorToState(tree))
+    forEach(ids, id => {
+      delete onGoingCalls[id]
+    })
 
-  return register[id]
+    return response
+  }
+
+  const promise = loadCriteriaName(ids, getApiFetchConfig(tree))
+    .then(saveResponseTokenAsCookie)
+    .then(onSuccess)
+    .catch(pushResponseErrorToState(tree))
+
+  forEach(ids, id => {
+    onGoingCalls[id] = promise
+  })
+
+  return promise
 }
 
 const criterias = [
@@ -33,24 +49,45 @@ const criterias = [
   'RegionCriteriaId'
 ].map(toLower)
 
-function getCriteriaName (tree, id) {
-  const cached = tree.get(['locationCriteria', id, 'name'])
+export function replaceCriteriaIdWithName (tree, lines) {
+  const unknownIdsMap = {}
+  const apiCalls = []
+  const getLocationName = id => tree.get(['locationCriteria', id])
 
-  return cached || loadLocationCriteriaAction(tree, id)
-      .then(response => response.data.name)
-}
+  const forEachCriteria = fn => forEach(criterias, criteria =>
+    forEach(lines, line => fn(criteria, line)))
 
-export function hydrateReportResult (tree, lines) {
-  function hydrateLine (line) {
-    function lookupName (criteria) {
-      return line[criteria]
-        ? getCriteriaName(tree, line[criteria]).then(name => set(line, criteria, name))
-        : null
+  function collectIds (criteria, line) {
+    const id = line[criteria]
+
+    if (!id || getLocationName(id)) {
+      return
     }
 
-    return Promise.all(map(criterias, lookupName))
-      .then(() => line)
+    if (onGoingCalls[id]) {
+      apiCalls.push(onGoingCalls[id])
+    } else {
+      unknownIdsMap[id] = true
+    }
   }
 
-  return Promise.all(map(lines, hydrateLine))
+  forEachCriteria(collectIds)
+
+  const ids = keys(unknownIdsMap)
+
+  if (!isEmpty(ids)) {
+    apiCalls.push(loadCriteriaNameAction(tree, ids))
+  }
+
+  function replace (criteria, line) {
+    const id = line[criteria]
+
+    if (!id) return
+
+    line[criteria] = getLocationName(id) || id
+  }
+
+  return Promise.all(apiCalls)
+    .then(() => forEachCriteria(replace))
+    .then(() => lines)
 }
