@@ -17,6 +17,7 @@ import {getDeepCursor} from '../functions/get-deep-cursor'
 import {isvalidReportQuery} from '../functions/is-valid-report-query'
 import compact from 'lodash/compact'
 import {inferLevelFromParams} from '../functions/infer-level-from-params'
+import {hydrateReportResult} from './load-location-criteria'
 
 const RESULT_LENGTH_LIMIT = 1000
 
@@ -144,7 +145,13 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
       moduleCursor.set('cropped', null)
     }
 
-    moduleCursor.set('result', normalizeResult(attributes, result))
+    return Promise.resolve()
+      .then(() => query.entity === 'Location'
+        ? hydrateReportResult(tree, result)
+        : result)
+      .then(() => {
+        moduleCursor.set('result', normalizeResult(attributes, result))
+      })
   }
 
   function onSuccess (response) {
@@ -158,7 +165,7 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
     forEach(response.data.exceptions,
       e => dealWithException(tree, params, e))
 
-    tree.commit()
+    // tree.commit()
 
     return response
   }
@@ -169,14 +176,14 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
     if (sameQuery()) {
       if (largeResultCache[id] && sortConfigHasChanged()) {
         updateModuleResult(largeResultCache[id])
-        tree.commit()
+          // .then(() => tree.commit())
       }
 
       return
     }
 
     isLoadingCursor.set(true)
-    tree.commit()
+    // tree.commit()
 
     loadReportModuleResult(query, isCrossPlatform, getApiFetchConfig(tree))
       .then(saveResponseTokenAsCookie)
