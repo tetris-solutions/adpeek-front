@@ -20,8 +20,8 @@ const MAX_ACCOUNTS = 15
 
 function requiredDimensions (entity) {
   switch (entity) {
-    case 'Location':
-      return ['countrycriteriaid']
+    // case 'Location':
+    //   return ['countrycriteriaid']
     default:
       return []
   }
