@@ -82,9 +82,9 @@ export function replaceCriteriaIdWithName (tree, lines) {
   function replace (criteria, line) {
     const id = line[criteria]
 
-    if (!id) return
-
-    line[criteria] = getLocationName(id) || id
+    if (id !== undefined) {
+      line[criteria] = getLocationName(id) || '---'
+    }
   }
 
   return Promise.all(apiCalls)
