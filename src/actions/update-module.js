@@ -22,7 +22,7 @@ function sendModuleChanges (tree, params, moduleId) {
     ['modules', moduleId]
   ]))
   const level = inferLevelFromParams(params)
-  const moduleChanges = omit(tree.get(cursorPath), 'result', 'query', 'isLoading')
+  const moduleChanges = omit(tree.get(cursorPath), 'result', 'query', 'isLoading', 'cropped')
 
   updateModule(moduleChanges, level, params[level], getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
