@@ -13,9 +13,28 @@ import React from 'react'
 import reportEntityType from '../../../../propTypes/report-entity'
 import reportModuleType from '../../../../propTypes/report-module'
 import Editor from './Editor'
+import Emmett from 'emmett'
 
 const editableFields = ['description', 'name', 'type', 'dimensions', 'metrics', 'rows', 'cols', 'entity', 'limit', 'sort', 'filters']
 const MAX_ACCOUNTS = 15
+
+function requiredDimensions (entity) {
+  switch (entity) {
+    case 'Location':
+      return ['countrycriteriaid']
+    default:
+      return []
+  }
+}
+
+function defaultFilters (entity) {
+  switch (entity) {
+    case 'Location':
+      return {locationtype: ['equals', 'LOCATION_OF_PRESENCE', '']}
+    default:
+      return {}
+  }
+}
 
 const ModuleEdit = React.createClass({
   displayName: 'Editor-Controller',
@@ -43,7 +62,9 @@ const ModuleEdit = React.createClass({
     addAttribute: React.PropTypes.func,
     removeAttribute: React.PropTypes.func,
     change: React.PropTypes.func,
-    onChangeProperty: React.PropTypes.func
+    onChangeName: React.PropTypes.func,
+    onChangeEntity: React.PropTypes.func,
+    onChangeType: React.PropTypes.func
   },
   getChildContext () {
     return {
@@ -52,7 +73,9 @@ const ModuleEdit = React.createClass({
         entity: this.getDraftEntity()
       },
       change: this.change,
-      onChangeProperty: this.onChangeProperty,
+      onChangeName: this.onChangeName,
+      onChangeType: this.onChangeType,
+      onChangeEntity: this.onChangeEntity,
       addAttribute: this.addAttribute,
       removeAttribute: this.removeAttribute,
       addEntity: this.addEntity,
@@ -71,6 +94,12 @@ const ModuleEdit = React.createClass({
     this.updateQueue = []
     this.persist = debounce(this.flushUpdateQueue, 500)
   },
+  componentDidMount () {
+    this.$e = new Emmett()
+  },
+  componentDidUpdate () {
+    this.$e.emit('update')
+  },
   flushUpdateQueue () {
     this.change(assign({}, ...this.updateQueue), true)
     this.updateQueue = []
@@ -79,22 +108,14 @@ const ModuleEdit = React.createClass({
     this.updateQueue.push(update)
     this.persist()
   },
-  onChangeProperty ({target: {type, name, value}}) {
-    if (type === 'number') {
-      value = isNaN(Number(value)) ? 0 : Number(value)
-    }
+  onChangeName ({target: {value}}) {
+    this.enqueueUpdate({name: value})
+  },
+  onChangeType ({target: {value}}) {
+    const newState = {type: value}
 
-    const newState = {[name]: value}
-    const module = this.getDraftModule()
-
-    if (name === 'entity') {
-      newState.dimensions = []
-      newState.metrics = []
-      newState.filters = {id: []}
-    }
-
-    if (name === 'type' && (value === 'pie' || value === 'total')) {
-      const {dimensions, metrics} = module
+    if (value === 'pie' || value === 'total') {
+      const {dimensions, metrics} = this.getDraftModule()
 
       if (dimensions.length > 1) {
         newState.dimensions = value === 'total' ? [] : [dimensions[0]]
@@ -105,7 +126,30 @@ const ModuleEdit = React.createClass({
       }
     }
 
-    this.enqueueUpdate(newState)
+    this.change(newState, true)
+  },
+  onChangeEntity ({target: {value: entity}}) {
+    const base = {
+      entity,
+      dimensions: [],
+      metrics: [],
+      filters: {id: []}
+    }
+
+    this.change(base, true)
+
+    const afterUpdate = () => {
+      if (this.context.module.entity !== entity) return
+
+      this.change({
+        dimensions: requiredDimensions(entity),
+        filters: assign({}, base.filters, defaultFilters(entity))
+      }, true)
+
+      this.$e.off('update', afterUpdate)
+    }
+
+    this.$e.on('update', afterUpdate)
   },
   removeEntity (id) {
     const ids = isArray(id) ? id : [id]
@@ -115,7 +159,6 @@ const ModuleEdit = React.createClass({
     })
     this.change({filters})
   },
-
   addEntity (id) {
     const ids = isArray(id) ? id : [id]
     const module = this.getDraftModule()

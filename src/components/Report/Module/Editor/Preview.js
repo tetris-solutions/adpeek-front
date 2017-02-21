@@ -9,15 +9,15 @@ import map from 'lodash/map'
 
 const ReportChart = expandVertically(_ReportChart)
 
-const EditContent = (props, {entities, onChangeProperty, change, draft: {module, entity}}) => (
+const EditContent = (props, {entities, onChangeName, onChangeType, onChangeEntity, change, draft: {module, entity}}) => (
   <section style={{height: '80vh', overflowY: 'auto'}}>
     <div className='mdl-grid'>
       <div className='mdl-cell mdl-cell--4-col'>
-        <Input name='name' label='name' defaultValue={module.name} onChange={onChangeProperty} required/>
+        <Input name='name' label='name' defaultValue={module.name} onChange={onChangeName} required/>
       </div>
 
       <div className='mdl-cell mdl-cell--4-col'>
-        <Select label='entity' name='entity' onChange={onChangeProperty} value={entity.id}>
+        <Select label='entity' name='entity' onChange={onChangeEntity} value={entity.id}>
           {map(entities, ({id, name}) =>
             <option key={id} value={id}>
               {name}
@@ -26,7 +26,7 @@ const EditContent = (props, {entities, onChangeProperty, change, draft: {module,
       </div>
 
       <div className='mdl-cell mdl-cell--4-col'>
-        <TypeSelect onChange={onChangeProperty} value={module.type}/>
+        <TypeSelect onChange={onChangeType} value={module.type}/>
       </div>
 
       <SelectedFields
@@ -44,7 +44,9 @@ const EditContent = (props, {entities, onChangeProperty, change, draft: {module,
 
 EditContent.displayName = 'Edit-Content'
 EditContent.contextTypes = {
-  onChangeProperty: React.PropTypes.func.isRequired,
+  onChangeName: React.PropTypes.func.isRequired,
+  onChangeEntity: React.PropTypes.func.isRequired,
+  onChangeType: React.PropTypes.func.isRequired,
   entities: React.PropTypes.object.isRequired,
   change: React.PropTypes.func.isRequired,
   draft: React.PropTypes.object.isRequired
