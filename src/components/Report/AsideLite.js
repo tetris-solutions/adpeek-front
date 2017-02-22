@@ -1,16 +1,25 @@
 import React from 'react'
 import {contextualize} from '../higher-order/contextualize'
-import {Navigation, Name} from '../Navigation'
+import {Navigation, NavBts, Name} from '../Navigation'
 import Icon from './Icon'
+import ModulesIndex from './ModulesIndex'
 
 const AsideLite = ({report}) => (
   <Navigation icon={<Icon {...report}/>}>
-    <Name>{report.name}</Name>
+    <div>
+      <Name>{report.name}</Name>
 
-    {report.description &&
-    <blockquote
-      style={{fontSize: '10pt', margin: '0 2em'}}
-      dangerouslySetInnerHTML={{__html: report.description.replace(/\n/g, '<br/>')}}/>}
+      {report.description &&
+      <blockquote
+        style={{fontSize: '10pt', margin: '0 2em'}}
+        dangerouslySetInnerHTML={{__html: report.description.replace(/\n/g, '<br/>')}}/>}
+
+      <hr/>
+    </div>
+
+    <NavBts>
+      <ModulesIndex/>
+    </NavBts>
   </Navigation>
 )
 

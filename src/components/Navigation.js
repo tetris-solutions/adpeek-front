@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import isString from 'lodash/isString'
 import csjs from 'csjs'
 import {styled} from './mixins/styled'
@@ -100,6 +101,17 @@ Name.propTypes = NavBts.propTypes = {
   children: React.PropTypes.node.isRequired
 }
 
+const NavContainer = ({children}) => (
+  <div className={`${style.wrapper}`}>
+    {children}
+  </div>
+)
+
+NavContainer.displayName = 'Container'
+NavContainer.propTypes = {
+  children: React.PropTypes.node
+}
+
 export const Navigation = React.createClass({
   displayName: 'Navigation',
   mixins: [styled(style)],
@@ -124,7 +136,7 @@ export const Navigation = React.createClass({
     window.requestAnimationFrame(() => {
       if (this.dead) return
 
-      const {nav} = this.refs
+      const nav = ReactDOM.findDOMNode(this)
       const main = document.querySelector('#app main')
       const header = document.querySelector('#app header')
       const slideHeight = main.scrollTop - header.clientHeight
@@ -151,10 +163,10 @@ export const Navigation = React.createClass({
     }
 
     return (
-      <div ref='nav' className={`${style.wrapper}`}>
+      <NavContainer>
         {navIcon}
         {children}
-      </div>
+      </NavContainer>
     )
   }
 })
