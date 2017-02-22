@@ -1,22 +1,10 @@
 import React from 'react'
-import Message from 'tetris-iso/Message'
-import {NavBt} from '../Navigation'
-import {collection} from '../higher-order/branch'
-import {DropdownMenu, MenuItem} from '../DropdownMenu'
 import map from 'lodash/map'
 import scrollTo from 'scrollto-with-animation'
+import {NavBts, NavBt} from '../Navigation'
 import sortBy from 'lodash/sortBy'
-import {styledFnComponent} from '../higher-order/styled-fn-component'
-import csjs from 'csjs'
-
-const style = csjs`
-.item {
-  display: block;
-  max-width: 15em;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}`
+import {Button} from '../Button'
+import Message from 'tetris-iso/Message'
 
 /**
  *
@@ -36,28 +24,28 @@ const scrollToModule = id => () => {
   scrollTo(main, 'scrollTop', top(module) - top(main))
 }
 
-let Modules = ({modules}) =>
-  <DropdownMenu>{map(sortBy(modules, 'y'), ({id, name}) =>
-    <MenuItem onClick={scrollToModule(id)} key={id}>
-      <span title={name} className={`${style.item}`}>
-        {name}
-      </span>
-    </MenuItem>)}
-  </DropdownMenu>
+const iconFor = {
+  line: 'timeline',
+  column: 'insert_chart',
+  table: 'view_list',
+  pie: 'pie_chart',
+  total: 'looks_one'
+}
+
+export const Modules = ({name, modules, exit}) =>
+  <NavBts>{map(sortBy(modules, 'y'), ({id, name, type}) =>
+    <NavBt key={id} tag={Button} onClick={scrollToModule(id)} icon={iconFor[type] || 'timeline'}>
+      {name}
+    </NavBt>)}
+
+    <NavBt tag={Button} onClick={exit} icon='close'>
+      <Message>oneLevelUpNavigation</Message>
+    </NavBt>
+  </NavBts>
 
 Modules.displayName = 'Modules'
 Modules.propTypes = {
+  exit: React.PropTypes.func,
+  name: React.PropTypes.string,
   modules: React.PropTypes.array
 }
-Modules = collection('report', 'modules', Modules)
-
-const ModulesIndex = props => (
-  <NavBt icon='list'>
-    <Message>moduleIndexLabel</Message>
-    <Modules/>
-  </NavBt>
-)
-
-ModulesIndex.displayName = 'Modules-Index'
-
-export default styledFnComponent(ModulesIndex, style)

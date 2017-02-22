@@ -8,48 +8,20 @@ import DeleteButton from '../DeleteButton'
 import {deleteReportAction} from '../../actions/delete-report'
 import {contextualize} from '../higher-order/contextualize'
 import ReportEditPrompt from './EditPrompt'
-import {Name, Navigation, NavBt, NavBts} from '../Navigation'
+import {Navigation, NavBt, NavBts} from '../Navigation'
 import {canSkipReportEditPrompt} from '../../functions/can-skip-report-edit-prompt'
-import NameInput from './NameInput'
+import ReportAsideHeader from './AsideHeader'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
-import replace from 'lodash/replace'
-import ModulesIndex from './ModulesIndex'
+
+import {Modules} from './ModulesIndex'
 import Icon from './Icon'
+import {withState} from 'recompose'
 
+const enhance = withState('indexMode', 'setIndexMode', false)
 const createModule = () => window.event$.emit('report.onNewModuleClick')
-const withLineBreaks = str => replace(str, /\n/g, '<br/>')
-const blockStyle = {fontSize: '10pt', margin: '0 2em'}
 
-const ReportHeader = props => {
-  if (props.inEditMode) {
-    return <NameInput {...props}/>
-  }
-
-  const {report: {name, description}} = props
-
-  return (
-    <div>
-      <Name>{name}</Name>
-
-      {description && (
-        <blockquote
-          style={blockStyle}
-          dangerouslySetInnerHTML={{__html: withLineBreaks(description)}}/>
-      )}
-
-      <hr/>
-    </div>
-  )
-}
-
-ReportHeader.displayName = 'Header'
-ReportHeader.propTypes = {
-  report: React.PropTypes.object.isRequired,
-  inEditMode: React.PropTypes.bool.isRequired
-}
-
-export function ReportAside ({report, user, dispatch}, {messages, locales, router, location: {pathname, search}, params}) {
+export function ReportAside ({report, user, dispatch, indexMode, setIndexMode}, {messages, locales, router, location: {pathname, search}, params}) {
   const {company, workspace, folder} = params
 
   const scopeUrl = '/' +
@@ -92,45 +64,47 @@ export function ReportAside ({report, user, dispatch}, {messages, locales, route
 
     return (
       <Navigation icon={<Icon {...report}/>}>
-        <ReportHeader {...{dispatch, params, report, inEditMode}}/>
+        <ReportAsideHeader {...{dispatch, params, report, inEditMode}}/>
 
-        <NavBts>
-          <ModulesIndex/>
+        {indexMode
+          ? <Modules {...report} exit={() => setIndexMode(false)}/>
+          : (
+            <NavBts>
+              <NavBt icon='list' onClick={() => setIndexMode(true)}>
+                <Message>moduleIndexLabel</Message>
+              </NavBt>
 
-          {inEditMode && canEditReport && (
-            <NavBt onClick={createModule} icon='add'>
-              <Message>newModule</Message>
-            </NavBt>)}
+              {inEditMode && canEditReport && (
+                <NavBt onClick={createModule} icon='add'>
+                  <Message>newModule</Message>
+                </NavBt>)}
 
-          {canEditReport && !inEditMode && shouldSkipEditPrompt && (
-            <NavBt tag={Link} to={`${reportUrl}/edit${search}`} icon='create'>
-              <Message>editReport</Message>
-            </NavBt>)}
+              {canEditReport && !inEditMode && shouldSkipEditPrompt && (
+                <NavBt tag={Link} to={`${reportUrl}/edit${search}`} icon='create'>
+                  <Message>editReport</Message>
+                </NavBt>)}
 
-          {canEditReport && !inEditMode && !shouldSkipEditPrompt && (
-            <NavBt
-              tag={ReportEditPrompt}
-              report={report}
-              params={params}
-              icon='create'/>)}
+              {canEditReport && !inEditMode && !shouldSkipEditPrompt && (
+                <NavBt
+                  tag={ReportEditPrompt}
+                  report={report}
+                  params={params}
+                  icon='create'/>)}
 
-          {canCloneReport && (
-            <NavBt tag={Link} to={cloneUrl} icon='content_copy'>
-              <Message>cloneReport</Message>
-            </NavBt>)}
+              {canCloneReport && (
+                <NavBt tag={Link} to={cloneUrl} icon='content_copy'>
+                  <Message>cloneReport</Message>
+                </NavBt>)}
 
-          {canEditReport && (
-            <NavBt tag={DeleteButton} entityName={report.name} onClick={deleteReport} icon='delete'>
-              <Message>deleteReport</Message>
-            </NavBt>)}
+              {canEditReport && (
+                <NavBt tag={DeleteButton} entityName={report.name} onClick={deleteReport} icon='delete'>
+                  <Message>deleteReport</Message>
+                </NavBt>)}
 
-          <NavBt
-            tag={Link}
-            to={backUrl}
-            icon='close'>
-            <Message>oneLevelUpNavigation</Message>
-          </NavBt>
-        </NavBts>
+              <NavBt tag={Link} to={backUrl} icon='close'>
+                <Message>oneLevelUpNavigation</Message>
+              </NavBt>
+            </NavBts>)}
       </Navigation>
     )
   }
@@ -145,7 +119,9 @@ ReportAside.propTypes = {
   report: React.PropTypes.shape({
     id: React.PropTypes.string,
     name: React.PropTypes.string
-  })
+  }),
+  indexMode: React.PropTypes.bool,
+  setIndexMode: React.PropTypes.func
 }
 ReportAside.contextTypes = {
   messages: React.PropTypes.object,
@@ -155,4 +131,4 @@ ReportAside.contextTypes = {
   params: React.PropTypes.object
 }
 
-export default contextualize(ReportAside, 'report', 'user')
+export default contextualize(enhance(ReportAside), 'report', 'user')
