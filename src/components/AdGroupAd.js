@@ -6,6 +6,8 @@ import {styledFnComponent} from './higher-order/styled-fn-component'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
 import startsWith from 'lodash/startsWith'
+import find from 'lodash/find'
+import get from 'lodash/get'
 
 const style = csjs`
 .wrapper {
@@ -73,7 +75,74 @@ const colors = {
   neutral: 'grey-800'
 }
 
-function TextAd ({
+const DestinationUrl = ({url}) => (
+  <div className={`mdl-color--yellow-200 ${style.box}`}>
+    <strong>
+      <Message>finalUrl</Message>
+    </strong>
+    <br/>
+    <div className={`${style.finalUrl}`}>
+      <a className={`${style.anchor}`} href={url} title={url} target='_blank'>
+        {url}
+      </a>
+    </div>
+  </div>
+)
+
+DestinationUrl.displayName = 'Destination-URL'
+DestinationUrl.propTypes = {
+  url: React.PropTypes.string
+}
+
+function DisplayUrl ({display_url, final_urls, path_1, path_2}) {
+  display_url = display_url || inferDisplayUrl(final_urls, path_1, path_2)
+
+  return (
+    <a className={`${style.anchor}`} title={display_url} href={`http://${display_url}`} target='_blank'>
+      {display_url}
+    </a>
+  )
+}
+
+DisplayUrl.displayName = 'Display-URL'
+DisplayUrl.propTypes = {
+  display_url: React.PropTypes.string,
+  final_urls: React.PropTypes.array,
+  path_1: React.PropTypes.string,
+  path_2: React.PropTypes.string
+}
+
+const Banner = ({url}) => url
+  ? (
+    <div>
+      <img src={url}/>
+    </div>
+  ) : null
+
+Banner.propTypes = {
+  url: React.PropTypes.string
+}
+
+const pickFullUrl = urls => get(find(urls, {key: 'FULL'}), 'value')
+
+const ImageAd = ({urls, final_urls}) => (
+  <div className={`${style.wrapper}`}>
+    <div className={`mdl-color--yellow-200 ${style.box}`}>
+      <Banner url={pickFullUrl(urls)}/>
+    </div>
+
+    {map(final_urls, (url, index) =>
+      <DestinationUrl key={index} url={url}/>)}
+  </div>
+)
+
+ImageAd.displayName = 'Image-Ad'
+ImageAd.propTypes = {
+  urls: React.PropTypes.array,
+  final_urls: React.PropTypes.array
+}
+
+const TextAd = ({
   kpi,
   headline,
   headline_part_1,
@@ -85,48 +154,46 @@ function TextAd ({
   path_1,
   path_2,
   final_urls
-}) {
-  display_url = display_url || inferDisplayUrl(final_urls, path_1, path_2)
+}) => (
+  <div className={`${style.wrapper}`}>
+    <div className={`mdl-color--yellow-200 ${style.box}`}>
+      {headline
+        ? <h5>{headline}</h5>
+        : <h6>{headline_part_1}<br/>{headline_part_2}</h6>}
 
-  return (
-    <div className={`${style.wrapper}`}>
-      <div className={`mdl-color--yellow-200 ${style.box}`}>
-        {headline
-          ? <h5>{headline}</h5>
-          : <h6>{headline_part_1}<br/>{headline_part_2}</h6>}
+      {kpi && (
+        <span title={kpi.name} className={`mdl-color--${colors[kpi.status]} mdl-color-text--white ${style.kpi}`}>
+          {kpi.text}
+        </span>
+      )}
 
-        {kpi && (
-          <span title={kpi.name} className={`mdl-color--${colors[kpi.status]} mdl-color-text--white ${style.kpi}`}>
-            {kpi.text}
-          </span>
-        )}
+      <DisplayUrl
+        display_url={display_url}
+        final_urls={final_urls}
+        path_1={path_1}
+        path_2={path_2}/>
 
-        <a className={`${style.anchor}`} title={display_url} href={`http://${display_url}`} target='_blank'>
-          {display_url}
-        </a>
+      <div>{description || description_1}</div>
 
-        <div>{description || description_1}</div>
-
-        {description_2
-          ? <div>{description_2}</div>
-          : null}
-      </div>
-
-      {map(final_urls, (url, index) =>
-        <div className={`mdl-color--yellow-200 ${style.box}`} key={index}>
-          <strong>
-            <Message>finalUrl</Message>
-          </strong>
-          <br/>
-          <div className={`${style.finalUrl}`}>
-            <a className={`${style.anchor}`} href={url} title={url} target='_blank'>
-              {url}
-            </a>
-          </div>
-        </div>)}
+      {description_2
+        ? <div>{description_2}</div>
+        : null}
     </div>
-  )
-}
+
+    {map(final_urls, (url, index) =>
+      <div className={`mdl-color--yellow-200 ${style.box}`} key={index}>
+        <strong>
+          <Message>finalUrl</Message>
+        </strong>
+        <br/>
+        <div className={`${style.finalUrl}`}>
+          <a className={`${style.anchor}`} href={url} title={url} target='_blank'>
+            {url}
+          </a>
+        </div>
+      </div>)}
+  </div>
+)
 
 TextAd.displayName = 'Text-Ad'
 TextAd.propTypes = {
@@ -148,6 +215,8 @@ function AdGroupAd (props) {
     case 'EXPANDED_TEXT_AD':
     case 'TEXT_AD':
       return <TextAd {...props}/>
+    case 'IMAGE_AD':
+      return <ImageAd {...props}/>
     default:
       return (
         <div className={`${style.wrapper}`}>
