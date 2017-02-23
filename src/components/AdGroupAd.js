@@ -8,6 +8,8 @@ import join from 'lodash/join'
 import startsWith from 'lodash/startsWith'
 import find from 'lodash/find'
 import get from 'lodash/get'
+import Modal from 'tetris-iso/Modal'
+import {withState} from 'recompose'
 
 const style = csjs`
 .wrapper {
@@ -52,6 +54,18 @@ const style = csjs`
   line-height: 1.5em;
   border-radius: 4px;
   padding: 0 .5em;
+}
+.banner {
+  cursor: pointer;
+  width: 100%;
+  height: 200px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.preview {
+  display: block;
+  margin: 100px auto;
 }`
 
 const w3 = 'www.'
@@ -112,16 +126,23 @@ DisplayUrl.propTypes = {
   path_2: React.PropTypes.string
 }
 
-const Banner = ({url}) => url
+let Banner = ({url, previewMode, setPreviewMode}) => url
   ? (
-    <div>
-      <img src={url}/>
+    <div className={`${style.banner}`} style={{backgroundImage: `url(${url})`}} onClick={() => setPreviewMode(true)}>
+      {previewMode && (
+        <Modal onEscPress={() => setPreviewMode(false)}>
+          <img className={`${style.preview}`} src={url}/>
+        </Modal>)}
     </div>
   ) : null
 
+Banner.displayName = 'Banner'
 Banner.propTypes = {
-  url: React.PropTypes.string
+  url: React.PropTypes.string,
+  previewMode: React.PropTypes.bool,
+  setPreviewMode: React.PropTypes.func
 }
+Banner = withState('previewMode', 'setPreviewMode', false)(Banner)
 
 const pickFullUrl = urls => get(find(urls, {key: 'FULL'}), 'value')
 
