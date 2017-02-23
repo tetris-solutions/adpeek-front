@@ -19,8 +19,7 @@ const AsideLite = ({report, indexMode, setIndexMode}) => (
           <NavBt icon='list' onClick={() => setIndexMode(true)}>
             <Message>moduleIndexLabel</Message>
           </NavBt>
-        </NavBts>
-      )}
+        </NavBts>)}
   </Navigation>
 )
 

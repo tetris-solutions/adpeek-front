@@ -73,7 +73,7 @@ const colors = {
   neutral: 'grey-800'
 }
 
-function AdGroupAd ({
+function TextAd ({
   kpi,
   headline,
   headline_part_1,
@@ -128,9 +128,8 @@ function AdGroupAd ({
   )
 }
 
-AdGroupAd.displayName = 'AdGroup-Ad'
-AdGroupAd.propTypes = {
-  id: React.PropTypes.string,
+TextAd.displayName = 'Text-Ad'
+TextAd.propTypes = {
   kpi: React.PropTypes.number,
   headline: React.PropTypes.string,
   headline_part_1: React.PropTypes.string,
@@ -142,6 +141,27 @@ AdGroupAd.propTypes = {
   final_urls: React.PropTypes.array,
   path_1: React.PropTypes.string,
   path_2: React.PropTypes.string
+}
+
+function AdGroupAd (props) {
+  switch (props.type) {
+    case 'EXPANDED_TEXT_AD':
+    case 'TEXT_AD':
+      return <TextAd {...props}/>
+    default:
+      return (
+        <div className={`${style.wrapper}`}>
+          <div className={`mdl-color--yellow-200 ${style.box}`}>
+            this bad hmmm okay
+          </div>
+        </div>
+      )
+  }
+}
+
+AdGroupAd.displayName = 'AdGroup-Ad'
+AdGroupAd.propTypes = {
+  type: React.PropTypes.string
 }
 
 export default styledFnComponent(AdGroupAd, style)
