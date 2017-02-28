@@ -2,14 +2,12 @@ import React from 'react'
 import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
 import csjs from 'csjs'
-import {styledFnComponent} from './higher-order/styled-fn-component'
-import compact from 'lodash/compact'
-import join from 'lodash/join'
-import startsWith from 'lodash/startsWith'
-import find from 'lodash/find'
-import get from 'lodash/get'
 import Modal from 'tetris-iso/Modal'
+import {styledFnComponent} from './higher-order/styled-fn-component'
 import {withState} from 'recompose'
+import {inferDisplayUrl} from '../functions/infer-display-url'
+import {findImageAdUrl} from '../functions/find-image-ad-url'
+import {findTemplateAdUrl} from '../functions/find-template-ad-url'
 
 const style = csjs`
 .wrapper {
@@ -67,21 +65,6 @@ const style = csjs`
   display: block;
   margin: 100px auto;
 }`
-
-const w3 = 'www.'
-const stripW3 = str => startsWith(str, w3) ? str.substr(w3.length) : str
-
-function inferDisplayUrl (final_urls, path_1, path_2) {
-  if (!final_urls || !final_urls[0]) return null
-
-  const path_0 = final_urls[0]
-    .replace(/.*?:\/\//g, '')
-    .split('/')[0]
-
-  const url = join(compact([`www.${stripW3(path_0)}`, path_1, path_2]), '/')
-
-  return url.replace(/\/$/g, '')
-}
 
 const colors = {
   good: 'light-green-900',
@@ -142,14 +125,13 @@ Banner.propTypes = {
   previewMode: React.PropTypes.bool,
   setPreviewMode: React.PropTypes.func
 }
-Banner = withState('previewMode', 'setPreviewMode', false)(Banner)
 
-const pickFullUrl = urls => get(find(urls, {key: 'FULL'}), 'value')
+Banner = withState('previewMode', 'setPreviewMode', false)(Banner)
 
 const ImageAd = ({urls, final_urls}) => (
   <div className={`${style.wrapper}`}>
     <div className={`mdl-color--yellow-200 ${style.box}`}>
-      <Banner url={pickFullUrl(urls)}/>
+      <Banner url={findImageAdUrl(urls)}/>
     </div>
 
     {map(final_urls, (url, index) =>
@@ -185,8 +167,7 @@ const TextAd = ({
       {kpi && (
         <span title={kpi.name} className={`mdl-color--${colors[kpi.status]} mdl-color-text--white ${style.kpi}`}>
           {kpi.text}
-        </span>
-      )}
+        </span>)}
 
       <DisplayUrl
         display_url={display_url}
@@ -231,6 +212,19 @@ TextAd.propTypes = {
   path_2: React.PropTypes.string
 }
 
+const TemplateAd = ({urls}) => (
+  <div className={`${style.wrapper}`}>
+    <div className={`mdl-color--yellow-200 ${style.box}`}>
+      {findTemplateAdUrl(urls)}
+    </div>
+  </div>
+)
+
+TemplateAd.displayName = 'Template-Ad'
+TemplateAd.propTypes = {
+  urls: React.PropTypes.array
+}
+
 function AdGroupAd (props) {
   switch (props.type) {
     case 'EXPANDED_TEXT_AD':
@@ -238,6 +232,8 @@ function AdGroupAd (props) {
       return <TextAd {...props}/>
     case 'IMAGE_AD':
       return <ImageAd {...props}/>
+    case 'TEMPLATE_AD':
+      return <TemplateAd {...props}/>
     default:
       return (
         <div className={`${style.wrapper}`}>

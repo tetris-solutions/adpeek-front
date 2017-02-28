@@ -1,7 +1,7 @@
 import endsWith from 'lodash/endsWith'
-import find from 'lodash/find'
-import get from 'lodash/get'
 import React from 'react'
+import {findTemplateAdUrl} from '../../../functions/find-template-ad-url'
+import {findImageAdUrl} from '../../../functions/find-image-ad-url'
 
 import AdCreative from './TableCreative'
 const TextAd = ({description, headline}) => (
@@ -20,7 +20,7 @@ TextAd.propTypes = {
 
 const ImageAd = ({urls, name}) => (
   <figure>
-    <img src={get(find(urls, {key: 'PREVIEW'}), 'value', 'http://placehold.it/120x120')}/>
+    <img src={findImageAdUrl(urls, 'http://placehold.it/120x120')}/>
     <figcaption>{name}</figcaption>
   </figure>
 )
@@ -35,21 +35,15 @@ ImageAd.propTypes = {
 }
 
 function TemplateAd ({urls, name}) {
-  let templateDownloadUrl
+  const templateDownloadUrl = findTemplateAdUrl(urls)
 
-  const htmlUrl = get(find(urls, {key: 'FULL'}), 'value')
-
-  if (htmlUrl) {
-    templateDownloadUrl = htmlUrl
-      .replace('/sadbundle/', '/simgad/')
-      .replace('/index.html', '')
-  }
-
-  return (
-    <a href={templateDownloadUrl} target='_blank'>
-      {name}
-    </a>
-  )
+  return templateDownloadUrl
+    ? (
+      <a href={templateDownloadUrl} target='_blank'>
+        {name}
+      </a>
+    )
+    : <span>{name}</span>
 }
 
 TemplateAd.displayName = 'Template-Ad'
