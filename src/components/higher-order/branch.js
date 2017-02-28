@@ -158,7 +158,7 @@ export function branch (mapping, Component = ByPass, maxWatchDepth = 1) {
   })
 }
 
-export function derivative (parent, name, resolverOrComponent, Component) {
+export function derivative (parent, name, resolverOrComponent, Component, maxDepthWatch = 1) {
   const resolver = Component
     ? resolverOrComponent
     : () => name
@@ -189,7 +189,7 @@ export function derivative (parent, name, resolverOrComponent, Component) {
           : {}
       }
 
-      this.Branch = branch(solver, Component)
+      this.Branch = branch(solver, Component, maxDepthWatch)
     },
     render () {
       const {Branch} = this
@@ -203,7 +203,7 @@ export const collection = derivative
 
 const plural = name => name === 'company' ? 'companies' : name + 's'
 
-export const node = (parent, name, Component = ByPass) =>
+export const node = (parent, name, Component = ByPass, maxDepthWatch = 1) =>
   derivative(parent, name, (node, {params}) => {
     if (!node) return null
 
@@ -218,4 +218,4 @@ export const node = (parent, name, Component = ByPass) =>
     return list === node
       ? index
       : [plural(name), index]
-  }, Component)
+  }, Component, maxDepthWatch)

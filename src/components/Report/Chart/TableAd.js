@@ -20,7 +20,7 @@ TextAd.propTypes = {
 
 const ImageAd = ({urls, name}) => (
   <figure>
-    <img src={findImageAdUrl(urls, 'http://placehold.it/120x120')}/>
+    <img src={findImageAdUrl(urls) || 'http://placehold.it/120x120'}/>
     <figcaption>{name}</figcaption>
   </figure>
 )

@@ -7,7 +7,7 @@ import {styledFnComponent} from './higher-order/styled-fn-component'
 import {withState} from 'recompose'
 import {inferDisplayUrl} from '../functions/infer-display-url'
 import {findImageAdUrl} from '../functions/find-image-ad-url'
-import {findTemplateAdId} from '../functions/find-template-ad-url'
+import {findTemplateAdId, findTemplateAdUrl} from '../functions/find-template-ad-url'
 import {loadBundlePreviewUrlAction} from '../actions/load-bundle-preview-url'
 
 const style = csjs`
@@ -215,11 +215,13 @@ TextAd.propTypes = {
 
 const TemplateAd = React.createClass({
   displayName: 'Template-Ad',
-  getInitialState () {
-    return {previewUrl: null}
-  },
   propTypes: {
-    urls: React.PropTypes.array
+    id: React.PropTypes.string,
+    adgroup_id: React.PropTypes.string,
+    urls: React.PropTypes.array,
+    preview: React.PropTypes.shape({
+      url: React.PropTypes.string
+    })
   },
   contextTypes: {
     tree: React.PropTypes.object,
@@ -227,22 +229,22 @@ const TemplateAd = React.createClass({
   },
   componentDidMount () {
     const {tree, params} = this.context
-    const id = findTemplateAdId(this.props.urls)
+    const {urls, id, adgroup_id} = this.props
+    const bundleId = findTemplateAdId(urls)
 
-    if (id) {
-      loadBundlePreviewUrlAction(tree, params, id)
-        .then(response => this.setState({
-          previewUrl: response.data.url
-        }))
+    if (bundleId) {
+      loadBundlePreviewUrlAction(tree, params, adgroup_id, id, bundleId)
     }
   },
   render () {
-    const {previewUrl} = this.state
+    const {preview, urls} = this.props
 
     return (
       <div className={`${style.wrapper}`}>
         <div className={`mdl-color--yellow-200 ${style.box}`}>
-          {previewUrl ? <iframe src={previewUrl}/> : null}
+          {preview
+            ? <iframe src={preview.url} frameBorder={0} height={200}/>
+            : findTemplateAdUrl(urls) || 'invalid template'}
         </div>
       </div>
     )

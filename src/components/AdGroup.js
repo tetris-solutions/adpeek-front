@@ -103,4 +103,4 @@ AdGroupWrapper.propTypes = {
 
 const level = ({params}) => params.campaign ? 'campaign' : 'folder'
 
-export default node(level, 'adGroup', pure(AdGroupWrapper))
+export default node(level, 'adGroup', pure(AdGroupWrapper), Infinity)
