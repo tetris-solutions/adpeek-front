@@ -7,7 +7,8 @@ import {styledFnComponent} from './higher-order/styled-fn-component'
 import {withState} from 'recompose'
 import {inferDisplayUrl} from '../functions/infer-display-url'
 import {findImageAdUrl} from '../functions/find-image-ad-url'
-import {findTemplateAdUrl} from '../functions/find-template-ad-url'
+import {findTemplateAdId} from '../functions/find-template-ad-url'
+import {loadBundlePreviewUrlAction} from '../actions/load-bundle-preview-url'
 
 const style = csjs`
 .wrapper {
@@ -212,18 +213,41 @@ TextAd.propTypes = {
   path_2: React.PropTypes.string
 }
 
-const TemplateAd = ({urls}) => (
-  <div className={`${style.wrapper}`}>
-    <div className={`mdl-color--yellow-200 ${style.box}`}>
-      {findTemplateAdUrl(urls)}
-    </div>
-  </div>
-)
+const TemplateAd = React.createClass({
+  displayName: 'Template-Ad',
+  getInitialState () {
+    return {previewUrl: null}
+  },
+  propTypes: {
+    urls: React.PropTypes.array
+  },
+  contextTypes: {
+    tree: React.PropTypes.object,
+    params: React.PropTypes.object
+  },
+  componentDidMount () {
+    const {tree, params} = this.context
+    const id = findTemplateAdId(this.props.urls)
 
-TemplateAd.displayName = 'Template-Ad'
-TemplateAd.propTypes = {
-  urls: React.PropTypes.array
-}
+    if (id) {
+      loadBundlePreviewUrlAction(tree, params, id)
+        .then(response => this.setState({
+          previewUrl: response.data.url
+        }))
+    }
+  },
+  render () {
+    const {previewUrl} = this.state
+
+    return (
+      <div className={`${style.wrapper}`}>
+        <div className={`mdl-color--yellow-200 ${style.box}`}>
+          {previewUrl ? <iframe src={previewUrl}/> : null}
+        </div>
+      </div>
+    )
+  }
+})
 
 function AdGroupAd (props) {
   switch (props.type) {
@@ -235,13 +259,7 @@ function AdGroupAd (props) {
     case 'TEMPLATE_AD':
       return <TemplateAd {...props}/>
     default:
-      return (
-        <div className={`${style.wrapper}`}>
-          <div className={`mdl-color--yellow-200 ${style.box}`}>
-            this bad hmmm okay
-          </div>
-        </div>
-      )
+      return null
   }
 }
 
