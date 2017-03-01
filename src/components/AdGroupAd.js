@@ -86,6 +86,9 @@ const style = csjs`
   display: inline-block;
   width: 300px;
   margin: 100px;
+}
+.link {
+  word-break: break-all;
 }`
 
 const colors = {
@@ -255,6 +258,17 @@ TemplatePreview.propTypes = {
 }
 TemplatePreview = withPreview(TemplatePreview)
 
+const TemplateLink = ({url}) => (
+  <a className={`${style.link}`} href={url || ''} target='_blank'>
+    {url || 'invalid template'}
+  </a>
+)
+
+TemplateLink.displayName = 'Template-Link'
+TemplateLink.propTypes = {
+  url: React.PropTypes.string
+}
+
 const TemplateAd = React.createClass({
   displayName: 'Template-Ad',
   propTypes: {
@@ -286,7 +300,7 @@ const TemplateAd = React.createClass({
         <div className={`mdl-color--yellow-200 ${style.box}`}>
           {preview
             ? <TemplatePreview url={preview.url}/>
-            : findTemplateAdUrl(urls) || 'invalid template'}
+            : <TemplateLink url={findTemplateAdUrl(urls)}/>}
         </div>
       </div>
     )
