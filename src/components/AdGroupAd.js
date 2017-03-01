@@ -10,6 +10,8 @@ import {findImageAdUrl} from '../functions/find-image-ad-url'
 import {findTemplateAdId, findTemplateAdUrl} from '../functions/find-template-ad-url'
 import {loadBundlePreviewUrlAction} from '../actions/load-bundle-preview-url'
 
+const withPreview = withState('previewMode', 'setPreviewMode', false)
+
 const style = csjs`
 .wrapper {
   padding-bottom: 1em;
@@ -65,6 +67,25 @@ const style = csjs`
 .preview {
   display: block;
   margin: 100px auto;
+}
+.templatePreview {
+  display: relative;
+}
+.templatePreviewOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 3;
+}
+.templatePreviewModal {
+  text-align: center;
+}
+.templatePreviewIframe {
+  display: inline-block;
+  width: 300px;
+  margin: 100px;
 }`
 
 const colors = {
@@ -127,7 +148,7 @@ Banner.propTypes = {
   setPreviewMode: React.PropTypes.func
 }
 
-Banner = withState('previewMode', 'setPreviewMode', false)(Banner)
+Banner = withPreview(Banner)
 
 const ImageAd = ({urls, final_urls}) => (
   <div className={`${style.wrapper}`}>
@@ -213,6 +234,27 @@ TextAd.propTypes = {
   path_2: React.PropTypes.string
 }
 
+let TemplatePreview = ({url, previewMode, setPreviewMode}) => (
+  <div className={`${style.templatePreview}`}>
+    <iframe src={url} frameBorder={0} height={200}/>
+    <div className={`${style.templatePreviewOverlay}`} onClick={() => setPreviewMode(true)}>{previewMode && (
+      <Modal onEscPress={() => setPreviewMode(false)}>
+        <div className={`${style.templatePreviewModal}`}>
+          <iframe src={url} frameBorder={0} height={300} className={`${style.templatePreviewIframe}`}/>
+        </div>
+      </Modal>)}
+    </div>
+  </div>
+)
+
+TemplatePreview.displayName = 'Template-Preview'
+TemplatePreview.propTypes = {
+  url: React.PropTypes.string,
+  previewMode: React.PropTypes.bool,
+  setPreviewMode: React.PropTypes.func
+}
+TemplatePreview = withPreview(TemplatePreview)
+
 const TemplateAd = React.createClass({
   displayName: 'Template-Ad',
   propTypes: {
@@ -243,7 +285,7 @@ const TemplateAd = React.createClass({
       <div className={`${style.wrapper}`}>
         <div className={`mdl-color--yellow-200 ${style.box}`}>
           {preview
-            ? <iframe src={preview.url} frameBorder={0} height={200}/>
+            ? <TemplatePreview url={preview.url}/>
             : findTemplateAdUrl(urls) || 'invalid template'}
         </div>
       </div>
