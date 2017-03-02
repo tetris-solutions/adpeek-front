@@ -138,11 +138,13 @@ export const Navigation = React.createClass({
 
       const nav = ReactDOM.findDOMNode(this)
       const main = document.querySelector('#app main')
-      const header = document.querySelector('#app header')
+      const header = main.querySelector('header')
+      const viewportHeight = main.clientHeight - header.clientHeight
       const slideHeight = main.scrollTop - header.clientHeight
       const maxSlide = nav.parentElement.clientHeight - nav.clientHeight
+      const navTrailingHeight = Math.max(0, nav.clientHeight - viewportHeight)
 
-      nav.style.marginTop = slideHeight > 0
+      nav.style.marginTop = slideHeight > navTrailingHeight
         ? Math.min(slideHeight, maxSlide) + 'px'
         : ''
     })
