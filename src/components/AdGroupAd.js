@@ -274,6 +274,7 @@ const TemplateAd = React.createClass({
   propTypes: {
     id: React.PropTypes.string,
     adgroup_id: React.PropTypes.string,
+    final_urls: React.PropTypes.array,
     urls: React.PropTypes.array,
     preview: React.PropTypes.shape({
       url: React.PropTypes.string
@@ -293,7 +294,7 @@ const TemplateAd = React.createClass({
     }
   },
   render () {
-    const {preview, urls} = this.props
+    const {preview, final_urls, urls} = this.props
 
     return (
       <div className={`${style.wrapper}`}>
@@ -302,6 +303,8 @@ const TemplateAd = React.createClass({
             ? <TemplatePreview url={preview.url}/>
             : <TemplateLink url={findTemplateAdUrl(urls)}/>}
         </div>
+        {map(final_urls, (url, index) =>
+          <DestinationUrl key={index} url={url}/>)}
       </div>
     )
   }
