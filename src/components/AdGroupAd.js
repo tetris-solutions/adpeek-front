@@ -97,6 +97,12 @@ const colors = {
   neutral: 'grey-800'
 }
 
+const kpiType = React.PropTypes.shape({
+  name: React.PropTypes.string,
+  status: React.PropTypes.string,
+  text: React.PropTypes.string
+})
+
 const DestinationUrl = ({url}) => (
   <div className={`mdl-color--yellow-200 ${style.box}`}>
     <strong>
@@ -153,9 +159,10 @@ Banner.propTypes = {
 
 Banner = withPreview(Banner)
 
-const ImageAd = ({urls, final_urls}) => (
+const ImageAd = ({kpi, urls, final_urls}) => (
   <div className={`${style.wrapper}`}>
     <div className={`mdl-color--yellow-200 ${style.box}`}>
+      {kpi && <KPI kpi={kpi}/>}
       <Banner url={findImageAdUrl(urls)}/>
     </div>
 
@@ -166,8 +173,20 @@ const ImageAd = ({urls, final_urls}) => (
 
 ImageAd.displayName = 'Image-Ad'
 ImageAd.propTypes = {
+  kpi: kpiType,
   urls: React.PropTypes.array,
   final_urls: React.PropTypes.array
+}
+
+const KPI = ({kpi}) => (
+  <span title={kpi.name} className={`mdl-color--${colors[kpi.status]} mdl-color-text--white ${style.kpi}`}>
+    {kpi.text}
+  </span>
+)
+
+KPI.displayName = 'KPI'
+KPI.propTypes = {
+  kpi: kpiType
 }
 
 const TextAd = ({
@@ -189,10 +208,7 @@ const TextAd = ({
         ? <h5>{headline}</h5>
         : <h6>{headline_part_1}<br/>{headline_part_2}</h6>}
 
-      {kpi && (
-        <span title={kpi.name} className={`mdl-color--${colors[kpi.status]} mdl-color-text--white ${style.kpi}`}>
-          {kpi.text}
-        </span>)}
+      {kpi && <KPI kpi={kpi}/>}
 
       <DisplayUrl
         display_url={display_url}
@@ -224,7 +240,7 @@ const TextAd = ({
 
 TextAd.displayName = 'Text-Ad'
 TextAd.propTypes = {
-  kpi: React.PropTypes.number,
+  kpi: kpiType,
   headline: React.PropTypes.string,
   headline_part_1: React.PropTypes.string,
   headline_part_2: React.PropTypes.string,
@@ -275,6 +291,7 @@ const TemplateAd = React.createClass({
     id: React.PropTypes.string,
     adgroup_id: React.PropTypes.string,
     final_urls: React.PropTypes.array,
+    kpi: kpiType,
     urls: React.PropTypes.array,
     preview: React.PropTypes.shape({
       url: React.PropTypes.string
@@ -294,11 +311,12 @@ const TemplateAd = React.createClass({
     }
   },
   render () {
-    const {preview, final_urls, urls} = this.props
+    const {kpi, preview, final_urls, urls} = this.props
 
     return (
       <div className={`${style.wrapper}`}>
         <div className={`mdl-color--yellow-200 ${style.box}`}>
+          {kpi && <KPI kpi={kpi}/>}
           {preview
             ? <TemplatePreview url={preview.url}/>
             : <TemplateLink url={findTemplateAdUrl(urls)}/>}
