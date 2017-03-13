@@ -2,6 +2,7 @@ import bind from 'lodash/bind'
 import {loadUserCompaniesActionServerAdaptor as companies} from 'tetris-iso/actions'
 import {protectedRouteMiddleware as protect, performActionsMiddleware as preload} from 'tetris-iso/server'
 import {allowGuestMiddleware} from '../middlewares/allow-guest'
+import {protectSharedReportMiddleware} from '../middlewares/protect-shared-report'
 
 import {loadReportShareActionServerAdaptor as reportShareMetaData} from '../actions/load-report-share'
 import {loadWorkspaceAccountsActionServerAdaptor as accounts} from '../actions/load-accounts'
@@ -34,6 +35,7 @@ export function setAppRoutes (app, render) {
 
   const ensureLoad = (...args) => preload(statuses, medias, companies, ...args)
 
+  app.get('/expired/report/:report', render)
   app.get('/mailing/:mailing/unsubscribe/:email',
     preload(unsub),
     render)
@@ -45,7 +47,7 @@ export function setAppRoutes (app, render) {
 
   app.get('/share/report/:reportShare',
     allowGuestMiddleware,
-    protect,
+    protectSharedReportMiddleware,
     preload(statuses, reportShareMetaData, reportShare),
     render)
 

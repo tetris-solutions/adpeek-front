@@ -91,6 +91,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
   /* eslint-disable react/jsx-indent-props */
   return (
     <Route path='/' component={root(tree, createRoot(DocTitle, ErrorScreen))}>
+      <Route path='expired/report/:report' {...render(component.Expired)}/>
       <Route
         path='mailing/:mailing/unsubscribe/:email'
         onEnter={preload(unsub)}

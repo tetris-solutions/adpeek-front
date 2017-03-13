@@ -131,6 +131,9 @@ const orderLevel = provide => tempSyncEnsure(() => provide({
 const unsub = provide => tempSyncEnsure(() =>
   provide(require('./components/Report/Unsub')))
 
+const expired = provide => tempSyncEnsure(() =>
+  provide(require('./components/Report/Expired')))
+
 const mailing = provide => tempSyncEnsure(() =>
   provide(require('./components/Report/Mailing')))
 
@@ -148,6 +151,7 @@ const orderList = provide => tempSyncEnsure(() =>
 
 export const component = {
   Unsub: screen(unsub),
+  Expired: screen(expired),
   Mailing: screen(mailing),
   Companies: screen(companies),
   OrderAutoBudget: screen(autoBudget),

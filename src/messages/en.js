@@ -333,5 +333,9 @@ module.exports = {
   lastActiveOrder: 'Last active Order',
   moduleIndexLabel: 'Index',
   loadSearchTerms: 'Load Search Terms',
-  searchTerms: 'Search Terms'
+  searchTerms: 'Search Terms',
+  expiredReportTitle: 'Expired Report Access',
+  expiredReportBody: `
+      Oops, your access to report <code>{report}</code> is not valid anymore.
+      This happens when you try to access a report with an expired guest token.`
 }
