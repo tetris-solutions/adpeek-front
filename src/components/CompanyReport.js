@@ -41,4 +41,4 @@ const CompanyReport = React.createClass({
   }
 })
 
-export default branch('reportMetaData', CompanyReport)
+export default branch('reportMetaData', CompanyReport, 2)

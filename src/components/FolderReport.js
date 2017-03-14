@@ -46,4 +46,4 @@ const FolderReport = React.createClass({
   }
 })
 
-export default branch('reportMetaData', FolderReport)
+export default branch('reportMetaData', FolderReport, 2)

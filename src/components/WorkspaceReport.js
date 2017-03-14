@@ -43,4 +43,4 @@ const WorkspaceReport = React.createClass({
   }
 })
 
-export default branch('reportMetaData', WorkspaceReport)
+export default branch('reportMetaData', WorkspaceReport, 2)
