@@ -6,7 +6,7 @@ import Fence from './Fence'
 import {Navigation, NavBt, NavLink, NavBts, Name} from './Navigation'
 import DeleteButton from './DeleteButton'
 import {deleteFolderAction} from '../actions/delete-folder'
-import {contextualize} from './higher-order/contextualize'
+import {node} from './higher-order/branch'
 
 export function FolderAside ({
   dispatch,
@@ -82,4 +82,4 @@ FolderAside.propTypes = {
   })
 }
 
-export default contextualize(FolderAside, 'folder')
+export default node('workspace', 'folder', FolderAside)

@@ -1,17 +1,15 @@
 import React from 'react'
-import {contextualize} from './higher-order/contextualize'
 import OrdersClone from './OrdersClone'
+import {node} from './higher-order/branch'
 
-export const Orders = React.createClass({
-  displayName: 'Orders',
-  propTypes: {
-    folder: React.PropTypes.shape({
-      orders: React.PropTypes.array
-    })
-  },
-  render () {
-    return <OrdersClone orders={this.props.folder.orders}/>
-  }
-})
+export const Orders = ({folder: {orders}}) =>
+  <OrdersClone orders={orders}/>
 
-export default contextualize(Orders, 'folder')
+Orders.displayName = 'Folder-Orders-Cloning'
+Orders.propTypes = {
+  folder: React.PropTypes.shape({
+    orders: React.PropTypes.array
+  })
+}
+
+export default node('workspace', 'folder', Orders)

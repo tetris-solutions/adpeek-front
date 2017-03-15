@@ -1,5 +1,5 @@
 import React from 'react'
-import {contextualize} from './higher-order/contextualize'
+import {node} from './higher-order/branch'
 import {Link} from 'react-router'
 import Message from 'tetris-iso/Message'
 import {Navigation, NavBt, NavBts, Name} from './Navigation'
@@ -25,4 +25,4 @@ CampaignAside.propTypes = {
   })
 }
 
-export default contextualize(CampaignAside, 'campaign')
+export default node('folder', 'campaign', CampaignAside)

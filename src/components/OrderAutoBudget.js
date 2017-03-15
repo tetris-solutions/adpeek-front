@@ -1,7 +1,7 @@
 import React from 'react'
 import {styled} from './mixins/styled'
 import csjs from 'csjs'
-import {contextualize} from './higher-order/contextualize'
+import {node} from './higher-order/branch'
 import Input from './Input'
 import AutoBudgetLogs from './AutoBudgetLogs'
 const style = csjs`
@@ -50,4 +50,4 @@ export const OrderAutoBudget = React.createClass({
   }
 })
 
-export default contextualize(OrderAutoBudget, 'order', 'folder')
+export default node('folder', 'order', OrderAutoBudget)

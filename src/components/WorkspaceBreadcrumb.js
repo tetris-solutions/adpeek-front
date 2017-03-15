@@ -1,7 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router'
-
-import {contextualize} from './higher-order/contextualize'
+import {node} from './higher-order/branch'
 
 const WorkspaceBreadcrumb = ({params: {company}, workspace}, {messages: {workspaceBreadcrumb}}) => workspace && (
   <Link to={`/company/${company}/workspace/${workspace.id}`} title={workspaceBreadcrumb}>
@@ -24,4 +23,4 @@ WorkspaceBreadcrumb.contextTypes = {
   messages: React.PropTypes.object
 }
 
-export default contextualize(WorkspaceBreadcrumb, 'workspace')
+export default node('company', 'workspace', WorkspaceBreadcrumb)

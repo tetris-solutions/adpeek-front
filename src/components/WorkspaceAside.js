@@ -3,7 +3,7 @@ import React from 'react'
 import Fence from './Fence'
 import DeleteButton from './DeleteButton'
 import {deleteWorkspaceAction} from '../actions/delete-workspace'
-import {contextualize} from './higher-order/contextualize'
+import {node} from './higher-order/branch'
 import {Navigation, NavLink, NavBt, NavBts, Name} from './Navigation'
 import Recent from './Recent'
 import ReportLink from './Report/ReportLink'
@@ -79,4 +79,4 @@ WorkspaceAside.propTypes = {
   })
 }
 
-export default contextualize(WorkspaceAside, 'workspace')
+export default node('company', 'workspace', WorkspaceAside)

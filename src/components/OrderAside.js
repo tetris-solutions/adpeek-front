@@ -4,7 +4,7 @@ import {Link} from 'react-router'
 import Fence from './Fence'
 import DeleteButton from './DeleteButton'
 import {deleteOrderAction} from '../actions/delete-order'
-import {contextualize} from './higher-order/contextualize'
+import {node} from './higher-order/branch'
 import {Navigation, Name, NavBt, NavBts} from './Navigation'
 
 export function OrderAside ({params, order, dispatch}, {router}) {
@@ -61,4 +61,4 @@ OrderAside.propTypes = {
   })
 }
 
-export default contextualize(OrderAside, 'order')
+export default node('folder', 'order', OrderAside)

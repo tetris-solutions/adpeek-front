@@ -7,7 +7,7 @@ import Input from './Input'
 import RolesSelector from './WorkspaceRolesSelector'
 import {updateWorkspaceAction} from '../actions/update-workspace'
 import {Form, Content, Header, Footer} from './Card'
-import {contextualize} from './higher-order/contextualize'
+import {node} from './higher-order/branch'
 import WorkspaceForm from './mixins/WorkspaceForm'
 import Page from './Page'
 import SubHeader from './SubHeader'
@@ -88,4 +88,4 @@ export const WorkspaceEdit = React.createClass({
   }
 })
 
-export default contextualize(WorkspaceEdit, 'workspace')
+export default node('company', 'workspace', WorkspaceEdit)

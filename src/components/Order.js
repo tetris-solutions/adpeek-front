@@ -1,5 +1,5 @@
 import React from 'react'
-import {contextualize} from './higher-order/contextualize'
+import {many} from './higher-order/branch'
 import OrderController from './OrderController'
 import Message from 'intl-messageformat'
 import upperFirst from 'lodash/upperFirst'
@@ -56,6 +56,7 @@ export function Order ({deliveryMethods, dispatch, params, order, folder, status
 }
 
 Order.displayName = 'Order'
+
 Order.propTypes = {
   routes: React.PropTypes.array,
   statuses: React.PropTypes.array,
@@ -65,10 +66,15 @@ Order.propTypes = {
   folder: React.PropTypes.object,
   order: React.PropTypes.any
 }
+
 Order.contextTypes = {
   moment: React.PropTypes.func,
   locales: React.PropTypes.string,
   messages: React.PropTypes.object
 }
 
-export default contextualize(Order, {deliveryMethods: ['deliveryMethods'], statuses: ['statuses']}, 'folder', 'order')
+export default many([
+  {deliveryMethods: ['deliveryMethods'], statuses: ['statuses']},
+  ['workspace', 'folder'],
+  ['folder', 'order']
+], Order)

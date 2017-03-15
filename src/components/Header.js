@@ -5,7 +5,7 @@ import csjs from 'csjs'
 import {styled} from './mixins/styled'
 import gravatar from 'gravatar'
 import Tooltip from 'tetris-iso/Tooltip'
-import {contextualize} from './higher-order/contextualize'
+import {many} from './higher-order/branch'
 import {logoutAction} from 'tetris-iso/actions'
 import get from 'lodash/get'
 import {Link} from 'react-router'
@@ -193,4 +193,7 @@ const Header = React.createClass({
   }
 })
 
-export default contextualize(Header, 'user', 'company')
+export default many([
+  {user: ['user']},
+  ['user', 'company']
+], Header)

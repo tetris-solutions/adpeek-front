@@ -10,7 +10,7 @@ import map from 'lodash/map'
 import find from 'lodash/find'
 import get from 'lodash/get'
 import {Form, Content, Header, Footer} from './Card'
-import {contextualize} from './higher-order/contextualize'
+import {many} from './higher-order/branch'
 import Checkbox from './Checkbox'
 import AutoSelect from './AutoSelect'
 import FolderFormMixin from './mixins/FolderForm'
@@ -217,4 +217,8 @@ export const CreateFolder = React.createClass({
   }
 })
 
-export default contextualize(CreateFolder, {kpis: ['kpis'], medias: ['medias']}, 'workspace', 'company')
+export default many([
+  {kpis: ['kpis'], medias: ['medias']},
+  ['user', 'company'],
+  ['company', 'workspace']
+], CreateFolder)

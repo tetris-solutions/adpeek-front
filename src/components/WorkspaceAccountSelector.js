@@ -10,9 +10,8 @@ import Autosuggest from 'react-autosuggest'
 import Message from 'intl-messageformat'
 import React from 'react'
 import {removeFromStart} from '../functions/remove-from-start'
-
 import {loadCompanyAccountsAction} from '../actions/load-company-accounts'
-import {contextualize} from './higher-order/contextualize'
+import {node} from './higher-order/branch'
 import {styled} from './mixins/styled'
 
 const yes = () => true
@@ -280,4 +279,4 @@ export const WorkspaceAccountSelector = React.createClass({
   }
 })
 
-export default contextualize(WorkspaceAccountSelector, 'company')
+export default node('user', 'company', WorkspaceAccountSelector)

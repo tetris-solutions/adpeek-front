@@ -1,6 +1,6 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
-import {contextualize} from './higher-order/contextualize'
+import {node} from './higher-order/branch'
 import {Navigation, NavLink, NavBt, NavBts, Name} from './Navigation'
 import Recent from './Recent'
 import ReportLink from './Report/ReportLink'
@@ -61,4 +61,4 @@ CompanyAside.propTypes = {
   })
 }
 
-export default contextualize(CompanyAside, 'company')
+export default node('user', 'company', CompanyAside)

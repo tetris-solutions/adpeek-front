@@ -1,7 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router'
-
-import {contextualize} from './higher-order/contextualize'
+import {node} from './higher-order/branch'
 
 const FolderBreadcrumb = ({params: {company, workspace}, folder}, {messages: {folderBreadcrumb}}) => folder && (
   <Link to={`/company/${company}/workspace/${workspace}/folder/${folder.id}`} title={folderBreadcrumb}>
@@ -25,4 +24,4 @@ FolderBreadcrumb.contextTypes = {
   messages: React.PropTypes.object
 }
 
-export default contextualize(FolderBreadcrumb, 'folder')
+export default node('workspace', 'folder', FolderBreadcrumb)

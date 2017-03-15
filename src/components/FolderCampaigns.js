@@ -14,7 +14,7 @@ import {linkCampaignsAction} from '../actions/link-campaigns'
 import {loadFolderCampaignsAction} from '../actions/load-folder-campaigns'
 import {loadLooseCampaignsAction} from '../actions/load-loose-campaigns'
 import {unlinkCampaignsAction} from '../actions/unlink-campaign'
-import {contextualize} from './higher-order/contextualize'
+import {node} from './higher-order/branch'
 import Page from './Page'
 
 const cleanStr = str => deburr(lowerCase(str))
@@ -151,4 +151,4 @@ const FolderCampaigns = React.createClass({
   }
 })
 
-export default contextualize(FolderCampaigns, 'folder')
+export default node('workspace', 'folder', FolderCampaigns)

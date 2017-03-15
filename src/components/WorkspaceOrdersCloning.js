@@ -1,17 +1,15 @@
 import React from 'react'
-import {contextualize} from './higher-order/contextualize'
 import OrdersClone from './OrdersClone'
+import {node} from './higher-order/branch'
 
-export const Orders = React.createClass({
-  displayName: 'Orders',
-  propTypes: {
-    workspace: React.PropTypes.shape({
-      orders: React.PropTypes.array
-    })
-  },
-  render () {
-    return <OrdersClone orders={this.props.workspace.orders}/>
-  }
-})
+export const Orders = ({workspace: {orders}}) =>
+  <OrdersClone orders={orders}/>
 
-export default contextualize(Orders, 'workspace')
+Orders.displayName = 'Workspace-Orders-Cloning'
+Orders.propTypes = {
+  workspace: React.PropTypes.shape({
+    orders: React.PropTypes.array
+  })
+}
+
+export default node('company', 'workspace', Orders)

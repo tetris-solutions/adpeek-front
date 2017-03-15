@@ -3,7 +3,7 @@ import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
 import CheckBox from './Checkbox'
 import includes from 'lodash/includes'
-import {contextualize} from './higher-order/contextualize'
+import {node} from './higher-order/branch'
 
 export const WorkspaceRolesSelector = React.createClass({
   displayName: 'Workspace-Roles-Selector',
@@ -39,4 +39,4 @@ export const WorkspaceRolesSelector = React.createClass({
   }
 })
 
-export default contextualize(WorkspaceRolesSelector, 'company')
+export default node('user', 'company', WorkspaceRolesSelector)

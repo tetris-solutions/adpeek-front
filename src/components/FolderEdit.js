@@ -11,7 +11,7 @@ import Select from './Select'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import {updateFolderAction} from '../actions/update-folder'
 import {Form, Content, Header, Footer} from './Card'
-import {contextualize} from './higher-order/contextualize'
+import {node} from './higher-order/branch'
 import FolderFormMixin from './mixins/FolderForm'
 import AutoSelect from './AutoSelect'
 import Page from './Page'
@@ -223,4 +223,12 @@ export const EditFolder = React.createClass({
   }
 })
 
-export default contextualize(EditFolder, {kpis: ['kpis'], medias: ['medias']}, 'folder', 'workspace', 'company')
+export default node([
+  {
+    kpis: ['kpis'],
+    medias: ['medias']
+  },
+  ['user', 'company'],
+  ['company', 'workspace'],
+  ['workspace', 'folder']
+], EditFolder)

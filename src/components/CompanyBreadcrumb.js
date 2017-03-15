@@ -1,16 +1,12 @@
 import React from 'react'
 import {Link} from 'react-router'
+import {node} from './higher-order/branch'
 
-import {contextualize} from './higher-order/contextualize'
-
-export function CompanyBreadcrumb ({company: {id, name}}, {messages: {companyBreadcrumb}}) {
-  return (
-    <Link to={`/company/${id}`} title={companyBreadcrumb}>
-      <i className='material-icons'>account_balance</i>
-      {name}
-    </Link>
-  )
-}
+export const CompanyBreadcrumb = ({company: {id, name}}, {messages: {companyBreadcrumb}}) =>
+  <Link to={`/company/${id}`} title={companyBreadcrumb}>
+    <i className='material-icons'>account_balance</i>
+    {name}
+  </Link>
 
 CompanyBreadcrumb.displayName = 'Company-Breadcrumb'
 CompanyBreadcrumb.propTypes = {
@@ -23,4 +19,4 @@ CompanyBreadcrumb.contextTypes = {
   messages: React.PropTypes.object
 }
 
-export default contextualize(CompanyBreadcrumb, 'company')
+export default node('user', 'company', CompanyBreadcrumb)

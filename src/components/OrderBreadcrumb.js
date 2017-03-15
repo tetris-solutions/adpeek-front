@@ -1,16 +1,12 @@
 import React from 'react'
 import {Link} from 'react-router'
+import {node} from './higher-order/branch'
 
-import {contextualize} from './higher-order/contextualize'
-
-export function OrderBreadcrumb ({params: {company, workspace, folder}, order}, {messages: {orderBreadcrumb}}) {
-  return (
-    <Link to={`/company/${company}/workspace/${workspace}/folder/${folder}/order/${order.id}`} title={orderBreadcrumb}>
-      <i className='material-icons'>monetization_on</i>
-      {order.name}
-    </Link>
-  )
-}
+export const OrderBreadcrumb = ({params: {company, workspace, folder}, order}, {messages: {orderBreadcrumb}}) =>
+  <Link to={`/company/${company}/workspace/${workspace}/folder/${folder}/order/${order.id}`} title={orderBreadcrumb}>
+    <i className='material-icons'>monetization_on</i>
+    {order.name}
+  </Link>
 
 OrderBreadcrumb.displayName = 'Order-Breadcrumb'
 OrderBreadcrumb.propTypes = {
@@ -28,4 +24,4 @@ OrderBreadcrumb.contextTypes = {
   messages: React.PropTypes.object
 }
 
-export default contextualize(OrderBreadcrumb, 'order')
+export default node('folder', 'order', OrderBreadcrumb)
