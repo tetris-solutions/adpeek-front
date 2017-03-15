@@ -3,6 +3,7 @@ import isFunction from 'lodash/isFunction'
 import findIndex from 'lodash/findIndex'
 import isString from 'lodash/isString'
 import isArray from 'lodash/isArray'
+import isObject from 'lodash/isPlainObject'
 import isNumber from 'lodash/isNumber'
 import forEach from 'lodash/forEach'
 import assign from 'lodash/assign'
@@ -222,10 +223,10 @@ export const node = (parent, name, Component = Placeholder, maxDepthWatch = 1) =
 
 export function many (maps, Component) {
   forEach(maps, mapping => {
-    if (isArray(mapping)) {
-      Component = node(...mapping.concat([Component]))
-    } else {
+    if (isObject(mapping)) {
       Component = branch(mapping, Component)
+    } else {
+      Component = node(...mapping.concat([Component]))
     }
   })
 
