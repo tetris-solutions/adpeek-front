@@ -11,6 +11,8 @@ import find from 'lodash/find'
 import concat from 'lodash/concat'
 import omit from 'lodash/omit'
 
+const plural = name => name === 'company' ? 'companies' : name + 's'
+
 const mappingToCursors = (mapping, props, context) =>
   isFunction(mapping)
     ? mapping(props, context)
@@ -25,6 +27,12 @@ Placeholder.propTypes = {
   children: React.PropTypes.node
 }
 
+/**
+ * @param {String|Function|Object} mapping cursor mapping
+ * @param {Function} Component component to extend
+ * @param {Number} [maxWatchDepth=1] max tree depth to watch
+ * @return {Function} extended component
+ */
 export function branch (mapping, Component = Placeholder, maxWatchDepth = 1) {
   if (isString(mapping)) {
     mapping = {[mapping]: [mapping]}
@@ -159,6 +167,14 @@ export function branch (mapping, Component = Placeholder, maxWatchDepth = 1) {
   })
 }
 
+/**
+ * @param {String|Function} parent parent cursor
+ * @param {String} name cursor name
+ * @param {Function} resolverOrComponent resolver fn or component
+ * @param {Function} Component component to extend
+ * @param {Number} [maxDepthWatch=1] max tree depth to watch
+ * @return {Function} extended component
+ */
 export function derivative (parent, name, resolverOrComponent, Component, maxDepthWatch = 1) {
   const resolver = Component
     ? resolverOrComponent
@@ -202,8 +218,13 @@ export function derivative (parent, name, resolverOrComponent, Component, maxDep
 
 export const collection = derivative
 
-const plural = name => name === 'company' ? 'companies' : name + 's'
-
+/**
+ * @param {String|Function} parent parent cursor name
+ * @param {String} name cursor name
+ * @param {Function} Component component to extend
+ * @param {Number} [maxDepthWatch=1] max depth for watching
+ * @return {Function} extended component
+ */
 export const node = (parent, name, Component = Placeholder, maxDepthWatch = 1) =>
   derivative(parent, name, (node, {params}) => {
     if (!node) return null
@@ -221,6 +242,11 @@ export const node = (parent, name, Component = Placeholder, maxDepthWatch = 1) =
       : [plural(name), index]
   }, Component, maxDepthWatch)
 
+/**
+ * @param {Array} maps maps to use for injection
+ * @param {Function} Component react component to extend
+ * @return {Function} extended component
+ */
 export function many (maps, Component) {
   forEach(maps, mapping => {
     if (isObject(mapping)) {

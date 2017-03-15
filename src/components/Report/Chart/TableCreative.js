@@ -4,8 +4,9 @@ import React from 'react'
 import get from 'lodash/get'
 import reportParamsType from '../../../propTypes/report-params'
 import {loadCreativeAction} from '../../../actions/load-creative'
-import {contextualize} from '../../higher-order/contextualize'
+import {node} from '../../higher-order/branch'
 import {styled} from '../../mixins/styled'
+
 const style = csjs`
 .post {
   width: 256px;
@@ -97,4 +98,4 @@ const AdCreative = React.createClass({
   }
 })
 
-export default contextualize(AdCreative, 'company')
+export default node('user', 'company', AdCreative)
