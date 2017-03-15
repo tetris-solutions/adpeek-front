@@ -15,16 +15,16 @@ const mappingToCursors = (mapping, props, context) =>
     ? mapping(props, context)
     : mapping
 
-const ByPass = props => props.children
+const Placeholder = props => props.children
   ? React.cloneElement(props.children, omit(props, 'children'))
   : null
 
-ByPass.displayName = 'Node'
-ByPass.propTypes = {
+Placeholder.displayName = 'Node'
+Placeholder.propTypes = {
   children: React.PropTypes.node
 }
 
-export function branch (mapping, Component = ByPass, maxWatchDepth = 1) {
+export function branch (mapping, Component = Placeholder, maxWatchDepth = 1) {
   if (isString(mapping)) {
     mapping = {[mapping]: [mapping]}
   }
@@ -203,7 +203,7 @@ export const collection = derivative
 
 const plural = name => name === 'company' ? 'companies' : name + 's'
 
-export const node = (parent, name, Component = ByPass, maxDepthWatch = 1) =>
+export const node = (parent, name, Component = Placeholder, maxDepthWatch = 1) =>
   derivative(parent, name, (node, {params}) => {
     if (!node) return null
 
@@ -219,3 +219,15 @@ export const node = (parent, name, Component = ByPass, maxDepthWatch = 1) =>
       ? index
       : [plural(name), index]
   }, Component, maxDepthWatch)
+
+export function many (maps, Component) {
+  forEach(maps, mapping => {
+    if (isArray(mapping)) {
+      Component = node(...mapping.concat([Component]))
+    } else {
+      Component = branch(mapping, Component)
+    }
+  })
+
+  return Component
+}
