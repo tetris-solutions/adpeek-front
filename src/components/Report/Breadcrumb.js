@@ -2,8 +2,8 @@ import React from 'react'
 import {Link} from 'react-router'
 import join from 'lodash/join'
 import compact from 'lodash/compact'
-
-import {contextualize} from '../higher-order/contextualize'
+import {node} from '../higher-order/branch'
+import {inferLevelFromParams} from '../../functions/infer-level-from-params'
 
 export function ReportBreadcrumb ({params: {company, workspace, folder}, report}, {messages: {reportBreadcrumb}}) {
   const url = '/' +
@@ -38,4 +38,4 @@ ReportBreadcrumb.contextTypes = {
   messages: React.PropTypes.object
 }
 
-export default contextualize(ReportBreadcrumb, 'report')
+export default node(({params}) => inferLevelFromParams(params), 'report', ReportBreadcrumb)

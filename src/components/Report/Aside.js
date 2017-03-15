@@ -6,7 +6,8 @@ import TextMessage from 'intl-messageformat'
 import Fence from '../Fence'
 import DeleteButton from '../DeleteButton'
 import {deleteReportAction} from '../../actions/delete-report'
-import {contextualize} from '../higher-order/contextualize'
+import {inferLevelFromParams} from '../../functions/infer-level-from-params'
+import {many} from '../higher-order/branch'
 import ReportEditPrompt from './EditPrompt'
 import {Navigation, NavBt, NavBts} from '../Navigation'
 import {canSkipReportEditPrompt} from '../../functions/can-skip-report-edit-prompt'
@@ -18,7 +19,7 @@ import {Modules} from './ModulesIndex'
 import Icon from './Icon'
 import {withState} from 'recompose'
 
-const enhance = withState('indexMode', 'setIndexMode', false)
+const indexModeToggle = withState('indexMode', 'setIndexMode', false)
 const createModule = () => window.event$.emit('report.onNewModuleClick')
 
 export function ReportAside ({report, user, dispatch, indexMode, setIndexMode}, {messages, locales, router, location: {pathname, search}, params}) {
@@ -131,4 +132,7 @@ ReportAside.contextTypes = {
   params: React.PropTypes.object
 }
 
-export default contextualize(enhance(ReportAside), 'report', 'user')
+export default many([
+  {user: ['user']},
+  [({params}) => inferLevelFromParams(params), 'report']
+], indexModeToggle(ReportAside))

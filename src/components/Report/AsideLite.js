@@ -1,5 +1,6 @@
 import React from 'react'
-import {contextualize} from '../higher-order/contextualize'
+import {node} from '../higher-order/branch'
+import {inferLevelFromParams} from '../../functions/infer-level-from-params'
 import {Navigation, NavBts, NavBt} from '../Navigation'
 import Message from 'tetris-iso/Message'
 import Icon from './Icon'
@@ -30,4 +31,4 @@ AsideLite.propTypes = {
   setIndexMode: React.PropTypes.func
 }
 
-export default contextualize(enhance(AsideLite), 'report')
+export default node(({params}) => inferLevelFromParams(params), 'report', enhance(AsideLite))
