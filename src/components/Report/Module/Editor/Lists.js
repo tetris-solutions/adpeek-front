@@ -114,16 +114,6 @@ const Lists = React.createClass({
             <Entities items={items}/>
           </Tab>
 
-          <Tab id='metric' title={metricTitle}>
-            <br/>
-            <AttributeList
-              add={addAttribute}
-              remove={removeAttribute}
-              attributes={metrics}
-              levels={attrLevels}
-              selectedAttributes={selectedMetrics}/>
-          </Tab>
-
           {draft.module.type !== 'total' && (
             <Tab id='dimension' title={dimensionTitle}>
               <br/>
@@ -134,6 +124,16 @@ const Lists = React.createClass({
                 levels={attrLevels}
                 selectedAttributes={selectedDimensions}/>
             </Tab>)}
+
+          <Tab id='metric' title={metricTitle}>
+            <br/>
+            <AttributeList
+              add={addAttribute}
+              remove={removeAttribute}
+              attributes={metrics}
+              levels={attrLevels}
+              selectedAttributes={selectedMetrics}/>
+          </Tab>
         </Tabs>
       </div>
     )
