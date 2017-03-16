@@ -337,5 +337,7 @@ module.exports = {
   expiredReportTitle: 'Expired Report Access',
   expiredReportBody: `
       Oops, your access to report <code>{report}</code> is not valid anymore.
-      This happens when you try to access a report with an expired guest token.`
+      This happens when you try to access a report with an expired guest token.`,
+  selectIdDimension: 'Select {entity}',
+  missingIdAlert: 'Some attributes can only be<br/> used along the dimension <em>{entity}</em>.'
 }

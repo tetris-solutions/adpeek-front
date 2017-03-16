@@ -14,6 +14,7 @@ import AttributeList from './AttributeList'
 import Input from '../../../Input'
 import {Tabs, Tab} from '../../../Tabs'
 import Entities from './Entities'
+import MissingIdAlert from './MissingIdAlert'
 
 const clean = str => trim(lowerCase(deburr(str)))
 
@@ -100,6 +101,7 @@ const Lists = React.createClass({
     const dimensionTitle = (
       <i className={dimensionClasses} title={messages.dimensions}>view_column</i>
     )
+    const missingId = !includes(selectedDimensions, 'id')
 
     return (
       <div ref='wrapper'>
@@ -117,6 +119,11 @@ const Lists = React.createClass({
           {draft.module.type !== 'total' && (
             <Tab id='dimension' title={dimensionTitle}>
               <br/>
+
+              {missingId && (
+                <MissingIdAlert
+                  add={() => addAttribute('id')}/>)}
+
               <AttributeList
                 add={addAttribute}
                 remove={removeAttribute}
@@ -127,6 +134,11 @@ const Lists = React.createClass({
 
           <Tab id='metric' title={metricTitle}>
             <br/>
+
+            {draft.module.type !== 'total' && missingId && (
+              <MissingIdAlert
+                add={() => addAttribute('id')}/>)}
+
             <AttributeList
               add={addAttribute}
               remove={removeAttribute}
