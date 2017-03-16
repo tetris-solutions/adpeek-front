@@ -248,7 +248,7 @@ export const node = (parent, name, Component = Placeholder, maxDepthWatch = 1) =
  * @return {Function} extended component
  */
 export function many (maps, Component) {
-  forEach(maps, mapping => {
+  forEach(maps.reverse(), mapping => {
     if (isObject(mapping)) {
       Component = branch(mapping, Component)
     } else {

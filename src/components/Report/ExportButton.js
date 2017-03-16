@@ -3,7 +3,8 @@ import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
 import {styledFnComponent} from '../higher-order/styled-fn-component'
 import csjs from 'csjs'
-import {contextualize} from '../higher-order/contextualize'
+import {many} from '../higher-order/branch'
+import {inferLevelFromProps} from '../../functions/infer-level-from-params'
 import get from 'lodash/get'
 import some from 'lodash/some'
 import {Button} from '../Button'
@@ -153,4 +154,9 @@ const ReportExportButton = React.createClass({
   }
 })
 
-export default contextualize(ReportExportButton, 'company', 'folder', 'workspace', 'report')
+export default many([
+  ['user', 'company'],
+  ['company', 'workspace'],
+  ['workspace', 'folder'],
+  [inferLevelFromProps, 'report']
+], ReportExportButton)

@@ -9,8 +9,7 @@ import {updateMailingReportAction} from '../../actions/update-mailing-action'
 import {deleteMailingAction} from '../../actions/delete-mailing'
 import {spawnReportMailingAction} from '../../actions/spawn-report-mailing'
 import {pushSuccessMessageAction} from '../../actions/push-success-message-action'
-import {contextualize} from '../higher-order/contextualize'
-import {node} from '../higher-order/branch'
+import {node, many} from '../higher-order/branch'
 import {inferLevelFromParams, inferLevelFromProps} from '../../functions/infer-level-from-params'
 import Edit from './MailingEdit'
 import find from 'lodash/find'
@@ -56,7 +55,12 @@ New.propTypes = {
   folder: React.PropTypes.object
 }
 
-const NewMailing = contextualize(New, 'report', 'company', 'workspace', 'folder')
+const NewMailing = many([
+  ['user', 'company'],
+  ['company', 'workspace'],
+  ['workspace', 'folder'],
+  [inferLevelFromProps, 'report']
+], New)
 
 const MailingLink = React.createClass({
   displayName: 'Mailing-Link',
