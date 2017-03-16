@@ -9,3 +9,5 @@ export function inferLevelFromParams (params) {
 
   return level
 }
+
+export const inferLevelFromProps = ({params}) => inferLevelFromParams(params)

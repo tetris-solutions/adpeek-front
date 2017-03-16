@@ -3,7 +3,7 @@ import {Link} from 'react-router'
 import join from 'lodash/join'
 import compact from 'lodash/compact'
 import {node} from '../higher-order/branch'
-import {inferLevelFromParams} from '../../functions/infer-level-from-params'
+import {inferLevelFromProps} from '../../functions/infer-level-from-params'
 
 export function ReportBreadcrumb ({params: {company, workspace, folder}, report}, {messages: {reportBreadcrumb}}) {
   const url = '/' +
@@ -38,4 +38,4 @@ ReportBreadcrumb.contextTypes = {
   messages: React.PropTypes.object
 }
 
-export default node(({params}) => inferLevelFromParams(params), 'report', ReportBreadcrumb)
+export default node(inferLevelFromProps, 'report', ReportBreadcrumb)

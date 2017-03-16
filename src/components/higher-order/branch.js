@@ -171,7 +171,7 @@ export function branch (mapping, Component = Placeholder, maxWatchDepth = 1) {
  * @param {String|Function} parent parent cursor
  * @param {String} name cursor name
  * @param {Function} resolverOrComponent resolver fn or component
- * @param {Function} Component component to extend
+ * @param {Function} [Component] component to extend
  * @param {Number} [maxDepthWatch=1] max tree depth to watch
  * @return {Function} extended component
  */

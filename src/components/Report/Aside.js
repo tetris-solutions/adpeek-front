@@ -6,7 +6,7 @@ import TextMessage from 'intl-messageformat'
 import Fence from '../Fence'
 import DeleteButton from '../DeleteButton'
 import {deleteReportAction} from '../../actions/delete-report'
-import {inferLevelFromParams} from '../../functions/infer-level-from-params'
+import {inferLevelFromProps} from '../../functions/infer-level-from-params'
 import {many} from '../higher-order/branch'
 import ReportEditPrompt from './EditPrompt'
 import {Navigation, NavBt, NavBts} from '../Navigation'
@@ -134,5 +134,5 @@ ReportAside.contextTypes = {
 
 export default many([
   {user: ['user']},
-  [({params}) => inferLevelFromParams(params), 'report']
+  [inferLevelFromProps, 'report']
 ], indexModeToggle(ReportAside))

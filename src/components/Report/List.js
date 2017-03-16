@@ -3,7 +3,7 @@ import compact from 'lodash/compact'
 import join from 'lodash/join'
 import {styled} from '../mixins/styled'
 import {collection} from '../higher-order/branch'
-import {inferLevelFromParams} from '../../functions/infer-level-from-params'
+import {inferLevelFromProps} from '../../functions/infer-level-from-params'
 import map from 'lodash/map'
 import orderBy from 'lodash/orderBy'
 import Message from 'tetris-iso/Message'
@@ -192,4 +192,4 @@ Wrapper.propTypes = {
   params: React.PropTypes.object
 }
 
-export default collection(({params}) => inferLevelFromParams(params), 'reports', Wrapper)
+export default collection(inferLevelFromProps, 'reports', Wrapper)

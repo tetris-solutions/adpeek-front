@@ -8,7 +8,7 @@ import csjs from 'csjs'
 import {styled} from '../mixins/styled'
 import {branch, many} from '../higher-order/branch'
 import Fence from '../Fence'
-import {inferLevelFromParams} from '../../functions/infer-level-from-params'
+import {inferLevelFromParams, inferLevelFromProps} from '../../functions/infer-level-from-params'
 import {Button} from '../Button'
 import {DropdownMenu, MenuItem} from '../DropdownMenu'
 import {loadReportAction} from '../../actions/load-report'
@@ -251,5 +251,5 @@ const ReportAccessControl = React.createClass({
 
 export default many([
   {user: ['user']},
-  [({params}) => inferLevelFromParams(params), 'report']
+  [inferLevelFromProps, 'report']
 ], ReportAccessControl)

@@ -1,7 +1,7 @@
 import React from 'react'
 import UI from '../UI'
 import ReportContainer from './Container'
-import {contextualize} from '../higher-order/contextualize'
+import {many} from '../higher-order/branch'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
 
 import get from 'lodash/get'
@@ -50,9 +50,10 @@ const Share = React.createClass({
     const {params} = this.getReportShare()
     const level = this.level = inferLevelFromParams(params)
 
-    this.ReportWrapper = contextualize(Wrapper, {
-      metaData: ['reportMetaData']
-    }, level, 'report')
+    this.ReportWrapper = many([
+      {metaData: ['reportMetaData']},
+      [level, 'report']
+    ], Wrapper)
   },
   getChildContext () {
     const {params, company} = this.getReportShare()
