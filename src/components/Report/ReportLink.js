@@ -20,24 +20,27 @@ const ReportLink = React.createClass({
   getInitialState () {
     return {
       isLoading: false,
-      hasFired: false
+      isReady: false
     }
   },
   componentDidUpdate () {
-    if (!this.gone && this.state.hasFired && this.props.reports) {
+    if (!this.gone && this.state.isReady && this.props.reports) {
       this.gone = true
       this.context.router.push(this.getUrl())
     }
   },
   loadReports () {
     const {reports, dispatch, params} = this.props
+    const onReady = () => this.setState({isReady: true})
 
-    if (reports) return Promise.resolve()
+    if (reports) {
+      return Promise.resolve().then(onReady)
+    }
 
     this.setState({isLoading: true})
 
     return dispatch(loadReportsAction, params, true)
-      .then(() => this.setState({hasFired: true}))
+      .then(onReady)
   },
   onClick () {
     if (this.state.isLoading) return
