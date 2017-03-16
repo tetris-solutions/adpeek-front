@@ -1,5 +1,6 @@
 import React from 'react'
-import {contextualize} from './higher-order/contextualize'
+import {many} from './higher-order/branch'
+import {inferLevelFromProps} from '../functions/infer-level-from-params'
 import Helmet from 'react-helmet'
 import join from 'lodash/join'
 import compact from 'lodash/compact'
@@ -76,4 +77,12 @@ const DocTitle = React.createClass({
   }
 })
 
-export default contextualize(DocTitle, 'order', 'report', 'campaign', 'folder', 'workspace', 'company')
+export default many([
+  {user: ['user']},
+  ['user', 'company'],
+  ['company', 'workspace'],
+  ['workspace', 'folder'],
+  [inferLevelFromProps, 'report'],
+  ['folder', 'order'],
+  ['folder', 'campaign']
+], DocTitle)
