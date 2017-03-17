@@ -39,7 +39,7 @@ export default {
   /**
    * serialize workspace <form>
    * @param {HTMLFormElement} form form DOM element
-   * @returns {{name: *, accounts: {facebook, adwords}, roles: Array}} workspace object
+   * @returns {{name: *, accounts: {facebook, adwords, analytics}, roles: Array}} workspace object
    */
   serializeWorkspaceForm (form) {
     const {elements} = form
@@ -47,7 +47,8 @@ export default {
       name: elements.name.value,
       accounts: {
         facebook: JSON.parse(elements.facebook_account.value),
-        adwords: JSON.parse(elements.adwords_account.value)
+        adwords: JSON.parse(elements.adwords_account.value),
+        analytics: JSON.parse(elements.analytics_account.value)
       },
       roles: []
     }

@@ -3,6 +3,7 @@ import FormMixin from './mixins/FormMixin'
 import Message from 'tetris-iso/Message'
 import Input from './Input'
 import AccountSelector from './WorkspaceAccountSelector'
+// import AutoSelect from './AutoSelect'
 import RolesSelector from './WorkspaceRolesSelector'
 import {createWorkspaceAction} from '../actions/create-workspace'
 import {Form, Content, Header, Footer} from './Card'
@@ -41,6 +42,7 @@ export const CreateWorkspace = React.createClass({
               <Input label='name' name='name' error={errors.name} onChange={this.dismissError}/>
               <AccountSelector platform='facebook'/>
               <AccountSelector platform='adwords'/>
+              <AccountSelector platform='analytics'/>
               <RolesSelector/>
             </Content>
 
