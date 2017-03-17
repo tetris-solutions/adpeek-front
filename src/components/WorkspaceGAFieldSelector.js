@@ -10,6 +10,9 @@ const Selector = React.createClass({
   propTypes: {
     placeholder: React.PropTypes.string,
     onChange: React.PropTypes.func,
+    parent: React.PropTypes.string,
+    list: React.PropTypes.string,
+    params: React.PropTypes.object,
     account: React.PropTypes.shape({
       properties: React.PropTypes.array
     })
@@ -25,22 +28,25 @@ const Selector = React.createClass({
   normalize ({id: value, name: text}) {
     return {text, value}
   },
-  componentWillReceiveProps ({account}) {
-    if (account !== this.props.account) {
+  componentWillReceiveProps (nextProps) {
+    const {parent} = this.props
+
+    if (nextProps.params[parent] !== this.props.params[parent]) {
       this.setState({selected: null})
     }
   },
-  onChange (selection) {
-    const id = selection ? selection.value : null
+  onChange (option) {
+    const selected = option
+      ? find(this.getProperties(), {id: option.value})
+      : null
 
-    this.setState({
-      selected: id
-        ? find(this.getProperties(), {id})
-        : null
-    }, () => this.props.onChange(id))
+    this.setState({selected}, () =>
+      this.props.onChange(selected))
   },
   getProperties () {
-    return get(this.props.account, 'properties', [])
+    const {parent, list} = this.props
+
+    return get(this.props[parent], list, [])
   },
   render () {
     const {selected} = this.state
@@ -55,12 +61,33 @@ const Selector = React.createClass({
   }
 })
 
-const PropertySelector_ = node('company', 'account', Selector)
+const injectAccount = C => node('company', 'account', C)
+const injectProperty = C => node('account', 'property', C)
+
+const PropertySelector_ = injectAccount(Selector)
 
 export const PropertySelector = (props, {messages}) =>
-  <PropertySelector_ {...props} placeholder={messages.gaPropertyLabel}/>
+  <PropertySelector_
+    {...props}
+    parent='account'
+    list='properties'
+    placeholder={messages.gaPropertyLabel}/>
 
 PropertySelector.displayName = 'Property-Selector'
 PropertySelector.contextTypes = {
+  messages: React.PropTypes.object
+}
+
+const ViewSelector_ = injectAccount(injectProperty(Selector))
+
+export const ViewSelector = (props, {messages}) =>
+  <ViewSelector_
+    {...props}
+    parent='property'
+    list='views'
+    placeholder={messages.gaViewLabel}/>
+
+ViewSelector.displayName = 'View-Selector'
+ViewSelector.contextTypes = {
   messages: React.PropTypes.object
 }

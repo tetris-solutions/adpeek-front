@@ -4,13 +4,14 @@ import Message from 'tetris-iso/Message'
 import Input from './Input'
 import AccountSelector from './WorkspaceAccountSelector'
 import {loadGAPropertiesAction} from '../actions/load-ga-properties'
+import {loadGAViewsAction} from '../actions/load-ga-views'
 import RolesSelector from './WorkspaceRolesSelector'
 import {createWorkspaceAction} from '../actions/create-workspace'
 import {Form, Content, Header, Footer} from './Card'
 import WorkspaceForm from './mixins/WorkspaceForm'
 import Page from './Page'
 import SubHeader from './SubHeader'
-import {PropertySelector} from './WorkspaceGAFieldSelector'
+import {PropertySelector, ViewSelector} from './WorkspaceGAFieldSelector'
 
 export const CreateWorkspace = React.createClass({
   displayName: 'Create-Workspace',
@@ -20,7 +21,10 @@ export const CreateWorkspace = React.createClass({
     params: React.PropTypes.object
   },
   getInitialState () {
-    return {gaAccount: null}
+    return {
+      gaAccount: null,
+      gaProperty: null
+    }
   },
   onSubmit (e) {
     e.preventDefault()
@@ -29,19 +33,33 @@ export const CreateWorkspace = React.createClass({
 
     this.saveWorkspace(data, createWorkspaceAction)
   },
-  onChangeAnalyticsAccount (account) {
+  onChangeAnalyticsAccount (gaAccount) {
     const {dispatch, params} = this.props
 
-    if (account) {
-      this.setState({gaAccount: account.external_id})
+    if (gaAccount) {
+      this.setState({gaAccount})
 
-      dispatch(loadGAPropertiesAction, params, account)
+      dispatch(loadGAPropertiesAction, params, gaAccount)
     } else {
       this.setState({gaAccount: null})
     }
   },
+  onChangeProperty (gaProperty) {
+    const {dispatch, params} = this.props
+
+    if (gaProperty) {
+      this.setState({gaProperty})
+
+      dispatch(loadGAViewsAction, params, this.state.gaAccount, gaProperty.id)
+    } else {
+      this.setState({gaAccount: null})
+    }
+  },
+  onChangeView (gaView) {
+    this.setState({gaView})
+  },
   render () {
-    const {errors, gaAccount} = this.state
+    const {errors, gaAccount, gaProperty} = this.state
 
     return (
       <div>
@@ -67,7 +85,14 @@ export const CreateWorkspace = React.createClass({
                 onChange={this.onChangeAnalyticsAccount}/>
 
               {gaAccount && (
-                <PropertySelector params={{account: gaAccount}}/>)}
+                <PropertySelector
+                  onChange={this.onChangeProperty}
+                  params={{account: gaAccount.id}}/>)}
+
+              {gaProperty && (
+                <ViewSelector
+                  onChange={this.onChangeView}
+                  params={{account: gaAccount.id, property: gaProperty.id}}/>)}
 
               <RolesSelector/>
             </Content>

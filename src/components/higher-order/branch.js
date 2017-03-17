@@ -10,8 +10,11 @@ import assign from 'lodash/assign'
 import find from 'lodash/find'
 import concat from 'lodash/concat'
 import omit from 'lodash/omit'
+import endsWith from 'lodash/endsWith'
 
-const plural = name => name === 'company' ? 'companies' : name + 's'
+const plural = name => endsWith(name, 'y')
+  ? name.substr(0, name.length - 1) + 'ies'
+  : name + 's'
 
 const mappingToCursors = (mapping, props, context) =>
   isFunction(mapping)
