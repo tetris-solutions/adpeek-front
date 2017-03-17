@@ -340,5 +340,6 @@ module.exports = {
     Isso acontece quando você tenta abrir um relatório utilizando um guest token expirado.`,
   selectIdDimension: 'Selecionar {entity}',
   missingIdAlert: 'Alguns atributos só podem ser adicionados <br/>' +
-  'ao módulo após a seleção da dimensão <em>{entity}</em>.'
+  'ao módulo após a seleção da dimensão <em>{entity}</em>.',
+  invalidPermutation: 'Ooops, você não pode selecionar <strong>{first}</strong> e <strong>{second}</strong> ao mesmo tempo'
 }

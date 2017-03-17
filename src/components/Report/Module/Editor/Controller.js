@@ -1,4 +1,6 @@
+import concat from 'lodash/concat'
 import assign from 'lodash/assign'
+import forEach from 'lodash/forEach'
 import debounce from 'lodash/debounce'
 import diff from 'lodash/difference'
 import find from 'lodash/find'
@@ -299,18 +301,43 @@ const ModuleEdit = React.createClass({
   getDraftEntity () {
     return this.context.entities[this.state.newModule.entity]
   },
+  getInvalidPermutation (dimensions, metrics) {
+    const {attributes} = this.context
+    const selected = concat(dimensions, metrics)
+    const isSelected = id => includes(selected, id)
+    let invalidPermutation
+
+    function checkForConflict (id) {
+      const currentAttribute = find(attributes, {id})
+      const deniedAttributeId = find(currentAttribute.incompatible, isSelected)
+
+      if (deniedAttributeId) {
+        invalidPermutation = [currentAttribute, find(attributes, {id: deniedAttributeId})]
+
+        return false
+      }
+    }
+
+    forEach(selected, checkForConflict)
+
+    return invalidPermutation
+  },
   render () {
     const {name, type, dimensions, metrics, filters} = this.getDraftModule()
     const numberOfSelectedAccounts = this.context.getUsedAccounts(filters.id).length
-    const isInvalidModule = isEmpty(name) || (
-        isEmpty(dimensions) &&
-        type !== 'total'
-      ) ||
+
+    const isInvalidModule = (
+      isEmpty(name) ||
       isEmpty(metrics) ||
-      isEmpty(filters.id)
+      isEmpty(filters.id) ||
+      (type !== 'total' && isEmpty(dimensions))
+    )
+
+    const invalidPermutation = isInvalidModule ? undefined : this.getInvalidPermutation(dimensions, metrics)
 
     return (
       <Editor
+        invalidPermutation={invalidPermutation}
         maxAccounts={MAX_ACCOUNTS}
         numberOfSelectedAccounts={numberOfSelectedAccounts}
         isInvalid={isInvalidModule}

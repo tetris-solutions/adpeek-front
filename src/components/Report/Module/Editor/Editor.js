@@ -36,6 +36,7 @@ const Editor = React.createClass({
     attributes: React.PropTypes.object.isRequired
   },
   propTypes: {
+    invalidPermutation: React.PropTypes.array,
     maxAccounts: React.PropTypes.number.isRequired,
     numberOfSelectedAccounts: React.PropTypes.number.isRequired,
     isInvalid: React.PropTypes.bool.isRequired,
@@ -70,7 +71,7 @@ const Editor = React.createClass({
     return {selectable}
   },
   render () {
-    const {isLoading, isInvalid, maxAccounts, numberOfSelectedAccounts, redraw, save, cancel} = this.props
+    const {isLoading, isInvalid, maxAccounts, invalidPermutation, numberOfSelectedAccounts, redraw, save, cancel} = this.props
     const {messages, draft} = this.context
     const selectedTooManyAccounts = numberOfSelectedAccounts > maxAccounts
     let updateBt
@@ -86,6 +87,14 @@ const Editor = React.createClass({
         <em className='mdl-color-text--red-A700'>
           <Message selected={String(numberOfSelectedAccounts)} max={String(maxAccounts)}>
             tooManyAccounts
+          </Message>
+        </em>
+      )
+    } else if (invalidPermutation) {
+      updateBt = (
+        <em className='mdl-color-text--red-A700'>
+          <Message first={invalidPermutation[0].name} second={invalidPermutation[1].name} html>
+            invalidPermutation
           </Message>
         </em>
       )
