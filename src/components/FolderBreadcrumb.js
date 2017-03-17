@@ -2,12 +2,13 @@ import React from 'react'
 import {Link} from 'react-router'
 import {node} from './higher-order/branch'
 
-const FolderBreadcrumb = ({params: {company, workspace}, folder}, {messages: {folderBreadcrumb}}) => folder && (
-  <Link to={`/company/${company}/workspace/${workspace}/folder/${folder.id}`} title={folderBreadcrumb}>
-    <i className='material-icons'>folder</i>
-    {folder.name}
-  </Link>
-)
+const FolderBreadcrumb = ({params: {company, workspace}, folder}, {messages: {folderBreadcrumb}}) => folder
+  ? (
+    <Link to={`/company/${company}/workspace/${workspace}/folder/${folder.id}`} title={folderBreadcrumb}>
+      <i className='material-icons'>folder</i>
+      {folder.name}
+    </Link>
+  ) : null
 
 FolderBreadcrumb.displayName = 'Folder-Breadcrumb'
 FolderBreadcrumb.propTypes = {

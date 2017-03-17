@@ -3,6 +3,7 @@ import FormMixin from './mixins/FormMixin'
 import Message from 'tetris-iso/Message'
 import Input from './Input'
 import AccountSelector from './WorkspaceAccountSelector'
+import {loadGAPropertiesAction} from '../actions/load-ga-properties'
 // import AutoSelect from './AutoSelect'
 import RolesSelector from './WorkspaceRolesSelector'
 import {createWorkspaceAction} from '../actions/create-workspace'
@@ -19,12 +20,26 @@ export const CreateWorkspace = React.createClass({
     dispatch: React.PropTypes.func,
     params: React.PropTypes.object
   },
+  getInitialState () {
+    return {gaAccount: null}
+  },
   onSubmit (e) {
     e.preventDefault()
 
     const data = this.serializeWorkspaceForm(e.target)
 
     this.saveWorkspace(data, createWorkspaceAction)
+  },
+  onChangeAnalyticsAccount (account) {
+    const {dispatch, params} = this.props
+
+    if (account) {
+      this.setState({gaAccount: account.external_id})
+
+      dispatch(loadGAPropertiesAction, params, account)
+    } else {
+      this.setState({gaAccount: null})
+    }
   },
   render () {
     const {errors} = this.state
@@ -39,10 +54,18 @@ export const CreateWorkspace = React.createClass({
             </Header>
 
             <Content>
-              <Input label='name' name='name' error={errors.name} onChange={this.dismissError}/>
+              <Input
+                label='name'
+                name='name'
+                error={errors.name}
+                onChange={this.dismissError}/>
+
               <AccountSelector platform='facebook'/>
               <AccountSelector platform='adwords'/>
-              <AccountSelector platform='analytics'/>
+
+              <AccountSelector
+                platform='analytics'
+                onChange={this.onChangeAnalyticsAccount}/>
               <RolesSelector/>
             </Content>
 

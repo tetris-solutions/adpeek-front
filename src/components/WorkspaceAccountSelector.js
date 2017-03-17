@@ -177,12 +177,14 @@ export const WorkspaceAccountSelector = React.createClass({
     platform: React.PropTypes.string,
     dispatch: React.PropTypes.func,
     value: React.PropTypes.string,
-    account: React.PropTypes.object
+    account: React.PropTypes.object,
+    onChange: React.PropTypes.func
   },
   getDefaultProps () {
     return {
       account: null,
-      value: ''
+      value: '',
+      onChange: () => false
     }
   },
   getInitialState () {
@@ -245,7 +247,8 @@ export const WorkspaceAccountSelector = React.createClass({
     })
   },
   onSuggestionSelected (event, {suggestion}) {
-    this.setState({account: suggestion || null})
+    this.setState({account: suggestion || null},
+      () => this.props.onChange(this.state.account))
   },
   render () {
     const {locales, messages: {accountSelectorPlaceholder}} = this.context

@@ -2,12 +2,13 @@ import React from 'react'
 import {Link} from 'react-router'
 import {node} from './higher-order/branch'
 
-const WorkspaceBreadcrumb = ({params: {company}, workspace}, {messages: {workspaceBreadcrumb}}) => workspace && (
-  <Link to={`/company/${company}/workspace/${workspace.id}`} title={workspaceBreadcrumb}>
-    <i className='material-icons'>domain</i>
-    {workspace.name}
-  </Link>
-)
+const WorkspaceBreadcrumb = ({params: {company}, workspace}, {messages: {workspaceBreadcrumb}}) => workspace
+  ? (
+    <Link to={`/company/${company}/workspace/${workspace.id}`} title={workspaceBreadcrumb}>
+      <i className='material-icons'>domain</i>
+      {workspace.name}
+    </Link>
+  ) : null
 
 WorkspaceBreadcrumb.displayName = 'Workspace-Breadcrumb'
 WorkspaceBreadcrumb.propTypes = {
