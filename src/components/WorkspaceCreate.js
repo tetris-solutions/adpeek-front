@@ -4,14 +4,58 @@ import Message from 'tetris-iso/Message'
 import Input from './Input'
 import AccountSelector from './WorkspaceAccountSelector'
 import {loadGAPropertiesAction} from '../actions/load-ga-properties'
-// import AutoSelect from './AutoSelect'
 import RolesSelector from './WorkspaceRolesSelector'
 import {createWorkspaceAction} from '../actions/create-workspace'
 import {Form, Content, Header, Footer} from './Card'
 import WorkspaceForm from './mixins/WorkspaceForm'
-import {branch} from './higher-order/branch'
 import Page from './Page'
 import SubHeader from './SubHeader'
+
+import {node} from './higher-order/branch'
+import AutoSelect from './AutoSelect'
+import get from 'lodash/get'
+import map from 'lodash/map'
+import find from 'lodash/find'
+
+const Selector = React.createClass({
+  displayName: 'S',
+  propTypes: {
+    account: React.PropTypes.shape({
+      properties: React.PropTypes.array
+    })
+  },
+  getInitialState () {
+    return {selected: null}
+  },
+  normalize ({id: value, name: text}) {
+    return {text, value}
+  },
+  componentWillReceiveProps ({account}) {
+    if (account !== this.props.account) {
+      this.setState({selected: null})
+    }
+  },
+  onChange ({value: id}) {
+    this.setState({
+      selected: find(this.getProperties(), {id})
+    })
+  },
+  getProperties () {
+    return get(this.props.account, 'properties', [])
+  },
+  render () {
+    const {selected} = this.state
+
+    return (
+      <AutoSelect
+        selected={selected ? this.normalize(selected) : null}
+        onChange={this.onChange}
+        options={map(this.getProperties(), this.normalize)}/>
+    )
+  }
+})
+
+const PropertySelector = node('company', 'account', Selector)
 
 export const CreateWorkspace = React.createClass({
   displayName: 'Create-Workspace',
@@ -42,7 +86,7 @@ export const CreateWorkspace = React.createClass({
     }
   },
   render () {
-    const {errors} = this.state
+    const {errors, gaAccount} = this.state
 
     return (
       <div>
@@ -66,6 +110,10 @@ export const CreateWorkspace = React.createClass({
               <AccountSelector
                 platform='analytics'
                 onChange={this.onChangeAnalyticsAccount}/>
+
+              {gaAccount && (
+                <PropertySelector params={{account: gaAccount}}/>)}
+
               <RolesSelector/>
             </Content>
 
@@ -79,4 +127,4 @@ export const CreateWorkspace = React.createClass({
   }
 })
 
-export default branch({}, CreateWorkspace)
+export default CreateWorkspace

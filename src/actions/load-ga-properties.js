@@ -6,13 +6,13 @@ function loadGAProperties (company, tetris_account, ga_account, config) {
   return GET(`${process.env.ADPEEK_API_URL}/company/${company}/account/${tetris_account}/ga_account/${ga_account}/properties`, config)
 }
 
-export function loadGAPropertiesAction (tree, {company}, {tetris_id, external_id}) {
-  return loadGAProperties(company, tetris_id, external_id, getApiFetchConfig(tree))
+export function loadGAPropertiesAction (tree, {company}, {tetris_id, id}) {
+  return loadGAProperties(company, tetris_id, id, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .then(saveResponseData(tree, [
       'user',
       ['companies', company],
-      ['accounts', external_id, 'external_id'],
+      ['accounts', id],
       'properties'
     ]))
     .catch(pushResponseErrorToState(tree))
