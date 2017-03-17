@@ -10,52 +10,7 @@ import {Form, Content, Header, Footer} from './Card'
 import WorkspaceForm from './mixins/WorkspaceForm'
 import Page from './Page'
 import SubHeader from './SubHeader'
-
-import {node} from './higher-order/branch'
-import AutoSelect from './AutoSelect'
-import get from 'lodash/get'
-import map from 'lodash/map'
-import find from 'lodash/find'
-
-const Selector = React.createClass({
-  displayName: 'S',
-  propTypes: {
-    account: React.PropTypes.shape({
-      properties: React.PropTypes.array
-    })
-  },
-  getInitialState () {
-    return {selected: null}
-  },
-  normalize ({id: value, name: text}) {
-    return {text, value}
-  },
-  componentWillReceiveProps ({account}) {
-    if (account !== this.props.account) {
-      this.setState({selected: null})
-    }
-  },
-  onChange ({value: id}) {
-    this.setState({
-      selected: find(this.getProperties(), {id})
-    })
-  },
-  getProperties () {
-    return get(this.props.account, 'properties', [])
-  },
-  render () {
-    const {selected} = this.state
-
-    return (
-      <AutoSelect
-        selected={selected ? this.normalize(selected) : null}
-        onChange={this.onChange}
-        options={map(this.getProperties(), this.normalize)}/>
-    )
-  }
-})
-
-const PropertySelector = node('company', 'account', Selector)
+import {PropertySelector} from './WorkspaceGAFieldSelector'
 
 export const CreateWorkspace = React.createClass({
   displayName: 'Create-Workspace',

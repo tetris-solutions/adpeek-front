@@ -340,5 +340,7 @@ module.exports = {
       This happens when you try to access a report with an expired guest token.`,
   selectIdDimension: 'Select {entity}',
   missingIdAlert: 'Some attributes can only be<br/> used along the dimension <em>{entity}</em>.',
-  invalidPermutation: 'Ooops, you can\'t select <strong>{first}</strong> and <strong>{second}</strong> at the same time'
+  invalidPermutation: 'Ooops, you can\'t select <strong>{first}</strong> and <strong>{second}</strong> at the same time',
+  gaPropertyLabel: 'Select Analytics Property',
+  gaViewLabel: 'Select Analytics View'
 }
