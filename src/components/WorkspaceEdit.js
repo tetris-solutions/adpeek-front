@@ -44,7 +44,7 @@ export const WorkspaceEdit = React.createClass({
     const {errors, name} = this.state
     const {workspace} = this.props
     const roles = workspace.roles
-    const {accounts: {facebook, adwords}} = workspace
+    const {accounts: {facebook, adwords, analytics}} = workspace
 
     return (
       <div>
@@ -64,16 +64,22 @@ export const WorkspaceEdit = React.createClass({
                 value={name}/>
 
               <AccountSelector
-                disabled
+                disabled={Boolean(facebook)}
                 account={facebook}
                 value={facebook ? facebook.name : ''}
                 platform='facebook'/>
 
               <AccountSelector
-                disabled
+                disabled={Boolean(adwords)}
                 account={adwords}
                 value={adwords ? adwords.name : ''}
                 platform='adwords'/>
+
+              <AccountSelector
+                disabled={Boolean(analytics)}
+                account={analytics}
+                value={analytics ? analytics.name : ''}
+                platform='analytics'/>
 
               <RolesSelector roles={roles}/>
             </Content>

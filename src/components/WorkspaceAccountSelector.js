@@ -253,7 +253,7 @@ export const WorkspaceAccountSelector = React.createClass({
   render () {
     const {locales, messages: {accountSelectorPlaceholder}} = this.context
     const {isLoading, suggestions, value, account} = this.state
-    const {platform, disabled, account: savedAccount} = this.props
+    const {platform, disabled} = this.props
     const inputProps = {
       value,
       placeholder: isLoading
@@ -261,7 +261,7 @@ export const WorkspaceAccountSelector = React.createClass({
         : new Message(accountSelectorPlaceholder, locales).format({platform: upperFirst(platform)}),
       onChange: this.onChange,
       onKeyDown: preventSubmit,
-      disabled: isLoading || (disabled && savedAccount)
+      disabled: isLoading || disabled
     }
 
     return (
