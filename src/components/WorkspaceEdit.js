@@ -12,6 +12,8 @@ import WorkspaceForm from './mixins/WorkspaceForm'
 import Page from './Page'
 import SubHeader from './SubHeader'
 import {PropertySelector, ViewSelector} from './WorkspaceGAFieldSelector'
+import {loadGAPropertiesAction} from '../actions/load-ga-properties'
+import {loadGAViewsAction} from '../actions/load-ga-views'
 
 export const WorkspaceEdit = React.createClass({
   displayName: 'Workspace-Edit',
@@ -27,20 +29,23 @@ export const WorkspaceEdit = React.createClass({
       name: React.PropTypes.string
     })
   },
-  componentWillMount () {
+  getInitialState () {
+    const state = {}
     const {workspace: {accounts: {analytics}}} = this.props
 
     if (analytics) {
-      this.setState({gaAccount: analytics})
+      state.gaAccount = analytics
 
       if (analytics.ga_property) {
-        this.setState({gaProperty: analytics.ga_property})
+        state.gaProperty = analytics.ga_property
       }
 
       if (analytics.ga_view) {
-        this.setState({gaProperty: analytics.ga_view})
+        state.gaView = analytics.ga_view
       }
     }
+
+    return state
   },
   onSubmit (e) {
     e.preventDefault()
@@ -55,6 +60,20 @@ export const WorkspaceEdit = React.createClass({
     const errors = omit(this.state.errors, 'name')
 
     this.setState({errors, 'name': value})
+  },
+  loadAnalytics () {
+    const {gaAccount, gaProperty} = this.state
+    const {params, dispatch} = this.props
+
+    const loadProperties = gaAccount
+      ? dispatch(loadGAPropertiesAction, params, gaAccount)
+      : Promise.resolve()
+
+    const loadViews = gaProperty
+      ? () => dispatch(loadGAViewsAction, params, gaAccount, gaProperty.id)
+      : undefined
+
+    loadProperties.then(loadViews)
   },
   render () {
     const {errors, name, gaAccount, gaProperty, gaView} = this.state
@@ -96,19 +115,20 @@ export const WorkspaceEdit = React.createClass({
                 account={gaAccount}
                 value={gaAccount ? gaAccount.name : ''}
                 platform='analytics'
+                onLoad={this.loadAnalytics}
                 onChange={this.onChangeAnalyticsAccount}/>
 
               {gaAccount && (
                 <PropertySelector
                   disabled={Boolean(gaProperty)}
                   onChange={this.onChangeProperty}
-                  params={{account: gaAccount.id}}/>)}
+                  params={{account: gaAccount.external_id}}/>)}
 
               {gaProperty && (
                 <ViewSelector
                   disabled={Boolean(gaView)}
                   onChange={this.onChangeView}
-                  params={{account: gaAccount.id, property: gaProperty.id}}/>)}
+                  params={{account: gaAccount.external_id, property: gaProperty.id}}/>)}
 
               <RolesSelector roles={roles}/>
             </Content>

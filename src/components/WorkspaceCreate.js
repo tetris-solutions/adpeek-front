@@ -19,6 +19,13 @@ export const CreateWorkspace = React.createClass({
     dispatch: React.PropTypes.func,
     params: React.PropTypes.object
   },
+  getInitialState () {
+    return {
+      gaAccount: null,
+      gaProperty: null,
+      gaView: null
+    }
+  },
   onSubmit (e) {
     e.preventDefault()
 

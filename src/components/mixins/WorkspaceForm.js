@@ -18,10 +18,7 @@ export default {
   },
   getInitialState () {
     return {
-      name: get(this.props, 'workspace.name', ''),
-      gaAccount: null,
-      gaProperty: null,
-      gaView: null
+      name: get(this.props, 'workspace.name', '')
     }
   },
   /**

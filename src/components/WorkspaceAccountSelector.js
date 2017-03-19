@@ -174,6 +174,7 @@ export const WorkspaceAccountSelector = React.createClass({
       id: React.PropTypes.string,
       accounts: React.PropTypes.array
     }),
+    onLoad: React.PropTypes.func,
     platform: React.PropTypes.string,
     dispatch: React.PropTypes.func,
     value: React.PropTypes.string,
@@ -181,10 +182,13 @@ export const WorkspaceAccountSelector = React.createClass({
     onChange: React.PropTypes.func
   },
   getDefaultProps () {
+    const noop = () => false
+
     return {
       account: null,
       value: '',
-      onChange: () => false
+      onChange: noop,
+      onLoad: noop
     }
   },
   getInitialState () {
@@ -207,13 +211,18 @@ export const WorkspaceAccountSelector = React.createClass({
   },
   updateSuggestionList () {
     if (this.hasUnmounted) return
-    const updateSuggestions = () => this.onSuggestionsFetchRequested(this.state)
-    this.setState({isLoading: false}, updateSuggestions)
+
+    this.setState({isLoading: false},
+      () => this.onSuggestionsFetchRequested(this.state))
   },
   componentDidMount () {
+    const {company, platform, dispatch, onLoad} = this.props
+
     this.onSuggestionsFetchRequested = debounce(this.onSuggestionsFetchRequested, 300)
-    this.props.dispatch(loadCompanyAccountsAction, this.props.company.id, this.props.platform)
+
+    dispatch(loadCompanyAccountsAction, company.id, platform)
       .then(this.updateSuggestionList)
+      .then(onLoad)
   },
   componentWillUnmount () {
     this.hasUnmounted = true
