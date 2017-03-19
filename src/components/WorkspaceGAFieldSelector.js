@@ -6,7 +6,7 @@ import map from 'lodash/map'
 import find from 'lodash/find'
 
 const Selector = React.createClass({
-  displayName: 'S',
+  displayName: 'GA-Field-Selector',
   propTypes: {
     placeholder: React.PropTypes.string,
     onChange: React.PropTypes.func,

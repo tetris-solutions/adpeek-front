@@ -1,4 +1,5 @@
 import React from 'react'
+import assign from 'lodash/assign'
 import FormMixin from './mixins/FormMixin'
 import Message from 'tetris-iso/Message'
 import Input from './Input'
@@ -23,13 +24,29 @@ export const CreateWorkspace = React.createClass({
   getInitialState () {
     return {
       gaAccount: null,
-      gaProperty: null
+      gaProperty: null,
+      gaView: null
     }
   },
   onSubmit (e) {
     e.preventDefault()
 
     const data = this.serializeWorkspaceForm(e.target)
+    const {gaProperty, gaView} = this.state
+
+    if (gaProperty) {
+      assign(data.accounts.analytics, {
+        ga_property_id: gaProperty.id,
+        ga_property_name: gaProperty.name
+      })
+    }
+
+    if (gaView) {
+      assign(data.accounts.analytics, {
+        ga_view_id: gaView.id,
+        ga_view_name: gaView.name
+      })
+    }
 
     this.saveWorkspace(data, createWorkspaceAction)
   },
