@@ -9,6 +9,8 @@ const Selector = React.createClass({
   displayName: 'GA-Field-Selector',
   propTypes: {
     placeholder: React.PropTypes.string,
+    selected: React.PropTypes.object,
+    disabled: React.PropTypes.bool,
     onChange: React.PropTypes.func,
     parent: React.PropTypes.string,
     list: React.PropTypes.string,
@@ -19,11 +21,15 @@ const Selector = React.createClass({
   },
   getDefaultProps () {
     return {
-      onChange: () => false
+      onChange: () => false,
+      selected: null,
+      disabled: false
     }
   },
   getInitialState () {
-    return {selected: null}
+    return {
+      selected: this.props.selected
+    }
   },
   normalize ({id: value, name: text}) {
     return {text, value}
@@ -50,10 +56,12 @@ const Selector = React.createClass({
   },
   render () {
     const {selected} = this.state
+    const {placeholder, disabled} = this.props
 
     return (
       <AutoSelect
-        placeholder={this.props.placeholder}
+        disabled={disabled}
+        placeholder={placeholder}
         selected={selected ? this.normalize(selected) : null}
         onChange={this.onChange}
         options={map(this.getProperties(), this.normalize)}/>

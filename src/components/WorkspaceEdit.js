@@ -30,7 +30,7 @@ export const WorkspaceEdit = React.createClass({
     })
   },
   getInitialState () {
-    const state = {}
+    const state = {gaReady: false}
     const {workspace: {accounts: {analytics}}} = this.props
 
     if (analytics) {
@@ -71,12 +71,14 @@ export const WorkspaceEdit = React.createClass({
 
     const loadViews = gaProperty
       ? () => dispatch(loadGAViewsAction, params, gaAccount, gaProperty.id)
-      : undefined
+      : Promise.resolve()
 
-    loadProperties.then(loadViews)
+    loadProperties
+      .then(loadViews)
+      .then(() => this.setState({gaReady: true}))
   },
   render () {
-    const {errors, name, gaAccount, gaProperty, gaView} = this.state
+    const {errors, name, gaAccount, gaProperty, gaView, gaReady} = this.state
     const {workspace} = this.props
     const roles = workspace.roles
     const {accounts: {facebook, adwords, analytics}} = workspace
@@ -118,15 +120,17 @@ export const WorkspaceEdit = React.createClass({
                 onLoad={this.loadAnalytics}
                 onChange={this.onChangeAnalyticsAccount}/>
 
-              {gaAccount && (
+              {gaAccount && gaReady && (
                 <PropertySelector
                   disabled={Boolean(gaProperty)}
+                  selected={gaProperty}
                   onChange={this.onChangeProperty}
                   params={{account: gaAccount.external_id}}/>)}
 
-              {gaProperty && (
+              {gaProperty && gaReady && (
                 <ViewSelector
                   disabled={Boolean(gaView)}
+                  selected={gaView}
                   onChange={this.onChangeView}
                   params={{account: gaAccount.external_id, property: gaProperty.id}}/>)}
 

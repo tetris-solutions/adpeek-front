@@ -38,6 +38,7 @@ const style = csjs`
 }
 
 .input[disabled] {
+  cursor: not-allowed;
   background: rgba(250, 250, 250, 0.6) !important;
 }
 .input:focus {
