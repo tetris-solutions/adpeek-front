@@ -1,11 +1,9 @@
 import React from 'react'
-import assign from 'lodash/assign'
 import FormMixin from './mixins/FormMixin'
 import Message from 'tetris-iso/Message'
 import Input from './Input'
 import AccountSelector from './WorkspaceAccountSelector'
-import {loadGAPropertiesAction} from '../actions/load-ga-properties'
-import {loadGAViewsAction} from '../actions/load-ga-views'
+
 import RolesSelector from './WorkspaceRolesSelector'
 import {createWorkspaceAction} from '../actions/create-workspace'
 import {Form, Content, Header, Footer} from './Card'
@@ -21,59 +19,12 @@ export const CreateWorkspace = React.createClass({
     dispatch: React.PropTypes.func,
     params: React.PropTypes.object
   },
-  getInitialState () {
-    return {
-      gaAccount: null,
-      gaProperty: null,
-      gaView: null
-    }
-  },
   onSubmit (e) {
     e.preventDefault()
 
     const data = this.serializeWorkspaceForm(e.target)
-    const {gaProperty, gaView} = this.state
-
-    if (gaProperty) {
-      assign(data.accounts.analytics, {
-        ga_property_id: gaProperty.id,
-        ga_property_name: gaProperty.name
-      })
-    }
-
-    if (gaView) {
-      assign(data.accounts.analytics, {
-        ga_view_id: gaView.id,
-        ga_view_name: gaView.name
-      })
-    }
 
     this.saveWorkspace(data, createWorkspaceAction)
-  },
-  onChangeAnalyticsAccount (gaAccount) {
-    const {dispatch, params} = this.props
-
-    if (gaAccount) {
-      this.setState({gaAccount})
-
-      dispatch(loadGAPropertiesAction, params, gaAccount)
-    } else {
-      this.setState({gaAccount: null})
-    }
-  },
-  onChangeProperty (gaProperty) {
-    const {dispatch, params} = this.props
-
-    if (gaProperty) {
-      this.setState({gaProperty})
-
-      dispatch(loadGAViewsAction, params, this.state.gaAccount, gaProperty.id)
-    } else {
-      this.setState({gaAccount: null})
-    }
-  },
-  onChangeView (gaView) {
-    this.setState({gaView})
   },
   render () {
     const {errors, gaAccount, gaProperty} = this.state

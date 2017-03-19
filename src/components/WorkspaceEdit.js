@@ -11,6 +11,7 @@ import {node} from './higher-order/branch'
 import WorkspaceForm from './mixins/WorkspaceForm'
 import Page from './Page'
 import SubHeader from './SubHeader'
+import {PropertySelector, ViewSelector} from './WorkspaceGAFieldSelector'
 
 export const WorkspaceEdit = React.createClass({
   displayName: 'Workspace-Edit',
@@ -25,6 +26,21 @@ export const WorkspaceEdit = React.createClass({
       id: React.PropTypes.string,
       name: React.PropTypes.string
     })
+  },
+  componentWillMount () {
+    const {workspace: {accounts: {analytics}}} = this.props
+
+    if (analytics) {
+      this.setState({gaAccount: analytics})
+
+      if (analytics.ga_property) {
+        this.setState({gaProperty: analytics.ga_property})
+      }
+
+      if (analytics.ga_view) {
+        this.setState({gaProperty: analytics.ga_view})
+      }
+    }
   },
   onSubmit (e) {
     e.preventDefault()
@@ -41,7 +57,7 @@ export const WorkspaceEdit = React.createClass({
     this.setState({errors, 'name': value})
   },
   render () {
-    const {errors, name} = this.state
+    const {errors, name, gaAccount, gaProperty, gaView} = this.state
     const {workspace} = this.props
     const roles = workspace.roles
     const {accounts: {facebook, adwords, analytics}} = workspace
@@ -77,9 +93,22 @@ export const WorkspaceEdit = React.createClass({
 
               <AccountSelector
                 disabled={Boolean(analytics)}
-                account={analytics}
-                value={analytics ? analytics.name : ''}
-                platform='analytics'/>
+                account={gaAccount}
+                value={gaAccount ? gaAccount.name : ''}
+                platform='analytics'
+                onChange={this.onChangeAnalyticsAccount}/>
+
+              {gaAccount && (
+                <PropertySelector
+                  disabled={Boolean(gaProperty)}
+                  onChange={this.onChangeProperty}
+                  params={{account: gaAccount.id}}/>)}
+
+              {gaProperty && (
+                <ViewSelector
+                  disabled={Boolean(gaView)}
+                  onChange={this.onChangeView}
+                  params={{account: gaAccount.id, property: gaProperty.id}}/>)}
 
               <RolesSelector roles={roles}/>
             </Content>

@@ -3,6 +3,9 @@ import get from 'lodash/get'
 import {pushSuccessMessageAction} from '../../actions/push-success-message-action'
 import startsWith from 'lodash/startsWith'
 import forEach from 'lodash/forEach'
+import assign from 'lodash/assign'
+import {loadGAPropertiesAction} from '../../actions/load-ga-properties'
+import {loadGAViewsAction} from '../../actions/load-ga-views'
 
 export default {
   contextTypes: {
@@ -15,7 +18,10 @@ export default {
   },
   getInitialState () {
     return {
-      name: get(this.props, 'workspace.name', '')
+      name: get(this.props, 'workspace.name', ''),
+      gaAccount: null,
+      gaProperty: null,
+      gaView: null
     }
   },
   /**
@@ -53,6 +59,22 @@ export default {
       roles: []
     }
 
+    const {gaProperty, gaView} = this.state
+
+    if (gaProperty) {
+      assign(data.accounts.analytics, {
+        ga_property_id: gaProperty.id,
+        ga_property_name: gaProperty.name
+      })
+    }
+
+    if (gaView) {
+      assign(data.accounts.analytics, {
+        ga_view_id: gaView.id,
+        ga_view_name: gaView.name
+      })
+    }
+
     forEach(elements, ({type, name, checked}) => {
       const prefix = 'role_'
 
@@ -62,5 +84,30 @@ export default {
     })
 
     return data
+  },
+  onChangeAnalyticsAccount (gaAccount) {
+    const {dispatch, params} = this.props
+
+    if (gaAccount) {
+      this.setState({gaAccount})
+
+      dispatch(loadGAPropertiesAction, params, gaAccount)
+    } else {
+      this.setState({gaAccount: null})
+    }
+  },
+  onChangeProperty (gaProperty) {
+    const {dispatch, params} = this.props
+
+    if (gaProperty) {
+      this.setState({gaProperty})
+
+      dispatch(loadGAViewsAction, params, this.state.gaAccount, gaProperty.id)
+    } else {
+      this.setState({gaAccount: null})
+    }
+  },
+  onChangeView (gaView) {
+    this.setState({gaView})
   }
 }
