@@ -1,6 +1,7 @@
 import React from 'react'
 import FormMixin from './mixins/FormMixin'
 import concat from 'lodash/concat'
+import assign from 'lodash/assign'
 import Message from 'tetris-iso/Message'
 import Input from './Input'
 import {createFolderAction} from '../actions/create-folder'
@@ -54,15 +55,25 @@ export const CreateFolder = React.createClass({
     e.preventDefault()
     const {target: {elements}} = e
     const {params: {company, workspace}} = this.props
+    const {dashCampaign, gaSegment} = this.state
     const {dispatch} = this.props
+
     const folder = {
       name: elements.name.value,
       workspace_account: elements.workspace_account.value,
-      dash_campaign: get(elements, 'dash_campaign.value', null),
+      dash_campaign: dashCampaign ? dashCampaign.id : '',
+      ga_segment: null,
       tag: elements.tag.value || null,
       media: elements.media.value,
       kpi: this.state.kpi,
       kpi_goal: this.state.kpi_goal
+    }
+
+    if (gaSegment) {
+      folder.ga_segment = assign({}, gaSegment)
+      folder.ga_segment.id = folder.ga_segment.id === this.CREATE_OPTION_FLAG
+        ? null
+        : folder.ga_segment.id
     }
 
     if (folder.tag) {
@@ -178,18 +189,15 @@ export const CreateFolder = React.createClass({
 
               {this.isConnectedToDash()
                 ? (
-                  <div>
-                    <input type='hidden' name='dash_campaign' value={get(dashCampaign, 'id', '')}/>
-                    <AutoSelect
-                      disabled={this.state.isLoadingDashCampaigns}
-                      placeholder={messages.dashCampaignLabel}
-                      onChange={this.onChangeDashCampaign}
-                      selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}
-                      options={concat({
-                        value: this.CREATE_OPTION_FLAG,
-                        text: messages.newDashCampaign
-                      }, map(company.dashCampaigns, this.normalizeDashCampaignOption))}/>
-                  </div>
+                  <AutoSelect
+                    disabled={this.state.isLoadingDashCampaigns}
+                    placeholder={messages.dashCampaignLabel}
+                    onChange={this.onChangeDashCampaign}
+                    selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}
+                    options={concat({
+                      value: this.CREATE_OPTION_FLAG,
+                      text: messages.newDashCampaign
+                    }, map(company.dashCampaigns, this.normalizeDashCampaignOption))}/>
                 ) : null}
 
               {accounts.analytics
