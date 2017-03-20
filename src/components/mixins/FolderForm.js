@@ -3,6 +3,7 @@ import find from 'lodash/find'
 import get from 'lodash/get'
 import {loadDashCampaignsAction} from '../../actions/load-dash-campaigns'
 import {loadKPIMetadataAction} from '../../actions/load-kpi-meta-data'
+import {loadGASegmentsAction} from '../../actions/load-ga-segments'
 import omit from 'lodash/omit'
 
 export default {
@@ -25,9 +26,16 @@ export default {
       name: get(this.props, 'folder.name', '')
     }
   },
-  componentWillMount () {
+  componentDidMount () {
     if (this.isConnectedToDash()) {
       this.loadDashCampaigns()
+    }
+
+    const {params, dispatch, workspace} = this.props
+    const analytics = get(workspace, 'accounts.analytics')
+
+    if (analytics) {
+      dispatch(loadGASegmentsAction, params, analytics)
     }
   },
   componentWillReceiveProps ({company: {dashCampaigns}}) {
