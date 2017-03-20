@@ -28,9 +28,20 @@ export default {
     return {
       isLoadingDashCampaigns: true,
       dashCampaign: this.getCurrentCampaign(),
-      gaSegment: get(this.props, 'folder.ga_segment', null),
       name: get(this.props, 'folder.name', '')
     }
+  },
+  componentWillMount () {
+    let gaSegment = get(this.props, 'folder.ga_segment', null)
+
+    if (gaSegment && !gaSegment.id) {
+      gaSegment = assign({}, gaSegment, {
+        id: this.CREATE_OPTION_FLAG,
+        name: this.context.messages.newGASegmentLabel
+      })
+    }
+
+    this.setState({gaSegment})
   },
   componentDidMount () {
     if (this.isConnectedToDash()) {
