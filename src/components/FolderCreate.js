@@ -96,8 +96,9 @@ export const CreateFolder = React.createClass({
     })
   },
   render () {
+    const {messages} = this.context
     const {medias, company, workspace: {accounts}} = this.props
-    const {errors, kpi, kpi_goal, workspace_account, selectedMedia, showTagCheckbox, dashCampaign} = this.state
+    const {errors, kpi, kpi_goal, workspace_account, selectedMedia, showTagCheckbox, dashCampaign, gaSegment} = this.state
 
     return (
       <div>
@@ -181,14 +182,34 @@ export const CreateFolder = React.createClass({
                     <input type='hidden' name='dash_campaign' value={get(dashCampaign, 'id', '')}/>
                     <AutoSelect
                       disabled={this.state.isLoadingDashCampaigns}
-                      placeholder={this.context.messages.dashCampaignLabel}
+                      placeholder={messages.dashCampaignLabel}
                       onChange={this.onChangeDashCampaign}
                       selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}
                       options={concat({
-                        value: this.CREATE_CAMPAIGN_FLAG,
-                        text: this.context.messages.newDashCampaign
+                        value: this.CREATE_OPTION_FLAG,
+                        text: messages.newDashCampaign
                       }, map(company.dashCampaigns, this.normalizeDashCampaignOption))}/>
                   </div>
+                ) : null}
+
+              {accounts.analytics
+                ? (
+                  <AutoSelect
+                    selected={gaSegment ? this.normalizeAutoSelectOpt(gaSegment) : null}
+                    onChange={this.onChangeSegment}
+                    placeholder={messages.gaSegmentLabel}
+                    options={this.getSegments()}/>
+                ) : null}
+
+              {gaSegment
+                ? (
+                  <Input
+                    disabled={gaSegment.id !== this.CREATE_OPTION_FLAG}
+                    name='segmentDefinition'
+                    label='gaSegmentDefinition'
+                    value={gaSegment.definition}
+                    error={errors.segmentDefinition}
+                    onChange={this.onChangeSegmentDefinition}/>
                 ) : null}
 
               <Input
@@ -206,7 +227,6 @@ export const CreateFolder = React.createClass({
                   name='searchTagsRightAway'/>)}
 
             </Content>
-
             <Footer>
               <Message>newFolderCallToAction</Message>
             </Footer>

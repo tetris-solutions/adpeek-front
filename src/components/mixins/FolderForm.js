@@ -1,19 +1,24 @@
 import React from 'react'
+import assign from 'lodash/assign'
 import find from 'lodash/find'
 import get from 'lodash/get'
+import concat from 'lodash/concat'
+import map from 'lodash/map'
+import omit from 'lodash/omit'
+import sortBy from 'lodash/sortBy'
 import {loadDashCampaignsAction} from '../../actions/load-dash-campaigns'
 import {loadKPIMetadataAction} from '../../actions/load-kpi-meta-data'
 import {loadGASegmentsAction} from '../../actions/load-ga-segments'
-import omit from 'lodash/omit'
 
 export default {
-  CREATE_CAMPAIGN_FLAG: '+1',
+  CREATE_OPTION_FLAG: '+1',
   contextTypes: {
     router: React.PropTypes.object,
     messages: React.PropTypes.object
   },
   propTypes: {
     params: React.PropTypes.object,
+    cursors: React.PropTypes.object,
     company: React.PropTypes.shape({
       dashCampaigns: React.PropTypes.array
     }).isRequired,
@@ -36,6 +41,7 @@ export default {
 
     if (analytics) {
       dispatch(loadGASegmentsAction, params, analytics)
+        .then(() => this.forceUpdate())
     }
   },
   componentWillReceiveProps ({company: {dashCampaigns}}) {
@@ -67,8 +73,8 @@ export default {
   },
   onChangeDashCampaign (dashCampaign) {
     if (dashCampaign) {
-      dashCampaign = dashCampaign.value === this.CREATE_CAMPAIGN_FLAG
-        ? {id: this.CREATE_CAMPAIGN_FLAG, name: dashCampaign.text}
+      dashCampaign = dashCampaign.value === this.CREATE_OPTION_FLAG
+        ? {id: this.CREATE_OPTION_FLAG, name: dashCampaign.text}
         : find(this.props.company.dashCampaigns, {
           id: dashCampaign.value
         })
@@ -132,5 +138,33 @@ export default {
     }
 
     this.setState(changes)
-  }
+  },
+  onChangeSegment (segment) {
+    this.setState({
+      gaSegment: segment
+        ? find(this.rawSegments(), {id: segment.value})
+        : null
+    })
+  },
+  onChangeSegmentDefinition ({target: {value}}) {
+    this.setState({
+      gaSegment: assign(this.state.gaSegment, {definition: value})
+    })
+  },
+  rawSegments () {
+    return concat(
+      {
+        id: this.CREATE_OPTION_FLAG,
+        name: this.context.messages.newGASegmentLabel,
+        definition: '',
+        type: 'CUSTOM'
+      },
+      get(this.props.cursors, 'workspace.accounts.analytics.segments', [])
+    )
+  },
+  getSegments () {
+    return map(sortBy(this.rawSegments(), this.customFirst), this.normalizeAutoSelectOpt)
+  },
+  customFirst: ({type}) => type === 'CUSTOM' ? 0 : 1,
+  normalizeAutoSelectOpt: ({id: value, name: text}) => ({text, value})
 }

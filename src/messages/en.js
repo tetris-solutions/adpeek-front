@@ -342,5 +342,8 @@ module.exports = {
   missingIdAlert: 'Some attributes can only be<br/> used along the dimension <em>{entity}</em>.',
   invalidPermutation: 'Ooops, you can\'t select <strong>{first}</strong> and <strong>{second}</strong> at the same time',
   gaPropertyLabel: 'Select Analytics Property',
-  gaViewLabel: 'Select Analytics View'
+  gaViewLabel: 'Select Analytics View',
+  gaSegmentLabel: 'Select Analytics Segment',
+  newGASegmentLabel: 'Create Segment',
+  gaSegmentDefinitionLabel: 'Segment Definition'
 }

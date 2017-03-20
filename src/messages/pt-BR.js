@@ -343,5 +343,8 @@ module.exports = {
   'ao módulo após a seleção da dimensão <em>{entity}</em>.',
   invalidPermutation: 'Ooops, você não pode selecionar <strong>{first}</strong> e <strong>{second}</strong> ao mesmo tempo',
   gaPropertyLabel: 'Selecione a Propriedade GA',
-  gaViewLabel: 'Selecione a View GA'
+  gaViewLabel: 'Selecione a View GA',
+  gaSegmentLabel: 'Selecione o Segmento GA',
+  newGASegmentLabel: 'Novo Segmento',
+  gaSegmentDefinitionLabel: 'Definição Segmento GA'
 }
