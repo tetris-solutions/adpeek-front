@@ -28,6 +28,7 @@ export default {
     return {
       isLoadingDashCampaigns: true,
       dashCampaign: this.getCurrentCampaign(),
+      gaSegment: get(this.props, 'folder.ga_segment', null),
       name: get(this.props, 'folder.name', '')
     }
   },

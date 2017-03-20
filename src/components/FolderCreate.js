@@ -187,18 +187,17 @@ export const CreateFolder = React.createClass({
                 format={this.getKPIFormat()}
                 onChange={this.saveAndDismiss('kpi_goal')}/>
 
-              {this.isConnectedToDash()
-                ? (
-                  <AutoSelect
-                    disabled={this.state.isLoadingDashCampaigns}
-                    placeholder={messages.dashCampaignLabel}
-                    onChange={this.onChangeDashCampaign}
-                    selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}
-                    options={concat({
-                      value: this.CREATE_OPTION_FLAG,
-                      text: messages.newDashCampaign
-                    }, map(company.dashCampaigns, this.normalizeDashCampaignOption))}/>
-                ) : null}
+              {this.isConnectedToDash() && (
+                <AutoSelect
+                  disabled={this.state.isLoadingDashCampaigns}
+                  placeholder={messages.dashCampaignLabel}
+                  onChange={this.onChangeDashCampaign}
+                  selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}
+                  options={concat({
+                    value: this.CREATE_OPTION_FLAG,
+                    text: messages.newDashCampaign
+                  }, map(company.dashCampaigns, this.normalizeDashCampaignOption))}/>
+              )}
 
               {accounts.analytics
                 ? (

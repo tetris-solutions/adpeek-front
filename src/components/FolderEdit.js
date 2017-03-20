@@ -1,4 +1,5 @@
 import find from 'lodash/find'
+import assign from 'lodash/assign'
 import get from 'lodash/get'
 import map from 'lodash/map'
 import pick from 'lodash/pick'
@@ -11,7 +12,7 @@ import Select from './Select'
 import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import {updateFolderAction} from '../actions/update-folder'
 import {Form, Content, Header, Footer} from './Card'
-import {node} from './higher-order/branch'
+import {many} from './higher-order/branch'
 import FolderFormMixin from './mixins/FolderForm'
 import AutoSelect from './AutoSelect'
 import Page from './Page'
@@ -67,16 +68,25 @@ export const EditFolder = React.createClass({
     e.preventDefault()
     const {target: {elements}} = e
     const {params: {company, workspace}, folder: {id}} = this.props
+    const {dashCampaign, gaSegment} = this.state
     const {dispatch} = this.props
     const folder = {
       id,
       name: elements.name.value,
       workspace_account: elements.workspace_account.value,
-      dash_campaign: get(elements, 'dash_campaign.value', null),
+      dash_campaign: dashCampaign ? dashCampaign.id : '',
+      ga_segment: null,
       tag: elements.tag.value || null,
       media: elements.media.value,
       kpi: this.state.kpi,
       kpi_goal: this.state.kpi_goal
+    }
+
+    if (gaSegment) {
+      folder.ga_segment = assign({}, gaSegment)
+      folder.ga_segment.id = folder.ga_segment.id === this.CREATE_OPTION_FLAG
+        ? null
+        : folder.ga_segment.id
     }
 
     if (folder.tag) {
@@ -94,6 +104,7 @@ export const EditFolder = React.createClass({
       .then(this.posSubmit)
   },
   render () {
+    const {messages} = this.context
     const {medias, company, workspace: {accounts}} = this.props
     const {
       errors,
@@ -102,6 +113,7 @@ export const EditFolder = React.createClass({
       name,
       workspace_account,
       dashCampaign,
+      gaSegment,
       media,
       tag
     } = this.state
@@ -184,17 +196,33 @@ export const EditFolder = React.createClass({
                 format={this.getKPIFormat()}
                 onChange={this.saveAndDismiss('kpi_goal')}/>
 
-              {this.isConnectedToDash()
+              {this.isConnectedToDash() && (
+                <AutoSelect
+                  disabled={this.state.isLoadingDashCampaigns}
+                  placeholder={messages.dashCampaignLabel}
+                  onChange={this.onChangeDashCampaign}
+                  options={map(company.dashCampaigns, this.normalizeDashCampaignOption)}
+                  selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}/>
+              )}
+
+              {accounts.analytics
                 ? (
-                  <div>
-                    <input type='hidden' name='dash_campaign' value={get(dashCampaign, 'id', '')}/>
-                    <AutoSelect
-                      disabled={this.state.isLoadingDashCampaigns}
-                      placeholder={this.context.messages.dashCampaignLabel}
-                      onChange={this.onChangeDashCampaign}
-                      options={map(company.dashCampaigns, this.normalizeDashCampaignOption)}
-                      selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}/>
-                  </div>
+                  <AutoSelect
+                    selected={gaSegment ? this.normalizeAutoSelectOpt(gaSegment) : null}
+                    onChange={this.onChangeSegment}
+                    placeholder={messages.gaSegmentLabel}
+                    options={this.getSegments()}/>
+                ) : null}
+
+              {gaSegment
+                ? (
+                  <Input
+                    disabled={gaSegment.id !== this.CREATE_OPTION_FLAG}
+                    name='segmentDefinition'
+                    label='gaSegmentDefinition'
+                    value={gaSegment.definition}
+                    error={errors.segmentDefinition}
+                    onChange={this.onChangeSegmentDefinition}/>
                 ) : null}
 
               <Input
@@ -223,12 +251,12 @@ export const EditFolder = React.createClass({
   }
 })
 
-export default node([
+export default many([
   {
     kpis: ['kpis'],
     medias: ['medias']
   },
   ['user', 'company'],
-  ['company', 'workspace'],
-  ['workspace', 'folder']
+  ['workspace', 'folder'],
+  ['company', 'workspace']
 ], EditFolder)
