@@ -160,7 +160,7 @@ export default {
   },
   onChangeSegmentDefinition ({target: {value}}) {
     this.setState({
-      gaSegment: assign(this.state.gaSegment, {definition: value})
+      gaSegment: assign({}, this.state.gaSegment, {definition: value})
     })
   },
   rawSegments () {
