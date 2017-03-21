@@ -36,6 +36,11 @@ const Workspace = ({workspace, params, dispatch}) => {
           <strong className={`${style.number}`}>
             {Number(workspace.summary.facebook || 0)}
           </strong>
+
+          <img className={`${style.platform}`} src='/img/ga-logo-32.png'/>
+          <strong className={`${style.number}`}>
+            {Number(workspace.summary.analytics || 0)}
+          </strong>
         </div>
       </BottomLine>
       <Gear>
