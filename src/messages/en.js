@@ -346,5 +346,6 @@ module.exports = {
   gaSegmentLabel: 'Select Analytics Segment',
   newGASegmentLabel: 'Create Segment',
   gaSegmentDefinitionLabel: 'Segment Definition',
-  analyticsFolderTitle: 'Analytics Folder {name}'
+  analyticsFolderTitle: 'Analytics Folder "{name}"',
+  analyticsFolderDescription: 'Analytics folders do not contain campaigns, they are designed for reports only'
 }
