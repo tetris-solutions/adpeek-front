@@ -37,10 +37,10 @@ const Workspace = ({workspace, params, dispatch}) => {
             {Number(workspace.summary.facebook || 0)}
           </strong>
 
-          <img className={`${style.platform}`} src='/img/ga-logo-32.png'/>
-          <strong className={`${style.number}`}>
+          {workspace.summary.analytics && <img className={`${style.platform}`} src='/img/ga-logo-32.png'/>}
+          {workspace.summary.analytics && <strong className={`${style.number}`}>
             {Number(workspace.summary.analytics || 0)}
-          </strong>
+          </strong>}
         </div>
       </BottomLine>
       <Gear>
