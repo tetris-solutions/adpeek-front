@@ -35,6 +35,7 @@ const platformColor = {
 const FolderCard = ({id, account: {platform}, kpi_goal, name, stats, reports, editable, dispatch, params}) => {
   const {company, workspace} = params
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${id}`
+  const isAnalytics = platform === 'analytics'
 
   return (
     <ThumbLink to={folderUrl} title={name} style={{width: 280}}>
@@ -46,13 +47,13 @@ const FolderCard = ({id, account: {platform}, kpi_goal, name, stats, reports, ed
 
       <Gear>
         <DropdownMenu>
-          <MenuItem to={`${folderUrl}/creatives`} tag={Link} icon='receipt'>
+          {!isAnalytics && <MenuItem to={`${folderUrl}/creatives`} tag={Link} icon='receipt'>
             <Message>creatives</Message>
-          </MenuItem>
+          </MenuItem>}
 
-          <MenuItem to={`${folderUrl}/orders`} tag={Link} icon='attach_money'>
+          {!isAnalytics && <MenuItem to={`${folderUrl}/orders`} tag={Link} icon='attach_money'>
             <Message>folderOrders</Message>
-          </MenuItem>
+          </MenuItem>}
 
           <ReportLink
             tag={MenuItem}
