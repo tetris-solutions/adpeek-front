@@ -7,6 +7,7 @@ import {Navigation, NavBt, NavLink, NavBts, Name} from './Navigation'
 import DeleteButton from './DeleteButton'
 import {deleteFolderAction} from '../actions/delete-folder'
 import {node} from './higher-order/branch'
+import get from 'lodash/get'
 
 export function FolderAside ({
   dispatch,
@@ -22,6 +23,7 @@ export function FolderAside ({
       })
   }
 
+  const isAnalytics = get(folder, 'account.platform') === 'analytics'
   const baseUrl = `/company/${company}/workspace/${workspace}/folder/${folder.id}`
   const backspaceUrl = endsWith(location.pathname, folder.id)
     ? `/company/${company}/workspace/${workspace}`
@@ -34,13 +36,13 @@ export function FolderAside ({
           {folder.name}
         </Name>
         <NavBts>
-          <NavLink to={`${baseUrl}/creatives`} icon='receipt'>
+          {!isAnalytics && <NavLink to={`${baseUrl}/creatives`} icon='receipt'>
             <Message>creatives</Message>
-          </NavLink>
+          </NavLink>}
 
-          <NavLink to={`${baseUrl}/orders`} icon='attach_money'>
+          {!isAnalytics && <NavLink to={`${baseUrl}/orders`} icon='attach_money'>
             <Message>folderOrders</Message>
-          </NavLink>
+          </NavLink>}
 
           <ReportLink tag={NavLink} params={params} reports={folder.reports} dispatch={dispatch}>
             <Message>folderReport</Message>

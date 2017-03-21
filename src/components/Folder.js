@@ -167,11 +167,15 @@ const AnalyticsFolder = ({folder}) => (
             analyticsFolderDescription
           </Message>
 
-          <p style={{textAlign: 'right'}}>
+          {folder.ga_segment && <p style={{textAlign: 'right'}}>
+            <strong>
+              {folder.ga_segment.name}
+            </strong>
+            <br/>
             <em>
-              {get(folder, 'ga_segment.definition', '- no segment -')}
+              {folder.ga_segment.definition}
             </em>
-          </p>
+          </p>}
         </Content>
       </Card>
     </Page>
