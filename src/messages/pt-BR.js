@@ -346,5 +346,6 @@ module.exports = {
   gaViewLabel: 'Selecione a View GA',
   gaSegmentLabel: 'Selecione o Segmento GA',
   newGASegmentLabel: 'Novo Segmento',
-  gaSegmentDefinitionLabel: 'Definição Segmento GA'
+  gaSegmentDefinitionLabel: 'Definição Segmento GA',
+  analyticsFolderTitle: 'Pasta GA {name}'
 }

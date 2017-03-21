@@ -120,7 +120,7 @@ const workspaceLevel = provide => tempSyncEnsure(() => provide({
 
 const folderLevel = provide => tempSyncEnsure(() => provide({
   aside: require('./components/FolderAside'),
-  campaigns: require('./components/FolderCampaigns')
+  campaigns: require('./components/Folder')
 }))
 
 const orderLevel = provide => tempSyncEnsure(() => provide({

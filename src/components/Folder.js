@@ -1,4 +1,5 @@
 import deburr from 'lodash/deburr'
+import get from 'lodash/get'
 import filter from 'lodash/filter'
 import includes from 'lodash/includes'
 import lowerCase from 'lodash/toLower'
@@ -16,6 +17,8 @@ import {loadLooseCampaignsAction} from '../actions/load-loose-campaigns'
 import {unlinkCampaignsAction} from '../actions/unlink-campaign'
 import {node} from './higher-order/branch'
 import Page from './Page'
+import SubHeader from './SubHeader'
+import {Card, Content, Header} from './Card'
 
 const cleanStr = str => deburr(lowerCase(str))
 const hasFolder = ({folder}) => folder ? 1 : 0
@@ -151,4 +154,33 @@ const FolderCampaigns = React.createClass({
   }
 })
 
-export default node('workspace', 'folder', FolderCampaigns)
+const AnalyticsFolder = ({folder}) => (
+  <div>
+    <SubHeader/>
+    <Page>
+      <Card>
+        <Header>
+          <Message name={folder.name}>analyticsFolderTitle</Message>
+        </Header>
+        <Content>
+          <p>
+            <em>
+              {get(folder, 'ga_segment.definition', '- no segment -')}
+            </em>
+          </p>
+        </Content>
+      </Card>
+    </Page>
+  </div>
+)
+
+AnalyticsFolder.displayName = 'Analytics-Folder'
+AnalyticsFolder.propTypes = {
+  folder: React.PropTypes.object
+}
+
+export default node('workspace', 'folder',
+  props => get(props, 'folder.account.platform') === 'analytics'
+    ? <AnalyticsFolder {...props}/>
+    : <FolderCampaigns {...props}/>
+)

@@ -345,5 +345,6 @@ module.exports = {
   gaViewLabel: 'Select Analytics View',
   gaSegmentLabel: 'Select Analytics Segment',
   newGASegmentLabel: 'Create Segment',
-  gaSegmentDefinitionLabel: 'Segment Definition'
+  gaSegmentDefinitionLabel: 'Segment Definition',
+  analyticsFolderTitle: 'Analytics Folder {name}'
 }
