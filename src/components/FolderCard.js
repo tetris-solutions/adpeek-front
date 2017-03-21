@@ -26,13 +26,19 @@ DeleteFolder.propTypes = {
   dispatch: React.PropTypes.func.isRequired
 }
 
+const platformColor = {
+  adwords: 'amber-A700',
+  facebook: 'blue-900',
+  analytics: 'deep-orange-A400'
+}
+
 const FolderCard = ({id, account: {platform}, kpi_goal, name, stats, reports, editable, dispatch, params}) => {
   const {company, workspace} = params
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${id}`
 
   return (
     <ThumbLink to={folderUrl} title={name} style={{width: 280}}>
-      <Cap bg={platform === 'adwords' ? 'amber-800' : 'blue-900'}>
+      <Cap bg={platformColor[platform]}>
         {name}
       </Cap>
 
