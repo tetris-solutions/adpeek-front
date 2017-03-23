@@ -32,6 +32,9 @@ const revisionSuffix = process.env.DEV_SERVER ? '' : `.${require('../../package.
 const hardCodedStyle = `
 .react-resizable-handle {
   z-index: 3;
+}
+.mdl-layout__header {
+  display: flex !important;
 }`
 
 const HTML = ({payload, children, css}) => (
