@@ -1,13 +1,13 @@
 import React from 'react'
 import UI from '../UI'
 import ReportContainer from './Container'
-import {many} from '../higher-order/branch'
+import {many, branch} from '../higher-order/branch'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
 import compact from 'lodash/compact'
 import get from 'lodash/get'
 
 function Wrapper (props) {
-  const {accounts, metaData, location, report, dispatch, params, level} = props
+  const {accounts, reportMetaData, location, report, dispatch, params, level} = props
   const node = props[level]
 
   return (
@@ -18,14 +18,14 @@ function Wrapper (props) {
       accounts={accounts}
       report={report}
       params={params}
-      metaData={get(metaData, report.platform || '_')}
+      metaData={get(reportMetaData, report.platform || '_')}
       reportLiteMode/>
   )
 }
 
 Wrapper.displayName = 'Report-Wrapper'
 Wrapper.propTypes = {
-  metaData: React.PropTypes.object,
+  reportMetaData: React.PropTypes.object,
   report: React.PropTypes.object.isRequired,
   location: React.PropTypes.object.isRequired,
   accounts: React.PropTypes.array.isRequired,
@@ -48,15 +48,14 @@ const Share = React.createClass({
   },
   componentWillMount () {
     const {params} = this.getReportShare()
-    const level = this.level = inferLevelFromParams(params)
+    const level = inferLevelFromParams(params)
 
     this.ReportWrapper = many(compact([
-      {metaData: ['reportMetaData']},
       ['user', 'company'],
       params.workspace && ['company', 'workspace'],
       params.folder && ['workspace', 'folder'],
       [level, 'report']
-    ]), Wrapper)
+    ]), branch('reportMetaData', Wrapper, 2))
   },
   getChildContext () {
     const {params, company} = this.getReportShare()
