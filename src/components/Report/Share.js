@@ -3,7 +3,7 @@ import UI from '../UI'
 import ReportContainer from './Container'
 import {many} from '../higher-order/branch'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
-
+import compact from 'lodash/compact'
 import get from 'lodash/get'
 
 function Wrapper (props) {
@@ -50,10 +50,13 @@ const Share = React.createClass({
     const {params} = this.getReportShare()
     const level = this.level = inferLevelFromParams(params)
 
-    this.ReportWrapper = many([
+    this.ReportWrapper = many(compact([
       {metaData: ['reportMetaData']},
+      ['user', 'company'],
+      params.workspace && ['company', 'workspace'],
+      params.folder && ['workspace', 'folder'],
       [level, 'report']
-    ], Wrapper)
+    ]), Wrapper)
   },
   getChildContext () {
     const {params, company} = this.getReportShare()
