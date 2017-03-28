@@ -19,11 +19,20 @@ import equals from 'shallowequal'
 
 const empty = []
 
-const transformAccount = ({external_id, tetris_id, platform}) => ({
-  ad_account: external_id,
-  platform: platform,
-  tetris_account: tetris_id
-})
+function transformAccount ({external_id, tetris_id, platform, ga_property_id, ga_view_id}) {
+  const acc = {
+    ad_account: external_id,
+    platform: platform,
+    tetris_account: tetris_id
+  }
+
+  if (platform === 'analytics') {
+    acc.ga_property_id = ga_property_id
+    acc.ga_view_id = ga_view_id
+  }
+
+  return acc
+}
 
 const Placeholder = ({reportLiteMode, children}) => (
   <div>
