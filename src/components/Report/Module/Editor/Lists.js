@@ -12,7 +12,7 @@ import split from 'lodash/split'
 import React from 'react'
 import AttributeList from './AttributeList'
 import Input from '../../../Input'
-import {Tabs, Tab} from '../../../Tabs'
+import { Tabs, Tab } from '../../../Tabs'
 import Entities from './Entities'
 import MissingIdAlert from './MissingIdAlert'
 
@@ -75,7 +75,7 @@ const Lists = React.createClass({
   },
   render () {
     const {searchValue} = this.state
-    const {messages, draft, addAttribute, removeAttribute} = this.context
+    const {report, messages, draft, addAttribute, removeAttribute} = this.context
 
     const selectable = sorted(matching(this.context.selectable, clean(searchValue)))
     const items = sorted(matching(draft.entity.list, clean(searchValue)))
@@ -102,6 +102,8 @@ const Lists = React.createClass({
       <i className={dimensionClasses} title={messages.dimensions}>view_column</i>
     )
     const missingId = !includes(selectedDimensions, 'id')
+    const isAnalytics = report.platform === 'analytics'
+    const isTotalType = draft.module.type === 'total'
 
     return (
       <div ref='wrapper'>
@@ -116,13 +118,12 @@ const Lists = React.createClass({
             <Entities items={items}/>
           </Tab>
 
-          {draft.module.type !== 'total' && (
+          {!isTotalType && (
             <Tab id='dimension' title={dimensionTitle}>
               <br/>
 
-              {missingId && (
-                <MissingIdAlert
-                  add={() => addAttribute('id')}/>)}
+              {missingId && !isAnalytics && (
+                <MissingIdAlert add={() => addAttribute('id')}/>)}
 
               <AttributeList
                 add={addAttribute}
@@ -135,9 +136,8 @@ const Lists = React.createClass({
           <Tab id='metric' title={metricTitle}>
             <br/>
 
-            {draft.module.type !== 'total' && missingId && (
-              <MissingIdAlert
-                add={() => addAttribute('id')}/>)}
+            {!isTotalType && !isAnalytics && missingId && (
+              <MissingIdAlert add={() => addAttribute('id')}/>)}
 
             <AttributeList
               add={addAttribute}
