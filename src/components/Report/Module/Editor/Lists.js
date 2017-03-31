@@ -12,7 +12,7 @@ import split from 'lodash/split'
 import React from 'react'
 import AttributeList from './AttributeList'
 import Input from '../../../Input'
-import { Tabs, Tab } from '../../../Tabs'
+import {Tabs, Tab} from '../../../Tabs'
 import Entities from './Entities'
 import MissingIdAlert from './MissingIdAlert'
 
@@ -113,10 +113,11 @@ const Lists = React.createClass({
           onChange={this.onChangeSearch}/>
 
         <Tabs onChangeTab={this.onChangeTab}>
-          <Tab id='entity' title={entityTitle}>
-            <br/>
-            <Entities items={items}/>
-          </Tab>
+          {!isAnalytics && (
+            <Tab id='entity' title={entityTitle}>
+              <br/>
+              <Entities items={items}/>
+            </Tab>)}
 
           {!isTotalType && (
             <Tab id='dimension' title={dimensionTitle}>

@@ -9,23 +9,24 @@ import map from 'lodash/map'
 
 const ReportChart = expandVertically(_ReportChart)
 
-const EditContent = (props, {entities, onChangeName, onChangeType, onChangeEntity, change, draft: {module, entity}}) => (
+const EditContent = (props, {report, entities, onChangeName, onChangeType, onChangeEntity, change, draft: {module, entity}}) => (
   <section style={{height: '80vh', overflowY: 'auto'}}>
     <div className='mdl-grid'>
-      <div className='mdl-cell mdl-cell--4-col'>
+      <div className={`mdl-cell mdl-cell--${report.platform === 'analytics' ? 7 : 4}-col`}>
         <Input name='name' label='name' defaultValue={module.name} onChange={onChangeName} required/>
       </div>
 
-      <div className='mdl-cell mdl-cell--4-col'>
-        <Select label='entity' name='entity' onChange={onChangeEntity} value={entity.id}>
-          {map(entities, ({id, name}) =>
-            <option key={id} value={id}>
-              {name}
-            </option>)}
-        </Select>
-      </div>
+      {report.platform !== 'analytics' && (
+        <div className='mdl-cell mdl-cell--4-col'>
+          <Select label='entity' name='entity' onChange={onChangeEntity} value={entity.id}>
+            {map(entities, ({id, name}) =>
+              <option key={id} value={id}>
+                {name}
+              </option>)}
+          </Select>
+        </div>)}
 
-      <div className='mdl-cell mdl-cell--4-col'>
+      <div className={`mdl-cell mdl-cell--${report.platform === 'analytics' ? 5 : 4}-col`}>
         <TypeSelect onChange={onChangeType} value={module.type}/>
       </div>
 
@@ -44,6 +45,7 @@ const EditContent = (props, {entities, onChangeName, onChangeType, onChangeEntit
 
 EditContent.displayName = 'Edit-Content'
 EditContent.contextTypes = {
+  report: React.PropTypes.object,
   onChangeName: React.PropTypes.func.isRequired,
   onChangeEntity: React.PropTypes.func.isRequired,
   onChangeType: React.PropTypes.func.isRequired,
