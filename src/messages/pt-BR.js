@@ -348,5 +348,7 @@ module.exports = {
   newGASegmentLabel: 'Novo Segmento',
   gaSegmentDefinitionLabel: 'Definição Segmento GA',
   analyticsFolderTitle: 'Pasta GA "{name}"',
-  analyticsFolderDescription: 'Pastas do Google Analytics não possuem campanhas, seu uso é predominantemente para extração de relatórios'
+  analyticsFolderDescription: 'Pastas do Google Analytics não possuem campanhas, seu uso é predominantemente para extração de relatórios',
+  hideWorkspace: 'Ocultar Área',
+  showWorkspace: 'Exibir Área'
 }

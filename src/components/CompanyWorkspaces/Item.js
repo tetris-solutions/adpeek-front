@@ -2,6 +2,7 @@ import React from 'react'
 import {Link} from 'react-router'
 import {node} from '../higher-order/branch'
 import style from './style'
+import noop from 'lodash/noop'
 import Message from 'tetris-iso/Message'
 import {ThumbLink, BottomLine, Cap, Gear} from '../ThumbLink'
 import {deleteWorkspaceAction} from '../../actions/delete-workspace'
@@ -12,9 +13,13 @@ import ReportLink from '../Report/ReportLink'
 import {DeleteSpan} from '../DeleteButton'
 import Fence from '../Fence'
 import Stats from './Stats'
+import {hideWorkspaceAction} from '../../actions/hide-workspace'
+import {showWorkspaceAction} from '../../actions/show-workspace'
+import {loadCompanyWorkspacesAction} from '../../actions/load-company-workspaces'
 
 const Workspace = ({workspace, params, dispatch}) => {
-  const run = (action, after = undefined) => () => dispatch(action, params)
+  const reload = () => dispatch(loadCompanyWorkspacesAction, params.company)
+  const run = (action, after = noop) => () => dispatch(action, params).then(after)
 
   return (
     <ThumbLink to={`/company/${params.company}/workspace/${workspace.id}`} title={workspace.name}>
@@ -69,6 +74,17 @@ const Workspace = ({workspace, params, dispatch}) => {
               <Message>editWorkspace</Message>
             </MenuItem>
           </Fence>
+
+          {workspace.hidden
+            ? (
+              <MenuItem icon='visibility' onClick={run(showWorkspaceAction, reload)}>
+                <Message>showWorkspace</Message>
+              </MenuItem>
+            ) : (
+              <MenuItem icon='visibility_off' onClick={run(hideWorkspaceAction, reload)}>
+                <Message>hideWorkspace</Message>
+              </MenuItem>
+            )}
 
           <Fence canEditWorkspace>
             <MenuItem
