@@ -15,10 +15,8 @@ import Fence from '../Fence'
 import Stats from './Stats'
 import {hideWorkspaceAction} from '../../actions/hide-workspace'
 import {showWorkspaceAction} from '../../actions/show-workspace'
-import {loadCompanyWorkspacesAction} from '../../actions/load-company-workspaces'
 
-const Workspace = ({workspace, params, dispatch}) => {
-  const reload = () => dispatch(loadCompanyWorkspacesAction, params.company)
+const Workspace = ({workspace, params, dispatch, reload}) => {
   const run = (action, after = noop) => () => dispatch(action, params).then(after)
 
   return (
@@ -101,6 +99,7 @@ const Workspace = ({workspace, params, dispatch}) => {
 }
 Workspace.displayName = 'Workspace'
 Workspace.propTypes = {
+  reload: React.PropTypes.func,
   params: React.PropTypes.object.isRequired,
   dispatch: React.PropTypes.func.isRequired,
   workspace: React.PropTypes.object.isRequired

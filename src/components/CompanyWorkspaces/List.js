@@ -21,11 +21,14 @@ import {loadWorkspaceStatsAction} from '../../actions/load-workspace-stats'
 import {styled} from '../mixins/styled'
 import style from './style'
 import Workspace from './Item'
+import Switch from '../Switch'
+import {loadCompanyWorkspacesAction} from '../../actions/load-company-workspaces'
 
 const cleanStr = str => trim(deburr(lowerCase(str)))
 
-const Items = ({favorites, others}) => (
+const Items = ({favorites, others, reload, children}) => (
   <Container>
+    {children}
     {favorites && (
       <h5>
         <Message>faveWorkspaceList</Message>
@@ -34,6 +37,7 @@ const Items = ({favorites, others}) => (
     {map(favorites, (workspace, index) =>
       <Workspace
         key={workspace.id}
+        reload={reload}
         params={{workspace: workspace.id}}/>)}
 
     {favorites && <br/>}
@@ -44,11 +48,14 @@ const Items = ({favorites, others}) => (
     {map(others, (workspace, index) =>
       <Workspace
         key={workspace.id}
+        reload={reload}
         params={{workspace: workspace.id}}/>)}
   </Container>
 )
 Items.displayName = 'Items'
 Items.propTypes = {
+  reload: React.PropTypes.func,
+  children: React.PropTypes.node,
   favorites: React.PropTypes.array,
   others: React.PropTypes.array
 }
@@ -59,11 +66,15 @@ const matching = (searchValue, workspaces) => searchValue
   ? filter(workspaces, ({name}) => includes(cleanStr(name), searchValue))
   : workspaces
 
-let List = ({searchValue, workspaces}) =>
-  <Items {...groupBy(orderBy(matching(searchValue, workspaces), ['creation'], ['desc']), isFav)}/>
+let List = ({searchValue, workspaces, reload, children}) =>
+  <Items {...groupBy(orderBy(matching(searchValue, workspaces), ['creation'], ['desc']), isFav)} reload={reload}>
+    {children}
+  </Items>
 
 List.displayName = 'List'
 List.propTypes = {
+  reload: React.PropTypes.func,
+  children: React.PropTypes.node,
   searchValue: React.PropTypes.string,
   workspaces: React.PropTypes.array
 }
@@ -73,6 +84,9 @@ export const Workspaces = React.createClass({
   displayName: 'Workspaces',
   mixins: [styled(style)],
   propTypes: {
+    params: React.PropTypes.shape({
+      company: React.PropTypes.string
+    }),
     location: React.PropTypes.object,
     dispatch: React.PropTypes.func,
     company: React.PropTypes.shape({
@@ -85,6 +99,7 @@ export const Workspaces = React.createClass({
   },
   getInitialState () {
     return {
+      visibleOnly: true,
       searchValue: ''
     }
   },
@@ -96,6 +111,16 @@ export const Workspaces = React.createClass({
   },
   onChange (searchValue) {
     this.setState({searchValue})
+  },
+  onSwitch ({target: {checked: visibleOnly}}) {
+    this.setState({visibleOnly}, this.reload)
+  },
+  reload () {
+    this.props.dispatch(
+      loadCompanyWorkspacesAction,
+      this.props.params.company,
+      !this.state.visibleOnly
+    )
   },
   render () {
     const searchValue = cleanStr(this.state.searchValue)
@@ -112,7 +137,15 @@ export const Workspaces = React.createClass({
           <SearchBox onChange={this.onChange}/>
         </SubHeader>
         <Page>
-          <List searchValue={searchValue}/>
+          <List searchValue={searchValue} reload={this.reload}>
+            <span style={{float: 'right'}}>
+              <Switch
+                checked={this.state.visibleOnly}
+                name='visibleOnly'
+                label={<Message>filterActiveOnly</Message>}
+                onChange={this.onSwitch}/>
+            </span>
+          </List>
         </Page>
       </div>
     )
