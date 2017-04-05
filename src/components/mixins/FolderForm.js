@@ -178,5 +178,9 @@ export default {
     return map(sortBy(this.rawSegments(), this.customFirst), this.normalizeAutoSelectOpt)
   },
   customFirst: ({type}) => type === 'CUSTOM' ? 0 : 1,
-  normalizeAutoSelectOpt: ({id: value, name: text}) => ({text, value})
+  normalizeAutoSelectOpt: ({id: value, name: text}) => ({text, value}),
+  isAnalytics () {
+    const accountPlatform = get(find(this.props.workspace.accounts, {id: this.state.workspace_account}), 'platform')
+    return accountPlatform === 'analytics'
+  }
 }

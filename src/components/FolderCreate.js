@@ -4,14 +4,14 @@ import concat from 'lodash/concat'
 import assign from 'lodash/assign'
 import Message from 'tetris-iso/Message'
 import Input from './Input'
-import {createFolderAction} from '../actions/create-folder'
-import {pushSuccessMessageAction} from '../actions/push-success-message-action'
+import { createFolderAction } from '../actions/create-folder'
+import { pushSuccessMessageAction } from '../actions/push-success-message-action'
 import Select from './Select'
 import map from 'lodash/map'
 import find from 'lodash/find'
 import get from 'lodash/get'
-import {Form, Content, Header, Footer} from './Card'
-import {many} from './higher-order/branch'
+import { Form, Content, Header, Footer } from './Card'
+import { many } from './higher-order/branch'
 import Checkbox from './Checkbox'
 import AutoSelect from './AutoSelect'
 import FolderFormMixin from './mixins/FolderForm'
@@ -25,7 +25,6 @@ export const CreateFolder = React.createClass({
     dispatch: React.PropTypes.func,
     company: React.PropTypes.object,
     medias: React.PropTypes.array,
-    kpis: React.PropTypes.object,
     params: React.PropTypes.shape({
       company: React.PropTypes.string,
       workspace: React.PropTypes.string
@@ -63,10 +62,15 @@ export const CreateFolder = React.createClass({
       workspace_account: elements.workspace_account.value,
       dash_campaign: dashCampaign ? dashCampaign.id : '',
       ga_segment: null,
-      tag: elements.tag.value || null,
-      media: elements.media.value,
+      tag: get(elements, 'tag.value', null),
+      media: get(elements, 'media.value', null),
       kpi: this.state.kpi,
       kpi_goal: this.state.kpi_goal
+    }
+
+    if (this.isAnalytics()) {
+      folder.media = 'display'
+      folder.kpi = 'cpa'
     }
 
     if (gaSegment) {
@@ -106,10 +110,12 @@ export const CreateFolder = React.createClass({
       showTagCheckbox: Boolean(e.target.value)
     })
   },
+
   render () {
     const {messages} = this.context
     const {medias, company, workspace: {accounts}} = this.props
     const {errors, kpi, kpi_goal, workspace_account, selectedMedia, showTagCheckbox, dashCampaign, gaSegment} = this.state
+    const isAnalytics = this.isAnalytics()
 
     return (
       <div>
@@ -145,47 +151,50 @@ export const CreateFolder = React.createClass({
 
               </Select>
 
-              <Select
-                name='media'
-                label='media'
-                error={errors.media}
-                value={selectedMedia}
-                onChange={this.onChangeMedia}>
+              {!isAnalytics && (
+                <Select
+                  name='media'
+                  label='media'
+                  error={errors.media}
+                  value={selectedMedia}
+                  onChange={this.onChangeMedia}>
 
-                <option value=''/>
+                  <option value=''/>
 
-                {map(medias,
-                  ({id, name}, index) => (
-                    <option key={index} value={id}>
-                      {name}
-                    </option>
-                  ))}
-              </Select>
+                  {map(medias,
+                    ({id, name}, index) => (
+                      <option key={index} value={id}>
+                        {name}
+                      </option>
+                    ))}
+                </Select>)}
 
-              <Select
-                name='kpi'
-                label='kpi'
-                error={errors.kpi}
-                value={kpi}
-                onChange={this.saveAndDismiss('kpi')}>
+              {!isAnalytics && (
+                <Select
+                  name='kpi'
+                  label='kpi'
+                  error={errors.kpi}
+                  value={kpi}
+                  onChange={this.saveAndDismiss('kpi')}>
 
-                <option value=''/>
+                  <option value=''/>
 
-                {map(get(find(medias, {id: selectedMedia}), 'kpis'),
-                  ({id, name, disabled}, index) => (
-                    <option key={index} value={id} disabled={disabled}>
-                      {name}
-                    </option>
-                  ))}
-              </Select>
+                  {map(get(find(medias, {id: selectedMedia}), 'kpis'),
+                    ({id, name, disabled}, index) => (
+                      <option key={index} value={id} disabled={disabled}>
+                        {name}
+                      </option>
+                    ))}
+                </Select>)}
 
-              <Input
-                type='number'
-                label='kpiGoal'
-                name='kpi_goal'
-                value={kpi_goal}
-                format={this.getKPIFormat()}
-                onChange={this.saveAndDismiss('kpi_goal')}/>
+              {!isAnalytics && (
+                <Input
+                  type='number'
+                  label='kpiGoal'
+                  name='kpi_goal'
+                  value={kpi_goal}
+                  format={this.getKPIFormat()}
+                  onChange={this.saveAndDismiss('kpi_goal')}/>)}
 
               {this.isConnectedToDash() && (
                 <AutoSelect
@@ -219,15 +228,16 @@ export const CreateFolder = React.createClass({
                     onChange={this.onChangeSegmentDefinition}/>
                 ) : null}
 
-              <Input
-                name='tag'
-                label='folderTag'
-                error={errors.tag}
-                onChange={this.onChangeTag}/>
+              {!isAnalytics && (
+                <Input
+                  name='tag'
+                  label='folderTag'
+                  error={errors.tag}
+                  onChange={this.onChangeTag}/>)}
 
               <br/>
 
-              {showTagCheckbox && (
+              {!isAnalytics && showTagCheckbox && (
                 <Checkbox
                   checked
                   label={<Message>autoLinkRightAway</Message>}

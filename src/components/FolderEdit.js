@@ -9,10 +9,10 @@ import React from 'react'
 import Checkbox from './Checkbox'
 import Input from './Input'
 import Select from './Select'
-import {pushSuccessMessageAction} from '../actions/push-success-message-action'
-import {updateFolderAction} from '../actions/update-folder'
-import {Form, Content, Header, Footer} from './Card'
-import {many} from './higher-order/branch'
+import { pushSuccessMessageAction } from '../actions/push-success-message-action'
+import { updateFolderAction } from '../actions/update-folder'
+import { Form, Content, Header, Footer } from './Card'
+import { many } from './higher-order/branch'
 import FolderFormMixin from './mixins/FolderForm'
 import AutoSelect from './AutoSelect'
 import Page from './Page'
@@ -57,7 +57,9 @@ export const EditFolder = React.createClass({
     ]))
   },
   componentDidMount () {
-    this.loadKPI()
+    if (!this.isAnalytics) {
+      this.loadKPI()
+    }
   },
   /**
    * handles submit event
@@ -76,10 +78,15 @@ export const EditFolder = React.createClass({
       workspace_account: elements.workspace_account.value,
       dash_campaign: dashCampaign ? dashCampaign.id : '',
       ga_segment: null,
-      tag: elements.tag.value || null,
-      media: elements.media.value,
+      tag: get(elements, 'tag.value', null),
+      media: get(elements, 'media.value', null),
       kpi: this.state.kpi,
       kpi_goal: this.state.kpi_goal
+    }
+
+    if (this.isAnalytics()) {
+      folder.media = 'display'
+      folder.kpi = 'cpa'
     }
 
     if (gaSegment) {
@@ -117,6 +124,7 @@ export const EditFolder = React.createClass({
       media,
       tag
     } = this.state
+    const isAnalytics = this.isAnalytics()
 
     return (
       <div>
@@ -154,47 +162,50 @@ export const EditFolder = React.createClass({
 
               </Select>
 
-              <Select
-                name='media'
-                label='media'
-                error={errors.media}
-                value={media}
-                onChange={this.saveAndDismiss('media')}>
+              {!isAnalytics && (
+                <Select
+                  name='media'
+                  label='media'
+                  error={errors.media}
+                  value={media}
+                  onChange={this.saveAndDismiss('media')}>
 
-                <option value=''/>
+                  <option value=''/>
 
-                {map(medias,
-                  ({id, name}, index) => (
-                    <option key={index} value={id}>
-                      {name}
-                    </option>
-                  ))}
-              </Select>
+                  {map(medias,
+                    ({id, name}, index) => (
+                      <option key={index} value={id}>
+                        {name}
+                      </option>
+                    ))}
+                </Select>)}
 
-              <Select
-                name='kpi'
-                label='kpi'
-                error={errors.kpi}
-                value={kpi}
-                onChange={this.saveAndDismiss('kpi')}>
+              {!isAnalytics && (
+                <Select
+                  name='kpi'
+                  label='kpi'
+                  error={errors.kpi}
+                  value={kpi}
+                  onChange={this.saveAndDismiss('kpi')}>
 
-                <option value=''/>
+                  <option value=''/>
 
-                {map(get(find(medias, {id: media}), 'kpis'),
-                  ({id, name, disabled}, index) => (
-                    <option key={index} value={id} disabled={disabled}>
-                      {name}
-                    </option>
-                  ))}
-              </Select>
+                  {map(get(find(medias, {id: media}), 'kpis'),
+                    ({id, name, disabled}, index) => (
+                      <option key={index} value={id} disabled={disabled}>
+                        {name}
+                      </option>
+                    ))}
+                </Select>)}
 
-              <Input
-                type='number'
-                label='kpiGoal'
-                name='kpi_goal'
-                value={kpi_goal}
-                format={this.getKPIFormat()}
-                onChange={this.saveAndDismiss('kpi_goal')}/>
+              {!isAnalytics && (
+                <Input
+                  type='number'
+                  label='kpiGoal'
+                  name='kpi_goal'
+                  value={kpi_goal}
+                  format={this.getKPIFormat()}
+                  onChange={this.saveAndDismiss('kpi_goal')}/>)}
 
               {this.isConnectedToDash() && (
                 <AutoSelect
@@ -225,16 +236,17 @@ export const EditFolder = React.createClass({
                     onChange={this.onChangeSegmentDefinition}/>
                 ) : null}
 
-              <Input
-                name='tag'
-                label='folderTag'
-                error={errors.tag}
-                value={tag || ''}
-                onChange={this.saveAndDismiss('tag')}/>
+              {!isAnalytics && (
+                <Input
+                  name='tag'
+                  label='folderTag'
+                  error={errors.tag}
+                  value={tag || ''}
+                  onChange={this.saveAndDismiss('tag')}/>)}
 
               <br/>
 
-              {tag && (
+              {!isAnalytics && tag && (
                 <Checkbox
                   checked
                   label={<Message>autoLinkRightAway</Message>}
