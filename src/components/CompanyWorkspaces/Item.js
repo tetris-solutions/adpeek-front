@@ -21,7 +21,10 @@ const Workspace = ({workspace, params, dispatch, reload}) => {
 
   return (
     <ThumbLink to={`/company/${params.company}/workspace/${workspace.id}`} title={workspace.name}>
-      <Cap>{workspace.name}</Cap>
+      <Cap bg={workspace.hidden ? 'grey-600' : undefined}>
+        {workspace.name}
+      </Cap>
+
       <Stats {...workspace.stats}/>
 
       <BottomLine>
