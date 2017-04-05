@@ -350,5 +350,7 @@ module.exports = {
   analyticsFolderTitle: 'Pasta GA "{name}"',
   analyticsFolderDescription: 'Pastas do Google Analytics não possuem campanhas, seu uso é predominantemente para extração de relatórios',
   hideWorkspace: 'Ocultar Área',
-  showWorkspace: 'Exibir Área'
+  showWorkspace: 'Exibir Área',
+  hideFolder: 'Ocultar Pasta',
+  showFolder: 'Exibir Pasta'
 }

@@ -349,5 +349,7 @@ module.exports = {
   analyticsFolderTitle: 'Analytics Folder "{name}"',
   analyticsFolderDescription: 'Analytics folders do not contain campaigns, they are designed for reports only',
   hideWorkspace: 'Hide Workspace',
-  showWorkspace: 'Show Workspace'
+  showWorkspace: 'Show Workspace',
+  hideFolder: 'Hide Folder',
+  showFolder: 'Show Folder'
 }
