@@ -109,7 +109,7 @@ export const Folders = React.createClass({
             <SearchBox onChange={this.onChange}/>
           </SubHeader>
           <Page>
-            <List searchValue={searchValue} editable={canEditFolder}>
+            <List searchValue={searchValue} editable={canEditFolder} reload={this.reload}>
               <span style={{float: 'right'}}>
                 <Switch
                   checked={this.state.visibleOnly}
