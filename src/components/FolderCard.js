@@ -8,6 +8,8 @@ import {DeleteSpan} from './DeleteButton'
 import ReportLink from './Report/ReportLink'
 import FolderStats from './FolderStats'
 import {node} from './higher-order/branch'
+import {showFolderAction} from '../actions/show-folder'
+import {hideFolderAction} from '../actions/hide-folder'
 
 const DeleteFolder = ({params, dispatch, id, name}) => (
   <MenuItem
@@ -32,14 +34,14 @@ const platformColor = {
   analytics: 'deep-orange-A400'
 }
 
-const FolderCard = ({id, account: {platform}, kpi_goal, name, stats, reports, editable, dispatch, params}) => {
+const FolderCard = ({id, account: {platform}, kpi_goal, name, stats, reports, editable, hidden, reload, dispatch, params}) => {
   const {company, workspace} = params
   const folderUrl = `/company/${company}/workspace/${workspace}/folder/${id}`
   const isAnalytics = platform === 'analytics'
 
   return (
     <ThumbLink to={folderUrl} title={name} style={{width: 280}}>
-      <Cap bg={platformColor[platform]}>
+      <Cap bg={hidden ? 'grey-600' : platformColor[platform]}>
         {name}
       </Cap>
 
@@ -68,6 +70,17 @@ const FolderCard = ({id, account: {platform}, kpi_goal, name, stats, reports, ed
             <Message>editFolder</Message>
           </MenuItem>}
 
+          {hidden
+            ? (
+              <MenuItem icon='visibility' onClick={() => dispatch(showFolderAction, params).then(reload)}>
+                <Message>showFolder</Message>
+              </MenuItem>
+            ) : (
+              <MenuItem icon='visibility_off' onClick={() => dispatch(hideFolderAction, params).then(reload)}>
+                <Message>hideFolder</Message>
+              </MenuItem>
+            )}
+
           {editable &&
           <DeleteFolder
             id={id}
@@ -83,6 +96,8 @@ const FolderCard = ({id, account: {platform}, kpi_goal, name, stats, reports, ed
 FolderCard.displayName = 'Card'
 FolderCard.propTypes = {
   id: React.PropTypes.string.isRequired,
+  reload: React.PropTypes.func,
+  hidden: React.PropTypes.bool,
   kpi_goal: React.PropTypes.number,
   account: React.PropTypes.shape({
     platform: React.PropTypes.string

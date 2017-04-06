@@ -118,7 +118,7 @@ export const Workspaces = React.createClass({
   reload () {
     this.props.dispatch(
       loadCompanyWorkspacesAction,
-      this.props.params.company,
+      this.props.params,
       !this.state.visibleOnly
     )
   },

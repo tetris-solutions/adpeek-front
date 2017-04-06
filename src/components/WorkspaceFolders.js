@@ -15,17 +15,21 @@ import {Container} from './ThumbLink'
 import {Link} from 'react-router'
 import Page from './Page'
 import FolderCard from './FolderCard'
+import Switch from './Switch'
+import {loadWorkspaceFoldersAction} from '../actions/load-folders'
 
 const cleanStr = str => trim(deburr(lowerCase(str)))
 
-const Cards = ({editable, folders}) => (
+const Cards = ({editable, folders, reload, children}) => (
   <Container>
+    {children}
     <h5>
       <Message>folderList</Message>
     </h5>
     {map(folders, ({id}, index) =>
       <FolderCard
         key={index}
+        reload={reload}
         params={{folder: id}}
         editable={editable}/>)}
   </Container>
@@ -33,21 +37,28 @@ const Cards = ({editable, folders}) => (
 
 Cards.displayName = 'Cards'
 Cards.propTypes = {
+  reload: React.PropTypes.func,
+  children: React.PropTypes.node,
   editable: React.PropTypes.bool,
   folders: React.PropTypes.array
 }
 
-let List = ({editable, searchValue, folders}) => (
+let List = ({editable, searchValue, reload, children, folders}) => (
   <Cards
+    reload={reload}
     editable={editable}
     folders={orderBy(searchValue
       ? filter(folders, ({name}) => includes(cleanStr(name), searchValue))
       : folders, ['creation'], ['desc']
-    )}/>
+    )}>
+    {children}
+  </Cards>
 )
 
 List.displayName = 'List'
 List.propTypes = {
+  reload: React.PropTypes.func,
+  children: React.PropTypes.node,
   editable: React.PropTypes.bool,
   searchValue: React.PropTypes.string,
   folders: React.PropTypes.array
@@ -57,6 +68,7 @@ List = collection('workspace', 'folders', List)
 export const Folders = React.createClass({
   displayName: 'Folders',
   propTypes: {
+    dispatch: React.PropTypes.func,
     params: React.PropTypes.shape({
       company: React.PropTypes.string,
       workspace: React.PropTypes.string
@@ -64,11 +76,22 @@ export const Folders = React.createClass({
   },
   getInitialState () {
     return {
-      searchValue: ''
+      searchValue: '',
+      visibleOnly: true
     }
   },
   onChange (searchValue) {
     this.setState({searchValue})
+  },
+  onSwitch ({target: {checked: visibleOnly}}) {
+    this.setState({visibleOnly}, this.reload)
+  },
+  reload () {
+    this.props.dispatch(
+      loadWorkspaceFoldersAction,
+      this.props.params,
+      !this.state.visibleOnly
+    )
   },
   render () {
     const searchValue = cleanStr(this.state.searchValue)
@@ -86,9 +109,15 @@ export const Folders = React.createClass({
             <SearchBox onChange={this.onChange}/>
           </SubHeader>
           <Page>
-            <List
-              searchValue={searchValue}
-              editable={canEditFolder}/>
+            <List searchValue={searchValue} editable={canEditFolder}>
+              <span style={{float: 'right'}}>
+                <Switch
+                  checked={this.state.visibleOnly}
+                  name='visibleOnly'
+                  label={<Message>filterActiveOnly</Message>}
+                  onChange={this.onSwitch}/>
+              </span>
+            </List>
           </Page>
         </div>}
       </Fence>

@@ -2,7 +2,7 @@ import {GET} from '@tetris/http'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {mergeList} from '../functions/save-response-data'
 
-export function loadWorkspaceFolders (workspace, includeHidden, config) {
+function loadWorkspaceFolders (workspace, includeHidden, config) {
   return GET(`${process.env.ADPEEK_API_URL}/workspace/${workspace}/folders${includeHidden ? '?includeHidden=true' : ''}`, config)
 }
 
