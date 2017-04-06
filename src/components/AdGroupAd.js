@@ -89,6 +89,10 @@ const style = csjs`
 }
 .link {
   word-break: break-all;
+}
+.youtubeThumb {
+  width: 100%;
+  height: auto;
 }`
 
 const colors = {
@@ -189,19 +193,7 @@ KPI.propTypes = {
   kpi: kpiType
 }
 
-const TextAd = ({
-  kpi,
-  headline,
-  headline_part_1,
-  headline_part_2,
-  display_url,
-  description,
-  description_1,
-  description_2,
-  path_1,
-  path_2,
-  final_urls
-}) => (
+const TextAd = ({kpi, headline, headline_part_1, headline_part_2, display_url, description, description_1, description_2, path_1, path_2, final_urls}) => (
   <div className={`${style.wrapper}`}>
     <div className={`mdl-color--yellow-200 ${style.box}`}>
       {headline
@@ -328,6 +320,18 @@ const TemplateAd = React.createClass({
   }
 })
 
+const YouTubeAd = ({video_id}) => (
+  <div className={`${style.wrapper}`}>
+    <div className={`mdl-color--yellow-200 ${style.box}`}>
+      <img className={`${style.youtubeThumb}`} src={`http://img.youtube.com/vi/${video_id}/mqdefault.jpg`}/>
+    </div>
+  </div>
+)
+YouTubeAd.displayName = 'YouTube-Ad'
+YouTubeAd.propTypes = {
+  video_id: React.PropTypes.string
+}
+
 function AdGroupAd (props) {
   switch (props.type) {
     case 'EXPANDED_TEXT_AD':
@@ -337,6 +341,8 @@ function AdGroupAd (props) {
       return <ImageAd {...props}/>
     case 'TEMPLATE_AD':
       return <TemplateAd {...props}/>
+    case 'YOUTUBE':
+      return <YouTubeAd {...props}/>
     default:
       return null
   }
