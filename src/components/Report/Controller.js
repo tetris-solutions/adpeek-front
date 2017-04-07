@@ -115,19 +115,22 @@ const ReportController = React.createClass({
     const {report, params, dispatch} = this.props
     const {messages: {module: defaultModuleName}} = this.context
     const lastY = max(map(report.modules, 'y'))
-    const y = (isNumber(lastY) ? lastY : -1) + 1
+    const y = isNumber(lastY) ? lastY + 1 : 0
 
-    dispatch(createModuleReportAction, params, {
+    const newModule = {
       type: 'line',
       name: defaultModuleName + ' ' + size(report.modules),
       x: 0,
       y,
       entity: 'Campaign',
-      filters: {
-        id: [],
-        impressions: ['greater than', 1]
-      }
-    })
+      filters: {id: []}
+    }
+
+    if (report.platform !== 'analytics') {
+      newModule.filters.impressions = ['greater than', 1]
+    }
+
+    dispatch(createModuleReportAction, params, newModule)
   },
   cloneModule (id, name) {
     const {params, dispatch, report} = this.props
