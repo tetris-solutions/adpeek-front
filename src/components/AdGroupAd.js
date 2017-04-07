@@ -9,6 +9,7 @@ import {inferDisplayUrl} from '../functions/infer-display-url'
 import {findImageAdUrl} from '../functions/find-image-ad-url'
 import {findTemplateAdId, findTemplateAdUrl} from '../functions/find-template-ad-url'
 import {loadBundlePreviewUrlAction} from '../actions/load-bundle-preview-url'
+import floor from 'lodash/floor'
 
 const withPreview = withState('previewMode', 'setPreviewMode', false)
 
@@ -26,6 +27,7 @@ const style = csjs`
   white-space: nowrap
 }
 .box {
+  display: block;
   position: relative;
   margin-top: 1em;
   padding: .7em;
@@ -91,6 +93,9 @@ const style = csjs`
   word-break: break-all;
 }
 .youtubeThumb {
+  cursor: pointer;
+}
+.youtubeThumb > img{
   width: 100%;
   height: auto;
 }`
@@ -320,17 +325,35 @@ const TemplateAd = React.createClass({
   }
 })
 
-const YouTubeAd = ({video_id}) => (
+let YouTubeAd = ({title, video_id, previewMode, setPreviewMode}) => (
   <div className={`${style.wrapper}`}>
-    <div className={`mdl-color--yellow-200 ${style.box}`}>
-      <img className={`${style.youtubeThumb}`} src={`http://img.youtube.com/vi/${video_id}/mqdefault.jpg`}/>
+    <div
+      className={`mdl-color--yellow-200 ${style.box} ${style.youtubeThumb}`}
+      onClick={() => setPreviewMode(!previewMode)}>
+
+      <img src={`http://img.youtube.com/vi/${video_id}/mqdefault.jpg`}/>
+      <h6>{title}</h6>
+      {previewMode && (
+        <Modal onEscPress={() => setPreviewMode(false)}>
+          <iframe
+            width={750}
+            height={floor(750 * (9 / 16))}
+            frameBorder={0}
+            src={`https://www.youtube.com/embed/${video_id}`}
+            allowFullScreen/>
+        </Modal>)}
     </div>
   </div>
 )
 YouTubeAd.displayName = 'YouTube-Ad'
 YouTubeAd.propTypes = {
-  video_id: React.PropTypes.string
+  video_id: React.PropTypes.string,
+  title: React.PropTypes.string,
+  previewMode: React.PropTypes.bool,
+  setPreviewMode: React.PropTypes.func
 }
+
+YouTubeAd = withPreview(YouTubeAd)
 
 function AdGroupAd (props) {
   switch (props.type) {
