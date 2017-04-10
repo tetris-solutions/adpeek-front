@@ -19,6 +19,8 @@ import Emmett from 'emmett'
 
 const editableFields = ['description', 'name', 'type', 'dimensions', 'metrics', 'rows', 'cols', 'entity', 'limit', 'sort', 'filters']
 const MAX_ACCOUNTS = 15
+const MAX_GA_DIMENSIONS = 7
+const MAX_GA_METRICS = 10
 
 function requiredDimensions (entity) {
   switch (entity) {
@@ -48,7 +50,8 @@ const ModuleEdit = React.createClass({
     module: React.PropTypes.object.isRequired,
     entities: React.PropTypes.object.isRequired,
     getUsedAccounts: React.PropTypes.func.isRequired,
-    activeOnly: React.PropTypes.bool.isRequired
+    activeOnly: React.PropTypes.bool.isRequired,
+    report: React.PropTypes.object
   },
   propTypes: {
     close: React.PropTypes.func,
@@ -322,6 +325,21 @@ const ModuleEdit = React.createClass({
 
     return invalidPermutation
   },
+  getAttributeSelectionLimit (dimensions, metrics) {
+    let tooManyDimensions = null
+    let tooManyMetrics = null
+
+    if (this.context.report.platform === 'analytics') {
+      if (dimensions.length > MAX_GA_DIMENSIONS) {
+        tooManyDimensions = {limit: MAX_GA_DIMENSIONS, selected: dimensions.length}
+      }
+      if (metrics.length > MAX_GA_METRICS) {
+        tooManyMetrics = {limit: MAX_GA_METRICS, selected: metrics.length}
+      }
+    }
+
+    return {tooManyMetrics, tooManyDimensions}
+  },
   render () {
     const {name, type, dimensions, metrics, filters} = this.getDraftModule()
     const numberOfSelectedAccounts = this.context.getUsedAccounts(filters.id).length
@@ -334,6 +352,7 @@ const ModuleEdit = React.createClass({
     )
 
     const invalidPermutation = isInvalidModule ? undefined : this.getInvalidPermutation(dimensions, metrics)
+    const limits = this.getAttributeSelectionLimit(dimensions, metrics)
 
     return (
       <Editor
@@ -342,6 +361,8 @@ const ModuleEdit = React.createClass({
         numberOfSelectedAccounts={numberOfSelectedAccounts}
         isInvalid={isInvalidModule}
         isLoading={Boolean(this.context.module.isLoading)}
+        tooManyMetrics={limits.tooManyMetrics}
+        tooManyDimensions={limits.tooManyDimensions}
         cancel={this.cancel}
         redraw={this.redraw}
         save={this.save}/>

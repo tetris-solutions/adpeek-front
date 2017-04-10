@@ -352,5 +352,7 @@ module.exports = {
   hideWorkspace: 'Ocultar Área',
   showWorkspace: 'Exibir Área',
   hideFolder: 'Ocultar Pasta',
-  showFolder: 'Exibir Pasta'
+  showFolder: 'Exibir Pasta',
+  tooManyMetrics: 'Por favor, selecione até {limit} métricas, você selecionou {selected}',
+  tooManyDimensions: 'Por favor, selecione até {limit} dimensões, você selecionou {selected}'
 }

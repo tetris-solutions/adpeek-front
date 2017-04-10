@@ -41,6 +41,8 @@ const Editor = React.createClass({
     numberOfSelectedAccounts: React.PropTypes.number.isRequired,
     isInvalid: React.PropTypes.bool.isRequired,
     isLoading: React.PropTypes.bool.isRequired,
+    tooManyDimensions: React.PropTypes.object,
+    tooManyMetrics: React.PropTypes.object,
     save: React.PropTypes.func.isRequired,
     redraw: React.PropTypes.func.isRequired,
     cancel: React.PropTypes.func.isRequired
@@ -71,7 +73,18 @@ const Editor = React.createClass({
     return {selectable}
   },
   render () {
-    const {isLoading, isInvalid, maxAccounts, invalidPermutation, numberOfSelectedAccounts, redraw, save, cancel} = this.props
+    const {
+      isLoading,
+      isInvalid,
+      maxAccounts,
+      invalidPermutation,
+      numberOfSelectedAccounts,
+      tooManyDimensions,
+      tooManyMetrics,
+      redraw,
+      save,
+      cancel
+    } = this.props
     const {messages, draft} = this.context
     const selectedTooManyAccounts = numberOfSelectedAccounts > maxAccounts
     let updateBt
@@ -95,6 +108,22 @@ const Editor = React.createClass({
         <em className='mdl-color-text--red-A700'>
           <Message first={invalidPermutation[0].name} second={invalidPermutation[1].name} html>
             invalidPermutation
+          </Message>
+        </em>
+      )
+    } else if (tooManyDimensions) {
+      updateBt = (
+        <em className='mdl-color-text--red-A700'>
+          <Message selected={tooManyDimensions.selected} limit={tooManyDimensions.limit} html>
+            tooManyDimensions
+          </Message>
+        </em>
+      )
+    } else if (tooManyMetrics) {
+      updateBt = (
+        <em className='mdl-color-text--red-A700'>
+          <Message selected={tooManyMetrics.selected} limit={tooManyMetrics.limit} html>
+            tooManyMetrics
           </Message>
         </em>
       )
