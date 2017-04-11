@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Helmet from 'react-helmet'
 
 const gTMSrc = `(function (w, d, s, l, i) {
   w[l] = w[l] || [];
@@ -38,15 +37,13 @@ const hardCodedStyle = `
   display: flex !important;
 }`
 
-const HTML = ({payload, children, css}) => (
+const HTML = ({payload, children, css, helmet}) => (
   <html>
     <head>
       <meta charSet='UTF-8'/>
       <meta name='viewport' content='width=device-width, initial-scale=1'/>
 
-      {Helmet
-        .rewind()
-        .title.toComponent()}
+      {helmet.title.toComponent()}
 
       <link rel='shortcut icon' type='image/png' href='/img/favicon.png'/>
       <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' type='text/css'/>
@@ -83,7 +80,8 @@ const HTML = ({payload, children, css}) => (
 HTML.propTypes = {
   css: PropTypes.string,
   payload: PropTypes.object,
-  children: PropTypes.node
+  children: PropTypes.node,
+  helmet: PropTypes.object
 }
 
 export default HTML

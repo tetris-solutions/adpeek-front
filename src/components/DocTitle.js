@@ -84,7 +84,11 @@ class DocTitle extends React.Component {
   }
 
   render () {
-    return <Helmet title={this.getTitle()}/>
+    return (
+      <Helmet>
+        <title>{this.getTitle()}</title>
+      </Helmet>
+    )
   }
 }
 

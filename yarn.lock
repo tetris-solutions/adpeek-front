@@ -1284,7 +1284,7 @@ decamelize@^1.0.0, decamelize@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
 
-deep-equal@1.0.1:
+deep-equal@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.0.1.tgz#f5d260292b660e084eff4cdbc9f08ad3247448b5"
 
@@ -3319,9 +3319,9 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.0.0, prop-types@^15.5.2, prop-types@^15.5.6, prop-types@~15.5.0:
-  version "15.5.6"
-  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.6.tgz#797a915b1714b645ebb7c5d6cc690346205bd2aa"
+prop-types@^15.0.0, prop-types@^15.5.2, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@~15.5.0:
+  version "15.5.7"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.7.tgz#231c4f29cdd82e355011d4889386ca9059544dd1"
   dependencies:
     fbjs "^0.8.9"
 
@@ -3483,12 +3483,13 @@ react-grid-layout@^0.13.9:
     react-draggable "^2.1.1"
     react-resizable "^1.4.0"
 
-react-helmet@^3.2.2:
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/react-helmet/-/react-helmet-3.3.2.tgz#0d5a985aca6fba0331331fb567ca3d96681a381c"
+react-helmet@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/react-helmet/-/react-helmet-5.0.3.tgz#c6da63ee96e83aa7c8fe6d041f28dd288b1b006d"
   dependencies:
-    deep-equal "1.0.1"
-    object-assign "^4.0.1"
+    deep-equal "^1.0.1"
+    object-assign "^4.1.1"
+    prop-types "^15.5.4"
     react-side-effect "^1.1.0"
 
 react-intl@^1.2.2:
@@ -4165,9 +4166,9 @@ tar@^2.2.1:
     fstream "^1.0.2"
     inherits "2"
 
-tetris-iso@^0.5.11:
-  version "0.5.11"
-  resolved "https://registry.yarnpkg.com/tetris-iso/-/tetris-iso-0.5.11.tgz#4e96bb9518f390ff7e85c3d6d5607229f321b382"
+tetris-iso@^0.5.14:
+  version "0.5.14"
+  resolved "https://registry.yarnpkg.com/tetris-iso/-/tetris-iso-0.5.14.tgz#4562e71dfc8e0478c2a62d3331687c2707ae42ba"
   dependencies:
     "@tetris/debug-middleware" "^0.1.0"
     "@tetris/locale-middleware" "^0.1.1"
