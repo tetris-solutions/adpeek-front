@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {branch} from './higher-order/branch'
 import {Card, Content, Header, Footer} from './Card'
 import {forgetError} from 'tetris-iso/actions'
@@ -46,14 +47,14 @@ function ErrorScreen ({error, dispatch}, {router}) {
 
 ErrorScreen.displayName = 'Error-Screen'
 ErrorScreen.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 }
 ErrorScreen.propTypes = {
-  dispatch: React.PropTypes.func.isRequired,
-  error: React.PropTypes.shape({
-    status: React.PropTypes.number,
-    message: React.PropTypes.string,
-    stack: React.PropTypes.string
+  dispatch: PropTypes.func.isRequired,
+  error: PropTypes.shape({
+    status: PropTypes.number,
+    message: PropTypes.string,
+    stack: PropTypes.string
   }).isRequired
 }
 export default branch({error: ['error']}, ErrorScreen)

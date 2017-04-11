@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Input from '../../../Input'
 import SelectedFields from './SelectedFields'
 import Select from '../../../Select'
@@ -45,13 +46,13 @@ const EditContent = (props, {report, entities, onChangeName, onChangeType, onCha
 
 EditContent.displayName = 'Edit-Content'
 EditContent.contextTypes = {
-  report: React.PropTypes.object,
-  onChangeName: React.PropTypes.func.isRequired,
-  onChangeEntity: React.PropTypes.func.isRequired,
-  onChangeType: React.PropTypes.func.isRequired,
-  entities: React.PropTypes.object.isRequired,
-  change: React.PropTypes.func.isRequired,
-  draft: React.PropTypes.object.isRequired
+  report: PropTypes.object,
+  onChangeName: PropTypes.func.isRequired,
+  onChangeEntity: PropTypes.func.isRequired,
+  onChangeType: PropTypes.func.isRequired,
+  entities: PropTypes.object.isRequired,
+  change: PropTypes.func.isRequired,
+  draft: PropTypes.object.isRequired
 }
 
 export default EditContent

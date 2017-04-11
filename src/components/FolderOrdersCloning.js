@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import OrdersClone from './OrdersClone'
 import {node} from './higher-order/branch'
 
@@ -7,8 +8,8 @@ export const Orders = ({folder: {orders}}) =>
 
 Orders.displayName = 'Folder-Orders-Cloning'
 Orders.propTypes = {
-  folder: React.PropTypes.shape({
-    orders: React.PropTypes.array
+  folder: PropTypes.shape({
+    orders: PropTypes.array
   })
 }
 

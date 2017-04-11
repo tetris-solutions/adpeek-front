@@ -1,18 +1,21 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
 import CheckBox from './Checkbox'
 import includes from 'lodash/includes'
 import {node} from './higher-order/branch'
 
-export const WorkspaceRolesSelector = React.createClass({
-  displayName: 'Workspace-Roles-Selector',
-  propTypes: {
-    company: React.PropTypes.shape({
-      roles: React.PropTypes.array
+export class WorkspaceRolesSelector extends React.Component {
+  static displayName = 'Workspace-Roles-Selector'
+
+  static propTypes = {
+    company: PropTypes.shape({
+      roles: PropTypes.array
     }),
-    roles: React.PropTypes.array
-  },
+    roles: PropTypes.array
+  }
+
   render () {
     const {company: {roles: allRoles, role: {id: myRole}}, roles: selectedRoles} = this.props
 
@@ -37,6 +40,6 @@ export const WorkspaceRolesSelector = React.createClass({
       </fieldset>
     )
   }
-})
+}
 
 export default node('user', 'company', WorkspaceRolesSelector)

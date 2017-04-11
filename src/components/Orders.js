@@ -7,6 +7,7 @@ import map from 'lodash/map'
 import trim from 'lodash/trim'
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Link} from 'react-router'
 import Fence from './Fence'
 import SearchBox from './HeaderSearchBox'
@@ -20,33 +21,37 @@ import {inferLevelFromProps} from '../functions/infer-level-from-params'
 
 const cleanStr = str => trim(deburr(lowerCase(str)))
 
-export const Orders = React.createClass({
-  displayName: 'Orders',
-  contextTypes: {
-    moment: React.PropTypes.func.isRequired,
-    location: React.PropTypes.object,
-    params: React.PropTypes.shape({
-      company: React.PropTypes.string,
-      workspace: React.PropTypes.string,
-      folder: React.PropTypes.string
+export class Orders extends React.Component {
+  static displayName = 'Orders'
+
+  static contextTypes = {
+    moment: PropTypes.func.isRequired,
+    location: PropTypes.object,
+    params: PropTypes.shape({
+      company: PropTypes.string,
+      workspace: PropTypes.string,
+      folder: PropTypes.string
     })
-  },
-  propTypes: {
-    dispatch: React.PropTypes.func.isRequired,
-    orders: React.PropTypes.array.isRequired
-  },
-  getInitialState () {
-    return {
-      searchValue: '',
-      activeOnly: true
-    }
-  },
-  onChange (searchValue) {
+  }
+
+  static propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    orders: PropTypes.array.isRequired
+  }
+
+  state = {
+    searchValue: '',
+    activeOnly: true
+  }
+
+  onChange = (searchValue) => {
     this.setState({searchValue})
-  },
-  onSwitch ({target: {checked: activeOnly}}) {
+  }
+
+  onSwitch = ({target: {checked: activeOnly}}) => {
     this.setState({activeOnly})
-  },
+  }
+
   render () {
     const {activeOnly} = this.state
     const searchValue = cleanStr(this.state.searchValue)
@@ -103,6 +108,6 @@ export const Orders = React.createClass({
       </Fence>
     )
   }
-})
+}
 
 export default collection(inferLevelFromProps, 'orders', Orders)

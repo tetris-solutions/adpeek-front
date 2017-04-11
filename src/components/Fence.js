@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import diff from 'lodash/difference'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
@@ -23,9 +24,9 @@ const permissionNames = {
 const permissionAliases = invert(permissionNames)
 const getPermissionName = id => permissionNames[id]
 const none = []
-const passengerType = React.PropTypes.oneOfType([
-  React.PropTypes.func,
-  React.PropTypes.node
+const passengerType = PropTypes.oneOfType([
+  PropTypes.func,
+  PropTypes.node
 ]).isRequired
 
 function Gate ({passenger, permissions}) {
@@ -41,32 +42,35 @@ function Gate ({passenger, permissions}) {
 Gate.displayName = 'Gate'
 Gate.propTypes = {
   passenger: passengerType,
-  permissions: React.PropTypes.shape({
-    allow: React.PropTypes.bool.isRequired,
-    granted: React.PropTypes.array.isRequired,
-    required: React.PropTypes.array.isRequired
+  permissions: PropTypes.shape({
+    allow: PropTypes.bool.isRequired,
+    granted: PropTypes.array.isRequired,
+    required: PropTypes.array.isRequired
   }).isRequired
 }
 
-const Fence = React.createClass({
-  displayName: 'Fence',
-  contextTypes: {
-    company: React.PropTypes.object.isRequired,
-    isGuest: React.PropTypes.bool.isRequired,
-    isAdmin: React.PropTypes.bool.isRequired
-  },
-  propTypes: {
+class Fence extends React.Component {
+  static displayName = 'Fence'
+
+  static contextTypes = {
+    company: PropTypes.object.isRequired,
+    isGuest: PropTypes.bool.isRequired,
+    isAdmin: PropTypes.bool.isRequired
+  }
+
+  static propTypes = {
     children: passengerType,
-    canEditWorkspace: React.PropTypes.bool,
-    canEditFolder: React.PropTypes.bool,
-    canEditCampaign: React.PropTypes.bool,
-    canEditOrder: React.PropTypes.bool,
-    canEditReport: React.PropTypes.bool,
-    canBrowseReports: React.PropTypes.bool,
-    isLoggedIn: React.PropTypes.bool,
-    isRegularUser: React.PropTypes.bool,
-    isAdmin: React.PropTypes.bool
-  },
+    canEditWorkspace: PropTypes.bool,
+    canEditFolder: PropTypes.bool,
+    canEditCampaign: PropTypes.bool,
+    canEditOrder: PropTypes.bool,
+    canEditReport: PropTypes.bool,
+    canBrowseReports: PropTypes.bool,
+    isLoggedIn: PropTypes.bool,
+    isRegularUser: PropTypes.bool,
+    isAdmin: PropTypes.bool
+  }
+
   render () {
     const {props, context} = this
     const required = compact(map(keys(props), getPermissionName))
@@ -97,6 +101,6 @@ const Fence = React.createClass({
 
     return <Gate passenger={props.children} permissions={permissions}/>
   }
-})
+}
 
 export default Fence

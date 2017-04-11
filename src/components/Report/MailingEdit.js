@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import {Link} from 'react-router'
 import FormMixin from '../mixins/FormMixin'
 import {Submit, Button} from '../Button'
@@ -46,8 +48,8 @@ const Middle = ({className, children}) => (
 
 Middle.displayName = 'Middle'
 Middle.propTypes = {
-  className: React.PropTypes.string.isRequired,
-  children: React.PropTypes.node.isRequired
+  className: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired
 }
 
 const RangeSelect = ({value, onChange}, {messages}) => (
@@ -63,11 +65,11 @@ const RangeSelect = ({value, onChange}, {messages}) => (
 
 RangeSelect.displayName = 'Range-Select'
 RangeSelect.propTypes = {
-  value: React.PropTypes.string,
-  onChange: React.PropTypes.func.isRequired
+  value: PropTypes.string,
+  onChange: PropTypes.func.isRequired
 }
 RangeSelect.contextTypes = {
-  messages: React.PropTypes.object
+  messages: PropTypes.object
 }
 
 const daysOfWeek = moment => {
@@ -116,17 +118,17 @@ const PeriodicitySelector = (props, {messages, moment}) => (
 )
 PeriodicitySelector.displayName = 'Periodicity'
 PeriodicitySelector.propTypes = {
-  day_of_week: React.PropTypes.number,
-  day_of_month: React.PropTypes.number,
-  date: React.PropTypes.string,
-  periodicity: React.PropTypes.oneOf(['daily', 'weekly', 'monthly']).isRequired,
-  onChangePeriodicity: React.PropTypes.func.isRequired,
-  onChangeDayOfWeek: React.PropTypes.func.isRequired,
-  onChangeDayOfMonth: React.PropTypes.func.isRequired
+  day_of_week: PropTypes.number,
+  day_of_month: PropTypes.number,
+  date: PropTypes.string,
+  periodicity: PropTypes.oneOf(['daily', 'weekly', 'monthly']).isRequired,
+  onChangePeriodicity: PropTypes.func.isRequired,
+  onChangeDayOfWeek: PropTypes.func.isRequired,
+  onChangeDayOfMonth: PropTypes.func.isRequired
 }
 PeriodicitySelector.contextTypes = {
-  moment: React.PropTypes.func.isRequired,
-  messages: React.PropTypes.object.isRequired
+  moment: PropTypes.func.isRequired,
+  messages: PropTypes.object.isRequired
 }
 
 const Email = ({drop, dead, email}, {messages}) => (
@@ -149,49 +151,53 @@ const Email = ({drop, dead, email}, {messages}) => (
 
 Email.displayName = 'Email'
 Email.propTypes = {
-  drop: React.PropTypes.func.isRequired,
-  email: React.PropTypes.string.isRequired,
-  dead: React.PropTypes.bool.isRequired
+  drop: PropTypes.func.isRequired,
+  email: PropTypes.string.isRequired,
+  dead: PropTypes.bool.isRequired
 }
 Email.contextTypes = {
-  messages: React.PropTypes.object.isRequired
+  messages: PropTypes.object.isRequired
 }
 
 const validEmail = str => Boolean(str.match(/\S+@\S+\.\S+/))
 
-const MailingEdit = React.createClass({
+const MailingEdit = createReactClass({
+  displayName: 'MailingEdit',
   mixins: [FormMixin],
+
   propTypes: {
-    params: React.PropTypes.object.isRequired,
-    mailing: React.PropTypes.shape({
-      id: React.PropTypes.string,
-      date_range: React.PropTypes.oneOf(ranges),
-      disabled: React.PropTypes.bool,
-      schedule: React.PropTypes.shape({
-        id: React.PropTypes.string,
-        day_of_week: React.PropTypes.number,
-        day_of_month: React.PropTypes.number,
-        date: React.PropTypes.string
+    params: PropTypes.object.isRequired,
+    mailing: PropTypes.shape({
+      id: PropTypes.string,
+      date_range: PropTypes.oneOf(ranges),
+      disabled: PropTypes.bool,
+      schedule: PropTypes.shape({
+        id: PropTypes.string,
+        day_of_week: PropTypes.number,
+        day_of_month: PropTypes.number,
+        date: PropTypes.string
       }),
-      emails: React.PropTypes.array,
-      report: React.PropTypes.shape({
-        id: React.PropTypes.string,
-        name: React.PropTypes.string
+      emails: PropTypes.array,
+      report: PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string
       }),
-      workspace: React.PropTypes.shape({
-        id: React.PropTypes.string,
-        name: React.PropTypes.string
+      workspace: PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string
       }),
-      folder: React.PropTypes.shape({
-        id: React.PropTypes.string,
-        name: React.PropTypes.string
+      folder: PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string
       })
     }).isRequired
   },
+
   contextTypes: {
-    tree: React.PropTypes.object.isRequired,
-    router: React.PropTypes.object.isRequired
+    tree: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired
   },
+
   getInitialState () {
     let {mailing} = this.props
 
@@ -204,6 +210,7 @@ const MailingEdit = React.createClass({
       mailing
     }
   },
+
   getMailingUrl (mailingId = null) {
     const {params} = this.props
 
@@ -217,6 +224,7 @@ const MailingEdit = React.createClass({
 
     return '/' + join(path, '/')
   },
+
   getReportUrl () {
     const {params, mailing: {workspace, folder, report}} = this.props
 
@@ -229,6 +237,7 @@ const MailingEdit = React.createClass({
 
     return '/' + join(path, '/')
   },
+
   normalize (mailing) {
     mailing = assign({}, mailing)
 
@@ -248,22 +257,27 @@ const MailingEdit = React.createClass({
 
     return mailing
   },
+
   changeMailing (changes) {
     const mailing = assign({}, this.state.mailing, changes)
 
     this.setState({mailing})
   },
+
   changeSchedule (sChanges) {
     const schedule = assign({}, this.state.mailing.schedule, sChanges)
 
     this.changeMailing({schedule})
   },
+
   onChangeRange ({target: {value: date_range}}) {
     this.changeMailing({date_range})
   },
+
   onChangeDisabled ({target: {checked}}) {
     this.changeMailing({disabled: !checked})
   },
+
   onChangeRecurrent ({target: {checked}}) {
     this.changeSchedule(checked
       ? {
@@ -278,11 +292,13 @@ const MailingEdit = React.createClass({
         date: moment().add(1, 'day').format('YYYY-MM-DD')
       })
   },
+
   onChangeDate (momentDate) {
     this.changeSchedule({
       date: momentDate.format('YYYY-MM-DD')
     })
   },
+
   onChangePeriodicity ({target: {value: periodicity}}) {
     const changes = {periodicity}
 
@@ -299,9 +315,11 @@ const MailingEdit = React.createClass({
 
     this.changeSchedule(changes)
   },
+
   onChangeInterval ({target: {value, name}}) {
     this.changeSchedule({[name]: Number(value)})
   },
+
   dropEmail (email) {
     return e => {
       e.preventDefault()
@@ -310,6 +328,7 @@ const MailingEdit = React.createClass({
       })
     }
   },
+
   addEmail () {
     const {mailing: {emails}, newEmail} = this.state
 
@@ -320,6 +339,7 @@ const MailingEdit = React.createClass({
       emails: uniq(emails.concat([newEmail]))
     })
   },
+
   send () {
     const {state: {newEmail}, props: {params}, context: {router, tree}} = this
     const mailing = assign({}, this.state.mailing)
@@ -341,25 +361,30 @@ const MailingEdit = React.createClass({
       .then(() => router.push(this.getMailingUrl()))
       .then(() => mailingId)
   },
+
   addOnEnter (e) {
     if (e.which === 13) {
       e.preventDefault()
       this.addEmail()
     }
   },
+
   run () {
     const {tree} = this.context
 
     this.send().then(id => spawnReportMailingAction(tree, id))
   },
+
   onChangeEmail ({target: {value}}) {
     this.setState({newEmail: value})
   },
+
   handleSubmit (e) {
     e.preventDefault()
 
     this.send()
   },
+
   render () {
     const {mailing, newEmail} = this.state
     const {params} = this.props

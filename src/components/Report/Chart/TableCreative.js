@@ -1,6 +1,8 @@
 import csjs from 'csjs'
 import find from 'lodash/find'
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import reportParamsType from '../../../propTypes/report-params'
 import {loadCreativeAction} from '../../../actions/load-creative'
@@ -47,27 +49,27 @@ function Creative ({thumbnail, body}) {
 
 Creative.displayName = 'Creative'
 Creative.propTypes = {
-  thumbnail: React.PropTypes.string,
-  body: React.PropTypes.string
+  thumbnail: PropTypes.string,
+  body: PropTypes.string
 }
 
-const AdCreative = React.createClass({
+const AdCreative = createReactClass({
   displayName: 'Ad-Creative',
   mixins: [styled(style)],
   propTypes: {
     reportParams: reportParamsType,
-    params: React.PropTypes.shape({
-      company: React.PropTypes.string,
-      account: React.PropTypes.string
+    params: PropTypes.shape({
+      company: PropTypes.string,
+      account: PropTypes.string
     }),
-    company: React.PropTypes.shape({
-      creatives: React.PropTypes.array
+    company: PropTypes.shape({
+      creatives: PropTypes.array
     }),
-    account: React.PropTypes.string,
-    dispatch: React.PropTypes.func,
-    creative: React.PropTypes.object,
-    creative_id: React.PropTypes.string,
-    name: React.PropTypes.string
+    account: PropTypes.string,
+    dispatch: PropTypes.func,
+    creative: PropTypes.object,
+    creative_id: PropTypes.string,
+    name: PropTypes.string
   },
   componentDidMount () {
     const {reportParams, creative_id, dispatch, params} = this.props

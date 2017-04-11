@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {styledFnComponent} from '../../higher-order/styled-fn-component'
 import {loadFolderChannelAction} from '../../../actions/load-folder-channel'
 import csjs from 'csjs'
@@ -17,26 +18,31 @@ const style = csjs`
   cursor: pointer;
 }`
 
-export const Channel = React.createClass({
-  displayName: 'Channel',
-  propTypes: {
-    id: React.PropTypes.string,
-    channel: React.PropTypes.object
-  },
-  contextTypes: {
-    tree: React.PropTypes.object.isRequired,
-    params: React.PropTypes.object.isRequired
-  },
+export class Channel extends React.Component {
+  static displayName = 'Channel'
+
+  static propTypes = {
+    id: PropTypes.string,
+    channel: PropTypes.object
+  }
+
+  static contextTypes = {
+    tree: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired
+  }
+
   componentDidMount () {
     if (!this.props.channel) {
       this.load()
     }
-  },
-  load () {
+  }
+
+  load = () => {
     const {tree, params} = this.context
 
     loadFolderChannelAction(tree, params, this.props.id)
-  },
+  }
+
   render () {
     if (!this.props.channel) {
       return <span>{this.props.id}</span>
@@ -52,7 +58,7 @@ export const Channel = React.createClass({
       </div>
     )
   }
-})
+}
 
 function Video ({id, name, duration, previewMode, setPreviewMode}) {
   return (
@@ -78,11 +84,11 @@ function Video ({id, name, duration, previewMode, setPreviewMode}) {
 
 Video.displayName = 'Video'
 Video.propTypes = {
-  id: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired,
-  duration: React.PropTypes.string.isRequired,
-  previewMode: React.PropTypes.bool,
-  setPreviewMode: React.PropTypes.func
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  duration: PropTypes.string.isRequired,
+  previewMode: PropTypes.bool,
+  setPreviewMode: PropTypes.func
 }
 
 export default withState('previewMode', 'setPreviewMode', false)(styledFnComponent(Video, style))

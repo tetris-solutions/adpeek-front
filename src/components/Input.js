@@ -2,6 +2,7 @@ import cx from 'classnames'
 import trim from 'lodash/trim'
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import PropTypes from 'prop-types'
 import isNumber from 'lodash/isNumber'
 import isString from 'lodash/isString'
 import assign from 'lodash/assign'
@@ -13,39 +14,41 @@ function notEmptyString (value) {
   return value !== '' && value !== undefined && value !== null
 }
 
-export const Input = React.createClass({
-  displayName: 'Input',
-  propTypes: {
-    children: React.PropTypes.node,
-    readOnly: React.PropTypes.bool,
-    type: React.PropTypes.string,
-    min: React.PropTypes.number,
-    max: React.PropTypes.number,
-    className: React.PropTypes.string,
-    value: React.PropTypes.any,
-    defaultValue: React.PropTypes.any,
-    error: React.PropTypes.string,
-    label: React.PropTypes.string,
-    name: React.PropTypes.string.isRequired,
-    onChange: React.PropTypes.func,
-    format: React.PropTypes.oneOf(['currency', 'percentage', 'decimal'])
-  },
-  contextTypes: {
-    messages: React.PropTypes.object,
-    locales: React.PropTypes.string
-  },
-  getDefaultProps () {
-    return {
-      type: 'text',
-      format: 'decimal'
-    }
-  },
-  getInitialState () {
-    return {isFocused: false}
-  },
-  getValue () {
+export class Input extends React.Component {
+  static displayName = 'Input'
+
+  static propTypes = {
+    children: PropTypes.node,
+    readOnly: PropTypes.bool,
+    type: PropTypes.string,
+    min: PropTypes.number,
+    max: PropTypes.number,
+    className: PropTypes.string,
+    value: PropTypes.any,
+    defaultValue: PropTypes.any,
+    error: PropTypes.string,
+    label: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    onChange: PropTypes.func,
+    format: PropTypes.oneOf(['currency', 'percentage', 'decimal'])
+  }
+
+  static contextTypes = {
+    messages: PropTypes.object,
+    locales: PropTypes.string
+  }
+
+  static defaultProps = {
+    type: 'text',
+    format: 'decimal'
+  }
+
+  state = {isFocused: false}
+
+  getValue = () => {
     return this.state.value
-  },
+  }
+
   componentWillMount () {
     let value = this.props.value === undefined
       ? this.props.defaultValue
@@ -63,11 +66,13 @@ export const Input = React.createClass({
     state.error = this.getError(assign({}, this.props, state))
 
     this.setState(state)
-  },
+  }
+
   componentDidMount () {
     this.input = this.refs.wrapper.querySelector('input')
     this.input.inputMaskToNumber = () => this.getRawNumber(this.state.value)
-  },
+  }
+
   componentWillReceiveProps (nextProps, nextContext) {
     const oldPropsValue = this.props.value
     const stateValue = this.state.value
@@ -98,27 +103,29 @@ export const Input = React.createClass({
       newState.isDirty = notEmptyString(newState.value)
       this.setState(newState)
     }
-  },
-  getRawNumber (value) {
+  }
+
+  getRawNumber = (value) => {
     if (isNumber(value)) return value
     if (!isString(value)) return 0
 
     const {locales} = this.context
 
     const cleanValue = locales === 'pt-BR' ? (
-        value.replace(/\./g, '') // strip thousand sep
-          .replace(',', '.') // translate decimal sep
-      ) : (
-        value.replace(/,/g, '') // strip thousand sep
-      )
+      value.replace(/\./g, '') // strip thousand sep
+        .replace(',', '.') // translate decimal sep
+    ) : (
+      value.replace(/,/g, '') // strip thousand sep
+    )
 
     return Number(
       cleanValue
         .replace(/[^0-9-.]/g, '') // clean up
         .replace(/\D$/g, '') // ignore trailing decimal separator << 100. => 100 >>
     )
-  },
-  formatNumber (val, format = this.props.format, locale = this.context.locales) {
+  }
+
+  formatNumber = (val, format = this.props.format, locale = this.context.locales) => {
     if (isString(val)) {
       val = this.getRawNumber(val)
     }
@@ -130,8 +137,9 @@ export const Input = React.createClass({
     } else {
       return prettyNumber(val, format, locale)
     }
-  },
-  getNumberError (input) {
+  }
+
+  getNumberError = (input) => {
     const {messages: {invalidInput, greaterThanMax, lessThanMin}, locales} = this.context
 
     const number = this.getRawNumber(input.value)
@@ -147,8 +155,9 @@ export const Input = React.createClass({
     }
 
     return null
-  },
-  getError (input) {
+  }
+
+  getError = (input) => {
     let error = null
 
     if (input.required && !trim(input.value)) {
@@ -158,8 +167,9 @@ export const Input = React.createClass({
     }
 
     return error
-  },
-  onChange (e) {
+  }
+
+  onChange = (e) => {
     const {onChange, type} = this.props
     const input = e.target
     const error = this.getError(input)
@@ -181,18 +191,21 @@ export const Input = React.createClass({
       value: input.value,
       isDirty: notEmptyString(input.value)
     }, onStateChange)
-  },
-  onFocus () {
+  }
+
+  onFocus = () => {
     this.setState({isFocused: true})
-  },
-  onBlur () {
+  }
+
+  onBlur = () => {
     const {value} = this.state
 
     this.setState({
       isFocused: false,
       value: this.props.type === 'number' ? this.formatNumber(value) : value
     })
-  },
+  }
+
   render () {
     const {value, isDirty, isFocused} = this.state
     const {label, children} = this.props
@@ -247,6 +260,6 @@ export const Input = React.createClass({
       </div>
     )
   }
-})
+}
 
 export default Input

@@ -1,6 +1,7 @@
 import get from 'lodash/get'
 import map from 'lodash/map'
 import React from 'react'
+import PropTypes from 'prop-types'
 import Module from './Module/Container'
 import GridLayout from 'react-grid-layout'
 import sizeMe from 'react-sizeme'
@@ -13,8 +14,8 @@ let ModuleWrapper = props => (
 
 ModuleWrapper.displayName = 'Module-Wrapper'
 ModuleWrapper.propTypes = {
-  metaData: React.PropTypes.object.isRequired,
-  module: React.PropTypes.object.isRequired
+  metaData: PropTypes.object.isRequired,
+  module: PropTypes.object.isRequired
 }
 
 ModuleWrapper = derivative(
@@ -24,18 +25,7 @@ ModuleWrapper = derivative(
   ModuleWrapper
 )
 
-const ReportGrid = ({
-  modules,
-  onLayoutChange,
-  cloneModule,
-  editMode,
-  layout,
-  params,
-  dispatch,
-  metaData,
-  openModule,
-  width
-}) => (
+const ReportGrid = ({modules, onLayoutChange, cloneModule, editMode, layout, params, dispatch, metaData, openModule, width}) => (
   <GridLayout layout={layout} width={width} rowHeight={100} onLayoutChange={onLayoutChange}>
     {map(modules, ({id, type}, index) =>
       <div key={id} data-module-id={id} data-module-type={type}>
@@ -51,23 +41,23 @@ const ReportGrid = ({
 
 ReportGrid.displayName = 'Pure-Grid'
 ReportGrid.propTypes = {
-  modules: React.PropTypes.array.isRequired,
-  cloneModule: React.PropTypes.func.isRequired,
-  onLayoutChange: React.PropTypes.func.isRequired,
-  layout: React.PropTypes.array.isRequired,
-  params: React.PropTypes.object.isRequired,
-  dispatch: React.PropTypes.func.isRequired,
-  metaData: React.PropTypes.object.isRequired,
-  editMode: React.PropTypes.bool,
-  openModule: React.PropTypes.string,
-  width: React.PropTypes.number
+  modules: PropTypes.array.isRequired,
+  cloneModule: PropTypes.func.isRequired,
+  onLayoutChange: PropTypes.func.isRequired,
+  layout: PropTypes.array.isRequired,
+  params: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  metaData: PropTypes.object.isRequired,
+  editMode: PropTypes.bool,
+  openModule: PropTypes.string,
+  width: PropTypes.number
 }
 
 const DynamicGrid = props => <ReportGrid width={props.size.width} {...props}/>
 
 DynamicGrid.propTypes = {
-  size: React.PropTypes.shape({
-    width: React.PropTypes.number
+  size: PropTypes.shape({
+    width: PropTypes.number
   })
 }
 

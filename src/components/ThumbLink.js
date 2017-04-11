@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import assign from 'lodash/assign'
 import csjs from 'csjs'
 import {Link} from 'react-router'
@@ -125,7 +126,7 @@ export const BottomLine = ({children}) => (
 
 BottomLine.displayName = 'Bottom-Line'
 BottomLine.propTypes = {
-  children: React.PropTypes.node.isRequired
+  children: PropTypes.node.isRequired
 }
 
 export const Title = ({children}) => (
@@ -136,7 +137,7 @@ export const Title = ({children}) => (
 
 Title.displayName = 'Title'
 Title.propTypes = {
-  children: React.PropTypes.node.isRequired
+  children: PropTypes.node.isRequired
 }
 
 export const Cap = ({children, bg = 'primary-dark'}) => (
@@ -149,8 +150,8 @@ export const Cap = ({children, bg = 'primary-dark'}) => (
 
 Cap.displayName = 'Cap'
 Cap.propTypes = {
-  bg: React.PropTypes.string,
-  children: React.PropTypes.node
+  bg: PropTypes.string,
+  children: PropTypes.node
 }
 
 export function ThumbLink ({to, title, img, children, sad, style: css}) {
@@ -169,12 +170,12 @@ export function ThumbLink ({to, title, img, children, sad, style: css}) {
 
 ThumbLink.displayName = 'Thumb-Link'
 ThumbLink.propTypes = {
-  style: React.PropTypes.object,
-  sad: React.PropTypes.bool,
-  children: React.PropTypes.node,
-  img: React.PropTypes.string,
-  to: React.PropTypes.string,
-  title: React.PropTypes.string
+  style: PropTypes.object,
+  sad: PropTypes.bool,
+  children: PropTypes.node,
+  img: PropTypes.string,
+  to: PropTypes.string,
+  title: PropTypes.string
 }
 
 export const Info = ({children}) => (
@@ -184,8 +185,8 @@ export const Info = ({children}) => (
 )
 Info.displayName = 'Info'
 Info.propTypes = {
-  style: React.PropTypes.object,
-  children: React.PropTypes.node.isRequired
+  style: PropTypes.object,
+  children: PropTypes.node.isRequired
 }
 
 /**
@@ -205,7 +206,7 @@ export const Gear = ({children}) => (
 
 Gear.displayName = 'Gear'
 Gear.propTypes = {
-  children: React.PropTypes.node.isRequired
+  children: PropTypes.node.isRequired
 }
 
 const Parent = ({children}) => (
@@ -215,7 +216,7 @@ const Parent = ({children}) => (
 )
 Parent.displayName = 'Container'
 Parent.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 }
 
 export const Container = styledFnComponent(Parent, style)

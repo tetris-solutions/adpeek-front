@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Link} from 'react-router'
 import {node} from './higher-order/branch'
 
@@ -12,17 +13,17 @@ const FolderBreadcrumb = ({params: {company, workspace}, folder}, {messages: {fo
 
 FolderBreadcrumb.displayName = 'Folder-Breadcrumb'
 FolderBreadcrumb.propTypes = {
-  folder: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    name: React.PropTypes.string
+  folder: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string
   }),
-  params: React.PropTypes.shape({
-    company: React.PropTypes.string,
-    workspace: React.PropTypes.string
+  params: PropTypes.shape({
+    company: PropTypes.string,
+    workspace: PropTypes.string
   })
 }
 FolderBreadcrumb.contextTypes = {
-  messages: React.PropTypes.object
+  messages: PropTypes.object
 }
 
 export default node('workspace', 'folder', FolderBreadcrumb)

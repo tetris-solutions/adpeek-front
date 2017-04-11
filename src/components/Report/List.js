@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
 import {styled} from '../mixins/styled'
@@ -110,31 +112,31 @@ function Report (props, {moment}) {
 
 Report.displayName = 'Report'
 Report.propTypes = {
-  id: React.PropTypes.string,
-  author: React.PropTypes.object,
-  last_update: React.PropTypes.string,
-  shareUrl: React.PropTypes.string,
-  path: React.PropTypes.string,
-  name: React.PropTypes.string,
-  description: React.PropTypes.string,
-  dispatch: React.PropTypes.func.isRequired,
-  params: React.PropTypes.object.isRequired,
-  is_private: React.PropTypes.bool,
-  is_global: React.PropTypes.bool
+  id: PropTypes.string,
+  author: PropTypes.object,
+  last_update: PropTypes.string,
+  shareUrl: PropTypes.string,
+  path: PropTypes.string,
+  name: PropTypes.string,
+  description: PropTypes.string,
+  dispatch: PropTypes.func.isRequired,
+  params: PropTypes.object.isRequired,
+  is_private: PropTypes.bool,
+  is_global: PropTypes.bool
 }
 Report.contextTypes = {
-  messages: React.PropTypes.object.isRequired,
-  moment: React.PropTypes.func.isRequired
+  messages: PropTypes.object.isRequired,
+  moment: PropTypes.func.isRequired
 }
 
-export const Reports = React.createClass({
+export const Reports = createReactClass({
   displayName: 'Reports',
   mixins: [styled(style)],
   propTypes: {
-    dispatch: React.PropTypes.func.isRequired,
-    params: React.PropTypes.object.isRequired,
-    reports: React.PropTypes.array,
-    path: React.PropTypes.string
+    dispatch: PropTypes.func.isRequired,
+    params: PropTypes.object.isRequired,
+    reports: PropTypes.array,
+    path: PropTypes.string
   },
   getInitialState () {
     return {
@@ -188,8 +190,8 @@ const Wrapper = props =>
 
 Wrapper.displayName = 'Report-List-Wrapper'
 Wrapper.propTypes = {
-  reports: React.PropTypes.array,
-  params: React.PropTypes.object
+  reports: PropTypes.array,
+  params: PropTypes.object
 }
 
 export default collection(inferLevelFromProps, 'reports', Wrapper)

@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import {styled} from './mixins/styled'
 import findLast from 'lodash/findLast'
 import property from 'lodash/property'
@@ -41,14 +43,14 @@ const style = csjs`
   margin: 40vh 0 0 2px;  
 }`
 
-const Page = React.createClass({
+const Page = createReactClass({
   displayName: 'Page',
   mixins: [styled(style)],
   propTypes: {
-    children: React.PropTypes.node.isRequired
+    children: PropTypes.node.isRequired
   },
   contextTypes: {
-    routes: React.PropTypes.array.isRequired
+    routes: PropTypes.array.isRequired
   },
   getInitialState () {
     return {

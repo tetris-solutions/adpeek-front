@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import {Submit} from './Button'
 import Message from 'tetris-iso/Message'
 import {branch} from './higher-order/branch'
@@ -45,27 +47,27 @@ const ClonableRow = ({name, id, start, end, amount}) => (
 
 ClonableRow.displayName = 'Clonable-Row'
 ClonableRow.propTypes = {
-  name: React.PropTypes.string,
-  id: React.PropTypes.string,
-  start: React.PropTypes.string,
-  end: React.PropTypes.string,
-  amount: React.PropTypes.number
+  name: PropTypes.string,
+  id: PropTypes.string,
+  start: PropTypes.string,
+  end: PropTypes.string,
+  amount: PropTypes.number
 }
 
-export const OrdersClone = React.createClass({
+export const OrdersClone = createReactClass({
   displayName: 'Orders-Clone',
   mixins: [FormMixin, styled(style)],
   propTypes: {
-    dispatch: React.PropTypes.func,
-    orders: React.PropTypes.array
+    dispatch: PropTypes.func,
+    orders: PropTypes.array
   },
   contextTypes: {
-    locales: React.PropTypes.string.isRequired,
-    params: React.PropTypes.object.isRequired,
-    location: React.PropTypes.object.isRequired,
-    router: React.PropTypes.object.isRequired,
-    messages: React.PropTypes.shape({
-      copyOfName: React.PropTypes.string
+    locales: PropTypes.string.isRequired,
+    params: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired,
+    messages: PropTypes.shape({
+      copyOfName: PropTypes.string
     }).isRequired
   },
   getInitialState () {

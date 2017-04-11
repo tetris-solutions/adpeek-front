@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import debounce from 'lodash/debounce'
 import {styled} from '../../../mixins/styled'
 import csjs from 'csjs'
@@ -11,13 +13,13 @@ const style = csjs`
   height: 70vh;
 }`
 
-const Description = React.createClass({
+const Description = createReactClass({
   displayName: 'Description',
   mixins: [styled(style)],
   contextTypes: {
-    draft: React.PropTypes.object.isRequired,
-    change: React.PropTypes.func.isRequired,
-    messages: React.PropTypes.object.isRequired
+    draft: PropTypes.object.isRequired,
+    change: PropTypes.func.isRequired,
+    messages: PropTypes.object.isRequired
   },
   componentWillMount () {
     this.setState({

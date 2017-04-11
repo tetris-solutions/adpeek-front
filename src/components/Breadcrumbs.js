@@ -1,6 +1,8 @@
 import csjs from 'csjs'
 import map from 'lodash/map'
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import compact from 'lodash/compact'
 import flatten from 'lodash/flatten'
 import {styled} from './mixins/styled'
@@ -29,15 +31,15 @@ const style = csjs`
   margin-right: .3em;
 }`
 
-const Breadcrumbs = React.createClass({
+const Breadcrumbs = createReactClass({
   displayName: 'Breadcrumbs',
   mixins: [styled(style)],
   contextTypes: {
-    params: React.PropTypes.object,
-    routes: React.PropTypes.array
+    params: PropTypes.object,
+    routes: PropTypes.array
   },
   propTypes: {
-    title: React.PropTypes.node
+    title: PropTypes.node
   },
   componentDidMount () {
     /**

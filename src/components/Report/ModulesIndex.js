@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import map from 'lodash/map'
 import scrollTo from 'scrollto-with-animation'
 import {NavBts, NavBt} from '../Navigation'
@@ -45,7 +46,7 @@ export const Modules = ({name, modules, exit}) =>
 
 Modules.displayName = 'Modules'
 Modules.propTypes = {
-  exit: React.PropTypes.func,
-  name: React.PropTypes.string,
-  modules: React.PropTypes.array
+  exit: PropTypes.func,
+  name: PropTypes.string,
+  modules: PropTypes.array
 }

@@ -1,26 +1,30 @@
 import React from 'react'
 
-export const Slide = React.createClass({
-  displayName: 'Slide',
-  propTypes: {
-    onChange: React.PropTypes.func,
-    name: React.PropTypes.string,
-    value: React.PropTypes.number,
-    min: React.PropTypes.number,
-    max: React.PropTypes.number,
-    step: React.PropTypes.number
-  },
-  getDefaultProps () {
-    return {
-      step: 0.5
-    }
-  },
+import PropTypes from 'prop-types'
+
+export class Slide extends React.Component {
+  static displayName = 'Slide'
+
+  static propTypes = {
+    onChange: PropTypes.func,
+    name: PropTypes.string,
+    value: PropTypes.number,
+    min: PropTypes.number,
+    max: PropTypes.number,
+    step: PropTypes.number
+  }
+
+  static defaultProps = {
+    step: 0.5
+  }
+
   componentDidMount () {
     const {input} = this.refs
 
     window.componentHandler.upgradeElement(input)
     input.addEventListener('input', this.props.onChange)
-  },
+  }
+
   componentWillReceiveProps ({value, min, max, step}) {
     const {input} = this.refs
     if (
@@ -34,10 +38,12 @@ export const Slide = React.createClass({
       input.step = step
       input.MaterialSlider.change(value)
     }
-  },
+  }
+
   shouldComponentUpdate () {
     return false
-  },
+  }
+
   render () {
     const {name, step, value, min, max} = this.props
     return (
@@ -52,6 +58,6 @@ export const Slide = React.createClass({
         max={max}/>
     )
   }
-})
+}
 
 export default Slide

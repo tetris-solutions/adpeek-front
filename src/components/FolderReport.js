@@ -1,37 +1,41 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import ReportContainer from './Report/Container'
 import {branch} from './higher-order/branch'
 import get from 'lodash/get'
 import endsWith from 'lodash/endsWith'
 
-const FolderReport = React.createClass({
-  displayName: 'Folder-Report',
-  propTypes: {
-    report: React.PropTypes.object,
-    location: React.PropTypes.object,
-    reportMetaData: React.PropTypes.object,
-    params: React.PropTypes.object.isRequired,
-    dispatch: React.PropTypes.func,
-    folder: React.PropTypes.shape({
-      account: React.PropTypes.shape({
-        external_id: React.PropTypes.string,
-        tetris_id: React.PropTypes.string,
-        platform: React.PropTypes.string
+class FolderReport extends React.Component {
+  static displayName = 'Folder-Report'
+
+  static propTypes = {
+    report: PropTypes.object,
+    location: PropTypes.object,
+    reportMetaData: PropTypes.object,
+    params: PropTypes.object.isRequired,
+    dispatch: PropTypes.func,
+    folder: PropTypes.shape({
+      account: PropTypes.shape({
+        external_id: PropTypes.string,
+        tetris_id: PropTypes.string,
+        platform: PropTypes.string
       }),
-      entities: React.PropTypes.shape({
-        campaigns: React.PropTypes.array,
-        adSets: React.PropTypes.array,
-        keywords: React.PropTypes.array,
-        adGroups: React.PropTypes.array,
-        ads: React.PropTypes.array
+      entities: PropTypes.shape({
+        campaigns: PropTypes.array,
+        adSets: PropTypes.array,
+        keywords: PropTypes.array,
+        adGroups: PropTypes.array,
+        ads: PropTypes.array
       })
     })
-  },
-  getAccounts () {
+  }
+
+  getAccounts = () => {
     this._accounts = this._accounts || [this.props.folder.account]
 
     return this._accounts
-  },
+  }
+
   render () {
     const {reportMetaData: metaData, folder, location} = this.props
 
@@ -44,6 +48,6 @@ const FolderReport = React.createClass({
         accounts={this.getAccounts()}/>
     )
   }
-})
+}
 
 export default branch('reportMetaData', FolderReport, 2)

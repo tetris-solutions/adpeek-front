@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import prop from 'lodash/property'
 import assign from 'lodash/assign'
 import some from 'lodash/some'
@@ -20,32 +21,35 @@ import log from 'loglevel'
 
 const keyed = reportEntities => keyBy(reportEntities, 'id')
 
-const ModuleContainer = React.createClass({
-  displayName: 'Module-Container',
-  propTypes: {
-    editable: React.PropTypes.bool,
+class ModuleContainer extends React.Component {
+  static displayName = 'Module-Container'
+
+  static propTypes = {
+    editable: PropTypes.bool,
     module: moduleType.isRequired,
     metaData: reportMetaDataType.isRequired,
-    reportEntities: React.PropTypes.arrayOf(reportEntityType).isRequired
-  },
-  childContextTypes: {
-    entities: React.PropTypes.object,
-    activeOnly: React.PropTypes.bool,
-    toggleActiveOnly: React.PropTypes.func
-  },
-  getInitialState () {
-    return {
-      activeOnly: false
-    }
-  },
+    reportEntities: PropTypes.arrayOf(reportEntityType).isRequired
+  }
+
+  static childContextTypes = {
+    entities: PropTypes.object,
+    activeOnly: PropTypes.bool,
+    toggleActiveOnly: PropTypes.func
+  }
+
+  state = {
+    activeOnly: false
+  }
+
   getChildContext () {
     return {
       entities: this.getEntities(),
       activeOnly: this.state.activeOnly,
       toggleActiveOnly: this.toggleActiveOnly
     }
-  },
-  calculateEntities ({entities, moduleEntity, selectedIds, activeOnly}) {
+  }
+
+  calculateEntities = ({entities, moduleEntity, selectedIds, activeOnly}) => {
     log.info(`will mount ${this.props.module.name} entities`)
 
     const adGroupLevel = entities.AdSet ? 'AdSet' : 'AdGroup'
@@ -135,8 +139,9 @@ const ModuleContainer = React.createClass({
     }
 
     return entities
-  },
-  entitiesSource () {
+  }
+
+  entitiesSource = () => {
     const {activeOnly} = this.state
     const {module, reportEntities} = this.props
 
@@ -146,8 +151,9 @@ const ModuleContainer = React.createClass({
       moduleEntity: module.entity,
       selectedIds: module.filters.id
     }
-  },
-  getEntities () {
+  }
+
+  getEntities = () => {
     const newSource = this.entitiesSource()
     const anyChange = !this._source || (
         this._source.reportEntities !== newSource.reportEntities ||
@@ -164,12 +170,14 @@ const ModuleContainer = React.createClass({
     }
 
     return this._entities
-  },
-  toggleActiveOnly () {
+  }
+
+  toggleActiveOnly = () => {
     this.setState({
       activeOnly: !this.state.activeOnly
     })
-  },
+  }
+
   render () {
     const {metaData: {attributes}} = this.props
     const entities = this.getEntities()
@@ -185,12 +193,12 @@ const ModuleContainer = React.createClass({
 
     return <Controller {...this.props} module={module} entity={entity} attributes={attributes}/>
   }
-})
+}
 
 const Upper = (props, {reportEntities}) => <ModuleContainer {...props} reportEntities={reportEntities}/>
 
 Upper.contextTypes = {
-  reportEntities: React.PropTypes.arrayOf(reportEntityType).isRequired
+  reportEntities: PropTypes.arrayOf(reportEntityType).isRequired
 }
 
 export default Upper

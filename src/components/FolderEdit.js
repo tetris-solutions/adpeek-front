@@ -6,45 +6,47 @@ import pick from 'lodash/pick'
 import FormMixin from './mixins/FormMixin'
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import Checkbox from './Checkbox'
 import Input from './Input'
 import Select from './Select'
-import { pushSuccessMessageAction } from '../actions/push-success-message-action'
-import { updateFolderAction } from '../actions/update-folder'
-import { Form, Content, Header, Footer } from './Card'
-import { many } from './higher-order/branch'
+import {pushSuccessMessageAction} from '../actions/push-success-message-action'
+import {updateFolderAction} from '../actions/update-folder'
+import {Form, Content, Header, Footer} from './Card'
+import {many} from './higher-order/branch'
 import FolderFormMixin from './mixins/FolderForm'
 import AutoSelect from './AutoSelect'
 import Page from './Page'
 import SubHeader from './SubHeader'
 
-export const EditFolder = React.createClass({
+export const EditFolder = createReactClass({
   displayName: 'Edit-Folder',
   mixins: [FormMixin, FolderFormMixin],
   propTypes: {
-    dispatch: React.PropTypes.func,
-    company: React.PropTypes.object,
-    medias: React.PropTypes.array,
-    params: React.PropTypes.shape({
-      company: React.PropTypes.string,
-      workspace: React.PropTypes.string
+    dispatch: PropTypes.func,
+    company: PropTypes.object,
+    medias: PropTypes.array,
+    params: PropTypes.shape({
+      company: PropTypes.string,
+      workspace: PropTypes.string
     }),
-    kpis: React.PropTypes.object,
-    folder: React.PropTypes.shape({
-      id: React.PropTypes.string,
-      account: React.PropTypes.object,
-      name: React.PropTypes.string,
-      tag: React.PropTypes.string,
-      workspace_account: React.PropTypes.string,
-      media: React.PropTypes.string,
-      kpi: React.PropTypes.string
+    kpis: PropTypes.object,
+    folder: PropTypes.shape({
+      id: PropTypes.string,
+      account: PropTypes.object,
+      name: PropTypes.string,
+      tag: PropTypes.string,
+      workspace_account: PropTypes.string,
+      media: PropTypes.string,
+      kpi: PropTypes.string
     }),
-    workspace: React.PropTypes.shape({
-      accounts: React.PropTypes.object
+    workspace: PropTypes.shape({
+      accounts: PropTypes.object
     })
   },
   contextTypes: {
-    router: React.PropTypes.object
+    router: PropTypes.object
   },
   componentWillMount () {
     this.setState(pick(this.props.folder, [

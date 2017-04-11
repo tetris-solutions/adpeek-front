@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import every from 'lodash/every'
 import Message from 'tetris-iso/Message'
 import {Card, Content, Header, Footer} from '../Card'
@@ -34,8 +35,8 @@ export function notNullable (Component, ...requiredProps) {
 
   N.displayName = `guard(${Component.displayName})`
   N.contextTypes = {
-    tree: React.PropTypes.object.isRequired,
-    messages: React.PropTypes.object.isRequired
+    tree: PropTypes.object.isRequired,
+    messages: PropTypes.object.isRequired
   }
 
   return N

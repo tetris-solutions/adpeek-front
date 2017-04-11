@@ -9,6 +9,8 @@ import includes from 'lodash/includes'
 import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import Fence from '../Fence'
 import SearchBox from '../HeaderSearchBox'
 import {notNullable} from '../higher-order/not-nullable'
@@ -54,10 +56,10 @@ const Items = ({favorites, others, reload, children}) => (
 )
 Items.displayName = 'Items'
 Items.propTypes = {
-  reload: React.PropTypes.func,
-  children: React.PropTypes.node,
-  favorites: React.PropTypes.array,
-  others: React.PropTypes.array
+  reload: PropTypes.func,
+  children: PropTypes.node,
+  favorites: PropTypes.array,
+  others: PropTypes.array
 }
 
 const isFav = ({favorite}) => favorite ? 'favorites' : 'others'
@@ -73,29 +75,29 @@ let List = ({searchValue, workspaces, reload, children}) =>
 
 List.displayName = 'List'
 List.propTypes = {
-  reload: React.PropTypes.func,
-  children: React.PropTypes.node,
-  searchValue: React.PropTypes.string,
-  workspaces: React.PropTypes.array
+  reload: PropTypes.func,
+  children: PropTypes.node,
+  searchValue: PropTypes.string,
+  workspaces: PropTypes.array
 }
 List = collection('company', 'workspaces', List)
 
-export const Workspaces = React.createClass({
+export const Workspaces = createReactClass({
   displayName: 'Workspaces',
   mixins: [styled(style)],
   propTypes: {
-    params: React.PropTypes.shape({
-      company: React.PropTypes.string
+    params: PropTypes.shape({
+      company: PropTypes.string
     }),
-    location: React.PropTypes.object,
-    dispatch: React.PropTypes.func,
-    company: React.PropTypes.shape({
-      id: React.PropTypes.string,
-      workspaces: React.PropTypes.array
+    location: PropTypes.object,
+    dispatch: PropTypes.func,
+    company: PropTypes.shape({
+      id: PropTypes.string,
+      workspaces: PropTypes.array
     })
   },
   contextTypes: {
-    router: React.PropTypes.object
+    router: PropTypes.object
   },
   getInitialState () {
     return {

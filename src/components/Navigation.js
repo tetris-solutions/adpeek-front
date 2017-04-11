@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import isString from 'lodash/isString'
 import csjs from 'csjs'
@@ -71,12 +73,12 @@ NavBt.defaultProps = {
   tag: 'a'
 }
 NavBt.propTypes = {
-  tag: React.PropTypes.any,
-  href: React.PropTypes.string,
-  to: React.PropTypes.string,
-  icon: React.PropTypes.string,
-  onClick: React.PropTypes.func,
-  children: React.PropTypes.node
+  tag: PropTypes.any,
+  href: PropTypes.string,
+  to: PropTypes.string,
+  icon: PropTypes.string,
+  onClick: PropTypes.func,
+  children: PropTypes.node
 }
 
 export const NavLink = props => <NavBt {...props} tag={Link}/>
@@ -98,7 +100,7 @@ Name.displayName = 'Name'
 NavBts.displayName = 'Nav-Buttons'
 
 Name.propTypes = NavBts.propTypes = {
-  children: React.PropTypes.node.isRequired
+  children: PropTypes.node.isRequired
 }
 
 const NavContainer = ({children}) => (
@@ -109,16 +111,16 @@ const NavContainer = ({children}) => (
 
 NavContainer.displayName = 'Container'
 NavContainer.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 }
 
-export const Navigation = React.createClass({
+export const Navigation = createReactClass({
   displayName: 'Navigation',
   mixins: [styled(style)],
   propTypes: {
-    icon: React.PropTypes.node,
-    img: React.PropTypes.string,
-    children: React.PropTypes.node
+    icon: PropTypes.node,
+    img: PropTypes.string,
+    children: PropTypes.node
   },
   componentDidMount () {
     window.event$.emit('aside-toggle')

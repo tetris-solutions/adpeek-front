@@ -1,40 +1,42 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import FormMixin from './mixins/FormMixin'
 import concat from 'lodash/concat'
 import assign from 'lodash/assign'
 import Message from 'tetris-iso/Message'
 import Input from './Input'
-import { createFolderAction } from '../actions/create-folder'
-import { pushSuccessMessageAction } from '../actions/push-success-message-action'
+import {createFolderAction} from '../actions/create-folder'
+import {pushSuccessMessageAction} from '../actions/push-success-message-action'
 import Select from './Select'
 import map from 'lodash/map'
 import find from 'lodash/find'
 import get from 'lodash/get'
-import { Form, Content, Header, Footer } from './Card'
-import { many } from './higher-order/branch'
+import {Form, Content, Header, Footer} from './Card'
+import {many} from './higher-order/branch'
 import Checkbox from './Checkbox'
 import AutoSelect from './AutoSelect'
 import FolderFormMixin from './mixins/FolderForm'
 import Page from './Page'
 import SubHeader from './SubHeader'
 
-export const CreateFolder = React.createClass({
+export const CreateFolder = createReactClass({
   displayName: 'Create-Folder',
   mixins: [FormMixin, FolderFormMixin],
   propTypes: {
-    dispatch: React.PropTypes.func,
-    company: React.PropTypes.object,
-    medias: React.PropTypes.array,
-    params: React.PropTypes.shape({
-      company: React.PropTypes.string,
-      workspace: React.PropTypes.string
+    dispatch: PropTypes.func,
+    company: PropTypes.object,
+    medias: PropTypes.array,
+    params: PropTypes.shape({
+      company: PropTypes.string,
+      workspace: PropTypes.string
     }),
-    workspace: React.PropTypes.shape({
-      accounts: React.PropTypes.object
+    workspace: PropTypes.shape({
+      accounts: PropTypes.object
     })
   },
   contextTypes: {
-    router: React.PropTypes.object
+    router: PropTypes.object
   },
   getInitialState () {
     return {

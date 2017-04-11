@@ -3,6 +3,7 @@ import map from 'lodash/map'
 import size from 'lodash/size'
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Button} from './Button'
 import {branch} from './higher-order/branch'
 import budgetType from '../propTypes/budget'
@@ -18,35 +19,42 @@ import BudgetEditFolderCampaigns from './BudgetEditFolderCampaigns'
 
 const notUnknown = ({id}) => id !== 'UNKNOWN'
 
-export const BudgetEdit = React.createClass({
-  displayName: 'Budget-Edit',
-  propTypes: {
-    close: React.PropTypes.func,
-    remove: React.PropTypes.func,
-    deliveryMethods: React.PropTypes.array,
-    removeCampaign: React.PropTypes.func,
-    change: React.PropTypes.func,
-    max: React.PropTypes.number,
+export class BudgetEdit extends React.Component {
+  static displayName = 'Budget-Edit'
+
+  static propTypes = {
+    close: PropTypes.func,
+    remove: PropTypes.func,
+    deliveryMethods: PropTypes.array,
+    removeCampaign: PropTypes.func,
+    change: PropTypes.func,
+    max: PropTypes.number,
     budget: budgetType,
-    folderCampaigns: React.PropTypes.array,
-    showFolderCampaigns: React.PropTypes.bool,
-    addCampaigns: React.PropTypes.func
-  },
-  contextTypes: {
-    messages: React.PropTypes.object
-  },
-  onChangeMode ({target: {checked}}) {
+    folderCampaigns: PropTypes.array,
+    showFolderCampaigns: PropTypes.bool,
+    addCampaigns: PropTypes.func
+  }
+
+  static contextTypes = {
+    messages: PropTypes.object
+  }
+
+  onChangeMode = ({target: {checked}}) => {
     this.props.change('mode', checked ? 'percentage' : 'amount')
-  },
-  onChangeValue ({target: input}) {
+  }
+
+  onChangeValue = ({target: input}) => {
     return this.props.change('value', Number(input.value))
-  },
-  onChangeName ({target: {value}}) {
+  }
+
+  onChangeName = ({target: {value}}) => {
     this.props.change('name', value)
-  },
-  onChangeDeliveryMethod ({target: {value}}) {
+  }
+
+  onChangeDeliveryMethod = ({target: {value}}) => {
     this.props.change('delivery_method', value)
-  },
+  }
+
   render () {
     const {messages: {percentageLabel, amountLabel, folderCampaignsTitle, budgetCampaignsTitle}} = this.context
     const {
@@ -164,6 +172,6 @@ export const BudgetEdit = React.createClass({
       </Card>
     )
   }
-})
+}
 
 export default branch({deliveryMethods: ['deliveryMethods']}, BudgetEdit)

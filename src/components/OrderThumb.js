@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Link} from 'react-router'
 import {Cap, Title, ThumbLink, Info, Gear} from './ThumbLink'
 import {DropdownMenu, MenuItem, HeaderMenuItem} from './DropdownMenu'
@@ -93,24 +94,24 @@ const Order = ({dispatch, amount, auto_budget, start, end, company, workspace, f
 
 Order.displayName = 'Order'
 Order.propTypes = {
-  id: React.PropTypes.string.isRequired,
-  dispatch: React.PropTypes.func.isRequired,
-  auto_budget: React.PropTypes.bool.isRequired,
-  amount: React.PropTypes.number.isRequired,
-  name: React.PropTypes.string.isRequired,
-  folder_name: React.PropTypes.string.isRequired,
-  workspace_name: React.PropTypes.string.isRequired,
-  start: React.PropTypes.string.isRequired,
-  end: React.PropTypes.string.isRequired,
-  workspace: React.PropTypes.string.isRequired,
-  company: React.PropTypes.string.isRequired,
-  folder: React.PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  auto_budget: PropTypes.bool.isRequired,
+  amount: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  folder_name: PropTypes.string.isRequired,
+  workspace_name: PropTypes.string.isRequired,
+  start: PropTypes.string.isRequired,
+  end: PropTypes.string.isRequired,
+  workspace: PropTypes.string.isRequired,
+  company: PropTypes.string.isRequired,
+  folder: PropTypes.string.isRequired
 }
 
 Order.contextTypes = {
-  moment: React.PropTypes.func.isRequired,
-  locales: React.PropTypes.string.isRequired,
-  params: React.PropTypes.object.isRequired
+  moment: PropTypes.func.isRequired,
+  locales: PropTypes.string.isRequired,
+  params: PropTypes.object.isRequired
 }
 
 export default styledFnComponent(Order, style)

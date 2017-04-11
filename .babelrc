@@ -5,19 +5,22 @@
   ],
   "plugins": [
     [
-      "csjs-postcss",
-      {
-        "plugins": [
-          [
-            "autoprefixer",
-            {
-              "browsers": [
-                "> 2%"
-              ]
-            }
+      "transform-class-properties",
+      [
+        "csjs-postcss",
+        {
+          "plugins": [
+            [
+              "autoprefixer",
+              {
+                "browsers": [
+                  "> 2%"
+                ]
+              }
+            ]
           ]
-        ]
-      }
+        }
+      ]
     ]
   ]
 }

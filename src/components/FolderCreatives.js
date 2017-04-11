@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Creatives from './Creatives'
 
 const FolderCreatives = ({folder, dispatch, params, cursors}) => (
@@ -13,10 +14,10 @@ const FolderCreatives = ({folder, dispatch, params, cursors}) => (
 
 FolderCreatives.displayName = 'Folder-Creatives'
 FolderCreatives.propTypes = {
-  cursors: React.PropTypes.object,
-  folder: React.PropTypes.object,
-  dispatch: React.PropTypes.func,
-  params: React.PropTypes.object
+  cursors: PropTypes.object,
+  folder: PropTypes.object,
+  dispatch: PropTypes.func,
+  params: PropTypes.object
 }
 
 export default FolderCreatives

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Link} from 'react-router'
 import {node} from './higher-order/branch'
 
@@ -12,16 +13,16 @@ const WorkspaceBreadcrumb = ({params: {company}, workspace}, {messages: {workspa
 
 WorkspaceBreadcrumb.displayName = 'Workspace-Breadcrumb'
 WorkspaceBreadcrumb.propTypes = {
-  workspace: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    name: React.PropTypes.string
+  workspace: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string
   }),
-  params: React.PropTypes.shape({
-    company: React.PropTypes.string
+  params: PropTypes.shape({
+    company: PropTypes.string
   })
 }
 WorkspaceBreadcrumb.contextTypes = {
-  messages: React.PropTypes.object
+  messages: PropTypes.object
 }
 
 export default node('company', 'workspace', WorkspaceBreadcrumb)

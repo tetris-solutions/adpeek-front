@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import TextMessage from 'intl-messageformat'
 import Switch from '../../Switch'
 import DatePicker from '../../DatePicker'
@@ -61,8 +63,8 @@ const Middle = ({className, children}) => (
 
 Middle.displayName = 'Middle'
 Middle.propTypes = {
-  className: React.PropTypes.string.isRequired,
-  children: React.PropTypes.node.isRequired
+  className: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired
 }
 
 const Comment = ({id, date, body, user, creation, del}, {messages, moment, locales}) => (
@@ -93,54 +95,59 @@ const Comment = ({id, date, body, user, creation, del}, {messages, moment, local
 
 Comment.displayName = 'Comment'
 Comment.propTypes = {
-  id: React.PropTypes.string.isRequired,
-  del: React.PropTypes.func.isRequired,
-  date: React.PropTypes.string.isRequired,
-  body: React.PropTypes.string.isRequired,
-  user: React.PropTypes.shape({
-    name: React.PropTypes.string
+  id: PropTypes.string.isRequired,
+  del: PropTypes.func.isRequired,
+  date: PropTypes.string.isRequired,
+  body: PropTypes.string.isRequired,
+  user: PropTypes.shape({
+    name: PropTypes.string
   }).isRequired,
-  creation: React.PropTypes.string.isRequired
+  creation: PropTypes.string.isRequired
 }
 Comment.contextTypes = {
-  locales: React.PropTypes.string.isRequired,
-  messages: React.PropTypes.object.isRequired,
-  moment: React.PropTypes.func.isRequired
+  locales: PropTypes.string.isRequired,
+  messages: PropTypes.object.isRequired,
+  moment: PropTypes.func.isRequired
 }
 
-const Comments = React.createClass({
-  displayName: 'Comments',
-  propTypes: {
-    close: React.PropTypes.func.isRequired,
-    del: React.PropTypes.func.isRequired,
-    save: React.PropTypes.func.isRequired,
-    dispatch: React.PropTypes.func.isRequired,
-    params: React.PropTypes.object.isRequired,
-    module: React.PropTypes.shape({
-      id: React.PropTypes.string,
-      comments: React.PropTypes.array
+class Comments extends React.Component {
+  static displayName = 'Comments'
+
+  static propTypes = {
+    close: PropTypes.func.isRequired,
+    del: PropTypes.func.isRequired,
+    save: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    params: PropTypes.object.isRequired,
+    module: PropTypes.shape({
+      id: PropTypes.string,
+      comments: PropTypes.array
     }).isRequired
-  },
-  contextTypes: {
-    messages: React.PropTypes.object.isRequired,
-    moment: React.PropTypes.func.isRequired
-  },
+  }
+
+  static contextTypes = {
+    messages: PropTypes.object.isRequired,
+    moment: PropTypes.func.isRequired
+  }
+
   componentWillMount () {
     this.setState({
       date: this.context.moment().format('YYYY-MM-DD')
     })
-  },
-  onSubmit (e) {
+  }
+
+  onSubmit = (e) => {
     e.preventDefault()
 
     this.submit(e.target)
-  },
+  }
+
   /**
    *
    * @param {HTMLFormElement} form el
    * @return {Promise} promise that resolves according to create-comment action
    */
-  submit (form) {
+  submit = (form) => {
     const comment = {
       body: form.elements.body.value,
       private: form.elements.isPrivate.checked,
@@ -150,22 +157,25 @@ const Comments = React.createClass({
     this.props.save(comment).then(() => {
       form.elements.body.value = ''
     })
-  },
-  onChangeDate (momentDate) {
+  }
+
+  onChangeDate = (momentDate) => {
     this.setState({
       date: momentDate.format('YYYY-MM-DD')
     })
-  },
+  }
+
   /**
    *
    * @param {KeyboardEvent} e keypress event
    * @return {undefined}
    */
-  detectEnter (e) {
+  detectEnter = (e) => {
     if (e.which === 13 && e.ctrlKey) {
       this.submit(e.target.form)
     }
-  },
+  }
+
   render () {
     const {messages} = this.context
     const {close, del, module} = this.props
@@ -219,9 +229,9 @@ const Comments = React.createClass({
       </form>
     )
   }
-})
+}
 
-const CommentsButton = React.createClass({
+const CommentsButton = createReactClass({
   displayName: 'Comments-Button',
   mixins: [styled(style)],
   propTypes: {
@@ -230,7 +240,7 @@ const CommentsButton = React.createClass({
     module: Comments.propTypes.module
   },
   contextTypes: {
-    reportParams: React.PropTypes.object.isRequired
+    reportParams: PropTypes.object.isRequired
   },
   componentDidMount () {
     this.loadComments()

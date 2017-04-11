@@ -1,5 +1,7 @@
 import csjs from 'csjs'
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import OrderDateRange from './OrderDateRange'
 import orderType from '../propTypes/order'
 import Input from './Input'
@@ -14,21 +16,21 @@ const style = csjs`
   min-height: 0
 }
 .inner {
-  width: '96%';
+  width: '96%'
   margin: .3em auto;
   padding: 0
 }`
 
-export const OrderHeader = React.createClass({
+export const OrderHeader = createReactClass({
   displayName: 'Order-Header',
   mixins: [styled(style)],
   propTypes: {
-    min: React.PropTypes.number.isRequired,
-    change: React.PropTypes.func,
+    min: PropTypes.number.isRequired,
+    change: PropTypes.func,
     order: orderType
   },
   contextTypes: {
-    moment: React.PropTypes.func.isRequired
+    moment: PropTypes.func.isRequired
   },
   componentWillMount () {
     const {change} = this.props

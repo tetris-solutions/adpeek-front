@@ -4,6 +4,10 @@ import pick from 'lodash/pick'
 import Message from 'tetris-iso/Message'
 import React from 'react'
 
+import createReactClass from 'create-react-class'
+
+import PropTypes from 'prop-types'
+
 import {styled} from './mixins/styled'
 
 const style = csjs`
@@ -22,18 +26,18 @@ const selectFields = [
   'value'
 ]
 
-export const Select = React.createClass({
+export const Select = createReactClass({
   displayName: 'Select',
   mixins: [styled(style)],
   propTypes: {
-    children: React.PropTypes.node,
-    disabled: React.PropTypes.bool,
-    value: React.PropTypes.any,
-    defaultValue: React.PropTypes.any,
-    error: React.PropTypes.string,
-    label: React.PropTypes.string,
-    name: React.PropTypes.string.isRequired,
-    onChange: React.PropTypes.func
+    children: PropTypes.node,
+    disabled: PropTypes.bool,
+    value: PropTypes.any,
+    defaultValue: PropTypes.any,
+    error: PropTypes.string,
+    label: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    onChange: PropTypes.func
   },
   getInitialState () {
     return {

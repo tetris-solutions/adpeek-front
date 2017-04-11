@@ -1,8 +1,12 @@
 {
-  "extends": ["standard", "standard-react"],
+  "extends": [
+    "standard",
+    "standard-react"
+  ],
   "globals": {
     "ReactIntl": true
   },
+  "parser": "babel-eslint",
   "rules": {
     "valid-jsdoc": 2,
     "no-console": 2,

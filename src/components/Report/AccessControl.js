@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
 import {openReportAction} from '../../actions/open-report'
@@ -44,15 +46,16 @@ const style = csjs`
   width: 20em;
 }`
 
-const CallToAction = ({children, onClick}) =>
+const CallToAction = ({children, onClick}) => (
   <a className={`${style.button} mdl-button`} onClick={onClick}>
     <Message>{children}</Message>
   </a>
+)
 
 CallToAction.displayName = 'Call-To-Action'
 CallToAction.propTypes = {
-  children: React.PropTypes.string,
-  onClick: React.PropTypes.func
+  children: PropTypes.string,
+  onClick: PropTypes.func
 }
 
 let MediaSelector = ({selected, setMedia, medias}) =>
@@ -70,9 +73,9 @@ let MediaSelector = ({selected, setMedia, medias}) =>
 
 MediaSelector.displayName = 'Media-Selector'
 MediaSelector.propTypes = {
-  selected: React.PropTypes.string,
-  setMedia: React.PropTypes.func,
-  medias: React.PropTypes.array
+  selected: PropTypes.string,
+  setMedia: PropTypes.func,
+  medias: PropTypes.array
 }
 MediaSelector = branch('medias', MediaSelector)
 
@@ -94,9 +97,9 @@ function CardButton ({button, icon, description}) {
 }
 CardButton.displayName = 'Card-Button'
 CardButton.propTypes = {
-  button: React.PropTypes.node.isRequired,
-  icon: React.PropTypes.string.isRequired,
-  description: React.PropTypes.node.isRequired
+  button: PropTypes.node.isRequired,
+  icon: PropTypes.string.isRequired,
+  description: PropTypes.node.isRequired
 }
 
 function Options ({user, report, setMedia, makePublic, unlock, setAsDefault, close, canEdit}) {
@@ -166,17 +169,17 @@ function Options ({user, report, setMedia, makePublic, unlock, setAsDefault, clo
 
 Options.displayName = 'Options'
 Options.propTypes = {
-  user: React.PropTypes.object.isRequired,
-  report: React.PropTypes.object.isRequired,
-  makePublic: React.PropTypes.func.isRequired,
-  unlock: React.PropTypes.func.isRequired,
-  setMedia: React.PropTypes.func.isRequired,
-  setAsDefault: React.PropTypes.func.isRequired,
-  close: React.PropTypes.func.isRequired,
-  canEdit: React.PropTypes.bool.isRequired
+  user: PropTypes.object.isRequired,
+  report: PropTypes.object.isRequired,
+  makePublic: PropTypes.func.isRequired,
+  unlock: PropTypes.func.isRequired,
+  setMedia: PropTypes.func.isRequired,
+  setAsDefault: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
+  canEdit: PropTypes.bool.isRequired
 }
 
-const ReportAccessControl = React.createClass({
+const ReportAccessControl = createReactClass({
   displayName: 'Report-Access-Control',
   mixins: [styled(style)],
   getInitialState () {
@@ -185,10 +188,10 @@ const ReportAccessControl = React.createClass({
     }
   },
   propTypes: {
-    dispatch: React.PropTypes.func.isRequired,
-    report: React.PropTypes.object.isRequired,
-    params: React.PropTypes.object.isRequired,
-    user: React.PropTypes.object.isRequired
+    dispatch: PropTypes.func.isRequired,
+    report: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired
   },
   componentWillMount () {
     const {dispatch, report, params} = this.props
@@ -230,7 +233,8 @@ const ReportAccessControl = React.createClass({
 
     return (
       <MenuItem icon='visibility' onClick={this.open}>
-        <Message>reportAccessControl</Message>{this.state.isModalOpen ? (
+        <Message>reportAccessControl</Message>{this.state.isModalOpen
+        ? (
           <Modal onEscPress={this.close}>
             <Fence {...fencePerms}>{permissions => (
               <Options

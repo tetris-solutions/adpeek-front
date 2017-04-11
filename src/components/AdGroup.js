@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import {node} from './higher-order/branch'
 import {pure} from 'recompose'
 import AdGroupAd from './AdGroupAd'
@@ -17,15 +19,15 @@ const style = csjs`
   padding: .7em 0;
   text-align: center;
 }`
-export const AdGroup = React.createClass({
+export const AdGroup = createReactClass({
   displayName: 'AdGroup',
   mixins: [styled(style)],
   propTypes: {
-    status: React.PropTypes.string,
-    searchTerms: React.PropTypes.array,
-    name: React.PropTypes.string,
-    ads: React.PropTypes.array,
-    keywords: React.PropTypes.array
+    status: PropTypes.string,
+    searchTerms: PropTypes.array,
+    name: PropTypes.string,
+    ads: PropTypes.array,
+    keywords: PropTypes.array
   },
   render () {
     const {name, status, ads, keywords, searchTerms} = this.props
@@ -98,7 +100,7 @@ const AdGroupWrapper = props => <AdGroup {...props} {...props.adGroup}/>
 
 AdGroupWrapper.displayName = 'AdGroup'
 AdGroupWrapper.propTypes = {
-  adGroup: React.PropTypes.object
+  adGroup: PropTypes.object
 }
 
 const level = ({params}) => params.campaign ? 'campaign' : 'folder'

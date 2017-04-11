@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {node} from './higher-order/branch'
 import {Link} from 'react-router'
 import Message from 'tetris-iso/Message'
@@ -18,10 +19,10 @@ export const CampaignAside = ({params: {company, workspace, folder}, campaign}) 
 
 CampaignAside.displayName = 'Campaign-Aside'
 CampaignAside.propTypes = {
-  params: React.PropTypes.object,
-  campaign: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    name: React.PropTypes.string
+  params: PropTypes.object,
+  campaign: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string
   })
 }
 

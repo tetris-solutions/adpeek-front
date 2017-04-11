@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import csjs from 'csjs'
 import {Button} from '../../../Button'
 import Message from 'tetris-iso/Message'
@@ -28,10 +29,10 @@ const MissingIdAlert = ({add}, {entity}) =>
 
 MissingIdAlert.displayName = 'Missing-Id'
 MissingIdAlert.propTypes = {
-  add: React.PropTypes.func
+  add: PropTypes.func
 }
 MissingIdAlert.contextTypes = {
-  entity: React.PropTypes.object
+  entity: PropTypes.object
 }
 
 export default styledFnComponent(MissingIdAlert, style)

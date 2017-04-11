@@ -10,6 +10,7 @@ import trim from 'lodash/trim'
 import head from 'lodash/head'
 import split from 'lodash/split'
 import React from 'react'
+import PropTypes from 'prop-types'
 import AttributeList from './AttributeList'
 import Input from '../../../Input'
 import {Tabs, Tab} from '../../../Tabs'
@@ -31,27 +32,30 @@ const matching = (ls, searchValue) => searchValue
 
 const sorted = ls => sortBy(ls, 'name')
 
-const Lists = React.createClass({
-  displayName: 'Lists',
-  contextTypes: {
-    report: React.PropTypes.object.isRequired,
-    messages: React.PropTypes.object.isRequired,
-    selectable: React.PropTypes.object.isRequired,
-    draft: React.PropTypes.object.isRequired,
-    addAttribute: React.PropTypes.func.isRequired,
-    removeAttribute: React.PropTypes.func.isRequired
-  },
-  getInitialState () {
-    return {searchValue: ''}
-  },
+class Lists extends React.Component {
+  static displayName = 'Lists'
+
+  static contextTypes = {
+    report: PropTypes.object.isRequired,
+    messages: PropTypes.object.isRequired,
+    selectable: PropTypes.object.isRequired,
+    draft: PropTypes.object.isRequired,
+    addAttribute: PropTypes.func.isRequired,
+    removeAttribute: PropTypes.func.isRequired
+  }
+
+  state = {searchValue: ''}
+
   componentWillMount () {
     this.onChangeSearch = debounce(this.onChangeSearch, 300)
-  },
-  onChangeSearch () {
+  }
+
+  onChangeSearch = () => {
     const input = this.refs.wrapper.querySelector('input[name="searchValue"]')
     this.setState({searchValue: input.value})
-  },
-  attributeLevels () {
+  }
+
+  attributeLevels = () => {
     const {messages, report} = this.context
 
     return report.platform
@@ -72,7 +76,8 @@ const Lists = React.createClass({
           }
         }
       }]
-  },
+  }
+
   render () {
     const {searchValue} = this.state
     const {report, messages, draft, addAttribute, removeAttribute} = this.context
@@ -151,6 +156,6 @@ const Lists = React.createClass({
       </div>
     )
   }
-})
+}
 
 export default Lists

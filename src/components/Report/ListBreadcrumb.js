@@ -1,5 +1,6 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Link} from 'react-router'
 import Fence from '../Fence'
 import compact from 'lodash/compact'
@@ -26,10 +27,10 @@ function ReportsBreadcrumb ({params: {company, workspace, folder}}) {
 
 ReportsBreadcrumb.displayName = 'Reports-Breadcrumb'
 ReportsBreadcrumb.propTypes = {
-  params: React.PropTypes.shape({
-    company: React.PropTypes.string,
-    workspace: React.PropTypes.string,
-    folder: React.PropTypes.string
+  params: PropTypes.shape({
+    company: PropTypes.string,
+    workspace: PropTypes.string,
+    folder: PropTypes.string
   })
 }
 

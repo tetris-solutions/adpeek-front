@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
 import isFunction from 'lodash/isFunction'
@@ -8,32 +9,36 @@ import join from 'lodash/join'
 import compact from 'lodash/compact'
 import {Button} from '../Button'
 
-const ReportEditPrompt = React.createClass({
-  displayName: 'Report-Edit-Prompt',
-  getInitialState () {
-    return {
-      isModalOpen: false
-    }
-  },
-  propTypes: {
-    children: React.PropTypes.node.isRequired,
-    className: React.PropTypes.string.isRequired,
-    report: React.PropTypes.object.isRequired,
-    params: React.PropTypes.object.isRequired
-  },
-  contextTypes: {
-    messages: React.PropTypes.object,
-    locales: React.PropTypes.string,
-    router: React.PropTypes.object
-  },
-  open () {
+class ReportEditPrompt extends React.Component {
+  static displayName = 'Report-Edit-Prompt'
+
+  static propTypes = {
+    children: PropTypes.node.isRequired,
+    className: PropTypes.string.isRequired,
+    report: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired
+  }
+
+  static contextTypes = {
+    messages: PropTypes.object,
+    locales: PropTypes.string,
+    router: PropTypes.object
+  }
+
+  state = {
+    isModalOpen: false
+  }
+
+  open = () => {
     this.setState({isModalOpen: true})
-  },
-  closeModalAnd (fn) {
+  }
+
+  closeModalAnd = (fn) => {
     this.setState({isModalOpen: false},
       isFunction(fn) ? fn : undefined)
-  },
-  navigateToCloneForm () {
+  }
+
+  navigateToCloneForm = () => {
     const {router, messages, locales} = this.context
     const {report, params: {company, workspace, folder}} = this.props
     const cloneName = new TextMessage(messages.copyOfName, locales).format({name: report.name})
@@ -45,11 +50,13 @@ const ReportEditPrompt = React.createClass({
     ]), '/')
 
     router.push(`/${scope}/reports/new?clone=${report.id}&name=${cloneName}`)
-  },
-  cloneInstead () {
+  }
+
+  cloneInstead = () => {
     this.closeModalAnd(this.navigateToCloneForm)
-  },
-  remember () {
+  }
+
+  remember = () => {
     try {
       const {form: {elements}} = this.refs
 
@@ -59,8 +66,9 @@ const ReportEditPrompt = React.createClass({
     } catch (e) {
       // console.error(e)
     }
-  },
-  navigateToEditMode () {
+  }
+
+  navigateToEditMode = () => {
     const {params: {company, workspace, folder, report}} = this.props
 
     const scope = join(compact([
@@ -70,12 +78,14 @@ const ReportEditPrompt = React.createClass({
     ]), '/')
 
     this.context.router.push(`/${scope}/report/${report}/edit`)
-  },
-  confirm () {
+  }
+
+  confirm = () => {
     this.closeModalAnd(this.navigateToEditMode)
 
     this.remember()
-  },
+  }
+
   render () {
     const {report, children, className} = this.props
 
@@ -120,6 +130,6 @@ const ReportEditPrompt = React.createClass({
       </a>
     )
   }
-})
+}
 
 export default ReportEditPrompt

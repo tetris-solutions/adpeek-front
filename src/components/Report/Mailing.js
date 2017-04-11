@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import orderBy from 'lodash/sortBy'
 import Message from 'tetris-iso/Message'
 import Page from '../Page'
@@ -48,11 +49,11 @@ const New = ({params, report, company, workspace, folder}) => (
 
 New.displayName = 'New-Mailing'
 New.propTypes = {
-  params: React.PropTypes.object,
-  report: React.PropTypes.object,
-  company: React.PropTypes.object,
-  workspace: React.PropTypes.object,
-  folder: React.PropTypes.object
+  params: PropTypes.object,
+  report: PropTypes.object,
+  company: PropTypes.object,
+  workspace: PropTypes.object,
+  folder: PropTypes.object
 }
 
 const NewMailing = many([
@@ -62,37 +63,43 @@ const NewMailing = many([
   [inferLevelFromProps, 'report']
 ], New)
 
-const MailingLink = React.createClass({
-  displayName: 'Mailing-Link',
-  propTypes: {
-    dispatch: React.PropTypes.func.isRequired,
-    params: React.PropTypes.object.isRequired,
-    mailing: React.PropTypes.object.isRequired,
-    url: React.PropTypes.string.isRequired
-  },
-  contextTypes: {
-    locales: React.PropTypes.string.isRequired,
-    messages: React.PropTypes.object.isRequired,
-    moment: React.PropTypes.func.isRequired
-  },
-  toggle () {
+class MailingLink extends React.Component {
+  static displayName = 'Mailing-Link'
+
+  static propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    params: PropTypes.object.isRequired,
+    mailing: PropTypes.object.isRequired,
+    url: PropTypes.string.isRequired
+  }
+
+  static contextTypes = {
+    locales: PropTypes.string.isRequired,
+    messages: PropTypes.object.isRequired,
+    moment: PropTypes.func.isRequired
+  }
+
+  toggle = () => {
     const {dispatch, params, mailing} = this.props
 
     dispatch(updateMailingReportAction, params, assign({}, mailing, {
       disabled: !mailing.disabled
     }))
-  },
-  del () {
+  }
+
+  del = () => {
     const {dispatch, params, mailing} = this.props
 
     dispatch(deleteMailingAction, params, mailing.id)
-  },
-  run () {
+  }
+
+  run = () => {
     const {dispatch, mailing} = this.props
 
     dispatch(spawnReportMailingAction, mailing.id)
       .then(() => dispatch(pushSuccessMessageAction))
-  },
+  }
+
   render () {
     const {mailing, url} = this.props
     const {messages, moment, locales} = this.context
@@ -170,27 +177,30 @@ const MailingLink = React.createClass({
       </ThumbLink>
     )
   }
-})
+}
 
-const List = React.createClass({
-  displayName: 'Mailings',
-  propTypes: {
-    url: React.PropTypes.string.isRequired,
-    mailings: React.PropTypes.array.isRequired,
-    params: React.PropTypes.object.isRequired
-  },
-  contextTypes: {
-    location: React.PropTypes.object.isRequired,
-    router: React.PropTypes.object.isRequired
-  },
-  getInitialState () {
-    return {
-      activeOnly: true
-    }
-  },
-  onSwitch ({target: {checked: activeOnly}}) {
+class List extends React.Component {
+  static displayName = 'Mailings'
+
+  static propTypes = {
+    url: PropTypes.string.isRequired,
+    mailings: PropTypes.array.isRequired,
+    params: PropTypes.object.isRequired
+  }
+
+  static contextTypes = {
+    location: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired
+  }
+
+  state = {
+    activeOnly: true
+  }
+
+  onSwitch = ({target: {checked: activeOnly}}) => {
     this.setState({activeOnly})
-  },
+  }
+
   render () {
     const {activeOnly} = this.state
     const {location: {pathname, query}} = this.context
@@ -232,7 +242,7 @@ const List = React.createClass({
       </Container>
     )
   }
-})
+}
 
 const Content = props => {
   const {params} = props
@@ -264,7 +274,7 @@ const Content = props => {
 
 Content.displayName = 'Content'
 Content.propTypes = {
-  params: React.PropTypes.object.isRequired
+  params: PropTypes.object.isRequired
 }
 
 const StandaloneMailingList = props => (
@@ -273,8 +283,8 @@ const StandaloneMailingList = props => (
 
 StandaloneMailingList.displayName = 'Mailing-List'
 StandaloneMailingList.propTypes = {
-  params: React.PropTypes.object,
-  level: React.PropTypes.string.isRequired
+  params: PropTypes.object,
+  level: PropTypes.string.isRequired
 }
 
 const ReportMailingList = props => (
@@ -283,9 +293,9 @@ const ReportMailingList = props => (
 
 ReportMailingList.displayName = 'Report-Mailing-List'
 ReportMailingList.propTypes = {
-  params: React.PropTypes.object,
-  report: React.PropTypes.shape({
-    mailings: React.PropTypes.array
+  params: PropTypes.object,
+  report: PropTypes.shape({
+    mailings: PropTypes.array
   })
 }
 
@@ -308,7 +318,7 @@ const Mailing = props => {
 
 Mailing.displayName = 'Mailing'
 Mailing.propTypes = {
-  params: React.PropTypes.object
+  params: PropTypes.object
 }
 
 export default Mailing

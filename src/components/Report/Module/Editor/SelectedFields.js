@@ -7,6 +7,8 @@ import map from 'lodash/map'
 import sortBy from 'lodash/sortBy'
 import toPairs from 'lodash/toPairs'
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import Reorder from 'react-reorder'
 import {Button} from '../../../Button'
 import {styled} from '../../../mixins/styled'
@@ -38,10 +40,10 @@ function Field ({item: {name, remove, id}}) {
 
 Field.displayName = 'Field'
 Field.propTypes = {
-  item: React.PropTypes.shape({
-    id: React.PropTypes.string.isRequired,
-    name: React.PropTypes.string.isRequired,
-    remove: React.PropTypes.func.isRequired
+  item: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    remove: PropTypes.func.isRequired
   }).isRequired
 }
 
@@ -58,14 +60,14 @@ function mountFields (attributes, dimensions, metrics, fieldSort) {
   return sortBy(map(concat(dimensions, metrics), normalizeField), 'index')
 }
 
-const SelectedFields = React.createClass({
+const SelectedFields = createReactClass({
   displayName: 'Selected-Fields',
   mixins: [styled(style)],
   contextTypes: {
-    draft: React.PropTypes.object.isRequired,
-    attributes: React.PropTypes.object.isRequired,
-    removeAttribute: React.PropTypes.func.isRequired,
-    change: React.PropTypes.func.isRequired
+    draft: PropTypes.object.isRequired,
+    attributes: PropTypes.object.isRequired,
+    removeAttribute: PropTypes.func.isRequired,
+    change: PropTypes.func.isRequired
   },
   onReorder (event, movedItem, previousIndex, nextIndex, fieldSort) {
     const {draft: {module}, change} = this.context

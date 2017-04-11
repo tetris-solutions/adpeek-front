@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import ReportLink from './Report/ReportLink'
 import endsWith from 'lodash/endsWith'
@@ -10,10 +11,10 @@ import {node} from './higher-order/branch'
 import get from 'lodash/get'
 
 export function FolderAside ({
-  dispatch,
-  folder,
-  params
-}, {router, location}) {
+                               dispatch,
+                               folder,
+                               params
+                             }, {router, location}) {
   const {company, workspace} = params
 
   function onClick () {
@@ -69,18 +70,18 @@ export function FolderAside ({
 
 FolderAside.displayName = 'Folder-Aside'
 FolderAside.contextTypes = {
-  router: React.PropTypes.object,
-  location: React.PropTypes.object
+  router: PropTypes.object,
+  location: PropTypes.object
 }
 FolderAside.propTypes = {
-  dispatch: React.PropTypes.func,
-  folder: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    name: React.PropTypes.string
+  dispatch: PropTypes.func,
+  folder: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string
   }),
-  params: React.PropTypes.shape({
-    company: React.PropTypes.string,
-    workspace: React.PropTypes.string
+  params: PropTypes.shape({
+    company: PropTypes.string,
+    workspace: PropTypes.string
   })
 }
 

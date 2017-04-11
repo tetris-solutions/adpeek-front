@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Button} from './Button'
 import Message from 'tetris-iso/Message'
 import DateRangePicker from './DateRangePicker'
@@ -77,13 +78,13 @@ function DateRangeModal ({startDate, endDate, close, onChange}, {messages}) {
 
 DateRangeModal.displayName = 'Date-Range-Modal'
 DateRangeModal.propTypes = {
-  onChange: React.PropTypes.func,
-  close: React.PropTypes.func,
-  startDate: React.PropTypes.object,
-  endDate: React.PropTypes.object
+  onChange: PropTypes.func,
+  close: PropTypes.func,
+  startDate: PropTypes.object,
+  endDate: PropTypes.object
 }
 DateRangeModal.contextTypes = {
-  messages: React.PropTypes.object
+  messages: PropTypes.object
 }
 
 function OrderDateRange ({startDate, endDate, onChange, buttonClassName}) {
@@ -108,10 +109,10 @@ function OrderDateRange ({startDate, endDate, onChange, buttonClassName}) {
 
 OrderDateRange.displayName = 'Order-Date-Range'
 OrderDateRange.propTypes = {
-  buttonClassName: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func.isRequired,
-  startDate: React.PropTypes.object.isRequired,
-  endDate: React.PropTypes.object.isRequired
+  buttonClassName: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  startDate: PropTypes.object.isRequired,
+  endDate: PropTypes.object.isRequired
 }
 
 export default OrderDateRange

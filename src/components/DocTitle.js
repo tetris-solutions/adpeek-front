@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {many} from './higher-order/branch'
 import {inferLevelFromProps} from '../functions/infer-level-from-params'
 import Helmet from 'react-helmet'
@@ -6,29 +7,34 @@ import join from 'lodash/join'
 import compact from 'lodash/compact'
 import loglevel from 'loglevel'
 
-const DocTitle = React.createClass({
-  displayName: 'Doc-Title',
-  propTypes: {
-    report: React.PropTypes.object,
-    order: React.PropTypes.object,
-    campaign: React.PropTypes.object,
-    folder: React.PropTypes.object,
-    workspace: React.PropTypes.object,
-    company: React.PropTypes.object
-  },
+class DocTitle extends React.Component {
+  static displayName = 'Doc-Title'
+
+  static propTypes = {
+    report: PropTypes.object,
+    order: PropTypes.object,
+    campaign: PropTypes.object,
+    folder: PropTypes.object,
+    workspace: PropTypes.object,
+    company: PropTypes.object
+  }
+
   componentDidMount () {
     this.checkpoint()
-  },
+  }
+
   componentDidUpdate () {
     if (process.env.NODE_ENV === 'production' && this.getCurrentUrl() !== this._url) {
       this.track()
     }
     this.checkpoint()
-  },
-  checkpoint () {
+  }
+
+  checkpoint = () => {
     this._url = this.getCurrentUrl()
-  },
-  track () {
+  }
+
+  track = () => {
     try {
       this.trackGA()
     } catch (e) {
@@ -40,23 +46,27 @@ const DocTitle = React.createClass({
     } catch (e) {
       loglevel.error(e)
     }
-  },
-  trackPIWIK () {
+  }
+
+  trackPIWIK = () => {
     window._paq.push(['setDocumentTitle', document.title])
     window._paq.push(['setCustomUrl', this.getCurrentUrl()])
     window._paq.push(['trackPageView'])
-  },
-  trackGA () {
+  }
+
+  trackGA = () => {
     window.ga('send', {
       hitType: 'pageview',
       page: this.getCurrentUrl(),
       title: document.title
     })
-  },
-  getCurrentUrl () {
+  }
+
+  getCurrentUrl = () => {
     return window.location.pathname + window.location.search
-  },
-  getTitle () {
+  }
+
+  getTitle = () => {
     const {report, order, campaign, folder, workspace, company} = this.props
 
     const parts = [
@@ -71,11 +81,12 @@ const DocTitle = React.createClass({
     ].reverse()
 
     return join(compact(parts), ' - ')
-  },
+  }
+
   render () {
     return <Helmet title={this.getTitle()}/>
   }
-})
+}
 
 export default many([
   {user: ['user']},

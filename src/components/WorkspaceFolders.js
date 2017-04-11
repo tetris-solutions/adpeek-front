@@ -7,6 +7,7 @@ import map from 'lodash/map'
 import trim from 'lodash/trim'
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import PropTypes from 'prop-types'
 import Fence from './Fence'
 import SubHeader, {SubHeaderButton} from './SubHeader'
 import SearchBox from './HeaderSearchBox'
@@ -37,10 +38,10 @@ const Cards = ({editable, folders, reload, children}) => (
 
 Cards.displayName = 'Cards'
 Cards.propTypes = {
-  reload: React.PropTypes.func,
-  children: React.PropTypes.node,
-  editable: React.PropTypes.bool,
-  folders: React.PropTypes.array
+  reload: PropTypes.func,
+  children: PropTypes.node,
+  editable: PropTypes.bool,
+  folders: PropTypes.array
 }
 
 let List = ({editable, searchValue, reload, children, folders}) => (
@@ -57,42 +58,46 @@ let List = ({editable, searchValue, reload, children, folders}) => (
 
 List.displayName = 'List'
 List.propTypes = {
-  reload: React.PropTypes.func,
-  children: React.PropTypes.node,
-  editable: React.PropTypes.bool,
-  searchValue: React.PropTypes.string,
-  folders: React.PropTypes.array
+  reload: PropTypes.func,
+  children: PropTypes.node,
+  editable: PropTypes.bool,
+  searchValue: PropTypes.string,
+  folders: PropTypes.array
 }
 List = collection('workspace', 'folders', List)
 
-export const Folders = React.createClass({
-  displayName: 'Folders',
-  propTypes: {
-    dispatch: React.PropTypes.func,
-    params: React.PropTypes.shape({
-      company: React.PropTypes.string,
-      workspace: React.PropTypes.string
+export class Folders extends React.Component {
+  static displayName = 'Folders'
+
+  static propTypes = {
+    dispatch: PropTypes.func,
+    params: PropTypes.shape({
+      company: PropTypes.string,
+      workspace: PropTypes.string
     }).isRequired
-  },
-  getInitialState () {
-    return {
-      searchValue: '',
-      visibleOnly: true
-    }
-  },
-  onChange (searchValue) {
+  }
+
+  state = {
+    searchValue: '',
+    visibleOnly: true
+  }
+
+  onChange = (searchValue) => {
     this.setState({searchValue})
-  },
-  onSwitch ({target: {checked: visibleOnly}}) {
+  }
+
+  onSwitch = ({target: {checked: visibleOnly}}) => {
     this.setState({visibleOnly}, this.reload)
-  },
-  reload () {
+  }
+
+  reload = () => {
     this.props.dispatch(
       loadWorkspaceFoldersAction,
       this.props.params,
       !this.state.visibleOnly
     )
-  },
+  }
+
   render () {
     const searchValue = cleanStr(this.state.searchValue)
     const {params: {company, workspace}} = this.props
@@ -123,6 +128,6 @@ export const Folders = React.createClass({
       </Fence>
     )
   }
-})
+}
 
 export default Folders

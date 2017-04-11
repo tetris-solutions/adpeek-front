@@ -1,59 +1,64 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {node} from './higher-order/branch'
 import AutoSelect from './AutoSelect'
 import get from 'lodash/get'
 import map from 'lodash/map'
 import find from 'lodash/find'
 
-const Selector = React.createClass({
-  displayName: 'GA-Field-Selector',
-  propTypes: {
-    placeholder: React.PropTypes.string,
-    selected: React.PropTypes.object,
-    disabled: React.PropTypes.bool,
-    onChange: React.PropTypes.func,
-    parent: React.PropTypes.string,
-    list: React.PropTypes.string,
-    params: React.PropTypes.object,
-    account: React.PropTypes.shape({
-      properties: React.PropTypes.array
+class Selector extends React.Component {
+  static displayName = 'GA-Field-Selector'
+
+  static propTypes = {
+    placeholder: PropTypes.string,
+    selected: PropTypes.object,
+    disabled: PropTypes.bool,
+    onChange: PropTypes.func,
+    parent: PropTypes.string,
+    list: PropTypes.string,
+    params: PropTypes.object,
+    account: PropTypes.shape({
+      properties: PropTypes.array
     })
-  },
-  getDefaultProps () {
-    return {
-      onChange: () => false,
-      selected: null,
-      disabled: false
-    }
-  },
-  getInitialState () {
-    return {
-      selected: this.props.selected
-    }
-  },
-  normalize ({id: value, name: text}) {
+  }
+
+  static defaultProps = {
+    onChange: () => false,
+    selected: null,
+    disabled: false
+  }
+
+  state = {
+    selected: this.props.selected
+  }
+
+  normalize = ({id: value, name: text}) => {
     return {text, value}
-  },
+  }
+
   componentWillReceiveProps (nextProps) {
     const {parent} = this.props
 
     if (nextProps.params[parent] !== this.props.params[parent]) {
       this.setState({selected: null})
     }
-  },
-  onChange (option) {
+  }
+
+  onChange = (option) => {
     const selected = option
       ? find(this.getProperties(), {id: option.value})
       : null
 
     this.setState({selected}, () =>
       this.props.onChange(selected))
-  },
-  getProperties () {
+  }
+
+  getProperties = () => {
     const {parent, list} = this.props
 
     return get(this.props[parent], list, [])
-  },
+  }
+
   render () {
     const {selected} = this.state
     const {placeholder, disabled} = this.props
@@ -67,7 +72,7 @@ const Selector = React.createClass({
         options={map(this.getProperties(), this.normalize)}/>
     )
   }
-})
+}
 
 const injectAccount = C => node('company', 'account', C)
 const injectProperty = C => node('account', 'property', C)
@@ -83,7 +88,7 @@ export const PropertySelector = (props, {messages}) =>
 
 PropertySelector.displayName = 'Property-Selector'
 PropertySelector.contextTypes = {
-  messages: React.PropTypes.object
+  messages: PropTypes.object
 }
 
 const ViewSelector_ = injectAccount(injectProperty(Selector))
@@ -97,5 +102,5 @@ export const ViewSelector = (props, {messages}) =>
 
 ViewSelector.displayName = 'View-Selector'
 ViewSelector.contextTypes = {
-  messages: React.PropTypes.object
+  messages: PropTypes.object
 }

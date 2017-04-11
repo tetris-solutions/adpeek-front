@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import Spinner from './Spinner'
 import {branch} from './higher-order/branch'
@@ -31,14 +33,14 @@ const Loading = ({running}) => (
 
 Loading.displayName = 'Loading'
 Loading.propTypes = {
-  running: React.PropTypes.number
+  running: PropTypes.number
 }
 
-const Wrapper = React.createClass({
+const Wrapper = createReactClass({
   displayName: 'Loading-Wrapper',
   mixins: [styled(style)],
   propTypes: {
-    running: React.PropTypes.number
+    running: PropTypes.number
   },
   componentDidMount () {
     this.container = document.createElement('div')

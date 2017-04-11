@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {many} from './higher-order/branch'
 import OrderController from './OrderController'
 import Message from 'intl-messageformat'
@@ -58,19 +59,19 @@ export function Order ({deliveryMethods, dispatch, params, order, folder, status
 Order.displayName = 'Order'
 
 Order.propTypes = {
-  routes: React.PropTypes.array,
-  statuses: React.PropTypes.array,
-  dispatch: React.PropTypes.func,
-  deliveryMethods: React.PropTypes.array,
-  params: React.PropTypes.object,
-  folder: React.PropTypes.object,
-  order: React.PropTypes.any
+  routes: PropTypes.array,
+  statuses: PropTypes.array,
+  dispatch: PropTypes.func,
+  deliveryMethods: PropTypes.array,
+  params: PropTypes.object,
+  folder: PropTypes.object,
+  order: PropTypes.any
 }
 
 Order.contextTypes = {
-  moment: React.PropTypes.func,
-  locales: React.PropTypes.string,
-  messages: React.PropTypes.object
+  moment: PropTypes.func,
+  locales: PropTypes.string,
+  messages: PropTypes.object
 }
 
 export default many([

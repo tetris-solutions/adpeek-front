@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import {loadRecentAction} from '../actions/load-recent'
 import camelCase from 'lodash/camelCase'
 import map from 'lodash/map'
@@ -32,15 +34,15 @@ const levels = ['company', 'workspace', 'folder', 'campaign', 'order', 'report']
 const calcPath = params => compact(map(levels, name => params[name] && `${name}/${params[name]}`))
   .join('/')
 
-const Recent = React.createClass({
+const Recent = createReactClass({
   displayName: 'Recent',
   mixins: [styled(style)],
   propTypes: {
-    dispatch: React.PropTypes.func.isRequired,
-    params: React.PropTypes.object.isRequired,
-    icon: React.PropTypes.string.isRequired,
-    level: React.PropTypes.string.isRequired,
-    node: React.PropTypes.object.isRequired
+    dispatch: PropTypes.func.isRequired,
+    params: PropTypes.object.isRequired,
+    icon: PropTypes.string.isRequired,
+    level: PropTypes.string.isRequired,
+    node: PropTypes.object.isRequired
   },
   getList () {
     return this.props.node[camelCase(`recent ${this.props.level}`)]

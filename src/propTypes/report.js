@@ -1,15 +1,15 @@
-import React from 'react'
+import PropTypes from 'prop-types'
 
-export default React.PropTypes.shape({
-  id: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired,
-  level: React.PropTypes.oneOf([
+export default PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  level: PropTypes.oneOf([
     'folder',
     'workspace',
     'company'
   ]),
-  platform: React.PropTypes.string,
-  is_private: React.PropTypes.bool,
-  is_user_selected: React.PropTypes.bool,
-  is_default_report: React.PropTypes.bool
+  platform: PropTypes.string,
+  is_private: PropTypes.bool,
+  is_user_selected: PropTypes.bool,
+  is_default_report: PropTypes.bool
 })

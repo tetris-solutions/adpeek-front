@@ -1,4 +1,4 @@
-import React from 'react'
+import PropTypes from 'prop-types'
 import isEmpty from 'lodash/isEmpty'
 import assign from 'lodash/assign'
 import omit from 'lodash/omit'
@@ -10,10 +10,10 @@ export default {
     }
   },
   childContextTypes: {
-    submitInProgress: React.PropTypes.bool.isRequired
+    submitInProgress: PropTypes.bool.isRequired
   },
   contextTypes: {
-    messages: React.PropTypes.object
+    messages: PropTypes.object
   },
   getInitialState () {
     return {

@@ -1,5 +1,7 @@
 import React from 'react'
 
+import PropTypes from 'prop-types'
+
 function Icon ({className, is_private, is_global}, {messages}) {
   let title = messages.companyReportTooltip
   let icon = 'people'
@@ -22,13 +24,13 @@ function Icon ({className, is_private, is_global}, {messages}) {
 Icon.displayName = 'Report-Icon'
 
 Icon.propTypes = {
-  className: React.PropTypes.string,
-  is_global: React.PropTypes.bool,
-  is_private: React.PropTypes.bool
+  className: PropTypes.string,
+  is_global: PropTypes.bool,
+  is_private: PropTypes.bool
 }
 
 Icon.contextTypes = {
-  messages: React.PropTypes.object
+  messages: PropTypes.object
 }
 
 export default Icon

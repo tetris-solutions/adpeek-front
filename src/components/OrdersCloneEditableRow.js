@@ -1,46 +1,53 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Checkbox from './Checkbox'
 import Input from './Input'
 import OrderDateRange from './OrderDateRange'
 
-export const Editable = React.createClass({
-  displayName: 'Editable',
-  propTypes: {
-    index: React.PropTypes.number,
-    name: React.PropTypes.string,
-    start: React.PropTypes.string,
-    end: React.PropTypes.string,
-    auto_budget: React.PropTypes.bool,
-    amount: React.PropTypes.number
-  },
-  contextTypes: {
-    moment: React.PropTypes.func
-  },
-  getInitialState () {
-    return {
-      autoBudget: this.props.auto_budget,
-      start: this.props.start,
-      end: this.props.end
-    }
-  },
+export class Editable extends React.Component {
+  static displayName = 'Editable'
+
+  static propTypes = {
+    index: PropTypes.number,
+    name: PropTypes.string,
+    start: PropTypes.string,
+    end: PropTypes.string,
+    auto_budget: PropTypes.bool,
+    amount: PropTypes.number
+  }
+
+  static contextTypes = {
+    moment: PropTypes.func
+  }
+
+  state = {
+    autoBudget: this.props.auto_budget,
+    start: this.props.start,
+    end: this.props.end
+  }
+
   componentDidMount () {
     this.refs.start.programaticallySetValue = start => this.setState({start})
     this.refs.end.programaticallySetValue = end => this.setState({end})
-  },
+  }
+
   componentWillReceiveProps ({start, end}) {
     if (start !== this.props.start || end !== this.props.end) {
       this.setState({start, end})
     }
-  },
-  onChangeAutoBudget ({target: {checked}}) {
+  }
+
+  onChangeAutoBudget = ({target: {checked}}) => {
     this.setState({autoBudget: checked})
-  },
-  onChangeRange ({startDate, endDate}) {
+  }
+
+  onChangeRange = ({startDate, endDate}) => {
     this.setState({
       start: startDate.format('YYYY-MM-DD'),
       end: endDate.format('YYYY-MM-DD')
     })
-  },
+  }
+
   render () {
     const {index, name, amount} = this.props
     const {start, end} = this.state
@@ -79,6 +86,6 @@ export const Editable = React.createClass({
       </tr>
     )
   }
-})
+}
 
 export default Editable

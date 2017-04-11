@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import Highcharts from './Highcharts'
 import {prettyNumber} from '../functions/pretty-number'
@@ -103,11 +105,11 @@ const Rail = ({cost, amount}, {locales}) => (
 
 Rail.displayName = 'Rail'
 Rail.propTypes = {
-  amount: React.PropTypes.number,
-  cost: React.PropTypes.number
+  amount: PropTypes.number,
+  cost: PropTypes.number
 }
 Rail.contextTypes = {
-  locales: React.PropTypes.string.isRequired
+  locales: PropTypes.string.isRequired
 }
 
 const Period = ({start, end}, {moment, locales}) => (
@@ -124,11 +126,11 @@ const Period = ({start, end}, {moment, locales}) => (
 )
 Period.displayName = 'Period'
 Period.propTypes = {
-  start: React.PropTypes.string,
-  end: React.PropTypes.string
+  start: PropTypes.string,
+  end: PropTypes.string
 }
 Period.contextTypes = {
-  moment: React.PropTypes.func.isRequired
+  moment: PropTypes.func.isRequired
 }
 
 const Goal = ({series, metric, kpi_goal}, {locales}) => {
@@ -157,17 +159,17 @@ const Goal = ({series, metric, kpi_goal}, {locales}) => {
 Goal.displayName = 'Goal'
 
 Goal.propTypes = {
-  series: React.PropTypes.array,
-  metric: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    type: React.PropTypes.string,
-    name: React.PropTypes.string
+  series: PropTypes.array,
+  metric: PropTypes.shape({
+    id: PropTypes.string,
+    type: PropTypes.string,
+    name: PropTypes.string
   }),
-  kpi_goal: React.PropTypes.number
+  kpi_goal: PropTypes.number
 }
 
 Goal.contextTypes = {
-  locales: React.PropTypes.string.isRequired
+  locales: PropTypes.string.isRequired
 }
 
 function preventDefault (e) {
@@ -274,18 +276,18 @@ let Stats = ({stats, kpi_goal}, {messages, locales}) => (
 
 Stats.displayName = 'Stats'
 Stats.propTypes = {
-  kpi_goal: React.PropTypes.number,
-  stats: React.PropTypes.shape({
-    metric: React.PropTypes.object,
-    series: React.PropTypes.arrayOf(React.PropTypes.shape({
-      date: React.PropTypes.string,
-      cost: React.PropTypes.number
+  kpi_goal: PropTypes.number,
+  stats: PropTypes.shape({
+    metric: PropTypes.object,
+    series: PropTypes.arrayOf(PropTypes.shape({
+      date: PropTypes.string,
+      cost: PropTypes.number
     }))
   }).isRequired
 }
 Stats.contextTypes = {
-  messages: React.PropTypes.object.isRequired,
-  locales: React.PropTypes.string.isRequired
+  messages: PropTypes.object.isRequired,
+  locales: PropTypes.string.isRequired
 }
 
 Stats = pure(Stats)
@@ -312,25 +314,25 @@ const EmptyStats = ({lastOrder}, {moment}) => (
 
 EmptyStats.displayName = 'Empty-Stats'
 EmptyStats.propTypes = {
-  lastOrder: React.PropTypes.object
+  lastOrder: PropTypes.object
 }
 EmptyStats.contextTypes = {
-  moment: React.PropTypes.func
+  moment: PropTypes.func
 }
 
-const FolderStats = React.createClass({
+const FolderStats = createReactClass({
   displayName: 'Folder-Stats',
   mixins: [styled(style)],
   propTypes: {
-    id: React.PropTypes.string,
-    params: React.PropTypes.object,
-    stats: React.PropTypes.object,
-    kpi_goal: React.PropTypes.number
+    id: PropTypes.string,
+    params: PropTypes.object,
+    stats: PropTypes.object,
+    kpi_goal: PropTypes.number
   },
   contextTypes: {
-    tree: React.PropTypes.object.isRequired,
-    locales: React.PropTypes.string.isRequired,
-    messages: React.PropTypes.object.isRequired
+    tree: PropTypes.object.isRequired,
+    locales: PropTypes.string.isRequired,
+    messages: PropTypes.object.isRequired
   },
   getDefaultProps () {
     return {

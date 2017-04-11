@@ -1,5 +1,6 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Link} from 'react-router'
 import {DropdownMenu, MenuItem, HeaderMenuItem} from '../DropdownMenu'
 import SubHeader from '../SubHeader'
@@ -85,16 +86,16 @@ function ReportScreen (props, context) {
 }
 ReportScreen.displayName = 'Report-Screen'
 ReportScreen.propTypes = {
-  reportLiteMode: React.PropTypes.bool,
-  downloadReport: React.PropTypes.func.isRequired,
-  favoriteReport: React.PropTypes.func.isRequired,
-  report: React.PropTypes.object.isRequired,
-  children: React.PropTypes.node.isRequired,
-  isCreatingReport: React.PropTypes.bool.isRequired
+  reportLiteMode: PropTypes.bool,
+  downloadReport: PropTypes.func.isRequired,
+  favoriteReport: PropTypes.func.isRequired,
+  report: PropTypes.object.isRequired,
+  children: PropTypes.node.isRequired,
+  isCreatingReport: PropTypes.bool.isRequired
 }
 ReportScreen.contextTypes = {
-  messages: React.PropTypes.object.isRequired,
-  params: React.PropTypes.object.isRequired,
-  location: React.PropTypes.object.isRequired
+  messages: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired
 }
 export default ReportScreen

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Creatives from './Creatives'
 
 const CampaignCreatives = ({folder, campaign, dispatch, params, cursors}) => (
@@ -13,11 +14,11 @@ const CampaignCreatives = ({folder, campaign, dispatch, params, cursors}) => (
 
 CampaignCreatives.displayName = 'Campaign-Creatives'
 CampaignCreatives.propTypes = {
-  cursors: React.PropTypes.object,
-  folder: React.PropTypes.object,
-  campaign: React.PropTypes.object,
-  dispatch: React.PropTypes.func,
-  params: React.PropTypes.object
+  cursors: PropTypes.object,
+  folder: PropTypes.object,
+  campaign: PropTypes.object,
+  dispatch: PropTypes.func,
+  params: PropTypes.object
 }
 
 export default CampaignCreatives

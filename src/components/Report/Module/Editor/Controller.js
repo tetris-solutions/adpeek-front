@@ -12,6 +12,7 @@ import findIndex from 'lodash/findIndex'
 import pick from 'lodash/pick'
 import uniq from 'lodash/uniq'
 import React from 'react'
+import PropTypes from 'prop-types'
 import reportEntityType from '../../../../propTypes/report-entity'
 import reportModuleType from '../../../../propTypes/report-module'
 import Editor from './Editor'
@@ -40,37 +41,51 @@ function defaultFilters (entity) {
   }
 }
 
-const ModuleEdit = React.createClass({
-  displayName: 'Editor-Controller',
-  contextTypes: {
-    attributes: React.PropTypes.object.isRequired,
-    messages: React.PropTypes.object.isRequired,
-    locales: React.PropTypes.string.isRequired,
-    moment: React.PropTypes.func.isRequired,
-    module: React.PropTypes.object.isRequired,
-    entities: React.PropTypes.object.isRequired,
-    getUsedAccounts: React.PropTypes.func.isRequired,
-    activeOnly: React.PropTypes.bool.isRequired,
-    report: React.PropTypes.object
-  },
-  propTypes: {
-    close: React.PropTypes.func,
-    save: React.PropTypes.func
-  },
-  childContextTypes: {
-    draft: React.PropTypes.shape({
+class ModuleEdit extends React.Component {
+  static displayName = 'Editor-Controller'
+
+  static contextTypes = {
+    attributes: PropTypes.object.isRequired,
+    messages: PropTypes.object.isRequired,
+    locales: PropTypes.string.isRequired,
+    moment: PropTypes.func.isRequired,
+    module: PropTypes.object.isRequired,
+    entities: PropTypes.object.isRequired,
+    getUsedAccounts: PropTypes.func.isRequired,
+    activeOnly: PropTypes.bool.isRequired,
+    report: PropTypes.object
+  }
+
+  static propTypes = {
+    close: PropTypes.func,
+    save: PropTypes.func
+  }
+
+  static childContextTypes = {
+    draft: PropTypes.shape({
       module: reportModuleType,
       entity: reportEntityType
     }),
-    addEntity: React.PropTypes.func,
-    removeEntity: React.PropTypes.func,
-    addAttribute: React.PropTypes.func,
-    removeAttribute: React.PropTypes.func,
-    change: React.PropTypes.func,
-    onChangeName: React.PropTypes.func,
-    onChangeEntity: React.PropTypes.func,
-    onChangeType: React.PropTypes.func
-  },
+    addEntity: PropTypes.func,
+    removeEntity: PropTypes.func,
+    addAttribute: PropTypes.func,
+    removeAttribute: PropTypes.func,
+    change: PropTypes.func,
+    onChangeName: PropTypes.func,
+    onChangeEntity: PropTypes.func,
+    onChangeType: PropTypes.func
+  }
+
+  constructor (props, context) {
+    super(props, context)
+    const snapshot = pick(context.module, editableFields)
+
+    this.state = {
+      oldModule: snapshot,
+      newModule: snapshot
+    }
+  }
+
   getChildContext () {
     return {
       draft: {
@@ -86,37 +101,36 @@ const ModuleEdit = React.createClass({
       addEntity: this.addEntity,
       removeEntity: this.removeEntity
     }
-  },
-  getInitialState () {
-    const snapshot = pick(this.context.module, editableFields)
+  }
 
-    return {
-      oldModule: snapshot,
-      newModule: snapshot
-    }
-  },
   componentWillMount () {
     this.updateQueue = []
     this.persist = debounce(this.flushUpdateQueue, 500)
-  },
+  }
+
   componentDidMount () {
     this.$e = new Emmett()
-  },
+  }
+
   componentDidUpdate () {
     this.$e.emit('update')
-  },
-  flushUpdateQueue () {
+  }
+
+  flushUpdateQueue = () => {
     this.change(assign({}, ...this.updateQueue), true)
     this.updateQueue = []
-  },
-  enqueueUpdate (update) {
+  }
+
+  enqueueUpdate = (update) => {
     this.updateQueue.push(update)
     this.persist()
-  },
-  onChangeName ({target: {value}}) {
+  }
+
+  onChangeName = ({target: {value}}) => {
     this.enqueueUpdate({name: value})
-  },
-  onChangeType ({target: {value}}) {
+  }
+
+  onChangeType = ({target: {value}}) => {
     const newState = {type: value}
 
     if (value === 'pie' || value === 'total') {
@@ -132,8 +146,9 @@ const ModuleEdit = React.createClass({
     }
 
     this.change(newState, true)
-  },
-  onChangeEntity ({target: {value: entity}}) {
+  }
+
+  onChangeEntity = ({target: {value: entity}}) => {
     const base = {
       entity,
       dimensions: [],
@@ -155,24 +170,27 @@ const ModuleEdit = React.createClass({
     }
 
     this.$e.on('update', afterUpdate)
-  },
-  removeEntity (id) {
+  }
+
+  removeEntity = (id) => {
     const ids = isArray(id) ? id : [id]
     const module = this.getDraftModule()
     const filters = assign({}, module.filters, {
       id: module.filters.id.filter(currentId => !includes(ids, currentId))
     })
     this.change({filters})
-  },
-  addEntity (id) {
+  }
+
+  addEntity = (id) => {
     const ids = isArray(id) ? id : [id]
     const module = this.getDraftModule()
     const filters = assign({}, module.filters, {
       id: uniq(module.filters.id.concat(ids))
     })
     this.change({filters})
-  },
-  removeAttribute (_attribute_, forceRedraw = false) {
+  }
+
+  removeAttribute = (_attribute_, forceRedraw = false) => {
     const {attributes} = this.context
     const removedAttributesIds = isArray(_attribute_) ? _attribute_ : [_attribute_]
     const module = this.getDraftModule()
@@ -220,8 +238,9 @@ const ModuleEdit = React.createClass({
     changes.metrics = uniq(changes.metrics)
 
     this.change(changes, forceRedraw)
-  },
-  addAttribute (_attribute_) {
+  }
+
+  addAttribute = (_attribute_) => {
     const {attributes} = this.context
     const selectedAttributeIds = isArray(_attribute_) ? _attribute_ : [_attribute_]
     const module = this.getDraftModule()
@@ -263,8 +282,9 @@ const ModuleEdit = React.createClass({
     changes.metrics = uniq(changes.metrics)
 
     this.change(changes)
-  },
-  change (changes, forceRedraw = false) {
+  }
+
+  change = (changes, forceRedraw = false) => {
     const newModule = assign({}, this.state.newModule, changes)
     const redrawIfNecessary = () => {
       if (forceRedraw || changes.sort) {
@@ -273,12 +293,14 @@ const ModuleEdit = React.createClass({
     }
 
     this.setState({newModule}, redrawIfNecessary)
-  },
-  cancel () {
+  }
+
+  cancel = () => {
     this.props.save(this.state.oldModule)
     this.props.close()
-  },
-  save () {
+  }
+
+  save = () => {
     const {activeOnly} = this.context
     const draftModule = assign({}, this.state.newModule)
     const ids = map(this.getDraftEntity().list, 'id')
@@ -294,17 +316,21 @@ const ModuleEdit = React.createClass({
 
     this.props.save(draftModule, true)
     this.props.close()
-  },
-  redraw () {
+  }
+
+  redraw = () => {
     this.props.save(this.state.newModule)
-  },
-  getDraftModule () {
+  }
+
+  getDraftModule = () => {
     return assign({}, this.context.module, this.state.newModule)
-  },
-  getDraftEntity () {
+  }
+
+  getDraftEntity = () => {
     return this.context.entities[this.state.newModule.entity]
-  },
-  getInvalidPermutation (dimensions, metrics) {
+  }
+
+  getInvalidPermutation = (dimensions, metrics) => {
     const {attributes} = this.context
     const selected = concat(dimensions, metrics)
     const isSelected = id => includes(selected, id)
@@ -324,8 +350,9 @@ const ModuleEdit = React.createClass({
     forEach(selected, checkForConflict)
 
     return invalidPermutation
-  },
-  getAttributeSelectionLimit (dimensions, metrics) {
+  }
+
+  getAttributeSelectionLimit = (dimensions, metrics) => {
     let tooManyDimensions = null
     let tooManyMetrics = null
 
@@ -339,7 +366,8 @@ const ModuleEdit = React.createClass({
     }
 
     return {tooManyMetrics, tooManyDimensions}
-  },
+  }
+
   render () {
     const {name, type, dimensions, metrics, filters} = this.getDraftModule()
     const numberOfSelectedAccounts = this.context.getUsedAccounts(filters.id).length
@@ -368,6 +396,6 @@ const ModuleEdit = React.createClass({
         save={this.save}/>
     )
   }
-})
+}
 
 export default ModuleEdit

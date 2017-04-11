@@ -1,7 +1,7 @@
-import React from 'react'
+import PropTypes from 'prop-types'
 
-export default React.PropTypes.shape({
-  metrics: React.PropTypes.array,
-  dimensions: React.PropTypes.array,
-  attributes: React.PropTypes.object
+export default PropTypes.shape({
+  metrics: PropTypes.array,
+  dimensions: PropTypes.array,
+  attributes: PropTypes.object
 })

@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import csjs from 'csjs'
 import {styled} from '../../mixins/styled'
 import head from 'lodash/head'
@@ -34,19 +36,19 @@ const style = csjs`
   color: grey;
 }`
 
-const TotalChart = React.createClass({
+const TotalChart = createReactClass({
   displayName: 'Total-Chart',
   mixins: [styled(style)],
   propTypes: {
-    name: React.PropTypes.string.isRequired,
-    attributes: React.PropTypes.object,
-    query: React.PropTypes.shape({
-      metrics: React.PropTypes.array
+    name: PropTypes.string.isRequired,
+    attributes: PropTypes.object,
+    query: PropTypes.shape({
+      metrics: PropTypes.array
     }).isRequired,
-    result: React.PropTypes.array.isRequired
+    result: PropTypes.array.isRequired
   },
   contextTypes: {
-    locales: React.PropTypes.string
+    locales: PropTypes.string
   },
   render () {
     const {query: {metrics}, name, result, attributes} = this.props

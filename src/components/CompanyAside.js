@@ -1,5 +1,6 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import PropTypes from 'prop-types'
 import {node} from './higher-order/branch'
 import {Navigation, NavLink, NavBt, NavBts, Name} from './Navigation'
 import Recent from './Recent'
@@ -53,11 +54,11 @@ export const CompanyAside = ({company, params, dispatch}) => {
 
 CompanyAside.displayName = 'Company-Aside'
 CompanyAside.propTypes = {
-  dispatch: React.PropTypes.func.isRequired,
-  params: React.PropTypes.object.isRequired,
-  company: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    name: React.PropTypes.string
+  dispatch: PropTypes.func.isRequired,
+  params: PropTypes.object.isRequired,
+  company: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string
   })
 }
 

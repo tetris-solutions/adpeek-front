@@ -1,30 +1,33 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {updateReportAction} from '../../actions/update-report'
 import Input from '../Input'
 import debounce from 'lodash/debounce'
 
 const tStyle = {width: '100%', padding: 0}
 
-const NameInput = React.createClass({
-  displayName: 'Report-Name-Input',
-  propTypes: {
-    dispatch: React.PropTypes.func.isRequired,
-    params: React.PropTypes.object.isRequired,
-    report: React.PropTypes.shape({
-      id: React.PropTypes.string,
-      name: React.PropTypes.string,
-      description: React.PropTypes.string
+class NameInput extends React.Component {
+  static displayName = 'Report-Name-Input'
+
+  static propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    params: PropTypes.object.isRequired,
+    report: PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      description: PropTypes.string
     }).isRequired
-  },
-  contextTypes: {
-    messages: React.PropTypes.object.isRequired
-  },
-  getInitialState () {
-    return {
-      name: this.props.report.name,
-      description: this.props.report.description
-    }
-  },
+  }
+
+  static contextTypes = {
+    messages: PropTypes.object.isRequired
+  }
+
+  state = {
+    name: this.props.report.name,
+    description: this.props.report.description
+  }
+
   componentDidMount () {
     this.save = debounce(() => {
       const {dispatch, params, report} = this.props
@@ -35,10 +38,12 @@ const NameInput = React.createClass({
         description: this.state.description
       })
     }, 1000)
-  },
-  onChange ({target: {value, name}}) {
+  }
+
+  onChange = ({target: {value, name}}) => {
     this.setState({[name]: value}, this.save)
-  },
+  }
+
   render () {
     const {name, description} = this.state
     return (
@@ -63,6 +68,6 @@ const NameInput = React.createClass({
       </div>
     )
   }
-})
+}
 
 export default NameInput

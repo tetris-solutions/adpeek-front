@@ -1,13 +1,14 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Button} from './Button'
 import {Form, Content, Header, Footer} from './Card'
 
 function BudgetEmptySelection ({
-  createBudget,
-  amount,
-  available
-}) {
+                                 createBudget,
+                                 amount,
+                                 available
+                               }) {
   function onSubmit (e) {
     e.preventDefault()
     createBudget()
@@ -38,9 +39,9 @@ function BudgetEmptySelection ({
 
 BudgetEmptySelection.displayName = 'Budget-Empty-Selection'
 BudgetEmptySelection.propTypes = {
-  createBudget: React.PropTypes.func,
-  available: React.PropTypes.number,
-  amount: React.PropTypes.number
+  createBudget: PropTypes.func,
+  available: PropTypes.number,
+  amount: PropTypes.number
 }
 
 export default BudgetEmptySelection

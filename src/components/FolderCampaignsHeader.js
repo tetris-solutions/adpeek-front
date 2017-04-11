@@ -1,5 +1,6 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import PropTypes from 'prop-types'
 import HeaderSearchBox from './HeaderSearchBox'
 import SubHeader from './SubHeader'
 import {Button} from './Button'
@@ -20,12 +21,12 @@ export const FolderCampaignsHeader = ({onChange, isLoading, onClickRefresh}) => 
 
 FolderCampaignsHeader.displayName = 'Campaigns-Header'
 FolderCampaignsHeader.propTypes = {
-  isLoading: React.PropTypes.bool,
-  company: React.PropTypes.string,
-  workspace: React.PropTypes.string,
-  folder: React.PropTypes.string,
-  onClickRefresh: React.PropTypes.func,
-  onChange: React.PropTypes.func
+  isLoading: PropTypes.bool,
+  company: PropTypes.string,
+  workspace: PropTypes.string,
+  folder: PropTypes.string,
+  onClickRefresh: PropTypes.func,
+  onChange: PropTypes.func
 }
 
 export default FolderCampaignsHeader

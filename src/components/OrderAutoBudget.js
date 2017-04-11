@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import {styled} from './mixins/styled'
 import csjs from 'csjs'
 import {node} from './higher-order/branch'
@@ -7,18 +9,18 @@ import AutoBudgetLogs from './AutoBudgetLogs'
 const style = csjs`
 `
 
-export const OrderAutoBudget = React.createClass({
+export const OrderAutoBudget = createReactClass({
   displayName: 'OrderAutoBudget',
   mixins: [styled(style)],
   contextTypes: {
-    router: React.PropTypes.object,
-    moment: React.PropTypes.func
+    router: PropTypes.object,
+    moment: PropTypes.func
   },
   propTypes: {
-    order: React.PropTypes.object,
-    folder: React.PropTypes.object,
-    routeParams: React.PropTypes.object,
-    params: React.PropTypes.object
+    order: PropTypes.object,
+    folder: PropTypes.object,
+    routeParams: PropTypes.object,
+    params: PropTypes.object
   },
   onChangeDay (e) {
     const {company, workspace, folder, order} = this.props.params

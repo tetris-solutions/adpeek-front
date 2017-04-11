@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import AdGroup from './AdGroup'
 import map from 'lodash/map'
 import csjs from 'csjs'
@@ -30,11 +32,11 @@ function fitWrapper (wrapper) {
   wrapper.style.height = (window.innerHeight - rect.top - 20) + 'px'
 }
 
-export const AdGroups = React.createClass({
+export const AdGroups = createReactClass({
   displayName: 'AdGroups',
   mixins: [styled(style)],
   propTypes: {
-    adGroups: React.PropTypes.array
+    adGroups: PropTypes.array
   },
   getDefaultProps () {
     return {

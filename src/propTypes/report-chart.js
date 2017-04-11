@@ -1,12 +1,12 @@
-import React from 'react'
+import PropTypes from 'prop-types'
 
 export default {
-  result: React.PropTypes.array,
-  query: React.PropTypes.shape({
-    dimensions: React.PropTypes.array,
-    metrics: React.PropTypes.array
+  result: PropTypes.array,
+  query: PropTypes.shape({
+    dimensions: PropTypes.array,
+    metrics: PropTypes.array
   }),
-  entity: React.PropTypes.shape({
-    id: React.PropTypes.string
+  entity: PropTypes.shape({
+    id: PropTypes.string
   }).isRequired
 }

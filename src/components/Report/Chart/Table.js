@@ -17,6 +17,8 @@ import stableSort from 'stable'
 import toPairs from 'lodash/toPairs'
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import isNumber from 'lodash/isNumber'
 import {prettyNumber} from '../../../functions/pretty-number'
 import entityType from '../../../propTypes/report-entity'
@@ -110,10 +112,10 @@ const THeader = ({columns, attributes, sortPairs, toggle}) => (
 
 THeader.displayName = 'Report-Result-THeader'
 THeader.propTypes = {
-  columns: React.PropTypes.array,
-  sortPairs: React.PropTypes.object,
-  toggle: React.PropTypes.func,
-  attributes: React.PropTypes.object
+  columns: PropTypes.array,
+  sortPairs: PropTypes.object,
+  toggle: PropTypes.func,
+  attributes: PropTypes.object
 }
 
 function Cell ({attribute: {is_metric, type, is_percentage}, value: raw}, {locales, moment}) {
@@ -166,15 +168,15 @@ Cell.defaultProps = {
   }
 }
 Cell.contextTypes = {
-  locales: React.PropTypes.string.isRequired,
-  moment: React.PropTypes.func.isRequired
+  locales: PropTypes.string.isRequired,
+  moment: PropTypes.func.isRequired
 }
 Cell.displayName = 'Report-Result-Cell'
 Cell.propTypes = {
-  value: React.PropTypes.any,
-  attribute: React.PropTypes.shape({
-    is_metric: React.PropTypes.bool.isRequired,
-    type: React.PropTypes.string
+  value: PropTypes.any,
+  attribute: PropTypes.shape({
+    is_metric: PropTypes.bool.isRequired,
+    type: PropTypes.string
   }).isRequired
 }
 
@@ -191,9 +193,9 @@ const TBody = ({rows, columns, attributes}) => (
 
 TBody.displayName = 'Report-Result-TBody'
 TBody.propTypes = {
-  rows: React.PropTypes.arrayOf(React.PropTypes.object),
-  columns: React.PropTypes.array,
-  attributes: React.PropTypes.object
+  rows: PropTypes.arrayOf(PropTypes.object),
+  columns: PropTypes.array,
+  attributes: PropTypes.object
 }
 
 const EmptyTBody = ({isLoading, columns}) => (
@@ -208,25 +210,28 @@ const EmptyTBody = ({isLoading, columns}) => (
 
 EmptyTBody.displayName = 'Report-Result-Empty-TBody'
 EmptyTBody.propTypes = {
-  isLoading: React.PropTypes.bool.isRequired,
-  columns: React.PropTypes.array.isRequired
+  isLoading: PropTypes.bool.isRequired,
+  columns: PropTypes.array.isRequired
 }
 EmptyTBody.defaultProps = {
   isLoading: false
 }
 
-const ReportModuleTableTH = React.createClass({
-  displayName: 'Header',
-  propTypes: {
-    id: React.PropTypes.string.isRequired,
-    name: React.PropTypes.string.isRequired,
-    is_metric: React.PropTypes.bool,
-    toggle: React.PropTypes.func,
-    order: React.PropTypes.oneOf(['asc', 'desc'])
-  },
-  onClick () {
+class ReportModuleTableTH extends React.Component {
+  static displayName = 'Header'
+
+  static propTypes = {
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    is_metric: PropTypes.bool,
+    toggle: PropTypes.func,
+    order: PropTypes.oneOf(['asc', 'desc'])
+  }
+
+  onClick = () => {
     this.props.toggle(this.props.id)
-  },
+  }
+
   render () {
     const {toggle, name, is_metric, order} = this.props
     const classes = cx({
@@ -247,25 +252,25 @@ const ReportModuleTableTH = React.createClass({
       </th>
     )
   }
-})
+}
 
 const crop = (ls, n) => n ? ls.slice(0, n) : ls
 
-const ReportModuleTable = React.createClass({
+const ReportModuleTable = createReactClass({
   displayName: 'Module-Table',
   mixins: [styled(style)],
   propTypes: {
-    channels: React.PropTypes.object,
-    sort: React.PropTypes.array,
-    change: React.PropTypes.func,
-    limit: React.PropTypes.number,
-    isLoading: React.PropTypes.bool,
-    name: React.PropTypes.string,
+    channels: PropTypes.object,
+    sort: PropTypes.array,
+    change: PropTypes.func,
+    limit: PropTypes.number,
+    isLoading: PropTypes.bool,
+    name: PropTypes.string,
     reportParams: reportParamsType,
-    query: React.PropTypes.object,
+    query: PropTypes.object,
     entity: entityType,
-    attributes: React.PropTypes.object.isRequired,
-    result: React.PropTypes.array.isRequired
+    attributes: PropTypes.object.isRequired,
+    result: PropTypes.array.isRequired
   },
   getDefaultProps () {
     return {
@@ -410,7 +415,7 @@ const VideoWrapper = props => (
 
 VideoWrapper.displayName = 'Video-Table-Wrapper'
 VideoWrapper.propTypes = {
-  company: React.PropTypes.object
+  company: PropTypes.object
 }
 
 const WithChannel = node('user', 'company', VideoWrapper)

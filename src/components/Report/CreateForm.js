@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import Input from '../Input'
 import FormMixin from '../mixins/FormMixin'
 import {createReportAction} from '../../actions/create-report'
@@ -10,21 +12,21 @@ import SubHeader from '../SubHeader'
 import join from 'lodash/join'
 import compact from 'lodash/compact'
 
-const ReportCreate = React.createClass({
+const ReportCreate = createReactClass({
   displayName: 'Create-Report',
   mixins: [FormMixin],
   contextTypes: {
-    router: React.PropTypes.object,
-    tree: React.PropTypes.object
+    router: PropTypes.object,
+    tree: PropTypes.object
   },
   propTypes: {
-    location: React.PropTypes.shape({
-      query: React.PropTypes.object
+    location: PropTypes.shape({
+      query: PropTypes.object
     }).isRequired,
-    params: React.PropTypes.shape({
-      company: React.PropTypes.string,
-      workspace: React.PropTypes.string,
-      folder: React.PropTypes.string
+    params: PropTypes.shape({
+      company: PropTypes.string,
+      workspace: PropTypes.string,
+      folder: PropTypes.string
     }).isRequired
   },
   handleSubmit (e) {

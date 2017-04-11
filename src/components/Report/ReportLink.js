@@ -1,35 +1,39 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {loadReportsAction} from '../../actions/load-reports'
 import get from 'lodash/get'
 
-const ReportLink = React.createClass({
-  displayName: 'Report-Link',
-  propTypes: {
-    tag: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.func
+class ReportLink extends React.Component {
+  static displayName = 'Report-Link'
+
+  static propTypes = {
+    tag: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.func
     ]).isRequired,
-    params: React.PropTypes.object.isRequired,
-    children: React.PropTypes.node.isRequired,
-    reports: React.PropTypes.array,
-    dispatch: React.PropTypes.func.isRequired
-  },
-  contextTypes: {
-    router: React.PropTypes.object.isRequired
-  },
-  getInitialState () {
-    return {
-      isLoading: false,
-      isReady: false
-    }
-  },
+    params: PropTypes.object.isRequired,
+    children: PropTypes.node.isRequired,
+    reports: PropTypes.array,
+    dispatch: PropTypes.func.isRequired
+  }
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
+
+  state = {
+    isLoading: false,
+    isReady: false
+  }
+
   componentDidUpdate () {
     if (!this.gone && this.state.isReady && this.props.reports) {
       this.gone = true
       this.context.router.push(this.getUrl())
     }
-  },
-  loadReports () {
+  }
+
+  loadReports = () => {
     const {reports, dispatch, params} = this.props
     const onReady = () => this.setState({isReady: true})
 
@@ -41,13 +45,15 @@ const ReportLink = React.createClass({
 
     return dispatch(loadReportsAction, params, true)
       .then(onReady)
-  },
-  onClick () {
+  }
+
+  onClick = () => {
     if (this.state.isLoading) return
 
     this.loadReports()
-  },
-  getUrl () {
+  }
+
+  getUrl = () => {
     const {params, reports} = this.props
     const {company, workspace, folder} = params
 
@@ -69,7 +75,8 @@ const ReportLink = React.createClass({
     }
 
     return `${baseUrl}/report/${mainReportId}`
-  },
+  }
+
   render () {
     const {children, tag: Tag} = this.props
 
@@ -79,6 +86,6 @@ const ReportLink = React.createClass({
       </Tag>
     )
   }
-})
+}
 
 export default ReportLink

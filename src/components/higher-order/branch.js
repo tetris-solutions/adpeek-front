@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import isFunction from 'lodash/isFunction'
 import findIndex from 'lodash/findIndex'
 import isString from 'lodash/isString'
@@ -27,7 +28,7 @@ const Placeholder = props => props.children
 
 Placeholder.displayName = 'Node'
 Placeholder.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 }
 
 /**
@@ -79,29 +80,35 @@ export function branch (mapping, Component = Placeholder, maxWatchDepth = 1) {
     return false
   }
 
-  return React.createClass({
-    displayName: `branch(${Component.displayName})`,
-    contextTypes: {
-      tree: React.PropTypes.object.isRequired,
-      cursors: React.PropTypes.object,
-      params: React.PropTypes.object
-    },
-    childContextTypes: {
-      cursors: React.PropTypes.object
-    },
-    propTypes: {
-      params: React.PropTypes.object
-    },
+  return class extends React.Component {
+    static displayName = `branch(${Component.displayName})`
+
+    static contextTypes = {
+      tree: PropTypes.object.isRequired,
+      cursors: PropTypes.object,
+      params: PropTypes.object
+    }
+
+    static childContextTypes = {
+      cursors: PropTypes.object
+    }
+
+    static propTypes = {
+      params: PropTypes.object
+    }
+
     componentWillMount () {
       const {tree} = this.context
 
       this.dispatcher = (fn, ...args) => fn(tree, ...args)
-    },
+    }
+
     getChildContext () {
       return {
         cursors: assign({}, this.context.cursors, this.getCursors())
       }
-    },
+    }
+
     componentDidMount () {
       const {tree} = this.context
 
@@ -111,40 +118,47 @@ export function branch (mapping, Component = Placeholder, maxWatchDepth = 1) {
         this.dead = true
         tree.off('update', this.onUpdate)
       }
-    },
-    onUpdate (event) {
+    }
+
+    onUpdate = (event) => {
       const relatedToEvent = path => matchUpdatedPath(path, event)
       const changedPath = find(this.getCursors(), relatedToEvent)
 
       if (changedPath) {
         this.refresh()
       }
-    },
+    }
+
     componentWillUnmount () {
       if (this.release) {
         this.release()
       }
-    },
-    getCursors () {
+    }
+
+    getCursors = () => {
       return mappingToCursors(
         mapping,
         this.extendedProps(),
         this.context
       )
-    },
-    getParams () {
+    }
+
+    getParams = () => {
       return assign({}, this.context.params, this.props.params)
-    },
-    extendedProps () {
+    }
+
+    extendedProps = () => {
       return assign({}, this.props, {
         params: this.getParams()
       })
-    },
-    refresh () {
+    }
+
+    refresh = () => {
       if (!this.dead) {
         this.forceUpdate()
       }
-    },
+    }
+
     render () {
       const {tree} = this.context
       const props = this.extendedProps()
@@ -167,7 +181,7 @@ export function branch (mapping, Component = Placeholder, maxWatchDepth = 1) {
 
       return <Component {...props} />
     }
-  })
+  }
 }
 
 /**
@@ -185,12 +199,14 @@ export function derivative (parent, name, resolverOrComponent, Component, maxDep
 
   Component = Component || resolverOrComponent
 
-  return React.createClass({
-    displayName: `${name}(${Component.displayName})`,
-    contextTypes: {
-      tree: React.PropTypes.object.isRequired,
-      cursors: React.PropTypes.object.isRequired
-    },
+  return class extends React.Component {
+    static displayName = `${name}(${Component.displayName})`
+
+    static contextTypes = {
+      tree: PropTypes.object.isRequired,
+      cursors: PropTypes.object.isRequired
+    }
+
     componentWillMount () {
       const solver = (props, context) => {
         const {tree, cursors} = this.context
@@ -210,13 +226,14 @@ export function derivative (parent, name, resolverOrComponent, Component, maxDep
       }
 
       this.Branch = branch(solver, Component, maxDepthWatch)
-    },
+    }
+
     render () {
       const {Branch} = this
 
       return <Branch {...this.props}/>
     }
-  })
+  }
 }
 
 export const collection = derivative

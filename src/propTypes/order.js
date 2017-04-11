@@ -1,11 +1,11 @@
-import React from 'react'
+import PropTypes from 'prop-types'
 import budgetPropTypes from './budget'
 
-export default React.PropTypes.shape({
-  name: React.PropTypes.string,
-  start: React.PropTypes.string,
-  end: React.PropTypes.string,
-  auto_budget: React.PropTypes.bool,
-  amount: React.PropTypes.number,
-  budgets: React.PropTypes.arrayOf(budgetPropTypes)
+export default PropTypes.shape({
+  name: PropTypes.string,
+  start: PropTypes.string,
+  end: PropTypes.string,
+  auto_budget: PropTypes.bool,
+  amount: PropTypes.number,
+  budgets: PropTypes.arrayOf(budgetPropTypes)
 })

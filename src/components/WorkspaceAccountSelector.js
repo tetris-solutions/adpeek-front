@@ -9,6 +9,8 @@ import upperFirst from 'lodash/upperFirst'
 import Autosuggest from 'react-autosuggest'
 import Message from 'intl-messageformat'
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import {removeFromStart} from '../functions/remove-from-start'
 import {loadCompanyAccountsAction} from '../actions/load-company-accounts'
 import {node} from './higher-order/branch'
@@ -146,7 +148,7 @@ function Suggestion ({name}) {
 
 Suggestion.displayName = 'Suggestion'
 Suggestion.propTypes = {
-  name: React.PropTypes.string
+  name: PropTypes.string
 }
 
 /**
@@ -161,25 +163,25 @@ function getSuggestions (accounts, platform, value) {
   return filter(accounts, matchingName)
 }
 
-export const WorkspaceAccountSelector = React.createClass({
+export const WorkspaceAccountSelector = createReactClass({
   displayName: 'Workspace-Account-Selector',
   mixins: [styled(style)],
   contextTypes: {
-    locales: React.PropTypes.string,
-    messages: React.PropTypes.object
+    locales: PropTypes.string,
+    messages: PropTypes.object
   },
   propTypes: {
-    disabled: React.PropTypes.bool,
-    company: React.PropTypes.shape({
-      id: React.PropTypes.string,
-      accounts: React.PropTypes.array
+    disabled: PropTypes.bool,
+    company: PropTypes.shape({
+      id: PropTypes.string,
+      accounts: PropTypes.array
     }),
-    onLoad: React.PropTypes.func,
-    platform: React.PropTypes.string,
-    dispatch: React.PropTypes.func,
-    value: React.PropTypes.string,
-    account: React.PropTypes.object,
-    onChange: React.PropTypes.func
+    onLoad: PropTypes.func,
+    platform: PropTypes.string,
+    dispatch: PropTypes.func,
+    value: PropTypes.string,
+    account: PropTypes.object,
+    onChange: PropTypes.func
   },
   getDefaultProps () {
     const noop = () => false

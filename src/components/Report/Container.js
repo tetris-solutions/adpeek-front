@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import concat from 'lodash/concat'
 import head from 'lodash/head'
 import uniq from 'lodash/uniq'
@@ -43,51 +44,55 @@ const Placeholder = ({reportLiteMode, children}) => (
 
 Placeholder.displayName = 'Report-Placeholder'
 Placeholder.propTypes = {
-  children: React.PropTypes.node.isRequired,
-  reportLiteMode: React.PropTypes.bool
+  children: PropTypes.node.isRequired,
+  reportLiteMode: PropTypes.bool
 }
 
 const propTypes = {
-  children: React.PropTypes.node,
-  reportLiteMode: React.PropTypes.bool,
-  editMode: React.PropTypes.bool,
-  isGuestUser: React.PropTypes.bool,
-  dispatch: React.PropTypes.func.isRequired,
-  report: React.PropTypes.object.isRequired,
-  params: React.PropTypes.object.isRequired,
-  metaData: React.PropTypes.object,
-  campaigns: React.PropTypes.array,
-  adSets: React.PropTypes.array,
-  adGroups: React.PropTypes.array,
-  ads: React.PropTypes.array,
-  videos: React.PropTypes.array,
-  keywords: React.PropTypes.array,
-  accounts: React.PropTypes.arrayOf(React.PropTypes.shape({
-    external_id: React.PropTypes.string,
-    tetris_id: React.PropTypes.string,
-    platform: React.PropTypes.string
+  children: PropTypes.node,
+  reportLiteMode: PropTypes.bool,
+  editMode: PropTypes.bool,
+  isGuestUser: PropTypes.bool,
+  dispatch: PropTypes.func.isRequired,
+  report: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
+  metaData: PropTypes.object,
+  campaigns: PropTypes.array,
+  adSets: PropTypes.array,
+  adGroups: PropTypes.array,
+  ads: PropTypes.array,
+  videos: PropTypes.array,
+  keywords: PropTypes.array,
+  accounts: PropTypes.arrayOf(PropTypes.shape({
+    external_id: PropTypes.string,
+    tetris_id: PropTypes.string,
+    platform: PropTypes.string
   })).isRequired
 }
 
-const Container = React.createClass({
-  displayName: 'Report-Container',
-  contextTypes: {
-    messages: React.PropTypes.object
-  },
-  propTypes,
-  getInitialState () {
-    return {isLoading: true}
-  },
+class Container extends React.Component {
+  static displayName = 'Report-Container'
+
+  static contextTypes = {
+    messages: PropTypes.object
+  }
+
+  static propTypes = propTypes
+  state = {isLoading: true}
+
   componentDidMount () {
     this.load()
-  },
-  isFolderLevel () {
+  }
+
+  isFolderLevel = () => {
     return inferLevelFromParams(this.props.params) === 'folder'
-  },
-  getPlatforms () {
+  }
+
+  getPlatforms = () => {
     return uniq(map(this.props.accounts, 'platform'))
-  },
-  entitiesSource () {
+  }
+
+  entitiesSource = () => {
     const {messages} = this.context
     const {campaigns, adSets, adGroups, ads, keywords, videos} = this.props
 
@@ -100,8 +105,9 @@ const Container = React.createClass({
       adGroups,
       videos
     }
-  },
-  calculateEntities ({messages, campaigns, adSets, ads, keywords, adGroups, videos}) {
+  }
+
+  calculateEntities = ({messages, campaigns, adSets, ads, keywords, adGroups, videos}) => {
     log.info('will mount report entities')
 
     const entities = [{
@@ -175,8 +181,9 @@ const Container = React.createClass({
     }
 
     return entities
-  },
-  getEntities () {
+  }
+
+  getEntities = () => {
     const newSource = this.entitiesSource()
     const anyChange = !this._source || !equals(this._source, newSource)
 
@@ -186,8 +193,9 @@ const Container = React.createClass({
     }
 
     return this._entities
-  },
-  loadEntities (account) {
+  }
+
+  loadEntities = (account) => {
     const {campaigns, params, dispatch} = this.props
 
     if (campaigns) {
@@ -195,8 +203,9 @@ const Container = React.createClass({
     }
 
     return dispatch(loadReportEntitiesAction, params, pick(account, 'tetris_id', 'external_id', 'platform'))
-  },
-  loadMultiPlatformMetaData (entity) {
+  }
+
+  loadMultiPlatformMetaData = (entity) => {
     const {metaData, dispatch} = this.props
 
     if (has(metaData, entity)) {
@@ -204,8 +213,9 @@ const Container = React.createClass({
     }
 
     return dispatch(loadCrossPlatformReportMetaDataAction, this.getPlatforms(), entity)
-  },
-  loadSinglePlatformMetaData (entity) {
+  }
+
+  loadSinglePlatformMetaData = (entity) => {
     const {metaData, dispatch} = this.props
     const platform = head(this.getPlatforms())
 
@@ -214,13 +224,15 @@ const Container = React.createClass({
     }
 
     return dispatch(loadReportMetaDataAction, platform, entity)
-  },
-  loadMetaData (entity) {
+  }
+
+  loadMetaData = (entity) => {
     return this.isFolderLevel()
       ? this.loadSinglePlatformMetaData(entity)
       : this.loadMultiPlatformMetaData(entity)
-  },
-  load () {
+  }
+
+  load = () => {
     const promises = concat(
       map(this.getEntities(), ({id}) => this.loadMetaData(id)),
       map(this.props.accounts, this.loadEntities)
@@ -228,12 +240,14 @@ const Container = React.createClass({
 
     Promise.all(promises)
       .then(() => this.setState({isLoading: false}))
-  },
-  getAccounts () {
+  }
+
+  getAccounts = () => {
     this._accounts = this._accounts || map(this.props.accounts, transformAccount)
 
     return this._accounts
-  },
+  }
+
   render () {
     if (this.state.isLoading || !this.props.metaData || !this.props.campaigns) {
       return (
@@ -254,7 +268,7 @@ const Container = React.createClass({
         entities={this.getEntities()}/>
     )
   }
-})
+}
 
 const Report = props => <Container {...props} />
 Report.propTypes = propTypes
@@ -266,7 +280,7 @@ const R = props =>
 
 R.displayName = 'Report-Wrapper'
 R.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 }
 
 export default R

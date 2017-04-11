@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import Switch from '../../../Switch'
 import {styledFnComponent} from '../../../higher-order/styled-fn-component'
@@ -29,8 +30,8 @@ const FilterSwitch = (props, {activeOnly, toggleActiveOnly}) => (
 
 FilterSwitch.displayName = 'Filter-Switch'
 FilterSwitch.contextTypes = {
-  activeOnly: React.PropTypes.bool.isRequired,
-  toggleActiveOnly: React.PropTypes.func.isRequired
+  activeOnly: PropTypes.bool.isRequired,
+  toggleActiveOnly: PropTypes.func.isRequired
 }
 
 export default styledFnComponent(FilterSwitch, style)

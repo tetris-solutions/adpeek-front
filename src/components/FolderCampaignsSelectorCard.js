@@ -3,6 +3,8 @@ import {Button, Submit} from './Button'
 import forEach from 'lodash/forEach'
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import Fence from './Fence'
 import map from 'lodash/map'
@@ -16,21 +18,23 @@ const style = csjs`
   height: 50vh
 }`
 
-const InactiveCampaigns = React.createClass({
-  displayName: 'Inactive-Campaigns',
-  propTypes: {
-    campaigns: React.PropTypes.array.isRequired,
-    renderer: React.PropTypes.func.isRequired,
-    readOnly: React.PropTypes.bool.isRequired
-  },
-  getInitialState () {
-    return {
-      isExpanded: false
-    }
-  },
-  toggle () {
+class InactiveCampaigns extends React.Component {
+  static displayName = 'Inactive-Campaigns'
+
+  static propTypes = {
+    campaigns: PropTypes.array.isRequired,
+    renderer: PropTypes.func.isRequired,
+    readOnly: PropTypes.bool.isRequired
+  }
+
+  state = {
+    isExpanded: false
+  }
+
+  toggle = () => {
     this.setState({isExpanded: !this.state.isExpanded})
-  },
+  }
+
   render () {
     const {isExpanded} = this.state
     const {campaigns, readOnly, renderer: Component} = this.props
@@ -56,26 +60,26 @@ const InactiveCampaigns = React.createClass({
       </section>
     )
   }
-})
+}
 
-export const FolderCampaignsSelector = React.createClass({
+export const FolderCampaignsSelector = createReactClass({
   displayName: 'Campaigns-Selector',
   mixins: [styled(style)],
   propTypes: {
-    campaigns: React.PropTypes.array.isRequired,
-    renderer: React.PropTypes.func.isRequired,
-    readOnly: React.PropTypes.bool.isRequired,
-    isLoading: React.PropTypes.bool,
-    headerColor: React.PropTypes.string,
-    headerTextColor: React.PropTypes.string,
-    title: React.PropTypes.node,
-    label: React.PropTypes.string,
-    onSelected: React.PropTypes.func
+    campaigns: PropTypes.array.isRequired,
+    renderer: PropTypes.func.isRequired,
+    readOnly: PropTypes.bool.isRequired,
+    isLoading: PropTypes.bool,
+    headerColor: PropTypes.string,
+    headerTextColor: PropTypes.string,
+    title: PropTypes.node,
+    label: PropTypes.string,
+    onSelected: PropTypes.func
   },
   contextTypes: {
-    messages: React.PropTypes.shape({
-      selectAllCampaigns: React.PropTypes.string,
-      deselectAllCampaigns: React.PropTypes.string
+    messages: PropTypes.shape({
+      selectAllCampaigns: PropTypes.string,
+      deselectAllCampaigns: PropTypes.string
     })
   },
   getInitialState () {

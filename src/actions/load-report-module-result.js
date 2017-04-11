@@ -176,7 +176,7 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
     if (sameQuery()) {
       if (largeResultCache[id] && sortConfigHasChanged()) {
         updateModuleResult(largeResultCache[id])
-          // .then(() => tree.commit())
+        // .then(() => tree.commit())
       }
 
       return

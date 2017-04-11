@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Link} from 'react-router'
 import {DropdownMenu, MenuItem} from './DropdownMenu'
 import {Button} from './Button'
@@ -24,35 +25,32 @@ const statusIcons = {
   all: 'playlist_add_check'
 }
 
-export const Creatives = React.createClass({
-  displayName: 'Creatives',
-  propTypes: {
-    dispatch: React.PropTypes.func,
-    folder: React.PropTypes.object.isRequired,
-    adGroups: React.PropTypes.array,
-    getAdGroupsWithRelevance: React.PropTypes.func,
-    platform: React.PropTypes.string,
-    params: React.PropTypes.object
-  },
-  contextTypes: {
-    location: React.PropTypes.object.isRequired
-  },
-  getInitialState () {
-    return {
-      loadingSearchTerms: false,
-      calculatingKPI: false,
-      calculatingRelevance: false,
-      isLoading: this.isAdwords()
-    }
-  },
-  isAdwords () {
+export class Creatives extends React.Component {
+  static displayName = 'Creatives'
+
+  static propTypes = {
+    dispatch: PropTypes.func,
+    folder: PropTypes.object.isRequired,
+    adGroups: PropTypes.array,
+    getAdGroupsWithRelevance: PropTypes.func,
+    platform: PropTypes.string,
+    params: PropTypes.object
+  }
+
+  static contextTypes = {
+    location: PropTypes.object.isRequired
+  }
+
+  isAdwords = () => {
     return this.props.platform === 'adwords'
-  },
+  }
+
   componentDidMount () {
     if (this.isAdwords()) {
       this.loadAdGroups()
     }
-  },
+  }
+
   componentWillReceiveProps (props, {location: {query}}) {
     const newFilter = query.filter || 'enabled'
     const currentFilter = this.getStatusFilter()
@@ -60,38 +58,44 @@ export const Creatives = React.createClass({
     if (!this.state.isLoading && newFilter !== currentFilter) {
       this.setState({isLoading: true}, this.loadAdGroups)
     }
-  },
-  onReportCreated (response) {
+  }
+
+  onReportCreated = (response) => {
     this.setState({creatingReport: false})
 
     window.location.href = response.data.url
-  },
-  loadAdGroups () {
+  }
+
+  loadAdGroups = () => {
     const {params, dispatch} = this.props
 
     this.loadingAdGroups = dispatch(loadAdGroupsAction, params, this.getStatusFilter())
       .then(() => this.setState({isLoading: false}))
-  },
-  onAdGroupsLoaded () {
+  }
+
+  onAdGroupsLoaded = () => {
     const {getAdGroupsWithRelevance, dispatch, params} = this.props
 
     dispatch(createAdGroupsReportAction, params, getAdGroupsWithRelevance())
       .then(this.onReportCreated)
-  },
-  extractReport () {
+  }
+
+  extractReport = () => {
     if (!this.isAdwords()) return
 
     this.setState({creatingReport: true})
 
     this.loadingAdGroups.then(this.onAdGroupsLoaded)
-  },
-  loadKeywordsRelevance () {
+  }
+
+  loadKeywordsRelevance = () => {
     this.setState({calculatingRelevance: true})
 
     this.loadingAdGroups.then(this.bulkLoadRelevance)
       .then(() => this.setState({calculatingRelevance: false}))
-  },
-  bulkLoadRelevance () {
+  }
+
+  bulkLoadRelevance = () => {
     const {dispatch, params, adGroups} = this.props
 
     const keywordList =
@@ -108,14 +112,16 @@ export const Creatives = React.createClass({
     })
 
     return promise
-  },
-  loadAdsKPI () {
+  }
+
+  loadAdsKPI = () => {
     this.setState({calculatingKPI: true})
 
     this.loadingAdGroups.then(this.bulkLoadAdsKPI)
       .then(() => this.setState({calculatingKPI: false}))
-  },
-  bulkLoadAdsKPI () {
+  }
+
+  bulkLoadAdsKPI = () => {
     const {dispatch, params, adGroups, folder} = this.props
 
     const ads = uniq(flatten(map(adGroups, ({ads}) => map(ads, 'id'))))
@@ -130,22 +136,26 @@ export const Creatives = React.createClass({
     })
 
     return promise
-  },
-  loadSearchTerms () {
+  }
+
+  loadSearchTerms = () => {
     this.setState({loadingSearchTerms: true})
 
     this.loadingAdGroups.then(this.fetchSearchTerms)
       .then(() => this.setState({loadingSearchTerms: false}))
-  },
-  fetchSearchTerms () {
+  }
+
+  fetchSearchTerms = () => {
     const {dispatch, params, adGroups} = this.props
 
     return dispatch(loadAdGroupSearchTermsAction, params, map(adGroups, 'id'))
-  },
-  getStatusFilter () {
+  }
+
+  getStatusFilter = () => {
     return this.context.location.query.filter || 'enabled'
-  },
-  statusProps (status) {
+  }
+
+  statusProps = (status) => {
     const {location: {pathname}} = this.context
     const props = {
       icon: statusIcons[status],
@@ -160,7 +170,15 @@ export const Creatives = React.createClass({
     }
 
     return props
-  },
+  }
+
+  state = {
+    loadingSearchTerms: false,
+    calculatingKPI: false,
+    calculatingRelevance: false,
+    isLoading: this.isAdwords()
+  }
+
   render () {
     const {
       loadingSearchTerms,
@@ -231,6 +249,6 @@ export const Creatives = React.createClass({
       </div>
     )
   }
-})
+}
 
 export default Creatives

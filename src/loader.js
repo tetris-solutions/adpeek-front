@@ -37,33 +37,35 @@ const tempSyncEnsure = fn => fn()
 //     }
 //   })
 
-export const piece = (loader, name = null) =>
-  React.createClass({
-    displayName: 'Piece',
-    componentWillMount () {
-      this.inject(noop)
-      // if (isServer) {
-      //   this.inject(noop)
-      // }
-    },
-    // componentDidMount () {
-    //   this.inject(() => this.forceUpdate())
-    // },
-    inject (callback) {
-      loader(comp => {
-        this.Component = name
-          ? comp[name].default
-          : comp.default
+export const piece = (loader, name = null) => class extends React.Component {
+  static displayName = 'Piece'
 
-        callback()
-      })
-    },
-    render () {
-      const {Component} = this
+  componentWillMount () {
+    this.inject(noop)
+    // if (isServer) {
+    //   this.inject(noop)
+    // }
+  }
 
-      return Component ? <Component {...this.props}/> : null
-    }
-  })
+  // componentDidMount () {
+  //   this.inject(() => this.forceUpdate())
+  // },
+  inject = (callback) => {
+    loader(comp => {
+      this.Component = name
+        ? comp[name].default
+        : comp.default
+
+      callback()
+    })
+  }
+
+  render () {
+    const {Component} = this
+
+    return Component ? <Component {...this.props}/> : null
+  }
+}
 
 const reportSection = provide => tempSyncEnsure(() => provide({
   folder: require('./components/FolderReport'),

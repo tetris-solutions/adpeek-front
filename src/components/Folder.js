@@ -5,6 +5,7 @@ import includes from 'lodash/includes'
 import lowerCase from 'lodash/toLower'
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import PropTypes from 'prop-types'
 import sortBy from 'lodash/sortBy'
 import Fence from './Fence'
 import FolderCampaignLi from './FolderCampaignLi'
@@ -23,41 +24,45 @@ import {Card, Content, Header} from './Card'
 const cleanStr = str => deburr(lowerCase(str))
 const hasFolder = ({folder}) => folder ? 1 : 0
 
-const FolderCampaigns = React.createClass({
-  displayName: 'Folder-Campaigns',
-  propTypes: {
-    dispatch: React.PropTypes.func,
-    folder: React.PropTypes.shape({
-      id: React.PropTypes.string,
-      looseCampaigns: React.PropTypes.array,
-      campaigns: React.PropTypes.array
+class FolderCampaigns extends React.Component {
+  static displayName = 'Folder-Campaigns'
+
+  static propTypes = {
+    dispatch: PropTypes.func,
+    folder: PropTypes.shape({
+      id: PropTypes.string,
+      looseCampaigns: PropTypes.array,
+      campaigns: PropTypes.array
     }),
-    params: React.PropTypes.shape({
-      company: React.PropTypes.string,
-      workspace: React.PropTypes.string,
-      folder: React.PropTypes.string
+    params: PropTypes.shape({
+      company: PropTypes.string,
+      workspace: PropTypes.string,
+      folder: PropTypes.string
     })
-  },
-  contextTypes: {
-    messages: React.PropTypes.shape({
-      unlinkCampaignsCallToAction: React.PropTypes.string,
-      linkCampaignsCallToAction: React.PropTypes.string
+  }
+
+  static contextTypes = {
+    messages: PropTypes.shape({
+      unlinkCampaignsCallToAction: PropTypes.string,
+      linkCampaignsCallToAction: PropTypes.string
     })
-  },
-  getInitialState () {
-    return {
-      isLoading: true
-    }
-  },
+  }
+
+  state = {
+    isLoading: true
+  }
+
   componentDidMount () {
     this.setupActions()
-  },
+  }
+
   componentWillReceiveProps (nextProps) {
     if (this.props.params.folder !== nextProps.params.folder) {
       this.setupActions(nextProps)
     }
-  },
-  setupActions (props = this.props) {
+  }
+
+  setupActions = (props = this.props) => {
     const {dispatch, params: {folder, company, workspace}} = props
 
     const loadLoose = () => {
@@ -89,11 +94,13 @@ const FolderCampaigns = React.createClass({
     this.unlink = executeAction(unlinkCampaignsAction)
 
     loadLoose()
-  },
-  setFilterValue (filterValue) {
+  }
+
+  setFilterValue = (filterValue) => {
     this.setState({filterValue})
-  },
-  refreshCampaigns () {
+  }
+
+  refreshCampaigns = () => {
     const {dispatch, params: {folder, company, workspace}} = this.props
 
     this.setState({isRefreshing: true})
@@ -103,7 +110,8 @@ const FolderCampaigns = React.createClass({
         this.setState({isRefreshing: false})
         throw err
       })
-  },
+  }
+
   render () {
     const {isRefreshing, filterValue, isLoading} = this.state
     const value = cleanStr(filterValue)
@@ -152,7 +160,7 @@ const FolderCampaigns = React.createClass({
       </div>
     )
   }
-})
+}
 
 const AnalyticsFolder = ({folder}) => (
   <div>
@@ -185,7 +193,7 @@ const AnalyticsFolder = ({folder}) => (
 
 AnalyticsFolder.displayName = 'Analytics-Folder'
 AnalyticsFolder.propTypes = {
-  folder: React.PropTypes.object
+  folder: PropTypes.object
 }
 
 export default node('workspace', 'folder',

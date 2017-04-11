@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
 import {styledFnComponent} from '../higher-order/styled-fn-component'
@@ -39,9 +40,9 @@ const Format = ({icon, onClick, children}) => (
 
 Format.displayName = 'Format'
 Format.propTypes = {
-  icon: React.PropTypes.string.isRequired,
-  onClick: React.PropTypes.func.isRequired,
-  children: React.PropTypes.node.isRequired
+  icon: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired
 }
 
 const ExportOptions = ({pdf, xls, cancel}) => (
@@ -70,31 +71,33 @@ const ExportOptions = ({pdf, xls, cancel}) => (
 
 ExportOptions.displayName = 'Pick-Type'
 ExportOptions.propTypes = {
-  xls: React.PropTypes.func.isRequired,
-  pdf: React.PropTypes.func.isRequired,
-  cancel: React.PropTypes.func.isRequired
+  xls: PropTypes.func.isRequired,
+  pdf: PropTypes.func.isRequired,
+  cancel: PropTypes.func.isRequired
 }
 const PickType = styledFnComponent(ExportOptions, style)
 
 const notReady = ({isLoading, result}) => isLoading || !result
 
-const ReportExportButton = React.createClass({
-  displayName: 'Report-Export-Button',
-  propTypes: {
-    cursors: React.PropTypes.object.isRequired,
-    create: React.PropTypes.func.isRequired,
-    isCreatingReport: React.PropTypes.bool.isRequired
-  },
-  contextTypes: {
-    location: React.PropTypes.object.isRequired
-  },
-  getInitialState () {
-    return {
-      isModalOpen: false,
-      waiting: false
-    }
-  },
-  getReportMetaData () {
+class ReportExportButton extends React.Component {
+  static displayName = 'Report-Export-Button'
+
+  static propTypes = {
+    cursors: PropTypes.object.isRequired,
+    create: PropTypes.func.isRequired,
+    isCreatingReport: PropTypes.bool.isRequired
+  }
+
+  static contextTypes = {
+    location: PropTypes.object.isRequired
+  }
+
+  state = {
+    isModalOpen: false,
+    waiting: false
+  }
+
+  getReportMetaData = () => {
     return {
       folder: get(this.props, 'folder.name'),
       workspace: get(this.props, 'workspace.name'),
@@ -104,22 +107,27 @@ const ReportExportButton = React.createClass({
       from: get(this.context, 'location.query.from'),
       to: get(this.context, 'location.query.to')
     }
-  },
-  exportAsPdf () {
+  }
+
+  exportAsPdf = () => {
     this.export('pdf', this.getReportMetaData())
     this.close()
-  },
-  exportAsXls () {
+  }
+
+  exportAsXls = () => {
     this.export('xls', this.getReportMetaData())
     this.close()
-  },
-  open () {
+  }
+
+  open = () => {
     this.setState({isModalOpen: true})
-  },
-  close () {
+  }
+
+  close = () => {
     this.setState({isModalOpen: false})
-  },
-  export (type, metaData) {
+  }
+
+  export = (type, metaData) => {
     const {report: {modules}} = this.props.cursors
     const stillLoading = some(modules, notReady)
 
@@ -131,7 +139,8 @@ const ReportExportButton = React.createClass({
       this.setState({isWaiting: false})
       this.props.create(type, metaData)
     }
-  },
+  }
+
   render () {
     const isLoading = this.props.isCreatingReport || this.state.isWaiting
 
@@ -152,7 +161,7 @@ const ReportExportButton = React.createClass({
       </MenuItem>
     )
   }
-})
+}
 
 export default many([
   ['user', 'company'],

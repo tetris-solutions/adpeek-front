@@ -1,5 +1,7 @@
 import csjs from 'csjs'
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import Chart from '../Chart/Chart'
 import {styled} from '../../mixins/styled'
 
@@ -9,14 +11,14 @@ const style = csjs`
   height: 100%;
 }`
 
-const ModuleCard = React.createClass({
+const ModuleCard = createReactClass({
   displayName: 'Module-Card',
   mixins: [styled(style)],
   propTypes: {
-    children: React.PropTypes.node.isRequired
+    children: PropTypes.node.isRequired
   },
   contextTypes: {
-    module: React.PropTypes.object.isRequired
+    module: PropTypes.object.isRequired
   },
   componentWillReceiveProps (props, {module: {cols, rows}}) {
     const {module} = this.context

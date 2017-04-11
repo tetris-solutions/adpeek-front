@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Input from '../../../Input'
 import Select from '../../../Select'
 import concat from 'lodash/concat'
@@ -93,37 +94,34 @@ const Filter = ({id, attribute, operator, value, secondary, options, drop, chang
 
 Filter.displayName = 'Filter'
 Filter.propTypes = {
-  id: React.PropTypes.number.isRequired,
-  attribute: React.PropTypes.string,
-  operator: React.PropTypes.oneOf(operators).isRequired,
-  value: React.PropTypes.any,
-  secondary: React.PropTypes.any,
-  options: React.PropTypes.array.isRequired,
-  drop: React.PropTypes.func.isRequired,
-  change: React.PropTypes.func.isRequired,
-  metaData: React.PropTypes.shape({
-    type: React.PropTypes.string
+  id: PropTypes.number.isRequired,
+  attribute: PropTypes.string,
+  operator: PropTypes.oneOf(operators).isRequired,
+  value: PropTypes.any,
+  secondary: PropTypes.any,
+  options: PropTypes.array.isRequired,
+  drop: PropTypes.func.isRequired,
+  change: PropTypes.func.isRequired,
+  metaData: PropTypes.shape({
+    type: PropTypes.string
   }).isRequired
 }
 
 Filter.contextTypes = {
-  messages: React.PropTypes.object.isRequired
+  messages: PropTypes.object.isRequired
 }
 
-const EditFilters = React.createClass({
-  displayName: 'Edit-Filters',
-  getInitialState () {
-    return {
-      filters: this.parseFilters()
-    }
-  },
-  contextTypes: {
-    messages: React.PropTypes.object.isRequired,
-    draft: React.PropTypes.object.isRequired,
-    change: React.PropTypes.func.isRequired,
-    selectable: React.PropTypes.object.isRequired
-  },
-  parseFilters () {
+class EditFilters extends React.Component {
+  static displayName = 'Edit-Filters'
+
+  static contextTypes = {
+    messages: PropTypes.object.isRequired,
+    draft: PropTypes.object.isRequired,
+    change: PropTypes.func.isRequired,
+    selectable: PropTypes.object.isRequired
+  }
+
+  parseFilters = () => {
     const {draft: {module}} = this.context
     const filters = [{
       attribute: 'limit',
@@ -139,8 +137,9 @@ const EditFilters = React.createClass({
         value,
         secondary
       })))
-  },
-  newFilter () {
+  }
+
+  newFilter = () => {
     const filters = concat(this.state.filters, {
       attribute: '',
       operator: 'equals',
@@ -149,8 +148,9 @@ const EditFilters = React.createClass({
     })
 
     this.setState({filters})
-  },
-  filterOutSelected (selectedHere) {
+  }
+
+  filterOutSelected = (selectedHere) => {
     const selectedElsewhere = this.state.filters
 
     return filter(this.context.selectable, ({id: attribute}) => (
@@ -158,20 +158,23 @@ const EditFilters = React.createClass({
         attribute === selectedHere || !find(selectedElsewhere, {attribute})
       )
     ))
-  },
-  getOptions (currentValue) {
+  }
+
+  getOptions = (currentValue) => {
     const selectable = sortBy(this.filterOutSelected(currentValue), 'name')
 
     return concat([{id: '', name: ''}], selectable)
-  },
-  getLimitFilter () {
+  }
+
+  getLimitFilter = () => {
     return {
       id: 'limit',
       name: this.context.messages.resultLimitLabel,
       type: 'integer'
     }
-  },
-  getFilterProps ({attribute, operator, value, secondary}) {
+  }
+
+  getFilterProps = ({attribute, operator, value, secondary}) => {
     const options = attribute === 'limit'
       ? [this.getLimitFilter()]
       : this.getOptions(attribute)
@@ -188,8 +191,9 @@ const EditFilters = React.createClass({
       options,
       metaData
     }
-  },
-  removeFilter (index) {
+  }
+
+  removeFilter = (index) => {
     const filters = concat(this.state.filters)
     const filterName = filters[index].attribute
 
@@ -199,7 +203,12 @@ const EditFilters = React.createClass({
     const oldFilters = this.context.draft.module.filters
 
     this.context.change({filters: omit(oldFilters, filterName)})
-  },
+  }
+
+  state = {
+    filters: this.parseFilters()
+  }
+
   componentWillMount () {
     const updateOnChange = (index, name, {target: {value, type}}) => {
       const oldFilters = this.context.draft.module.filters
@@ -233,7 +242,8 @@ const EditFilters = React.createClass({
     }
 
     this.onChange = curry(updateOnChange)
-  },
+  }
+
   render () {
     return (
       <section style={{height: '80vh', overflowY: 'auto'}}>
@@ -251,6 +261,6 @@ const EditFilters = React.createClass({
       </section>
     )
   }
-})
+}
 
 export default EditFilters

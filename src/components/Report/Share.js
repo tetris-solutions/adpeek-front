@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import UI from '../UI'
 import ReportContainer from './Container'
 import {many, branch} from '../higher-order/branch'
@@ -25,27 +26,31 @@ function Wrapper (props) {
 
 Wrapper.displayName = 'Report-Wrapper'
 Wrapper.propTypes = {
-  reportMetaData: React.PropTypes.object,
-  report: React.PropTypes.object.isRequired,
-  location: React.PropTypes.object.isRequired,
-  accounts: React.PropTypes.array.isRequired,
-  dispatch: React.PropTypes.func.isRequired,
-  params: React.PropTypes.object.isRequired,
-  level: React.PropTypes.string.isRequired
+  reportMetaData: PropTypes.object,
+  report: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
+  accounts: PropTypes.array.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  params: PropTypes.object.isRequired,
+  level: PropTypes.string.isRequired
 }
 
-const Share = React.createClass({
-  displayName: 'Report-Share',
-  propTypes: {
-    location: React.PropTypes.object.isRequired
-  },
-  contextTypes: {
-    tree: React.PropTypes.object.isRequired
-  },
-  childContextTypes: {
-    params: React.PropTypes.object,
-    company: React.PropTypes.object
-  },
+class Share extends React.Component {
+  static displayName = 'Report-Share'
+
+  static propTypes = {
+    location: PropTypes.object.isRequired
+  }
+
+  static contextTypes = {
+    tree: PropTypes.object.isRequired
+  }
+
+  static childContextTypes = {
+    params: PropTypes.object,
+    company: PropTypes.object
+  }
+
   componentWillMount () {
     const {params} = this.getReportShare()
     const level = inferLevelFromParams(params)
@@ -56,15 +61,18 @@ const Share = React.createClass({
       params.folder && ['workspace', 'folder'],
       [level, 'report']
     ]), branch('reportMetaData', Wrapper, 2))
-  },
+  }
+
   getChildContext () {
     const {params, company} = this.getReportShare()
 
     return {company, params}
-  },
-  getReportShare () {
+  }
+
+  getReportShare = () => {
     return this.context.tree.get('reportShare')
-  },
+  }
+
   render () {
     const Report = this.ReportWrapper
     const {level, accounts} = this.getReportShare()
@@ -78,6 +86,6 @@ const Share = React.createClass({
       </UI>
     )
   }
-})
+}
 
 export default Share

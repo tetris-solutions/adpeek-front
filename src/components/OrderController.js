@@ -10,6 +10,7 @@ import map from 'lodash/map'
 import sum from 'lodash/sum'
 import without from 'lodash/without'
 import React from 'react'
+import PropTypes from 'prop-types'
 import isObject from 'lodash/isObject'
 import orderType from '../propTypes/order'
 import OrderEdit from './OrderEdit'
@@ -52,71 +53,81 @@ function defaultBudgetName ({budgetLabel}, index) {
   return `${budgetLabel} #${index}`
 }
 
-export const OrderController = React.createClass({
-  displayName: 'Order-Controller',
-  propTypes: {
-    route: React.PropTypes.object.isRequired,
-    deliveryMethods: React.PropTypes.array,
+export class OrderController extends React.Component {
+  static displayName = 'Order-Controller'
+
+  static propTypes = {
+    route: PropTypes.object.isRequired,
+    deliveryMethods: PropTypes.array,
     order: orderType,
-    params: React.PropTypes.shape({
-      company: React.PropTypes.string,
-      workspace: React.PropTypes.string,
-      folder: React.PropTypes.string,
-      order: React.PropTypes.string
+    params: PropTypes.shape({
+      company: PropTypes.string,
+      workspace: PropTypes.string,
+      folder: PropTypes.string,
+      order: PropTypes.string
     }),
-    dispatch: React.PropTypes.func,
-    campaigns: React.PropTypes.array,
-    maxCampaignsPerBudget: React.PropTypes.number
-  },
-  contextTypes: {
-    router: React.PropTypes.object,
-    messages: React.PropTypes.object
-  },
-  getInitialState () {
-    return {
-      dirty: false,
-      order: normalizeOrder(cloneDeep(this.props.order)),
-      selectedBudgetIndex: null
-    }
-  },
+    dispatch: PropTypes.func,
+    campaigns: PropTypes.array,
+    maxCampaignsPerBudget: PropTypes.number
+  }
+
+  static contextTypes = {
+    router: PropTypes.object,
+    messages: PropTypes.object
+  }
+
+  state = {
+    dirty: false,
+    order: normalizeOrder(cloneDeep(this.props.order)),
+    selectedBudgetIndex: null
+  }
+
   componentDidMount () {
     this.context.router.setRouteLeaveHook(this.props.route, this.onLeave)
     window.addEventListener('beforeunload', this.onUnload)
-  },
+  }
+
   componentWillUnmount () {
     window.removeEventListener('beforeunload', this.onUnload)
-  },
-  onUnload (e) {
+  }
+
+  onUnload = (e) => {
     if (this.state.dirty) {
       e.returnValue = this.context.messages.leaveOrderPrompt
     }
-  },
-  onLeave () {
+  }
+
+  onLeave = () => {
     return this.state.dirty
       ? this.context.messages.leaveOrderPrompt
       : true
-  },
-  updateOrder (order) {
+  }
+
+  updateOrder = (order) => {
     this.setState({order, dirty: true})
-  },
-  selectBudget (selectedBudgetIndex) {
+  }
+
+  selectBudget = (selectedBudgetIndex) => {
     if (selectedBudgetIndex === this.state.selectedBudgetIndex) {
       selectedBudgetIndex = null
     }
     this.setState({selectedBudgetIndex})
-  },
-  getCurrentBudget () {
+  }
+
+  getCurrentBudget = () => {
     const {selectedBudgetIndex, order} = this.state
 
     return order.budgets[selectedBudgetIndex]
-  },
-  setCurrentBudget (budget) {
+  }
+
+  setCurrentBudget = (budget) => {
     const {selectedBudgetIndex, order} = this.state
     order.budgets[selectedBudgetIndex] = budget
 
     this.updateOrder(order)
-  },
-  changeCurrentBudget (changes) {
+  }
+
+  changeCurrentBudget = (changes) => {
     this.setCurrentBudget(
       assign(
         {},
@@ -124,8 +135,9 @@ export const OrderController = React.createClass({
         changes
       )
     )
-  },
-  changeBudgetMode (mode) {
+  }
+
+  changeBudgetMode = (mode) => {
     const budget = this.getCurrentBudget()
     const {order} = this.state
     const changes = {mode}
@@ -139,15 +151,17 @@ export const OrderController = React.createClass({
     }
 
     this.changeCurrentBudget(changes)
-  },
-  changeOrderField (fieldOrChanges, value) {
+  }
+
+  changeOrderField = (fieldOrChanges, value) => {
     const changes = isObject(fieldOrChanges)
       ? fieldOrChanges
       : {[fieldOrChanges]: value}
 
     this.updateOrder(assign({}, this.state.order, changes))
-  },
-  changeBudgetField (field, value) {
+  }
+
+  changeBudgetField = (field, value) => {
     if (field === 'mode') {
       this.changeBudgetMode(value)
     } else if (field === 'value') {
@@ -160,13 +174,14 @@ export const OrderController = React.createClass({
     } else {
       this.changeCurrentBudget({[field]: value})
     }
-  },
+  }
+
   /**
    * include a list of campaigns in the selected budget
    * @param {Array.<String>} insertedCampaignIds campaign ids
    * @returns {undefined}
    */
-  addCampaigns (insertedCampaignIds) {
+  addCampaigns = (insertedCampaignIds) => {
     const budget = this.getCurrentBudget()
 
     const {campaigns} = this.props
@@ -183,13 +198,15 @@ export const OrderController = React.createClass({
     }
 
     this.setCurrentBudget(budget)
-  },
-  removeCampaign (campaign) {
+  }
+
+  removeCampaign = (campaign) => {
     this.changeCurrentBudget({
       campaigns: without(this.getCurrentBudget().campaigns, campaign)
     })
-  },
-  createBudget () {
+  }
+
+  createBudget = () => {
     const {deliveryMethods} = this.props
     const {order} = this.state
     const remainingAmount = availableAmount(order.amount, order.budgets)
@@ -205,22 +222,25 @@ export const OrderController = React.createClass({
 
     this.selectBudget(order.budgets.length)
     this.changeOrderField('budgets', order.budgets.concat([newBudget]))
-  },
-  removeBudget () {
+  }
+
+  removeBudget = () => {
     const {selectedBudgetIndex, order} = this.state
 
     order.budgets.splice(selectedBudgetIndex, 1)
 
     this.updateOrder(order)
     this.selectBudget(null)
-  },
-  run () {
+  }
+
+  run = () => {
     const {params, dispatch} = this.props
 
     dispatch(spawnAutoBudgetAction, params.order)
       .then(() => dispatch(pushSuccessMessageAction))
-  },
-  save () {
+  }
+
+  save = () => {
     const {router} = this.context
     const {dispatch, params} = this.props
     const isNewOrder = !params.order
@@ -250,7 +270,8 @@ export const OrderController = React.createClass({
     return dispatch(saveOrderAction, order)
       .then(onSuccess)
       .then(() => dispatch(pushSuccessMessageAction))
-  },
+  }
+
   render () {
     const {campaigns, maxCampaignsPerBudget} = this.props
     const {order, selectedBudgetIndex} = this.state
@@ -290,6 +311,6 @@ export const OrderController = React.createClass({
         folderCampaigns={folderCampaigns}/>
     )
   }
-})
+}
 
 export default OrderController

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {styledFnComponent} from './higher-order/styled-fn-component'
 import csjs from 'csjs'
 
@@ -27,10 +28,10 @@ export const Keyword = ({text, match_type, relevance}) => (
 
 Keyword.displayName = 'AdGroup-Keyword'
 Keyword.propTypes = {
-  relevance: React.PropTypes.oneOf(['UNKNOWN', 'BELOW_AVERAGE', 'AVERAGE', 'ABOVE_AVERAGE']),
-  text: React.PropTypes.string,
-  status: React.PropTypes.string,
-  match_type: React.PropTypes.string
+  relevance: PropTypes.oneOf(['UNKNOWN', 'BELOW_AVERAGE', 'AVERAGE', 'ABOVE_AVERAGE']),
+  text: PropTypes.string,
+  status: PropTypes.string,
+  match_type: PropTypes.string
 }
 
 export default styledFnComponent(Keyword, style)

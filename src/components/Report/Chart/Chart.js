@@ -2,6 +2,8 @@ import csjs from 'csjs'
 import ReactDOM from 'react-dom'
 import floor from 'lodash/floor'
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import reportEntityType from '../../../propTypes/report-entity'
 import reportModuleType from '../../../propTypes/report-module'
 import Column from './Column'
@@ -80,44 +82,44 @@ Chart.defaultProps = {
 }
 Chart.displayName = 'Pure-Chart'
 Chart.propTypes = {
-  change: React.PropTypes.func,
-  height: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number
+  change: PropTypes.func,
+  height: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
   ]),
-  renderHiddenTable: React.PropTypes.bool,
-  type: React.PropTypes.string,
-  locales: React.PropTypes.string,
-  sort: React.PropTypes.array,
-  limit: React.PropTypes.number,
-  isLoading: React.PropTypes.bool,
-  reportParams: React.PropTypes.object,
-  sourceWidth: React.PropTypes.number,
-  sourceHeight: React.PropTypes.number,
-  id: React.PropTypes.string,
-  name: React.PropTypes.string,
-  messages: React.PropTypes.object,
-  attributes: React.PropTypes.object,
-  entity: React.PropTypes.object,
-  result: React.PropTypes.array,
-  comments: React.PropTypes.array,
-  query: React.PropTypes.object
+  renderHiddenTable: PropTypes.bool,
+  type: PropTypes.string,
+  locales: PropTypes.string,
+  sort: PropTypes.array,
+  limit: PropTypes.number,
+  isLoading: PropTypes.bool,
+  reportParams: PropTypes.object,
+  sourceWidth: PropTypes.number,
+  sourceHeight: PropTypes.number,
+  id: PropTypes.string,
+  name: PropTypes.string,
+  messages: PropTypes.object,
+  attributes: PropTypes.object,
+  entity: PropTypes.object,
+  result: PropTypes.array,
+  comments: PropTypes.array,
+  query: PropTypes.object
 }
 
-const ChartContainer = React.createClass({
+const ChartContainer = createReactClass({
   displayName: 'Chart',
   mixins: [styled(style)],
   propTypes: {
-    change: React.PropTypes.func,
-    height: React.PropTypes.number
+    change: PropTypes.func,
+    height: PropTypes.number
   },
   contextTypes: {
-    messages: React.PropTypes.object,
-    locales: React.PropTypes.string,
+    messages: PropTypes.object,
+    locales: PropTypes.string,
     module: reportModuleType.isRequired,
     entity: reportEntityType.isRequired,
-    attributes: React.PropTypes.object.isRequired,
-    reportParams: React.PropTypes.object.isRequired
+    attributes: PropTypes.object.isRequired,
+    reportParams: PropTypes.object.isRequired
   },
   getInitialState () {
     return {

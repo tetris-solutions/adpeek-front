@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import pick from 'lodash/pick'
 import camelCase from 'lodash/camelCase'
 import cloneDeep from 'lodash/cloneDeep'
@@ -158,45 +159,50 @@ function hasChanged (configA, configB) {
   return !isEqualWith(newOptionsForComparision, oldOptionsForComparison, customComparison)
 }
 
-export const Chart = React.createClass({
-  displayName: 'Highcharts',
-  propTypes: {
-    tag: React.PropTypes.string,
-    children: React.PropTypes.node,
-    className: React.PropTypes.string,
-    style: React.PropTypes.object
-  },
-  getDefaultProps () {
-    return {
-      tag: 'div'
-    }
-  },
-  getInitialState () {
-    return {
-      config: mapPropsToConfig(this.props)
-    }
-  },
+export class Chart extends React.Component {
+  static displayName = 'Highcharts'
+
+  static propTypes = {
+    tag: PropTypes.string,
+    children: PropTypes.node,
+    className: PropTypes.string,
+    style: PropTypes.object
+  }
+
+  static defaultProps = {
+    tag: 'div'
+  }
+
+  state = {
+    config: mapPropsToConfig(this.props)
+  }
+
   componentDidMount () {
     this.draw()
     window.event$.on('aside-toggle', this.resizer)
-  },
+  }
+
   componentWillUnmount () {
     window.event$.off('aside-toggle', this.resizer)
-  },
-  resizer () {
+  }
+
+  resizer = () => {
     this.chart.reflow()
-  },
-  draw () {
+  }
+
+  draw = () => {
     this.refs.container.HCharts = this.chart = Highcharts.chart(
       this.refs.container,
       cloneDeep(this.state.config)
     )
-  },
-  hardRedraw () {
+  }
+
+  hardRedraw = () => {
     this.chart.destroy()
     this.draw()
-  },
-  updateSeries (series) {
+  }
+
+  updateSeries = (series) => {
     const oldSeries = find(this.chart.series, ['options.id', series.id])
 
     if (!oldSeries) {
@@ -204,7 +210,8 @@ export const Chart = React.createClass({
     }
 
     oldSeries.setData(series.data, doNotRedraw)
-  },
+  }
+
   componentWillReceiveProps (props) {
     const newConfig = mapPropsToConfig(props)
 
@@ -224,10 +231,12 @@ export const Chart = React.createClass({
 
       this.chart.redraw()
     }
-  },
+  }
+
   shouldComponentUpdate () {
     return false
-  },
+  }
+
   render () {
     const props = pick(this.props, 'className', 'style', 'onClick')
 
@@ -235,10 +244,11 @@ export const Chart = React.createClass({
 
     return React.createElement(this.props.tag, props)
   }
-})
+}
 
-export default React.createClass({
-  displayName: 'Loader',
+export default class extends React.Component {
+  static displayName = 'Loader'
+
   componentDidMount () {
     require.ensure([], require => {
       Highcharts = require('highcharts/highstock')
@@ -270,8 +280,9 @@ export default React.createClass({
 
       this.forceUpdate()
     })
-  },
+  }
+
   render () {
     return Highcharts ? <Chart {...this.props}/> : null
   }
-})
+}

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Link} from 'react-router'
 import {node} from './higher-order/branch'
 
@@ -10,18 +11,18 @@ export const OrderBreadcrumb = ({params: {company, workspace, folder}, order}, {
 
 OrderBreadcrumb.displayName = 'Order-Breadcrumb'
 OrderBreadcrumb.propTypes = {
-  order: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    name: React.PropTypes.string
+  order: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string
   }),
-  params: React.PropTypes.shape({
-    company: React.PropTypes.string,
-    workspace: React.PropTypes.string,
-    folder: React.PropTypes.string
+  params: PropTypes.shape({
+    company: PropTypes.string,
+    workspace: PropTypes.string,
+    folder: PropTypes.string
   })
 }
 OrderBreadcrumb.contextTypes = {
-  messages: React.PropTypes.object
+  messages: PropTypes.object
 }
 
 export default node('folder', 'order', OrderBreadcrumb)

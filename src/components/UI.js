@@ -1,34 +1,38 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Header from './Header'
 import {branch} from './higher-order/branch'
 import Loading from './Loading'
 
-const UI = React.createClass({
-  displayName: 'UI',
-  propTypes: {
-    hideLogin: React.PropTypes.bool,
-    children: React.PropTypes.node.isRequired,
-    userId: React.PropTypes.string,
-    isGuest: React.PropTypes.bool,
-    isAdmin: React.PropTypes.bool
-  },
-  childContextTypes: {
-    isLoggedIn: React.PropTypes.bool,
-    isGuest: React.PropTypes.bool,
-    isAdmin: React.PropTypes.bool
-  },
-  getDefaultProps () {
-    return {
-      hideLogin: false
-    }
-  },
+class UI extends React.Component {
+  static displayName = 'UI'
+
+  static propTypes = {
+    hideLogin: PropTypes.bool,
+    children: PropTypes.node.isRequired,
+    userId: PropTypes.string,
+    isGuest: PropTypes.bool,
+    isAdmin: PropTypes.bool
+  }
+
+  static childContextTypes = {
+    isLoggedIn: PropTypes.bool,
+    isGuest: PropTypes.bool,
+    isAdmin: PropTypes.bool
+  }
+
+  static defaultProps = {
+    hideLogin: false
+  }
+
   getChildContext () {
     return {
       isLoggedIn: Boolean(this.props.userId),
       isGuest: Boolean(this.props.isGuest),
       isAdmin: Boolean(this.props.isAdmin)
     }
-  },
+  }
+
   render () {
     const {children, hideLogin} = this.props
 
@@ -45,7 +49,7 @@ const UI = React.createClass({
       </div>
     )
   }
-})
+}
 
 export default branch({
   'userId': ['user', 'id'],

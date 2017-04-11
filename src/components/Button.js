@@ -1,5 +1,7 @@
 import React from 'react'
 
+import PropTypes from 'prop-types'
+
 const noop = () => false
 
 export function Button (props) {
@@ -9,8 +11,8 @@ export function Button (props) {
 Button.displayName = 'Button'
 
 Button.propTypes = {
-  disabled: React.PropTypes.bool,
-  onClick: React.PropTypes.func
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func
 }
 
 export function Submit (props) {

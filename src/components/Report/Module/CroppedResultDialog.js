@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Button} from '../../Button'
 import Message from 'tetris-iso/Message'
 import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
@@ -38,12 +39,12 @@ const CroppedResultDialog = ({module, size}, {messages, locales}) => (
 )
 CroppedResultDialog.displayName = 'Cropped-Result-Dialog'
 CroppedResultDialog.propTypes = {
-  module: React.PropTypes.string.isRequired,
-  size: React.PropTypes.number.isRequired
+  module: PropTypes.string.isRequired,
+  size: PropTypes.number.isRequired
 }
 CroppedResultDialog.contextTypes = {
-  messages: React.PropTypes.object.isRequired,
-  locales: React.PropTypes.string.isRequired
+  messages: PropTypes.object.isRequired,
+  locales: PropTypes.string.isRequired
 }
 
 export default CroppedResultDialog

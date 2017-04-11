@@ -2,6 +2,7 @@ import debounce from 'lodash/debounce'
 import map from 'lodash/map'
 import uniq from 'lodash/uniq'
 import React from 'react'
+import PropTypes from 'prop-types'
 import moduleType from '../../../propTypes/report-module'
 import reportEntityType from '../../../propTypes/report-entity'
 import reportParamsType from '../../../propTypes/report-params'
@@ -37,30 +38,41 @@ const reportContext = [
 
 const getAccountKeyFromId = id => id.substr(0, id.lastIndexOf(':'))
 
-const ModuleController = React.createClass({
-  displayName: 'Module-Controller',
-  propTypes: {
-    params: React.PropTypes.object.isRequired,
-    dispatch: React.PropTypes.func.isRequired,
-    editable: React.PropTypes.bool,
-    clone: React.PropTypes.func.isRequired,
+class ModuleController extends React.Component {
+  static displayName = 'Module-Controller'
+
+  static propTypes = {
+    params: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    editable: PropTypes.bool,
+    clone: PropTypes.func.isRequired,
     module: moduleType.isRequired,
-    attributes: React.PropTypes.object.isRequired,
+    attributes: PropTypes.object.isRequired,
     entity: reportEntityType.isRequired,
-    editMode: React.PropTypes.bool.isRequired
-  },
-  contextTypes: {
-    messages: React.PropTypes.object.isRequired,
-    locales: React.PropTypes.string.isRequired,
-    report: React.PropTypes.object.isRequired,
+    editMode: PropTypes.bool.isRequired
+  }
+
+  static contextTypes = {
+    messages: PropTypes.object.isRequired,
+    locales: PropTypes.string.isRequired,
+    report: PropTypes.object.isRequired,
     reportParams: reportParamsType.isRequired
-  },
-  childContextTypes: {
+  }
+
+  static childContextTypes = {
     entity: reportEntityType,
-    attributes: React.PropTypes.object,
-    module: React.PropTypes.object,
-    getUsedAccounts: React.PropTypes.func
-  },
+    attributes: PropTypes.object,
+    module: PropTypes.object,
+    getUsedAccounts: PropTypes.func
+  }
+
+  state = {
+    editMode: (
+      Boolean(this.props.editable) &&
+      isEmpty(this.props.module.metrics)
+    )
+  }
+
   getChildContext () {
     return {
       entity: this.props.entity,
@@ -68,28 +80,24 @@ const ModuleController = React.createClass({
       module: this.props.module,
       getUsedAccounts: this.getUsedAccounts
     }
-  },
-  getInitialState () {
-    return {
-      editMode: (
-        Boolean(this.props.editable) &&
-        isEmpty(this.props.module.metrics)
-      )
-    }
-  },
+  }
+
   componentDidMount () {
     this.fetchResult = debounce(this.startResultLoadingAction, 1000)
     this.fetchResult(this.getChartQuery())
-  },
+  }
+
   componentWillReceiveProps (nextProps) {
     if (nextProps.editMode && !this.props.editMode) {
       this.openModal()
     }
-  },
+  }
+
   componentDidUpdate () {
     this.fetchResult(this.getChartQuery())
-  },
-  startResultLoadingAction (query) {
+  }
+
+  startResultLoadingAction = (query) => {
     if (!query) {
       return
     }
@@ -97,8 +105,9 @@ const ModuleController = React.createClass({
     const {params, dispatch, module, attributes} = this.props
 
     return dispatch(loadReportModuleResultAction, params, module.id, query, attributes)
-  },
-  getChartQuery () {
+  }
+
+  getChartQuery = () => {
     const {reportParams} = this.context
     const {module, entity} = this.props
 
@@ -124,8 +133,9 @@ const ModuleController = React.createClass({
     }
 
     return this.rawQuery
-  },
-  getUsedAccounts (ids) {
+  }
+
+  getUsedAccounts = (ids) => {
     const {report: {platform}, reportParams: {accounts}} = this.context
 
     if (platform === this.$platform && accounts === this.$accounts) {
@@ -146,30 +156,36 @@ const ModuleController = React.createClass({
     }
 
     return this.$usedAccounts
-  },
-  remove () {
+  }
+
+  remove = () => {
     const {params, dispatch, module} = this.props
 
     return dispatch(deleteModuleAction, params, module.id)
-  },
-  save (moduleChanges, persistChanges) {
+  }
+
+  save = (moduleChanges, persistChanges) => {
     const {params, dispatch, module} = this.props
 
     return dispatch(updateModuleAction, params, module.id, moduleChanges, persistChanges)
-  },
-  clone () {
+  }
+
+  clone = () => {
     const {module} = this.props
     const {messages: {copyOfName}, locales} = this.context
     const name = new TextMessage(copyOfName, locales).format({name: module.name})
 
     this.props.clone(module.id, name)
-  },
-  openModal () {
+  }
+
+  openModal = () => {
     this.setState({editMode: true})
-  },
-  closeModal () {
+  }
+
+  closeModal = () => {
     this.setState({editMode: false})
-  },
+  }
+
   render () {
     const {params, dispatch, module, editable} = this.props
     const {messages: {untitledModule: defaultName, cloneModule: cloneLabel}} = this.context
@@ -217,6 +233,6 @@ const ModuleController = React.createClass({
       </ModuleCard>
     )
   }
-})
+}
 
 export default ModuleController

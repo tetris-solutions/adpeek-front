@@ -2,6 +2,8 @@ import omit from 'lodash/omit'
 import FormMixin from './mixins/FormMixin'
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import AccountSelector from './WorkspaceAccountSelector'
 import Input from './Input'
 import RolesSelector from './WorkspaceRolesSelector'
@@ -15,18 +17,18 @@ import {PropertySelector, ViewSelector} from './WorkspaceGAFieldSelector'
 import {loadGAPropertiesAction} from '../actions/load-ga-properties'
 import {loadGAViewsAction} from '../actions/load-ga-views'
 
-export const WorkspaceEdit = React.createClass({
+export const WorkspaceEdit = createReactClass({
   displayName: 'Workspace-Edit',
   mixins: [FormMixin, WorkspaceForm],
   propTypes: {
-    dispatch: React.PropTypes.func.isRequired,
-    params: React.PropTypes.shape({
-      workspace: React.PropTypes.string,
-      company: React.PropTypes.string
+    dispatch: PropTypes.func.isRequired,
+    params: PropTypes.shape({
+      workspace: PropTypes.string,
+      company: PropTypes.string
     }),
-    workspace: React.PropTypes.shape({
-      id: React.PropTypes.string,
-      name: React.PropTypes.string
+    workspace: PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string
     })
   },
   getInitialState () {

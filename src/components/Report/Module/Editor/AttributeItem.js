@@ -1,6 +1,8 @@
 import csjs from 'csjs'
 import cx from 'classnames'
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import {styled} from '../../../mixins/styled'
 
@@ -92,11 +94,11 @@ function TextAd ({onClick, className, headline, description, selectable}) {
 
 TextAd.displayName = 'Text-Ad'
 TextAd.propTypes = {
-  className: React.PropTypes.string.isRequired,
-  onClick: React.PropTypes.func.isRequired,
-  headline: React.PropTypes.string,
-  description: React.PropTypes.string,
-  selectable: React.PropTypes.bool
+  className: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  headline: PropTypes.string,
+  description: PropTypes.string,
+  selectable: PropTypes.bool
 }
 
 const GenericItem = ({onClick, className, id, name, selectable}) => (
@@ -107,14 +109,14 @@ const GenericItem = ({onClick, className, id, name, selectable}) => (
 
 GenericItem.displayName = 'Generic-Item'
 GenericItem.propTypes = {
-  className: React.PropTypes.string.isRequired,
-  onClick: React.PropTypes.func.isRequired,
-  name: React.PropTypes.string,
-  id: React.PropTypes.string.isRequired,
-  selectable: React.PropTypes.bool
+  className: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  name: PropTypes.string,
+  id: PropTypes.string.isRequired,
+  selectable: PropTypes.bool
 }
 
-const AttributeItem = React.createClass({
+const AttributeItem = createReactClass({
   displayName: 'Attribute-Item',
   mixins: [styled(style)],
   getDefaultProps () {
@@ -123,14 +125,14 @@ const AttributeItem = React.createClass({
     }
   },
   propTypes: {
-    id: React.PropTypes.string.isRequired,
-    name: React.PropTypes.string,
-    type: React.PropTypes.string,
-    urls: React.PropTypes.array,
-    headline: React.PropTypes.string,
-    description: React.PropTypes.string,
-    selected: React.PropTypes.bool.isRequired,
-    toggle: React.PropTypes.func
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    type: PropTypes.string,
+    urls: PropTypes.array,
+    headline: PropTypes.string,
+    description: PropTypes.string,
+    selected: PropTypes.bool.isRequired,
+    toggle: PropTypes.func
   },
   onClick (e) {
     e.persist()

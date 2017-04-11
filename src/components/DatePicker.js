@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Calendar} from 'react-date-range'
 import Tooltip from 'tetris-iso/Tooltip'
 import Input from './Input'
@@ -22,10 +23,10 @@ const DatePicker = (props, {moment}) => {
 
 DatePicker.displayName = 'Date-Picker'
 DatePicker.propTypes = {
-  value: React.PropTypes.string
+  value: PropTypes.string
 }
 DatePicker.contextTypes = {
-  moment: React.PropTypes.func.isRequired
+  moment: PropTypes.func.isRequired
 }
 
 export default DatePicker

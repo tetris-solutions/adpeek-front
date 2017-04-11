@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import UI from '../UI'
 import {Card, Header, Content, Footer} from '../Card'
 import Message from 'tetris-iso/Message'
@@ -39,12 +40,12 @@ const ExpiredReport = ({params, location}) => (
 
 ExpiredReport.displayName = 'Expired-Report'
 ExpiredReport.propTypes = {
-  location: React.PropTypes.shape({
-    pathname: React.PropTypes.string,
-    search: React.PropTypes.string
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+    search: PropTypes.string
   }),
-  params: React.PropTypes.shape({
-    report: React.PropTypes.string
+  params: PropTypes.shape({
+    report: PropTypes.string
   })
 }
 

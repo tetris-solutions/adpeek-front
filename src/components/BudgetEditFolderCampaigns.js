@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import withState from 'recompose/withState'
 import size from 'lodash/size'
 import map from 'lodash/map'
@@ -49,10 +50,10 @@ function BudgetEditFolderCampaigns ({add, isExpanded, setVisibility, campaigns})
 
 BudgetEditFolderCampaigns.displayName = 'Budget-Edit-Folder-Campaigns'
 BudgetEditFolderCampaigns.propTypes = {
-  isExpanded: React.PropTypes.bool.isRequired,
-  setVisibility: React.PropTypes.func.isRequired,
-  campaigns: React.PropTypes.array.isRequired,
-  add: React.PropTypes.func.isRequired
+  isExpanded: PropTypes.bool.isRequired,
+  setVisibility: PropTypes.func.isRequired,
+  campaigns: PropTypes.array.isRequired,
+  add: PropTypes.func.isRequired
 }
 
 export default enhance(BudgetEditFolderCampaigns)

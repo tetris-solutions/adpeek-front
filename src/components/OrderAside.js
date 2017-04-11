@@ -1,5 +1,6 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Link} from 'react-router'
 import Fence from './Fence'
 import DeleteButton from './DeleteButton'
@@ -46,18 +47,18 @@ export function OrderAside ({params, order, dispatch}, {router}) {
 
 OrderAside.displayName = 'Order-Aside'
 OrderAside.contextTypes = {
-  router: React.PropTypes.object
+  router: PropTypes.object
 }
 OrderAside.propTypes = {
-  dispatch: React.PropTypes.func,
-  order: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    name: React.PropTypes.string
+  dispatch: PropTypes.func,
+  order: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string
   }),
-  params: React.PropTypes.shape({
-    company: React.PropTypes.string,
-    workspace: React.PropTypes.string,
-    folder: React.PropTypes.string
+  params: PropTypes.shape({
+    company: PropTypes.string,
+    workspace: PropTypes.string,
+    folder: PropTypes.string
   })
 }
 

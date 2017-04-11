@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
 import csjs from 'csjs'
@@ -106,10 +107,10 @@ const colors = {
   neutral: 'grey-800'
 }
 
-const kpiType = React.PropTypes.shape({
-  name: React.PropTypes.string,
-  status: React.PropTypes.string,
-  text: React.PropTypes.string
+const kpiType = PropTypes.shape({
+  name: PropTypes.string,
+  status: PropTypes.string,
+  text: PropTypes.string
 })
 
 const DestinationUrl = ({url}) => (
@@ -128,7 +129,7 @@ const DestinationUrl = ({url}) => (
 
 DestinationUrl.displayName = 'Destination-URL'
 DestinationUrl.propTypes = {
-  url: React.PropTypes.string
+  url: PropTypes.string
 }
 
 function DisplayUrl ({display_url, final_urls, path_1, path_2}) {
@@ -143,10 +144,10 @@ function DisplayUrl ({display_url, final_urls, path_1, path_2}) {
 
 DisplayUrl.displayName = 'Display-URL'
 DisplayUrl.propTypes = {
-  display_url: React.PropTypes.string,
-  final_urls: React.PropTypes.array,
-  path_1: React.PropTypes.string,
-  path_2: React.PropTypes.string
+  display_url: PropTypes.string,
+  final_urls: PropTypes.array,
+  path_1: PropTypes.string,
+  path_2: PropTypes.string
 }
 
 let Banner = ({url, previewMode, setPreviewMode}) => url
@@ -161,9 +162,9 @@ let Banner = ({url, previewMode, setPreviewMode}) => url
 
 Banner.displayName = 'Banner'
 Banner.propTypes = {
-  url: React.PropTypes.string,
-  previewMode: React.PropTypes.bool,
-  setPreviewMode: React.PropTypes.func
+  url: PropTypes.string,
+  previewMode: PropTypes.bool,
+  setPreviewMode: PropTypes.func
 }
 
 Banner = withPreview(Banner)
@@ -183,8 +184,8 @@ const ImageAd = ({kpi, urls, final_urls}) => (
 ImageAd.displayName = 'Image-Ad'
 ImageAd.propTypes = {
   kpi: kpiType,
-  urls: React.PropTypes.array,
-  final_urls: React.PropTypes.array
+  urls: PropTypes.array,
+  final_urls: PropTypes.array
 }
 
 const KPI = ({kpi}) => (
@@ -238,16 +239,16 @@ const TextAd = ({kpi, headline, headline_part_1, headline_part_2, display_url, d
 TextAd.displayName = 'Text-Ad'
 TextAd.propTypes = {
   kpi: kpiType,
-  headline: React.PropTypes.string,
-  headline_part_1: React.PropTypes.string,
-  headline_part_2: React.PropTypes.string,
-  display_url: React.PropTypes.string,
-  description: React.PropTypes.string,
-  description_1: React.PropTypes.string,
-  description_2: React.PropTypes.string,
-  final_urls: React.PropTypes.array,
-  path_1: React.PropTypes.string,
-  path_2: React.PropTypes.string
+  headline: PropTypes.string,
+  headline_part_1: PropTypes.string,
+  headline_part_2: PropTypes.string,
+  display_url: PropTypes.string,
+  description: PropTypes.string,
+  description_1: PropTypes.string,
+  description_2: PropTypes.string,
+  final_urls: PropTypes.array,
+  path_1: PropTypes.string,
+  path_2: PropTypes.string
 }
 
 let TemplatePreview = ({url, previewMode, setPreviewMode}) => (
@@ -265,9 +266,9 @@ let TemplatePreview = ({url, previewMode, setPreviewMode}) => (
 
 TemplatePreview.displayName = 'Template-Preview'
 TemplatePreview.propTypes = {
-  url: React.PropTypes.string,
-  previewMode: React.PropTypes.bool,
-  setPreviewMode: React.PropTypes.func
+  url: PropTypes.string,
+  previewMode: PropTypes.bool,
+  setPreviewMode: PropTypes.func
 }
 TemplatePreview = withPreview(TemplatePreview)
 
@@ -279,25 +280,28 @@ const TemplateLink = ({url}) => (
 
 TemplateLink.displayName = 'Template-Link'
 TemplateLink.propTypes = {
-  url: React.PropTypes.string
+  url: PropTypes.string
 }
 
-const TemplateAd = React.createClass({
-  displayName: 'Template-Ad',
-  propTypes: {
-    id: React.PropTypes.string,
-    adgroup_id: React.PropTypes.string,
-    final_urls: React.PropTypes.array,
+class TemplateAd extends React.Component {
+  static displayName = 'Template-Ad'
+
+  static propTypes = {
+    id: PropTypes.string,
+    adgroup_id: PropTypes.string,
+    final_urls: PropTypes.array,
     kpi: kpiType,
-    urls: React.PropTypes.array,
-    preview: React.PropTypes.shape({
-      url: React.PropTypes.string
+    urls: PropTypes.array,
+    preview: PropTypes.shape({
+      url: PropTypes.string
     })
-  },
-  contextTypes: {
-    tree: React.PropTypes.object,
-    params: React.PropTypes.object
-  },
+  }
+
+  static contextTypes = {
+    tree: PropTypes.object,
+    params: PropTypes.object
+  }
+
   componentDidMount () {
     const {tree, params} = this.context
     const {urls, id, adgroup_id} = this.props
@@ -306,7 +310,8 @@ const TemplateAd = React.createClass({
     if (bundleId) {
       loadBundlePreviewUrlAction(tree, params, adgroup_id, id, bundleId)
     }
-  },
+  }
+
   render () {
     const {kpi, preview, final_urls, urls} = this.props
 
@@ -323,7 +328,7 @@ const TemplateAd = React.createClass({
       </div>
     )
   }
-})
+}
 
 let YouTubeAd = ({title, video_id, previewMode, setPreviewMode}) => (
   <div className={`${style.wrapper}`}>
@@ -347,10 +352,10 @@ let YouTubeAd = ({title, video_id, previewMode, setPreviewMode}) => (
 )
 YouTubeAd.displayName = 'YouTube-Ad'
 YouTubeAd.propTypes = {
-  video_id: React.PropTypes.string,
-  title: React.PropTypes.string,
-  previewMode: React.PropTypes.bool,
-  setPreviewMode: React.PropTypes.func
+  video_id: PropTypes.string,
+  title: PropTypes.string,
+  previewMode: PropTypes.bool,
+  setPreviewMode: PropTypes.func
 }
 
 YouTubeAd = withPreview(YouTubeAd)
@@ -373,7 +378,7 @@ function AdGroupAd (props) {
 
 AdGroupAd.displayName = 'AdGroup-Ad'
 AdGroupAd.propTypes = {
-  type: React.PropTypes.string
+  type: PropTypes.string
 }
 
 export default styledFnComponent(AdGroupAd, style)

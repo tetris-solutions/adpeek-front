@@ -2,6 +2,8 @@ import find from 'lodash/find'
 import map from 'lodash/map'
 import React from 'react'
 
+import PropTypes from 'prop-types'
+
 function TabHeader ({children, switchTab, id, active}) {
   function onClick (e) {
     e.preventDefault()
@@ -17,23 +19,20 @@ function TabHeader ({children, switchTab, id, active}) {
 
 TabHeader.displayName = 'Tab-Header'
 TabHeader.propTypes = {
-  active: React.PropTypes.bool.isRequired,
-  id: React.PropTypes.string.isRequired,
-  switchTab: React.PropTypes.func.isRequired,
-  children: React.PropTypes.node.isRequired
+  active: PropTypes.bool.isRequired,
+  id: PropTypes.string.isRequired,
+  switchTab: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired
 }
 
-export const Tabs = React.createClass({
-  displayName: 'Tabs',
-  propTypes: {
-    children: React.PropTypes.node.isRequired,
-    onChangeTab: React.PropTypes.func
-  },
-  getInitialState () {
-    return {
-      activeTab: this.findActiveTab()
-    }
-  },
+export class Tabs extends React.Component {
+  static displayName = 'Tabs'
+
+  static propTypes = {
+    children: PropTypes.node.isRequired,
+    onChangeTab: PropTypes.func
+  }
+
   componentWillReceiveProps (nextProps) {
     // abort if not in controlled mode
     if (!nextProps.onChangeTab) return
@@ -43,19 +42,26 @@ export const Tabs = React.createClass({
     if (newActiveTab !== this.state.activeTab) {
       this.setState({activeTab: newActiveTab})
     }
-  },
-  findActiveTab (props = this.props) {
+  }
+
+  findActiveTab = (props = this.props) => {
     const children = React.Children.toArray(props.children)
     const activeOne = find(children, ({props: {active}}) => active) || children[0]
 
     return activeOne ? activeOne.props.id : null
-  },
-  switchTab (activeTab) {
+  }
+
+  switchTab = (activeTab) => {
     if (this.props.onChangeTab) {
       this.props.onChangeTab(activeTab)
     }
     this.setState({activeTab})
-  },
+  }
+
+  state = {
+    activeTab: this.findActiveTab()
+  }
+
   render () {
     const {activeTab} = this.state
     const children = React.Children.toArray(this.props.children)
@@ -74,7 +80,7 @@ export const Tabs = React.createClass({
       </div>
     )
   }
-})
+}
 
 export function Tab ({children, id}) {
   return (
@@ -86,7 +92,7 @@ export function Tab ({children, id}) {
 
 Tab.displayName = 'Tab-Content'
 Tab.propTypes = {
-  id: React.PropTypes.string.isRequired,
-  title: React.PropTypes.node.isRequired,
-  children: React.PropTypes.node.isRequired
+  id: PropTypes.string.isRequired,
+  title: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired
 }

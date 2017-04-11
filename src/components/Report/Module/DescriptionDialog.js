@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Button} from '../../Button'
 import Message from 'tetris-iso/Message'
 import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
@@ -36,10 +37,10 @@ const DescriptionDialog = ({module}, {messages}) => (
 )
 DescriptionDialog.displayName = 'Description-Dialog'
 DescriptionDialog.propTypes = {
-  module: React.PropTypes.object.isRequired
+  module: PropTypes.object.isRequired
 }
 DescriptionDialog.contextTypes = {
-  messages: React.PropTypes.object.isRequired
+  messages: PropTypes.object.isRequired
 }
 
 export default DescriptionDialog

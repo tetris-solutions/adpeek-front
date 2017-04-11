@@ -1,4 +1,4 @@
-import React from 'react'
+import PropTypes from 'prop-types'
 import assign from 'lodash/assign'
 import find from 'lodash/find'
 import get from 'lodash/get'
@@ -13,16 +13,16 @@ import {loadGASegmentsAction} from '../../actions/load-ga-segments'
 export default {
   CREATE_OPTION_FLAG: '+1',
   contextTypes: {
-    router: React.PropTypes.object,
-    messages: React.PropTypes.object
+    router: PropTypes.object,
+    messages: PropTypes.object
   },
   propTypes: {
-    params: React.PropTypes.object,
-    cursors: React.PropTypes.object,
-    company: React.PropTypes.shape({
-      dashCampaigns: React.PropTypes.array
+    params: PropTypes.object,
+    cursors: PropTypes.object,
+    company: PropTypes.shape({
+      dashCampaigns: PropTypes.array
     }).isRequired,
-    dispatch: React.PropTypes.func.isRequired
+    dispatch: PropTypes.func.isRequired
   },
   getInitialState () {
     return {

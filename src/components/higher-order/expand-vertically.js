@@ -2,19 +2,20 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 export function expandVertically (Component) {
-  return React.createClass({
-    displayName: `ExpandVertically(${Component.displayName})`,
-    getInitialState () {
-      return {height: null}
-    },
+  return class extends React.Component {
+    static displayName = `ExpandVertically(${Component.displayName})`
+    state = {height: null}
+
     componentDidMount () {
       this.calcHeight()
       window.addEventListener('resize', this.calcHeight)
-    },
+    }
+
     componentWillUnmount () {
       window.removeEventListener('resize', this.calcHeight)
-    },
-    calcHeight () {
+    }
+
+    calcHeight = () => {
       /**
        * @type {HTMLElement}
        */
@@ -28,7 +29,8 @@ export function expandVertically (Component) {
           )
         )
       })
-    },
+    }
+
     render () {
       const {height} = this.state
 
@@ -36,5 +38,5 @@ export function expandVertically (Component) {
         ? <Component {...this.props} height={height}/>
         : <span />
     }
-  })
+  }
 }

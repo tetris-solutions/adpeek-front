@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Select from './Select'
 import {branch} from './higher-order/branch'
 import {changeLocaleAction} from 'tetris-iso/actions'
@@ -17,9 +18,9 @@ export function LocaleSelector ({dispatch, locale, userLocale}) {
 }
 
 LocaleSelector.propTypes = {
-  dispatch: React.PropTypes.func,
-  locale: React.PropTypes.string,
-  userLocale: React.PropTypes.string
+  dispatch: PropTypes.func,
+  locale: PropTypes.string,
+  userLocale: PropTypes.string
 }
 
 LocaleSelector.displayName = 'Locale-Selector'

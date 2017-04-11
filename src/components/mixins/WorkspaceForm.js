@@ -1,4 +1,4 @@
-import React from 'react'
+import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import {pushSuccessMessageAction} from '../../actions/push-success-message-action'
 import startsWith from 'lodash/startsWith'
@@ -9,12 +9,12 @@ import {loadGAViewsAction} from '../../actions/load-ga-views'
 
 export default {
   contextTypes: {
-    router: React.PropTypes.object,
-    messages: React.PropTypes.object
+    router: PropTypes.object,
+    messages: PropTypes.object
   },
   propTypes: {
-    params: React.PropTypes.object,
-    dispatch: React.PropTypes.func.isRequired
+    params: PropTypes.object,
+    dispatch: PropTypes.func.isRequired
   },
   getInitialState () {
     return {

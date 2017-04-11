@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Checkbox from './Checkbox'
 import {Link} from 'react-router'
 
@@ -24,16 +25,16 @@ export function FolderCampaignLi ({id, name, status, readOnly}, {params}) {
 
 FolderCampaignLi.displayName = 'Folder-Campaign-Li'
 FolderCampaignLi.propTypes = {
-  readOnly: React.PropTypes.bool,
-  id: React.PropTypes.string,
-  name: React.PropTypes.string,
-  status: React.PropTypes.shape({
-    icon: React.PropTypes.string,
-    description: React.PropTypes.string
+  readOnly: PropTypes.bool,
+  id: PropTypes.string,
+  name: PropTypes.string,
+  status: PropTypes.shape({
+    icon: PropTypes.string,
+    description: PropTypes.string
   })
 }
 FolderCampaignLi.contextTypes = {
-  params: React.PropTypes.object
+  params: PropTypes.object
 }
 
 export default FolderCampaignLi

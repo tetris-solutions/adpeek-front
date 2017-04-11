@@ -1,7 +1,7 @@
-import React from 'react'
+import PropTypes from 'prop-types'
 
-export default React.PropTypes.shape({
-  id: React.PropTypes.string,
-  external_id: React.PropTypes.string,
-  name: React.PropTypes.string
+export default PropTypes.shape({
+  id: PropTypes.string,
+  external_id: PropTypes.string,
+  name: PropTypes.string
 })

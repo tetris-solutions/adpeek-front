@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import {styled} from './mixins/styled'
 import csjs from 'csjs'
 import Middle from './VerticalAlign'
@@ -20,11 +22,11 @@ const style = csjs`
   height: 100%;
 }`
 
-export const LoadingHorizontal = React.createClass({
+export const LoadingHorizontal = createReactClass({
   displayName: 'Loading-Horizontal',
   mixins: [styled(style)],
   propTypes: {
-    children: React.PropTypes.node
+    children: PropTypes.node
   },
   componentDidMount () {
     window.componentHandler.upgradeElement(this.refs.prog)

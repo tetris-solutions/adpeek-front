@@ -1,6 +1,7 @@
 import some from 'lodash/some'
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import PropTypes from 'prop-types'
 import budgetType from '../propTypes/budget'
 import campaignType from '../propTypes/campaign'
 import orderType from '../propTypes/order'
@@ -16,22 +17,22 @@ import {Button} from './Button'
 const notPercentage = budget => budget && budget.mode === 'amount'
 
 export function OrderEdit ({
-  save,
-  runAutoBudget,
-  showFolderCampaigns,
-  createBudget,
-  removeBudget,
-  removeCampaign,
-  remainingValue,
-  remainingAmount,
-  addCampaigns,
-  selectBudget,
-  changeOrderField,
-  changeBudgetField,
-  budget,
-  order,
-  folderCampaigns
-}) {
+                             save,
+                             runAutoBudget,
+                             showFolderCampaigns,
+                             createBudget,
+                             removeBudget,
+                             removeCampaign,
+                             remainingValue,
+                             remainingAmount,
+                             addCampaigns,
+                             selectBudget,
+                             changeOrderField,
+                             changeBudgetField,
+                             budget,
+                             order,
+                             folderCampaigns
+                           }) {
   function closeBudget () {
     selectBudget(null)
   }
@@ -92,21 +93,21 @@ export function OrderEdit ({
 
 OrderEdit.displayName = 'Order-Edit'
 OrderEdit.propTypes = {
-  showFolderCampaigns: React.PropTypes.bool,
-  runAutoBudget: React.PropTypes.func,
-  save: React.PropTypes.func,
-  createBudget: React.PropTypes.func,
-  removeBudget: React.PropTypes.func,
-  removeCampaign: React.PropTypes.func,
-  remainingAmount: React.PropTypes.number,
-  remainingValue: React.PropTypes.number,
-  addCampaigns: React.PropTypes.func,
-  selectBudget: React.PropTypes.func,
-  changeOrderField: React.PropTypes.func,
-  changeBudgetField: React.PropTypes.func,
+  showFolderCampaigns: PropTypes.bool,
+  runAutoBudget: PropTypes.func,
+  save: PropTypes.func,
+  createBudget: PropTypes.func,
+  removeBudget: PropTypes.func,
+  removeCampaign: PropTypes.func,
+  remainingAmount: PropTypes.number,
+  remainingValue: PropTypes.number,
+  addCampaigns: PropTypes.func,
+  selectBudget: PropTypes.func,
+  changeOrderField: PropTypes.func,
+  changeBudgetField: PropTypes.func,
   budget: budgetType,
   order: orderType,
-  folderCampaigns: React.PropTypes.arrayOf(campaignType)
+  folderCampaigns: PropTypes.arrayOf(campaignType)
 }
 
 export default OrderEdit

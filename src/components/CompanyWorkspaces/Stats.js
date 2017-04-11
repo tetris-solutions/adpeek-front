@@ -1,6 +1,7 @@
 import isNumber from 'lodash/isNumber'
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import PropTypes from 'prop-types'
 import {prettyNumber} from '../../functions/pretty-number'
 import style from './style'
 
@@ -99,9 +100,9 @@ const Period = ({cost, budget, locales}) => (
 
 Period.displayName = 'Period'
 Period.propTypes = Daily.propTypes = {
-  locales: React.PropTypes.string,
-  budget: React.PropTypes.number,
-  cost: React.PropTypes.number
+  locales: PropTypes.string,
+  budget: PropTypes.number,
+  cost: PropTypes.number
 }
 
 const EmptyStats = ({lastOrder}, {moment}) => (
@@ -124,10 +125,10 @@ const EmptyStats = ({lastOrder}, {moment}) => (
 
 EmptyStats.displayName = 'Empty-Stats'
 EmptyStats.propTypes = {
-  lastOrder: React.PropTypes.object
+  lastOrder: PropTypes.object
 }
 EmptyStats.contextTypes = {
-  moment: React.PropTypes.func
+  moment: PropTypes.func
 }
 
 const Stats = ({open, yesterday, orders}, {locales, location: {query}}) => orders && !orders.count
@@ -153,23 +154,23 @@ Stats.defaultProps = {
 }
 
 Stats.propTypes = {
-  open: React.PropTypes.shape({
-    budget: React.PropTypes.number,
-    cost: React.PropTypes.number
+  open: PropTypes.shape({
+    budget: PropTypes.number,
+    cost: PropTypes.number
   }),
-  yesterday: React.PropTypes.shape({
-    budget: React.PropTypes.number,
-    cost: React.PropTypes.number
+  yesterday: PropTypes.shape({
+    budget: PropTypes.number,
+    cost: PropTypes.number
   }),
-  orders: React.PropTypes.shape({
-    count: React.PropTypes.number,
-    last: React.PropTypes.object
+  orders: PropTypes.shape({
+    count: PropTypes.number,
+    last: PropTypes.object
   })
 }
 
 Stats.contextTypes = {
-  locales: React.PropTypes.string.isRequired,
-  location: React.PropTypes.object.isRequired
+  locales: PropTypes.string.isRequired,
+  location: PropTypes.object.isRequired
 }
 
 export default Stats

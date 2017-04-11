@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Breadcrumbs from './Breadcrumbs'
 import {styledFnComponent} from './higher-order/styled-fn-component'
 import csjs from 'csjs'
@@ -24,8 +25,8 @@ export const SubHeaderButton = props => {
 
 SubHeaderButton.displayName = 'Sub-Header-Button'
 SubHeaderButton.propTypes = {
-  children: React.PropTypes.node.isRequired,
-  tag: React.PropTypes.oneOfType([React.PropTypes.func, React.PropTypes.string])
+  children: PropTypes.node.isRequired,
+  tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string])
 }
 
 const SubHeader = ({title, children}) => (
@@ -40,8 +41,8 @@ const SubHeader = ({title, children}) => (
 
 SubHeader.displayName = 'Sub-Header'
 SubHeader.propTypes = {
-  title: React.PropTypes.node,
-  children: React.PropTypes.node
+  title: PropTypes.node,
+  children: PropTypes.node
 }
 
 export default styledFnComponent(SubHeader, style)

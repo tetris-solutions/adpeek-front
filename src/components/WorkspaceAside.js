@@ -1,5 +1,6 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import PropTypes from 'prop-types'
 import Fence from './Fence'
 import DeleteButton from './DeleteButton'
 import {deleteWorkspaceAction} from '../actions/delete-workspace'
@@ -65,17 +66,17 @@ export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
 
 WorkspaceAside.displayName = 'Workspace-Aside'
 WorkspaceAside.contextTypes = {
-  router: React.PropTypes.object
+  router: PropTypes.object
 }
 WorkspaceAside.propTypes = {
-  dispatch: React.PropTypes.func,
-  workspace: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    name: React.PropTypes.string
+  dispatch: PropTypes.func,
+  workspace: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string
   }),
-  params: React.PropTypes.shape({
-    company: React.PropTypes.string,
-    workspace: React.PropTypes.string
+  params: PropTypes.shape({
+    company: PropTypes.string,
+    workspace: PropTypes.string
   })
 }
 

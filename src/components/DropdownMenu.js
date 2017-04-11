@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import csjs from 'csjs'
 import {styledFnComponent} from './higher-order/styled-fn-component'
 import Tooltip from 'tetris-iso/Tooltip'
@@ -65,10 +66,10 @@ MenuItem.defaultProps = {
   divider: false
 }
 MenuItem.propTypes = {
-  divider: React.PropTypes.bool,
-  tag: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.func]),
-  icon: React.PropTypes.string,
-  children: React.PropTypes.node.isRequired
+  divider: PropTypes.bool,
+  tag: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+  icon: PropTypes.string,
+  children: PropTypes.node.isRequired
 }
 
 export const HeaderMenuItem = props => (
@@ -78,7 +79,7 @@ export const HeaderMenuItem = props => (
 )
 
 HeaderMenuItem.propTypes = {
-  children: React.PropTypes.node.isRequired
+  children: PropTypes.node.isRequired
 }
 
 const DMenu = ({children, provide, hover}) => (
@@ -97,9 +98,9 @@ DMenu.defaultProps = {
 }
 DMenu.displayName = 'Dropdown-Menu'
 DMenu.propTypes = {
-  children: React.PropTypes.node.isRequired,
-  provide: React.PropTypes.array,
-  hover: React.PropTypes.bool
+  children: PropTypes.node.isRequired,
+  provide: PropTypes.array,
+  hover: PropTypes.bool
 }
 
 export const DropdownMenu = styledFnComponent(DMenu, style)

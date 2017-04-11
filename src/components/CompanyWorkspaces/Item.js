@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Link} from 'react-router'
 import {node} from '../higher-order/branch'
 import style from './style'
@@ -102,13 +103,13 @@ const Workspace = ({workspace, params, dispatch, reload}) => {
 }
 Workspace.displayName = 'Workspace'
 Workspace.propTypes = {
-  reload: React.PropTypes.func,
-  params: React.PropTypes.object.isRequired,
-  dispatch: React.PropTypes.func.isRequired,
-  workspace: React.PropTypes.object.isRequired
+  reload: PropTypes.func,
+  params: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  workspace: PropTypes.object.isRequired
 }
 Workspace.contextTypes = {
-  router: React.PropTypes.object
+  router: PropTypes.object
 }
 
 export default node('workspaces', 'workspace', Workspace)

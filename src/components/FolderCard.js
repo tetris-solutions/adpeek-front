@@ -1,5 +1,6 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import PropTypes from 'prop-types'
 import {ThumbLink, Cap, Gear} from './ThumbLink'
 import {DropdownMenu, MenuItem} from './DropdownMenu'
 import {Link} from 'react-router'
@@ -22,10 +23,10 @@ const DeleteFolder = ({params, dispatch, id, name}) => (
 )
 DeleteFolder.displayName = 'Delete-Folder'
 DeleteFolder.propTypes = {
-  id: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired,
-  params: React.PropTypes.object.isRequired,
-  dispatch: React.PropTypes.func.isRequired
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  params: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired
 }
 
 const platformColor = {
@@ -95,19 +96,19 @@ const FolderCard = ({id, account: {platform}, kpi_goal, name, stats, reports, ed
 
 FolderCard.displayName = 'Card'
 FolderCard.propTypes = {
-  id: React.PropTypes.string.isRequired,
-  reload: React.PropTypes.func,
-  hidden: React.PropTypes.bool,
-  kpi_goal: React.PropTypes.number,
-  account: React.PropTypes.shape({
-    platform: React.PropTypes.string
+  id: PropTypes.string.isRequired,
+  reload: PropTypes.func,
+  hidden: PropTypes.bool,
+  kpi_goal: PropTypes.number,
+  account: PropTypes.shape({
+    platform: PropTypes.string
   }).isRequired,
-  name: React.PropTypes.string.isRequired,
-  stats: React.PropTypes.object,
-  reports: React.PropTypes.array,
-  editable: React.PropTypes.bool.isRequired,
-  dispatch: React.PropTypes.func.isRequired,
-  params: React.PropTypes.object.isRequired
+  name: PropTypes.string.isRequired,
+  stats: PropTypes.object,
+  reports: PropTypes.array,
+  editable: PropTypes.bool.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  params: PropTypes.object.isRequired
 }
 
 const Folder = props => (
@@ -115,9 +116,9 @@ const Folder = props => (
 )
 Folder.displayName = 'Folder'
 Folder.propTypes = {
-  folder: React.PropTypes.object,
-  dispatch: React.PropTypes.func,
-  params: React.PropTypes.object
+  folder: PropTypes.object,
+  dispatch: PropTypes.func,
+  params: PropTypes.object
 }
 
 export default node('folders', 'folder', Folder)

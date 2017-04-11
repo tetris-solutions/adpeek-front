@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Checkbox from './Checkbox'
 import TextMessage from 'intl-messageformat'
 import {Link} from 'react-router'
@@ -53,23 +54,23 @@ FolderCampaignLooseLi.defaultProps = {
   is_adwords_video: false
 }
 FolderCampaignLooseLi.contextTypes = {
-  params: React.PropTypes.object,
-  messages: React.PropTypes.object,
-  locales: React.PropTypes.string
+  params: PropTypes.object,
+  messages: PropTypes.object,
+  locales: PropTypes.string
 }
 FolderCampaignLooseLi.propTypes = {
-  readOnly: React.PropTypes.bool,
-  platform: React.PropTypes.string,
-  external_id: React.PropTypes.string,
-  name: React.PropTypes.string,
-  is_adwords_video: React.PropTypes.bool,
-  folder: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    name: React.PropTypes.string
+  readOnly: PropTypes.bool,
+  platform: PropTypes.string,
+  external_id: PropTypes.string,
+  name: PropTypes.string,
+  is_adwords_video: PropTypes.bool,
+  folder: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string
   }),
-  status: React.PropTypes.shape({
-    icon: React.PropTypes.string,
-    description: React.PropTypes.string
+  status: PropTypes.shape({
+    icon: PropTypes.string,
+    description: PropTypes.string
   })
 }
 export default FolderCampaignLooseLi

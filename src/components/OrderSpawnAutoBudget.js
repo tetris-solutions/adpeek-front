@@ -1,28 +1,33 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
 import {Button} from './Button'
 
-const OrderSpawnAutoBudget = React.createClass({
-  displayName: 'Order-Spawn-Auto-Budget',
-  getInitialState () {
-    return {
-      isModalOpen: false
-    }
-  },
-  propTypes: {
-    runAutoBudget: React.PropTypes.func.isRequired
-  },
-  open () {
+class OrderSpawnAutoBudget extends React.Component {
+  static displayName = 'Order-Spawn-Auto-Budget'
+
+  static propTypes = {
+    runAutoBudget: PropTypes.func.isRequired
+  }
+
+  state = {
+    isModalOpen: false
+  }
+
+  open = () => {
     this.setState({isModalOpen: true})
-  },
-  close () {
+  }
+
+  close = () => {
     this.setState({isModalOpen: false})
-  },
-  confirm () {
+  }
+
+  confirm = () => {
     this.props.runAutoBudget()
     this.close()
-  },
+  }
+
   render () {
     return (
       <Button onClick={this.open} className='mdl-button mdl-color-text--grey-100'>
@@ -56,6 +61,6 @@ const OrderSpawnAutoBudget = React.createClass({
       </Button>
     )
   }
-})
+}
 
 export default OrderSpawnAutoBudget

@@ -7,6 +7,8 @@ import lowerCase from 'lodash/toLower'
 import property from 'lodash/property'
 import Autosuggest from 'react-autosuggest'
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import {removeFromStart} from '../functions/remove-from-start'
 import {styled} from './mixins/styled'
 import get from 'lodash/get'
@@ -115,24 +117,24 @@ function Suggestion ({text}) {
 
 Suggestion.displayName = 'Suggestion'
 Suggestion.propTypes = {
-  text: React.PropTypes.string
+  text: PropTypes.string
 }
 
-export const AutoSelect = React.createClass({
+export const AutoSelect = createReactClass({
   displayName: 'Auto-Select',
   mixins: [styled(style)],
   propTypes: {
-    disabled: React.PropTypes.bool,
-    prefix: React.PropTypes.string,
-    onChange: React.PropTypes.func,
-    selected: React.PropTypes.shape({
-      text: React.PropTypes.string,
-      value: React.PropTypes.string
+    disabled: PropTypes.bool,
+    prefix: PropTypes.string,
+    onChange: PropTypes.func,
+    selected: PropTypes.shape({
+      text: PropTypes.string,
+      value: PropTypes.string
     }),
-    placeholder: React.PropTypes.string,
-    options: React.PropTypes.arrayOf(React.PropTypes.shape({
-      value: React.PropTypes.string,
-      text: React.PropTypes.string
+    placeholder: PropTypes.string,
+    options: PropTypes.arrayOf(PropTypes.shape({
+      value: PropTypes.string,
+      text: PropTypes.string
     })).isRequired
   },
   getDefaultProps () {

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 
 const gTMSrc = `(function (w, d, s, l, i) {
@@ -80,9 +81,9 @@ const HTML = ({payload, children, css}) => (
 )
 
 HTML.propTypes = {
-  css: React.PropTypes.string,
-  payload: React.PropTypes.object,
-  children: React.PropTypes.node
+  css: PropTypes.string,
+  payload: PropTypes.object,
+  children: PropTypes.node
 }
 
 export default HTML

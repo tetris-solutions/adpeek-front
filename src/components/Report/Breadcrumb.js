@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Link} from 'react-router'
 import join from 'lodash/join'
 import compact from 'lodash/compact'
@@ -24,18 +25,18 @@ export function ReportBreadcrumb ({params: {company, workspace, folder}, report}
 
 ReportBreadcrumb.displayName = 'Report-Breadcrumb'
 ReportBreadcrumb.propTypes = {
-  report: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    name: React.PropTypes.string
+  report: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string
   }),
-  params: React.PropTypes.shape({
-    company: React.PropTypes.string,
-    workspace: React.PropTypes.string,
-    folder: React.PropTypes.string
+  params: PropTypes.shape({
+    company: PropTypes.string,
+    workspace: PropTypes.string,
+    folder: PropTypes.string
   })
 }
 ReportBreadcrumb.contextTypes = {
-  messages: React.PropTypes.object
+  messages: PropTypes.object
 }
 
 export default node(inferLevelFromProps, 'report', ReportBreadcrumb)

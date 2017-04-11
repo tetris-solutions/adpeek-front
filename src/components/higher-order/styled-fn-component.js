@@ -1,19 +1,21 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import assign from 'lodash/assign'
 
-export const styledFnComponent = (fnComponent, style) => React.createClass({
-  displayName: fnComponent.displayName,
-  propTypes: fnComponent.propTypes,
-  getDefaultProps () {
-    return fnComponent.defaultProps || {}
-  },
-  contextTypes: assign({
-    insertCss: React.PropTypes.func
-  }, fnComponent.contextTypes),
+export const styledFnComponent = (fnComponent, style) => class extends React.Component {
+  static displayName = fnComponent.displayName
+  static propTypes = fnComponent.propTypes
+  static defaultProps = fnComponent.defaultProps || {}
+
+  static contextTypes = assign({
+    insertCss: PropTypes.func
+  }, fnComponent.contextTypes)
+
   componentWillMount () {
     this.context.insertCss(style)
-  },
+  }
+
   render () {
     return fnComponent(this.props, this.context)
   }
-})
+}

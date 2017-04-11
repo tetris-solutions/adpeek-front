@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import Switch from './Switch'
 import {styled} from './mixins/styled'
 import csjs from 'csjs'
@@ -66,11 +68,11 @@ function replicateValue (form, name, value) {
     .forEach(setValue.bind(null, name, value))
 }
 
-export const EditableHeader = React.createClass({
+export const EditableHeader = createReactClass({
   displayName: 'Editable-Header',
   mixins: [styled(style)],
   contextTypes: {
-    moment: React.PropTypes.func
+    moment: PropTypes.func
   },
   getInitialState () {
     return {autoBudget: true}

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import OrdersClone from './OrdersClone'
 import {node} from './higher-order/branch'
 
@@ -7,8 +8,8 @@ const Orders = ({company: {orders}}) =>
 
 Orders.displayName = 'Company-Orders-Cloning'
 Orders.propTypes = {
-  company: React.PropTypes.shape({
-    orders: React.PropTypes.array
+  company: PropTypes.shape({
+    orders: PropTypes.array
   })
 }
 

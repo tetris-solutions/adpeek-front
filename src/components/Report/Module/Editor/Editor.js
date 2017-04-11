@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import csjs from 'csjs'
 import Message from 'tetris-iso/Message'
 import DateRangeButton from '../../DateRangeButton'
@@ -27,28 +29,28 @@ const style = csjs`
   float: right;
   margin-right: 1em
 }`
-const Editor = React.createClass({
+const Editor = createReactClass({
   displayName: 'Editor',
   mixins: [styled(style)],
   contextTypes: {
-    draft: React.PropTypes.object.isRequired,
-    messages: React.PropTypes.object.isRequired,
-    attributes: React.PropTypes.object.isRequired
+    draft: PropTypes.object.isRequired,
+    messages: PropTypes.object.isRequired,
+    attributes: PropTypes.object.isRequired
   },
   propTypes: {
-    invalidPermutation: React.PropTypes.array,
-    maxAccounts: React.PropTypes.number.isRequired,
-    numberOfSelectedAccounts: React.PropTypes.number.isRequired,
-    isInvalid: React.PropTypes.bool.isRequired,
-    isLoading: React.PropTypes.bool.isRequired,
-    tooManyDimensions: React.PropTypes.object,
-    tooManyMetrics: React.PropTypes.object,
-    save: React.PropTypes.func.isRequired,
-    redraw: React.PropTypes.func.isRequired,
-    cancel: React.PropTypes.func.isRequired
+    invalidPermutation: PropTypes.array,
+    maxAccounts: PropTypes.number.isRequired,
+    numberOfSelectedAccounts: PropTypes.number.isRequired,
+    isInvalid: PropTypes.bool.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    tooManyDimensions: PropTypes.object,
+    tooManyMetrics: PropTypes.object,
+    save: PropTypes.func.isRequired,
+    redraw: PropTypes.func.isRequired,
+    cancel: PropTypes.func.isRequired
   },
   childContextTypes: {
-    selectable: React.PropTypes.object
+    selectable: PropTypes.object
   },
   getChildContext () {
     const {attributes, draft} = this.context

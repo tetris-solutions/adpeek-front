@@ -1,4 +1,6 @@
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import FormMixin from './mixins/FormMixin'
 import Message from 'tetris-iso/Message'
 import Input from './Input'
@@ -12,12 +14,12 @@ import Page from './Page'
 import SubHeader from './SubHeader'
 import {PropertySelector, ViewSelector} from './WorkspaceGAFieldSelector'
 
-export const CreateWorkspace = React.createClass({
+export const CreateWorkspace = createReactClass({
   displayName: 'Create-Workspace',
   mixins: [FormMixin, WorkspaceForm],
   propTypes: {
-    dispatch: React.PropTypes.func,
-    params: React.PropTypes.object
+    dispatch: PropTypes.func,
+    params: PropTypes.object
   },
   getInitialState () {
     return {

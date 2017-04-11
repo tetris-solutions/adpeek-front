@@ -1,6 +1,7 @@
 import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import PropTypes from 'prop-types'
 import {branch} from './higher-order/branch'
 import SubHeader from './SubHeader'
 import {Container, Gear, Title, ThumbLink} from './ThumbLink'
@@ -42,8 +43,8 @@ const Companies = ({companies, dispatch}) => (
 
 Companies.displayName = 'Companies'
 Companies.propTypes = {
-  dispatch: React.PropTypes.func.isRequired,
-  companies: React.PropTypes.array
+  dispatch: PropTypes.func.isRequired,
+  companies: PropTypes.array
 }
 
 export default branch({companies: ['user', 'companies']}, Companies)

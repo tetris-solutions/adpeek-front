@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import NameInput from './NameInput'
 import replace from 'lodash/replace'
 import {Name} from '../Navigation'
@@ -28,8 +29,8 @@ const ReportAsideHeader = props => {
 
 ReportAsideHeader.displayName = 'Report-Aside-Header'
 ReportAsideHeader.propTypes = {
-  report: React.PropTypes.object.isRequired,
-  inEditMode: React.PropTypes.bool
+  report: PropTypes.object.isRequired,
+  inEditMode: PropTypes.bool
 }
 
 export default ReportAsideHeader

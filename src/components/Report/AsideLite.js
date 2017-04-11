@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {node} from '../higher-order/branch'
 import {inferLevelFromProps} from '../../functions/infer-level-from-params'
 import {Navigation, NavBts, NavBt} from '../Navigation'
@@ -26,9 +27,9 @@ const AsideLite = ({report, indexMode, setIndexMode}) => (
 
 AsideLite.displayName = 'Report-Aside-Lite'
 AsideLite.propTypes = {
-  report: React.PropTypes.object.isRequired,
-  indexMode: React.PropTypes.bool,
-  setIndexMode: React.PropTypes.func
+  report: PropTypes.object.isRequired,
+  indexMode: PropTypes.bool,
+  setIndexMode: PropTypes.func
 }
 
 export default node(inferLevelFromProps, 'report', enhance(AsideLite))

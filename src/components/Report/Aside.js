@@ -1,6 +1,7 @@
 import endsWith from 'lodash/endsWith'
 import Message from 'tetris-iso/Message'
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Link} from 'react-router'
 import TextMessage from 'intl-messageformat'
 import Fence from '../Fence'
@@ -115,21 +116,21 @@ export function ReportAside ({report, user, dispatch, indexMode, setIndexMode}, 
 
 ReportAside.displayName = 'Report-Aside'
 ReportAside.propTypes = {
-  dispatch: React.PropTypes.func,
-  user: React.PropTypes.object,
-  report: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    name: React.PropTypes.string
+  dispatch: PropTypes.func,
+  user: PropTypes.object,
+  report: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string
   }),
-  indexMode: React.PropTypes.bool,
-  setIndexMode: React.PropTypes.func
+  indexMode: PropTypes.bool,
+  setIndexMode: PropTypes.func
 }
 ReportAside.contextTypes = {
-  messages: React.PropTypes.object,
-  locales: React.PropTypes.string,
-  router: React.PropTypes.object,
-  location: React.PropTypes.object,
-  params: React.PropTypes.object
+  messages: PropTypes.object,
+  locales: PropTypes.string,
+  router: PropTypes.object,
+  location: PropTypes.object,
+  params: PropTypes.object
 }
 
 export default many([

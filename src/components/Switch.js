@@ -1,21 +1,23 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import cx from 'classnames'
 const isBrowser = typeof document !== 'undefined'
 
-export const Switch = React.createClass({
-  displayName: 'Switch',
-  propTypes: {
-    name: React.PropTypes.string,
-    onChange: React.PropTypes.func,
-    label: React.PropTypes.node,
-    checked: React.PropTypes.bool
-  },
-  getInitialState () {
-    return {
-      checked: Boolean(this.props.checked)
-    }
-  },
-  onChange (e) {
+export class Switch extends React.Component {
+  static displayName = 'Switch'
+
+  static propTypes = {
+    name: PropTypes.string,
+    onChange: PropTypes.func,
+    label: PropTypes.node,
+    checked: PropTypes.bool
+  }
+
+  state = {
+    checked: Boolean(this.props.checked)
+  }
+
+  onChange = (e) => {
     this.setState({
       checked: e.target.checked
     })
@@ -23,10 +25,12 @@ export const Switch = React.createClass({
     if (this.props.onChange) {
       this.props.onChange(e)
     }
-  },
+  }
+
   componentDidMount () {
     window.componentHandler.upgradeElement(this.refs.wrapper)
-  },
+  }
+
   render () {
     const wrapperClasses = cx('mdl-switch',
       isBrowser && 'mdl-js-switch mdl-js-ripple-effect')
@@ -44,6 +48,6 @@ export const Switch = React.createClass({
       </label>
     )
   }
-})
+}
 
 export default Switch

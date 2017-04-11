@@ -2,40 +2,48 @@ import cx from 'classnames'
 import debounce from 'lodash/debounce'
 import React from 'react'
 
-export const HeaderSearchBox = React.createClass({
-  displayName: 'Header-Search-Box',
-  propTypes: {
-    className: React.PropTypes.string,
-    value: React.PropTypes.any,
-    defaultValue: React.PropTypes.any,
-    onChange: React.PropTypes.func
-  },
-  getInitialState () {
-    return {
-      isDirty: Boolean(this.props.value || this.props.defaultValue),
-      isFocused: false
-    }
-  },
+import PropTypes from 'prop-types'
+
+export class HeaderSearchBox extends React.Component {
+  static displayName = 'Header-Search-Box'
+
+  static propTypes = {
+    className: PropTypes.string,
+    value: PropTypes.any,
+    defaultValue: PropTypes.any,
+    onChange: PropTypes.func
+  }
+
+  state = {
+    isDirty: Boolean(this.props.value || this.props.defaultValue),
+    isFocused: false
+  }
+
   componentWillMount () {
     this.save = debounce(value => this.props.onChange(value), 300)
-  },
-  manuallySetFocus () {
+  }
+
+  manuallySetFocus = () => {
     this.setState({isFocused: true},
       () => this.refs.input.focus())
-  },
-  onChange (e) {
+  }
+
+  onChange = (e) => {
     this.setState({
       isDirty: Boolean(e.target.value)
     })
 
     this.save(e.target.value)
-  },
-  onFocus () {
+  }
+
+  onFocus = () => {
     this.setState({isFocused: true})
-  },
-  onBlur () {
+  }
+
+  onBlur = () => {
     this.setState({isFocused: false})
-  },
+  }
+
   render () {
     const {isDirty, isFocused} = this.state
     const wrapperClasses = cx('mdl-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right',
@@ -60,6 +68,6 @@ export const HeaderSearchBox = React.createClass({
       </div>
     )
   }
-})
+}
 
 export default HeaderSearchBox

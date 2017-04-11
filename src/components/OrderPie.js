@@ -4,6 +4,8 @@ import map from 'lodash/map'
 import round from 'lodash/round'
 import size from 'lodash/size'
 import React from 'react'
+import createReactClass from 'create-react-class'
+import PropTypes from 'prop-types'
 import orderType from '../propTypes/order'
 import Chart from './Highcharts'
 import {styled} from './mixins/styled'
@@ -13,17 +15,17 @@ const style = csjs`
   height: 70vh
 }`
 
-export const OrderPie = React.createClass({
+export const OrderPie = createReactClass({
   displayName: 'Order-Pie',
   mixins: [styled(style)],
   propTypes: {
-    selectedBudgetId: React.PropTypes.string,
-    remainingAmount: React.PropTypes.number,
+    selectedBudgetId: PropTypes.string,
+    remainingAmount: PropTypes.number,
     order: orderType,
-    selectBudget: React.PropTypes.func
+    selectBudget: PropTypes.func
   },
   contextTypes: {
-    messages: React.PropTypes.object
+    messages: PropTypes.object
   },
   selectPoint (index, id) {
     this.props.selectBudget(id === 'remaining' ? null : index)

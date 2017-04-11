@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
 import moment from 'moment'
@@ -9,40 +10,45 @@ import {pushSuccessMessageAction} from '../../actions/push-success-message-actio
 import {Button} from '../Button'
 import {MenuItem} from '../DropdownMenu'
 
-const ShareDialog = React.createClass({
-  displayName: 'Share-Dialog',
-  propTypes: {
-    id: React.PropTypes.string.isRequired,
-    shareUrl: React.PropTypes.string,
-    close: React.PropTypes.func.isRequired
-  },
-  contextTypes: {
-    tree: React.PropTypes.object.isRequired,
-    params: React.PropTypes.object.isRequired,
-    location: React.PropTypes.object.isRequired,
-    messages: React.PropTypes.object.isRequired
-  },
-  getInitialState () {
-    return {isLoading: true}
-  },
+class ShareDialog extends React.Component {
+  static displayName = 'Share-Dialog'
+
+  static propTypes = {
+    id: PropTypes.string.isRequired,
+    shareUrl: PropTypes.string,
+    close: PropTypes.func.isRequired
+  }
+
+  static contextTypes = {
+    tree: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    messages: PropTypes.object.isRequired
+  }
+
+  state = {isLoading: true}
+
   componentDidMount () {
     this.load()
-  },
-  load () {
+  }
+
+  load = () => {
     const {params, location, tree} = this.context
     const to = location.query.to || moment().subtract(1, 'day').format('YYYY-MM-DD')
     const from = location.query.from || moment(to).subtract(30, 'days').format('YYYY-MM-DD')
 
     loadReportShareUrlAction(tree, params, this.props.id, {from, to})
       .then(() => this.setState({isLoading: false}))
-  },
-  copy () {
+  }
+
+  copy = () => {
     const {tree, messages} = this.context
 
     clipboard(this.props.shareUrl)
 
     pushSuccessMessageAction(tree, messages.copySuccess)
-  },
+  }
+
   render () {
     const {shareUrl, close} = this.props
 
@@ -77,7 +83,7 @@ const ShareDialog = React.createClass({
       </div>
     )
   }
-})
+}
 
 const MenuShare = props => <MenuItem {...props} icon='share'/>
 
@@ -92,7 +98,7 @@ const ShareButton = props => (
 
 ShareButton.displayName = 'Share-Button'
 ShareButton.propTypes = {
-  shareUrl: React.PropTypes.string
+  shareUrl: PropTypes.string
 }
 
 export default ShareButton
