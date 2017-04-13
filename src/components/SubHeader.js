@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Breadcrumbs from './Breadcrumbs'
-import {styledFnComponent} from './higher-order/styled-fn-component'
+import {styledFunctionalComponent} from './higher-order/styled'
 import csjs from 'csjs'
 import omit from 'lodash/omit'
 
@@ -45,4 +45,4 @@ SubHeader.propTypes = {
   children: PropTypes.node
 }
 
-export default styledFnComponent(SubHeader, style)
+export default styledFunctionalComponent(SubHeader, style)

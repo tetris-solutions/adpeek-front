@@ -8,7 +8,7 @@ import compact from 'lodash/compact'
 import size from 'lodash/size'
 import intersection from 'lodash/intersection'
 import isEmpty from 'lodash/isEmpty'
-import {styledFnComponent} from '../../../higher-order/styled-fn-component'
+import {styledFunctionalComponent} from '../../../higher-order/styled'
 import AttributeItem from './AttributeItem'
 import forEach from 'lodash/forEach'
 import groupBy from 'lodash/groupBy'
@@ -216,4 +216,4 @@ AttributeList.propTypes = {
   add: PropTypes.func.isRequired
 }
 
-export default styledFnComponent(AttributeList, style)
+export default styledFunctionalComponent(AttributeList, style)

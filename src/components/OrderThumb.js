@@ -6,7 +6,7 @@ import {DropdownMenu, MenuItem, HeaderMenuItem} from './DropdownMenu'
 import {prettyNumber} from '../functions/pretty-number'
 import csjs from 'csjs'
 import Message from 'tetris-iso/Message'
-import {styledFnComponent} from './higher-order/styled-fn-component'
+import {styledFunctionalComponent} from './higher-order/styled'
 import {DeleteSpan} from './DeleteButton'
 import {deleteOrderAction} from '../actions/delete-order'
 import {toggleOrderAutoBudgetAction} from '../actions/toggle-order-auto-budget'
@@ -114,4 +114,4 @@ Order.contextTypes = {
   params: PropTypes.object.isRequired
 }
 
-export default styledFnComponent(Order, style)
+export default styledFunctionalComponent(Order, style)

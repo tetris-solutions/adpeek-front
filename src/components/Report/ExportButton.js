@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
-import {styledFnComponent} from '../higher-order/styled-fn-component'
+import {styledFunctionalComponent} from '../higher-order/styled'
 import csjs from 'csjs'
 import {many} from '../higher-order/branch'
 import {inferLevelFromProps} from '../../functions/infer-level-from-params'
@@ -75,7 +75,7 @@ ExportOptions.propTypes = {
   pdf: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired
 }
-const PickType = styledFnComponent(ExportOptions, style)
+const PickType = styledFunctionalComponent(ExportOptions, style)
 
 const notReady = ({isLoading, result}) => isLoading || !result
 

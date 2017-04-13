@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import assign from 'lodash/assign'
 import csjs from 'csjs'
 import {Link} from 'react-router'
-import {styledFnComponent} from './higher-order/styled-fn-component'
+import {styledFunctionalComponent} from './higher-order/styled'
 
 const style = csjs`
 .container {
@@ -219,4 +219,4 @@ Parent.propTypes = {
   children: PropTypes.node
 }
 
-export const Container = styledFnComponent(Parent, style)
+export const Container = styledFunctionalComponent(Parent, style)

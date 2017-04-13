@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import csjs from 'csjs'
-import {styledFnComponent} from './higher-order/styled-fn-component'
+import {styledFunctionalComponent} from './higher-order/styled'
 import Tooltip from 'tetris-iso/Tooltip'
 import omit from 'lodash/omit'
 const style = csjs`
@@ -103,4 +103,4 @@ DMenu.propTypes = {
   hover: PropTypes.bool
 }
 
-export const DropdownMenu = styledFnComponent(DMenu, style)
+export const DropdownMenu = styledFunctionalComponent(DMenu, style)

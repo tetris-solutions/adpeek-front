@@ -4,7 +4,7 @@ import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
 import csjs from 'csjs'
 import Modal from 'tetris-iso/Modal'
-import {styledFnComponent} from './higher-order/styled-fn-component'
+import {styledFunctionalComponent} from './higher-order/styled'
 import {withState} from 'recompose'
 import {inferDisplayUrl} from '../functions/infer-display-url'
 import {findImageAdUrl} from '../functions/find-image-ad-url'
@@ -381,4 +381,4 @@ AdGroupAd.propTypes = {
   type: PropTypes.string
 }
 
-export default styledFnComponent(AdGroupAd, style)
+export default styledFunctionalComponent(AdGroupAd, style)

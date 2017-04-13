@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import csjs from 'csjs'
 import {Button} from '../../../Button'
 import Message from 'tetris-iso/Message'
-import {styledFnComponent} from '../../../higher-order/styled-fn-component'
+import {styledFunctionalComponent} from '../../../higher-order/styled'
 
 const style = csjs`
 .box {
@@ -35,4 +35,4 @@ MissingIdAlert.contextTypes = {
   entity: PropTypes.object
 }
 
-export default styledFnComponent(MissingIdAlert, style)
+export default styledFunctionalComponent(MissingIdAlert, style)

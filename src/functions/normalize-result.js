@@ -44,8 +44,7 @@ export function normalizeResult (attributes, result) {
     if (
       attribute.type === 'special' &&
       isObject(value) && !(
-        isString(value.raw) &&
-        value.raw.match(/[^0-9\s,.%]/) // raw value is not simply a number
+        isString(value.raw) && value.raw.match(/[^0-9\s,.%]/) // raw value is not simply a number
       )
     ) {
       return value.value

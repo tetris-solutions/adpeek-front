@@ -7,7 +7,7 @@ import groupBy from 'lodash/groupBy'
 import filter from 'lodash/filter'
 import {Card, Content, Header} from './Card'
 import isNumber from 'lodash/isNumber'
-import {styledFnComponent} from './higher-order/styled-fn-component'
+import {styledFunctionalComponent} from './higher-order/styled'
 import csjs from 'csjs'
 
 const style = csjs`
@@ -626,6 +626,6 @@ ABLogs.propTypes = {
   platform: PropTypes.string
 }
 
-export const AutoBudgetLogs = styledFnComponent(ABLogs, style)
+export const AutoBudgetLogs = styledFunctionalComponent(ABLogs, style)
 
 export default AutoBudgetLogs

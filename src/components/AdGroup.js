@@ -1,5 +1,4 @@
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import {node} from './higher-order/branch'
 import {pure} from 'recompose'
@@ -7,7 +6,7 @@ import AdGroupAd from './AdGroupAd'
 import AdGroupKeyword from './AdGroupKeyword'
 import map from 'lodash/map'
 import csjs from 'csjs'
-import {styled} from './mixins/styled'
+import {styledComponent} from './higher-order/styled'
 import groupBy from 'lodash/groupBy'
 import Message from 'tetris-iso/Message'
 import upper from 'lodash/toUpper'
@@ -19,16 +18,18 @@ const style = csjs`
   padding: .7em 0;
   text-align: center;
 }`
-export const AdGroup = createReactClass({
-  displayName: 'AdGroup',
-  mixins: [styled(style)],
-  propTypes: {
+
+class AdGroup_ extends React.Component {
+  static displayName = 'AdGroup'
+
+  static propTypes = {
     status: PropTypes.string,
     searchTerms: PropTypes.array,
     name: PropTypes.string,
     ads: PropTypes.array,
     keywords: PropTypes.array
-  },
+  }
+
   render () {
     const {name, status, ads, keywords, searchTerms} = this.props
     const criterions = groupBy(keywords, 'criterion_use')
@@ -94,7 +95,9 @@ export const AdGroup = createReactClass({
       </div>
     )
   }
-})
+}
+
+export const AdGroup = styledComponent(AdGroup_, style)
 
 const AdGroupWrapper = props => <AdGroup {...props} {...props.adGroup}/>
 

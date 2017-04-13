@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {styledFnComponent} from './higher-order/styled-fn-component'
+import {styledFunctionalComponent} from './higher-order/styled'
 import csjs from 'csjs'
 
 const style = csjs`
@@ -34,4 +34,4 @@ Keyword.propTypes = {
   match_type: PropTypes.string
 }
 
-export default styledFnComponent(Keyword, style)
+export default styledFunctionalComponent(Keyword, style)

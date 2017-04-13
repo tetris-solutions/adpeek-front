@@ -3,7 +3,7 @@ import React from 'react'
 
 import PropTypes from 'prop-types'
 
-import {styledFnComponent} from './higher-order/styled-fn-component'
+import {styledFunctionalComponent} from './higher-order/styled'
 const style = csjs`
 .verticallyAligned {
   display: inline-flex;
@@ -32,4 +32,4 @@ VerticalAlign.propTypes = {
   className: PropTypes.string
 }
 
-export default styledFnComponent(VerticalAlign, style)
+export default styledFunctionalComponent(VerticalAlign, style)

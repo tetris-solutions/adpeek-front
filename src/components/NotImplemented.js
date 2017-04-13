@@ -1,6 +1,6 @@
 import React from 'react'
 import csjs from 'csjs'
-import {styledFnComponent} from './higher-order/styled-fn-component'
+import {styledFunctionalComponent} from './higher-order/styled'
 import Message from 'tetris-iso/Message'
 
 const style = csjs`
@@ -21,4 +21,4 @@ export const NotImplemented = () => (
 
 NotImplemented.displayName = 'Not-Implemented'
 
-export default styledFnComponent(NotImplemented, style)
+export default styledFunctionalComponent(NotImplemented, style)

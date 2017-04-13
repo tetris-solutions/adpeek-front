@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {styledFnComponent} from '../../higher-order/styled-fn-component'
+import {styledFunctionalComponent} from '../../higher-order/styled'
 import {loadFolderChannelAction} from '../../../actions/load-folder-channel'
 import csjs from 'csjs'
 import {withState} from 'recompose'
@@ -91,4 +91,4 @@ Video.propTypes = {
   setPreviewMode: PropTypes.func
 }
 
-export default withState('previewMode', 'setPreviewMode', false)(styledFnComponent(Video, style))
+export default withState('previewMode', 'setPreviewMode', false)(styledFunctionalComponent(Video, style))
