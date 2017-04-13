@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Checkbox from '../Checkbox'
+import Checkbox from '../../Checkbox'
 import TextMessage from 'intl-messageformat'
 import {Link} from 'react-router'
-export function FolderCampaignLooseLi ({external_id, name, status, platform, is_adwords_video, folder, readOnly}, {locales, messages, params}) {
+
+function FolderCampaignLooseLi ({external_id, name, status, platform, is_adwords_video, folder, readOnly}, {locales, messages, params}) {
   const serialized = JSON.stringify({
     name,
     external_id,
@@ -50,14 +51,17 @@ export function FolderCampaignLooseLi ({external_id, name, status, platform, is_
 }
 
 FolderCampaignLooseLi.displayName = 'Loose-Campaign'
+
 FolderCampaignLooseLi.defaultProps = {
   is_adwords_video: false
 }
+
 FolderCampaignLooseLi.contextTypes = {
   params: PropTypes.object,
   messages: PropTypes.object,
   locales: PropTypes.string
 }
+
 FolderCampaignLooseLi.propTypes = {
   readOnly: PropTypes.bool,
   platform: PropTypes.string,
