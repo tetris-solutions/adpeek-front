@@ -2,11 +2,11 @@ import Message from 'tetris-iso/Message'
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router'
-import Fence from './Fence'
-import DeleteButton from './DeleteButton'
-import {deleteOrderAction} from '../actions/delete-order'
-import {node} from './higher-order/branch'
-import {Navigation, Name, NavBt, NavBts} from './Navigation'
+import Fence from '../Fence'
+import DeleteButton from '../DeleteButton'
+import {deleteOrderAction} from '../../actions/delete-order'
+import {node} from '../higher-order/branch'
+import {Navigation, Name, NavBt, NavBts} from '../Navigation'
 
 export function OrderAside ({params, order, dispatch}, {router}) {
   const {company, workspace, folder} = params

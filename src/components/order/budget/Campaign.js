@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import campaignType from '../propTypes/campaign'
+import campaignType from '../../../propTypes/campaign'
 
 function BudgetCampaign ({campaign, actionIcon, onClick}) {
   function onIconClick (e) {

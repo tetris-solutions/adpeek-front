@@ -5,9 +5,9 @@ import round from 'lodash/round'
 import size from 'lodash/size'
 import React from 'react'
 import PropTypes from 'prop-types'
-import orderType from '../propTypes/order'
-import Chart from './Highcharts'
-import {styledComponent} from './higher-order/styled'
+import orderType from '../../propTypes/order'
+import Chart from '../Highcharts'
+import {styledComponent} from '../higher-order/styled'
 
 const style = csjs`
 .orderPieChart {

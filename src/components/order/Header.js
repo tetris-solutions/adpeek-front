@@ -1,12 +1,12 @@
 import csjs from 'csjs'
 import React from 'react'
 import PropTypes from 'prop-types'
-import OrderDateRange from './OrderDateRange'
-import orderType from '../propTypes/order'
-import Input from './Input'
-import Switch from './Switch'
-import VerticalAlign from './VerticalAlign'
-import {styledComponent} from './higher-order/styled'
+import OrderDateRange from './DateRange'
+import orderType from '../../propTypes/order'
+import Input from '../Input'
+import Switch from '../Switch'
+import VerticalAlign from '../VerticalAlign'
+import {styledComponent} from '../higher-order/styled'
 
 const style = csjs`
 .card {

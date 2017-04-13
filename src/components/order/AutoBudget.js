@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {node} from './higher-order/branch'
-import Input from './Input'
-import AutoBudgetLogs from './AutoBudgetLogs'
+import {node} from '../higher-order/branch'
+import Input from '../Input'
+import AutoBudgetLogs from '../AutoBudgetLogs'
 
 class OrderAutoBudget extends React.Component {
   static displayName = 'OrderAutoBudget'

@@ -2,37 +2,21 @@ import some from 'lodash/some'
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import PropTypes from 'prop-types'
-import budgetType from '../propTypes/budget'
-import campaignType from '../propTypes/campaign'
-import orderType from '../propTypes/order'
-import BudgetEdit from './BudgetEdit'
-import EmptySelectionCard from './BudgetEmptySelection'
-import OrderHeader from './OrderHeader'
-import OrderPie from './OrderPie'
-import OrderSpawnAutoBudget from './OrderSpawnAutoBudget'
-import Fence from './Fence'
-import SubHeader from './SubHeader'
-import Page from './Page'
-import {Button} from './Button'
+import budgetType from '../../propTypes/budget'
+import campaignType from '../../propTypes/campaign'
+import orderType from '../../propTypes/order'
+import BudgetEdit from './budget/Form'
+import EmptySelectionCard from './budget/EmptySelection'
+import OrderHeader from './Header'
+import OrderPie from './Pie'
+import OrderSpawnAutoBudget from './list/SpawnAutoBudgetButton'
+import Fence from '../Fence'
+import SubHeader from '../SubHeader'
+import Page from '../Page'
+import {Button} from '../Button'
 const notPercentage = budget => budget && budget.mode === 'amount'
 
-export function OrderEdit ({
-                             save,
-                             runAutoBudget,
-                             showFolderCampaigns,
-                             createBudget,
-                             removeBudget,
-                             removeCampaign,
-                             remainingValue,
-                             remainingAmount,
-                             addCampaigns,
-                             selectBudget,
-                             changeOrderField,
-                             changeBudgetField,
-                             budget,
-                             order,
-                             folderCampaigns
-                           }) {
+export function OrderEdit ({save, runAutoBudget, showFolderCampaigns, createBudget, removeBudget, removeCampaign, remainingValue, remainingAmount, addCampaigns, selectBudget, changeOrderField, changeBudgetField, budget, order, folderCampaigns}) {
   function closeBudget () {
     selectBudget(null)
   }

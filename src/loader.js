@@ -82,8 +82,8 @@ const breadcrumbs = provide => tempSyncEnsure(() => provide({
   workspace: require('./components/workspace/Breadcrumb'),
   report: require('./components/report/Breadcrumb'),
   reports: require('./components/report/ListBreadcrumb'),
-  order: require('./components/OrderBreadcrumb'),
-  orders: require('./components/OrdersBreadcrumb')
+  order: require('./components/order/Breadcrumb'),
+  orders: require('./components/order/list/Breadcrumb')
 }))
 
 const campaign = provide => tempSyncEnsure(() => provide({
@@ -126,8 +126,8 @@ const folderLevel = provide => tempSyncEnsure(() => provide({
 }))
 
 const orderLevel = provide => tempSyncEnsure(() => provide({
-  editor: require('./components/Order'),
-  aside: require('./components/OrderAside')
+  editor: require('./components/order/Container'),
+  aside: require('./components/order/Aside')
 }))
 
 const unsub = provide => tempSyncEnsure(() =>
@@ -143,13 +143,13 @@ const companies = provide => tempSyncEnsure(() =>
   provide(require('./components/Companies')))
 
 const autoBudget = provide => tempSyncEnsure(() =>
-  provide(require('./components/OrderAutoBudget')))
+  provide(require('./components/order/AutoBudget')))
 
 const reportList = provide => tempSyncEnsure(() =>
   provide(require('./components/report/List')))
 
 const orderList = provide => tempSyncEnsure(() =>
-  provide(require('./components/Orders')))
+  provide(require('./components/order/list/List')))
 
 export const component = {
   Unsub: screen(unsub),

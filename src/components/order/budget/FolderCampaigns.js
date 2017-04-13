@@ -4,9 +4,10 @@ import withState from 'recompose/withState'
 import size from 'lodash/size'
 import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
-import BudgetCampaign from './BudgetCampaign'
+import BudgetCampaign from './Campaign'
 import groupBy from 'lodash/groupBy'
-import {Button} from './Button'
+import {Button} from '../../Button'
+
 const enhance = withState('isExpanded', 'setVisibility', false)
 
 function BudgetEditFolderCampaigns ({add, isExpanded, setVisibility, campaigns}) {

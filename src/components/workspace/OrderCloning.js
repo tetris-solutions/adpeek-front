@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import OrdersClone from '../OrdersClone'
+import OrdersClone from '../order/list/Cloner'
 import {node} from '../higher-order/branch'
 
 export const Orders = ({workspace: {orders}}) =>

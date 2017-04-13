@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router'
-import {node} from './higher-order/branch'
+import {node} from '../higher-order/branch'
 
 export const OrderBreadcrumb = ({params: {company, workspace, folder}, order}, {messages: {orderBreadcrumb}}) =>
   <Link to={`/company/${company}/workspace/${workspace}/folder/${folder}/order/${order.id}`} title={orderBreadcrumb}>

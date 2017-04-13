@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Checkbox from './Checkbox'
-import Input from './Input'
-import OrderDateRange from './OrderDateRange'
+import Checkbox from '../../Checkbox'
+import Input from '../../Input'
+import OrderDateRange from '../DateRange'
 
 export class Editable extends React.Component {
   static displayName = 'Editable'

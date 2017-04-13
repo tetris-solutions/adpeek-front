@@ -1,14 +1,10 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Button} from './Button'
-import {Form, Content, Header, Footer} from './Card'
+import {Button} from '../../Button'
+import {Form, Content, Header, Footer} from '../../Card'
 
-function BudgetEmptySelection ({
-                                 createBudget,
-                                 amount,
-                                 available
-                               }) {
+function BudgetEmptySelection ({createBudget, amount, available}) {
   function onSubmit (e) {
     e.preventDefault()
     createBudget()

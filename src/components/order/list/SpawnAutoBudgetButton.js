@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
-import {Button} from './Button'
+import {Button} from '../../Button'
 
 class OrderSpawnAutoBudget extends React.Component {
   static displayName = 'Order-Spawn-Auto-Budget'
