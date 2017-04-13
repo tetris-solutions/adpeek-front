@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Creatives from '../Creatives'
+import Creatives from '../creatives/Creatives'
 
 const FolderCreatives = ({folder, dispatch, params, cursors}) => (
   <Creatives

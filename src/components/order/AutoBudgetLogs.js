@@ -5,9 +5,9 @@ import Message from 'tetris-iso/Message'
 import map from 'lodash/map'
 import groupBy from 'lodash/groupBy'
 import filter from 'lodash/filter'
-import {Card, Content, Header} from './Card'
+import {Card, Content, Header} from '../Card'
 import isNumber from 'lodash/isNumber'
-import {styledFunctionalComponent} from './higher-order/styled'
+import {styledFunctionalComponent} from '../higher-order/styled'
 import csjs from 'csjs'
 
 const style = csjs`

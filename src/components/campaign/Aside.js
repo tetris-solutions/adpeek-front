@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {node} from './higher-order/branch'
+import {node} from '../higher-order/branch'
 import {Link} from 'react-router'
 import Message from 'tetris-iso/Message'
-import {Navigation, NavBt, NavBts, Name} from './Navigation'
+import {Navigation, NavBt, NavBts, Name} from '../Navigation'
 
 export const CampaignAside = ({params: {company, workspace, folder}, campaign}) =>
   <Navigation icon='format_shapes'>

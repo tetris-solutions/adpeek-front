@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import AdGroup from './AdGroup'
 import map from 'lodash/map'
 import csjs from 'csjs'
-import {styledComponent} from './higher-order/styled'
+import {styledComponent} from '../higher-order/styled'
 import size from 'lodash/size'
 
 const isBrowser = typeof window !== 'undefined'

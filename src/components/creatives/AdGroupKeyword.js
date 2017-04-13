@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {styledFunctionalComponent} from './higher-order/styled'
+import {styledFunctionalComponent} from '../higher-order/styled'
 import csjs from 'csjs'
 
 const style = csjs`
