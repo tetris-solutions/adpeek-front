@@ -1,10 +1,9 @@
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import {Submit} from './Button'
 import csjs from 'csjs'
 import omit from 'lodash/omit'
-import {styled} from './mixins/styled'
+import {styledComponent} from './higher-order/styled'
 
 const style = csjs`
 .card {
@@ -41,23 +40,19 @@ const style = csjs`
   width: 100%;
 }`
 
-export const Card = createReactClass({
-  displayName: 'Card',
-  display: 'Card',
-  mixins: [styled(style)],
+class Card_ extends React.Component {
+  static displayName = 'Card'
 
-  propTypes: {
+  static propTypes = {
     size: PropTypes.oneOf(['small', 'large', 'full']),
     tag: PropTypes.string,
     children: PropTypes.node.isRequired
-  },
+  }
 
-  getDefaultProps () {
-    return {
-      size: 'small',
-      tag: 'div'
-    }
-  },
+  static defaultProps = {
+    size: 'small',
+    tag: 'div'
+  }
 
   render () {
     const {children, size, tag: Tag} = this.props
@@ -69,7 +64,9 @@ export const Card = createReactClass({
       </Tag>
     )
   }
-})
+}
+
+export const Card = styledComponent(Card_, style)
 
 export class Form extends React.Component {
   static displayName = 'Form'
