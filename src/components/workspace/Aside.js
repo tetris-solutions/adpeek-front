@@ -1,13 +1,13 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import PropTypes from 'prop-types'
-import Fence from './Fence'
-import DeleteButton from './DeleteButton'
-import {deleteWorkspaceAction} from '../actions/delete-workspace'
-import {node} from './higher-order/branch'
-import {Navigation, NavLink, NavBt, NavBts, Name} from './Navigation'
-import Recent from './Recent'
-import ReportLink from './Report/ReportLink'
+import Fence from '../Fence'
+import DeleteButton from '../DeleteButton'
+import {deleteWorkspaceAction} from '../../actions/delete-workspace'
+import {node} from '../higher-order/branch'
+import {Navigation, NavLink, NavBt, NavBts, Name} from '../Navigation'
+import Recent from '../Recent'
+import ReportLink from '../Report/ReportLink'
 
 export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
   const {company} = params

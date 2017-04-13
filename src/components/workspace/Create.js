@@ -1,18 +1,18 @@
 import React from 'react'
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
-import FormMixin from './mixins/FormMixin'
+import FormMixin from '../mixins/FormMixin'
 import Message from 'tetris-iso/Message'
-import Input from './Input'
-import AccountSelector from './WorkspaceAccountSelector'
+import Input from '../Input'
+import AccountSelector from './AccountSelector'
 
-import RolesSelector from './WorkspaceRolesSelector'
-import {createWorkspaceAction} from '../actions/create-workspace'
-import {Form, Content, Header, Footer} from './Card'
-import WorkspaceForm from './mixins/WorkspaceForm'
-import Page from './Page'
-import SubHeader from './SubHeader'
-import {PropertySelector, ViewSelector} from './WorkspaceGAFieldSelector'
+import RolesSelector from './RolesSelector'
+import {createWorkspaceAction} from '../../actions/create-workspace'
+import {Form, Content, Header, Footer} from '../Card'
+import WorkspaceForm from '../mixins/WorkspaceForm'
+import Page from '../Page'
+import SubHeader from '../SubHeader'
+import {PropertySelector, ViewSelector} from './GAFieldSelector'
 
 export const CreateWorkspace = createReactClass({
   displayName: 'Create-Workspace',

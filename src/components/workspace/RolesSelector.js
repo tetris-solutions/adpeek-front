@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
-import CheckBox from './Checkbox'
+import CheckBox from '../Checkbox'
 import includes from 'lodash/includes'
-import {node} from './higher-order/branch'
+import {node} from '../higher-order/branch'
 
 export class WorkspaceRolesSelector extends React.Component {
   static displayName = 'Workspace-Roles-Selector'

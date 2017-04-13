@@ -69,7 +69,7 @@ export const piece = (loader, name = null) => class extends React.Component {
 
 const reportSection = provide => tempSyncEnsure(() => provide({
   folder: require('./components/FolderReport'),
-  workspace: require('./components/WorkspaceReport'),
+  workspace: require('./components/workspace/Report'),
   company: require('./components/company/Report'),
   share: require('./components/Report/Share'),
   aside: require('./components/Report/Aside'),
@@ -79,7 +79,7 @@ const reportSection = provide => tempSyncEnsure(() => provide({
 const breadcrumbs = provide => tempSyncEnsure(() => provide({
   company: require('./components/company/Breadcrumb'),
   folder: require('./components/FolderBreadcrumb'),
-  workspace: require('./components/WorkspaceBreadcrumb'),
+  workspace: require('./components/workspace/Breadcrumb'),
   report: require('./components/Report/Breadcrumb'),
   reports: require('./components/Report/ListBreadcrumb'),
   order: require('./components/OrderBreadcrumb'),
@@ -93,7 +93,7 @@ const campaign = provide => tempSyncEnsure(() => provide({
 
 const orderCloning = provide => tempSyncEnsure(() => provide({
   folder: require('./components/FolderOrdersCloning'),
-  workspace: require('./components/WorkspaceOrdersCloning'),
+  workspace: require('./components/workspace/OrderCloning'),
   company: require('./components/company/OrderCloning')
 }))
 
@@ -105,8 +105,8 @@ const creatives = provide => tempSyncEnsure(() => provide({
 const forms = provide => tempSyncEnsure(() => provide({
   folderCreate: require('./components/FolderCreate'),
   folderEdit: require('./components/FolderEdit'),
-  workspaceCreate: require('./components/WorkspaceCreate'),
-  workspaceEdit: require('./components/WorkspaceEdit'),
+  workspaceCreate: require('./components/workspace/Create'),
+  workspaceEdit: require('./components/workspace/Edit'),
   reportCreate: require('./components/Report/CreateForm')
 }))
 
@@ -116,8 +116,8 @@ const companyLevel = provide => tempSyncEnsure(() => provide({
 }))
 
 const workspaceLevel = provide => tempSyncEnsure(() => provide({
-  aside: require('./components/WorkspaceAside'),
-  folders: require('./components/WorkspaceFolders')
+  aside: require('./components/workspace/Aside'),
+  folders: require('./components/workspace/Folders')
 }))
 
 const folderLevel = provide => tempSyncEnsure(() => provide({

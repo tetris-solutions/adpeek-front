@@ -11,10 +11,10 @@ import Autosuggest from 'react-autosuggest'
 import Message from 'intl-messageformat'
 import React from 'react'
 import PropTypes from 'prop-types'
-import {removeFromStart} from '../functions/remove-from-start'
-import {loadCompanyAccountsAction} from '../actions/load-company-accounts'
-import {node} from './higher-order/branch'
-import {styledComponent} from './higher-order/styled'
+import {removeFromStart} from '../../functions/remove-from-start'
+import {loadCompanyAccountsAction} from '../../actions/load-company-accounts'
+import {node} from '../higher-order/branch'
+import {styledComponent} from '../higher-order/styled'
 
 const yes = () => true
 
