@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Checkbox from './Checkbox'
+import Checkbox from '../Checkbox'
 import TextMessage from 'intl-messageformat'
 import {Link} from 'react-router'
 export function FolderCampaignLooseLi ({external_id, name, status, platform, is_adwords_video, folder, readOnly}, {locales, messages, params}) {

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Checkbox from './Checkbox'
+import Checkbox from '../Checkbox'
 import {Link} from 'react-router'
 
 export function FolderCampaignLi ({id, name, status, readOnly}, {params}) {

@@ -1,9 +1,9 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import PropTypes from 'prop-types'
-import HeaderSearchBox from './HeaderSearchBox'
-import SubHeader from './SubHeader'
-import {Button} from './Button'
+import HeaderSearchBox from '../HeaderSearchBox'
+import SubHeader from '../SubHeader'
+import {Button} from '../Button'
 
 export const FolderCampaignsHeader = ({onChange, isLoading, onClickRefresh}) => (
   <SubHeader>
