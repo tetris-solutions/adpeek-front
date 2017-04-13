@@ -1,10 +1,9 @@
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import AdGroup from './AdGroup'
 import map from 'lodash/map'
 import csjs from 'csjs'
-import {styled} from './mixins/styled'
+import {styledComponent} from './higher-order/styled'
 import size from 'lodash/size'
 
 const isBrowser = typeof window !== 'undefined'
@@ -32,20 +31,21 @@ function fitWrapper (wrapper) {
   wrapper.style.height = (window.innerHeight - rect.top - 20) + 'px'
 }
 
-export const AdGroups = createReactClass({
-  displayName: 'AdGroups',
-  mixins: [styled(style)],
-  propTypes: {
+class AdGroups extends React.Component {
+  static displayName = 'AdGroups'
+
+  static propTypes = {
     adGroups: PropTypes.array
-  },
-  getDefaultProps () {
-    return {
-      adGroups: []
-    }
-  },
+  }
+
+  static defaultProps = {
+    adGroups: []
+  }
+
   componentDidMount () {
     fitWrapper(this.refs.wrapper)
-  },
+  }
+
   render () {
     const {adGroups} = this.props
     const gridStyle = {}
@@ -62,14 +62,13 @@ export const AdGroups = createReactClass({
               {map(adGroups, ({id}) => (
                 <div key={id} className={`${style.column}`}>
                   <AdGroup params={{adGroup: id}}/>
-                </div>
-              ))}
+                </div>))}
             </div>
           </div>
         </div>
       </section>
     )
   }
-})
+}
 
-export default AdGroups
+export default styledComponent(AdGroups, style)

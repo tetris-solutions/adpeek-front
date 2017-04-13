@@ -7,10 +7,9 @@ import lowerCase from 'lodash/toLower'
 import property from 'lodash/property'
 import Autosuggest from 'react-autosuggest'
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import {removeFromStart} from '../functions/remove-from-start'
-import {styled} from './mixins/styled'
+import {styledComponent} from './higher-order/styled'
 import get from 'lodash/get'
 
 const yes = () => true
@@ -120,10 +119,10 @@ Suggestion.propTypes = {
   text: PropTypes.string
 }
 
-export const AutoSelect = createReactClass({
-  displayName: 'Auto-Select',
-  mixins: [styled(style)],
-  propTypes: {
+class AutoSelect extends React.Component {
+  static displayName = 'Auto-Select'
+
+  static propTypes = {
     disabled: PropTypes.bool,
     prefix: PropTypes.string,
     onChange: PropTypes.func,
@@ -136,20 +135,14 @@ export const AutoSelect = createReactClass({
       value: PropTypes.string,
       text: PropTypes.string
     })).isRequired
-  },
-  getDefaultProps () {
-    return {
-      selected: null,
-      prefix: '',
-      placeholder: ''
-    }
-  },
-  getInitialState () {
-    return {
-      selected: this.props.selected,
-      value: this.addValuePrefix(get(this.props, 'selected.text', ''))
-    }
-  },
+  }
+
+  static defaultProps = {
+    selected: null,
+    prefix: '',
+    placeholder: ''
+  }
+
   componentWillMount () {
     const refreshSuggestions = ({value}) => {
       this.setState({
@@ -159,10 +152,12 @@ export const AutoSelect = createReactClass({
     this.onSuggestionsFetchRequested = debounce(refreshSuggestions, 300)
 
     refreshSuggestions(this.state)
-  },
+  }
+
   componentWillUnmount () {
     this.hasUnmounted = true
-  },
+  }
+
   componentWillReceiveProps ({selected}) {
     if (get(selected, 'text') !== get(this.props, 'selected.text')) {
       this.setState({
@@ -170,14 +165,17 @@ export const AutoSelect = createReactClass({
         value: this.addValuePrefix(get(selected, 'text', ''))
       })
     }
-  },
-  addValuePrefix (value) {
+  }
+
+  addValuePrefix = (value) => {
     return value ? `${this.props.prefix}${this.removeValuePrefix(value)}` : ''
-  },
-  removeValuePrefix (value) {
+  }
+
+  removeValuePrefix = (value) => {
     return removeFromStart(value, this.props.prefix)
-  },
-  onChange (e, {newValue}) {
+  }
+
+  onChange = (e, {newValue}) => {
     const newState = {
       value: this.addValuePrefix(newValue)
     }
@@ -191,21 +189,24 @@ export const AutoSelect = createReactClass({
     }
 
     this.setState(newState)
-  },
-  getSuggestions (value) {
+  }
+
+  getSuggestions = (value) => {
     value = cleanStr(value)
 
     return filter(this.props.options, option => (
       includes(cleanStr(option.text), value) ||
       includes(cleanStr(option.value), value)
     ))
-  },
-  onSuggestionsClearRequested () {
+  }
+
+  onSuggestionsClearRequested = () => {
     this.setState({
       suggestions: []
     })
-  },
-  onSuggestionSelected (event, {suggestion}) {
+  }
+
+  onSuggestionSelected = (event, {suggestion}) => {
     const selected = suggestion || null
 
     this.setState({selected})
@@ -213,7 +214,13 @@ export const AutoSelect = createReactClass({
     if (this.props.onChange) {
       this.props.onChange(selected)
     }
-  },
+  }
+
+  state = {
+    selected: this.props.selected,
+    value: this.addValuePrefix(get(this.props, 'selected.text', ''))
+  }
+
   render () {
     const {suggestions, value} = this.state
     const {placeholder, disabled} = this.props
@@ -238,6 +245,6 @@ export const AutoSelect = createReactClass({
         inputProps={inputProps}/>
     )
   }
-})
+}
 
-export default AutoSelect
+export default styledComponent(AutoSelect, style)
