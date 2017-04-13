@@ -2,7 +2,7 @@ import isNumber from 'lodash/isNumber'
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import PropTypes from 'prop-types'
-import {prettyNumber} from '../../functions/pretty-number'
+import {prettyNumber} from '../../../functions/pretty-number'
 import style from './style'
 
 const num = val => !isNumber(val) ? 0 : val

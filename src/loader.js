@@ -70,14 +70,14 @@ export const piece = (loader, name = null) => class extends React.Component {
 const reportSection = provide => tempSyncEnsure(() => provide({
   folder: require('./components/FolderReport'),
   workspace: require('./components/WorkspaceReport'),
-  company: require('./components/CompanyReport'),
+  company: require('./components/company/Report'),
   share: require('./components/Report/Share'),
   aside: require('./components/Report/Aside'),
   asideLite: require('./components/Report/AsideLite')
 }))
 
 const breadcrumbs = provide => tempSyncEnsure(() => provide({
-  company: require('./components/CompanyBreadcrumb'),
+  company: require('./components/company/Breadcrumb'),
   folder: require('./components/FolderBreadcrumb'),
   workspace: require('./components/WorkspaceBreadcrumb'),
   report: require('./components/Report/Breadcrumb'),
@@ -94,7 +94,7 @@ const campaign = provide => tempSyncEnsure(() => provide({
 const orderCloning = provide => tempSyncEnsure(() => provide({
   folder: require('./components/FolderOrdersCloning'),
   workspace: require('./components/WorkspaceOrdersCloning'),
-  company: require('./components/CompanyOrdersCloning')
+  company: require('./components/company/OrderCloning')
 }))
 
 const creatives = provide => tempSyncEnsure(() => provide({
@@ -111,8 +111,8 @@ const forms = provide => tempSyncEnsure(() => provide({
 }))
 
 const companyLevel = provide => tempSyncEnsure(() => provide({
-  aside: require('./components/CompanyAside'),
-  workspaces: require('./components/CompanyWorkspaces/List')
+  aside: require('./components/company/Aside'),
+  workspaces: require('./components/company/workspaces/List')
 }))
 
 const workspaceLevel = provide => tempSyncEnsure(() => provide({

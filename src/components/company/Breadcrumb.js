@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router'
-import {node} from './higher-order/branch'
+import {node} from '../higher-order/branch'
 
 export const CompanyBreadcrumb = ({company: {id, name}}, {messages: {companyBreadcrumb}}) => (
   <Link to={`/company/${id}`} title={companyBreadcrumb}>
