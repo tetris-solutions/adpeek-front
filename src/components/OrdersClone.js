@@ -6,7 +6,7 @@ import Message from 'tetris-iso/Message'
 import {branch} from './higher-order/branch'
 import map from 'lodash/map'
 import FormMixin from './mixins/FormMixin'
-import {styled} from './mixins/styled'
+import {styledComponent} from './higher-order/styled'
 import Checkbox from './Checkbox'
 import csjs from 'csjs'
 import find from 'lodash/find'
@@ -56,7 +56,7 @@ ClonableRow.propTypes = {
 
 export const OrdersClone = createReactClass({
   displayName: 'Orders-Clone',
-  mixins: [FormMixin, styled(style)],
+  mixins: [FormMixin],
   propTypes: {
     dispatch: PropTypes.func,
     orders: PropTypes.array
@@ -219,4 +219,4 @@ export const OrdersClone = createReactClass({
   }
 })
 
-export default branch({}, OrdersClone)
+export default branch({}, styledComponent(OrdersClone, style))
