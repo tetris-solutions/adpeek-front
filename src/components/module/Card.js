@@ -1,8 +1,8 @@
 import csjs from 'csjs'
 import React from 'react'
 import PropTypes from 'prop-types'
-import Chart from '../Chart/Chart'
-import {styledComponent} from '../../higher-order/styled'
+import Chart from './chart/Chart'
+import {styledComponent} from '../higher-order/styled'
 
 const style = csjs`
 .card, .content, .content > div {

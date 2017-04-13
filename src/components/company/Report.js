@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import ReportContainer from '../Report/Container'
+import ReportContainer from '../report/Container'
 import {branch} from '../higher-order/branch'
 import get from 'lodash/get'
 import endsWith from 'lodash/endsWith'

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
-import ReportLink from '../Report/ReportLink'
+import ReportLink from '../report/Link'
 import endsWith from 'lodash/endsWith'
 import Fence from '../Fence'
 import {Navigation, NavBt, NavLink, NavBts, Name} from '../Navigation'

@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import csjs from 'csjs'
-import {Button} from '../../../Button'
+import {Button} from '../../Button'
 import Message from 'tetris-iso/Message'
-import {styledFunctionalComponent} from '../../../higher-order/styled'
+import {styledFunctionalComponent} from '../../higher-order/styled'
 
 const style = csjs`
 .box {

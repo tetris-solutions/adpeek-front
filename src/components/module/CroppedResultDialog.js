@@ -1,26 +1,28 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Button} from '../../Button'
+import {Button} from '../Button'
 import Message from 'tetris-iso/Message'
 import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
+import {prettyNumber} from '../../functions/pretty-number'
 
-const DescriptionDialog = ({module}, {messages}) => (
+const CroppedResultDialog = ({module, size}, {messages, locales}) => (
   <ButtonWithPrompt
-    size='large'
     tag={props => <Button {...props} title={messages.croppedResultAlertTitle}/>}
-    label={<i className='material-icons'>info_outline</i>}
+    label={<i className='material-icons'>warning</i>}
     className='mdl-button mdl-button--icon'>
     {({dismiss}) => (
       <div className='mdl-grid'>
         <div className='mdl-cell mdl-cell--12-col'>
           <h3>
-            {module.name}
+            <Message>croppedResultAlertTitle</Message>
           </h3>
         </div>
         <div className='mdl-cell mdl-cell--12-col'>
-          <blockquote
-            style={{fontSize: '12pt'}}
-            dangerouslySetInnerHTML={{__html: module.description.replace(/\n/g, '<br/>')}}/>
+          <blockquote style={{fontSize: '12pt'}}>
+            <Message html module={module} size={prettyNumber(size, 'decimal', locales)}>
+              croppedResultAlertBody
+            </Message>
+          </blockquote>
           <br/>
           <br/>
           <hr/>
@@ -35,12 +37,14 @@ const DescriptionDialog = ({module}, {messages}) => (
     )}
   </ButtonWithPrompt>
 )
-DescriptionDialog.displayName = 'Description-Dialog'
-DescriptionDialog.propTypes = {
-  module: PropTypes.object.isRequired
+CroppedResultDialog.displayName = 'Cropped-Result-Dialog'
+CroppedResultDialog.propTypes = {
+  module: PropTypes.string.isRequired,
+  size: PropTypes.number.isRequired
 }
-DescriptionDialog.contextTypes = {
-  messages: PropTypes.object.isRequired
+CroppedResultDialog.contextTypes = {
+  messages: PropTypes.object.isRequired,
+  locales: PropTypes.string.isRequired
 }
 
-export default DescriptionDialog
+export default CroppedResultDialog

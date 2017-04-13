@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import debounce from 'lodash/debounce'
-import {styledComponent} from '../../../higher-order/styled'
+import {styledComponent} from '../../higher-order/styled'
 import csjs from 'csjs'
 
 const style = csjs`

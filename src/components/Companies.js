@@ -7,7 +7,7 @@ import SubHeader from './SubHeader'
 import {Container, Gear, Title, ThumbLink} from './ThumbLink'
 import {DropdownMenu, MenuItem} from './DropdownMenu'
 import {Link} from 'react-router'
-import ReportLink from './Report/ReportLink'
+import ReportLink from './report/Link'
 
 const Companies = ({companies, dispatch}) => (
   <div>

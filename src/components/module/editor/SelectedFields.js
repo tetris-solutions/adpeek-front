@@ -9,8 +9,8 @@ import toPairs from 'lodash/toPairs'
 import React from 'react'
 import PropTypes from 'prop-types'
 import Reorder from 'react-reorder'
-import {Button} from '../../../Button'
-import {styledComponent} from '../../../higher-order/styled'
+import {Button} from '../../Button'
+import {styledComponent} from '../../higher-order/styled'
 
 const style = csjs`
 .list {

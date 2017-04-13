@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Input from '../../../Input'
+import Input from '../../Input'
 import SelectedFields from './SelectedFields'
-import Select from '../../../Select'
+import Select from '../../Select'
 import TypeSelect from './TypeSelect'
-import _ReportChart from '../../Chart/Chart'
-import {expandVertically} from '../../../higher-order/expand-vertically'
+import _ReportChart from '../chart/Chart'
+import {expandVertically} from '../../higher-order/expand-vertically'
 import map from 'lodash/map'
 
 const ReportChart = expandVertically(_ReportChart)

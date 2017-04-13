@@ -3,7 +3,7 @@ import cx from 'classnames'
 import React from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
-import {styledComponent} from '../../../higher-order/styled'
+import {styledComponent} from '../../higher-order/styled'
 
 /**
  * finds the root list

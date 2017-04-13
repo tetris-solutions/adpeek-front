@@ -2,7 +2,7 @@ import csjs from 'csjs'
 import map from 'lodash/map'
 import React from 'react'
 import PropTypes from 'prop-types'
-import {styledComponent} from '../../../higher-order/styled'
+import {styledComponent} from '../../higher-order/styled'
 
 const style = csjs`
 .grid {

@@ -7,7 +7,7 @@ import {deleteWorkspaceAction} from '../../actions/delete-workspace'
 import {node} from '../higher-order/branch'
 import {Navigation, NavLink, NavBt, NavBts, Name} from '../Navigation'
 import Recent from '../Recent'
-import ReportLink from '../Report/ReportLink'
+import ReportLink from '../report/Link'
 
 export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
   const {company} = params

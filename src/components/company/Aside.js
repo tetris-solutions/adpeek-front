@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import {node} from '../higher-order/branch'
 import {Navigation, NavLink, NavBt, NavBts, Name} from '../Navigation'
 import Recent from '../Recent'
-import ReportLink from '../Report/ReportLink'
+import ReportLink from '../report/Link'
 
 export const CompanyAside = ({company, params, dispatch}) => {
   const baseUrl = `/company/${company.id}`

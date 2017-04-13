@@ -71,17 +71,17 @@ const reportSection = provide => tempSyncEnsure(() => provide({
   folder: require('./components/folder/Report'),
   workspace: require('./components/workspace/Report'),
   company: require('./components/company/Report'),
-  share: require('./components/Report/Share'),
-  aside: require('./components/Report/Aside'),
-  asideLite: require('./components/Report/AsideLite')
+  share: require('./components/report/Share'),
+  aside: require('./components/report/Aside'),
+  asideLite: require('./components/report/AsideLite')
 }))
 
 const breadcrumbs = provide => tempSyncEnsure(() => provide({
   company: require('./components/company/Breadcrumb'),
   folder: require('./components/folder/Breadcrumb'),
   workspace: require('./components/workspace/Breadcrumb'),
-  report: require('./components/Report/Breadcrumb'),
-  reports: require('./components/Report/ListBreadcrumb'),
+  report: require('./components/report/Breadcrumb'),
+  reports: require('./components/report/ListBreadcrumb'),
   order: require('./components/OrderBreadcrumb'),
   orders: require('./components/OrdersBreadcrumb')
 }))
@@ -107,7 +107,7 @@ const forms = provide => tempSyncEnsure(() => provide({
   folderEdit: require('./components/folder/Edit'),
   workspaceCreate: require('./components/workspace/Create'),
   workspaceEdit: require('./components/workspace/Edit'),
-  reportCreate: require('./components/Report/CreateForm')
+  reportCreate: require('./components/report/CreateForm')
 }))
 
 const companyLevel = provide => tempSyncEnsure(() => provide({
@@ -131,13 +131,13 @@ const orderLevel = provide => tempSyncEnsure(() => provide({
 }))
 
 const unsub = provide => tempSyncEnsure(() =>
-  provide(require('./components/Report/Unsub')))
+  provide(require('./components/report/Unsub')))
 
 const expired = provide => tempSyncEnsure(() =>
-  provide(require('./components/Report/Expired')))
+  provide(require('./components/report/Expired')))
 
 const mailing = provide => tempSyncEnsure(() =>
-  provide(require('./components/Report/Mailing')))
+  provide(require('./components/report/Mailing')))
 
 const companies = provide => tempSyncEnsure(() =>
   provide(require('./components/Companies')))
@@ -146,7 +146,7 @@ const autoBudget = provide => tempSyncEnsure(() =>
   provide(require('./components/OrderAutoBudget')))
 
 const reportList = provide => tempSyncEnsure(() =>
-  provide(require('./components/Report/List')))
+  provide(require('./components/report/List')))
 
 const orderList = provide => tempSyncEnsure(() =>
   provide(require('./components/Orders')))
