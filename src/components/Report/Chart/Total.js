@@ -1,8 +1,7 @@
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import csjs from 'csjs'
-import {styled} from '../../mixins/styled'
+import {styledComponent} from '../../higher-order/styled'
 import head from 'lodash/head'
 import get from 'lodash/get'
 import {prettyNumber} from '../../../functions/pretty-number'
@@ -36,20 +35,22 @@ const style = csjs`
   color: grey;
 }`
 
-const TotalChart = createReactClass({
-  displayName: 'Total-Chart',
-  mixins: [styled(style)],
-  propTypes: {
+class TotalChart extends React.Component {
+  static displayName = 'Total-Chart'
+
+  static propTypes = {
     name: PropTypes.string.isRequired,
     attributes: PropTypes.object,
     query: PropTypes.shape({
       metrics: PropTypes.array
     }).isRequired,
     result: PropTypes.array.isRequired
-  },
-  contextTypes: {
+  }
+
+  static contextTypes = {
     locales: PropTypes.string
-  },
+  }
+
   render () {
     const {query: {metrics}, name, result, attributes} = this.props
     const metric = head(metrics)
@@ -93,6 +94,6 @@ const TotalChart = createReactClass({
       </div>
     )
   }
-})
+}
 
-export default TotalChart
+export default styledComponent(TotalChart, style)

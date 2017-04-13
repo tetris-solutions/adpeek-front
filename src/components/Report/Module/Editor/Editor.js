@@ -1,5 +1,4 @@
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import csjs from 'csjs'
 import Message from 'tetris-iso/Message'
@@ -9,7 +8,7 @@ import Description from './Description'
 import Filters from './Filters'
 import Preview from './Preview'
 import {Tabs, Tab} from '../../../Tabs'
-import {styled} from '../../../mixins/styled'
+import {styledComponent} from '../../../higher-order/styled'
 import pick from 'lodash/pick'
 import concat from 'lodash/concat'
 import filter from 'lodash/filter'
@@ -29,15 +28,17 @@ const style = csjs`
   float: right;
   margin-right: 1em
 }`
-const Editor = createReactClass({
-  displayName: 'Editor',
-  mixins: [styled(style)],
-  contextTypes: {
+
+class Editor extends React.Component {
+  static displayName = 'Editor'
+
+  static contextTypes = {
     draft: PropTypes.object.isRequired,
     messages: PropTypes.object.isRequired,
     attributes: PropTypes.object.isRequired
-  },
-  propTypes: {
+  }
+
+  static propTypes = {
     invalidPermutation: PropTypes.array,
     maxAccounts: PropTypes.number.isRequired,
     numberOfSelectedAccounts: PropTypes.number.isRequired,
@@ -48,10 +49,12 @@ const Editor = createReactClass({
     save: PropTypes.func.isRequired,
     redraw: PropTypes.func.isRequired,
     cancel: PropTypes.func.isRequired
-  },
-  childContextTypes: {
+  }
+
+  static childContextTypes = {
     selectable: PropTypes.object
-  },
+  }
+
   getChildContext () {
     const {attributes, draft} = this.context
     const selected = pick(attributes, concat(draft.module.dimensions, draft.module.metrics))
@@ -73,7 +76,8 @@ const Editor = createReactClass({
     })
 
     return {selectable}
-  },
+  }
+
   render () {
     const {
       isLoading,
@@ -173,6 +177,6 @@ const Editor = createReactClass({
       </div>
     )
   }
-})
+}
 
-export default Editor
+export default styledComponent(Editor, style)

@@ -1,10 +1,9 @@
 import csjs from 'csjs'
 import cx from 'classnames'
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
-import {styled} from '../../../mixins/styled'
+import {styledComponent} from '../../../higher-order/styled'
 
 /**
  * finds the root list
@@ -116,15 +115,14 @@ GenericItem.propTypes = {
   selectable: PropTypes.bool
 }
 
-const AttributeItem = createReactClass({
-  displayName: 'Attribute-Item',
-  mixins: [styled(style)],
-  getDefaultProps () {
-    return {
-      fixed: false
-    }
-  },
-  propTypes: {
+class AttributeItem extends React.Component {
+  static displayName = 'Attribute-Item'
+
+  static defaultProps = {
+    fixed: false
+  }
+
+  static propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string,
     type: PropTypes.string,
@@ -133,8 +131,9 @@ const AttributeItem = createReactClass({
     description: PropTypes.string,
     selected: PropTypes.bool.isRequired,
     toggle: PropTypes.func
-  },
-  onClick (e) {
+  }
+
+  onClick = (e) => {
     e.persist()
     const {currentTarget: li, nativeEvent: {shiftKey, ctrlKey}} = e
     const {toggle, id} = this.props
@@ -152,13 +151,15 @@ const AttributeItem = createReactClass({
     }
 
     toggle(ids)
-  },
+  }
+
   componentDidMount () {
     const el = ReactDOM.findDOMNode(this)
 
     el._getId = () => this.props.id
     el._isSelected = () => this.props.selected
-  },
+  }
+
   render () {
     const {selected, toggle, headline} = this.props
     const className = cx({
@@ -179,6 +180,6 @@ const AttributeItem = createReactClass({
         selectable={Boolean(toggle)}/>
     )
   }
-})
+}
 
-export default AttributeItem
+export default styledComponent(AttributeItem, style)

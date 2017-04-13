@@ -1,8 +1,7 @@
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import debounce from 'lodash/debounce'
-import {styled} from '../../../mixins/styled'
+import {styledComponent} from '../../../higher-order/styled'
 import csjs from 'csjs'
 
 const style = csjs`
@@ -13,34 +12,39 @@ const style = csjs`
   height: 70vh;
 }`
 
-const Description = createReactClass({
-  displayName: 'Description',
-  mixins: [styled(style)],
-  contextTypes: {
+class Description extends React.Component {
+  static displayName = 'Description'
+
+  static contextTypes = {
     draft: PropTypes.object.isRequired,
     change: PropTypes.func.isRequired,
     messages: PropTypes.object.isRequired
-  },
+  }
+
   componentWillMount () {
     this.setState({
       description: this.savedDescription() || ''
     })
-  },
+  }
+
   componentDidMount () {
     this.save = debounce(() => {
       this.context.change({
         description: this.state.description
       })
     }, 1000)
-  },
-  savedDescription () {
+  }
+
+  savedDescription = () => {
     return this.context.draft.module.description
-  },
-  onChange ({target: {value}}) {
+  }
+
+  onChange = ({target: {value}}) => {
     this.setState({
       description: value
     }, this.save)
-  },
+  }
+
   render () {
     return (
       <div className='mdl-grid'>
@@ -59,6 +63,6 @@ const Description = createReactClass({
       </div>
     )
   }
-})
+}
 
-export default Description
+export default styledComponent(Description, style)

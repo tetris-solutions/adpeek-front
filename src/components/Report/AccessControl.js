@@ -1,5 +1,4 @@
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
@@ -7,7 +6,7 @@ import {openReportAction} from '../../actions/open-report'
 import {setDefaultReportAction} from '../../actions/set-default-report'
 import {updateReportAction} from '../../actions/update-report'
 import csjs from 'csjs'
-import {styled} from '../mixins/styled'
+import {styledComponent} from '../higher-order/styled'
 import {branch, many} from '../higher-order/branch'
 import Fence from '../Fence'
 import {inferLevelFromParams, inferLevelFromProps} from '../../functions/infer-level-from-params'
@@ -179,20 +178,20 @@ Options.propTypes = {
   canEdit: PropTypes.bool.isRequired
 }
 
-const ReportAccessControl = createReactClass({
-  displayName: 'Report-Access-Control',
-  mixins: [styled(style)],
-  getInitialState () {
-    return {
-      isModalOpen: false
-    }
-  },
-  propTypes: {
+class ReportAccessControl extends React.Component {
+  static displayName = 'Report-Access-Control'
+
+  static propTypes = {
     dispatch: PropTypes.func.isRequired,
     report: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired
-  },
+  }
+
+  state = {
+    isModalOpen: false
+  }
+
   componentWillMount () {
     const {dispatch, report, params} = this.props
 
@@ -209,18 +208,22 @@ const ReportAccessControl = createReactClass({
 
     this.setMedia = media =>
       dispatch(updateReportAction, params, {id: report.id, media})
-  },
-  open () {
+  }
+
+  open = () => {
     this.setState({isModalOpen: true})
-  },
-  close () {
+  }
+
+  close = () => {
     this.setState({isModalOpen: false})
-  },
-  reload () {
+  }
+
+  reload = () => {
     const {params, dispatch, report} = this.props
 
     return dispatch(loadReportAction, params, report.id)
-  },
+  }
+
   render () {
     const {report, user, params} = this.props
     const level = inferLevelFromParams(params)
@@ -251,9 +254,9 @@ const ReportAccessControl = createReactClass({
       </MenuItem>
     )
   }
-})
+}
 
 export default many([
   {user: ['user']},
   [inferLevelFromProps, 'report']
-], ReportAccessControl)
+], styledComponent(ReportAccessControl, style))

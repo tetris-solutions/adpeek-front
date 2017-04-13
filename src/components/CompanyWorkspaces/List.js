@@ -9,7 +9,6 @@ import includes from 'lodash/includes'
 import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import Fence from '../Fence'
 import SearchBox from '../HeaderSearchBox'
@@ -20,7 +19,7 @@ import SubHeader, {SubHeaderButton} from '../SubHeader'
 import Page from '../Page'
 import {Link} from 'react-router'
 import {loadWorkspaceStatsAction} from '../../actions/load-workspace-stats'
-import {styled} from '../mixins/styled'
+import {styledComponent} from '../higher-order/styled'
 import style from './style'
 import Workspace from './Item'
 import Switch from '../Switch'
@@ -82,10 +81,10 @@ List.propTypes = {
 }
 List = collection('company', 'workspaces', List)
 
-export const Workspaces = createReactClass({
-  displayName: 'Workspaces',
-  mixins: [styled(style)],
-  propTypes: {
+class Workspaces extends React.Component {
+  static displayName = 'Workspaces'
+
+  static propTypes = {
     params: PropTypes.shape({
       company: PropTypes.string
     }),
@@ -95,35 +94,40 @@ export const Workspaces = createReactClass({
       id: PropTypes.string,
       workspaces: PropTypes.array
     })
-  },
-  contextTypes: {
+  }
+
+  static contextTypes = {
     router: PropTypes.object
-  },
-  getInitialState () {
-    return {
-      visibleOnly: true,
-      searchValue: ''
-    }
-  },
+  }
+
+  state = {
+    visibleOnly: true,
+    searchValue: ''
+  }
+
   componentDidMount () {
     const {company: {id: companyId, workspaces}, dispatch, location: {query}} = this.props
 
     forEach(workspaces, ({id: workspaceId}) =>
       dispatch(loadWorkspaceStatsAction, companyId, workspaceId, Boolean(query.fresh)))
-  },
-  onChange (searchValue) {
+  }
+
+  onChange = (searchValue) => {
     this.setState({searchValue})
-  },
-  onSwitch ({target: {checked: visibleOnly}}) {
+  }
+
+  onSwitch = ({target: {checked: visibleOnly}}) => {
     this.setState({visibleOnly}, this.reload)
-  },
-  reload () {
+  }
+
+  reload = () => {
     this.props.dispatch(
       loadCompanyWorkspacesAction,
       this.props.params,
       !this.state.visibleOnly
     )
-  },
+  }
+
   render () {
     const searchValue = cleanStr(this.state.searchValue)
 
@@ -152,6 +156,6 @@ export const Workspaces = createReactClass({
       </div>
     )
   }
-})
+}
 
-export default notNullable(Workspaces, 'company')
+export default notNullable(styledComponent(Workspaces, style), 'company')

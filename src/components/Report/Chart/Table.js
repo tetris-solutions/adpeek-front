@@ -17,7 +17,6 @@ import stableSort from 'stable'
 import toPairs from 'lodash/toPairs'
 import Message from 'tetris-iso/Message'
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import isNumber from 'lodash/isNumber'
 import {prettyNumber} from '../../../functions/pretty-number'
@@ -25,7 +24,7 @@ import entityType from '../../../propTypes/report-entity'
 import reportParamsType from '../../../propTypes/report-params'
 import Ad from './TableAd'
 import Video, {Channel} from './TableVideo'
-import {styled} from '../../mixins/styled'
+import {styledFunctionalComponent} from '../../higher-order/styled'
 import isDate from 'lodash/isDate'
 import includes from 'lodash/includes'
 
@@ -256,10 +255,10 @@ class ReportModuleTableTH extends React.Component {
 
 const crop = (ls, n) => n ? ls.slice(0, n) : ls
 
-const ReportModuleTable = createReactClass({
-  displayName: 'Module-Table',
-  mixins: [styled(style)],
-  propTypes: {
+class ReportModuleTable extends React.Component {
+  static displayName = 'Module-Table'
+
+  static propTypes = {
     channels: PropTypes.object,
     sort: PropTypes.array,
     change: PropTypes.func,
@@ -271,13 +270,13 @@ const ReportModuleTable = createReactClass({
     entity: entityType,
     attributes: PropTypes.object.isRequired,
     result: PropTypes.array.isRequired
-  },
-  getDefaultProps () {
-    return {
-      channels: {}
-    }
-  },
-  getHeaderName (_, header) {
+  }
+
+  static defaultProps = {
+    channels: {}
+  }
+
+  getHeaderName = (_, header) => {
     const {attributes} = this.props
 
     const text = attributes[header]
@@ -285,8 +284,9 @@ const ReportModuleTable = createReactClass({
       : header
 
     return {text, value: header}
-  },
-  toggleHeader (id) {
+  }
+
+  toggleHeader = (id) => {
     const sortObj = pick(fromPairs(this.props.sort), id, '_fields_')
 
     if (sortObj[id] === 'desc') {
@@ -296,8 +296,9 @@ const ReportModuleTable = createReactClass({
     }
 
     this.props.change({sort: toPairs(sortObj)})
-  },
-  getEntityComponentById (id) {
+  }
+
+  getEntityComponentById = (id) => {
     const {entity: {id: entityId, list}, reportParams} = this.props
     const item = find(list, {id})
 
@@ -316,13 +317,15 @@ const ReportModuleTable = createReactClass({
     }
 
     return new Sortable(item.name || id, sortKey)
-  },
-  getChannelColumn (channelId) {
+  }
+
+  getChannelColumn = (channelId) => {
     const data = get(this.props.channels, channelId, {})
 
     return new Sortable(<Channel id={channelId} {...data}/>, get(data, 'channel.title', channelId))
-  },
-  getRowCompareFn () {
+  }
+
+  getRowCompareFn = () => {
     const {sort, query: {metrics, dimensions}} = this.props
     const sortCol = find(sort, ([name]) => (
       includes(dimensions, name) ||
@@ -336,7 +339,8 @@ const ReportModuleTable = createReactClass({
     }
 
     return (a, b) => comparison(metrics[0], 'desc', a, b)
-  },
+  }
+
   render () {
     const {
       sort,
@@ -407,7 +411,7 @@ const ReportModuleTable = createReactClass({
       </table>
     )
   }
-})
+}
 
 const VideoWrapper = props => (
   <ReportModuleTable {...props} channels={props.company.channels}/>
@@ -433,4 +437,4 @@ Wrapper.propTypes = {
   entity: entityType
 }
 
-export default Wrapper
+export default styledFunctionalComponent(Wrapper, style)

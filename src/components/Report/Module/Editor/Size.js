@@ -1,9 +1,9 @@
 import csjs from 'csjs'
 import map from 'lodash/map'
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
-import {styled} from '../../../mixins/styled'
+import {styledComponent} from '../../../higher-order/styled'
+
 const style = csjs`
 .grid {
   padding-top: 0;
@@ -36,19 +36,21 @@ const style = csjs`
 const availableColSizes = [[4, '1/3'], [6, '1/2'], [8, '2/3'], [12, '3/3']]
 const availableRowSizes = [2, 3, 4, 5, 6]
 
-const EditSize = createReactClass({
-  displayName: 'Edit-Size',
-  mixins: [styled(style)],
-  contextTypes: {
+class EditSize extends React.Component {
+  static displayName = 'Edit-Size'
+
+  static contextTypes = {
     draft: PropTypes.object.isRequired,
     change: PropTypes.func.isRequired
-  },
-  onSelect (cols, rows) {
+  }
+
+  onSelect = (cols, rows) => {
     return e => {
       e.preventDefault()
       this.context.change({cols, rows})
     }
-  },
+  }
+
   render () {
     const {draft: {module: {cols, rows}}} = this.context
     const getColor = (currentCol, currentRows) => cols >= currentCol && rows >= currentRows
@@ -90,6 +92,6 @@ const EditSize = createReactClass({
       </div>
     )
   }
-})
+}
 
-export default EditSize
+export default styledComponent(EditSize, style)

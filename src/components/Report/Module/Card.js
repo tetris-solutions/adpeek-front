@@ -1,9 +1,8 @@
 import csjs from 'csjs'
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import Chart from '../Chart/Chart'
-import {styled} from '../../mixins/styled'
+import {styledComponent} from '../../higher-order/styled'
 
 const style = csjs`
 .card, .content, .content > div {
@@ -11,33 +10,38 @@ const style = csjs`
   height: 100%;
 }`
 
-const ModuleCard = createReactClass({
-  displayName: 'Module-Card',
-  mixins: [styled(style)],
-  propTypes: {
+class ModuleCard extends React.Component {
+  static displayName = 'Module-Card'
+
+  static propTypes = {
     children: PropTypes.node.isRequired
-  },
-  contextTypes: {
+  }
+
+  static contextTypes = {
     module: PropTypes.object.isRequired
-  },
+  }
+
   componentWillReceiveProps (props, {module: {cols, rows}}) {
     const {module} = this.context
 
     this.repaintChart = cols !== module.cols || rows !== module.rows
-  },
+  }
+
   componentDidUpdate () {
     if (this.repaintChart) {
       delete this.repaintChart
       this.reflow()
     }
-  },
-  reflow () {
+  }
+
+  reflow = () => {
     const resizedChart = this.refs.chartWrapper.querySelector('div[data-highcharts-chart]')
 
     if (resizedChart) {
       resizedChart.HCharts.reflow()
     }
-  },
+  }
+
   render () {
     return (
       <div className={`mdl-card mdl-shadow--2dp ${style.card}`}>
@@ -48,6 +52,6 @@ const ModuleCard = createReactClass({
       </div>
     )
   }
-})
+}
 
-export default ModuleCard
+export default styledComponent(ModuleCard, style)

@@ -1,5 +1,4 @@
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import TextMessage from 'intl-messageformat'
 import Switch from '../../Switch'
@@ -8,7 +7,7 @@ import VerticalAlign from '../../VerticalAlign'
 import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
 import Message from 'tetris-iso/Message'
 import {Button, Submit} from '../../Button'
-import {styled} from '../../mixins/styled'
+import {styledComponent} from '../../higher-order/styled'
 import csjs from 'csjs'
 import size from 'lodash/size'
 import map from 'lodash/map'
@@ -231,45 +230,52 @@ class Comments extends React.Component {
   }
 }
 
-const CommentsButton = createReactClass({
-  displayName: 'Comments-Button',
-  mixins: [styled(style)],
-  propTypes: {
+class CommentsButton extends React.Component {
+  static displayName = 'Comments-Button'
+
+  static propTypes = {
     dispatch: Comments.propTypes.dispatch,
     params: Comments.propTypes.params,
     module: Comments.propTypes.module
-  },
-  contextTypes: {
+  }
+
+  static contextTypes = {
     reportParams: PropTypes.object.isRequired
-  },
+  }
+
   componentDidMount () {
     this.loadComments()
-  },
+  }
+
   componentWillReceiveProps (nextProps, {reportParams}) {
     const {reportParams: {from, to}} = this.context
 
     if (from !== reportParams.from || to !== reportParams.to) {
       this.loadComments(reportParams)
     }
-  },
-  loadComments (reportParams = this.context.reportParams) {
+  }
+
+  loadComments = (reportParams = this.context.reportParams) => {
     const {dispatch, params, module} = this.props
 
     return dispatch(loadModuleCommentsAction, params, reportParams, module.id)
-  },
-  createComment (comment) {
+  }
+
+  createComment = (comment) => {
     const {dispatch, params, module} = this.props
 
     return dispatch(createModuleCommentAction, params, module.id, comment)
       .then(() => dispatch(pushSuccessMessageAction))
       .then(this.loadComments)
-  },
-  deleteComment (commentId) {
+  }
+
+  deleteComment = (commentId) => {
     const {dispatch, params, module} = this.props
 
     return dispatch(deleteModuleAction, params, module.id, commentId)
       .then(() => dispatch(pushSuccessMessageAction))
-  },
+  }
+
   render () {
     const {module, params, dispatch} = this.props
     const count = module.comments ? size(module.comments) : null
@@ -296,6 +302,6 @@ const CommentsButton = createReactClass({
       </ButtonWithPrompt>
     )
   }
-})
+}
 
-export default CommentsButton
+export default styledComponent(CommentsButton, style)

@@ -7,11 +7,10 @@ import map from 'lodash/map'
 import sortBy from 'lodash/sortBy'
 import toPairs from 'lodash/toPairs'
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import Reorder from 'react-reorder'
 import {Button} from '../../../Button'
-import {styled} from '../../../mixins/styled'
+import {styledComponent} from '../../../higher-order/styled'
 
 const style = csjs`
 .list {
@@ -60,23 +59,25 @@ function mountFields (attributes, dimensions, metrics, fieldSort) {
   return sortBy(map(concat(dimensions, metrics), normalizeField), 'index')
 }
 
-const SelectedFields = createReactClass({
-  displayName: 'Selected-Fields',
-  mixins: [styled(style)],
-  contextTypes: {
+class SelectedFields extends React.Component {
+  static displayName = 'Selected-Fields'
+
+  static contextTypes = {
     draft: PropTypes.object.isRequired,
     attributes: PropTypes.object.isRequired,
     removeAttribute: PropTypes.func.isRequired,
     change: PropTypes.func.isRequired
-  },
-  onReorder (event, movedItem, previousIndex, nextIndex, fieldSort) {
+  }
+
+  onReorder = (event, movedItem, previousIndex, nextIndex, fieldSort) => {
     const {draft: {module}, change} = this.context
     const sort = fromPairs(module.sort)
 
     sort._fields_ = map(fieldSort, 'id')
 
     change({sort: toPairs(sort)})
-  },
+  }
+
   render () {
     const {attributes, removeAttribute, draft: {module: {dimensions, metrics, sort}}} = this.context
     const sortPairs = fromPairs(sort)
@@ -103,6 +104,6 @@ const SelectedFields = createReactClass({
       </div>
     )
   }
-})
+}
 
-export default SelectedFields
+export default styledComponent(SelectedFields, style)

@@ -2,7 +2,6 @@ import csjs from 'csjs'
 import ReactDOM from 'react-dom'
 import floor from 'lodash/floor'
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import reportEntityType from '../../../propTypes/report-entity'
 import reportModuleType from '../../../propTypes/report-module'
@@ -12,7 +11,7 @@ import Pie from './Pie'
 import Spinner from '../../Spinner'
 import Table from './Table'
 import Total from './Total'
-import {styled} from '../../mixins/styled'
+import {styledComponent} from '../../higher-order/styled'
 import log from 'loglevel'
 
 const style = csjs`
@@ -106,27 +105,28 @@ Chart.propTypes = {
   query: PropTypes.object
 }
 
-const ChartContainer = createReactClass({
-  displayName: 'Chart',
-  mixins: [styled(style)],
-  propTypes: {
+class ChartContainer extends React.Component {
+  static displayName = 'Chart'
+
+  static propTypes = {
     change: PropTypes.func,
     height: PropTypes.number
-  },
-  contextTypes: {
+  }
+
+  static contextTypes = {
     messages: PropTypes.object,
     locales: PropTypes.string,
     module: reportModuleType.isRequired,
     entity: reportEntityType.isRequired,
     attributes: PropTypes.object.isRequired,
     reportParams: PropTypes.object.isRequired
-  },
-  getInitialState () {
-    return {
-      renderHiddenTable: false
-    }
-  },
-  renderAsTable () {
+  }
+
+  state = {
+    renderHiddenTable: false
+  }
+
+  renderAsTable = () => {
     const unlock = () => this.setState({renderHiddenTable: false})
 
     return new Promise(resolve => this.setState({renderHiddenTable: true},
@@ -134,12 +134,14 @@ const ChartContainer = createReactClass({
         resolve()
         setTimeout(unlock, 300)
       }))
-  },
+  }
+
   componentDidMount () {
     const intr = ReactDOM.findDOMNode(this).querySelector('[data-interface]')
 
     intr.renderAsTable = this.renderAsTable
-  },
+  }
+
   render () {
     const {renderHiddenTable} = this.state
     const {module, locales, reportParams, entity, attributes} = this.context
@@ -171,6 +173,6 @@ const ChartContainer = createReactClass({
       <Chart {...config}/>
     )
   }
-})
+}
 
-export default ChartContainer
+export default styledComponent(ChartContainer, style)

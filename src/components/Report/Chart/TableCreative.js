@@ -1,13 +1,12 @@
 import csjs from 'csjs'
 import find from 'lodash/find'
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import reportParamsType from '../../../propTypes/report-params'
 import {loadCreativeAction} from '../../../actions/load-creative'
 import {node} from '../../higher-order/branch'
-import {styled} from '../../mixins/styled'
+import {styledComponent} from '../../higher-order/styled'
 
 const style = csjs`
 .post {
@@ -53,10 +52,10 @@ Creative.propTypes = {
   body: PropTypes.string
 }
 
-const AdCreative = createReactClass({
-  displayName: 'Ad-Creative',
-  mixins: [styled(style)],
-  propTypes: {
+class AdCreative extends React.Component {
+  static displayName = 'Ad-Creative'
+
+  static propTypes = {
     reportParams: reportParamsType,
     params: PropTypes.shape({
       company: PropTypes.string,
@@ -70,7 +69,8 @@ const AdCreative = createReactClass({
     creative: PropTypes.object,
     creative_id: PropTypes.string,
     name: PropTypes.string
-  },
+  }
+
   componentDidMount () {
     const {reportParams, creative_id, dispatch, params} = this.props
 
@@ -80,14 +80,16 @@ const AdCreative = createReactClass({
       params.company,
       get(reportParams, ['accounts', 0, 'tetris_account']),
       creative_id)
-  },
-  getCreative () {
+  }
+
+  getCreative = () => {
     const {company, creative_id} = this.props
 
     return find(company.creatives, {
       id: creative_id
     })
-  },
+  }
+
   render () {
     const {name} = this.props
     const creative = this.getCreative()
@@ -98,6 +100,7 @@ const AdCreative = createReactClass({
 
     return <Creative {...creative} />
   }
-})
+}
 
-export default node('user', 'company', AdCreative)
+export default node('user', 'company',
+  styledComponent(AdCreative, style))

@@ -1,9 +1,8 @@
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
-import {styled} from '../mixins/styled'
+import {styledFunctionalComponent} from '../higher-order/styled'
 import {collection} from '../higher-order/branch'
 import {inferLevelFromProps} from '../../functions/infer-level-from-params'
 import map from 'lodash/map'
@@ -129,23 +128,24 @@ Report.contextTypes = {
   moment: PropTypes.func.isRequired
 }
 
-export const Reports = createReactClass({
-  displayName: 'Reports',
-  mixins: [styled(style)],
-  propTypes: {
+class Reports extends React.Component {
+  static displayName = 'Reports'
+
+  static propTypes = {
     dispatch: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
     reports: PropTypes.array,
     path: PropTypes.string
-  },
-  getInitialState () {
-    return {
-      searchValue: ''
-    }
-  },
-  onChange (searchValue) {
+  }
+
+  state = {
+    searchValue: ''
+  }
+
+  onChange = (searchValue) => {
     this.setState({searchValue})
-  },
+  }
+
   render () {
     const searchValue = cleanStr(this.state.searchValue)
     const {reports, path, dispatch, params} = this.props
@@ -177,7 +177,7 @@ export const Reports = createReactClass({
       </div>
     )
   }
-})
+}
 
 const Wrapper = props =>
   <Reports {...props} path={'/' + (
@@ -194,4 +194,5 @@ Wrapper.propTypes = {
   params: PropTypes.object
 }
 
-export default collection(inferLevelFromProps, 'reports', Wrapper)
+export default collection(inferLevelFromProps, 'reports',
+  styledFunctionalComponent(Wrapper, style))
