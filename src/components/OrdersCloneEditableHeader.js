@@ -1,8 +1,7 @@
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import Switch from './Switch'
-import {styled} from './mixins/styled'
+import {styledComponent} from './higher-order/styled'
 import csjs from 'csjs'
 import VerticalAlign from './VerticalAlign'
 import filter from 'lodash/filter'
@@ -68,15 +67,15 @@ function replicateValue (form, name, value) {
     .forEach(setValue.bind(null, name, value))
 }
 
-export const EditableHeader = createReactClass({
-  displayName: 'Editable-Header',
-  mixins: [styled(style)],
-  contextTypes: {
+class EditableHeader extends React.Component {
+  static displayName = 'Editable-Header'
+
+  static contextTypes = {
     moment: PropTypes.func
-  },
-  getInitialState () {
-    return {autoBudget: true}
-  },
+  }
+
+  state = {autoBudget: true}
+
   componentWillMount () {
     const {moment} = this.context
 
@@ -84,8 +83,9 @@ export const EditableHeader = createReactClass({
       start: moment().date(1).format('YYYY-MM-DD'),
       end: moment().add(1, 'month').date(0).format('YYYY-MM-DD')
     })
-  },
-  apply (e) {
+  }
+
+  apply = (e) => {
     e.preventDefault()
     const {wrapper, start: startInput, end: endInput} = this.refs
 
@@ -94,23 +94,27 @@ export const EditableHeader = createReactClass({
     replicateValue(autoBudgetInput.form, 'autoBudget', autoBudgetInput.checked)
     replicateValue(startInput.form, 'start', startInput.value)
     replicateValue(endInput.form, 'end', endInput.value)
-  },
-  onChangeAutoBudget ({target: {checked, form}}) {
+  }
+
+  onChangeAutoBudget = ({target: {checked, form}}) => {
     this.setState({autoBudget: checked})
     replicateValue(form, 'autoBudget', checked)
-  },
-  hasChangedDate () {
+  }
+
+  hasChangedDate = () => {
     const {start: startInput, end: endInput} = this.refs
 
     replicateValue(startInput.form, 'start', startInput.value)
     replicateValue(endInput.form, 'end', endInput.value)
-  },
-  onChangeRange ({startDate, endDate}) {
+  }
+
+  onChangeRange = ({startDate, endDate}) => {
     this.setState({
       start: startDate.format('YYYY-MM-DD'),
       end: endDate.format('YYYY-MM-DD')
     }, this.hasChangedDate)
-  },
+  }
+
   render () {
     const {moment} = this.context
     const {start, end, autoBudget} = this.state
@@ -150,6 +154,6 @@ export const EditableHeader = createReactClass({
       </div>
     )
   }
-})
+}
 
-export default EditableHeader
+export default styledComponent(EditableHeader, style)

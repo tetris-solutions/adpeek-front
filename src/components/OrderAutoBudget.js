@@ -1,38 +1,37 @@
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
-import {styled} from './mixins/styled'
-import csjs from 'csjs'
 import {node} from './higher-order/branch'
 import Input from './Input'
 import AutoBudgetLogs from './AutoBudgetLogs'
-const style = csjs`
-`
 
-export const OrderAutoBudget = createReactClass({
-  displayName: 'OrderAutoBudget',
-  mixins: [styled(style)],
-  contextTypes: {
+class OrderAutoBudget extends React.Component {
+  static displayName = 'OrderAutoBudget'
+
+  static contextTypes = {
     router: PropTypes.object,
     moment: PropTypes.func
-  },
-  propTypes: {
+  }
+
+  static propTypes = {
     order: PropTypes.object,
     folder: PropTypes.object,
     routeParams: PropTypes.object,
     params: PropTypes.object
-  },
-  onChangeDay (e) {
+  }
+
+  onChangeDay = (e) => {
     const {company, workspace, folder, order} = this.props.params
     const day = e.target.value
 
     this.context.router.push(
       `/company/${company}/workspace/${workspace}/folder/${folder}/order/${order}/autobudget/${day}`
     )
-  },
-  yesterday () {
+  }
+
+  yesterday = () => {
     return this.context.moment().subtract(1, 'day').format('YYYY-MM-DD')
-  },
+  }
+
   render () {
     const {folder, order: {autoBudgetLogs}, routeParams: {day}} = this.props
 
@@ -50,6 +49,6 @@ export const OrderAutoBudget = createReactClass({
       </div>
     )
   }
-})
+}
 
 export default node('folder', 'order', OrderAutoBudget)

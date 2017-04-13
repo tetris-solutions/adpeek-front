@@ -4,39 +4,43 @@ import map from 'lodash/map'
 import round from 'lodash/round'
 import size from 'lodash/size'
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import orderType from '../propTypes/order'
 import Chart from './Highcharts'
-import {styled} from './mixins/styled'
+import {styledComponent} from './higher-order/styled'
 
 const style = csjs`
 .orderPieChart {
   height: 70vh
 }`
 
-export const OrderPie = createReactClass({
-  displayName: 'Order-Pie',
-  mixins: [styled(style)],
-  propTypes: {
+class OrderPie extends React.Component {
+  static displayName = 'Order-Pie'
+
+  static propTypes = {
     selectedBudgetId: PropTypes.string,
     remainingAmount: PropTypes.number,
     order: orderType,
     selectBudget: PropTypes.func
-  },
-  contextTypes: {
+  }
+
+  static contextTypes = {
     messages: PropTypes.object
-  },
-  selectPoint (index, id) {
+  }
+
+  selectPoint = (index, id) => {
     this.props.selectBudget(id === 'remaining' ? null : index)
-  },
-  onBudgetClick ({point: {options: {index, id}}}) {
+  }
+
+  onBudgetClick = ({point: {options: {index, id}}}) => {
     this.selectPoint(index, id)
-  },
-  onLegendClick (e) {
+  }
+
+  onLegendClick = (e) => {
     e.preventDefault()
     this.selectPoint(e.target.options.index, e.target.options.id)
-  },
+  }
+
   render () {
     const {messages: {availableBudget, budgetLabel}} = this.context
     const {selectedBudgetId, remainingAmount, order: {name, amount, budgets}} = this.props
@@ -101,7 +105,6 @@ export const OrderPie = createReactClass({
       </Chart>
     )
   }
-})
+}
 
-export default OrderPie
-
+export default styledComponent(OrderPie, style)

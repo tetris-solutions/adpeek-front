@@ -1,5 +1,4 @@
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import Highcharts from './Highcharts'
@@ -8,7 +7,7 @@ import {loadFolderStatsAction} from '../actions/load-folder-stats'
 import compact from 'lodash/compact'
 import {pure} from 'recompose'
 import csjs from 'csjs'
-import {styled} from './mixins/styled'
+import {styledComponent} from './higher-order/styled'
 import map from 'lodash/map'
 import isNumber from 'lodash/isNumber'
 import get from 'lodash/get'
@@ -320,32 +319,34 @@ EmptyStats.contextTypes = {
   moment: PropTypes.func
 }
 
-const FolderStats = createReactClass({
-  displayName: 'Folder-Stats',
-  mixins: [styled(style)],
-  propTypes: {
+class FolderStats extends React.Component {
+  static displayName = 'Folder-Stats'
+
+  static propTypes = {
     id: PropTypes.string,
     params: PropTypes.object,
     stats: PropTypes.object,
     kpi_goal: PropTypes.number
-  },
-  contextTypes: {
+  }
+
+  static contextTypes = {
     tree: PropTypes.object.isRequired,
     locales: PropTypes.string.isRequired,
     messages: PropTypes.object.isRequired
-  },
-  getDefaultProps () {
-    return {
-      stats: {}
-    }
-  },
+  }
+
+  static defaultProps = {
+    stats: {}
+  }
+
   componentDidMount () {
     loadFolderStatsAction(
       this.context.tree,
       this.props.params,
       this.props.id
     )
-  },
+  }
+
   render () {
     const {kpi_goal, stats} = this.props
 
@@ -353,6 +354,6 @@ const FolderStats = createReactClass({
       ? <Stats kpi_goal={kpi_goal} stats={stats}/>
       : <EmptyStats lastOrder={stats.orders.last}/>
   }
-})
+}
 
-export default FolderStats
+export default styledComponent(FolderStats, style)

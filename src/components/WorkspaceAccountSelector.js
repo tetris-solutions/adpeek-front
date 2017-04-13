@@ -1,4 +1,5 @@
 import csjs from 'csjs'
+import noop from 'lodash/noop'
 import debounce from 'lodash/debounce'
 import deburr from 'lodash/deburr'
 import filter from 'lodash/filter'
@@ -9,12 +10,11 @@ import upperFirst from 'lodash/upperFirst'
 import Autosuggest from 'react-autosuggest'
 import Message from 'intl-messageformat'
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import {removeFromStart} from '../functions/remove-from-start'
 import {loadCompanyAccountsAction} from '../actions/load-company-accounts'
 import {node} from './higher-order/branch'
-import {styled} from './mixins/styled'
+import {styledComponent} from './higher-order/styled'
 
 const yes = () => true
 
@@ -163,14 +163,15 @@ function getSuggestions (accounts, platform, value) {
   return filter(accounts, matchingName)
 }
 
-export const WorkspaceAccountSelector = createReactClass({
-  displayName: 'Workspace-Account-Selector',
-  mixins: [styled(style)],
-  contextTypes: {
+class WorkspaceAccountSelector extends React.Component {
+  static displayName = 'Workspace-Account-Selector'
+
+  static contextTypes = {
     locales: PropTypes.string,
     messages: PropTypes.object
-  },
-  propTypes: {
+  }
+
+  static propTypes = {
     disabled: PropTypes.bool,
     company: PropTypes.shape({
       id: PropTypes.string,
@@ -182,24 +183,15 @@ export const WorkspaceAccountSelector = createReactClass({
     value: PropTypes.string,
     account: PropTypes.object,
     onChange: PropTypes.func
-  },
-  getDefaultProps () {
-    const noop = () => false
+  }
 
-    return {
-      account: null,
-      value: '',
-      onChange: noop,
-      onLoad: noop
-    }
-  },
-  getInitialState () {
-    return {
-      account: this.props.account,
-      value: this.addValuePrefix(this.props.value),
-      isLoading: true
-    }
-  },
+  static defaultProps = {
+    account: null,
+    value: '',
+    onChange: noop,
+    onLoad: noop
+  }
+
   componentWillMount () {
     this.setState({
       suggestions: getSuggestions(
@@ -210,13 +202,15 @@ export const WorkspaceAccountSelector = createReactClass({
           : this.removeValuePrefix(this.state.value)
       )
     })
-  },
-  updateSuggestionList () {
+  }
+
+  updateSuggestionList = () => {
     if (this.hasUnmounted) return
 
     this.setState({isLoading: false},
       () => this.onSuggestionsFetchRequested(this.state))
-  },
+  }
+
   componentDidMount () {
     const {company, platform, dispatch, onLoad} = this.props
 
@@ -225,25 +219,31 @@ export const WorkspaceAccountSelector = createReactClass({
     dispatch(loadCompanyAccountsAction, company.id, platform)
       .then(this.updateSuggestionList)
       .then(onLoad)
-  },
+  }
+
   componentWillUnmount () {
     this.hasUnmounted = true
-  },
-  platformPrefix () {
+  }
+
+  platformPrefix = () => {
     return `${upperFirst(this.props.platform)} :: `
-  },
-  addValuePrefix (value) {
+  }
+
+  addValuePrefix = (value) => {
     return value ? `${this.platformPrefix()}${this.removeValuePrefix(value)}` : value
-  },
-  removeValuePrefix (value) {
+  }
+
+  removeValuePrefix = (value) => {
     return removeFromStart(value, this.platformPrefix())
-  },
-  onChange (e, {newValue}) {
+  }
+
+  onChange = (e, {newValue}) => {
     const newState = {value: this.addValuePrefix(newValue)}
     if (!newState.value) newState.account = null
     this.setState(newState)
-  },
-  onSuggestionsFetchRequested ({value}) {
+  }
+
+  onSuggestionsFetchRequested = ({value}) => {
     this.setState({
       suggestions: getSuggestions(
         this.props.company.accounts,
@@ -251,16 +251,25 @@ export const WorkspaceAccountSelector = createReactClass({
         this.removeValuePrefix(value)
       )
     })
-  },
-  onSuggestionsClearRequested () {
+  }
+
+  onSuggestionsClearRequested = () => {
     this.setState({
       suggestions: []
     })
-  },
-  onSuggestionSelected (event, {suggestion}) {
+  }
+
+  onSuggestionSelected = (event, {suggestion}) => {
     this.setState({account: suggestion || null},
       () => this.props.onChange(this.state.account))
-  },
+  }
+
+  state = {
+    account: this.props.account,
+    value: this.addValuePrefix(this.props.value),
+    isLoading: true
+  }
+
   render () {
     const {locales, messages: {accountSelectorPlaceholder}} = this.context
     const {isLoading, suggestions, value, account} = this.state
@@ -291,6 +300,7 @@ export const WorkspaceAccountSelector = createReactClass({
       </div>
     )
   }
-})
+}
 
-export default node('user', 'company', WorkspaceAccountSelector)
+export default node('user', 'company',
+  styledComponent(WorkspaceAccountSelector, style))

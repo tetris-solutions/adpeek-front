@@ -3,12 +3,8 @@ import cx from 'classnames'
 import pick from 'lodash/pick'
 import Message from 'tetris-iso/Message'
 import React from 'react'
-
-import createReactClass from 'create-react-class'
-
 import PropTypes from 'prop-types'
-
-import {styled} from './mixins/styled'
+import {styledComponent} from './higher-order/styled'
 
 const style = csjs`
 .select option {
@@ -26,10 +22,10 @@ const selectFields = [
   'value'
 ]
 
-export const Select = createReactClass({
-  displayName: 'Select',
-  mixins: [styled(style)],
-  propTypes: {
+export class Select extends React.Component {
+  static displayName = 'Select'
+
+  static propTypes = {
     children: PropTypes.node,
     disabled: PropTypes.bool,
     value: PropTypes.any,
@@ -38,14 +34,14 @@ export const Select = createReactClass({
     label: PropTypes.string,
     name: PropTypes.string.isRequired,
     onChange: PropTypes.func
-  },
-  getInitialState () {
-    return {
-      isDirty: Boolean(this.props.value || this.props.defaultValue),
-      isFocused: false
-    }
-  },
-  onChange (e) {
+  }
+
+  state = {
+    isDirty: Boolean(this.props.value || this.props.defaultValue),
+    isFocused: false
+  }
+
+  onChange = (e) => {
     this.setState({
       isDirty: Boolean(e.target.value)
     })
@@ -53,13 +49,16 @@ export const Select = createReactClass({
     if (this.props.onChange) {
       this.props.onChange(e)
     }
-  },
-  onFocus () {
+  }
+
+  onFocus = () => {
     this.setState({isFocused: true})
-  },
-  onBlur () {
+  }
+
+  onBlur = () => {
     this.setState({isFocused: false})
-  },
+  }
+
   render () {
     const {isDirty, isFocused} = this.state
     const {error, label} = this.props
@@ -94,6 +93,6 @@ export const Select = createReactClass({
       </div>
     )
   }
-})
+}
 
-export default Select
+export default styledComponent(Select, style)

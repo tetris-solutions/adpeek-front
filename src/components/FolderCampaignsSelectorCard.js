@@ -3,14 +3,13 @@ import {Button, Submit} from './Button'
 import forEach from 'lodash/forEach'
 import Message from 'tetris-iso/Message'
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import Fence from './Fence'
 import map from 'lodash/map'
 import size from 'lodash/size'
 import {Form, Content, Header, Footer} from './Card'
-import {styled} from './mixins/styled'
+import {styledComponent} from './higher-order/styled'
 import groupBy from 'lodash/groupBy'
 
 const style = csjs`
@@ -62,10 +61,10 @@ class InactiveCampaigns extends React.Component {
   }
 }
 
-export const FolderCampaignsSelector = createReactClass({
-  displayName: 'Campaigns-Selector',
-  mixins: [styled(style)],
-  propTypes: {
+class FolderCampaignsSelector extends React.Component {
+  static displayName = 'Campaigns-Selector'
+
+  static propTypes = {
     campaigns: PropTypes.array.isRequired,
     renderer: PropTypes.func.isRequired,
     readOnly: PropTypes.bool.isRequired,
@@ -75,26 +74,26 @@ export const FolderCampaignsSelector = createReactClass({
     title: PropTypes.node,
     label: PropTypes.string,
     onSelected: PropTypes.func
-  },
-  contextTypes: {
+  }
+
+  static contextTypes = {
     messages: PropTypes.shape({
       selectAllCampaigns: PropTypes.string,
       deselectAllCampaigns: PropTypes.string
     })
-  },
-  getInitialState () {
-    return {
-      selected: false,
-      activeOnly: false
-    }
-  },
-  getDefaultProps () {
-    return {
-      headerColor: 'primary',
-      headerTextColor: 'white'
-    }
-  },
-  handleSubmit (e) {
+  }
+
+  static defaultProps = {
+    headerColor: 'primary',
+    headerTextColor: 'white'
+  }
+
+  state = {
+    selected: false,
+    activeOnly: false
+  }
+
+  handleSubmit = (e) => {
     e.preventDefault()
     const values = []
 
@@ -110,8 +109,9 @@ export const FolderCampaignsSelector = createReactClass({
 
     this.setState({selected: false})
     this.props.onSelected(values)
-  },
-  toggleAll (e) {
+  }
+
+  toggleAll = (e) => {
     e.preventDefault()
 
     const form = ReactDOM.findDOMNode(this.refs.form)
@@ -129,7 +129,8 @@ export const FolderCampaignsSelector = createReactClass({
     forEach(form.elements, toggleCheckBox)
 
     this.setState({selected: !selected})
-  },
+  }
+
   render () {
     const {selected} = this.state
     const {messages: {selectAllCampaigns, deselectAllCampaigns}} = this.context
@@ -182,6 +183,6 @@ export const FolderCampaignsSelector = createReactClass({
       </Form>
     )
   }
-})
+}
 
-export default FolderCampaignsSelector
+export default styledComponent(FolderCampaignsSelector, style)

@@ -1,10 +1,9 @@
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import {Button} from './Button'
 import Message from 'tetris-iso/Message'
 import csjs from 'csjs'
-import {styled} from './mixins/styled'
+import {styledComponent} from './higher-order/styled'
 import gravatar from 'gravatar'
 import Tooltip from 'tetris-iso/Tooltip'
 import {many} from './higher-order/branch'
@@ -143,22 +142,24 @@ const UserMenu = props => (
 UserMenu.displayName = 'UserMenu'
 UserMenu.propTypes = pTypes
 
-const Header = createReactClass({
-  displayName: 'Header',
-  mixins: [styled(style)],
-  propTypes: {
+class Header extends React.Component {
+  static displayName = 'Header'
+
+  static propTypes = {
     dispatch: PropTypes.func.isRequired,
     user: PropTypes.shape({
       name: PropTypes.string
     }),
     hideLogin: PropTypes.bool.isRequired,
     company: PropTypes.object
-  },
-  loginRoundTrip () {
+  }
+
+  loginRoundTrip = () => {
     this.props.dispatch(logoutAction)
 
     window.location.href = process.env.FRONT_URL + '/login?next=' + encodeURIComponent(window.location.href)
-  },
+  }
+
   render () {
     const {user, company, hideLogin} = this.props
     let GoHome, homeProps, leftButton
@@ -193,9 +194,9 @@ const Header = createReactClass({
       </header>
     )
   }
-})
+}
 
 export default many([
   {user: ['user']},
   ['user', 'company']
-], Header)
+], styledComponent(Header, style))

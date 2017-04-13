@@ -1,7 +1,6 @@
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
-import {styled} from './mixins/styled'
+import {styledComponent} from './higher-order/styled'
 import findLast from 'lodash/findLast'
 import property from 'lodash/property'
 import csjs from 'csjs'
@@ -43,40 +42,44 @@ const style = csjs`
   margin: 40vh 0 0 2px;  
 }`
 
-const Page = createReactClass({
-  displayName: 'Page',
-  mixins: [styled(style)],
-  propTypes: {
+class Page extends React.Component {
+  static displayName = 'Page'
+
+  static propTypes = {
     children: PropTypes.node.isRequired
-  },
-  contextTypes: {
+  }
+
+  static contextTypes = {
     routes: PropTypes.array.isRequired
-  },
-  getInitialState () {
-    return {
-      isNavOpen: typeof window !== 'undefined' && this.readFromLocalStorage()
-    }
-  },
-  toggleNav () {
+  }
+
+  toggleNav = () => {
     this.setState({
       isNavOpen: !this.state.isNavOpen
     }, this.onAsideVisibilityChange)
-  },
-  readFromLocalStorage () {
+  }
+
+  readFromLocalStorage = () => {
     try {
       return window.localStorage.getItem('openSideNav') !== 'false'
     } catch (e) {
       return true
     }
-  },
-  onAsideVisibilityChange () {
+  }
+
+  onAsideVisibilityChange = () => {
     setTimeout(() => window.event$.emit('aside-toggle'), 300)
 
     try {
       window.localStorage.setItem('openSideNav', this.state.isNavOpen)
     } catch (e) {
     }
-  },
+  }
+
+  state = {
+    isNavOpen: typeof window !== 'undefined' && this.readFromLocalStorage()
+  }
+
   render () {
     const Aside = getAside(findLast(this.context.routes, getAside))
     const caret = this.state.isNavOpen ? '◀' : '▶'
@@ -97,6 +100,6 @@ const Page = createReactClass({
       </div>
     )
   }
-})
+}
 
-export default Page
+export default styledComponent(Page, style)

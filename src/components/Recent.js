@@ -1,12 +1,11 @@
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import {loadRecentAction} from '../actions/load-recent'
 import camelCase from 'lodash/camelCase'
 import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
 import csjs from 'csjs'
-import {styled} from './mixins/styled'
+import {styledComponent} from './higher-order/styled'
 import {Link} from 'react-router'
 import compact from 'lodash/compact'
 
@@ -34,24 +33,27 @@ const levels = ['company', 'workspace', 'folder', 'campaign', 'order', 'report']
 const calcPath = params => compact(map(levels, name => params[name] && `${name}/${params[name]}`))
   .join('/')
 
-const Recent = createReactClass({
-  displayName: 'Recent',
-  mixins: [styled(style)],
-  propTypes: {
+class Recent extends React.Component {
+  static displayName = 'Recent'
+
+  static propTypes = {
     dispatch: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
     icon: PropTypes.string.isRequired,
     level: PropTypes.string.isRequired,
     node: PropTypes.object.isRequired
-  },
-  getList () {
+  }
+
+  getList = () => {
     return this.props.node[camelCase(`recent ${this.props.level}`)]
-  },
+  }
+
   componentDidMount () {
     const {dispatch, params, level} = this.props
 
     dispatch(loadRecentAction, level, params)
-  },
+  }
+
   render () {
     const {level, params, icon} = this.props
     const path = calcPath(params)
@@ -75,6 +77,6 @@ const Recent = createReactClass({
       </div>
     )
   }
-})
+}
 
-export default Recent
+export default styledComponent(Recent, style)

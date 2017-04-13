@@ -1,10 +1,9 @@
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import Spinner from './Spinner'
 import {branch} from './higher-order/branch'
-import {styled} from './mixins/styled'
+import {styledComponent} from './higher-order/styled'
 import {runningActionCounter} from '../functions/intercept-preload'
 
 import csjs from 'csjs'
@@ -36,30 +35,35 @@ Loading.propTypes = {
   running: PropTypes.number
 }
 
-const Wrapper = createReactClass({
-  displayName: 'Loading-Wrapper',
-  mixins: [styled(style)],
-  propTypes: {
+class Wrapper extends React.Component {
+  static displayName = 'Loading-Wrapper'
+
+  static propTypes = {
     running: PropTypes.number
-  },
+  }
+
   componentDidMount () {
     this.container = document.createElement('div')
     this.container.classList.add(String(style.float))
 
     document.body.appendChild(this.container)
-  },
+  }
+
   componentDidUpdate () {
     this.draw()
-  },
-  draw () {
+  }
+
+  draw = () => {
     ReactDOM.render(
       <Loading running={this.props.running}/>,
       this.container
     )
-  },
+  }
+
   render () {
     return null
   }
-})
+}
 
-export default branch({running: [runningActionCounter]}, Wrapper)
+export default branch({running: [runningActionCounter]},
+  styledComponent(Wrapper, style))

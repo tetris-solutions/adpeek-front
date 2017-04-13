@@ -1,10 +1,9 @@
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import isString from 'lodash/isString'
 import csjs from 'csjs'
-import {styled} from './mixins/styled'
+import {styledComponent} from './higher-order/styled'
 import omit from 'lodash/omit'
 import {Link} from 'react-router'
 
@@ -114,27 +113,30 @@ NavContainer.propTypes = {
   children: PropTypes.node
 }
 
-export const Navigation = createReactClass({
-  displayName: 'Navigation',
-  mixins: [styled(style)],
-  propTypes: {
+class Navigation_ extends React.Component {
+  static displayName = 'Navigation'
+
+  static propTypes = {
     icon: PropTypes.node,
     img: PropTypes.string,
     children: PropTypes.node
-  },
+  }
+
   componentDidMount () {
     window.event$.emit('aside-toggle')
 
     document.querySelector('#app main')
       .addEventListener('scroll', this.onScroll)
-  },
+  }
+
   componentWillUnmount () {
     this.dead = true
 
     document.querySelector('#app main')
       .removeEventListener('scroll', this.onScroll)
-  },
-  onScroll () {
+  }
+
+  onScroll = () => {
     window.requestAnimationFrame(() => {
       if (this.dead) return
 
@@ -150,7 +152,8 @@ export const Navigation = createReactClass({
         ? Math.min(slideHeight, maxSlide) + 'px'
         : ''
     })
-  },
+  }
+
   render () {
     const {icon, img, children} = this.props
 
@@ -173,4 +176,6 @@ export const Navigation = createReactClass({
       </NavContainer>
     )
   }
-})
+}
+
+export const Navigation = styledComponent(Navigation_, style)

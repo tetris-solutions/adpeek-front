@@ -1,13 +1,12 @@
 import csjs from 'csjs'
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import OrderDateRange from './OrderDateRange'
 import orderType from '../propTypes/order'
 import Input from './Input'
 import Switch from './Switch'
 import VerticalAlign from './VerticalAlign'
-import {styled} from './mixins/styled'
+import {styledComponent} from './higher-order/styled'
 
 const style = csjs`
 .card {
@@ -21,29 +20,33 @@ const style = csjs`
   padding: 0
 }`
 
-export const OrderHeader = createReactClass({
-  displayName: 'Order-Header',
-  mixins: [styled(style)],
-  propTypes: {
+class OrderHeader extends React.Component {
+  static displayName = 'Order-Header'
+
+  static propTypes = {
     min: PropTypes.number.isRequired,
     change: PropTypes.func,
     order: orderType
-  },
-  contextTypes: {
+  }
+
+  static contextTypes = {
     moment: PropTypes.func.isRequired
-  },
+  }
+
   componentWillMount () {
     const {change} = this.props
     this.onChangeValue = ({target: {name, value}}) => change(name, value)
     this.onChangeNumber = ({target: {name, value}}) => change(name, Number(value))
     this.onChangeBoolean = ({target: {checked, name}}) => change(name, checked)
-  },
-  onChangeRange ({startDate, endDate}) {
+  }
+
+  onChangeRange = ({startDate, endDate}) => {
     this.props.change({
       start: startDate.format('YYYY-MM-DD'),
       end: endDate.format('YYYY-MM-DD')
     })
-  },
+  }
+
   render () {
     const {moment} = this.context
     const {min, order: {name, auto_budget, amount, start, end}} = this.props
@@ -91,6 +94,6 @@ export const OrderHeader = createReactClass({
       </div>
     )
   }
-})
+}
 
-export default OrderHeader
+export default styledComponent(OrderHeader, style)
