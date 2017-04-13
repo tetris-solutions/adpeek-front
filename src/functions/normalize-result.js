@@ -29,6 +29,7 @@ function zeroedMoment (str) {
 }
 
 const prefixless = name => name.substr(name.indexOf(':') + 1)
+const containsNonNumeric = rawValue => isString(rawValue) && rawValue.match(/[^0-9\s,.%]/)
 
 /**
  * @param {Object} attributes attributes for type mapping
@@ -43,9 +44,8 @@ export function normalizeResult (attributes, result) {
 
     if (
       attribute.type === 'special' &&
-      isObject(value) && !(
-        isString(value.raw) && value.raw.match(/[^0-9\s,.%]/) // raw value is not simply a number
-      )
+      isObject(value) &&
+      !containsNonNumeric(value.raw)
     ) {
       return value.value
     }

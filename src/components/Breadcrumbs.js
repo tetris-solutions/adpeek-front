@@ -1,11 +1,10 @@
 import csjs from 'csjs'
 import map from 'lodash/map'
 import React from 'react'
-import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import compact from 'lodash/compact'
 import flatten from 'lodash/flatten'
-import {styled} from './mixins/styled'
+import {styledComponent} from './higher-order/styled'
 
 const style = csjs`
 .wrapper {
@@ -31,16 +30,18 @@ const style = csjs`
   margin-right: .3em;
 }`
 
-const Breadcrumbs = createReactClass({
-  displayName: 'Breadcrumbs',
-  mixins: [styled(style)],
-  contextTypes: {
+class Breadcrumbs extends React.Component {
+  static displayName = 'Breadcrumbs'
+
+  static contextTypes = {
     params: PropTypes.object,
     routes: PropTypes.array
-  },
-  propTypes: {
+  }
+
+  static propTypes = {
     title: PropTypes.node
-  },
+  }
+
   componentDidMount () {
     /**
      * @type {HTMLElement} wrapper
@@ -48,7 +49,8 @@ const Breadcrumbs = createReactClass({
     const {wrapper} = this.refs
 
     wrapper.scrollLeft = wrapper.scrollWidth - wrapper.clientWidth
-  },
+  }
+
   render () {
     const {title} = this.props
     const {params, routes} = this.context
@@ -67,6 +69,6 @@ const Breadcrumbs = createReactClass({
       </span>
     )
   }
-})
+}
 
-export default Breadcrumbs
+export default styledComponent(Breadcrumbs, style)
