@@ -350,9 +350,9 @@ class FolderStats extends React.Component {
   render () {
     const {kpi_goal, stats} = this.props
 
-    return !stats.orders || stats.orders.current
+    return get(stats, 'orders.current')
       ? <Stats kpi_goal={kpi_goal} stats={stats}/>
-      : <EmptyStats lastOrder={stats.orders.last}/>
+      : <EmptyStats lastOrder={get(stats, 'orders.last')}/>
   }
 }
 
