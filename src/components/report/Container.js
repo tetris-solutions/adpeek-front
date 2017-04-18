@@ -48,28 +48,6 @@ Placeholder.propTypes = {
   reportLiteMode: PropTypes.bool
 }
 
-const propTypes = {
-  children: PropTypes.node,
-  reportLiteMode: PropTypes.bool,
-  editMode: PropTypes.bool,
-  isGuestUser: PropTypes.bool,
-  dispatch: PropTypes.func.isRequired,
-  report: PropTypes.object.isRequired,
-  params: PropTypes.object.isRequired,
-  metaData: PropTypes.object,
-  campaigns: PropTypes.array,
-  adSets: PropTypes.array,
-  adGroups: PropTypes.array,
-  ads: PropTypes.array,
-  videos: PropTypes.array,
-  keywords: PropTypes.array,
-  accounts: PropTypes.arrayOf(PropTypes.shape({
-    external_id: PropTypes.string,
-    tetris_id: PropTypes.string,
-    platform: PropTypes.string
-  })).isRequired
-}
-
 class Container extends React.Component {
   static displayName = 'Report-Container'
 
@@ -77,7 +55,28 @@ class Container extends React.Component {
     messages: PropTypes.object
   }
 
-  static propTypes = propTypes
+  static propTypes = {
+    children: PropTypes.node,
+    reportLiteMode: PropTypes.bool,
+    editMode: PropTypes.bool,
+    isGuestUser: PropTypes.bool,
+    dispatch: PropTypes.func.isRequired,
+    report: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired,
+    metaData: PropTypes.object,
+    campaigns: PropTypes.array,
+    adSets: PropTypes.array,
+    adGroups: PropTypes.array,
+    ads: PropTypes.array,
+    videos: PropTypes.array,
+    keywords: PropTypes.array,
+    accounts: PropTypes.arrayOf(PropTypes.shape({
+      external_id: PropTypes.string,
+      tetris_id: PropTypes.string,
+      platform: PropTypes.string
+    })).isRequired
+  }
+
   state = {isLoading: true}
 
   componentDidMount () {
@@ -270,17 +269,14 @@ class Container extends React.Component {
   }
 }
 
-const Report = props => <Container {...props} />
-Report.propTypes = propTypes
-
-const R = props =>
+const Report = props =>
   props.children
     ? props.children
-    : <Report {...props}/>
+    : <Container {...props}/>
 
-R.displayName = 'Report-Wrapper'
-R.propTypes = {
+Report.displayName = 'Report'
+Report.propTypes = {
   children: PropTypes.node
 }
 
-export default R
+export default Report
