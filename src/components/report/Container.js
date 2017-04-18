@@ -1,8 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import concat from 'lodash/concat'
+import assign from 'lodash/assign'
+import some from 'lodash/some'
 import head from 'lodash/head'
 import uniq from 'lodash/uniq'
+import forEach from 'lodash/forEach'
 import includes from 'lodash/includes'
 import ReportController from './Controller'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
@@ -77,7 +80,7 @@ class Container extends React.Component {
     })).isRequired
   }
 
-  state = {isLoading: true}
+  state = {loading: {component: true}}
 
   componentDidMount () {
     this.load()
@@ -231,14 +234,38 @@ class Container extends React.Component {
       : this.loadMultiPlatformMetaData(entity)
   }
 
-  load = () => {
-    const promises = concat(
-      map(this.getEntities(), ({id}) => this.loadMetaData(id)),
-      map(this.props.accounts, this.loadEntities)
-    )
+  markAsLoaded = (key) => {
+    const loading = assign({}, this.state.loading)
 
-    Promise.all(promises)
-      .then(() => this.setState({isLoading: false}))
+    loading[key] = false
+
+    this.setState({loading})
+  }
+
+  load = () => {
+    const entityMap = this.getEntities()
+    const loading = {metaData: true}
+    const keysToMarkAsLoaded = ['metaData']
+
+    let promises = map(entityMap, ({id}) => this.loadMetaData(id))
+
+    if (process.env.NODE_ENV === 'development') {
+      // load on demand
+      forEach(entityMap, ({id}) => {
+        loading[id] = true
+      })
+    } else {
+      // bulk load
+      promises = concat(promises, map(this.props.accounts, this.loadEntities))
+
+      forEach(entityMap, ({id}) => {
+        keysToMarkAsLoaded.push(id)
+      })
+    }
+
+    this.setState({loading})
+
+    Promise.all(promises).then(() => map(keysToMarkAsLoaded, this.markAsLoaded))
   }
 
   getAccounts = () => {
@@ -248,7 +275,7 @@ class Container extends React.Component {
   }
 
   render () {
-    if (this.state.isLoading || !this.props.metaData || !this.props.campaigns) {
+    if (some(this.state.loading) || !this.props.metaData || !this.props.campaigns) {
       return (
         <Placeholder>
           <LoadingHorizontal>
