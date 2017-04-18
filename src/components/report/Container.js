@@ -55,7 +55,10 @@ class Container extends React.Component {
   static displayName = 'Report-Container'
 
   static contextTypes = {
-    messages: PropTypes.object
+    messages: PropTypes.object,
+    location: PropTypes.shape({
+      query: PropTypes.object
+    })
   }
 
   static propTypes = {
@@ -84,6 +87,10 @@ class Container extends React.Component {
 
   componentDidMount () {
     this.load()
+  }
+
+  checkOnDemandFlag () {
+    return Boolean(this.context.location.query.onDemand)
   }
 
   isFolderLevel = () => {
@@ -249,7 +256,7 @@ class Container extends React.Component {
 
     let promises = map(entityMap, ({id}) => this.loadMetaData(id))
 
-    if (process.env.NODE_ENV === 'development') {
+    if (this.checkOnDemandFlag()) {
       // load on demand
       forEach(entityMap, ({id}) => {
         loading[id] = true
