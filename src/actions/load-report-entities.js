@@ -12,7 +12,7 @@ import {inferLevelFromParams} from '../functions/infer-level-from-params'
 import qs from 'query-string'
 import trim from 'lodash/trim'
 
-function loadReportEntities (level, id, config, queryParams) {
+function loadReportEntities (level, id, queryParams, config) {
   const queryString = queryParams
     ? '?' + qs.stringify(queryParams)
     : ''
@@ -20,7 +20,24 @@ function loadReportEntities (level, id, config, queryParams) {
   return GET(`${process.env.ADPEEK_API_URL}/${level}/${id}/report-entities${queryString}`, config)
 }
 
-function _loadReportEntitiesAction (tree, params, query) {
+function loadReportEntity (level, id, entity, queryParams, config) {
+  const queryString = queryParams
+    ? '?' + qs.stringify(queryParams)
+    : ''
+
+  return GET(`${process.env.ADPEEK_API_URL}/${level}/${id}/entity/${entity}${queryString}`, config)
+}
+
+const entityListName = {
+  Campaign: 'campaigns',
+  Ad: 'ads',
+  AdGroup: 'adGroups',
+  AdSet: 'adSets',
+  Videos: 'video',
+  Keyword: 'keywords'
+}
+
+function dispatchAction (tree, params, query, entity) {
   const level = inferLevelFromParams(params)
   const {company, workspace, folder} = params
   const setStatus = statusResolver(tree.get('statuses'))
@@ -44,6 +61,10 @@ function _loadReportEntitiesAction (tree, params, query) {
   }
 
   function mergeNewEntities (newEntities, oldEntities) {
+    if (entity) {
+      newEntities = {[entityListName[entity]]: newEntities}
+    }
+
     newEntities.campaigns = map(newEntities.campaigns, setStatus)
 
     forEach(newEntities, (newList, entityName) => {
@@ -64,7 +85,11 @@ function _loadReportEntitiesAction (tree, params, query) {
     'entities'
   ])
 
-  return loadReportEntities(level, params[level], getApiFetchConfig(tree), query)
+  const promise = entity
+    ? loadReportEntity(level, params[level], entity, query, getApiFetchConfig(tree))
+    : loadReportEntities(level, params[level], query, getApiFetchConfig(tree))
+
+  return promise
     .then(saveResponseTokenAsCookie)
     .then(saveResponseData(tree, path, mergeNewEntities))
     .catch(pushResponseErrorToState(tree))
@@ -72,8 +97,8 @@ function _loadReportEntitiesAction (tree, params, query) {
 
 const byPlatformCalls = {}
 
-export function loadReportEntitiesAction (tree, params, query) {
-  const call = () => _loadReportEntitiesAction(tree, params, query)
+export function loadReportEntitiesAction (tree, params, query, entity = null) {
+  const call = () => dispatchAction(tree, params, query, entity)
 
   if (byPlatformCalls[query.platform]) {
     byPlatformCalls[query.platform] = byPlatformCalls[query.platform].then(call, call)

@@ -20,6 +20,8 @@ import Message from 'tetris-iso/Message'
 import pick from 'lodash/pick'
 import log from 'loglevel'
 import equals from 'shallowequal'
+import filter from 'lodash/filter'
+import join from 'lodash/join'
 
 const empty = []
 
@@ -50,6 +52,9 @@ Placeholder.propTypes = {
   children: PropTypes.node.isRequired,
   reportLiteMode: PropTypes.bool
 }
+
+const nooP = () => Promise.resolve()
+const none = () => ({})
 
 class Container extends React.Component {
   static displayName = 'Report-Container'
@@ -84,6 +89,7 @@ class Container extends React.Component {
   }
 
   state = {loading: {component: true}}
+  promiseRegister = {}
 
   componentDidMount () {
     this.load()
@@ -116,7 +122,7 @@ class Container extends React.Component {
     }
   }
 
-  calculateEntities = ({messages, campaigns, adSets, ads, keywords, adGroups, videos}) => {
+  calculateEntities = ({messages, campaigns = empty, adSets = empty, ads = empty, keywords = empty, adGroups = empty, videos = empty}) => {
     log.info('will mount report entities')
 
     const entities = [{
@@ -158,19 +164,19 @@ class Container extends React.Component {
         entities.push({
           id: 'AdGroup',
           name: messages.adGroups,
-          list: adGroups || empty
+          list: adGroups
         })
 
         entities.push({
           id: 'Video',
           name: messages.videos,
-          list: videos || empty
+          list: videos
         })
 
         entities.push({
           id: 'Keyword',
           name: messages.keywords,
-          list: keywords || empty
+          list: keywords
         })
       }
 
@@ -178,14 +184,14 @@ class Container extends React.Component {
         entities.push({
           id: 'AdSet',
           name: messages.adSets,
-          list: adSets || empty
+          list: adSets
         })
       }
 
       entities.push({
         id: 'Ad',
         name: messages.ads,
-        list: ads || empty
+        list: ads
       })
     }
 
@@ -249,6 +255,57 @@ class Container extends React.Component {
     this.setState({loading})
   }
 
+  parentEntityLink (entity) {
+    switch (entity) {
+      case 'Campaign':
+        return {
+          load: nooP,
+          query: none
+        }
+      case 'AdGroup':
+        return {
+          load: () => this.loadEntity('Campaign'),
+          query: ({tetris_id: tetris_account}) => ({
+            campaigns: join(map(filter(this.props.campaigns, {tetris_account}), 'id'), ',')
+          })
+        }
+      case 'AdSet':
+        return {}
+      case 'Ad':
+        return {
+          load: () => this.loadEntity('AdGroup'),
+          query: ({tetris_id: tetris_account, platform}) => platform === 'facebook'
+            ? ({campaigns: join(map(filter(this.props.campaigns, {tetris_account}), 'id'), ',')})
+            : ({adGroups: join(map(filter(this.props.adGroups, {tetris_account}), 'id'), ',')})
+        }
+    }
+  }
+
+  loadEntity = (entity) => {
+    const {accounts, params, dispatch} = this.props
+
+    const dispatchEntityLoadingAction = (account, query) => {
+      return dispatch(loadReportEntitiesAction,
+        params,
+        assign({}, pick(account, 'tetris_id', 'external_id', 'platform'), query),
+        entity)
+    }
+
+    if (this.state.loading[entity] === false) {
+      return Promise.resolve()
+    }
+
+    if (!this.promiseRegister[entity]) {
+      const parentEntity = this.parentEntityLink(entity)
+
+      this.promiseRegister[entity] = parentEntity.load()
+        .then(() => Promise.all(map(accounts,
+          account => dispatchEntityLoadingAction(account, parentEntity.query(account)))))
+    }
+
+    return this.promiseRegister[entity]
+  }
+
   load = () => {
     const entityMap = this.getEntities()
     const loading = {metaData: true}
@@ -258,8 +315,12 @@ class Container extends React.Component {
 
     if (this.checkOnDemandFlag()) {
       // load on demand
-      forEach(entityMap, ({id}) => {
-        loading[id] = true
+      const {report: {modules}} = this.props
+
+      forEach(modules, ({entity}) => {
+        loading[entity] = true
+        this.loadEntity(entity)
+          .then(() => this.markAsLoaded(entity))
       })
     } else {
       // bulk load
