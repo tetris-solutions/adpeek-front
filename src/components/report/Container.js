@@ -22,6 +22,8 @@ import log from 'loglevel'
 import equals from 'shallowequal'
 import filter from 'lodash/filter'
 import join from 'lodash/join'
+import negate from 'lodash/negate'
+import startsWith from 'lodash/startsWith'
 
 const empty = []
 
@@ -88,7 +90,7 @@ class Container extends React.Component {
     })).isRequired
   }
 
-  state = {loading: {component: true}}
+  state = {}
   promiseRegister = {}
 
   componentDidMount () {
@@ -247,15 +249,31 @@ class Container extends React.Component {
       : this.loadMultiPlatformMetaData(entity)
   }
 
-  markAsLoaded = (key) => {
-    const loading = assign({}, this.state.loading)
+  loadingInProgress = () => {
+    const map = {}
 
-    loading[key] = false
+    forEach(this.state, (value, key) => {
+      if (startsWith(key, 'loading__')) {
+        map[key] = value
+      }
+    })
 
-    this.setState({loading})
+    return map
+  }
+
+  getLoadingState = (key) => {
+    return this.state[`loading__${key}`]
+  }
+
+  setLoadingState = (key, state) => {
+    this.setState({
+      [`loading__${key}`]: state
+    })
   }
 
   parentEntityLink (entity) {
+    const {report} = this.props
+
     switch (entity) {
       case 'Campaign':
         return {
@@ -265,18 +283,35 @@ class Container extends React.Component {
       case 'AdGroup':
         return {
           load: () => this.loadEntity('Campaign'),
-          query: ({tetris_id: tetris_account}) => ({
-            campaigns: join(map(filter(this.props.campaigns, {tetris_account}), 'id'), ',')
-          })
+          query: () => ({campaigns: join(map(this.props.campaigns, 'id'), ',')})
         }
       case 'AdSet':
-        return {}
+        return {
+          load: () => this.loadEntity('AdSet'),
+          query: () => ({campaigns: join(map(this.props.campaigns, 'id'), ',')})
+        }
       case 'Ad':
+        return report.platform === 'facebook' ? {
+          load: () => this.loadEntity('Campaign'),
+          query: ({campaigns: join(map(this.props.campaigns, 'id'), ',')})
+        } : {
+          load: () => this.loadEntity('AdGroup'),
+          query: ({adGroups: join(map(this.props.adGroups, 'id'), ',')})
+        }
+      case 'Keyword':
+        const isActive = ({status, campaign_status}) => (
+          status === 'ENABLED' && (
+            campaign_status === 'ENABLED' ||
+            campaign_status === 'SERVING'
+          )
+        )
+
         return {
           load: () => this.loadEntity('AdGroup'),
-          query: ({tetris_id: tetris_account, platform}) => platform === 'facebook'
-            ? ({campaigns: join(map(filter(this.props.campaigns, {tetris_account}), 'id'), ',')})
-            : ({adGroups: join(map(filter(this.props.adGroups, {tetris_account}), 'id'), ',')})
+          query: () => ({
+            activeAdGroups: join(map(filter(this.props.adGroups, isActive), 'id'), ','),
+            inactiveAdGroups: join(map(filter(this.props.adGroups, negate(isActive)), 'id'), ',')
+          })
         }
     }
   }
@@ -291,7 +326,7 @@ class Container extends React.Component {
         entity)
     }
 
-    if (this.state.loading[entity] === false) {
+    if (this.getLoadingState(entity) === false) {
       return Promise.resolve()
     }
 
@@ -303,25 +338,26 @@ class Container extends React.Component {
           account => dispatchEntityLoadingAction(account, parentEntity.query(account)))))
     }
 
+    this.setLoadingState(entity, true)
+
     return this.promiseRegister[entity]
+      .then(() => this.setLoadingState(entity, false))
   }
 
   load = () => {
     const entityMap = this.getEntities()
-    const loading = {metaData: true}
     const keysToMarkAsLoaded = ['metaData']
 
-    let promises = map(entityMap, ({id}) => this.loadMetaData(id))
+    this.setLoadingState('metaData', true)
+
+    let promises = map(entityMap, ({id}) =>
+      this.loadMetaData(id))
 
     if (this.checkOnDemandFlag()) {
       // load on demand
       const {report: {modules}} = this.props
 
-      forEach(modules, ({entity}) => {
-        loading[entity] = true
-        this.loadEntity(entity)
-          .then(() => this.markAsLoaded(entity))
-      })
+      forEach(modules, ({entity}) => this.loadEntity(entity))
     } else {
       // bulk load
       promises = concat(promises, map(this.props.accounts, this.loadEntities))
@@ -331,9 +367,9 @@ class Container extends React.Component {
       })
     }
 
-    this.setState({loading})
-
-    Promise.all(promises).then(() => map(keysToMarkAsLoaded, this.markAsLoaded))
+    Promise.all(promises).then(() =>
+      map(keysToMarkAsLoaded, key =>
+        this.setLoadingState(key, true)))
   }
 
   getAccounts = () => {
@@ -343,7 +379,7 @@ class Container extends React.Component {
   }
 
   render () {
-    if (some(this.state.loading) || !this.props.metaData || !this.props.campaigns) {
+    if (some(this.loadingInProgress()) || !this.props.metaData || !this.props.campaigns) {
       return (
         <Placeholder>
           <LoadingHorizontal>
