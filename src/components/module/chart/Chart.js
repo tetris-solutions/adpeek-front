@@ -158,7 +158,7 @@ class ChartContainer extends React.Component {
       locales: locales,
       sort: module.sort,
       limit: module.limit,
-      isLoading: module.isLoading,
+      isLoading: entity.isLoading || module.isLoading,
       reportParams: reportParams,
       sourceWidth: 1200,
       sourceHeight: floor(1200 * A4Ratio),

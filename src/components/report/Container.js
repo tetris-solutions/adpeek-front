@@ -137,7 +137,7 @@ class Container extends React.Component {
       id: 'Campaign',
       name: messages.campaigns,
       list: campaigns,
-      loading: this.getLoadingState('Campaign')
+      isLoading: this.getLoadingState('Campaign')
     }]
 
     if (this.isFolderLevel()) {
@@ -150,49 +150,49 @@ class Container extends React.Component {
           id: 'Placement',
           name: messages.placementLevel,
           list: campaigns,
-          loading: this.getLoadingState('Placement')
+          isLoading: this.getLoadingState('Placement')
         })
 
         entities.push({
           id: 'Search',
           name: messages.searchLevel,
           list: adGroups,
-          loading: this.getLoadingState('Search')
+          isLoading: this.getLoadingState('Search')
         })
 
         entities.push({
           id: 'Location',
           name: messages.locationLevel,
           list: adGroups,
-          loading: this.getLoadingState('Location')
+          isLoading: this.getLoadingState('Location')
         })
 
         entities.push({
           id: 'Audience',
           name: messages.audienceLevel,
           list: adGroups,
-          loading: this.getLoadingState('Audience')
+          isLoading: this.getLoadingState('Audience')
         })
 
         entities.push({
           id: 'AdGroup',
           name: messages.adGroups,
           list: adGroups,
-          loading: this.getLoadingState('AdGroup')
+          isLoading: this.getLoadingState('AdGroup')
         })
 
         entities.push({
           id: 'Video',
           name: messages.videos,
           list: videos,
-          loading: this.getLoadingState('Video')
+          isLoading: this.getLoadingState('Video')
         })
 
         entities.push({
           id: 'Keyword',
           name: messages.keywords,
           list: keywords,
-          loading: this.getLoadingState('Keyword')
+          isLoading: this.getLoadingState('Keyword')
         })
       }
 
@@ -201,7 +201,7 @@ class Container extends React.Component {
           id: 'AdSet',
           name: messages.adSets,
           list: adSets,
-          loading: this.getLoadingState('AdSet')
+          isLoading: this.getLoadingState('AdSet')
         })
       }
 
@@ -209,7 +209,7 @@ class Container extends React.Component {
         id: 'Ad',
         name: messages.ads,
         list: ads,
-        loading: this.getLoadingState('Ad')
+        isLoading: this.getLoadingState('Ad')
       })
     }
 
