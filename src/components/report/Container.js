@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import concat from 'lodash/concat'
 import assign from 'lodash/assign'
-import some from 'lodash/some'
 import head from 'lodash/head'
 import uniq from 'lodash/uniq'
 import forEach from 'lodash/forEach'
@@ -23,7 +22,6 @@ import equals from 'shallowequal'
 import filter from 'lodash/filter'
 import join from 'lodash/join'
 import negate from 'lodash/negate'
-import startsWith from 'lodash/startsWith'
 
 const empty = []
 
@@ -57,6 +55,18 @@ Placeholder.propTypes = {
 
 const nooP = () => Promise.resolve()
 const none = () => ({})
+const canonical = (entity) => {
+  switch (entity) {
+    case 'Placement':
+      return 'Campaign'
+    case 'Search':
+    case 'Audience':
+    case 'Location':
+      return 'AdGroup'
+    default:
+      return entity
+  }
+}
 
 class Container extends React.Component {
   static displayName = 'Report-Container'
@@ -97,6 +107,10 @@ class Container extends React.Component {
     this.load()
   }
 
+  componentWillMount () {
+    this.setLoadingState('metaData', true)
+  }
+
   checkOnDemandFlag () {
     return Boolean(this.context.location.query.onDemand)
   }
@@ -130,7 +144,8 @@ class Container extends React.Component {
     const entities = [{
       id: 'Campaign',
       name: messages.campaigns,
-      list: campaigns
+      list: campaigns,
+      loading: this.getLoadingState('Campaign')
     }]
 
     if (this.isFolderLevel()) {
@@ -142,43 +157,50 @@ class Container extends React.Component {
         entities.push({
           id: 'Placement',
           name: messages.placementLevel,
-          list: campaigns
+          list: campaigns,
+          loading: this.getLoadingState('Placement')
         })
 
         entities.push({
           id: 'Search',
           name: messages.searchLevel,
-          list: adGroups
+          list: adGroups,
+          loading: this.getLoadingState('Search')
         })
 
         entities.push({
           id: 'Location',
           name: messages.locationLevel,
-          list: adGroups
+          list: adGroups,
+          loading: this.getLoadingState('Location')
         })
 
         entities.push({
           id: 'Audience',
           name: messages.audienceLevel,
-          list: adGroups
+          list: adGroups,
+          loading: this.getLoadingState('Audience')
         })
 
         entities.push({
           id: 'AdGroup',
           name: messages.adGroups,
-          list: adGroups
+          list: adGroups,
+          loading: this.getLoadingState('AdGroup')
         })
 
         entities.push({
           id: 'Video',
           name: messages.videos,
-          list: videos
+          list: videos,
+          loading: this.getLoadingState('Video')
         })
 
         entities.push({
           id: 'Keyword',
           name: messages.keywords,
-          list: keywords
+          list: keywords,
+          loading: this.getLoadingState('Keyword')
         })
       }
 
@@ -186,14 +208,16 @@ class Container extends React.Component {
         entities.push({
           id: 'AdSet',
           name: messages.adSets,
-          list: adSets
+          list: adSets,
+          loading: this.getLoadingState('AdSet')
         })
       }
 
       entities.push({
         id: 'Ad',
         name: messages.ads,
-        list: ads
+        list: ads,
+        loading: this.getLoadingState('Ad')
       })
     }
 
@@ -249,26 +273,16 @@ class Container extends React.Component {
       : this.loadMultiPlatformMetaData(entity)
   }
 
-  loadingInProgress = () => {
-    const map = {}
-
-    forEach(this.state, (value, key) => {
-      if (startsWith(key, 'loading__')) {
-        map[key] = value
-      }
-    })
-
-    return map
-  }
-
   getLoadingState = (key) => {
-    return this.state[`loading__${key}`]
+    return this.state[`loading__${canonical(key)}`]
   }
 
-  setLoadingState = (key, state) => {
-    this.setState({
-      [`loading__${key}`]: state
-    })
+  setLoadingState = (key, value) => {
+    key = `loading__${canonical(key)}`
+
+    if (this.state[key] !== value) {
+      this.setState({[key]: value})
+    }
   }
 
   parentEntityLink (entity) {
@@ -318,6 +332,8 @@ class Container extends React.Component {
   }
 
   loadEntity = (entity) => {
+    entity = canonical(entity)
+
     const {accounts, params, dispatch} = this.props
 
     const dispatchEntityLoadingAction = (account, query) => {
@@ -349,8 +365,6 @@ class Container extends React.Component {
     const entityMap = this.getEntities()
     const keysToMarkAsLoaded = ['metaData']
 
-    this.setLoadingState('metaData', true)
-
     let promises = map(entityMap, ({id}) =>
       this.loadMetaData(id))
 
@@ -380,7 +394,7 @@ class Container extends React.Component {
   }
 
   render () {
-    if (some(this.loadingInProgress()) || !this.props.metaData || !this.props.campaigns) {
+    if (this.getLoadingState('metaData')) {
       return (
         <Placeholder>
           <LoadingHorizontal>
