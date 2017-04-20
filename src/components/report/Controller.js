@@ -55,7 +55,6 @@ class ReportController extends React.Component {
 
   static childContextTypes = {
     report: PropTypes.object,
-    reportEntities: PropTypes.array,
     changeDateRange: PropTypes.func,
     reportParams: reportParamsType
   }
@@ -64,7 +63,6 @@ class ReportController extends React.Component {
     return {
       report: this.props.report,
       reportParams: this.getReportParams(),
-      reportEntities: this.props.entities,
       changeDateRange: this.onChangeRange
     }
   }
@@ -257,7 +255,7 @@ class ReportController extends React.Component {
   }
 
   render () {
-    const {params, dispatch, loadEntity, reportLiteMode, editMode, metaData, report} = this.props
+    const {params, dispatch, entities, loadEntity, reportLiteMode, editMode, metaData, report} = this.props
     const {isCreatingReport, openModule, layout} = this.state
 
     log.debug('render report <Controller/>')
@@ -276,6 +274,7 @@ class ReportController extends React.Component {
           openModule={openModule}
           cloneModule={this.cloneModule}
           onLayoutChange={this.onLayoutChange}
+          entities={entities}
           loadEntity={loadEntity}
           editMode={editMode}
           layout={layout}

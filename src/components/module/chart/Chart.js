@@ -77,7 +77,8 @@ const Chart = props => {
 }
 
 Chart.defaultProps = {
-  height: '100%'
+  height: '100%',
+  isLoading: true
 }
 Chart.displayName = 'Pure-Chart'
 Chart.propTypes = {

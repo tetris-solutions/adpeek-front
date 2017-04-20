@@ -20,7 +20,7 @@ class ModuleContainer extends React.Component {
     editable: PropTypes.bool,
     module: moduleType.isRequired,
     metaData: reportMetaDataType.isRequired,
-    reportEntities: PropTypes.arrayOf(reportEntityType).isRequired
+    entities: PropTypes.arrayOf(reportEntityType).isRequired
   }
 
   static childContextTypes = {
@@ -49,10 +49,10 @@ class ModuleContainer extends React.Component {
 
   entitiesSource = () => {
     const {activeOnly} = this.state
-    const {module, reportEntities} = this.props
+    const {module, entities} = this.props
 
     return {
-      reportEntities,
+      entities,
       activeOnly,
       moduleEntity: module.entity,
       selectedIds: module.filters.id
@@ -62,14 +62,14 @@ class ModuleContainer extends React.Component {
   getEntities = () => {
     const newSource = this.entitiesSource()
     const anyChange = !this._source || (
-        this._source.reportEntities !== newSource.reportEntities ||
+        this._source.entities !== newSource.entities ||
         this._source.activeOnly !== newSource.activeOnly ||
         this._source.selectedIds !== newSource.selectedIds ||
         this._source.moduleEntity !== newSource.moduleEntity
       )
 
     if (anyChange) {
-      newSource.entities = keyed(newSource.reportEntities)
+      newSource.entities = keyed(newSource.entities)
 
       this._source = newSource
       this._entities = this.calculateEntities(this._source)
@@ -101,10 +101,4 @@ class ModuleContainer extends React.Component {
   }
 }
 
-const Upper = (props, {reportEntities}) => <ModuleContainer {...props} reportEntities={reportEntities}/>
-
-Upper.contextTypes = {
-  reportEntities: PropTypes.arrayOf(reportEntityType).isRequired
-}
-
-export default Upper
+export default ModuleContainer

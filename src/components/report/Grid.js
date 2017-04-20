@@ -25,13 +25,14 @@ ModuleWrapper = derivative(
   ModuleWrapper
 )
 
-const ReportGrid = ({modules, onLayoutChange, loadEntity, cloneModule, editMode, layout, params, dispatch, metaData, openModule, width}) => (
+const ReportGrid = ({modules, onLayoutChange, entities, loadEntity, cloneModule, editMode, layout, params, dispatch, metaData, openModule, width}) => (
   <GridLayout layout={layout} width={width} rowHeight={100} onLayoutChange={onLayoutChange}>
     {map(modules, ({id, type}, index) =>
       <div key={id} data-module-id={id} data-module-type={type}>
         <ModuleWrapper
           id={id}
           editable={editMode}
+          entities={entities}
           clone={cloneModule}
           loadEntity={loadEntity}
           metaData={metaData}
@@ -43,6 +44,7 @@ const ReportGrid = ({modules, onLayoutChange, loadEntity, cloneModule, editMode,
 ReportGrid.displayName = 'Pure-Grid'
 ReportGrid.propTypes = {
   loadEntity: PropTypes.func.isRequired,
+  entities: PropTypes.array.isRequired,
   modules: PropTypes.array.isRequired,
   cloneModule: PropTypes.func.isRequired,
   onLayoutChange: PropTypes.func.isRequired,

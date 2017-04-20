@@ -18,7 +18,6 @@ import LoadingHorizontal from '../LoadingHorizontal'
 import Message from 'tetris-iso/Message'
 import pick from 'lodash/pick'
 import log from 'loglevel'
-import equals from 'shallowequal'
 import filter from 'lodash/filter'
 import join from 'lodash/join'
 import negate from 'lodash/negate'
@@ -225,15 +224,7 @@ class Container extends React.Component {
   }
 
   getEntities = () => {
-    const newSource = this.entitiesSource()
-    const anyChange = !this._source || !equals(this._source, newSource)
-
-    if (anyChange) {
-      this._source = newSource
-      this._entities = this.calculateEntities(this._source)
-    }
-
-    return this._entities
+    return this.calculateEntities(this.entitiesSource())
   }
 
   loadEntities = (account) => {
