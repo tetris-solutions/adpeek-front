@@ -71,10 +71,7 @@ class Container extends React.Component {
   static displayName = 'Report-Container'
 
   static contextTypes = {
-    messages: PropTypes.object,
-    location: PropTypes.shape({
-      query: PropTypes.object
-    })
+    messages: PropTypes.object
   }
 
   static propTypes = {
@@ -108,10 +105,6 @@ class Container extends React.Component {
 
   componentWillMount () {
     this.setLoadingState('metaData', true)
-  }
-
-  checkOnDemandFlag () {
-    return Boolean(this.context.location.query.onDemand)
   }
 
   isFolderLevel = () => {
@@ -359,7 +352,7 @@ class Container extends React.Component {
     let promises = map(entityMap, ({id}) =>
       this.loadMetaData(id))
 
-    if (this.checkOnDemandFlag()) {
+    if (this.isFolderLevel()) {
       // load on demand
       const {report: {modules}} = this.props
 
