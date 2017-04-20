@@ -39,6 +39,7 @@ class Editor extends React.Component {
   }
 
   static propTypes = {
+    entities: PropTypes.object.isRequired,
     invalidPermutation: PropTypes.array,
     maxAccounts: PropTypes.number.isRequired,
     numberOfSelectedAccounts: PropTypes.number.isRequired,
@@ -80,6 +81,7 @@ class Editor extends React.Component {
 
   render () {
     const {
+      entities,
       isLoading,
       isInvalid,
       maxAccounts,
@@ -145,12 +147,12 @@ class Editor extends React.Component {
       <div>
         <form className='mdl-grid'>
           <div className={`mdl-cell mdl-cell--3-col ${style.leftCol}`}>
-            <Lists />
+            <Lists entities={entities} />
           </div>
           <div className='mdl-cell mdl-cell--9-col'>
             <Tabs>
               <Tab id='module-content' title={messages.moduleContent}>
-                <Preview />
+                <Preview entities={entities}/>
               </Tab>
               <Tab id='module-description' title={messages.moduleDescriptionTitle}>
                 <Description />

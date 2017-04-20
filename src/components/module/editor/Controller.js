@@ -50,7 +50,6 @@ class ModuleEdit extends React.Component {
     locales: PropTypes.string.isRequired,
     moment: PropTypes.func.isRequired,
     module: PropTypes.object.isRequired,
-    entities: PropTypes.object.isRequired,
     getUsedAccounts: PropTypes.func.isRequired,
     activeOnly: PropTypes.bool.isRequired,
     report: PropTypes.object
@@ -58,6 +57,7 @@ class ModuleEdit extends React.Component {
 
   static propTypes = {
     loadEntity: PropTypes.func.isRequired,
+    entities: PropTypes.object.isRequired,
     close: PropTypes.func,
     save: PropTypes.func
   }
@@ -329,7 +329,7 @@ class ModuleEdit extends React.Component {
   }
 
   getDraftEntity = () => {
-    return this.context.entities[this.state.newModule.entity]
+    return this.props.entities[this.state.newModule.entity]
   }
 
   getInvalidPermutation = (dimensions, metrics) => {
@@ -393,6 +393,7 @@ class ModuleEdit extends React.Component {
         isLoading={Boolean(this.context.module.isLoading)}
         tooManyMetrics={limits.tooManyMetrics}
         tooManyDimensions={limits.tooManyDimensions}
+        entities={this.props.entities}
         cancel={this.cancel}
         redraw={this.redraw}
         save={this.save}/>

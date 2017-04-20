@@ -44,6 +44,10 @@ class Lists extends React.Component {
     removeAttribute: PropTypes.func.isRequired
   }
 
+  static propTypes = {
+    entities: PropTypes.object.isRequired
+  }
+
   state = {searchValue: ''}
 
   componentWillMount () {
@@ -121,7 +125,7 @@ class Lists extends React.Component {
           {!isAnalytics && (
             <Tab id='entity' title={entityTitle}>
               <br/>
-              <Entities items={items}/>
+              <Entities entities={this.props.entities} items={items}/>
             </Tab>)}
 
           {!isTotalType && (

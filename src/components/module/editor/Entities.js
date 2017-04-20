@@ -9,12 +9,12 @@ class Entities extends React.Component {
     report: PropTypes.object.isRequired,
     messages: PropTypes.object.isRequired,
     draft: PropTypes.object.isRequired,
-    entities: PropTypes.object.isRequired,
     addEntity: PropTypes.func.isRequired,
     removeEntity: PropTypes.func.isRequired
   }
 
   static propTypes = {
+    entities: PropTypes.object.isRequired,
     items: PropTypes.array.isRequired
   }
 
@@ -98,7 +98,8 @@ class Entities extends React.Component {
   }
 
   getLevels = () => {
-    const {draft: {entity}, report, entities} = this.context
+    const {entities} = this.props
+    const {draft: {entity}, report} = this.context
 
     switch (entity.id) {
       case 'Placement':

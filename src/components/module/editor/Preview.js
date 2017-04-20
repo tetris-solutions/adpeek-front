@@ -10,7 +10,7 @@ import map from 'lodash/map'
 
 const ReportChart = expandVertically(_ReportChart)
 
-const EditContent = (props, {report, entities, onChangeName, onChangeType, onChangeEntity, change, draft: {module, entity}}) => (
+const EditContent = ({entities}, {report, onChangeName, onChangeType, onChangeEntity, change, draft: {module, entity}}) => (
   <section style={{height: '80vh', overflowY: 'auto'}}>
     <div className='mdl-grid'>
       <div className={`mdl-cell mdl-cell--${report.platform === 'analytics' ? 7 : 4}-col`}>
@@ -45,12 +45,14 @@ const EditContent = (props, {report, entities, onChangeName, onChangeType, onCha
 )
 
 EditContent.displayName = 'Edit-Content'
+EditContent.propTypes = {
+  entities: PropTypes.object.isRequired
+}
 EditContent.contextTypes = {
   report: PropTypes.object,
   onChangeName: PropTypes.func.isRequired,
   onChangeEntity: PropTypes.func.isRequired,
   onChangeType: PropTypes.func.isRequired,
-  entities: PropTypes.object.isRequired,
   change: PropTypes.func.isRequired,
   draft: PropTypes.object.isRequired
 }

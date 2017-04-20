@@ -26,7 +26,6 @@ import log from 'loglevel'
 const reportContext = [
   'report',
   'reportParams',
-  'entities',
   'changeDateRange',
   'entity',
   'attributes',
@@ -42,6 +41,7 @@ class ModuleController extends React.Component {
   static displayName = 'Module-Controller'
 
   static propTypes = {
+    entities: PropTypes.object.isRequired,
     loadEntity: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
@@ -188,7 +188,7 @@ class ModuleController extends React.Component {
   }
 
   render () {
-    const {params, dispatch, module, editable, loadEntity} = this.props
+    const {params, entities, dispatch, module, editable, loadEntity} = this.props
     const {messages: {untitledModule: defaultName, cloneModule: cloneLabel}} = this.context
 
     return (
@@ -227,7 +227,11 @@ class ModuleController extends React.Component {
 
         {this.state.editMode && (
           <Modal size='huge' provide={reportContext}>
-            <Editor loadEntity={loadEntity} save={this.save} close={this.closeModal}/>
+            <Editor
+              entities={entities}
+              loadEntity={loadEntity}
+              save={this.save}
+              close={this.closeModal}/>
           </Modal>
         )}
 

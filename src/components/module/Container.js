@@ -24,7 +24,6 @@ class ModuleContainer extends React.Component {
   }
 
   static childContextTypes = {
-    entities: PropTypes.object,
     activeOnly: PropTypes.bool,
     toggleActiveOnly: PropTypes.func
   }
@@ -35,7 +34,6 @@ class ModuleContainer extends React.Component {
 
   getChildContext () {
     return {
-      entities: this.getEntities(),
       activeOnly: this.state.activeOnly,
       toggleActiveOnly: this.toggleActiveOnly
     }
@@ -61,21 +59,10 @@ class ModuleContainer extends React.Component {
 
   getEntities = () => {
     const newSource = this.entitiesSource()
-    const anyChange = !this._source || (
-        this._source.entities !== newSource.entities ||
-        this._source.activeOnly !== newSource.activeOnly ||
-        this._source.selectedIds !== newSource.selectedIds ||
-        this._source.moduleEntity !== newSource.moduleEntity
-      )
 
-    if (anyChange) {
-      newSource.entities = keyed(newSource.entities)
+    newSource.entities = keyed(newSource.entities)
 
-      this._source = newSource
-      this._entities = this.calculateEntities(this._source)
-    }
-
-    return this._entities
+    return this.calculateEntities(newSource)
   }
 
   toggleActiveOnly = () => {
@@ -97,7 +84,14 @@ class ModuleContainer extends React.Component {
 
     module.filters = filters
 
-    return <Controller {...this.props} module={module} entity={entity} attributes={attributes}/>
+    return (
+      <Controller
+        {...this.props}
+        entities={entities}
+        module={module}
+        entity={entity}
+        attributes={attributes}/>
+    )
   }
 }
 
