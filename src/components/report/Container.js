@@ -301,6 +301,7 @@ class Container extends React.Component {
       case 'Keyword':
         const isActive = ({status, campaign_status}) => (
           status === 'ENABLED' && (
+            !campaign_status ||
             campaign_status === 'ENABLED' ||
             campaign_status === 'SERVING'
           )
@@ -369,7 +370,7 @@ class Container extends React.Component {
 
     Promise.all(promises).then(() =>
       map(keysToMarkAsLoaded, key =>
-        this.setLoadingState(key, true)))
+        this.setLoadingState(key, false)))
   }
 
   getAccounts = () => {
