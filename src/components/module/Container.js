@@ -8,10 +8,7 @@ import reportEntityType from '../../propTypes/report-entity'
 import reportMetaDataType from '../../propTypes/report-meta-data'
 import moduleType from '../../propTypes/report-module'
 import Controller from './Controller'
-import log from 'loglevel'
 import {mountModuleEntities} from '../../functions/mount-module-entities'
-
-const keyed = reportEntities => keyBy(reportEntities, 'id')
 
 class ModuleContainer extends React.Component {
   static displayName = 'Module-Container'
@@ -39,30 +36,11 @@ class ModuleContainer extends React.Component {
     }
   }
 
-  calculateEntities = ({entities, moduleEntity, selectedIds, activeOnly}) => {
-    log.info(`will mount ${this.props.module.name} entities`)
-
-    return mountModuleEntities(entities, moduleEntity, selectedIds, activeOnly)
-  }
-
-  entitiesSource = () => {
+  getEntities = () => {
     const {activeOnly} = this.state
     const {module, entities} = this.props
 
-    return {
-      entities,
-      activeOnly,
-      moduleEntity: module.entity,
-      selectedIds: module.filters.id
-    }
-  }
-
-  getEntities = () => {
-    const newSource = this.entitiesSource()
-
-    newSource.entities = keyed(newSource.entities)
-
-    return this.calculateEntities(newSource)
+    return mountModuleEntities(keyBy(entities, 'id'), module.entity, module.filters.id, activeOnly)
   }
 
   toggleActiveOnly = () => {

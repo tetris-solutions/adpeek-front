@@ -1,6 +1,7 @@
 import {GET} from '@tetris/http'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {saveResponseData} from '../functions/save-response-data'
+import assign from 'lodash/assign'
 import compact from 'lodash/compact'
 import uniqBy from 'lodash/uniqBy'
 import map from 'lodash/map'
@@ -65,7 +66,9 @@ function dispatchAction (tree, params, query, entity) {
       newEntities = {[entityListName[entity]]: newEntities}
     }
 
-    newEntities.campaigns = map(newEntities.campaigns, setStatus)
+    if (newEntities.campaigns) {
+      newEntities.campaigns = map(newEntities.campaigns, setStatus)
+    }
 
     forEach(newEntities, (newList, entityName) => {
       newEntities[entityName] = uniqBy(concat(
@@ -74,7 +77,7 @@ function dispatchAction (tree, params, query, entity) {
       ), 'id')
     })
 
-    return newEntities
+    return assign({}, oldEntities, newEntities)
   }
 
   const path = compact([
