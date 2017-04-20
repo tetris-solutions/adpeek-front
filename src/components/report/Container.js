@@ -293,10 +293,10 @@ class Container extends React.Component {
       case 'Ad':
         return report.platform === 'facebook' ? {
           load: () => this.loadEntity('Campaign'),
-          query: ({campaigns: join(map(this.props.campaigns, 'id'), ',')})
+          query: () => ({campaigns: join(map(this.props.campaigns, 'id'), ',')})
         } : {
           load: () => this.loadEntity('AdGroup'),
-          query: ({adGroups: join(map(this.props.adGroups, 'id'), ',')})
+          query: () => ({adGroups: join(map(this.props.adGroups, 'id'), ',')})
         }
       case 'Keyword':
         const isActive = ({status, campaign_status}) => (
@@ -395,6 +395,7 @@ class Container extends React.Component {
     return (
       <ReportController
         {...this.props}
+        loadEntity={this.loadEntity}
         accounts={this.getAccounts()}
         entities={this.getEntities()}/>
     )

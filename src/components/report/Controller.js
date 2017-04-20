@@ -31,6 +31,7 @@ class ReportController extends React.Component {
   static displayName = 'Report-Controller'
 
   static propTypes = {
+    loadEntity: PropTypes.func.isRequired,
     reportLiteMode: PropTypes.bool,
     editMode: PropTypes.bool,
     report: reportType.isRequired,
@@ -256,7 +257,7 @@ class ReportController extends React.Component {
   }
 
   render () {
-    const {params, dispatch, reportLiteMode, editMode, metaData, report} = this.props
+    const {params, dispatch, loadEntity, reportLiteMode, editMode, metaData, report} = this.props
     const {isCreatingReport, openModule, layout} = this.state
 
     log.debug('render report <Controller/>')
@@ -275,6 +276,7 @@ class ReportController extends React.Component {
           openModule={openModule}
           cloneModule={this.cloneModule}
           onLayoutChange={this.onLayoutChange}
+          loadEntity={loadEntity}
           editMode={editMode}
           layout={layout}
           params={params}

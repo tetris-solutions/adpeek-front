@@ -57,6 +57,7 @@ class ModuleEdit extends React.Component {
   }
 
   static propTypes = {
+    loadEntity: PropTypes.func.isRequired,
     close: PropTypes.func,
     save: PropTypes.func
   }
@@ -170,6 +171,7 @@ class ModuleEdit extends React.Component {
     }
 
     this.$e.on('update', afterUpdate)
+    this.props.loadEntity(entity)
   }
 
   removeEntity = (id) => {

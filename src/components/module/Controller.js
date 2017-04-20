@@ -42,6 +42,7 @@ class ModuleController extends React.Component {
   static displayName = 'Module-Controller'
 
   static propTypes = {
+    loadEntity: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     editable: PropTypes.bool,
@@ -187,7 +188,7 @@ class ModuleController extends React.Component {
   }
 
   render () {
-    const {params, dispatch, module, editable} = this.props
+    const {params, dispatch, module, editable, loadEntity} = this.props
     const {messages: {untitledModule: defaultName, cloneModule: cloneLabel}} = this.context
 
     return (
@@ -226,7 +227,7 @@ class ModuleController extends React.Component {
 
         {this.state.editMode && (
           <Modal size='huge' provide={reportContext}>
-            <Editor save={this.save} close={this.closeModal}/>
+            <Editor loadEntity={loadEntity} save={this.save} close={this.closeModal}/>
           </Modal>
         )}
 
