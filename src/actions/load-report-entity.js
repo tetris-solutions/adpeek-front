@@ -12,6 +12,24 @@ import {inferLevelFromParams} from '../functions/infer-level-from-params'
 import qs from 'query-string'
 import trim from 'lodash/trim'
 
+function normalize (item) {
+  if (item.description_1) {
+    item.description = (
+      trim(item.description_1) + ' ' +
+      trim(item.description_2)
+    )
+  }
+
+  if (item.headline_part_1) {
+    item.headline = (
+      trim(item.headline_part_1) + ' ' +
+      trim(item.headline_part_2)
+    )
+  }
+
+  return item
+}
+
 function loadReportEntity (level, id, entity, queryParams, config) {
   const queryString = queryParams
     ? '?' + qs.stringify(queryParams)
@@ -34,28 +52,10 @@ function dispatchAction (tree, params, query, entity) {
   const {company, workspace, folder} = params
   const setStatus = statusResolver(tree.get('statuses'))
 
-  function normalize (item) {
-    if (item.description_1) {
-      item.description = (
-        trim(item.description_1) + ' ' +
-        trim(item.description_2)
-      )
-    }
-
-    if (item.headline_part_1) {
-      item.headline = (
-        trim(item.headline_part_1) + ' ' +
-        trim(item.headline_part_2)
-      )
-    }
-
-    return item
-  }
-
   function mergeNewEntities (entityArray, entityMap) {
     const concatWithoutDuplicates = newList => uniqBy(concat(
       map(newList, normalize),
-      get(entityMap, entity, [])
+      get(entityMap, entityListName[entity], [])
     ), 'id')
 
     if (entity === 'Campaign') {
