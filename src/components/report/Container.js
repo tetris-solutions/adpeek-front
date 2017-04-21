@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import assign from 'lodash/assign'
 import head from 'lodash/head'
 import uniq from 'lodash/uniq'
+import delay from 'delay'
 import forEach from 'lodash/forEach'
 import includes from 'lodash/includes'
 import ReportController from './Controller'
@@ -325,15 +326,16 @@ class Container extends React.Component {
     if (!this.promiseRegister[entity]) {
       const parentEntity = this.parentEntityLink(entity)
 
+      this.setLoadingState(entity, true)
+
       this.promiseRegister[entity] = parentEntity.load()
-        .then(() => Promise.all(map(accounts,
-          account => dispatchEntityLoadingAction(account, parentEntity.query(account)))))
+        .then(() => Promise.all(map(accounts, account =>
+          dispatchEntityLoadingAction(account, parentEntity.query(account)))))
+        .then(delay(500))
+        .then(() => this.setLoadingState(entity, false))
     }
 
-    this.setLoadingState(entity, true)
-
     return this.promiseRegister[entity]
-      .then(() => this.setLoadingState(entity, false))
   }
 
   load = () => {
