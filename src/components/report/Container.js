@@ -128,12 +128,12 @@ class Container extends React.Component {
     }
   }
 
-  calculateEntities = ({messages, campaigns = empty, adSets = empty, ads = empty, keywords = empty, adGroups = empty, videos = empty}) => {
+  calculateEntities = ({messages, campaigns, adSets, ads, keywords, adGroups, videos}) => {
     const entities = [{
       id: 'Campaign',
       name: messages.campaigns,
-      list: campaigns,
-      isLoading: this.getLoadingState('Campaign')
+      list: campaigns || empty,
+      isLoading: !campaigns || this.getLoadingState('Campaign')
     }]
 
     if (this.isFolderLevel()) {
@@ -145,50 +145,50 @@ class Container extends React.Component {
         entities.push({
           id: 'Placement',
           name: messages.placementLevel,
-          list: campaigns,
-          isLoading: this.getLoadingState('Placement')
+          list: campaigns || empty,
+          isLoading: !campaigns || this.getLoadingState('Placement')
         })
 
         entities.push({
           id: 'Search',
           name: messages.searchLevel,
-          list: adGroups,
-          isLoading: this.getLoadingState('Search')
+          list: adGroups || empty,
+          isLoading: !adGroups || this.getLoadingState('Search')
         })
 
         entities.push({
           id: 'Location',
           name: messages.locationLevel,
-          list: adGroups,
-          isLoading: this.getLoadingState('Location')
+          list: adGroups || empty,
+          isLoading: !adGroups || this.getLoadingState('Location')
         })
 
         entities.push({
           id: 'Audience',
           name: messages.audienceLevel,
-          list: adGroups,
-          isLoading: this.getLoadingState('Audience')
+          list: adGroups || empty,
+          isLoading: !adGroups || this.getLoadingState('Audience')
         })
 
         entities.push({
           id: 'AdGroup',
           name: messages.adGroups,
-          list: adGroups,
-          isLoading: this.getLoadingState('AdGroup')
+          list: adGroups || empty,
+          isLoading: !adGroups || this.getLoadingState('AdGroup')
         })
 
         entities.push({
           id: 'Video',
           name: messages.videos,
-          list: videos,
-          isLoading: this.getLoadingState('Video')
+          list: videos || empty,
+          isLoading: !videos || this.getLoadingState('Video')
         })
 
         entities.push({
           id: 'Keyword',
           name: messages.keywords,
-          list: keywords,
-          isLoading: this.getLoadingState('Keyword')
+          list: keywords || empty,
+          isLoading: !keywords || this.getLoadingState('Keyword')
         })
       }
 
@@ -196,16 +196,16 @@ class Container extends React.Component {
         entities.push({
           id: 'AdSet',
           name: messages.adSets,
-          list: adSets,
-          isLoading: this.getLoadingState('AdSet')
+          list: adSets || empty,
+          isLoading: !adSets || this.getLoadingState('AdSet')
         })
       }
 
       entities.push({
         id: 'Ad',
         name: messages.ads,
-        list: ads,
-        isLoading: this.getLoadingState('Ad')
+        list: ads || empty,
+        isLoading: !ads || this.getLoadingState('Ad')
       })
     }
 
