@@ -1,8 +1,10 @@
 import find from 'lodash/find'
+import Message from 'tetris-iso/Message'
 import React from 'react'
 import PropTypes from 'prop-types'
 import AttributeList from './AttributeList'
 import FilterSwitch from './FilterSwitch'
+import Spinner from '../../Spinner'
 
 class Entities extends React.Component {
   static contextTypes = {
@@ -147,13 +149,24 @@ class Entities extends React.Component {
   }
 
   render () {
-    const {draft: {module}, addEntity, removeEntity} = this.context
+    const {draft: {module, entity}, addEntity, removeEntity} = this.context
     const {items} = this.props
+
+    // @todo show loading until entity is ready
 
     return (
       <div>
         <FilterSwitch/>
         <br/>
+
+        {entity.isLoading && (
+          <div style={{textAlign: 'center', marginTop: '2em'}}>
+            <Spinner/>
+            <br/>
+            <Message name={entity.name}>
+              loadingEntity
+            </Message>
+          </div>)}
 
         <AttributeList
           levels={this.getLevels()}

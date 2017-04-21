@@ -25,7 +25,7 @@ const entityListName = {
   Ad: 'ads',
   AdGroup: 'adGroups',
   AdSet: 'adSets',
-  Videos: 'video',
+  Video: 'videos',
   Keyword: 'keywords'
 }
 

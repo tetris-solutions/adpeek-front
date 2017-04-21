@@ -298,6 +298,11 @@ class Container extends React.Component {
             inactiveAdGroups: join(map(filter(this.props.adGroups, negate(isActive)), 'id'), ',')
           })
         }
+      case 'Video':
+        return {
+          load: () => this.loadEntity('AdGroup'),
+          query: () => ({adGroups: join(map(this.props.adGroups, 'id'), ',')})
+        }
     }
   }
 

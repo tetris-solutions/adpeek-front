@@ -353,5 +353,6 @@ module.exports = {
   hideFolder: 'Hide Folder',
   showFolder: 'Show Folder',
   tooManyMetrics: 'You cannot select more than {limit} metrics, you have {selected}',
-  tooManyDimensions: 'You cannot select more than {limit} dimensions, you have {selected}'
+  tooManyDimensions: 'You cannot select more than {limit} dimensions, you have {selected}',
+  loadingEntity: 'Loading {name}...'
 }
