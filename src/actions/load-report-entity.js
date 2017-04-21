@@ -6,20 +6,11 @@ import compact from 'lodash/compact'
 import uniqBy from 'lodash/uniqBy'
 import map from 'lodash/map'
 import get from 'lodash/get'
-import forEach from 'lodash/forEach'
 import concat from 'lodash/concat'
 import {statusResolver} from '../functions/status-resolver'
 import {inferLevelFromParams} from '../functions/infer-level-from-params'
 import qs from 'query-string'
 import trim from 'lodash/trim'
-
-function loadReportEntities (level, id, queryParams, config) {
-  const queryString = queryParams
-    ? '?' + qs.stringify(queryParams)
-    : ''
-
-  return GET(`${process.env.ADPEEK_API_URL}/${level}/${id}/report-entities${queryString}`, config)
-}
 
 function loadReportEntity (level, id, entity, queryParams, config) {
   const queryString = queryParams
@@ -61,23 +52,19 @@ function dispatchAction (tree, params, query, entity) {
     return item
   }
 
-  function mergeNewEntities (newEntities, oldEntities) {
-    if (entity) {
-      newEntities = {[entityListName[entity]]: newEntities}
+  function mergeNewEntities (entityArray, entityMap) {
+    const concatWithoutDuplicates = newList => uniqBy(concat(
+      map(newList, normalize),
+      get(entityMap, entity, [])
+    ), 'id')
+
+    if (entity === 'Campaign') {
+      entityArray = map(entityArray, setStatus)
     }
 
-    if (newEntities.campaigns) {
-      newEntities.campaigns = map(newEntities.campaigns, setStatus)
-    }
-
-    forEach(newEntities, (newList, entityName) => {
-      newEntities[entityName] = uniqBy(concat(
-        map(newList, normalize),
-        get(oldEntities, entityName, [])
-      ), 'id')
+    return assign({}, entityMap, {
+      [entityListName[entity]]: concatWithoutDuplicates(entityArray)
     })
-
-    return assign({}, oldEntities, newEntities)
   }
 
   const path = compact([
@@ -88,11 +75,7 @@ function dispatchAction (tree, params, query, entity) {
     'entities'
   ])
 
-  const promise = entity
-    ? loadReportEntity(level, params[level], entity, query, getApiFetchConfig(tree))
-    : loadReportEntities(level, params[level], query, getApiFetchConfig(tree))
-
-  return promise
+  return loadReportEntity(level, params[level], entity, query, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .then(saveResponseData(tree, path, mergeNewEntities))
     .catch(pushResponseErrorToState(tree))
@@ -100,7 +83,7 @@ function dispatchAction (tree, params, query, entity) {
 
 const byPlatformCalls = {}
 
-export function loadReportEntitiesAction (tree, params, query, entity = null) {
+export function loadReportEntityAction (tree, params, query, entity) {
   const call = () => dispatchAction(tree, params, query, entity)
 
   if (byPlatformCalls[query.platform]) {

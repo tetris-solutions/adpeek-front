@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import concat from 'lodash/concat'
 import assign from 'lodash/assign'
 import head from 'lodash/head'
 import uniq from 'lodash/uniq'
@@ -8,7 +7,7 @@ import forEach from 'lodash/forEach'
 import includes from 'lodash/includes'
 import ReportController from './Controller'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
-import {loadReportEntitiesAction} from '../../actions/load-report-entities'
+import {loadReportEntityAction} from '../../actions/load-report-entity'
 import {loadReportMetaDataAction, loadCrossPlatformReportMetaDataAction} from '../../actions/load-report-meta-data'
 import has from 'lodash/has'
 import map from 'lodash/map'
@@ -17,7 +16,6 @@ import SubHeader from '../SubHeader'
 import LoadingHorizontal from '../LoadingHorizontal'
 import Message from 'tetris-iso/Message'
 import pick from 'lodash/pick'
-import log from 'loglevel'
 import filter from 'lodash/filter'
 import join from 'lodash/join'
 import negate from 'lodash/negate'
@@ -131,8 +129,6 @@ class Container extends React.Component {
   }
 
   calculateEntities = ({messages, campaigns = empty, adSets = empty, ads = empty, keywords = empty, adGroups = empty, videos = empty}) => {
-    log.info('will mount report entities')
-
     const entities = [{
       id: 'Campaign',
       name: messages.campaigns,
@@ -218,16 +214,6 @@ class Container extends React.Component {
 
   getEntities = () => {
     return this.calculateEntities(this.entitiesSource())
-  }
-
-  loadEntities = (account) => {
-    const {campaigns, params, dispatch} = this.props
-
-    if (campaigns) {
-      return Promise.resolve()
-    }
-
-    return dispatch(loadReportEntitiesAction, params, pick(account, 'tetris_id', 'external_id', 'platform'))
   }
 
   loadMultiPlatformMetaData = (entity) => {
@@ -321,7 +307,7 @@ class Container extends React.Component {
     const {accounts, params, dispatch} = this.props
 
     const dispatchEntityLoadingAction = (account, query) => {
-      return dispatch(loadReportEntitiesAction,
+      return dispatch(loadReportEntityAction,
         params,
         assign({}, pick(account, 'tetris_id', 'external_id', 'platform'), query),
         entity)
@@ -347,28 +333,15 @@ class Container extends React.Component {
 
   load = () => {
     const entityMap = this.getEntities()
-    const keysToMarkAsLoaded = ['metaData']
 
-    let promises = map(entityMap, ({id}) =>
-      this.loadMetaData(id))
+    const promises = map(entityMap, ({id}) => this.loadMetaData(id))
 
-    if (this.isFolderLevel()) {
-      // load on demand
-      const {report: {modules}} = this.props
+    const {report: {modules}} = this.props
 
-      forEach(modules, ({entity}) => this.loadEntity(entity))
-    } else {
-      // bulk load
-      promises = concat(promises, map(this.props.accounts, this.loadEntities))
-
-      forEach(entityMap, ({id}) => {
-        keysToMarkAsLoaded.push(id)
-      })
-    }
+    forEach(modules, ({entity}) => this.loadEntity(entity))
 
     Promise.all(promises).then(() =>
-      map(keysToMarkAsLoaded, key =>
-        this.setLoadingState(key, false)))
+      this.setLoadingState('metaData', false))
   }
 
   getAccounts = () => {
@@ -387,8 +360,6 @@ class Container extends React.Component {
         </Placeholder>
       )
     }
-
-    log.debug('render report <Container/>')
 
     return (
       <ReportController
