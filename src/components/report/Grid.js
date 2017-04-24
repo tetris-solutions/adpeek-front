@@ -73,12 +73,13 @@ const WrappedGrid = sizeMe({
 
 const HardGrid = props => (
   <div className='mdl-grid'>
-    <div className='mdl-cell mdl-cell--12-col'>
+    <div className='mdl-cell mdl-cell--12-col' style={props.editMode ? {paddingBottom: '100px'} : undefined}>
       <WrappedGrid {...props}/>
     </div>
   </div>
 )
 
 HardGrid.displayName = 'Hard-Grid'
+HardGrid.propTypes = ReportGrid.propTypes
 
 export default HardGrid
