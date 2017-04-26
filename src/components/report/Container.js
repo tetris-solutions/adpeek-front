@@ -23,7 +23,7 @@ import negate from 'lodash/negate'
 
 const empty = []
 
-function transformAccount ({external_id, tetris_id, platform, ga_property_id, ga_view_id}) {
+function transformAccount ({external_id, tetris_id, platform, ga_property, ga_view, ga_property_id, ga_view_id}) {
   const acc = {
     ad_account: external_id,
     platform: platform,
@@ -31,8 +31,8 @@ function transformAccount ({external_id, tetris_id, platform, ga_property_id, ga
   }
 
   if (platform === 'analytics') {
-    acc.ga_property_id = ga_property_id
-    acc.ga_view_id = ga_view_id
+    acc.ga_property_id = ga_property ? ga_property.id : ga_property_id
+    acc.ga_view_id = ga_view ? ga_view.id : ga_view_id
   }
 
   return acc
