@@ -118,14 +118,15 @@ class ReportController extends React.Component {
   }
 
   addNewModule = () => {
-    const {report, params, dispatch} = this.props
+    const {report, params, dispatch, loadEntity} = this.props
     const {messages: {module: defaultModuleName}} = this.context
     const lastY = max(map(report.modules, 'y'))
     const y = isNumber(lastY) ? lastY + 1 : 0
+    const moduleCount = size(report.modules)
 
     const newModule = {
       type: 'line',
-      name: defaultModuleName + ' ' + size(report.modules),
+      name: defaultModuleName + ' ' + moduleCount,
       x: 0,
       y,
       entity: 'Campaign',
@@ -134,6 +135,10 @@ class ReportController extends React.Component {
 
     if (report.platform !== 'analytics') {
       newModule.filters.impressions = ['greater than', 1]
+    }
+
+    if (!moduleCount) {
+      loadEntity(newModule.entity)
     }
 
     dispatch(createModuleReportAction, params, newModule)
