@@ -54,6 +54,7 @@ class ReportController extends React.Component {
   }
 
   static childContextTypes = {
+    accounts: PropTypes.array,
     report: PropTypes.object,
     changeDateRange: PropTypes.func,
     reportParams: reportParamsType
@@ -61,6 +62,7 @@ class ReportController extends React.Component {
 
   getChildContext () {
     return {
+      accounts: this.props.accounts,
       report: this.props.report,
       reportParams: this.getReportParams(),
       changeDateRange: this.onChangeRange

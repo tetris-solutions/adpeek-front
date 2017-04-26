@@ -24,6 +24,7 @@ import DescriptionDialog from './DescriptionDialog'
 import log from 'loglevel'
 
 const reportContext = [
+  'accounts',
   'report',
   'reportParams',
   'changeDateRange',

@@ -28,6 +28,20 @@ import {styledFunctionalComponent} from '../../higher-order/styled'
 import isDate from 'lodash/isDate'
 import includes from 'lodash/includes'
 
+function getAccountSelector (id) {
+  if (!includes(id, ':')) return id
+
+  const [tetris_account, ad_account] = id.split(':').slice(0, 2)
+
+  return {tetris_account, ad_account}
+}
+
+function mountAnalyticsCampaign (id) {
+  const name = id.split(':').slice(2).join(':')
+
+  return {id: name, name}
+}
+
 const style = csjs`
 .table {
   width: 100%;
@@ -272,6 +286,10 @@ class ReportModuleTable extends React.Component {
     result: PropTypes.array.isRequired
   }
 
+  static contextTypes = {
+    accounts: PropTypes.array.isRequired
+  }
+
   static defaultProps = {
     channels: {}
   }
@@ -299,8 +317,14 @@ class ReportModuleTable extends React.Component {
   }
 
   getEntityComponentById = (id) => {
+    const {accounts} = this.context
     const {entity: {id: entityId, list}, reportParams} = this.props
-    const item = find(list, {id})
+    const accountSelector = getAccountSelector(id)
+    const account = find(accounts, accountSelector)
+
+    const item = account && account.platform === 'analytics'
+      ? mountAnalyticsCampaign(id)
+      : find(list, {id})
 
     if (!item) {
       return null
