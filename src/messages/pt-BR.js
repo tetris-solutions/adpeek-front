@@ -277,6 +277,7 @@ module.exports = {
   copySuccess: 'Copiado para área de transferência!',
   adwordsLevel: 'Adwords',
   facebookLevel: 'Facebook',
+  analyticsLevel: 'Analytics',
   sharedLevel: 'Comum',
   tooManyAccounts: 'O máximo de contas é {max}, você selecionou {selected}',
   calculateKeywordsRelevance: 'Calcular relevância',

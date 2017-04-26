@@ -277,6 +277,7 @@ module.exports = {
   copySuccess: 'Copied to clipboard!',
   adwordsLevel: 'Adwords',
   facebookLevel: 'Facebook',
+  analyticsLevel: 'Analytics',
   sharedLevel: 'Shared',
   tooManyAccounts: 'You have selected {selected} accounts, the max is {max}',
   calculateKeywordsRelevance: 'Calculate relevance',
