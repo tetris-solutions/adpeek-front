@@ -138,6 +138,20 @@ const readType = attr => attr.type === 'special' && attr.is_percentage
   ? 'percentage'
   : attr.type
 
+function getAccountSelector (id) {
+  if (!includes(id, ':')) return id
+
+  const [tetris_account, ad_account] = id.split(':').slice(0, 2)
+
+  return {tetris_account, ad_account}
+}
+
+function mountAnalyticsCampaign (id) {
+  const name = id.split(':').slice(2).join(':')
+
+  return {id: name, name}
+}
+
 export function reportToChartConfig (type, props) {
   const {comments, query, entity, attributes} = props
   const {metrics} = query
@@ -198,7 +212,16 @@ export function reportToChartConfig (type, props) {
   dimensions = without(dimensions, xAxisDimension)
 
   const series = []
-  const getEntityById = memoize(id => find(entity.list, {id}) || mockEntity)
+  const getEntityById = memoize(id => {
+    const {accounts, report: {platform: reportPlatform}} = props
+    const platform = reportPlatform || get(find(accounts, getAccountSelector(id)), 'platform')
+
+    if (platform === 'analytics') {
+      return reportPlatform ? {id, name: id} : mountAnalyticsCampaign(id)
+    }
+
+    return find(entity.list, {id}) || mockEntity
+  })
 
   function walk (points, xValue) {
     const firstPoint = points[0]

@@ -87,6 +87,8 @@ Chart.propTypes = {
     PropTypes.string,
     PropTypes.number
   ]),
+  accounts: PropTypes.array,
+  report: PropTypes.object,
   renderHiddenTable: PropTypes.bool,
   type: PropTypes.string,
   locales: PropTypes.string,
@@ -116,6 +118,8 @@ class ChartContainer extends React.Component {
 
   static contextTypes = {
     messages: PropTypes.object,
+    report: PropTypes.object,
+    accounts: PropTypes.array,
     locales: PropTypes.string,
     module: reportModuleType.isRequired,
     entity: reportEntityType.isRequired,
@@ -145,11 +149,13 @@ class ChartContainer extends React.Component {
 
   render () {
     const {renderHiddenTable} = this.state
-    const {module, locales, reportParams, entity, attributes} = this.context
+    const {accounts, report, module, locales, reportParams, entity, attributes} = this.context
     const {change, height} = this.props
 
     const config = {
       id: module.id,
+      accounts,
+      report,
       name: module.name,
       height: height,
       change,

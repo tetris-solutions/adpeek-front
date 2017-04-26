@@ -287,6 +287,7 @@ class ReportModuleTable extends React.Component {
   }
 
   static contextTypes = {
+    report: PropTypes.object.isRequired,
     accounts: PropTypes.array.isRequired
   }
 
@@ -317,14 +318,18 @@ class ReportModuleTable extends React.Component {
   }
 
   getEntityComponentById = (id) => {
-    const {accounts} = this.context
+    const {accounts, report: {platform: reportPlatform}} = this.context
     const {entity: {id: entityId, list}, reportParams} = this.props
-    const accountSelector = getAccountSelector(id)
-    const account = find(accounts, accountSelector)
 
-    const item = account && account.platform === 'analytics'
-      ? mountAnalyticsCampaign(id)
-      : find(list, {id})
+    const platform = reportPlatform ||
+      get(find(accounts, getAccountSelector(id)), 'platform')
+
+    const item = platform === 'analytics'
+      ? (
+        reportPlatform
+          ? {id, name: id}
+          : mountAnalyticsCampaign(id)
+      ) : find(list, {id})
 
     if (!item) {
       return null
