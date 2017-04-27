@@ -1,5 +1,4 @@
 import csjs from 'csjs'
-import includes from 'lodash/includes'
 import map from 'lodash/map'
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -17,6 +16,7 @@ import orderBy from 'lodash/orderBy'
 import assign from 'lodash/assign'
 import head from 'lodash/head'
 import tail from 'lodash/tail'
+import every from 'lodash/every'
 
 const style = csjs`
 .list {
@@ -162,23 +162,22 @@ List.propTypes = {
 
 const AttributeList = ({attributes, selectedAttributes, levels, remove, add}) => {
   function node (item) {
-    if (!item.list) {
-      const isSelected = includes(selectedAttributes, item.id)
-
-      return item.hidden ? null : (
-        <AttributeItem
-          {...item}
-          selected={isSelected}
-          toggle={isSelected ? remove : add}
-          key={item.id}/>
-      )
-    }
-
-    const localSelectionSize = size(intersection(item.ids, selectedAttributes))
+    const ids = item.ids ? item.ids : [item.id]
+    const localSelectionSize = size(intersection(ids, selectedAttributes))
     let selection
 
     if (localSelectionSize) {
-      selection = size(item.ids) === localSelectionSize ? 'total' : 'partial'
+      selection = size(ids) === localSelectionSize ? 'total' : 'partial'
+    }
+
+    if (every(item.list, 'hidden')) {
+      return (
+        <AttributeItem
+          {...item}
+          selected={selection === 'total'}
+          toggle={selection === 'total' ? remove : add}
+          key={item.id}/>
+      )
     }
 
     return (

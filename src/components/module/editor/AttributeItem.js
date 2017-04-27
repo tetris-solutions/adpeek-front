@@ -124,6 +124,7 @@ class AttributeItem extends React.Component {
 
   static propTypes = {
     id: PropTypes.string.isRequired,
+    ids: PropTypes.array,
     name: PropTypes.string,
     type: PropTypes.string,
     urls: PropTypes.array,
@@ -140,7 +141,7 @@ class AttributeItem extends React.Component {
 
     if (!toggle) return
 
-    let ids = [id]
+    let ids = this.props.ids || [id]
     const topUl = getTopUl(li)
 
     if (topUl) {
