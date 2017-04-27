@@ -165,7 +165,7 @@ const AttributeList = ({attributes, selectedAttributes, levels, remove, add}) =>
     if (!item.list) {
       const isSelected = includes(selectedAttributes, item.id)
 
-      return (
+      return item.hidden ? null : (
         <AttributeItem
           {...item}
           selected={isSelected}

@@ -152,8 +152,6 @@ class Entities extends React.Component {
     const {draft: {module, entity}, addEntity, removeEntity} = this.context
     const {items} = this.props
 
-    // @todo show loading until entity is ready
-
     return (
       <div>
         <FilterSwitch/>

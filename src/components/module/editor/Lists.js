@@ -16,6 +16,8 @@ import Input from '../../Input'
 import {Tabs, Tab} from '../../Tabs'
 import Entities from './Entities'
 import MissingIdAlert from './MissingIdAlert'
+import map from 'lodash/map'
+import assign from 'lodash/assign'
 
 const clean = str => trim(lowerCase(deburr(str)))
 
@@ -87,7 +89,14 @@ class Lists extends React.Component {
     const {report, messages, draft, addAttribute, removeAttribute} = this.context
 
     const selectable = sorted(matching(this.context.selectable, clean(searchValue)))
-    const items = sorted(matching(draft.entity.list, clean(searchValue)))
+    let items = sorted(matching(draft.entity.list, clean(searchValue)))
+
+    if (report.level !== 'folder') {
+      items = map(items, campaign => assign({}, campaign, {
+        hidden: campaign.platform === 'analytics'
+      }))
+    }
+
     const dimensions = filter(selectable, 'is_dimension')
     const metrics = filter(selectable, 'is_metric')
     const attrLevels = this.attributeLevels()
