@@ -45,8 +45,16 @@ class Editor extends React.Component {
     numberOfSelectedAccounts: PropTypes.number.isRequired,
     isInvalid: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
-    tooManyDimensions: PropTypes.object,
-    tooManyMetrics: PropTypes.object,
+    gaAttributesLimit: PropTypes.shape({
+      metrics: PropTypes.shape({
+        max: PropTypes.number,
+        selected: PropTypes.number
+      }),
+      dimensions: PropTypes.shape({
+        max: PropTypes.number,
+        selected: PropTypes.number
+      })
+    }),
     save: PropTypes.func.isRequired,
     redraw: PropTypes.func.isRequired,
     cancel: PropTypes.func.isRequired
@@ -87,8 +95,7 @@ class Editor extends React.Component {
       maxAccounts,
       invalidPermutation,
       numberOfSelectedAccounts,
-      tooManyDimensions,
-      tooManyMetrics,
+      gaAttributesLimit,
       redraw,
       save,
       cancel
@@ -119,18 +126,18 @@ class Editor extends React.Component {
           </Message>
         </em>
       )
-    } else if (tooManyDimensions) {
+    } else if (gaAttributesLimit.dimensions.selected > gaAttributesLimit.dimensions.max) {
       updateBt = (
         <em className='mdl-color-text--red-A700'>
-          <Message selected={tooManyDimensions.selected} limit={tooManyDimensions.limit} html>
+          <Message selected={gaAttributesLimit.dimensions.selected} limit={gaAttributesLimit.dimensions.max} html>
             tooManyDimensions
           </Message>
         </em>
       )
-    } else if (tooManyMetrics) {
+    } else if (gaAttributesLimit.metrics.selected > gaAttributesLimit.metrics.max) {
       updateBt = (
         <em className='mdl-color-text--red-A700'>
-          <Message selected={tooManyMetrics.selected} limit={tooManyMetrics.limit} html>
+          <Message selected={gaAttributesLimit.metrics.selected} limit={gaAttributesLimit.metrics.max} html>
             tooManyMetrics
           </Message>
         </em>

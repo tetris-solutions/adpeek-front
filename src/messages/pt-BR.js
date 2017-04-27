@@ -354,7 +354,7 @@ module.exports = {
   showWorkspace: 'Exibir Área',
   hideFolder: 'Ocultar Pasta',
   showFolder: 'Exibir Pasta',
-  tooManyMetrics: 'Por favor, selecione até {limit} métricas, você selecionou {selected}',
-  tooManyDimensions: 'Por favor, selecione até {limit} dimensões, você selecionou {selected}',
+  tooManyMetrics: 'Por favor, selecione até {limit} métricas <strong>GA</strong>, você selecionou {selected}',
+  tooManyDimensions: 'Por favor, selecione até {limit} dimensões <strong>GA</strong>, você selecionou {selected}',
   loadingEntity: 'Carregando {name}...'
 }

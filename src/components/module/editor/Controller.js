@@ -17,6 +17,10 @@ import reportEntityType from '../../../propTypes/report-entity'
 import reportModuleType from '../../../propTypes/report-module'
 import Editor from './Editor'
 import Emmett from 'emmett'
+import filter from 'lodash/filter'
+import startsWith from 'lodash/startsWith'
+import constant from 'lodash/constant'
+import size from 'lodash/size'
 
 const editableFields = ['description', 'name', 'type', 'dimensions', 'metrics', 'rows', 'cols', 'entity', 'limit', 'sort', 'filters']
 const MAX_ACCOUNTS = 15
@@ -332,7 +336,7 @@ class ModuleEdit extends React.Component {
     return this.props.entities[this.state.newModule.entity]
   }
 
-  getInvalidPermutation = (dimensions, metrics) => {
+  getInvalidPermutation (dimensions, metrics) {
     const {attributes} = this.context
     const selected = concat(dimensions, metrics)
     const isSelected = id => includes(selected, id)
@@ -354,20 +358,23 @@ class ModuleEdit extends React.Component {
     return invalidPermutation
   }
 
-  getAttributeSelectionLimit = (dimensions, metrics) => {
-    let tooManyDimensions = null
-    let tooManyMetrics = null
-
-    if (this.context.report.platform === 'analytics') {
-      if (dimensions.length > MAX_GA_DIMENSIONS) {
-        tooManyDimensions = {limit: MAX_GA_DIMENSIONS, selected: dimensions.length}
-      }
-      if (metrics.length > MAX_GA_METRICS) {
-        tooManyMetrics = {limit: MAX_GA_METRICS, selected: metrics.length}
-      }
+  getAttributeSelectionLimit (dimensions, metrics) {
+    const limit = {
+      dimensions: {max: MAX_GA_DIMENSIONS},
+      metrics: {max: MAX_GA_METRICS}
     }
 
-    return {tooManyMetrics, tooManyDimensions}
+    const {platform} = this.context.report
+    const isAnalyticsAttribute = platform === 'analytics'
+      ? constant(true)
+      : platform
+        ? constant(false)
+        : name => startsWith(name, 'analytics:')
+
+    limit.dimensions.selected = size(filter(dimensions, isAnalyticsAttribute))
+    limit.metrics.selected = size(filter(metrics, isAnalyticsAttribute))
+
+    return limit
   }
 
   render () {
@@ -382,7 +389,6 @@ class ModuleEdit extends React.Component {
     )
 
     const invalidPermutation = isInvalidModule ? undefined : this.getInvalidPermutation(dimensions, metrics)
-    const limits = this.getAttributeSelectionLimit(dimensions, metrics)
 
     return (
       <Editor
@@ -391,8 +397,7 @@ class ModuleEdit extends React.Component {
         numberOfSelectedAccounts={numberOfSelectedAccounts}
         isInvalid={isInvalidModule}
         isLoading={Boolean(this.context.module.isLoading)}
-        tooManyMetrics={limits.tooManyMetrics}
-        tooManyDimensions={limits.tooManyDimensions}
+        gaAttributesLimit={this.getAttributeSelectionLimit(dimensions, metrics)}
         entities={this.props.entities}
         cancel={this.cancel}
         redraw={this.redraw}
