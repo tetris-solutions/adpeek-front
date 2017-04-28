@@ -3,7 +3,6 @@ import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import FormMixin from '../mixins/FormMixin'
 import concat from 'lodash/concat'
-import assign from 'lodash/assign'
 import Message from 'tetris-iso/Message'
 import Input from '../Input'
 import {createFolderAction} from '../../actions/create-folder'
@@ -63,23 +62,16 @@ export const CreateFolder = createReactClass({
       name: elements.name.value,
       workspace_account: elements.workspace_account.value,
       dash_campaign: dashCampaign ? dashCampaign.id : '',
-      ga_segment: null,
       tag: get(elements, 'tag.value', null),
       media: get(elements, 'media.value', null),
       kpi: this.state.kpi,
-      kpi_goal: this.state.kpi_goal
+      kpi_goal: this.state.kpi_goal,
+      ga_segment: gaSegment || null
     }
 
     if (this.isAnalytics()) {
       folder.media = 'display'
       folder.kpi = 'cpa'
-    }
-
-    if (gaSegment) {
-      folder.ga_segment = assign({}, gaSegment)
-      folder.ga_segment.id = folder.ga_segment.id === this.CREATE_OPTION_FLAG
-        ? null
-        : folder.ga_segment.id
     }
 
     if (folder.tag) {
@@ -222,7 +214,7 @@ export const CreateFolder = createReactClass({
               {gaSegment
                 ? (
                   <Input
-                    disabled={gaSegment.id !== this.CREATE_OPTION_FLAG}
+                    disabled
                     name='segmentDefinition'
                     label='gaSegmentDefinition'
                     value={gaSegment.definition}

@@ -2,7 +2,6 @@ import PropTypes from 'prop-types'
 import assign from 'lodash/assign'
 import find from 'lodash/find'
 import get from 'lodash/get'
-import concat from 'lodash/concat'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
 import sortBy from 'lodash/sortBy'
@@ -164,15 +163,7 @@ export default {
     })
   },
   rawSegments () {
-    return concat(
-      {
-        id: this.CREATE_OPTION_FLAG,
-        name: this.context.messages.newGASegmentLabel,
-        definition: '',
-        type: 'CUSTOM'
-      },
-      get(this.props.cursors, 'workspace.accounts.analytics.segments', [])
-    )
+    return get(this.props.cursors, 'workspace.accounts.analytics.segments', [])
   },
   getSegments () {
     return map(sortBy(this.rawSegments(), this.customFirst), this.normalizeAutoSelectOpt)

@@ -1,5 +1,4 @@
 import find from 'lodash/find'
-import assign from 'lodash/assign'
 import get from 'lodash/get'
 import map from 'lodash/map'
 import pick from 'lodash/pick'
@@ -79,7 +78,7 @@ export const EditFolder = createReactClass({
       name: elements.name.value,
       workspace_account: elements.workspace_account.value,
       dash_campaign: dashCampaign ? dashCampaign.id : '',
-      ga_segment: null,
+      ga_segment: gaSegment || null,
       tag: get(elements, 'tag.value', null),
       media: get(elements, 'media.value', null),
       kpi: this.state.kpi,
@@ -89,13 +88,6 @@ export const EditFolder = createReactClass({
     if (this.isAnalytics()) {
       folder.media = 'display'
       folder.kpi = 'cpa'
-    }
-
-    if (gaSegment) {
-      folder.ga_segment = assign({}, gaSegment)
-      folder.ga_segment.id = folder.ga_segment.id === this.CREATE_OPTION_FLAG
-        ? null
-        : folder.ga_segment.id
     }
 
     if (folder.tag) {
@@ -230,7 +222,7 @@ export const EditFolder = createReactClass({
               {gaSegment
                 ? (
                   <Input
-                    disabled={gaSegment.id !== this.CREATE_OPTION_FLAG}
+                    disabled
                     name='segmentDefinition'
                     label='gaSegmentDefinition'
                     value={gaSegment.definition}
