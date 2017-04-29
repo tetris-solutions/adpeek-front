@@ -11,11 +11,19 @@ import {loadGASegmentsAction} from '../../actions/load-ga-segments'
 
 export default {
   CREATE_OPTION_FLAG: '+1',
+  DEFAULT_GA_SEGMENT: {
+    id: '-1',
+    name: 'All Users',
+    definition: '',
+    type: 'BUILT_IN'
+  },
   contextTypes: {
     router: PropTypes.object,
     messages: PropTypes.object
   },
   propTypes: {
+    folder: PropTypes.object,
+    workspace: PropTypes.object,
     params: PropTypes.object,
     cursors: PropTypes.object,
     company: PropTypes.shape({
@@ -31,16 +39,13 @@ export default {
     }
   },
   componentWillMount () {
-    let gaSegment = get(this.props, 'folder.ga_segment', null)
+    const {folder} = this.props
 
-    if (gaSegment && !gaSegment.id) {
-      gaSegment = assign({}, gaSegment, {
-        id: this.CREATE_OPTION_FLAG,
-        name: this.context.messages.newGASegmentLabel
+    if (folder) {
+      this.setState({
+        gaSegment: folder.ga_segment || null
       })
     }
-
-    this.setState({gaSegment})
   },
   componentDidMount () {
     if (this.isConnectedToDash()) {

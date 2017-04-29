@@ -72,6 +72,7 @@ export const CreateFolder = createReactClass({
     if (this.isAnalytics()) {
       folder.media = 'display'
       folder.kpi = 'cpa'
+      folder.ga_segment = folder.ga_segment || this.DEFAULT_GA_SEGMENT
     }
 
     if (folder.tag) {
