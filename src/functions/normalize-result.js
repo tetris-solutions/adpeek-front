@@ -59,10 +59,12 @@ export function normalizeResult (attributes, result) {
         date = zeroedMoment().year(value).toDate()
         date._format_ = 'YYYY'
         break
+      case 'hour':
       case 'hourofday':
         date = zeroedMoment().hour(value).toDate()
         date._format_ = 'HH:mm'
         break
+      case 'yearmonth':
       case 'month':
         date = zeroedMoment(value).toDate()
         date._format_ = 'MMMM/YY'

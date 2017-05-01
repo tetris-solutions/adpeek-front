@@ -81,8 +81,11 @@ const types = {
   }
 }
 
+types.yearmonth = types.month
+
 function detectXAxis (result, xAxisDimensions) {
   switch (xAxisDimensions) {
+    case 'hour':
     case 'hourofday':
     case 'hourly_stats_aggregated_by_advertiser_time_zone':
     case 'hourly_stats_aggregated_by_audience_time_zone':
@@ -90,6 +93,7 @@ function detectXAxis (result, xAxisDimensions) {
     case 'quarter':
     case 'dayofweek':
     case 'month':
+    case 'yearmonth':
     case 'monthofyear':
     case 'week':
     case 'year':
