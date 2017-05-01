@@ -83,7 +83,7 @@ const types = {
 
 types.yearmonth = types.month
 types.isoyearisoweek = types.week
-types.day_of_week = types.dayofweek
+types.day_of_week = types.dayofweekname = types.dayofweek
 types.month_of_year = types.monthofyear
 
 function detectXAxis (result, xAxisDimensions) {
@@ -95,6 +95,7 @@ function detectXAxis (result, xAxisDimensions) {
       return types.time
     case 'quarter':
     case 'day_of_week':
+    case 'dayofweekname':
     case 'dayofweek':
     case 'month':
     case 'yearmonth':

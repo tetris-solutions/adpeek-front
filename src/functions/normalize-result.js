@@ -80,6 +80,7 @@ export function normalizeResult (attributes, result) {
         date._simple_ = true
         break
       case 'day_of_week':
+      case 'dayofweekname':
       case 'dayofweek':
         date = zeroedMoment().weekday(daysOfWeek[toLower(value)] || 0).toDate()
         date._format_ = 'dddd'
