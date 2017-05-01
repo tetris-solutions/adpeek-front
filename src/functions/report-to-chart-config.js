@@ -84,6 +84,7 @@ const types = {
 types.yearmonth = types.month
 types.isoyearisoweek = types.week
 types.day_of_week = types.dayofweek
+types.month_of_year = types.monthofyear
 
 function detectXAxis (result, xAxisDimensions) {
   switch (xAxisDimensions) {
@@ -97,6 +98,7 @@ function detectXAxis (result, xAxisDimensions) {
     case 'dayofweek':
     case 'month':
     case 'yearmonth':
+    case 'month_of_year':
     case 'monthofyear':
     case 'isoyearisoweek':
     case 'week':

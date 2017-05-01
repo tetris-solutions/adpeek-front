@@ -69,6 +69,7 @@ export function normalizeResult (attributes, result) {
         date = zeroedMoment(value).toDate()
         date._format_ = 'MMMM/YY'
         break
+      case 'month_of_year':
       case 'monthofyear':
         date = zeroedMoment().month(monthNameToIndex(value)).toDate()
         date._format_ = 'MMMM'
