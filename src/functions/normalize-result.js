@@ -82,6 +82,7 @@ export function normalizeResult (attributes, result) {
         date = zeroedMoment().weekday(daysOfWeek[toLower(value)] || 0).toDate()
         date._format_ = 'dddd'
         break
+      case 'isoyearisoweek':
       case 'week':
         date = zeroedMoment(value).toDate()
         date._format_ = 'W, D/MMM'
