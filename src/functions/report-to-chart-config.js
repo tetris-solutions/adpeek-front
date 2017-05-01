@@ -83,6 +83,7 @@ const types = {
 
 types.yearmonth = types.month
 types.isoyearisoweek = types.week
+types.day_of_week = types.dayofweek
 
 function detectXAxis (result, xAxisDimensions) {
   switch (xAxisDimensions) {
@@ -92,6 +93,7 @@ function detectXAxis (result, xAxisDimensions) {
     case 'hourly_stats_aggregated_by_audience_time_zone':
       return types.time
     case 'quarter':
+    case 'day_of_week':
     case 'dayofweek':
     case 'month':
     case 'yearmonth':
