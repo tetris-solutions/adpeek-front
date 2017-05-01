@@ -3,7 +3,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import filter from 'lodash/filter'
 import find from 'lodash/find'
 import flatten from 'lodash/flatten'
-import floor from 'lodash/floor'
+import round from 'lodash/round'
 import includes from 'lodash/includes'
 import isNumber from 'lodash/isNumber'
 import map from 'lodash/map'
@@ -20,9 +20,11 @@ import {pushSuccessMessageAction} from '../../actions/push-success-message-actio
 import {saveOrderAction} from '../../actions/save-order'
 import {spawnAutoBudgetAction} from '../../actions/spawn-auto-budget'
 
+const n = num => round(num, 2)
+
 const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
-const toPercentage = (value, total) => floor((value / total) * 100, 2)
-const fromPercentage = (value, total) => floor((value / 100) * total, 2)
+const toPercentage = (value, total) => n((value / total) * 100)
+const fromPercentage = (value, total) => n((value / 100) * total)
 
 function looseCampaigns (campaigns, budgets) {
   const takenCampaigns = flatten(map(budgets, getCampaignIds))
@@ -46,7 +48,7 @@ function availableAmount (total, budgets) {
   const exactAmount = ({mode, value}) => mode === 'percentage'
     ? fromPercentage(value, total)
     : value
-  return floor(total - sum(map(budgets, exactAmount)), 2)
+  return n(total - sum(map(budgets, exactAmount)))
 }
 
 function defaultBudgetName ({budgetLabel}, index) {
