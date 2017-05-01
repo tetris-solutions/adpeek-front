@@ -9,6 +9,7 @@ import reportMetaDataType from '../../propTypes/report-meta-data'
 import moduleType from '../../propTypes/report-module'
 import Controller from './Controller'
 import {mountModuleEntities} from '../../functions/mount-module-entities'
+import filter from 'lodash/filter'
 
 class ModuleContainer extends React.Component {
   static displayName = 'Module-Container'
@@ -49,12 +50,19 @@ class ModuleContainer extends React.Component {
     })
   }
 
+  attributeExists = (name) => {
+    return Boolean(this.props.metaData.attributes[name])
+  }
+
   render () {
     const {metaData: {attributes}} = this.props
     const entities = this.getEntities()
     const module = assign({}, this.props.module)
     const filters = assign({}, module.filters)
     const entity = entities[module.entity]
+
+    module.dimensions = filter(module.dimensions, this.attributeExists)
+    module.metrics = filter(module.metrics, this.attributeExists)
 
     if (isEmpty(filters.id)) {
       filters.id = map(entity.list, 'id')
