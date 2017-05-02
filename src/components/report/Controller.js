@@ -135,7 +135,7 @@ class ReportController extends React.Component {
       filters: {id: []}
     }
 
-    if (report.platform !== 'analytics') {
+    if (report.level === 'folder' && report.platform !== 'analytics') {
       newModule.filters.impressions = ['greater than', 1]
     }
 
