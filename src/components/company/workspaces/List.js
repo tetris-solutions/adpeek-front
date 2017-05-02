@@ -12,7 +12,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Fence from '../../Fence'
 import SearchBox from '../../HeaderSearchBox'
-import {notNullable} from '../../higher-order/not-nullable'
+import {breakOnEmptyProp} from '../../higher-order/not-nullable'
 import {collection} from '../../higher-order/branch'
 import {Container} from '../../ThumbLink'
 import SubHeader, {SubHeaderButton} from '../../SubHeader'
@@ -158,4 +158,4 @@ class Workspaces extends React.Component {
   }
 }
 
-export default notNullable(styledComponent(Workspaces, style), 'company')
+export default breakOnEmptyProp(styledComponent(Workspaces, style), 'company')

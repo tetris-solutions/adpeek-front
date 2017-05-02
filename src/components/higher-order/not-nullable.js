@@ -5,7 +5,28 @@ import Message from 'tetris-iso/Message'
 import {Card, Content, Header, Footer} from '../Card'
 import {Link} from 'react-router'
 
-export function notNullable (Component, ...requiredProps) {
+const DefaultErrorComponent = () => (
+  <Card>
+    <Header color='deep-orange'>
+      <Message>notFoundTitle</Message>
+    </Header>
+    <Content>
+      <p style={{textAlign: 'center'}}>
+        <Message html>notFoundBody</Message>
+      </p>
+      <br/>
+    </Content>
+    <Footer multipleButtons>
+      <Link className='mdl-button mdl-button--colored' to='/'>
+        <Message>errorScreenExit</Message>
+      </Link>
+    </Footer>
+  </Card>
+)
+
+DefaultErrorComponent.displayName = 'Err'
+
+export function notNullable (Component, ErrorComponent, ...requiredProps) {
   function N (props) {
     const isset = name => Boolean(props[name])
 
@@ -13,24 +34,7 @@ export function notNullable (Component, ...requiredProps) {
       return <Component {...props}/>
     }
 
-    return (
-      <Card>
-        <Header color='deep-orange'>
-          <Message>notFoundTitle</Message>
-        </Header>
-        <Content>
-          <p style={{textAlign: 'center'}}>
-            <Message html>notFoundBody</Message>
-          </p>
-          <br/>
-        </Content>
-        <Footer multipleButtons>
-          <Link className='mdl-button mdl-button--colored' to='/'>
-            <Message>errorScreenExit</Message>
-          </Link>
-        </Footer>
-      </Card>
-    )
+    return <ErrorComponent {...props}/>
   }
 
   N.displayName = `guard(${Component.displayName})`
@@ -41,3 +45,6 @@ export function notNullable (Component, ...requiredProps) {
 
   return N
 }
+
+export const breakOnEmptyProp = (Comp, ...requiredProps) =>
+  notNullable(Comp, DefaultErrorComponent, ...requiredProps)
