@@ -1,4 +1,4 @@
-import {GET} from '@tetris/http'
+import {POST} from '@tetris/http'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {saveResponseData} from '../functions/save-response-data'
 import assign from 'lodash/assign'
@@ -9,7 +9,6 @@ import get from 'lodash/get'
 import concat from 'lodash/concat'
 import {statusResolver} from '../functions/status-resolver'
 import {inferLevelFromParams} from '../functions/infer-level-from-params'
-import qs from 'query-string'
 import trim from 'lodash/trim'
 
 function normalize (item) {
@@ -30,12 +29,9 @@ function normalize (item) {
   return item
 }
 
-function loadReportEntity (level, id, entity, queryParams, config) {
-  const queryString = queryParams
-    ? '?' + qs.stringify(queryParams)
-    : ''
-
-  return GET(`${process.env.ADPEEK_API_URL}/${level}/${id}/entity/${entity}${queryString}`, config)
+function loadReportEntity (level, id, entity, body, config) {
+  return POST(`${process.env.ADPEEK_API_URL}/${level}/${id}/list-entities/${entity}`,
+    assign({body}, config))
 }
 
 const entityListName = {

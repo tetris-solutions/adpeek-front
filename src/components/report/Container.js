@@ -18,7 +18,6 @@ import LoadingHorizontal from '../LoadingHorizontal'
 import Message from 'tetris-iso/Message'
 import pick from 'lodash/pick'
 import filter from 'lodash/filter'
-import join from 'lodash/join'
 import negate from 'lodash/negate'
 
 const empty = []
@@ -268,20 +267,20 @@ class Container extends React.Component {
       case 'AdGroup':
         return {
           load: () => this.loadEntity('Campaign'),
-          query: () => ({campaigns: join(map(this.props.campaigns, 'id'), ',')})
+          query: () => ({campaigns: map(this.props.campaigns, 'id')})
         }
       case 'AdSet':
         return {
-          load: () => this.loadEntity('AdSet'),
-          query: () => ({campaigns: join(map(this.props.campaigns, 'id'), ',')})
+          load: () => this.loadEntity('Campaign'),
+          query: () => ({campaigns: map(this.props.campaigns, 'id')})
         }
       case 'Ad':
         return report.platform === 'facebook' ? {
-          load: () => this.loadEntity('Campaign'),
-          query: () => ({campaigns: join(map(this.props.campaigns, 'id'), ',')})
+          load: () => this.loadEntity('AdSet'),
+          query: () => ({campaigns: map(this.props.campaigns, 'id')})
         } : {
           load: () => this.loadEntity('AdGroup'),
-          query: () => ({adGroups: join(map(this.props.adGroups, 'id'), ',')})
+          query: () => ({adGroups: map(this.props.adGroups, 'id')})
         }
       case 'Keyword':
         const isActive = ({status, campaign_status}) => (
@@ -295,14 +294,14 @@ class Container extends React.Component {
         return {
           load: () => this.loadEntity('AdGroup'),
           query: () => ({
-            activeAdGroups: join(map(filter(this.props.adGroups, isActive), 'id'), ','),
-            inactiveAdGroups: join(map(filter(this.props.adGroups, negate(isActive)), 'id'), ',')
+            activeAdGroups: map(filter(this.props.adGroups, isActive), 'id'),
+            inactiveAdGroups: map(filter(this.props.adGroups, negate(isActive)), 'id')
           })
         }
       case 'Video':
         return {
           load: () => this.loadEntity('AdGroup'),
-          query: () => ({adGroups: join(map(this.props.adGroups, 'id'), ',')})
+          query: () => ({adGroups: map(this.props.adGroups, 'id')})
         }
     }
   }
