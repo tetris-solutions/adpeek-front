@@ -64,6 +64,10 @@ class ModuleContainer extends React.Component {
     module.dimensions = filter(module.dimensions, this.attributeExists)
     module.metrics = filter(module.metrics, this.attributeExists)
 
+    if (module.type === 'total') {
+      module.dimensions = []
+    }
+
     if (isEmpty(filters.id)) {
       filters.id = map(entity.list, 'id')
     }

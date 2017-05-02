@@ -135,19 +135,21 @@ class ModuleEdit extends React.Component {
     this.enqueueUpdate({name: value})
   }
 
-  onChangeType = ({target: {value}}) => {
-    const newState = {type: value}
+  onChangeType = ({target: {value: type}}) => {
+    const newState = {type}
 
-    if (value === 'pie' || value === 'total') {
-      const {dimensions, metrics} = this.getDraftModule()
+    switch (type) {
+      case 'total':
+        newState.dimensions = []
+        break
 
-      if (dimensions.length > 1) {
-        newState.dimensions = value === 'total' ? [] : [dimensions[0]]
-      }
+      case 'pie':
+        const {dimensions, metrics} = this.getDraftModule()
 
-      if (metrics.length > 1) {
-        newState.metrics = [metrics[0]]
-      }
+        newState.dimensions = dimensions.slice(0, 1)
+        newState.metrics = metrics.slice(0, 1)
+
+        break
     }
 
     this.change(newState, true)
