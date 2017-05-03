@@ -110,6 +110,7 @@ module.exports = {
   loadingAds: 'Carregando criativos...',
   loadingReport: 'Carregando relatório...',
   loadingCampaigns: 'Carregando campanhas...',
+  loadingCampaignDetails: 'Carregando detalhes da campanha...',
   loading: 'Carregando...',
   calculating: 'Calculando...',
   extractReport: 'Baixar',

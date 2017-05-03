@@ -111,6 +111,7 @@ module.exports = {
   loadingAds: 'Loading Ads...',
   loadingReport: 'Loading Report...',
   loadingCampaigns: 'Loading Campaigns...',
+  loadingCampaignDetails: 'Loading Campaign Details...',
   loading: 'Loading...',
   calculating: 'Calculating...',
   extractReport: 'Download',
