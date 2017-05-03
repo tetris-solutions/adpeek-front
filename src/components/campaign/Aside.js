@@ -5,17 +5,26 @@ import {Link} from 'react-router'
 import Message from 'tetris-iso/Message'
 import {Navigation, NavBt, NavBts, Name} from '../Navigation'
 
-export const CampaignAside = ({params: {company, workspace, folder}, campaign}) =>
-  <Navigation icon='format_shapes'>
-    <Name>
-      {campaign.name}
-    </Name>
-    <NavBts>
-      <NavBt tag={Link} to={`/company/${company}/workspace/${workspace}/folder/${folder}`} icon='close'>
-        <Message>oneLevelUpNavigation</Message>
-      </NavBt>
-    </NavBts>
-  </Navigation>
+export const CampaignAside = ({params: {company, workspace, folder}, campaign}) => {
+  const folderUrl = `/company/${company}/workspace/${workspace}/folder/${folder}`
+
+  return (
+    <Navigation icon='format_shapes'>
+      <Name>
+        {campaign.name}
+      </Name>
+      <NavBts>
+        <NavBt tag={Link} to={`${folderUrl}/campaign/${campaign.id}/creatives`} icon='format_shapes'>
+          <Message>creatives</Message>
+        </NavBt>
+
+        <NavBt tag={Link} to={folderUrl} icon='close'>
+          <Message>oneLevelUpNavigation</Message>
+        </NavBt>
+      </NavBts>
+    </Navigation>
+  )
+}
 
 CampaignAside.displayName = 'Campaign-Aside'
 CampaignAside.propTypes = {

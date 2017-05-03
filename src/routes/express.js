@@ -198,6 +198,11 @@ export function setAppRoutes (app, render) {
     ensureLoad(workspace, folder, campaigns),
     render)
 
+  app.get('/company/:company/workspace/:workspace/folder/:folder/campaign/:campaign',
+    protect,
+    ensureLoad(workspace, folder, campaigns),
+    render)
+
   app.get('/company/:company/workspace/:workspace/folder/:folder/campaign/:campaign/creatives',
     protect,
     ensureLoad(workspace, folder, campaigns),

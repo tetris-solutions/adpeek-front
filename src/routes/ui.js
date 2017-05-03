@@ -160,6 +160,8 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                   path='campaign/:campaign'
                   aside={component.CampaignAside}
                   breadcrumb={component.CampaignBreadcrumb}>
+
+                  <IndexRoute {...render(component.CampaignHome)}/>
                   <Route path='creatives' {...render(component.CampaignCreatives)}/>
                 </Route>
 
