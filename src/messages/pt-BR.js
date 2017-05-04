@@ -357,5 +357,12 @@ module.exports = {
   showFolder: 'Exibir Pasta',
   tooManyMetrics: 'Por favor, selecione até {limit} métricas <strong>GA</strong>, você selecionou {selected}',
   tooManyDimensions: 'Por favor, selecione até {limit} dimensões <strong>GA</strong>, você selecionou {selected}',
-  loadingEntity: 'Carregando {name}...'
+  loadingEntity: 'Carregando {name}...',
+  campaignDetailsTitle: 'Detalhes da campanha',
+  targetNetworks: 'Redes de Campanha',
+  googleSearchNetwork: 'Google Search',
+  searchNetwork: 'Pesquisa',
+  contentNetwork: 'Display',
+  partnerNetwork: 'Parceiro',
+  locationCriterion: 'Segmentação Geográfica'
 }

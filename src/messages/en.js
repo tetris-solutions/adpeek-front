@@ -356,5 +356,12 @@ module.exports = {
   showFolder: 'Show Folder',
   tooManyMetrics: 'You cannot select more than {limit} <strong>GA</strong> metrics, you have {selected}',
   tooManyDimensions: 'You cannot select more than {limit} <strong>GA</strong> dimensions, you have {selected}',
-  loadingEntity: 'Loading {name}...'
+  loadingEntity: 'Loading {name}...',
+  campaignDetailsTitle: 'Campaign Details',
+  targetNetworks: 'Target Networks',
+  googleSearchNetwork: 'Google Search',
+  searchNetwork: 'Search',
+  contentNetwork: 'Display',
+  partnerNetwork: 'Partner',
+  locationCriterion: 'Location Criteria'
 }
