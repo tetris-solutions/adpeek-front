@@ -224,6 +224,8 @@ export function reportToChartConfig (type, props) {
 
   const series = []
   const getEntityById = memoize(id => {
+    if (!id) return mockEntity
+
     const {accounts, report: {platform: reportPlatform}} = props
     const platform = reportPlatform || get(find(accounts, getAccountSelector(id)), 'platform')
 
