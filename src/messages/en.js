@@ -372,5 +372,8 @@ module.exports = {
   targetService: 'Services',
   feedLocal: 'Local',
   targetApp: 'Mobile App',
-  targetNotSetForCampaign: 'Not Set'
+  targetNotSetForCampaign: 'Not Set',
+  targetAudience: 'Target Audience',
+  biddingConfiguration: 'Bidding configuration',
+  optimizationStatus: 'Optimization Status'
 }

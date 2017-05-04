@@ -78,7 +78,7 @@ Info.propTypes = {
   edit: PropTypes.func
 }
 
-const Description = ({children}) => isEmpty(children) ? (
+const Description = ({children}) => isEmpty(React.Children.toArray(children)) ? (
   <SubText>
     <Message>
       targetNotSetForCampaign
@@ -96,6 +96,12 @@ const isLanguage = {type: 'LANGUAGE'}
 const isApplication = {type: 'MOBILE_APPLICATION'}
 
 const mapExtensions = (ls, type, cb) => map(flatten(map(filter(ls, {type}), 'extensions')), cb)
+const crop = ls => ls.length > 4 ? ls.slice(0, 4)
+  .concat([
+    <SubText key={Math.random().toString(36).substr(2)}>
+      ...
+    </SubText>
+  ]) : ls
 
 const AdwordsCampaign = ({campaign: {details, name}}) => (
   <Card>
@@ -121,10 +127,10 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
       <Info>
         <Message>targetLocation</Message>:
         <Description>
-          {map(filter(details.criterion, isLocation), ({id, location, location_type}) =>
+          {crop(map(filter(details.criterion, isLocation), ({id, location, location_type}) =>
             <SubText key={id}>
               {location} ({location_type})
-            </SubText>)}
+            </SubText>))}
         </Description>
       </Info>
 
@@ -181,17 +187,55 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
           <Message>targetApp</Message>:
 
           <Description>
-            {map(filter(details.criterion, isApplication), ({id, app_name}) =>
+            {crop(map(filter(details.criterion, isApplication), ({id, app_name}) =>
               <SubText key={id}>
                 {app_name}
-              </SubText>)}
+              </SubText>))}
           </Description>
         </Info>
       </div>
 
       <Info>
+        <Message>targetAudience</Message>:
+
+        <Description>
+          {details.gender && (
+            <SubText>
+              {details.gender}
+            </SubText>)}
+
+          {details.age_range && (
+            <SubText>
+              {details.age_range}
+            </SubText>)}
+        </Description>
+      </Info>
+
+      <Info>
+        <Message>biddingConfiguration</Message>:
+
+        <Description>
+          {details.bidding_strategy_name || details.bidding_strategy_type ? (
+            <SubText>
+              {details.bidding_strategy_name || details.bidding_strategy_type}
+            </SubText>) : null}
+        </Description>
+      </Info>
+
+      <Info>
+        <Message>optimizationStatus</Message>:
+        <Description>
+          <SubText>
+            {details.optimization_status}
+          </SubText>
+        </Description>
+      </Info>
+
+      <Info>
         <Message>deliveryMethodLabel</Message>:
-        <SubText>{details.delivery_method}</SubText>
+        <SubText>
+          {details.delivery_method}
+        </SubText>
       </Info>
     </Content>
   </Card>

@@ -373,5 +373,8 @@ module.exports = {
   targetService: 'Serviços',
   feedLocal: 'Local',
   targetApp: 'Aplicativos',
-  targetNotSetForCampaign: 'Não possui'
+  targetNotSetForCampaign: 'Não possui',
+  targetAudience: 'Público alvo',
+  biddingConfiguration: 'Opção de lance',
+  optimizationStatus: 'Rotação de anúncios'
 }
