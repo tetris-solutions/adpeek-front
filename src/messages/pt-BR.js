@@ -372,5 +372,6 @@ module.exports = {
   callOut: 'Frase de Destaque',
   targetService: 'Serviços',
   feedLocal: 'Local',
-  targetApp: 'Aplicativos'
+  targetApp: 'Aplicativos',
+  targetNotSetForCampaign: 'Não possui'
 }

@@ -8,6 +8,8 @@ import map from 'lodash/map'
 import pick from 'lodash/pick'
 import keys from 'lodash/keys'
 import filter from 'lodash/filter'
+import isEmpty from 'lodash/isEmpty'
+import compact from 'lodash/compact'
 
 const style = csjs`
 .edit {
@@ -75,6 +77,19 @@ Info.propTypes = {
   edit: PropTypes.func
 }
 
+const Description = ({children}) => isEmpty(children) ? (
+  <SubText>
+    <Message>
+      targetNotSetForCampaign
+    </Message>
+  </SubText>
+) : <span>{children}</span>
+
+Description.displayName = 'Description'
+Description.propTypes = {
+  children: PropTypes.node
+}
+
 const isLocation = {type: 'LOCATION'}
 const isLanguage = {type: 'LANGUAGE'}
 const isApplication = {type: 'MOBILE_APPLICATION'}
@@ -92,32 +107,37 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
 
       <Info>
         <Message>targetNetworks</Message>:
-
-        {map(pick(details, networkNames),
-          (active, key) =>
-            active ? <Network key={key} name={key}/> : null)}
+        <Description>
+          {compact(map(pick(details, networkNames),
+            (active, key) => active
+              ? <Network key={key} name={key}/>
+              : null))}
+        </Description>
       </Info>
 
       <Info>
         <Message>targetLocation</Message>:
-
-        {map(filter(details.criterion, isLocation), ({id, location, location_type}) =>
-          <SubText key={id}>
-            {location} ({location_type})
-          </SubText>)}
+        <Description>
+          {map(filter(details.criterion, isLocation), ({id, location, location_type}) =>
+            <SubText key={id}>
+              {location} ({location_type})
+            </SubText>)}
+        </Description>
       </Info>
 
       <Info>
         <Message>targetLanguage</Message>:
-
-        {map(filter(details.criterion, isLanguage), ({id, language}) =>
-          <SubText key={id}>
-            {language}
-          </SubText>)}
+        <Description>
+          {map(filter(details.criterion, isLanguage), ({id, language}) =>
+            <SubText key={id}>
+              {language}
+            </SubText>)}
+        </Description>
       </Info>
 
       <Info>
         <Message>conversionTracker</Message>:
+        <Description/>
       </Info>
 
       <h6 className={`${style.extTitle}`}>
@@ -129,23 +149,28 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
       <div className={`${style.extensions}`}>
         <Info>
           <Message>siteLinks</Message>:
+          <Description/>
         </Info>
 
         <Info>
           <Message>callOut</Message>:
+          <Description/>
         </Info>
 
         <Info>
           <Message>feedLocal</Message>:
+          <Description/>
         </Info>
 
         <Info>
           <Message>targetApp</Message>:
 
-          {map(filter(details.criterion, isApplication), ({id, app_name}) =>
-            <SubText key={id}>
-              {app_name}
-            </SubText>)}
+          <Description>
+            {map(filter(details.criterion, isApplication), ({id, app_name}) =>
+              <SubText key={id}>
+                {app_name}
+              </SubText>)}
+          </Description>
         </Info>
       </div>
 

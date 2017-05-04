@@ -371,5 +371,6 @@ module.exports = {
   callOut: 'Callout',
   targetService: 'Services',
   feedLocal: 'Local',
-  targetApp: 'Mobile App'
+  targetApp: 'Mobile App',
+  targetNotSetForCampaign: 'Not Set'
 }
