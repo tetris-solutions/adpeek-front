@@ -23,6 +23,13 @@ const style = csjs`
 }
 .title {
   margin: .3em 0;
+}
+.extensions {
+  margin-left: 2em;
+  margin-bottom: 1em;
+}
+.extTitle extends .title {
+  margin-top: 1em;
 }`
 
 const EditLink = ({onClick}) =>
@@ -44,10 +51,12 @@ const networkMessages = {
 
 const networkNames = keys(networkMessages)
 
+const SubText = props => <span {...props} className={`${style.subText}`}/>
+
 const Network = ({name}) => (
-  <span className={`${style.subText}`}>
+  <SubText>
     <Message>{networkMessages[name]}</Message>
-  </span>
+  </SubText>
 )
 Network.displayName = 'Network'
 Network.propTypes = {
@@ -68,6 +77,7 @@ Info.propTypes = {
 
 const isLocation = {type: 'LOCATION'}
 const isLanguage = {type: 'LANGUAGE'}
+const isApplication = {type: 'MOBILE_APPLICATION'}
 
 const AdwordsCampaign = ({campaign: {details, name}}) => (
   <Card>
@@ -77,7 +87,7 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
     <Content>
       <Info>
         <Message>nameLabel</Message>:
-        <span className={`${style.subText}`}>{name}</span>
+        <SubText>{name}</SubText>
       </Info>
 
       <Info>
@@ -92,14 +102,56 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
         <Message>targetLocation</Message>:
 
         {map(filter(details.criterion, isLocation), ({id, location, location_type}) =>
-          <span key={id} className={`${style.subText}`}>{location} ({location_type})</span>)}
+          <SubText key={id}>
+            {location} ({location_type})
+          </SubText>)}
       </Info>
 
       <Info>
         <Message>targetLanguage</Message>:
 
         {map(filter(details.criterion, isLanguage), ({id, language}) =>
-          <span key={id} className={`${style.subText}`}>{language}</span>)}
+          <SubText key={id}>
+            {language}
+          </SubText>)}
+      </Info>
+
+      <Info>
+        <Message>conversionTracker</Message>:
+      </Info>
+
+      <h6 className={`${style.extTitle}`}>
+        <em>
+          <Message>extensions</Message>:
+        </em>
+      </h6>
+
+      <div className={`${style.extensions}`}>
+        <Info>
+          <Message>siteLinks</Message>:
+        </Info>
+
+        <Info>
+          <Message>callOut</Message>:
+        </Info>
+
+        <Info>
+          <Message>feedLocal</Message>:
+        </Info>
+
+        <Info>
+          <Message>targetApp</Message>:
+
+          {map(filter(details.criterion, isApplication), ({id, app_name}) =>
+            <SubText key={id}>
+              {app_name}
+            </SubText>)}
+        </Info>
+      </div>
+
+      <Info>
+        <Message>deliveryMethodLabel</Message>:
+        <SubText>{details.delivery_method}</SubText>
       </Info>
     </Content>
   </Card>

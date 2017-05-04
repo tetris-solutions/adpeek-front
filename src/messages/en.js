@@ -364,5 +364,12 @@ module.exports = {
   contentNetwork: 'Display',
   partnerNetwork: 'Partner',
   targetLocation: 'Target Location',
-  targetLanguage: 'Target Language'
+  targetLanguage: 'Target Language',
+  conversionTracker: 'Conversion Tracker',
+  extensions: 'Extensions',
+  siteLinks: 'SiteLinks',
+  callOut: 'Callout',
+  targetService: 'Services',
+  feedLocal: 'Local',
+  targetApp: 'Mobile App'
 }

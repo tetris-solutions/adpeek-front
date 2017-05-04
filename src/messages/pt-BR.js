@@ -365,5 +365,12 @@ module.exports = {
   contentNetwork: 'Display',
   partnerNetwork: 'Parceiro',
   targetLocation: 'Segmentação Geográfica',
-  targetLanguage: 'Idioma de destino'
+  targetLanguage: 'Idioma de destino',
+  conversionTracker: 'Tag de conversão ativa',
+  extensions: 'Extensões',
+  siteLinks: 'SiteLinks',
+  callOut: 'Frase de Destaque',
+  targetService: 'Serviços',
+  feedLocal: 'Local',
+  targetApp: 'Aplicativos'
 }
