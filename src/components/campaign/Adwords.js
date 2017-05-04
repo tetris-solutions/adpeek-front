@@ -94,7 +94,8 @@ Description.propTypes = {
 const isLocation = {type: 'LOCATION'}
 const isLanguage = {type: 'LANGUAGE'}
 const isApplication = {type: 'MOBILE_APPLICATION'}
-const isCallout = {type: 'CALLOUT'}
+
+const mapExtensions = (ls, type, cb) => map(flatten(map(filter(ls, {type}), 'extensions')), cb)
 
 const AdwordsCampaign = ({campaign: {details, name}}) => (
   <Card>
@@ -151,17 +152,23 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
       <div className={`${style.extensions}`}>
         <Info>
           <Message>siteLinks</Message>:
-          <Description/>
+          <Description>
+            {mapExtensions(details.extension, 'SITELINK', ({sitelinkText, sitelinkUrl}, index) =>
+              <SubText key={index}>
+                <a href={sitelinkUrl} target='_blank'>
+                  {sitelinkText}
+                </a>
+              </SubText>)}
+          </Description>
         </Info>
 
         <Info>
           <Message>callOut</Message>:
           <Description>
-            {map(flatten(map(filter(details.extension, isCallout), 'extensions')),
-              ({calloutText}, index) =>
-                <SubText key={index}>
-                  "{calloutText}"
-                </SubText>)}
+            {mapExtensions(details.extension, 'CALLOUT', ({calloutText}, index) =>
+              <SubText key={index}>
+                "{calloutText}"
+              </SubText>)}
           </Description>
         </Info>
 
