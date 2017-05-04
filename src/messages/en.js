@@ -363,5 +363,6 @@ module.exports = {
   searchNetwork: 'Search',
   contentNetwork: 'Display',
   partnerNetwork: 'Partner',
-  locationCriterion: 'Location Criteria'
+  targetLocation: 'Target Location',
+  targetLanguage: 'Target Language'
 }

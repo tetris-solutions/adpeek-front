@@ -67,6 +67,7 @@ Info.propTypes = {
 }
 
 const isLocation = {type: 'LOCATION'}
+const isLanguage = {type: 'LANGUAGE'}
 
 const AdwordsCampaign = ({campaign: {details, name}}) => (
   <Card>
@@ -88,10 +89,17 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
       </Info>
 
       <Info>
-        <Message>locationCriterion</Message>:
+        <Message>targetLocation</Message>:
 
         {map(filter(details.criterion, isLocation), ({id, location, location_type}) =>
           <span key={id} className={`${style.subText}`}>{location} ({location_type})</span>)}
+      </Info>
+
+      <Info>
+        <Message>targetLanguage</Message>:
+
+        {map(filter(details.criterion, isLanguage), ({id, language}) =>
+          <span key={id} className={`${style.subText}`}>{language}</span>)}
       </Info>
     </Content>
   </Card>

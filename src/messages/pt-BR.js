@@ -364,5 +364,6 @@ module.exports = {
   searchNetwork: 'Pesquisa',
   contentNetwork: 'Display',
   partnerNetwork: 'Parceiro',
-  locationCriterion: 'Segmentação Geográfica'
+  targetLocation: 'Segmentação Geográfica',
+  targetLanguage: 'Idioma de destino'
 }
