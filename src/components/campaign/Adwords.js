@@ -5,6 +5,7 @@ import {Card, Content, Header} from '../Card'
 import csjs from 'csjs'
 import {styledFunctionalComponent} from '../higher-order/styled'
 import map from 'lodash/map'
+import head from 'lodash/head'
 import pick from 'lodash/pick'
 import keys from 'lodash/keys'
 import filter from 'lodash/filter'
@@ -159,9 +160,9 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
         <Info>
           <Message>siteLinks</Message>:
           <Description>
-            {mapExtensions(details.extension, 'SITELINK', ({sitelinkText, sitelinkUrl}, index) =>
+            {mapExtensions(details.extension, 'SITELINK', ({sitelinkText, sitelinkFinalUrls: {urls}}, index) =>
               <SubText key={index}>
-                <a href={sitelinkUrl} target='_blank'>
+                <a href={head(urls)} target='_blank'>
                   {sitelinkText}
                 </a>
               </SubText>)}
