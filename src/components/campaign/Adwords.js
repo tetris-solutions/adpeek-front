@@ -10,6 +10,7 @@ import keys from 'lodash/keys'
 import filter from 'lodash/filter'
 import isEmpty from 'lodash/isEmpty'
 import compact from 'lodash/compact'
+import flatten from 'lodash/flatten'
 
 const style = csjs`
 .edit {
@@ -93,6 +94,7 @@ Description.propTypes = {
 const isLocation = {type: 'LOCATION'}
 const isLanguage = {type: 'LANGUAGE'}
 const isApplication = {type: 'MOBILE_APPLICATION'}
+const isCallout = {type: 'CALLOUT'}
 
 const AdwordsCampaign = ({campaign: {details, name}}) => (
   <Card>
@@ -154,7 +156,13 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
 
         <Info>
           <Message>callOut</Message>:
-          <Description/>
+          <Description>
+            {map(flatten(map(filter(details.extension, isCallout), 'extensions')),
+              ({calloutText}, index) =>
+                <SubText key={index}>
+                  "{calloutText}"
+                </SubText>)}
+          </Description>
         </Info>
 
         <Info>
