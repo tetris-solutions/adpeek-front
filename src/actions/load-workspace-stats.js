@@ -11,6 +11,11 @@ function loadWorkspaceStats (id, requestFreshStats, config) {
 const statsRequestRegister = {}
 
 export function loadWorkspaceStatsAction (tree, company, workspace, requestFreshStats = false) {
+  // @todo delete this
+  if (window.sessionStorage.getItem('cardStats') !== 'enabled') {
+    return Promise.resolve()
+  }
+
   statsRequestRegister[workspace] = statsRequestRegister[workspace] ||
     loadWorkspaceStats(workspace, requestFreshStats, getApiFetchConfig(tree))
       .then(saveResponseTokenAsCookie)

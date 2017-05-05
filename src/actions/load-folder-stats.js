@@ -9,6 +9,11 @@ function loadFolderStats (id, requestFreshStats, config) {
 }
 
 export function loadFolderStatsAction (tree, {company, workspace}, folder, requestFreshStats = false) {
+  // @todo delete this
+  if (window.sessionStorage.getItem('cardStats') !== 'enabled') {
+    return Promise.resolve()
+  }
+
   return loadFolderStats(folder, requestFreshStats, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .then(mergeResponseData(tree, [
