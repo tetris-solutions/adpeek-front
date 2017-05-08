@@ -15,6 +15,7 @@ import flatten from 'lodash/flatten'
 import camelCase from 'lodash/camelCase'
 import toLower from 'lodash/toLower'
 import isArray from 'lodash/isArray'
+import PrettyNumber from '../PrettyNumber'
 
 const style = csjs`
 .edit {
@@ -60,6 +61,7 @@ const networkMessages = {
 const networkNames = keys(networkMessages)
 
 const SubText = props => <span {...props} className={`${style.subText}`}/>
+const Italic = props => <em {...props} className={`${style.subText}`}/>
 
 const Network = ({name}) => (
   <SubText>
@@ -113,7 +115,7 @@ const crop = ls => ls.length > 4 ? ls.slice(0, 4)
     </SubText>
   ]) : ls
 
-function BiddingStrategy ({type, name}) {
+function BiddingStrategy ({type, name, cpa, roas}) {
   let label
 
   if (name) {
@@ -124,7 +126,25 @@ function BiddingStrategy ({type, name}) {
   }
 
   return (
-    <SubText>{label}</SubText>
+    <span>
+      <SubText>{label}</SubText>
+
+      {cpa ? (
+        <Italic>
+          {'(CPA: '}
+          <PrettyNumber type='currency'>{cpa}</PrettyNumber>
+          {')'}
+        </Italic>
+      ) : null}
+
+      {roas ? (
+        <Italic>
+          {'(ROAS: '}
+          <PrettyNumber type='currency'>{roas}</PrettyNumber>
+          {')'}
+        </Italic>
+      ) : null}
+    </span>
   )
 }
 
@@ -132,7 +152,10 @@ BiddingStrategy.displayName = 'Bidding-Strategy'
 BiddingStrategy.propTypes = {
   amount: PropTypes.number,
   type: PropTypes.string,
-  name: PropTypes.string
+  name: PropTypes.string,
+  id: PropTypes.string,
+  cpa: PropTypes.number,
+  roas: PropTypes.number
 }
 
 const AdwordsCampaign = ({campaign: {details, name}}) => (
@@ -232,9 +255,10 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
           <BiddingStrategy
             amount={details.amount}
             id={details.bidding_strategy_id}
+            cpa={details.cpa}
+            roas={details.roas}
             type={details.bidding_strategy_type}
-            name={details.bidding_strategy_name}/>
-        ) : null}
+            name={details.bidding_strategy_name}/>) : null}
       </Info>
 
       <Info>
