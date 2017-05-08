@@ -5,7 +5,7 @@ import {loadCampaignDetailsAction} from '../../actions/load-campaign-details'
 import PropTypes from 'prop-types'
 import SubHeader from '../SubHeader'
 import Page from '../Page'
-import AdwordsCampaign from './Adwords'
+import AdwordsCampaign from './Adwords/Card'
 import LoadingHorizontal from '../LoadingHorizontal'
 
 const PlatComp = {
