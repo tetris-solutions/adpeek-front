@@ -157,6 +157,9 @@ BiddingStrategy.propTypes = {
   cpa: PropTypes.number,
   roas: PropTypes.number
 }
+BiddingStrategy.contextTypes = {
+  messages: PropTypes.object.isRequired
+}
 
 const AdwordsCampaign = ({campaign: {details, name}}) => (
   <Card size='large'>
@@ -271,7 +274,11 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
       <Info>
         <Message>deliveryMethodLabel</Message>:
         {maybeList(details.delivery_method &&
-          <SubText>{toLower(details.delivery_method) + 'Delivery'}</SubText>)}
+          <SubText>
+            <Message>
+              {toLower(details.delivery_method) + 'Delivery'}
+            </Message>
+          </SubText>)}
       </Info>
     </Content>
   </Card>
