@@ -14,6 +14,7 @@ import compact from 'lodash/compact'
 import flatten from 'lodash/flatten'
 import camelCase from 'lodash/camelCase'
 import toLower from 'lodash/toLower'
+import isArray from 'lodash/isArray'
 
 const style = csjs`
 .edit {
@@ -29,6 +30,7 @@ const style = csjs`
 }
 .title {
   margin: .3em 0;
+  overflow: hidden;
 }
 .extensions {
   margin-left: 2em;
@@ -81,17 +83,21 @@ Info.propTypes = {
   edit: PropTypes.func
 }
 
-const Description = ({children}) => isEmpty(React.Children.toArray(children)) ? (
+const None = () =>
   <SubText>
-    <Message>
-      targetNotSetForCampaign
-    </Message>
+    <Message>targetNotSetForCampaign</Message>
   </SubText>
-) : <span>{children}</span>
 
-Description.displayName = 'Description'
-Description.propTypes = {
-  children: PropTypes.node
+None.displayName = 'None'
+
+function maybeList (ls) {
+  ls = isArray(ls) ? compact(ls) : [ls]
+
+  if (isEmpty(ls)) {
+    return <None/>
+  }
+
+  return ls
 }
 
 const isLocation = {type: 'LOCATION'}
@@ -99,6 +105,7 @@ const isLanguage = {type: 'LANGUAGE'}
 const isApplication = {type: 'MOBILE_APPLICATION'}
 
 const mapExtensions = (ls, type, cb) => map(flatten(map(filter(ls, {type}), 'extensions')), cb)
+
 const crop = ls => ls.length > 4 ? ls.slice(0, 4)
   .concat([
     <SubText key={Math.random().toString(36).substr(2)}>
@@ -117,9 +124,7 @@ function BiddingStrategy ({type, name}) {
   }
 
   return (
-    <Description>
-      <SubText>{label}</SubText>
-    </Description>
+    <SubText>{label}</SubText>
   )
 }
 
@@ -143,37 +148,33 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
 
       <Info>
         <Message>targetNetworks</Message>:
-        <Description>
-          {compact(map(pick(details, networkNames),
-            (active, key) => active
-              ? <Network key={key} name={key}/>
-              : null))}
-        </Description>
+        {maybeList(map(pick(details, networkNames),
+          (active, key) => active
+            ? <Network key={key} name={key}/>
+            : null))}
       </Info>
 
       <Info>
         <Message>targetLocation</Message>:
-        <Description>
-          {crop(map(filter(details.criterion, isLocation), ({id, location, location_type}) =>
+        {maybeList(crop(map(filter(details.criterion, isLocation),
+          ({id, location, location_type}) =>
             <SubText key={id}>
               {location} ({location_type})
-            </SubText>))}
-        </Description>
+            </SubText>)))}
       </Info>
 
       <Info>
         <Message>targetLanguage</Message>:
-        <Description>
-          {map(filter(details.criterion, isLanguage), ({id, language}) =>
+        {maybeList(crop(map(filter(details.criterion, isLanguage),
+          ({id, language}) =>
             <SubText key={id}>
               {language}
-            </SubText>)}
-        </Description>
+            </SubText>)))}
       </Info>
 
       <Info>
         <Message>conversionTracker</Message>:
-        <Description/>
+        <None/>
       </Info>
 
       <h6 className={`${style.extTitle}`}>
@@ -185,62 +186,48 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
       <div className={`${style.extensions}`}>
         <Info>
           <Message>siteLinks</Message>:
-          <Description>
-            {mapExtensions(details.extension, 'SITELINK', ({sitelinkText, sitelinkFinalUrls: {urls}}, index) =>
+          {maybeList(mapExtensions(details.extension, 'SITELINK',
+            ({sitelinkText, sitelinkFinalUrls: {urls}}, index) =>
               <SubText key={index}>
                 <a href={head(urls)} target='_blank'>
                   {sitelinkText}
                 </a>
-              </SubText>)}
-          </Description>
+              </SubText>))}
         </Info>
 
         <Info>
           <Message>callOut</Message>:
-          <Description>
-            {mapExtensions(details.extension, 'CALLOUT', ({calloutText}, index) =>
+          {maybeList(mapExtensions(details.extension, 'CALLOUT',
+            ({calloutText}, index) =>
               <SubText key={index}>
                 "{calloutText}"
-              </SubText>)}
-          </Description>
+              </SubText>))}
         </Info>
 
         <Info>
           <Message>feedLocal</Message>:
-          <Description/>
+          <None/>
         </Info>
 
         <Info>
           <Message>targetApp</Message>:
-
-          <Description>
-            {crop(map(filter(details.criterion, isApplication), ({id, app_name}) =>
+          {maybeList(crop(map(filter(details.criterion, isApplication),
+            ({id, app_name}) =>
               <SubText key={id}>
                 {app_name}
-              </SubText>))}
-          </Description>
+              </SubText>)))}
         </Info>
       </div>
 
       <Info>
         <Message>targetAudience</Message>:
-
-        <Description>
-          {details.gender && (
-            <SubText>
-              {details.gender}
-            </SubText>)}
-
-          {details.age_range && (
-            <SubText>
-              {details.age_range}
-            </SubText>)}
-        </Description>
+        {maybeList([
+          details.gender && <SubText key='gender'>{details.gender}</SubText>,
+          details.age_range && <SubText key='age'>{details.age_range}</SubText>])}
       </Info>
 
       <Info>
         <Message>biddingConfiguration</Message>:
-
         {details.bidding_strategy_name || details.bidding_strategy_type ? (
           <BiddingStrategy
             amount={details.amount}
@@ -252,18 +239,15 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
 
       <Info>
         <Message>optimizationStatus</Message>:
-        <Description>
-          <SubText>
-            {details.optimization_status}
-          </SubText>
-        </Description>
+        <SubText>
+          {details.optimization_status}
+        </SubText>
       </Info>
 
       <Info>
         <Message>deliveryMethodLabel</Message>:
-        {details.delivery_method
-          ? <SubText>{toLower(details.delivery_method) + 'Delivery'}</SubText>
-          : null}
+        {maybeList(details.delivery_method &&
+          <SubText>{toLower(details.delivery_method) + 'Delivery'}</SubText>)}
       </Info>
     </Content>
   </Card>

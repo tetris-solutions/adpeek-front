@@ -378,5 +378,11 @@ module.exports = {
   optimizationStatus: 'Optimization Status',
   manualCpcLabel: 'Manual CPC',
   standardDelivery: 'Standard',
-  acceleratedDelivery: 'Accelerated'
+  acceleratedDelivery: 'Accelerated',
+  targetCpaLabel: 'Target CPA',
+  targetRoasLabel: 'Target ROAS',
+  targetSpendLabel: 'Maximize Clicks',
+  enhancedCpcLabel: 'Enhanced CPC',
+  targetOutrankShareLabel: 'Target Outrank Share',
+  pageOnePromotedLabel: 'Page-One Promoted'
 }

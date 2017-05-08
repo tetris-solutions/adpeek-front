@@ -379,5 +379,11 @@ module.exports = {
   optimizationStatus: 'Rotação de anúncios',
   manualCpcLabel: 'CPC Manual',
   standardDelivery: 'Padrão',
-  acceleratedDelivery: 'Acelerado'
+  acceleratedDelivery: 'Acelerado',
+  targetCpaLabel: 'CPA de destino',
+  targetRoasLabel: 'ROAS desejado',
+  targetSpendLabel: 'Maximizar cliques',
+  enhancedCpcLabel: 'CPC otimizado',
+  targetOutrankShareLabel: 'Parcela de vitórias desejadas',
+  pageOnePromotedLabel: 'Localização da página segmentada para pesquisa'
 }
