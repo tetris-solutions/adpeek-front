@@ -376,5 +376,6 @@ module.exports = {
   targetNotSetForCampaign: 'Não possui',
   targetAudience: 'Público alvo',
   biddingConfiguration: 'Opção de lance',
-  optimizationStatus: 'Rotação de anúncios'
+  optimizationStatus: 'Rotação de anúncios',
+  manualCpcLabel: 'CPC Manual'
 }

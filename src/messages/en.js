@@ -375,5 +375,6 @@ module.exports = {
   targetNotSetForCampaign: 'Not Set',
   targetAudience: 'Target Audience',
   biddingConfiguration: 'Bidding configuration',
-  optimizationStatus: 'Optimization Status'
+  optimizationStatus: 'Optimization Status',
+  manualCpcLabel: 'Manual CPC'
 }

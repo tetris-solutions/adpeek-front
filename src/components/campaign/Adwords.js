@@ -12,6 +12,7 @@ import filter from 'lodash/filter'
 import isEmpty from 'lodash/isEmpty'
 import compact from 'lodash/compact'
 import flatten from 'lodash/flatten'
+import camelCase from 'lodash/camelCase'
 
 const style = csjs`
 .edit {
@@ -103,6 +104,30 @@ const crop = ls => ls.length > 4 ? ls.slice(0, 4)
       ...
     </SubText>
   ]) : ls
+
+function BiddingStrategy ({type, name}) {
+  let label
+
+  if (name) {
+    label = <span>{name}</span>
+  } else {
+    const labelName = camelCase(type) + 'Label'
+    label = <Message>{labelName}</Message>
+  }
+
+  return (
+    <Description>
+      <SubText>{label}</SubText>
+    </Description>
+  )
+}
+
+BiddingStrategy.displayName = 'Bidding-Strategy'
+BiddingStrategy.propTypes = {
+  amount: PropTypes.number,
+  type: PropTypes.string,
+  name: PropTypes.string
+}
 
 const AdwordsCampaign = ({campaign: {details, name}}) => (
   <Card>
@@ -215,12 +240,13 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
       <Info>
         <Message>biddingConfiguration</Message>:
 
-        <Description>
-          {details.bidding_strategy_name || details.bidding_strategy_type ? (
-            <SubText>
-              {details.bidding_strategy_name || details.bidding_strategy_type}
-            </SubText>) : null}
-        </Description>
+        {details.bidding_strategy_id || details.bidding_strategy_type ? (
+          <BiddingStrategy
+            amount={details.amount}
+            id={details.bidding_strategy_id}
+            type={details.bidding_strategy_type}
+            name={details.bidding_strategy_name}/>
+        ) : null}
       </Info>
 
       <Info>
