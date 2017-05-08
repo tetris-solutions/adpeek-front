@@ -108,21 +108,21 @@ const isApplication = {type: 'MOBILE_APPLICATION'}
 
 const mapExtensions = (ls, type, cb) => map(flatten(map(filter(ls, {type}), 'extensions')), cb)
 
-const crop = ls => ls.length > 4 ? ls.slice(0, 4)
+const crop = ls => ls.length > 10 ? ls.slice(0, 10)
   .concat([
     <SubText key={Math.random().toString(36).substr(2)}>
       ...
     </SubText>
   ]) : ls
 
-function BiddingStrategy ({type, name, cpa, roas}) {
+function BiddingStrategy ({type, name, cpa, roas}, {messages}) {
   let label
 
   if (name) {
     label = <span>{name}</span>
   } else {
     const labelName = camelCase(type) + 'Label'
-    label = <Message>{labelName}</Message>
+    label = messages[labelName] || type
   }
 
   return (
@@ -159,7 +159,7 @@ BiddingStrategy.propTypes = {
 }
 
 const AdwordsCampaign = ({campaign: {details, name}}) => (
-  <Card>
+  <Card size='large'>
     <Header>
       <Message>campaignDetailsTitle</Message>
     </Header>
