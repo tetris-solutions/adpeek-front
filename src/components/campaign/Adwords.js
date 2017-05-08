@@ -13,6 +13,7 @@ import isEmpty from 'lodash/isEmpty'
 import compact from 'lodash/compact'
 import flatten from 'lodash/flatten'
 import camelCase from 'lodash/camelCase'
+import toLower from 'lodash/toLower'
 
 const style = csjs`
 .edit {
@@ -240,7 +241,7 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
       <Info>
         <Message>biddingConfiguration</Message>:
 
-        {details.bidding_strategy_id || details.bidding_strategy_type ? (
+        {details.bidding_strategy_name || details.bidding_strategy_type ? (
           <BiddingStrategy
             amount={details.amount}
             id={details.bidding_strategy_id}
@@ -260,9 +261,9 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
 
       <Info>
         <Message>deliveryMethodLabel</Message>:
-        <SubText>
-          {details.delivery_method}
-        </SubText>
+        {details.delivery_method
+          ? <SubText>{toLower(details.delivery_method) + 'Delivery'}</SubText>
+          : null}
       </Info>
     </Content>
   </Card>

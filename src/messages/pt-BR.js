@@ -377,5 +377,7 @@ module.exports = {
   targetAudience: 'Público alvo',
   biddingConfiguration: 'Opção de lance',
   optimizationStatus: 'Rotação de anúncios',
-  manualCpcLabel: 'CPC Manual'
+  manualCpcLabel: 'CPC Manual',
+  standardDelivery: 'Padrão',
+  acceleratedDelivery: 'Acelerado'
 }

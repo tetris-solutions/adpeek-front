@@ -376,5 +376,7 @@ module.exports = {
   targetAudience: 'Target Audience',
   biddingConfiguration: 'Bidding configuration',
   optimizationStatus: 'Optimization Status',
-  manualCpcLabel: 'Manual CPC'
+  manualCpcLabel: 'Manual CPC',
+  standardDelivery: 'Standard',
+  acceleratedDelivery: 'Accelerated'
 }
