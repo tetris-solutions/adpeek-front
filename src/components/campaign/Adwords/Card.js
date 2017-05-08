@@ -71,16 +71,14 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
 
       <Info>
         <Message>targetLanguage</Message>:
-        {maybeList(crop(map(filter(details.criterion, isLanguage),
-          ({id, language}) =>
-            <SubText key={id}>
-              {language}
-            </SubText>)))}
+        {maybeList(crop(map(filter(details.criterion, isLanguage), ({id, language}) =>
+          <SubText key={id}>{language}</SubText>)))}
       </Info>
 
       <Info>
         <Message>conversionTracker</Message>:
-        <None/>
+        {maybeList(crop(map(details.conversionTracker, ({id, name}) =>
+          <SubText key={id}>{name}</SubText>)))}
       </Info>
 
       <h6 className={`${style.extTitle}`}>
