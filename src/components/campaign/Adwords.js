@@ -161,6 +161,29 @@ BiddingStrategy.contextTypes = {
   messages: PropTypes.object.isRequired
 }
 
+function OptimizationStatus ({status}, {messages}) {
+  const labelName = camelCase(status) + 'StatusLabel'
+
+  return (
+    <SubText>
+      {messages[labelName] ? messages[labelName] : status}
+    </SubText>
+  )
+}
+
+OptimizationStatus.displayName = 'Optimization-Status'
+OptimizationStatus.propTypes = {
+  status: PropTypes.oneOf([
+    'OPTIMIZE',
+    'CONVERSION_OPTIMIZE',
+    'ROTATE',
+    'ROTATE_INDEFINITELY',
+    'UNAVAILABLE',
+    'UNKNOWN'
+  ])
+}
+OptimizationStatus.contextTypes = BiddingStrategy.contextTypes
+
 const AdwordsCampaign = ({campaign: {details, name}}) => (
   <Card size='large'>
     <Header>
@@ -266,9 +289,7 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
 
       <Info>
         <Message>optimizationStatus</Message>:
-        <SubText>
-          {details.optimization_status}
-        </SubText>
+        <OptimizationStatus status={details.optimization_status}/>
       </Info>
 
       <Info>

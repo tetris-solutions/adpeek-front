@@ -385,5 +385,9 @@ module.exports = {
   targetSpendLabel: 'Maximizar cliques',
   enhancedCpcLabel: 'CPC otimizado',
   targetOutrankShareLabel: 'Parcela de vitórias desejadas',
-  pageOnePromotedLabel: 'Localização da página segmentada para pesquisa'
+  pageOnePromotedLabel: 'Localização da página segmentada para pesquisa',
+  optimizeStatusLabel: 'Otimizado',
+  conversionOptimizeStatusLabel: 'Otimizado para conversões',
+  rotateStatusLabel: 'Rotacionar e otimizar',
+  rotateIndefinitelyStatusLabel: 'Rotacionar indefinidamente'
 }

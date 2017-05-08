@@ -384,5 +384,9 @@ module.exports = {
   targetSpendLabel: 'Maximize Clicks',
   enhancedCpcLabel: 'Enhanced CPC',
   targetOutrankShareLabel: 'Target Outrank Share',
-  pageOnePromotedLabel: 'Page-One Promoted'
+  pageOnePromotedLabel: 'Page-One Promoted',
+  optimizeStatusLabel: 'Optimized',
+  conversionOptimizeStatusLabel: 'Optimized for Conversion',
+  rotateStatusLabel: 'Rotate then Optimize',
+  rotateIndefinitelyStatusLabel: 'Rotate Indefinitely'
 }
