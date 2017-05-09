@@ -30,6 +30,7 @@ function maybeList (ls) {
 
 const isLocation = {type: 'LOCATION'}
 const isLanguage = {type: 'LANGUAGE'}
+const isUserList = {type: 'USER_LIST'}
 const isApplication = {type: 'MOBILE_APPLICATION'}
 
 const mapExtensions = (ls, type, cb) => map(flatten(map(filter(ls, {type}), 'extensions')), cb)
@@ -130,9 +131,9 @@ const AdwordsCampaign = ({campaign: {details, name}}, {messages}) => (
 
       <Info>
         <Message>targetAudience</Message>:
-        {maybeList([
-          details.gender && <SubText key='gender'>{details.gender}</SubText>,
-          details.age_range && <SubText key='age'>{details.age_range}</SubText>])}
+
+        {maybeList(crop(map(filter(details.criterion, isUserList), ({user_list_id: id, user_list_name: name}) =>
+          <SubText key={id}>{name}</SubText>)))}
       </Info>
 
       <Info>
