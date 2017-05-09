@@ -41,7 +41,7 @@ const crop = ls => ls.length > 10 ? ls.slice(0, 10)
     </SubText>
   ]) : ls
 
-const AdwordsCampaign = ({campaign: {details, name}}) => (
+const AdwordsCampaign = ({campaign: {details, name}}, {messages}) => (
   <Card size='large'>
     <Header>
       <Message>campaignDetailsTitle</Message>
@@ -144,7 +144,7 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
             cpa={details.cpa}
             roas={details.roas}
             type={details.bidding_strategy_type}
-            name={details.bidding_strategy_name}/>) : null}
+            name={details.bidding_strategy_name}/>) : <None/>}
       </Info>
 
       <Info>
@@ -154,12 +154,9 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
 
       <Info>
         <Message>deliveryMethodLabel</Message>:
-        {maybeList(details.delivery_method &&
-          <SubText key='delivery'>
-            <Message>
-              {toLower(details.delivery_method) + 'Delivery'}
-            </Message>
-          </SubText>)}
+        <SubText>
+          {messages[toLower(details.delivery_method) + 'Delivery']}
+        </SubText>
       </Info>
     </Content>
   </Card>
@@ -170,6 +167,9 @@ AdwordsCampaign.propTypes = {
   params: PropTypes.object.isRequired,
   campaign: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
+}
+AdwordsCampaign.contextTypes = {
+  messages: PropTypes.object
 }
 
 export default styledFunctionalComponent(AdwordsCampaign, style)
