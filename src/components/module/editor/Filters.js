@@ -16,9 +16,11 @@ import VerticalAlign from '../../VerticalAlign'
 import sortBy from 'lodash/sortBy'
 import find from 'lodash/find'
 import {Button} from '../../Button'
+
 const operators = ['contains', 'equals', 'not equals', 'less than', 'greater than', 'between']
 const limitOperators = ['equals']
 const fixedOperators = ['equals', 'not equals']
+const listOperators = ['contains']
 
 const numTypes = [
   'integer',
@@ -39,6 +41,14 @@ function inputType (type) {
   return 'text'
 }
 
+function getOperatorsFor (attribute, metaData) {
+  if (attribute === 'limit') return limitOperators
+  if (metaData.type === 'list') return listOperators
+  if (metaData.values) return fixedOperators
+
+  return operators
+}
+
 const Filter = ({id, attribute, operator, value, secondary, options, drop, change, metaData}, {messages}) => (
   <div className='mdl-grid'>
     <div className='mdl-cell mdl-cell--4-col'>
@@ -51,8 +61,8 @@ const Filter = ({id, attribute, operator, value, secondary, options, drop, chang
     </div>
     <div className='mdl-cell mdl-cell--3-col'>
       <Select name={`filters.${id}.operator`} value={operator} onChange={change('operator')}>
-        {map(attribute === 'limit' ? limitOperators : (metaData.values ? fixedOperators : operators),
-          op => <option key={op} value={op}>
+        {map(getOperatorsFor(attribute, metaData), op =>
+          <option key={op} value={op}>
             {messages[`${camelCase(op)}Operator`]}
           </option>)}
       </Select>
