@@ -27,6 +27,7 @@ import Video, {Channel} from './TableVideo'
 import {styledFunctionalComponent} from '../../higher-order/styled'
 import isDate from 'lodash/isDate'
 import includes from 'lodash/includes'
+import isArray from 'lodash/isArray'
 
 function getAccountSelector (id) {
   if (!includes(id, ':')) return id
@@ -70,6 +71,9 @@ const style = csjs`
 }
 .cell[title] {
   font-style: italic;
+}
+.chip {
+  margin-right: 3px;
 }`
 
 class Sortable {
@@ -166,11 +170,23 @@ function Cell ({attribute: {is_metric, type, is_percentage}, value: raw}, {local
     }
   }
 
+  let content = '---'
+
+  if (isString(value) || React.isValidElement(value)) {
+    content = value
+  } else if (isArray(value)) {
+    content = map(value, (str, index) => (
+      <span className={`mdl-chip ${style.chip}`} key={index}>
+        <span className='mdl-chip__text'>
+          {str}
+        </span>
+      </span>
+    ))
+  }
+
   return (
     <td className={is_metric ? `${style.cell}` : `${style.cell} mdl-data-table__cell--non-numeric`} {...tdProps}>
-      {isString(value) || React.isValidElement(value)
-        ? value
-        : '---'}
+      {content}
     </td>
   )
 }
