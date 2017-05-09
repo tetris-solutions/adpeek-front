@@ -20,17 +20,13 @@ function BiddingStrategy ({type, name, cpa, roas}, {messages}) {
 
       {cpa ? (
         <Italic>
-          {'(CPA: '}
-          <PrettyNumber type='currency'>{cpa}</PrettyNumber>
-          {')'}
+          (CPA: <PrettyNumber type='currency'>{cpa}</PrettyNumber>)
         </Italic>
       ) : null}
 
       {roas ? (
         <Italic>
-          {'(ROAS: '}
-          <PrettyNumber type='currency'>{roas}</PrettyNumber>
-          {')'}
+          (ROAS: <PrettyNumber type='currency'>{roas}</PrettyNumber>)
         </Italic>
       ) : null}
     </span>

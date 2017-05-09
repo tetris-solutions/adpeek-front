@@ -388,5 +388,6 @@ module.exports = {
   optimizeStatusLabel: 'Optimized',
   conversionOptimizeStatusLabel: 'Optimized for Conversion',
   rotateStatusLabel: 'Rotate then Optimize',
-  rotateIndefinitelyStatusLabel: 'Rotate Indefinitely'
+  rotateIndefinitelyStatusLabel: 'Rotate Indefinitely',
+  feedLocalBusiness: 'from MCC {email}'
 }

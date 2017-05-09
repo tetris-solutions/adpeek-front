@@ -110,7 +110,12 @@ const AdwordsCampaign = ({campaign: {details, name}}) => (
 
         <Info>
           <Message>feedLocal</Message>:
-          <None/>
+          {maybeList(map(details.localFeed, ({id, name, data}) =>
+            <SubText key={id}>
+              {name} {data && data.emailAddress
+              ? <em>(<Message email={data.emailAddress}>feedLocalBusiness</Message>)</em>
+              : null}
+            </SubText>))}
         </Info>
 
         <Info>
