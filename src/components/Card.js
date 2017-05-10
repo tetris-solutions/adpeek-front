@@ -87,7 +87,7 @@ export const Content = ({children, tag: Tag, className}) => (
 )
 
 Content.defaultProps = {
-  tag: 'section',
+  tag: 'div',
   className: ''
 }
 Content.displayName = 'Content'

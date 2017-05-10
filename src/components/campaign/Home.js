@@ -7,9 +7,35 @@ import SubHeader from '../SubHeader'
 import Page from '../Page'
 import AdwordsCampaign from './Adwords/Card'
 import LoadingHorizontal from '../LoadingHorizontal'
+import {Card, Content, Header} from '../Card'
+import {Wrapper, Info, SubText} from './Utils'
+import upperFirst from 'lodash/upperFirst'
 
-const PlatComp = {
-  adwords: AdwordsCampaign
+const NotAvailable = ({campaign: {name, platform, is_adwords_video, details}}) => (
+  <Wrapper>
+    <Info disabled>
+      <Message>nameLabel</Message>:
+      <SubText>{name}</SubText>
+    </Info>
+
+    <Info disabled>
+      <Message>platformLabel</Message>:
+      <SubText>{upperFirst(platform)}</SubText>
+    </Info>
+
+    <br/>
+
+    <p className='mdl-color--yellow-300 mdl-color-text--grey-700' style={{padding: '1em'}}>
+      <strong>
+        <Message>emptyCampaignDetails</Message>
+      </strong>
+    </p>
+  </Wrapper>
+)
+
+NotAvailable.displayName = 'Not-Available'
+NotAvailable.propTypes = {
+  campaign: PropTypes.object.isRequired
 }
 
 class CampaignHome extends React.PureComponent {
@@ -32,20 +58,31 @@ class CampaignHome extends React.PureComponent {
 
   render () {
     const {campaign} = this.props
-    const Component = PlatComp[campaign.platform]
+    const Campaign = campaign.platform === 'adwords' && !campaign.is_adwords_video
+      ? AdwordsCampaign
+      : NotAvailable
 
     return (
       <div>
         <SubHeader/>
         <Page>
-          <section className='mdl-grid'>
+          <div className='mdl-grid'>
             <div className='mdl-cell mdl-cell--12-col'>
-              {campaign.details ? <Component {...this.props}/> : (
+              {campaign.details ? (
+                <Card size='large'>
+                  <Header>
+                    <Message>campaignDetailsTitle</Message>
+                  </Header>
+                  <Content>
+                    <Campaign {...this.props}/>
+                  </Content>
+                </Card>
+              ) : (
                 <LoadingHorizontal>
                   <Message>loadingCampaignDetails</Message>
                 </LoadingHorizontal>)}
             </div>
-          </section>
+          </div>
         </Page>
       </div>
     )

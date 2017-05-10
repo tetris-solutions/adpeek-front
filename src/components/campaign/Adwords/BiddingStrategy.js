@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import PrettyNumber from '../../PrettyNumber'
-import {Italic, SubText} from './Utils'
+import {Italic, SubText} from '../Utils'
 import camelCase from 'lodash/camelCase'
 
 function BiddingStrategy ({type, name, cpa, roas}, {messages}) {

@@ -31,6 +31,7 @@ module.exports = {
   update: 'Update',
   budgetNameLabel: 'Budget name',
   nameLabel: 'Name',
+  platformLabel: 'Platform',
   entityLabel: 'Report type',
   orders: 'Orders',
   dayLabel: 'Day',
@@ -389,5 +390,6 @@ module.exports = {
   conversionOptimizeStatusLabel: 'Optimized for Conversion',
   rotateStatusLabel: 'Rotate then Optimize',
   rotateIndefinitelyStatusLabel: 'Rotate Indefinitely',
-  feedLocalBusiness: 'from MCC {email}'
+  feedLocalBusiness: 'from MCC {email}',
+  emptyCampaignDetails: 'This type of campaign is not yet available for edit'
 }

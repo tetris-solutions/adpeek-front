@@ -2,7 +2,7 @@ import React from 'react'
 import Message from 'tetris-iso/Message'
 import PropTypes from 'prop-types'
 import keys from 'lodash/keys'
-import {SubText} from './Utils'
+import {SubText} from '../Utils'
 
 const networkMessages = {
   google_search: 'googleSearchNetwork',

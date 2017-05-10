@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {SubText} from './Utils'
+import {SubText} from '../Utils'
 import camelCase from 'lodash/camelCase'
 
 function OptimizationStatus ({status}, {messages}) {

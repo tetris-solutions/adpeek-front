@@ -34,6 +34,7 @@ module.exports = {
   orders: 'Pedidos',
   dayLabel: 'Dia',
   nameLabel: 'Nome',
+  platformLabel: 'Plataforma',
   entityLabel: 'Tipo de relatório',
   mediaLabel: 'Pilar de mídia',
   kpiLabel: 'KPI',
@@ -390,5 +391,6 @@ module.exports = {
   conversionOptimizeStatusLabel: 'Otimizado para conversões',
   rotateStatusLabel: 'Rotacionar e otimizar',
   rotateIndefinitelyStatusLabel: 'Rotacionar indefinidamente',
-  feedLocalBusiness: 'do MCC {email}'
+  feedLocalBusiness: 'do MCC {email}',
+  emptyCampaignDetails: 'Esse tipo de campanha ainda não permite edição'
 }
