@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {styledFunctionalComponent} from '../higher-order/styled'
 import Message from 'tetris-iso/Message'
+import {Link} from 'react-router'
 import csjs from 'csjs'
 
 export const style = csjs`
@@ -50,32 +51,41 @@ export const Italic = props => <SubText {...props} tag='em'/>
 
 Italic.displayName = 'Italic'
 
-export const Info = ({children, edit}) => (
+export const EditLink = ({onClick, to}) =>
+  to ? (
+    <Link className={`${style.edit}`} to={to}>
+      <Message>edit</Message>
+    </Link>
+  ) : (
+    <a className={`${style.edit}`} onClick={onClick}>
+      <Message>edit</Message>
+    </a>
+  )
+
+EditLink.displayName = 'Edit-Link'
+EditLink.propTypes = {
+  onClick: PropTypes.func,
+  to: PropTypes.string
+}
+
+export const Info = ({children, editLink, editClick}) => (
   <h6 className={`${style.title}`}>
     {children}
-    {edit && (
-      <EditLink onClick={edit}/>)}
+    {editLink || editClick
+      ? <EditLink onClick={editClick} to={editLink}/>
+      : null}
   </h6>
 )
 
 Info.displayName = 'Info'
 Info.propTypes = {
-  children: PropTypes.node,
-  edit: PropTypes.func
+  children: PropTypes.node.isRequired,
+  editClick: PropTypes.func,
+  editLink: PropTypes.string
 }
 
 export const None = () => <SubText/>
 None.displayName = 'None'
-
-export const EditLink = ({onClick}) =>
-  <a className={`${style.edit}`} onClick={onClick}>
-    <Message>edit</Message>
-  </a>
-
-EditLink.displayName = 'Edit-Link'
-EditLink.propTypes = {
-  onClick: PropTypes.func
-}
 
 export const Section = ({children}) => (
   <section className={`${style.section}`}>

@@ -162,6 +162,11 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                   breadcrumb={component.CampaignBreadcrumb}>
 
                   <IndexRoute {...render(component.CampaignHome)}/>
+
+                  <Route path='edit' {...render(component.CampaignHome)}>
+                    <Route path='name' {...render(component.CampaignName)}/>
+                  </Route>
+
                   <Route path='creatives' {...render(component.CampaignCreatives)}/>
                 </Route>
 

@@ -1,4 +1,5 @@
 import bind from 'lodash/bind'
+import forEach from 'lodash/forEach'
 import {loadUserCompaniesActionServerAdaptor as companies} from 'tetris-iso/actions'
 import {protectedRouteMiddleware as protect, performActionsMiddleware as preload} from 'tetris-iso/server'
 import {allowGuestMiddleware} from '../middlewares/allow-guest'
@@ -198,15 +199,11 @@ export function setAppRoutes (app, render) {
     ensureLoad(workspace, folder, campaigns),
     render)
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/campaign/:campaign',
-    protect,
-    ensureLoad(workspace, folder, campaigns),
-    render)
-
-  app.get('/company/:company/workspace/:workspace/folder/:folder/campaign/:campaign/creatives',
-    protect,
-    ensureLoad(workspace, folder, campaigns),
-    render)
+  forEach(['', '/edit/name', '/creatives'], path =>
+    app.get(`/company/:company/workspace/:workspace/folder/:folder/campaign/:campaign${path}`,
+      protect,
+      ensureLoad(workspace, folder, campaigns),
+      render))
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/orders',
     protect,

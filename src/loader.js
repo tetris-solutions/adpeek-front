@@ -89,7 +89,8 @@ const breadcrumbs = provide => tempSyncEnsure(() => provide({
 const campaign = provide => tempSyncEnsure(() => provide({
   aside: require('./components/campaign/Aside'),
   breadcrumb: require('./components/campaign/Breadcrumb'),
-  home: require('./components/campaign/Home')
+  home: require('./components/campaign/Home'),
+  name: require('./components/campaign/edit/Name')
 }))
 
 const orderCloning = provide => tempSyncEnsure(() => provide({
@@ -181,6 +182,7 @@ export const component = {
   FolderOrdersCloning: screen(orderCloning, 'folder'),
 
   CampaignHome: screen(campaign, 'home'),
+  CampaignName: screen(campaign, 'name'),
   CampaignCreatives: screen(creatives, 'campaign'),
   FolderCreatives: screen(creatives, 'folder'),
 
