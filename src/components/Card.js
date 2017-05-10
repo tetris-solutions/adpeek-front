@@ -8,11 +8,14 @@ import {styledComponent} from './higher-order/styled'
 const style = csjs`
 .card {
   margin: 3em auto;
+  min-width: 320px;
 }
 .small extends .card {
   width: 35%;
-  min-width: 320px;
   overflow: visible;
+}
+.medium extends .card {
+  width: 70%;
 }
 .large extends .card {
   width: 90%;
@@ -44,7 +47,7 @@ class Card_ extends React.Component {
   static displayName = 'Card'
 
   static propTypes = {
-    size: PropTypes.oneOf(['small', 'large', 'full']),
+    size: PropTypes.oneOf(['small', 'medium', 'large', 'full']),
     tag: PropTypes.string,
     children: PropTypes.node.isRequired
   }

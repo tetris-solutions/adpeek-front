@@ -62,14 +62,20 @@ class CampaignHome extends React.PureComponent {
       ? AdwordsCampaign
       : NotAvailable
 
+    const isLoading = !campaign.details
+
     return (
       <div>
         <SubHeader/>
         <Page>
           <div className='mdl-grid'>
             <div className='mdl-cell mdl-cell--12-col'>
-              {campaign.details ? (
-                <Card size='large'>
+              {isLoading ? (
+                <LoadingHorizontal>
+                  <Message>loadingCampaignDetails</Message>
+                </LoadingHorizontal>
+              ) : (
+                <Card size='medium'>
                   <Header>
                     <Message>campaignDetailsTitle</Message>
                   </Header>
@@ -77,10 +83,7 @@ class CampaignHome extends React.PureComponent {
                     <Campaign {...this.props}/>
                   </Content>
                 </Card>
-              ) : (
-                <LoadingHorizontal>
-                  <Message>loadingCampaignDetails</Message>
-                </LoadingHorizontal>)}
+              )}
             </div>
           </div>
         </Page>

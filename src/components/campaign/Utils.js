@@ -50,22 +50,18 @@ export const Italic = props => <SubText {...props} tag='em'/>
 
 Italic.displayName = 'Italic'
 
-export const Info = ({children, edit, disabled}) => (
+export const Info = ({children, edit}) => (
   <h6 className={`${style.title}`}>
     {children}
-    {!disabled && (
+    {edit && (
       <EditLink onClick={edit}/>)}
   </h6>
 )
 
 Info.displayName = 'Info'
 Info.propTypes = {
-  disabled: PropTypes.bool,
   children: PropTypes.node,
   edit: PropTypes.func
-}
-Info.defaultProps = {
-  disabled: false
 }
 
 export const None = () => <SubText/>
