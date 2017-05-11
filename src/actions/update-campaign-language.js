@@ -19,6 +19,7 @@ export function updateCampaignLanguageAction (tree, {company, workspace, folder,
         ['workspaces', workspace],
         ['folders', folder],
         ['campaigns', campaign],
+        'details',
         'criteria'
       ])
 
