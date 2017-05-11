@@ -112,6 +112,7 @@ module.exports = {
   loadingReport: 'Carregando relatório...',
   loadingCampaigns: 'Carregando campanhas...',
   loadingCampaignDetails: 'Carregando detalhes da campanha...',
+  loadingLanguages: 'Carregando lista de linguagens...',
   loading: 'Carregando...',
   calculating: 'Calculando...',
   extractReport: 'Baixar',

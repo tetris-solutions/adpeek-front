@@ -72,16 +72,16 @@ function AdwordsCampaign (props, context) {
 
         <Info>
           <Message>targetLocation</Message>:
-          {maybeList(crop(map(filter(details.criterion, isLocation),
+          {maybeList(crop(map(filter(details.criteria, isLocation),
             ({id, location, location_type}) =>
               <SubText key={id}>
                 {location} ({location_type})
               </SubText>)))}
         </Info>
 
-        <Info>
+        <Info editLink={editable ? urlFor(params, 'language') : null}>
           <Message>targetLanguage</Message>:
-          {maybeList(crop(map(filter(details.criterion, isLanguage), ({id, language}) =>
+          {maybeList(crop(map(filter(details.criteria, isLanguage), ({id, language}) =>
             <SubText key={id}>{language}</SubText>)))}
         </Info>
 
@@ -128,7 +128,7 @@ function AdwordsCampaign (props, context) {
 
           <Info>
             <Message>targetApp</Message>:
-            {maybeList(crop(map(filter(details.criterion, isApplication),
+            {maybeList(crop(map(filter(details.criteria, isApplication),
               ({id, app_name}) =>
                 <SubText key={id}>
                   {app_name}
@@ -139,7 +139,7 @@ function AdwordsCampaign (props, context) {
         <Info>
           <Message>targetAudience</Message>:
 
-          {maybeList(crop(map(filter(details.criterion, isUserList),
+          {maybeList(crop(map(filter(details.criteria, isUserList),
             ({user_list_id: id, user_list_name: name}) =>
               <SubText key={id}>{name}</SubText>)))}
         </Info>
