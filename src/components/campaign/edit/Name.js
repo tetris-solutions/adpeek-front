@@ -51,11 +51,11 @@ class EditName extends React.Component {
           </div>
         </div>
 
-        <br/>
-
-        <Submit className='mdl-button mdl-button--raised mdl-button--colored'>
-          <Message>save</Message>
-        </Submit>
+        <div style={{textAlign: 'right'}}>
+          <Submit className='mdl-button mdl-button--raised mdl-button--colored'>
+            <Message>save</Message>
+          </Submit>
+        </div>
       </form>
     )
   }

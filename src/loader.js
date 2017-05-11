@@ -90,7 +90,7 @@ const campaign = provide => tempSyncEnsure(() => provide({
   aside: require('./components/campaign/Aside'),
   breadcrumb: require('./components/campaign/Breadcrumb'),
   home: require('./components/campaign/Home'),
-  name: require('./components/campaign/edit/Name')
+  name: require('./components/campaign/edit/NameModal')
 }))
 
 const orderCloning = provide => tempSyncEnsure(() => provide({

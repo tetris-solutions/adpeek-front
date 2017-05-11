@@ -4172,9 +4172,9 @@ tar@^2.2.1:
     fstream "^1.0.2"
     inherits "2"
 
-tetris-iso@^0.5.16:
-  version "0.5.16"
-  resolved "https://registry.yarnpkg.com/tetris-iso/-/tetris-iso-0.5.16.tgz#51ed4fff77b27b75a6fee3cf1a882e45e857289f"
+tetris-iso@^0.5.17:
+  version "0.5.17"
+  resolved "https://registry.yarnpkg.com/tetris-iso/-/tetris-iso-0.5.17.tgz#359a7bf45c0b18ee99bb13dd5d79538fc4cf4a18"
   dependencies:
     "@tetris/debug-middleware" "^0.1.0"
     "@tetris/locale-middleware" "^0.1.1"

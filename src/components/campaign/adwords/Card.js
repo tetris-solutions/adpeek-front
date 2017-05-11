@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import Fence from '../../Fence'
-import Modal from 'tetris-iso/Modal'
 import {Wrapper, SubText, None, Info, Section, SectionTitle} from '../Utils'
 import Network, {networkNames} from './Network'
 import BiddingStrategy from './BiddingStrategy'
@@ -169,13 +168,10 @@ function AdwordsCampaign (props, context) {
           </SubText>
         </Info>
 
-        {children ? (
-          <Modal onEscPress={closeModal}>
-            {React.cloneElement(children,
-              assign({}, props, {
-                onSubmit: closeModal
-              }))}
-          </Modal>) : null}
+        {children ? React.cloneElement(children,
+          assign({}, props, {
+            onSubmit: closeModal
+          })) : null}
       </Wrapper>}
     </Fence>
   )
