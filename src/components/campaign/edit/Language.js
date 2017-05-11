@@ -1,6 +1,6 @@
 import React from 'react'
 import Message from 'tetris-iso/Message'
-import {Submit} from '../../Button'
+import {Submit, Button} from '../../Button'
 import PropTypes from 'prop-types'
 import Checkbox from '../../Checkbox'
 import map from 'lodash/map'
@@ -78,6 +78,14 @@ class EditLanguage extends React.Component {
     return filter(this.props.campaign.details.criteria, {type: 'LANGUAGE'})
   }
 
+  selectAll = () => {
+    forEach(this.refs.form.elements, input => {
+      if (input && input.programaticallyCheck) {
+        input.programaticallyCheck()
+      }
+    })
+  }
+
   render () {
     let {folder: {languageCriteria}} = this.props
 
@@ -90,7 +98,7 @@ class EditLanguage extends React.Component {
     }
 
     return (
-      <form onSubmit={this.onSubmit}>
+      <form onSubmit={this.onSubmit} ref='form'>
         <div className='mdl-grid'>
           <div className={`mdl-cell mdl-cell--12-col ${style.checklist}`}>
             {map(languageCriteria, ({id, name}) =>
@@ -108,6 +116,9 @@ class EditLanguage extends React.Component {
         </div>
 
         <div className={`${style.actions}`}>
+          <Button onClick={this.selectAll} className='mdl-button mdl-button--raised'>
+            <Message>selectAll</Message>
+          </Button>
           <Submit className='mdl-button mdl-button--raised mdl-button--colored'>
             <Message>save</Message>
           </Submit>

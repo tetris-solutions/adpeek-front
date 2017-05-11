@@ -78,8 +78,8 @@ class FolderCampaignsSelector extends React.Component {
 
   static contextTypes = {
     messages: PropTypes.shape({
-      selectAllCampaigns: PropTypes.string,
-      deselectAllCampaigns: PropTypes.string
+      selectAll: PropTypes.string,
+      deselectAll: PropTypes.string
     })
   }
 
@@ -133,7 +133,7 @@ class FolderCampaignsSelector extends React.Component {
 
   render () {
     const {selected} = this.state
-    const {messages: {selectAllCampaigns, deselectAllCampaigns}} = this.context
+    const {messages: {selectAll, deselectAll}} = this.context
     const {
       readOnly,
       campaigns,
@@ -176,7 +176,7 @@ class FolderCampaignsSelector extends React.Component {
 
             {!isLoading && (
               <a onClick={this.toggleAll} className='mdl-button mdl-button--colored'>
-                {selected ? deselectAllCampaigns : selectAllCampaigns}
+                {selected ? deselectAll : selectAll}
               </a>)}
           </Footer>
         </Fence>
