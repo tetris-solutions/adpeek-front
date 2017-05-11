@@ -2,13 +2,13 @@ import React from 'react'
 import Message from 'tetris-iso/Message'
 import {Submit} from '../../Button'
 import PropTypes from 'prop-types'
-import loglevel from 'loglevel'
 import Checkbox from '../../Checkbox'
 import map from 'lodash/map'
 import filter from 'lodash/filter'
 import noop from 'lodash/noop'
 import keyBy from 'lodash/keyBy'
 import {loadLanguageCriteriaAction} from '../../../actions/load-campaign-language-criteria'
+import {updateCampaignLanguageAction} from '../../../actions/update-campaign-language'
 import csjs from 'csjs'
 import {styledComponent} from '../../higher-order/styled'
 import forEach from 'lodash/forEach'
@@ -54,6 +54,7 @@ class EditLanguage extends React.Component {
   onSubmit = e => {
     e.preventDefault()
 
+    const {dispatch, params, onSubmit} = this.props
     const selected = []
 
     /**
@@ -69,7 +70,8 @@ class EditLanguage extends React.Component {
       }
     })
 
-    loglevel.info(selected)
+    dispatch(updateCampaignLanguageAction, params, selected)
+      .then(onSubmit)
   }
 
   getCampaignLanguages = () => {
