@@ -188,6 +188,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                     breadcrumb={component.OrderBreadCrumb}>
 
                     <IndexRoute onEnter={preload(budgets)} {...render(component.Order)}/>
+                    <Route path='budget/:budget' onEnter={preload(budgets)} {...render(component.Order)}/>
 
                     <Route path='autobudget(/:day)'
                            onEnter={preload(autoBudgetLogs)}

@@ -2,6 +2,7 @@ import assign from 'lodash/assign'
 import cloneDeep from 'lodash/cloneDeep'
 import filter from 'lodash/filter'
 import find from 'lodash/find'
+import findIndex from 'lodash/findIndex'
 import flatten from 'lodash/flatten'
 import round from 'lodash/round'
 import includes from 'lodash/includes'
@@ -66,7 +67,8 @@ export class OrderController extends React.Component {
       company: PropTypes.string,
       workspace: PropTypes.string,
       folder: PropTypes.string,
-      order: PropTypes.string
+      order: PropTypes.string,
+      budget: PropTypes.string
     }),
     dispatch: PropTypes.func,
     campaigns: PropTypes.array,
@@ -81,7 +83,7 @@ export class OrderController extends React.Component {
   state = {
     dirty: false,
     order: normalizeOrder(cloneDeep(this.props.order)),
-    selectedBudgetIndex: null
+    selectedBudgetIndex: findIndex(this.props.order.budgets, {id: this.props.params.budget})
   }
 
   componentDidMount () {

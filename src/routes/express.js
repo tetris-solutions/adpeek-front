@@ -215,10 +215,11 @@ export function setAppRoutes (app, render) {
     ensureLoad(workspace, folder, orders),
     render)
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/order/:order',
-    protect,
-    ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets),
-    render)
+  forEach(['', '/budget/:budget'], sPath =>
+    app.get(`/company/:company/workspace/:workspace/folder/:folder/order/:order${sPath}`,
+      protect,
+      ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets),
+      render))
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/order/:order/autobudget',
     protect,
