@@ -112,6 +112,7 @@ module.exports = {
   loadingReport: 'Carregando relatório...',
   loadingCampaigns: 'Carregando campanhas...',
   loadingCampaignDetails: 'Carregando detalhes da campanha...',
+  loadingCampaignOrder: 'Carregando Pedido da campamha...',
   loadingLanguages: 'Carregando lista de linguagens...',
   loading: 'Carregando...',
   calculating: 'Calculando...',
@@ -393,5 +394,9 @@ module.exports = {
   rotateStatusLabel: 'Rotacionar e otimizar',
   rotateIndefinitelyStatusLabel: 'Rotacionar indefinidamente',
   feedLocalBusiness: 'do MCC {email}',
-  emptyCampaignDetails: 'Esse tipo de campanha ainda não permite edição'
+  emptyCampaignDetails: 'Esse tipo de campanha ainda não permite edição',
+  campaignOrderDeliveryMethod: 'A forma de entrega dessa campanha está associada ao orçamento <strong>"{budget}"</strong> do Pedido <strong>"{order}"</strong>',
+  cannotEditDeliveryMethodWithoutOrder: 'Não é possível editar a forma de entrega dessa campanha pois ela não possui um Pedido associado',
+  openOrders: 'Abrir Ordens',
+  editBudget: 'Editar Orçamento'
 }

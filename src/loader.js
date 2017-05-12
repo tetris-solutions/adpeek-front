@@ -91,7 +91,8 @@ const campaign = provide => tempSyncEnsure(() => provide({
   breadcrumb: require('./components/campaign/Breadcrumb'),
   home: require('./components/campaign/Home'),
   name: require('./components/campaign/edit/NameModal'),
-  language: require('./components/campaign/edit/LanguageModal')
+  language: require('./components/campaign/edit/LanguageModal'),
+  deliveryMethod: require('./components/campaign/edit/DeliveryMethodModal')
 }))
 
 const orderCloning = provide => tempSyncEnsure(() => provide({
@@ -185,6 +186,7 @@ export const component = {
   CampaignHome: screen(campaign, 'home'),
   CampaignName: screen(campaign, 'name'),
   CampaignLanguage: screen(campaign, 'language'),
+  CampaignDeliveryMethod: screen(campaign, 'deliveryMethod'),
   CampaignCreatives: screen(creatives, 'campaign'),
   FolderCreatives: screen(creatives, 'folder'),
 

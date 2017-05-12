@@ -161,7 +161,7 @@ function AdwordsCampaign (props, context) {
           <OptimizationStatus status={details.optimization_status}/>
         </Info>
 
-        <Info>
+        <Info editLink={editable ? urlFor(params, 'delivery-method') : null}>
           <Message>deliveryMethodLabel</Message>:
           <SubText>
             {messages[toLower(details.delivery_method) + 'Delivery']}

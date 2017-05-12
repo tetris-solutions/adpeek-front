@@ -113,6 +113,7 @@ module.exports = {
   loadingReport: 'Loading Report...',
   loadingCampaigns: 'Loading Campaigns...',
   loadingCampaignDetails: 'Loading Campaign Details...',
+  loadingCampaignOrder: 'Loading Campaign Order...',
   loadingLanguages: 'Loading available languages...',
   loading: 'Loading...',
   calculating: 'Calculating...',
@@ -392,5 +393,9 @@ module.exports = {
   rotateStatusLabel: 'Rotate then Optimize',
   rotateIndefinitelyStatusLabel: 'Rotate Indefinitely',
   feedLocalBusiness: 'from MCC {email}',
-  emptyCampaignDetails: 'This type of campaign is not yet available for edit'
+  emptyCampaignDetails: 'This type of campaign is not yet available for edit',
+  campaignOrderDeliveryMethod: 'This campaign\'s delivery method is associated to the budget <strong>"{budget}"</strong> inside the order <strong>"{order}"</strong>',
+  cannotEditDeliveryMethodWithoutOrder: 'To edit the delivery method of this campaign you have to link it to an Order first',
+  openOrders: 'Open Orders',
+  editBudget: 'Edit Budget'
 }
