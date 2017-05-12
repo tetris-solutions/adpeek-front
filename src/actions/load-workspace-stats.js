@@ -2,22 +2,24 @@ import {GET} from '@tetris/http'
 import {saveResponseData} from '../functions/save-response-data'
 import {getApiFetchConfig, saveResponseTokenAsCookie, pushResponseErrorToState} from 'tetris-iso/utils'
 
-function loadWorkspaceStats (id, requestFreshStats, config) {
-  const qs = requestFreshStats ? '?fresh=true' : ''
+function loadWorkspaceStats (id, updateMode, config) {
+  const qs = updateMode !== 'normal'
+    ? `?${updateMode}=true`
+    : ''
 
   return GET(`${process.env.ADPEEK_API_URL}/workspace/${id}/stats${qs}`, config)
 }
 
 const statsRequestRegister = {}
 
-export function loadWorkspaceStatsAction (tree, company, workspace, requestFreshStats = false) {
+export function loadWorkspaceStatsAction (tree, company, workspace, updateMode = 'normal') {
   // @todo delete this
   if (window.sessionStorage.getItem('cardStats') !== 'enabled') {
-    return Promise.resolve()
+    updateMode = 'cached'
   }
 
   statsRequestRegister[workspace] = statsRequestRegister[workspace] ||
-    loadWorkspaceStats(workspace, requestFreshStats, getApiFetchConfig(tree))
+    loadWorkspaceStats(workspace, updateMode, getApiFetchConfig(tree))
       .then(saveResponseTokenAsCookie)
       .then(saveResponseData(tree, [
         'user',
