@@ -2,10 +2,11 @@ import React from 'react'
 import Message from 'tetris-iso/Message'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router'
+import {Button} from '../../Button'
 import {loadCampaignOrderAction} from '../../../actions/load-campaign-order'
 import noop from 'lodash/noop'
 
-const CampaignOrder = ({params: {company, workspace, folder, campaign}, order: {id, name, budget}}) => (
+const CampaignOrder = ({close, params: {company, workspace, folder, campaign}, order: {id, name, budget}}) => (
   <div>
     <div className='mdl-grid'>
       <div className='mdl-cell mdl-cell--12-col'>
@@ -17,11 +18,9 @@ const CampaignOrder = ({params: {company, workspace, folder, campaign}, order: {
       </div>
     </div>
     <p>
-      <Link
-        className='mdl-button mdl-button--raised'
-        to={`/company/${company}/workspace/${workspace}/folder/${folder}/campaign/${campaign}`}>
+      <Button className='mdl-button mdl-button--raised' onClick={close}>
         <Message>cancel</Message>
-      </Link>
+      </Button>
       <Link
         style={{float: 'right'}}
         className='mdl-button mdl-button--raised mdl-button--colored'
@@ -33,11 +32,12 @@ const CampaignOrder = ({params: {company, workspace, folder, campaign}, order: {
 )
 CampaignOrder.displayName = 'campaign-Order'
 CampaignOrder.propTypes = {
+  close: PropTypes.func,
   params: PropTypes.object.isRequired,
   order: PropTypes.object.isRequired
 }
 
-const CreateOrderPrompt = ({params: {company, workspace, folder, campaign}}) => (
+const CreateOrderPrompt = ({close, params: {company, workspace, folder, campaign}}) => (
   <div>
     <div className='mdl-grid'>
       <div className='mdl-cell mdl-cell--12-col'>
@@ -46,12 +46,10 @@ const CreateOrderPrompt = ({params: {company, workspace, folder, campaign}}) => 
         </p>
       </div>
     </div>
-    <p>
-      <Link
-        className='mdl-button mdl-button--raised'
-        to={`/company/${company}/workspace/${workspace}/folder/${folder}/campaign/${campaign}`}>
+    <div>
+      <Button className='mdl-button mdl-button--raised' onClick={close}>
         <Message>cancel</Message>
-      </Link>
+      </Button>
 
       <Link
         style={{float: 'right'}}
@@ -59,13 +57,13 @@ const CreateOrderPrompt = ({params: {company, workspace, folder, campaign}}) => 
         to={`/company/${company}/workspace/${workspace}/folder/${folder}/orders`}>
         <Message>openOrders</Message>
       </Link>
-    </p>
+    </div>
   </div>
 )
 CreateOrderPrompt.displayName = 'Create-Order-Prompt'
 CreateOrderPrompt.propTypes = {
-  params: PropTypes.object,
-  campaign: PropTypes.object
+  close: PropTypes.func,
+  params: PropTypes.object
 }
 
 class EditDeliveryMethod extends React.Component {
@@ -113,11 +111,11 @@ class EditDeliveryMethod extends React.Component {
       )
     }
 
-    const {campaign: {order}, params} = this.props
+    const {onSubmit, campaign: {order}, params} = this.props
 
     return order
-      ? <CampaignOrder params={params} order={order}/>
-      : <CreateOrderPrompt params={params}/>
+      ? <CampaignOrder params={params} order={order} close={onSubmit}/>
+      : <CreateOrderPrompt params={params} close={onSubmit}/>
   }
 }
 

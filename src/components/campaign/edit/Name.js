@@ -2,7 +2,7 @@ import React from 'react'
 import Message from 'tetris-iso/Message'
 import PropTypes from 'prop-types'
 import Input from '../../Input'
-import {Submit} from '../../Button'
+import {Submit, Button} from '../../Button'
 import {updateCampaignNameAction} from '../../../actions/update-campaign-name'
 import noop from 'lodash/noop'
 
@@ -38,6 +38,8 @@ class EditName extends React.Component {
   }
 
   render () {
+    const {onSubmit: close} = this.props
+
     return (
       <form onSubmit={this.onSubmit}>
         <div className='mdl-grid'>
@@ -51,8 +53,12 @@ class EditName extends React.Component {
           </div>
         </div>
 
-        <div style={{textAlign: 'right'}}>
-          <Submit className='mdl-button mdl-button--raised mdl-button--colored'>
+        <div>
+          <Button className='mdl-button mdl-button--raised' onClick={close}>
+            <Message>cancel</Message>
+          </Button>
+
+          <Submit style={{float: 'right'}} className='mdl-button mdl-button--raised mdl-button--colored'>
             <Message>save</Message>
           </Submit>
         </div>

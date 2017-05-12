@@ -24,6 +24,9 @@ const style = csjs`
 .loading {
   margin-top: 2em;
   font-style: italic;
+}
+.cancel {
+  float: left;
 }`
 
 const parseCampaignLang = ({id, language: name, language_code: code}) => ({id, name, code})
@@ -87,6 +90,7 @@ class EditLanguage extends React.Component {
   }
 
   render () {
+    const close = this.props.onSubmit
     let {folder: {languageCriteria}} = this.props
 
     const campaignLanguages = this.getCampaignLanguages()
@@ -116,9 +120,14 @@ class EditLanguage extends React.Component {
         </div>
 
         <div className={`${style.actions}`}>
+          <Button className={`mdl-button mdl-button--raised ${style.cancel}`} onClick={close}>
+            <Message>cancel</Message>
+          </Button>
+
           <Button onClick={this.selectAll} className='mdl-button mdl-button--raised'>
             <Message>selectAll</Message>
           </Button>
+          {' '}
           <Submit className='mdl-button mdl-button--raised mdl-button--colored'>
             <Message>save</Message>
           </Submit>
