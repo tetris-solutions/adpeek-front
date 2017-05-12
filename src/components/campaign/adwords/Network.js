@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import keys from 'lodash/keys'
 import {SubText} from '../Utils'
 
-const networkMessages = {
+export const networkMessages = {
   google_search: 'googleSearchNetwork',
   search_network: 'searchNetwork',
   content_network: 'contentNetwork',

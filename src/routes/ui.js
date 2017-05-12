@@ -167,6 +167,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                     <Route path='name' {...render(component.CampaignName)}/>
                     <Route path='language' {...render(component.CampaignLanguage)}/>
                     <Route path='delivery-method' {...render(component.CampaignDeliveryMethod)}/>
+                    <Route path='network' {...render(component.CampaignNetwork)}/>
                   </Route>
 
                   <Route path='creatives' {...render(component.CampaignCreatives)}/>

@@ -62,7 +62,7 @@ function AdwordsCampaign (props, context) {
           <SubText>{name}</SubText>
         </Info>
 
-        <Info>
+        <Info editLink={editable ? urlFor(params, 'network') : null}>
           <Message>targetNetworks</Message>:
           {maybeList(map(pick(details, networkNames),
             (active, key) => active
