@@ -6,7 +6,9 @@ import noop from 'lodash/noop'
 import pick from 'lodash/pick'
 import map from 'lodash/map'
 import Checkbox from '../../Checkbox'
+import {updateCampaignNetworkAction} from '../../../actions/update-campaign-network'
 import {networkNames, networkMessages} from '../adwords/Network'
+import forEach from 'lodash/forEach'
 
 class EditNetwork extends React.Component {
   static displayName = 'Edit-Network'
@@ -28,6 +30,16 @@ class EditNetwork extends React.Component {
 
   onSubmit = e => {
     e.preventDefault()
+
+    const {onSubmit, params, dispatch} = this.props
+    const network = {}
+
+    forEach(networkNames, name => {
+      network[name] = e.target.elements[name].checked
+    })
+
+    dispatch(updateCampaignNetworkAction, params, network)
+      .then(onSubmit)
   }
 
   render () {
