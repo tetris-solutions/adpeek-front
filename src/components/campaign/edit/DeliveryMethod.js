@@ -18,7 +18,7 @@ const CampaignOrder = ({params: {company, workspace, folder, campaign}, order: {
     </div>
     <p>
       <Link
-        className='mdl-button mdl-button--raised mdl-button--accent'
+        className='mdl-button mdl-button--raised'
         to={`/company/${company}/workspace/${workspace}/folder/${folder}/campaign/${campaign}`}>
         <Message>cancel</Message>
       </Link>
@@ -48,7 +48,7 @@ const CreateOrderPrompt = ({params: {company, workspace, folder, campaign}}) => 
     </div>
     <p>
       <Link
-        className='mdl-button mdl-button--raised mdl-button--accent'
+        className='mdl-button mdl-button--raised'
         to={`/company/${company}/workspace/${workspace}/folder/${folder}/campaign/${campaign}`}>
         <Message>cancel</Message>
       </Link>
