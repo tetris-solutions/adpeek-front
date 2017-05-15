@@ -37,7 +37,7 @@ const hardCodedStyle = `
   display: flex !important;
 }`
 
-const HTML = ({payload, children, css, helmet}) => (
+const HTML = ({state, children, css, helmet}) => (
   <html>
     <head>
       <meta charSet='UTF-8'/>
@@ -51,7 +51,7 @@ const HTML = ({payload, children, css, helmet}) => (
 
       <link
         rel='stylesheet'
-        href={`https://code.getmdl.io/1.3.0/material.${payload.debugMode ? 'brown-deep_purple' : 'blue-indigo'}.min.css`}/>
+        href={`https://code.getmdl.io/1.3.0/material.${state.debugMode ? 'brown-deep_purple' : 'blue-indigo'}.min.css`}/>
 
       <link rel='stylesheet' href='/css/mdl-selectfield.min.css'/>
       <link rel='stylesheet' href='/css/animate.min.css'/>
@@ -66,7 +66,10 @@ const HTML = ({payload, children, css, helmet}) => (
       <script src='https://code.getmdl.io/1.3.0/material.min.js' defer/>
       <script
         id='state-injection'
-        dangerouslySetInnerHTML={{__html: `var backendPayload = ${JSON.stringify(payload)}`}}/>
+        dangerouslySetInnerHTML={{__html: `var backendPayload = ${JSON.stringify(state)}`}}/>
+
+      <script src='/js/intl.min.js' defer/>
+      <script src={`/js/intl/${state.locale}.js`} defer/>
       <script src={`/js/client${revisionSuffix}.js`} defer/>
     </head>
     <body>
@@ -79,7 +82,7 @@ const HTML = ({payload, children, css, helmet}) => (
 
 HTML.propTypes = {
   css: PropTypes.string,
-  payload: PropTypes.object,
+  state: PropTypes.object,
   children: PropTypes.node,
   helmet: PropTypes.object
 }

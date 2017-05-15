@@ -25,12 +25,15 @@ try {
   loglevel.error(e)
 }
 
-const tree = createClient(getRoutes, defaultState)
-
 window.event$ = new Emitter()
-
-loglevel.setLevel(tree.get('debugMode') ? 'debug' : 'warn')
 
 if (process.env.NODE_ENV !== 'production') {
   window.Perf = require('react-addons-perf')
 }
+
+const tree = createClient(getRoutes, defaultState)
+
+loglevel.setLevel(tree.get('debugMode')
+  ? 'debug'
+  : 'warn')
+
