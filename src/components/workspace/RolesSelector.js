@@ -17,7 +17,8 @@ export class WorkspaceRolesSelector extends React.Component {
   }
 
   render () {
-    const {company: {roles: allRoles, role: {id: myRole}}, roles: selectedRoles} = this.props
+    const {company: {roles: allRoles, role: userRole}, roles: selectedRoles} = this.props
+    const userRoleId = userRole ? userRole.id : null
 
     return (
       <fieldset>
@@ -25,18 +26,16 @@ export class WorkspaceRolesSelector extends React.Component {
           <div className='mdl-grid' key={index}>
             <div className='mdl-cell mdl-cell--4-col'>
               {index === 0 && (
-                <Message>rolesLabel</Message>
-              )}
+                <Message>rolesLabel</Message>)}
             </div>
             <div className='mdl-cell mdl-cell--8-col'>
               <CheckBox
                 name={`role_${id}`}
                 label={name}
-                disabled={id === myRole}
-                checked={id === myRole || includes(selectedRoles, id)}/>
+                disabled={id === userRoleId}
+                checked={id === userRoleId || includes(selectedRoles, id)}/>
             </div>
-          </div>
-        ))}
+          </div>))}
       </fieldset>
     )
   }
