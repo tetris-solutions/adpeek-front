@@ -121,7 +121,7 @@ const style = csjs`
   text-overflow: ellipsis;
 }
 
-.suggestionFocused {
+.suggestionHighlighted {
   background-color: #ddd;
 }
 .sectionContainer {}
