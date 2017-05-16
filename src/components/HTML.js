@@ -55,9 +55,13 @@ const HTML = ({state, children, css, helmet}) => (
 
       <link rel='stylesheet' href='/css/mdl-selectfield.min.css'/>
       <link rel='stylesheet' href='/css/animate.min.css'/>
+
+      <link rel='stylesheet' href='/css/react-s-alert.css'/>
+      <link rel='stylesheet' href='/css/react-s-alert-slide.css'/>
+      <link rel='stylesheet' href='/css/react-s-alert-flip.css'/>
+
       <link rel='stylesheet' href='/css/react-grid-layout.css'/>
       <link rel='stylesheet' href='/css/react-resizable.css'/>
-      <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css'/>
 
       <style id='style-injection' dangerouslySetInnerHTML={{__html: css}}/>
       <style dangerouslySetInnerHTML={{__html: hardCodedStyle}}/>
