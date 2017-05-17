@@ -400,5 +400,6 @@ module.exports = {
   openOrders: 'Abrir Pedidos',
   editBudget: 'Editar Orçamento',
   locationCriteria: 'Localização',
-  proximityCriteria: 'Proximidade'
+  proximityCriteria: 'Proximidade',
+  locationLabel: 'Nova localidade'
 }

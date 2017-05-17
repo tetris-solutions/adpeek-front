@@ -402,5 +402,6 @@ module.exports = {
   openOrders: 'Open Orders',
   editBudget: 'Edit Budget',
   locationCriteria: 'Location',
-  proximityCriteria: 'Proximity'
+  proximityCriteria: 'Proximity',
+  locationLabel: 'New location'
 }

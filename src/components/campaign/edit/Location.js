@@ -131,7 +131,9 @@ class EditLocation extends React.Component {
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--12-col'>
             <Input
+              type='search'
               name='searchTerm'
+              label='location'
               onChange={this.onChangeSearch}
               value={searchTerm}/>
           </div>
