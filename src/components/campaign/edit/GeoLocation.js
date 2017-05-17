@@ -10,6 +10,7 @@ import concat from 'lodash/concat'
 import {Submit, Button} from '../../Button'
 import csjs from 'csjs'
 import {styledComponent} from '../../higher-order/styled'
+import {updateCampaignLocationAction} from '../../../actions/update-campaign-location'
 
 const style = csjs`
 .actions {
@@ -58,6 +59,11 @@ class EditGeoLocation extends React.Component {
 
   onSubmit = e => {
     e.preventDefault()
+
+    const {dispatch, params, onSubmit} = this.props
+
+    dispatch(updateCampaignLocationAction, params, this.state.locations)
+      .then(onSubmit)
   }
 
   render () {
