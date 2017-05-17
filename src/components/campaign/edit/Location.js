@@ -5,6 +5,15 @@ import Input from '../../Input'
 import {searchLocationAction} from '../../../actions/search-location'
 import debounce from 'lodash/debounce'
 import deburr from 'lodash/deburr'
+import csjs from 'csjs'
+import {styledComponent} from '../../higher-order/styled'
+import keyBy from 'lodash/keyBy'
+import filter from 'lodash/filter'
+const style = csjs`
+.list {
+  height: 400px;
+  overflow-y: auto;
+}`
 
 const MIN_SEARCH_TERM_LENGTH = 2
 
@@ -43,44 +52,43 @@ class Location extends React.PureComponent {
   }
 }
 
-class Locations extends React.PureComponent {
-  static displayName = 'Locations'
+function Locations ({add, remove, search, selected}) {
+  selected = keyBy(selected, 'id')
 
-  static propTypes = {
-    search: PropTypes.array,
-    selected: PropTypes.array,
-    add: PropTypes.func,
-    remove: PropTypes.func
-  }
+  const notSelected = ({id}) => !selected[id]
 
-  render () {
-    const {add, remove, search, selected} = this.props
-
-    return (
-      <div className='mdl-grid'>
-        <div className='mdl-cell mdl-cell--6-col'>
-          <ul className='mdl-list'>
-            {map(search, location =>
-              <Location
-                key={location.id}
-                location={location}
-                toggle={add}
-                icon='add'/>)}
-          </ul>
-        </div>
-        <div className='mdl-cell mdl-cell--6-col'>
-          <ul className='mdl-list'>
-            {map(selected, location =>
-              <Location
-                key={location.id}
-                location={location}
-                toggle={remove}
-                icon='remove'/>)}
-          </ul>
-        </div>
+  return (
+    <div className='mdl-grid'>
+      <div className='mdl-cell mdl-cell--6-col'>
+        <ul className={`mdl-list ${style.list}`}>
+          {map(filter(search, notSelected), location =>
+            <Location
+              key={location.id}
+              location={location}
+              toggle={add}
+              icon='add'/>)}
+        </ul>
       </div>
-    )
-  }
+      <div className='mdl-cell mdl-cell--6-col'>
+        <ul className={`mdl-list ${style.list}`}>
+          {map(selected, location =>
+            <Location
+              key={location.id}
+              location={location}
+              toggle={remove}
+              icon='remove'/>)}
+        </ul>
+      </div>
+    </div>
+  )
+}
+
+Locations.displayName = 'Locations'
+Locations.propTypes = {
+  search: PropTypes.array,
+  selected: PropTypes.array,
+  add: PropTypes.func,
+  remove: PropTypes.func
 }
 
 class EditLocation extends React.Component {
@@ -138,4 +146,4 @@ class EditLocation extends React.Component {
   }
 }
 
-export default EditLocation
+export default styledComponent(EditLocation, style)
