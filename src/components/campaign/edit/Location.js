@@ -4,6 +4,7 @@ import map from 'lodash/map'
 import Input from '../../Input'
 import {searchLocationAction} from '../../../actions/search-location'
 import debounce from 'lodash/debounce'
+import deburr from 'lodash/deburr'
 
 const MIN_SEARCH_TERM_LENGTH = 2
 
@@ -17,6 +18,7 @@ class Locations extends React.PureComponent {
 
   render () {
     const {search, inserted} = this.props
+
     return (
       <div className='mdl-grid'>
         <div className='mdl-cell mdl-cell--6-col'>
@@ -59,8 +61,9 @@ class EditLocation extends React.Component {
   }
 
   search = debounce(() => {
-    this.props.dispatch(searchLocationAction, this.state.searchTerm)
-      .then(({data: searchResult}) => this.setState({searchResult}))
+    this.props.dispatch(searchLocationAction, deburr(this.state.searchTerm))
+      .then(({data: searchResult}) =>
+        this.setState({searchResult}))
   }, 300)
 
   empty = () => {
