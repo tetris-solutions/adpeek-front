@@ -8,6 +8,7 @@ import toLower from 'lodash/toLower'
 import countBy from 'lodash/countBy'
 import forEach from 'lodash/forEach'
 import filter from 'lodash/filter'
+import {getCanonicalReportEntity} from '../functions/get-canonical-report-entity'
 
 /**
  *
@@ -47,13 +48,9 @@ export function mountModuleEntities (entities, moduleEntity, selectedIds, active
 
   let isSelected
 
-  switch (moduleEntity) {
+  switch (getCanonicalReportEntity(moduleEntity)) {
     case 'AdSet':
     case 'AdGroup':
-    case 'Video':
-    case 'Search':
-    case 'Audience':
-    case 'Location':
       isSelected = countBy(selectedIds, toCampaignId(toLower(moduleEntity), 'campaign'))
       break
     case 'Ad':

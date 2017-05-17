@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import AttributeList from './AttributeList'
 import FilterSwitch from './FilterSwitch'
 import Spinner from '../../Spinner'
+import {getCanonicalReportEntity} from '../../../functions/get-canonical-report-entity'
 
 class Entities extends React.Component {
   static contextTypes = {
@@ -102,9 +103,9 @@ class Entities extends React.Component {
   getLevels = () => {
     const {entities} = this.props
     const {draft: {entity}, report} = this.context
+    const canonicalEntity = getCanonicalReportEntity(entity.id)
 
-    switch (entity.id) {
-      case 'Placement':
+    switch (canonicalEntity) {
       case 'Campaign':
         if (report.level === 'company') {
           return [
@@ -125,11 +126,7 @@ class Entities extends React.Component {
 
         return [this.getTopLevel()]
       case 'AdSet':
-      case 'Search':
-      case 'Audience':
-      case 'Video':
       case 'AdGroup':
-      case 'Location':
         return [this.getTopLevel(), this.getCampaignLevel(entities)]
       case 'Ad':
         return [

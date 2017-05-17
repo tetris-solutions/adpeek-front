@@ -6,6 +6,7 @@ import filter from 'lodash/filter'
 import map from 'lodash/map'
 import curry from 'lodash/curry'
 import join from 'lodash/join'
+import {getCanonicalReportEntity} from '../functions/get-canonical-report-entity'
 
 const excluded = [
   'account_id',
@@ -139,24 +140,19 @@ const saveMetaData = curry((tree, platform, entity, response) => {
   const attributes = omitBy(response.data, (obj, id) => (
     includes(excluded, prefixless(id))
   ))
-  let entityNameMessage
 
-  switch (entity) {
-    case 'Placement':
-      entityNameMessage = 'campaignEntity'
-      delete attributes.campaignname
-      break
-    case 'Search':
-    case 'Audience':
-    case 'Location':
-      entityNameMessage = 'adGroupEntity'
-      break
-    default:
-      entityNameMessage = `${entity[0].toLowerCase() + entity.slice(1)}Entity`
-  }
+  const canonicalEntity = getCanonicalReportEntity(entity)
+
+  // rm attributes campaignname, etc
+  delete attributes[canonicalEntity.toLowerCase() + 'name']
 
   if (attributes.id) {
-    attributes.id.name = tree.get(['intl', 'messages', entityNameMessage])
+    const lFirstEntityName = (
+      canonicalEntity[0].toLowerCase() +
+      canonicalEntity.slice(1)
+    )
+
+    attributes.id.name = tree.get(['intl', 'messages', `${lFirstEntityName}Entity`])
   }
 
   const metaData = {

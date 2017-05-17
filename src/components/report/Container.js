@@ -19,6 +19,7 @@ import Message from 'tetris-iso/Message'
 import pick from 'lodash/pick'
 import filter from 'lodash/filter'
 import negate from 'lodash/negate'
+import {getCanonicalReportEntity} from '../../functions/get-canonical-report-entity'
 
 const empty = []
 
@@ -52,18 +53,6 @@ Placeholder.propTypes = {
 
 const nooP = () => Promise.resolve()
 const none = () => ({})
-const canonical = (entity) => {
-  switch (entity) {
-    case 'Placement':
-      return 'Campaign'
-    case 'Search':
-    case 'Audience':
-    case 'Location':
-      return 'AdGroup'
-    default:
-      return entity
-  }
-}
 
 class Container extends React.Component {
   static displayName = 'Report-Container'
@@ -244,11 +233,11 @@ class Container extends React.Component {
   }
 
   getLoadingState = (key) => {
-    return this.state[`loading__${canonical(key)}`]
+    return this.state[`loading__${getCanonicalReportEntity(key)}`]
   }
 
   setLoadingState = (key, value) => {
-    key = `loading__${canonical(key)}`
+    key = `loading__${getCanonicalReportEntity(key)}`
 
     if (this.state[key] !== value) {
       this.setState({[key]: value})
@@ -307,7 +296,7 @@ class Container extends React.Component {
   }
 
   loadEntity = (entity) => {
-    entity = canonical(entity)
+    entity = getCanonicalReportEntity(entity)
 
     const {accounts, params, dispatch} = this.props
 

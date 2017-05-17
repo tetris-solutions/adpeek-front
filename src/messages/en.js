@@ -137,6 +137,7 @@ module.exports = {
   dateRangeLabel: 'from {startDate} until {endDate}',
   reportRangeTitle: 'Report date range',
   campaigns: 'Campaigns',
+
   placementLevel: 'Placement',
   searchLevel: 'Search Query',
   locationLevel: 'Geolocation',
@@ -146,6 +147,7 @@ module.exports = {
   keywords: 'Keywords',
   adSets: 'Ad Sets',
   ads: 'Ads',
+
   campaignEntity: 'Campaign',
   videoEntity: 'Video',
   adEntity: 'Ad',
@@ -153,6 +155,7 @@ module.exports = {
   adSetEntity: 'Ad Set',
   accountEntity: 'Account',
   keywordEntity: 'Keyword',
+
   newModule: 'New module',
   moduleTypeLabel: 'Module type',
   lineChart: 'Line chart',

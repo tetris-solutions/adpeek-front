@@ -13,15 +13,15 @@ const style = csjs`
   margin-bottom: 2em;
 }`
 
-const MissingIdAlert = ({add}, {entity}) =>
+const MissingIdAlert = ({add}, {attributes}) =>
   <div className={`mdl-color--yellow-200 mdl-color-text--grey-700 ${style.box}`}>
-    <Message entity={entity.name} html>
+    <Message entity={attributes.id.name} html>
       missingIdAlert
     </Message>
 
     <br/>
     <Button className='mdl-button mdl-button--primary' onClick={add}>
-      <Message entity={entity.name}>
+      <Message entity={attributes.id.name}>
         selectIdDimension
       </Message>
     </Button>
@@ -32,7 +32,7 @@ MissingIdAlert.propTypes = {
   add: PropTypes.func
 }
 MissingIdAlert.contextTypes = {
-  entity: PropTypes.object
+  attributes: PropTypes.object
 }
 
 export default styledFunctionalComponent(MissingIdAlert, style)
