@@ -12,26 +12,30 @@ class Location extends React.PureComponent {
   static displayName = 'Location'
 
   static propTypes = {
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
+    location: PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      type: PropTypes.string
+    }).isRequired,
     toggle: PropTypes.func.isRequired,
     icon: PropTypes.string.isRequired
   }
 
-  onClick = () => {
-    this.props.toggle(this.props.id)
+  onClick = e => {
+    e.preventDefault()
+
+    this.props.toggle(this.props.location)
   }
 
   render () {
-    const {name, type, icon} = this.props
+    const {location: {name, type}, icon} = this.props
 
     return (
       <li className='mdl-list__item'>
         <span className='mdl-list__item-primary-content'>
           {name} (<small>{type}</small>)
         </span>
-        <a className='mdl-list__item-secondary-action' onClick={this.onClick}>
+        <a href='' className='mdl-list__item-secondary-action' onClick={this.onClick}>
           <i className='material-icons'>{icon}</i>
         </a>
       </li>
@@ -59,7 +63,7 @@ class Locations extends React.PureComponent {
             {map(search, location =>
               <Location
                 key={location.id}
-                {...location}
+                location={location}
                 toggle={add}
                 icon='add'/>)}
           </ul>
@@ -69,7 +73,7 @@ class Locations extends React.PureComponent {
             {map(selected, location =>
               <Location
                 key={location.id}
-                {...location}
+                location={location}
                 toggle={remove}
                 icon='remove'/>)}
           </ul>
