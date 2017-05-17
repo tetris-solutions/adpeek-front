@@ -403,5 +403,7 @@ module.exports = {
   editBudget: 'Edit Budget',
   locationCriteria: 'Location',
   proximityCriteria: 'Proximity',
-  locationLabel: 'New location'
+  locationLabel: 'New location',
+  locationSearchResult: 'Search Result',
+  campaignLocations: 'Selected'
 }

@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Message from 'tetris-iso/Message'
 import map from 'lodash/map'
+import groupBy from 'lodash/groupBy'
 import Input from '../../Input'
 import {searchLocationAction} from '../../../actions/search-location'
 import debounce from 'lodash/debounce'
@@ -38,12 +40,12 @@ class Location extends React.PureComponent {
   }
 
   render () {
-    const {location: {name, type}, icon} = this.props
+    const {location, icon} = this.props
 
     return (
       <li className='mdl-list__item'>
         <span className='mdl-list__item-primary-content'>
-          {name} (<small>{type}</small>)
+          {location.name}
         </span>
         <a href='' className='mdl-list__item-secondary-action' onClick={this.onClick}>
           <i className='material-icons'>{icon}</i>
@@ -51,6 +53,29 @@ class Location extends React.PureComponent {
       </li>
     )
   }
+}
+
+const LocationGroup = ({list, type, toggle, icon}) => (
+  <div>
+    <h6 className='mdl-color-text--grey-700'>
+      <em>{type}</em>
+    </h6>
+    <ul className='mdl-list'>{map(list, location =>
+      <Location
+        key={location.id}
+        location={location}
+        toggle={toggle}
+        icon={icon}/>)}
+    </ul>
+  </div>
+)
+
+LocationGroup.displayName = 'Location-Group'
+LocationGroup.propTypes = {
+  list: PropTypes.array.isRequired,
+  type: PropTypes.string.isRequired,
+  toggle: PropTypes.func.isRequired,
+  icon: PropTypes.string.isRequired
 }
 
 function Locations ({add, remove, search, selected}) {
@@ -61,24 +86,20 @@ function Locations ({add, remove, search, selected}) {
   return (
     <div className='mdl-grid'>
       <div className='mdl-cell mdl-cell--6-col'>
-        <ul className={`mdl-list ${style.list}`}>
-          {map(filter(search, notSelected), location =>
-            <Location
-              key={location.id}
-              location={location}
-              toggle={add}
-              icon='add'/>)}
-        </ul>
+        <h5>
+          <Message>locationSearchResult</Message>
+        </h5>
+        <div className={`${style.list}`}>{map(groupBy(filter(search, notSelected), 'type'), (list, type) =>
+          <LocationGroup key={type} list={list} type={type} toggle={add} icon='add'/>)}
+        </div>
       </div>
-      <div className='mdl-cell mdl-cell--6-col'>
-        <ul className={`mdl-list ${style.list}`}>
-          {map(selected, location =>
-            <Location
-              key={location.id}
-              location={location}
-              toggle={remove}
-              icon='remove'/>)}
-        </ul>
+      <div className={`mdl-cell mdl-cell--6-col`}>
+        <h5>
+          <Message>campaignLocations</Message>
+        </h5>
+        <div className={`${style.list}`}>{map(groupBy(selected, 'type'), (list, type) =>
+          <LocationGroup key={type} list={list} type={type} toggle={remove} icon='remove'/>)}
+        </div>
       </div>
     </div>
   )

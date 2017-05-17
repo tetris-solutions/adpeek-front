@@ -401,5 +401,7 @@ module.exports = {
   editBudget: 'Editar Orçamento',
   locationCriteria: 'Localização',
   proximityCriteria: 'Proximidade',
-  locationLabel: 'Nova localidade'
+  locationLabel: 'Nova localidade',
+  locationSearchResult: 'Resultado da busca',
+  campaignLocations: 'Selecionados'
 }
