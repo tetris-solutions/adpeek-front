@@ -8,32 +8,71 @@ import deburr from 'lodash/deburr'
 
 const MIN_SEARCH_TERM_LENGTH = 2
 
+class Location extends React.PureComponent {
+  static displayName = 'Location'
+
+  static propTypes = {
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    toggle: PropTypes.func.isRequired,
+    icon: PropTypes.string.isRequired
+  }
+
+  onClick = () => {
+    this.props.toggle(this.props.id)
+  }
+
+  render () {
+    const {name, type, icon} = this.props
+
+    return (
+      <li className='mdl-list__item'>
+        <span className='mdl-list__item-primary-content'>
+          {name} (<small>{type}</small>)
+        </span>
+        <a className='mdl-list__item-secondary-action' onClick={this.onClick}>
+          <i className='material-icons'>{icon}</i>
+        </a>
+      </li>
+    )
+  }
+}
+
 class Locations extends React.PureComponent {
   static displayName = 'Locations'
 
   static propTypes = {
     search: PropTypes.array,
-    inserted: PropTypes.array
+    selected: PropTypes.array,
+    add: PropTypes.func,
+    remove: PropTypes.func
   }
 
   render () {
-    const {search, inserted} = this.props
+    const {add, remove, search, selected} = this.props
 
     return (
       <div className='mdl-grid'>
         <div className='mdl-cell mdl-cell--6-col'>
-          <ul>
-            {map(search, ({id, name, type}) =>
-              <li key={id}>
-                {name} <em>{type}</em>
-              </li>)}
+          <ul className='mdl-list'>
+            {map(search, location =>
+              <Location
+                key={location.id}
+                {...location}
+                toggle={add}
+                icon='add'/>)}
           </ul>
         </div>
         <div className='mdl-cell mdl-cell--6-col'>
-          {map(inserted, ({id, name, type}) =>
-            <li key={id}>
-              {name} <em>{type}</em>
-            </li>)}
+          <ul className='mdl-list'>
+            {map(selected, location =>
+              <Location
+                key={location.id}
+                {...location}
+                toggle={remove}
+                icon='remove'/>)}
+          </ul>
         </div>
       </div>
     )
@@ -43,7 +82,7 @@ class Locations extends React.PureComponent {
 class EditLocation extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func,
-    insert: PropTypes.func,
+    add: PropTypes.func,
     remove: PropTypes.func,
     locations: PropTypes.array
   }
@@ -71,7 +110,7 @@ class EditLocation extends React.Component {
   }
 
   render () {
-    const {insert, remove, locations} = this.props
+    const {add, remove, locations} = this.props
     const {searchTerm, searchResult} = this.state
 
     return (
@@ -86,8 +125,8 @@ class EditLocation extends React.Component {
         </div>
 
         <Locations
-          inserted={locations}
-          insert={insert}
+          selected={locations}
+          add={add}
           remove={remove}
           search={searchResult}/>
       </div>
