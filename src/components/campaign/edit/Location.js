@@ -5,6 +5,8 @@ import Input from '../../Input'
 import {searchLocationAction} from '../../../actions/search-location'
 import debounce from 'lodash/debounce'
 
+const MIN_SEARCH_TERM_LENGTH = 2
+
 class Locations extends React.PureComponent {
   static displayName = 'Locations'
 
@@ -51,7 +53,7 @@ class EditLocation extends React.Component {
 
   onChangeSearch = ({target: {value: searchTerm}}) => {
     this.setState({searchTerm},
-      searchTerm.trim().length >= 3
+      searchTerm.trim().length >= MIN_SEARCH_TERM_LENGTH
         ? this.search
         : this.empty)
   }
