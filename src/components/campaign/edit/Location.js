@@ -9,6 +9,7 @@ import csjs from 'csjs'
 import {styledComponent} from '../../higher-order/styled'
 import keyBy from 'lodash/keyBy'
 import filter from 'lodash/filter'
+
 const style = csjs`
 .list {
   height: 400px;
@@ -22,7 +23,7 @@ class Location extends React.PureComponent {
 
   static propTypes = {
     location: PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       name: PropTypes.string,
       type: PropTypes.string
     }).isRequired,
