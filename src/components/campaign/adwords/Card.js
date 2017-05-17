@@ -70,7 +70,7 @@ function AdwordsCampaign (props, context) {
               : null))}
         </Info>
 
-        <Info>
+        <Info editLink={editable ? urlFor(params, 'geo-location') : null}>
           <Message>targetLocation</Message>:
           {maybeList(crop(map(filter(details.criteria, isLocation),
             ({id, location, location_type}) =>

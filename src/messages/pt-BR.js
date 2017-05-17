@@ -398,5 +398,7 @@ module.exports = {
   campaignOrderDeliveryMethod: 'A forma de entrega dessa campanha está associada ao orçamento <strong>"{budget}"</strong> do Pedido <strong>"{order}"</strong>',
   cannotEditDeliveryMethodWithoutOrder: 'Não é possível editar a forma de entrega dessa campanha pois ela não possui um Pedido associado',
   openOrders: 'Abrir Pedidos',
-  editBudget: 'Editar Orçamento'
+  editBudget: 'Editar Orçamento',
+  locationCriteria: 'Localização',
+  proximityCriteria: 'Proximidade'
 }

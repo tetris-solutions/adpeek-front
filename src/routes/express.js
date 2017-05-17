@@ -199,7 +199,13 @@ export function setAppRoutes (app, render) {
     ensureLoad(workspace, folder, campaigns),
     render)
 
-  forEach(['', '/edit/name', '/edit/language', '/edit/delivery-method', '/edit/network', '/creatives'], path =>
+  forEach(['',
+    '/edit/name',
+    '/edit/language',
+    '/edit/delivery-method',
+    '/edit/network',
+    '/edit/geo-location',
+    '/creatives'], path =>
     app.get(`/company/:company/workspace/:workspace/folder/:folder/campaign/:campaign${path}`,
       protect,
       ensureLoad(workspace, folder, campaigns),

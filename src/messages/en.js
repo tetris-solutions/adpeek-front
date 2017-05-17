@@ -400,5 +400,7 @@ module.exports = {
   campaignOrderDeliveryMethod: 'This campaign\'s delivery method is associated to the budget <strong>"{budget}"</strong> inside the order <strong>"{order}"</strong>',
   cannotEditDeliveryMethodWithoutOrder: 'To edit the delivery method of this campaign you have to link it to an Order first',
   openOrders: 'Open Orders',
-  editBudget: 'Edit Budget'
+  editBudget: 'Edit Budget',
+  locationCriteria: 'Location',
+  proximityCriteria: 'Proximity'
 }
