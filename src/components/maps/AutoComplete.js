@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import isNumber from 'lodash/isNumber'
 import Input from '../Input'
 import {injectMaps} from '../higher-order/inject-maps'
+import head from 'lodash/head'
+import forEach from 'lodash/forEach'
 
 let geoCoder
 
@@ -12,6 +14,38 @@ function preventSubmit (e) {
   }
 }
 
+function parseAddressComponents (components) {
+  const address = {}
+
+  forEach(components, ({long_name, short_name, types: [type, subType, metaData]}) => {
+    if (type === 'postal_code') {
+      address.postalCode = long_name
+    }
+    if (type === 'country') {
+      address.countryName = long_name
+      address.countryCode = short_name
+    }
+    if (type === 'administrative_area_level_1') {
+      address.provinceName = long_name
+      address.provinceCode = short_name
+    }
+    if (type === 'locality') {
+      address.cityName = long_name
+    }
+    if (type === 'street_number') {
+      address.streetNumber = long_name
+    }
+    if (type === 'route') {
+      address.streetAddress = long_name
+    }
+    if (subType === 'sublocality') {
+      address.neighborhood = long_name
+    }
+  })
+
+  return address
+}
+
 class GeoCode extends React.PureComponent {
   static displayName = 'AutoComplete'
 
@@ -19,8 +53,8 @@ class GeoCode extends React.PureComponent {
     value: PropTypes.string.isRequired,
     lat: PropTypes.number,
     lng: PropTypes.number,
-    onChange: PropTypes.func.isRequired,
-    onPlaceSelected: PropTypes.func.isRequired
+    onChangeAddress: PropTypes.func.isRequired,
+    onChangePlace: PropTypes.func.isRequired
   }
 
   componentDidMount () {
@@ -36,27 +70,43 @@ class GeoCode extends React.PureComponent {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (!nextProps.value && isNumber(nextProps.lat)) {
+    if (!nextProps.value && isNumber(nextProps.lat) && isNumber(nextProps.lng)) {
       this.geoCode(nextProps.lat, nextProps.lng)
     }
+  }
+
+  geoCode (lat, lng) {
+    const onGeoCode = (results, status) => {
+      const place = head(results)
+
+      if (!place || status !== 'OK') return
+
+      this.props.onChangePlace(
+        lat,
+        lng,
+        place.formatted_address,
+        parseAddressComponents(place.address_components)
+      )
+    }
+
+    geoCoder.geocode({location: {lat, lng}}, onGeoCode)
   }
 
   onPlacesChange = () => {
     const place = this.autoComplete.getPlace()
 
     if (place.geometry) {
-      this.props.onPlaceSelected(place)
-    } else {
-
+      this.props.onChangePlace(
+        place.geometry.location.lat(),
+        place.geometry.location.lng(),
+        place.formatted_address,
+        parseAddressComponents(place.address_components)
+      )
     }
   }
 
   onChange = (e) => {
-    this.props.onChange(e)
-  }
-
-  geoCode (lat, lng) {
-    // geoCoder.geoCode()
+    this.props.onChangeAddress(e.target.value)
   }
 
   render () {

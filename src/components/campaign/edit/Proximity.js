@@ -38,7 +38,7 @@ class EditProximity extends React.Component {
   }
 
   state = {
-    address: '',
+    searchValue: '',
     suggestions: []
   }
 
@@ -46,24 +46,25 @@ class EditProximity extends React.Component {
     this.props.update({radius})
   }
 
-  onChangeAddress = ({target: {value: address}}) => {
-    this.setState({address})
+  onChangeAddress = searchValue => {
+    this.setState({searchValue})
   }
 
-  onChangePlace = ({formatted_address: address, geometry: {location}}) => {
+  onChangePlace = (lat, lng, searchValue, address) => {
     this.props.update({
-      lat: location.lat(),
-      lng: location.lng()
+      address,
+      lat,
+      lng
     })
 
-    this.setState({address})
+    this.setState({searchValue})
   }
 
   onMarkerMove = (lat, lng) => {
     this.props.update({lat, lng})
 
     this.setState({
-      address: ''
+      searchValue: ''
     })
   }
 
@@ -76,9 +77,9 @@ class EditProximity extends React.Component {
           <AutoComplete
             lat={lat}
             lng={lng}
-            value={this.state.address}
-            onPlaceSelected={this.onChangePlace}
-            onChange={this.onChangeAddress}/>
+            value={this.state.searchValue}
+            onChangePlace={this.onChangePlace}
+            onChangeAddress={this.onChangeAddress}/>
         </div>
         <div className='mdl-cell mdl-cell--4-col'>
           <Input
