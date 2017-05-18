@@ -59,6 +59,14 @@ class EditProximity extends React.Component {
     this.setState({address})
   }
 
+  onMarkerMove = (lat, lng) => {
+    this.props.update({lat, lng})
+
+    this.setState({
+      address: ''
+    })
+  }
+
   render () {
     const {lat, lng, radius, unit} = this.props
 
@@ -83,7 +91,7 @@ class EditProximity extends React.Component {
         <div className='mdl-cell mdl-cell--12-col'>
           <Map>
             {lat !== undefined && (
-              <Marker lat={lat} lng={lng}/>)}
+              <Marker lat={lat} lng={lng} move={this.onMarkerMove}/>)}
           </Map>
         </div>
       </div>

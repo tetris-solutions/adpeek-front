@@ -7,7 +7,8 @@ class Marker extends React.PureComponent {
   static propTypes = {
     lat: PropTypes.number,
     lng: PropTypes.number,
-    draggable: PropTypes.bool
+    draggable: PropTypes.bool,
+    move: PropTypes.func
   }
 
   static contextTypes = {
@@ -26,6 +27,10 @@ class Marker extends React.PureComponent {
       position: new google.maps.LatLng(lat, lng),
       map: this.context.map
     })
+
+    if (draggable) {
+      this.marker.addListener('dragend', this.onDragEnd)
+    }
   }
 
   componentWillUnmount () {
@@ -35,6 +40,15 @@ class Marker extends React.PureComponent {
   componentDidUpdate () {
     this.marker.setPosition(
       new google.maps.LatLng(this.props.lat, this.props.lng)
+    )
+  }
+
+  onDragEnd = () => {
+    const positon = this.marker.getPosition()
+
+    this.props.move(
+      positon.lat(),
+      positon.lng()
     )
   }
 
