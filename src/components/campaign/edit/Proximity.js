@@ -56,7 +56,7 @@ class EditProximity extends React.Component {
 
   static defaultProps = {
     unit: 'KILOMETERS',
-    radius: 10
+    radius: 5
   }
 
   state = {
