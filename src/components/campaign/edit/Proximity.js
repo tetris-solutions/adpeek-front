@@ -51,12 +51,12 @@ class EditProximity extends React.Component {
   }
 
   onChangePlace = ({formatted_address: address, geometry: {location}}) => {
-    this.setState({address})
-
     this.props.update({
       lat: location.lat(),
       lng: location.lng()
     })
+
+    this.setState({address})
   }
 
   render () {

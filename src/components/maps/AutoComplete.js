@@ -6,6 +6,12 @@ import {injectMaps} from '../higher-order/inject-maps'
 
 let geoCoder
 
+function preventSubmit (e) {
+  if (e.which === 13) {
+    e.preventDefault()
+  }
+}
+
 class GeoCode extends React.PureComponent {
   static displayName = 'AutoComplete'
 
@@ -57,6 +63,7 @@ class GeoCode extends React.PureComponent {
     return (
       <Input
         ref='el'
+        onKeyDown={preventSubmit}
         onChange={this.onChange}
         value={this.props.value}
         name='autoComplete'

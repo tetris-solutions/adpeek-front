@@ -32,6 +32,12 @@ class Marker extends React.PureComponent {
     this.marker.setMap(null)
   }
 
+  componentDidUpdate () {
+    this.marker.setPosition(
+      new google.maps.LatLng(this.props.lat, this.props.lng)
+    )
+  }
+
   render () {
     return null
   }
