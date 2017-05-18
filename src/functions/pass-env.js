@@ -16,7 +16,8 @@ module.exports = function passEnv () {
     'TKM_URL',
     'TOKEN_COOKIE_DOMAIN',
     'TOKEN_COOKIE_NAME',
-    'LOCALE_COOKIE_NAME'),
+    'LOCALE_COOKIE_NAME',
+    'GMAPS_KEY'),
 
     function (value, key) {
       env[key] = `"${value}"`

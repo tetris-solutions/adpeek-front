@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 // import Message from 'tetris-iso/Message'
 import Input from '../../Input'
 import keys from 'lodash/keys'
+import Map from '../../Map'
 
 const unitAbbr = {
   KILOMETERS: 'Km',
@@ -55,7 +56,7 @@ class EditProximity extends React.Component {
             type='number'/>
         </div>
         <div className='mdl-cell mdl-cell--12-col'>
-          map goes here
+          <Map/>
         </div>
       </div>
     )
