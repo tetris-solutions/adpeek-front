@@ -2,8 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 // import Message from 'tetris-iso/Message'
 import Input from '../../Input'
+import AutoComplete from '../../maps/AutoComplete'
 import keys from 'lodash/keys'
-import Map from '../../Map'
+import Map from '../../maps/Map'
+import Marker from '../../maps/Marker'
 
 const unitAbbr = {
   KILOMETERS: 'Km',
@@ -35,17 +37,40 @@ class EditProximity extends React.Component {
     unit: 'KILOMETERS'
   }
 
+  state = {
+    address: '',
+    suggestions: []
+  }
+
   onChangeRadius = ({target: {value: radius}}) => {
     this.props.update({radius})
   }
 
+  onChangeAddress = ({target: {value: address}}) => {
+    this.setState({address})
+  }
+
+  onChangePlace = ({formatted_address: address, geometry: {location}}) => {
+    this.setState({address})
+
+    this.props.update({
+      lat: location.lat(),
+      lng: location.lng()
+    })
+  }
+
   render () {
-    const {radius, unit} = this.props
+    const {lat, lng, radius, unit} = this.props
 
     return (
       <div className='mdl-grid'>
         <div className='mdl-cell mdl-cell--8-col'>
-          <Input name='address'/>
+          <AutoComplete
+            lat={lat}
+            lng={lng}
+            value={this.state.address}
+            onPlaceSelected={this.onChangePlace}
+            onChange={this.onChangeAddress}/>
         </div>
         <div className='mdl-cell mdl-cell--4-col'>
           <Input
@@ -56,7 +81,12 @@ class EditProximity extends React.Component {
             type='number'/>
         </div>
         <div className='mdl-cell mdl-cell--12-col'>
-          <Map/>
+          <Map>
+            {lat !== undefined && (
+              <Marker
+                lat={lat}
+                lng={lng}/>)}
+          </Map>
         </div>
       </div>
     )

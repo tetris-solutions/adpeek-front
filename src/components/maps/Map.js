@@ -1,45 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import qs from 'query-string'
-
-let mapsPromise = null
-const libraries = [
-  'geometry',
-  'drawing',
-  'places'
-]
-
-const config = {
-  key: process.env.GMAPS_KEY,
-  callback: '_onInitGoogleMaps_',
-  libraries: libraries.join(',')
-}
-
-const mapsUrl = `https://maps.googleapis.com/maps/api/js?${qs.stringify(config)}`
-
-function initialize () {
-  if (mapsPromise) {
-    return mapsPromise
-  }
-
-  mapsPromise = new Promise((resolve, reject) => {
-    const script = window.document.createElement('script')
-
-    window[config.callback] = resolve
-
-    script.src = mapsUrl
-    script.onerror = reject
-
-    document.body.appendChild(script)
-  })
-
-  return mapsPromise
-}
+import {injectMaps} from '../higher-order/inject-maps'
 
 class Map extends React.Component {
   static displayName = 'Google-Map'
 
   static propTypes = {
+    children: PropTypes.node,
     center: PropTypes.shape({
       lat: PropTypes.number,
       lng: PropTypes.number
@@ -59,8 +26,18 @@ class Map extends React.Component {
     zoom: 11
   }
 
+  static childContextTypes = {
+    map: PropTypes.object
+  }
+
+  getChildContext () {
+    return {
+      map: this.map
+    }
+  }
+
   componentDidMount () {
-    initialize().then(this.setup)
+    this.setup()
   }
 
   setup = () => {
@@ -71,13 +48,19 @@ class Map extends React.Component {
       zoom,
       disableDefaultUI
     })
+
+    this.forceUpdate()
   }
 
   render () {
-    const {height} = this.props
+    const {children, height} = this.props
 
-    return <div ref='container' style={{height}}/>
+    return (
+      <div ref='container' style={{height}}>
+        {children}
+      </div>
+    )
   }
 }
 
-export default Map
+export default injectMaps(Map)

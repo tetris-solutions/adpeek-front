@@ -10,7 +10,7 @@ import TextMessage from 'intl-messageformat'
 import {prettyNumber} from '../functions/pretty-number'
 import omit from 'lodash/omit'
 
-function notEmptyString (value) {
+function notEmptyInput (value) {
   return value !== '' && value !== undefined && value !== null
 }
 
@@ -60,7 +60,7 @@ export class Input extends React.Component {
 
     const state = {
       value: value === undefined ? '' : value,
-      isDirty: notEmptyString(value)
+      isDirty: notEmptyInput(value)
     }
 
     state.error = this.getError(assign({}, this.props, state))
@@ -100,7 +100,7 @@ export class Input extends React.Component {
     newState.error = this.getError(assign({}, this.state, nextProps, newState))
 
     if (newState.value !== undefined || newState.error !== this.state.error) {
-      newState.isDirty = notEmptyString(newState.value)
+      newState.isDirty = notEmptyInput(newState.value)
       this.setState(newState)
     }
   }
@@ -189,7 +189,7 @@ export class Input extends React.Component {
     this.setState({
       error,
       value: input.value,
-      isDirty: notEmptyString(input.value)
+      isDirty: notEmptyInput(input.value)
     }, onStateChange)
   }
 
