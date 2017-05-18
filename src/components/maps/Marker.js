@@ -8,6 +8,7 @@ class Marker extends React.PureComponent {
     lat: PropTypes.number,
     lng: PropTypes.number,
     draggable: PropTypes.bool,
+    centered: PropTypes.bool,
     move: PropTypes.func
   }
 
@@ -20,7 +21,7 @@ class Marker extends React.PureComponent {
   }
 
   componentDidMount () {
-    const {lat, lng, draggable} = this.props
+    const {lat, lng, draggable, centered} = this.props
 
     this.marker = new google.maps.Marker({
       draggable,
@@ -30,6 +31,10 @@ class Marker extends React.PureComponent {
 
     if (draggable) {
       this.marker.addListener('dragend', this.onDragEnd)
+    }
+
+    if (centered) {
+      this.focus()
     }
   }
 
@@ -41,6 +46,19 @@ class Marker extends React.PureComponent {
     this.marker.setPosition(
       new google.maps.LatLng(this.props.lat, this.props.lng)
     )
+
+    if (this.props.centered) {
+      this.focus()
+    }
+  }
+
+  focus () {
+    clearTimeout(this.timeout)
+
+    this.timeout = setTimeout(() => {
+      this.context.map.panTo(new google.maps.LatLng(this.props.lat, this.props.lng))
+      this.context.map.setZoom(12)
+    }, 1000)
   }
 
   onDragEnd = () => {

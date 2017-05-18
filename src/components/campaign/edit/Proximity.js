@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-// import Message from 'tetris-iso/Message'
 import Input from '../../Input'
 import AutoComplete from '../../maps/AutoComplete'
 import keys from 'lodash/keys'
@@ -107,7 +106,11 @@ class EditProximity extends React.Component {
         <div className='mdl-cell mdl-cell--12-col'>
           <Map>
             {lat !== undefined && (
-              <Marker lat={lat} lng={lng} move={this.onMarkerMove}/>)}
+              <Marker
+                lat={lat}
+                lng={lng}
+                move={this.onMarkerMove}
+                centered/>)}
           </Map>
         </div>
       </div>
