@@ -127,6 +127,7 @@ class GeoCode extends React.PureComponent {
     return (
       <Input
         ref='el'
+        type='search'
         onKeyDown={preventSubmit}
         onChange={this.onChange}
         value={this.props.value}
