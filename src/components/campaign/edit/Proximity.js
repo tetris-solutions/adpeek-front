@@ -83,9 +83,7 @@ class EditProximity extends React.Component {
         <div className='mdl-cell mdl-cell--12-col'>
           <Map>
             {lat !== undefined && (
-              <Marker
-                lat={lat}
-                lng={lng}/>)}
+              <Marker lat={lat} lng={lng}/>)}
           </Map>
         </div>
       </div>

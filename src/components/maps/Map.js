@@ -57,7 +57,7 @@ class Map extends React.Component {
 
     return (
       <div ref='container' style={{height}}>
-        {children}
+        {this.map ? children : null}
       </div>
     )
   }
