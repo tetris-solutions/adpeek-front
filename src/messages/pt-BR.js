@@ -403,5 +403,7 @@ module.exports = {
   proximityCriteria: 'Proximidade',
   locationLabel: 'Nova localidade',
   locationSearchResult: 'Resultado da busca',
-  campaignLocations: 'Selecionados'
+  campaignLocations: 'Selecionados',
+  radiusInKmLabel: 'Raio em Km',
+  radiusInMilesLabel: 'Raio em milhas'
 }
