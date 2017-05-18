@@ -6,9 +6,9 @@ class Circle extends React.PureComponent {
   static displayName = 'Circle'
 
   static propTypes = {
-    lat: PropTypes.number,
-    lng: PropTypes.number,
-    radius: PropTypes.number,
+    lat: PropTypes.number.isRequired,
+    lng: PropTypes.number.isRequired,
+    radius: PropTypes.number.isRequired,
     strokeColor: PropTypes.string,
     strokeOpacity: PropTypes.number,
     strokeWeight: PropTypes.number,
@@ -21,7 +21,6 @@ class Circle extends React.PureComponent {
   }
 
   static defaultProps = {
-    draggable: true,
     strokeColor: '#920f0f',
     strokeOpacity: 0.7,
     strokeWeight: 2,
