@@ -58,6 +58,26 @@ class GeoCode extends React.PureComponent {
   }
 
   componentDidMount () {
+    this.init()
+
+    const {lat, lng, value} = this.props
+
+    if (!value && isNumber(lat) && isNumber(lng)) {
+      this.geoCode(lat, lng)
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    const emptySearch = !nextProps.value
+    const isValidCoords = isNumber(nextProps.lat) && isNumber(nextProps.lng)
+    const isNewCoords = nextProps.lat !== this.props.lat || nextProps.lng !== this.props.lng
+
+    if (emptySearch && isValidCoords && isNewCoords) {
+      this.geoCode(nextProps.lat, nextProps.lng)
+    }
+  }
+
+  init () {
     geoCoder = geoCoder || new google.maps.Geocoder()
 
     const {input} = this.refs.el
@@ -67,12 +87,6 @@ class GeoCode extends React.PureComponent {
     input.placeholder = ''
 
     this.autoComplete.addListener('place_changed', this.onPlacesChange)
-  }
-
-  componentWillReceiveProps (nextProps) {
-    if (!nextProps.value && isNumber(nextProps.lat) && isNumber(nextProps.lng)) {
-      this.geoCode(nextProps.lat, nextProps.lng)
-    }
   }
 
   geoCode (lat, lng) {

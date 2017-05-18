@@ -6,10 +6,25 @@ import AutoComplete from '../../maps/AutoComplete'
 import keys from 'lodash/keys'
 import Map from '../../maps/Map'
 import Marker from '../../maps/Marker'
+import compact from 'lodash/compact'
+import join from 'lodash/join'
 
 const unitAbbr = {
   KILOMETERS: 'Km',
   MILES: 'Miles'
+}
+
+function stringifyAddressComponents (addr) {
+  addr = addr || {}
+
+  return join(compact([
+    addr.streetAddress,
+    addr.streetNumber,
+    addr.neighborhood,
+    addr.cityName,
+    addr.provinceCode,
+    addr.countryCode
+  ]), ', ')
 }
 
 class EditProximity extends React.Component {
@@ -38,7 +53,7 @@ class EditProximity extends React.Component {
   }
 
   state = {
-    searchValue: '',
+    searchValue: stringifyAddressComponents(this.props.address),
     suggestions: []
   }
 
