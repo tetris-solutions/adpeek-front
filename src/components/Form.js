@@ -4,7 +4,7 @@ import isFunction from 'lodash/isFunction'
 
 const isPromise = r => r && isFunction(r.then)
 
-class Form extends React.PureComponent {
+class Form extends React.Component {
   static displayName = 'Form'
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
@@ -25,6 +25,10 @@ class Form extends React.PureComponent {
     }
   }
 
+  componentWillUnmount () {
+    this.dead = true
+  }
+
   handleSubmit = e => {
     e.preventDefault()
 
@@ -36,9 +40,13 @@ class Form extends React.PureComponent {
       submitInProgress: true
     })
 
-    result.then(() => this.setState({
-      submitInProgress: false
-    }))
+    result.then(() => {
+      if (this.dead) return
+
+      this.setState({
+        submitInProgress: false
+      })
+    })
   }
 
   render () {
