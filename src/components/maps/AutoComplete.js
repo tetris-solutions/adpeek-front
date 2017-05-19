@@ -5,6 +5,7 @@ import Input from '../Input'
 import {injectMaps} from '../higher-order/inject-maps'
 import head from 'lodash/head'
 import forEach from 'lodash/forEach'
+import loglevel from 'loglevel'
 
 let geoCoder
 
@@ -84,6 +85,7 @@ class GeoCode extends React.PureComponent {
 
     this.autoComplete = new google.maps.places.Autocomplete(input)
 
+    // override autoComplete widget defaults
     input.placeholder = ''
 
     this.autoComplete.addListener('place_changed', this.onPlacesChange)
@@ -93,7 +95,10 @@ class GeoCode extends React.PureComponent {
     const onGeoCode = (results, status) => {
       const place = head(results)
 
-      if (!place || status !== 'OK') return
+      if (!place || status !== 'OK') {
+        loglevel.warning('geo code failure', {status, results})
+        return
+      }
 
       this.props.onChangePlace(
         lat,

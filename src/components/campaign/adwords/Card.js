@@ -50,9 +50,18 @@ const urlFor = ({company, workspace, folder, campaign}, fragment = null) => {
 }
 
 function AdwordsCampaign (props, context) {
-  const {children, params, campaign: {details, name}} = props
+  const {reload, children, params, campaign: {details, name}} = props
   const {messages, router} = context
-  const closeModal = () => router.push(urlFor(params))
+
+  function closeModal (reloadFirst = true) {
+    const navigate = () => router.push(urlFor(params))
+
+    if (reloadFirst) {
+      reload().then(navigate)
+    } else {
+      navigate()
+    }
+  }
 
   return (
     <Fence canEditCampaign>{({canEditCampaign: editable}) =>
@@ -180,6 +189,7 @@ function AdwordsCampaign (props, context) {
 AdwordsCampaign.displayName = 'Adwords-Campaign'
 AdwordsCampaign.propTypes = {
   children: PropTypes.node,
+  reload: PropTypes.func,
   params: PropTypes.object.isRequired,
   campaign: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired

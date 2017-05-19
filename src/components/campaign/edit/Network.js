@@ -49,9 +49,13 @@ class EditNetwork extends React.Component {
       .then(onSubmit)
   }
 
+  cancel = () => {
+    this.props.onSubmit(false)
+  }
+
   render () {
     const {messages} = this.context
-    const {campaign: {details}, onSubmit: close} = this.props
+    const {campaign: {details}} = this.props
     const networks = pick(details, networkNames)
     const readOnly = isDisplayCampaign(networks)
 
@@ -70,7 +74,7 @@ class EditNetwork extends React.Component {
         </div>
 
         <div>
-          <Button className='mdl-button mdl-button--raised' onClick={close}>
+          <Button className='mdl-button mdl-button--raised' onClick={this.cancel}>
             <Message>cancel</Message>
           </Button>
 

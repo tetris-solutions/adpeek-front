@@ -53,7 +53,15 @@ class CampaignHome extends React.PureComponent {
   }
 
   componentDidMount () {
-    this.props.dispatch(loadCampaignDetailsAction, this.props.params)
+    this.loadDetails()
+  }
+
+  loadDetails (fresh = false) {
+    return this.props.dispatch(loadCampaignDetailsAction, this.props.params, fresh)
+  }
+
+  reload () {
+    return this.loadDetails(true)
   }
 
   render () {
@@ -80,7 +88,7 @@ class CampaignHome extends React.PureComponent {
                     <Message>campaignDetailsTitle</Message>
                   </Header>
                   <Content>
-                    <Campaign {...this.props}/>
+                    <Campaign {...this.props} reload={this.reload}/>
                   </Content>
                 </Card>
               )}

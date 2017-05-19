@@ -6,7 +6,7 @@ import {Button} from '../../Button'
 import {loadCampaignOrderAction} from '../../../actions/load-campaign-order'
 import noop from 'lodash/noop'
 
-const CampaignOrder = ({close, params: {company, workspace, folder, campaign}, order: {id, name, budget}}) => (
+const CampaignOrder = ({cancel, params: {company, workspace, folder, campaign}, order: {id, name, budget}}) => (
   <div>
     <div className='mdl-grid'>
       <div className='mdl-cell mdl-cell--12-col'>
@@ -18,7 +18,7 @@ const CampaignOrder = ({close, params: {company, workspace, folder, campaign}, o
       </div>
     </div>
     <p>
-      <Button className='mdl-button mdl-button--raised' onClick={close}>
+      <Button className='mdl-button mdl-button--raised' onClick={cancel}>
         <Message>cancel</Message>
       </Button>
       <Link
@@ -32,12 +32,12 @@ const CampaignOrder = ({close, params: {company, workspace, folder, campaign}, o
 )
 CampaignOrder.displayName = 'campaign-Order'
 CampaignOrder.propTypes = {
-  close: PropTypes.func,
+  cancel: PropTypes.func,
   params: PropTypes.object.isRequired,
   order: PropTypes.object.isRequired
 }
 
-const CreateOrderPrompt = ({close, params: {company, workspace, folder, campaign}}) => (
+const CreateOrderPrompt = ({cancel, params: {company, workspace, folder, campaign}}) => (
   <div>
     <div className='mdl-grid'>
       <div className='mdl-cell mdl-cell--12-col'>
@@ -47,7 +47,7 @@ const CreateOrderPrompt = ({close, params: {company, workspace, folder, campaign
       </div>
     </div>
     <div>
-      <Button className='mdl-button mdl-button--raised' onClick={close}>
+      <Button className='mdl-button mdl-button--raised' onClick={cancel}>
         <Message>cancel</Message>
       </Button>
 
@@ -62,7 +62,7 @@ const CreateOrderPrompt = ({close, params: {company, workspace, folder, campaign
 )
 CreateOrderPrompt.displayName = 'Create-Order-Prompt'
 CreateOrderPrompt.propTypes = {
-  close: PropTypes.func,
+  cancel: PropTypes.func,
   params: PropTypes.object
 }
 
@@ -98,6 +98,10 @@ class EditDeliveryMethod extends React.Component {
       .then(done, done)
   }
 
+  cancel = () => {
+    this.props.onSubmit(false)
+  }
+
   render () {
     if (this.state.isLoading) {
       return (
@@ -111,11 +115,11 @@ class EditDeliveryMethod extends React.Component {
       )
     }
 
-    const {onSubmit, campaign: {order}, params} = this.props
+    const {campaign: {order}, params} = this.props
 
     return order
-      ? <CampaignOrder params={params} order={order} close={onSubmit}/>
-      : <CreateOrderPrompt params={params} close={onSubmit}/>
+      ? <CampaignOrder params={params} order={order} cancel={this.cancel}/>
+      : <CreateOrderPrompt params={params} cancel={this.cancel}/>
   }
 }
 

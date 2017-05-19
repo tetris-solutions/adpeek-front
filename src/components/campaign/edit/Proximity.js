@@ -73,21 +73,16 @@ class EditProximity extends React.Component {
   }
 
   onChangePlace = (lat, lng, searchValue, address) => {
-    this.props.update({
+    this.setState({searchValue}, () => this.props.update({
       address,
       lat,
       lng
-    })
-
-    this.setState({searchValue})
+    }))
   }
 
   onMarkerMove = (lat, lng) => {
-    this.props.update({lat, lng})
-
-    this.setState({
-      searchValue: ''
-    })
+    this.setState({searchValue: ''},
+      () => this.props.update({lat, lng}))
   }
 
   render () {
@@ -125,9 +120,7 @@ class EditProximity extends React.Component {
               <Circle
                 lat={lat}
                 lng={lng}
-                radius={radius * unitMultiplier[unit]}
-                move={this.onMarkerMove}
-                centered/>)}
+                radius={radius * unitMultiplier[unit]}/>)}
           </Map>
         </div>
       </div>

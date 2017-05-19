@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import {Tab, Tabs} from '../../Tabs'
+import startsWith from 'lodash/startsWith'
 import noop from 'lodash/noop'
 import Location from './Location'
 import Proximity from './Proximity'
 import filter from 'lodash/filter'
-import isEmpty from 'lodash/isEmpty'
 import assign from 'lodash/assign'
 import map from 'lodash/map'
 import concat from 'lodash/concat'
@@ -14,12 +14,26 @@ import {Submit, Button} from '../../Button'
 import csjs from 'csjs'
 import {styledComponent} from '../../higher-order/styled'
 import {updateCampaignLocationAction} from '../../../actions/update-campaign-location'
+import {updateCampaignProximityAction} from '../../../actions/update-campaign-proximity'
 
 const style = csjs`
 .actions {
   margin-top: 1em;
   text-align: right;
+}
+.actions > button:first-child {
+  float: left;
+}
+.actions > button:last-child {
+  margin-left: .5em;
 }`
+
+const NEW_POINT_PREFIX = '__NEW__.'
+
+const preparePoint = point =>
+  assign({}, point, {
+    id: startsWith(point.id, NEW_POINT_PREFIX) ? null : point.id
+  })
 
 const normalizeLocation = ({id, location: name, location_type: type}) => ({id, name, type})
 const normalizeProximity = ({id, geo_point: {latitudeInMicroDegrees: lat, longitudeInMicroDegrees: lng}, radius, radius_unit: unit, address}) => ({
@@ -57,12 +71,6 @@ class EditGeoLocation extends React.Component {
     points: map(filter(this.props.campaign.details.criteria, isProximity), normalizeProximity)
   }
 
-  componentWillMount () {
-    if (isEmpty(this.state.points)) {
-      this.addPoint()
-    }
-  }
-
   removeLocation = ({id}) => {
     this.setState({
       locations: filter(this.state.locations, location => location.id !== id)
@@ -79,15 +87,18 @@ class EditGeoLocation extends React.Component {
     e.preventDefault()
 
     const {dispatch, params, onSubmit} = this.props
+    const {locations, points} = this.state
 
-    dispatch(updateCampaignLocationAction, params, this.state.locations)
-      .then(onSubmit)
+    Promise.all([
+      dispatch(updateCampaignLocationAction, params, locations),
+      dispatch(updateCampaignProximityAction, params, map(points, preparePoint))
+    ]).then(onSubmit)
   }
 
   addPoint = () => {
     this.setState({
       points: concat(this.state.points, {
-        id: Math.random().toString(36).substr(2),
+        id: NEW_POINT_PREFIX + Math.random().toString(36).substr(2),
         unit: 'KILOMETERS'
       })
     })
@@ -102,9 +113,13 @@ class EditGeoLocation extends React.Component {
     })
   }
 
+  cancel = () => {
+    this.props.onSubmit(false)
+  }
+
   render () {
     const {messages} = this.context
-    const {dispatch, onSubmit: close} = this.props
+    const {dispatch} = this.props
     const {points, locations} = this.state
 
     return (
@@ -124,8 +139,12 @@ class EditGeoLocation extends React.Component {
             </Tab>)}
         </Tabs>
         <div className={`${style.actions}`}>
-          <Button className={`mdl-button mdl-button--raised ${style.cancel}`} onClick={close} style={{float: 'left'}}>
+          <Button className='mdl-button mdl-button--raised' onClick={this.cancel}>
             <Message>cancel</Message>
+          </Button>
+
+          <Button onClick={this.addPoint} className='mdl-button mdl-button--raised'>
+            <Message>addPoint</Message>
           </Button>
 
           <Submit className='mdl-button mdl-button--raised mdl-button--colored'>

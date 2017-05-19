@@ -37,9 +37,11 @@ class EditName extends React.Component {
       .then(onSubmit)
   }
 
-  render () {
-    const {onSubmit: close} = this.props
+  cancel = () => {
+    this.props.onSubmit(false)
+  }
 
+  render () {
     return (
       <form onSubmit={this.onSubmit}>
         <div className='mdl-grid'>
@@ -54,7 +56,7 @@ class EditName extends React.Component {
         </div>
 
         <div>
-          <Button className='mdl-button mdl-button--raised' onClick={close}>
+          <Button className='mdl-button mdl-button--raised' onClick={this.cancel}>
             <Message>cancel</Message>
           </Button>
 

@@ -25,7 +25,7 @@ const style = csjs`
   margin-top: 2em;
   font-style: italic;
 }
-.cancel {
+.actions > button:first-child {
   float: left;
 }`
 
@@ -89,8 +89,11 @@ class EditLanguage extends React.Component {
     })
   }
 
+  cancel = () => {
+    this.props.onSubmit(false)
+  }
+
   render () {
-    const close = this.props.onSubmit
     let {folder: {languageCriteria}} = this.props
 
     const campaignLanguages = this.getCampaignLanguages()
@@ -120,7 +123,7 @@ class EditLanguage extends React.Component {
         </div>
 
         <div className={`${style.actions}`}>
-          <Button className={`mdl-button mdl-button--raised ${style.cancel}`} onClick={close}>
+          <Button className='mdl-button mdl-button--raised' onClick={this.cancel}>
             <Message>cancel</Message>
           </Button>
 
