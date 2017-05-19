@@ -40,12 +40,20 @@ class Form extends React.Component {
       submitInProgress: true
     })
 
-    result.then(() => {
+    const unlock = () => {
       if (this.dead) return
 
       this.setState({
         submitInProgress: false
       })
+    }
+
+    result.then(r => {
+      unlock()
+      return r
+    }, err => {
+      unlock()
+      return Promise.reject(err)
     })
   }
 
