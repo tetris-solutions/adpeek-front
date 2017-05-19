@@ -408,6 +408,5 @@ module.exports = {
   campaignLocations: 'Selected',
   radiusInKmLabel: 'Radius in Km',
   radiusInMilesLabel: 'Radius in miles',
-  addPoint: 'Add Coordinates',
-  submitInProgress: 'Saving...'
+  addPoint: 'Add Coordinates'
 }
