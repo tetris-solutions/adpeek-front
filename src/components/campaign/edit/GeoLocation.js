@@ -29,11 +29,9 @@ const style = csjs`
   margin-left: .5em;
 }`
 
-const NEW_POINT_PREFIX = '__NEW__.'
-
 const preparePoint = point =>
   assign({}, point, {
-    id: startsWith(point.id, NEW_POINT_PREFIX) ? null : point.id,
+    id: point.draft ? null : point.id,
     lat: floor(point.lat * Math.pow(10, 6)),
     lng: floor(point.lng * Math.pow(10, 6))
   })
@@ -100,12 +98,13 @@ class EditGeoLocation extends React.Component {
   }
 
   addPoint = () => {
-    const id = NEW_POINT_PREFIX + Math.random().toString(36).substr(2)
+    const id = Math.random().toString(36).substr(2)
 
     this.setState({
       activeTab: `point-${id}`,
       points: concat(this.state.points, {
         id,
+        draft: true,
         unit: 'KILOMETERS',
         radius: 5
       })

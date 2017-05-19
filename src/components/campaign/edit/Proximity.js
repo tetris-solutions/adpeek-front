@@ -40,6 +40,7 @@ class EditProximity extends React.Component {
     id: PropTypes.string,
     lat: PropTypes.number,
     lng: PropTypes.number,
+    draft: PropTypes.bool,
     unit: PropTypes.oneOf(keys(unitAbbr)),
     radius: PropTypes.number,
     address: PropTypes.shape({
@@ -52,6 +53,10 @@ class EditProximity extends React.Component {
       countryCode: PropTypes.string
     }),
     update: PropTypes.func
+  }
+
+  static defaultProps = {
+    draft: false
   }
 
   state = {
@@ -80,13 +85,14 @@ class EditProximity extends React.Component {
   }
 
   render () {
-    const {lat, lng, radius, unit} = this.props
+    const {lat, lng, radius, unit, draft} = this.props
     const validCoords = isNumber(lat) && isNumber(lng)
 
     return (
       <div className='mdl-grid'>
         <div className='mdl-cell mdl-cell--8-col'>
           <AutoComplete
+            disabled={!draft}
             lat={lat}
             lng={lng}
             value={this.state.searchValue}
@@ -95,6 +101,7 @@ class EditProximity extends React.Component {
         </div>
         <div className='mdl-cell mdl-cell--4-col'>
           <Input
+            disabled={!draft}
             name='radius'
             label={`radiusIn${unitAbbr[unit]}`}
             value={radius}
@@ -105,6 +112,7 @@ class EditProximity extends React.Component {
           <Map>
             {validCoords && (
               <Marker
+                draggable={draft}
                 lat={lat}
                 lng={lng}
                 move={this.onMarkerMove}

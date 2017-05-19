@@ -51,6 +51,7 @@ class GeoCode extends React.PureComponent {
   static displayName = 'AutoComplete'
 
   static propTypes = {
+    disabled: PropTypes.bool,
     value: PropTypes.string.isRequired,
     lat: PropTypes.number,
     lng: PropTypes.number,
@@ -133,6 +134,7 @@ class GeoCode extends React.PureComponent {
       <Input
         ref='el'
         type='search'
+        disabled={this.props.disabled}
         onKeyDown={preventSubmit}
         onChange={this.onChange}
         value={this.props.value}
