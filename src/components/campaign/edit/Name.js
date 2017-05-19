@@ -3,6 +3,7 @@ import Message from 'tetris-iso/Message'
 import PropTypes from 'prop-types'
 import Input from '../../Input'
 import {Submit, Button} from '../../Button'
+import Form from '../../Form'
 import {updateCampaignNameAction} from '../../../actions/update-campaign-name'
 import noop from 'lodash/noop'
 
@@ -28,12 +29,10 @@ class EditName extends React.Component {
     this.setState({name: target.value})
   }
 
-  onSubmit = e => {
-    e.preventDefault()
-
+  save = () => {
     const {onSubmit, params, dispatch} = this.props
 
-    dispatch(updateCampaignNameAction, params, this.state.name)
+    return dispatch(updateCampaignNameAction, params, this.state.name)
       .then(onSubmit)
   }
 
@@ -43,7 +42,7 @@ class EditName extends React.Component {
 
   render () {
     return (
-      <form onSubmit={this.onSubmit}>
+      <Form onSubmit={this.save}>
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--12-col'>
             <Input
@@ -64,7 +63,7 @@ class EditName extends React.Component {
             <Message>save</Message>
           </Submit>
         </div>
-      </form>
+      </Form>
     )
   }
 }

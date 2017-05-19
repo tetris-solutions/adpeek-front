@@ -1,6 +1,7 @@
 import React from 'react'
 import Message from 'tetris-iso/Message'
 import {Submit, Button} from '../../Button'
+import Form from '../../Form'
 import PropTypes from 'prop-types'
 import Checkbox from '../../Checkbox'
 import map from 'lodash/map'
@@ -54,9 +55,7 @@ class EditLanguage extends React.Component {
     }
   }
 
-  onSubmit = e => {
-    e.preventDefault()
-
+  save = e => {
     const {dispatch, params, onSubmit} = this.props
     const selected = []
 
@@ -73,7 +72,7 @@ class EditLanguage extends React.Component {
       }
     })
 
-    dispatch(updateCampaignLanguageAction, params, selected)
+    return dispatch(updateCampaignLanguageAction, params, selected)
       .then(onSubmit)
   }
 
@@ -81,8 +80,8 @@ class EditLanguage extends React.Component {
     return filter(this.props.campaign.details.criteria, {type: 'LANGUAGE'})
   }
 
-  selectAll = () => {
-    forEach(this.refs.form.elements, input => {
+  selectAll = ({target: {form}}) => {
+    forEach(form.elements, input => {
       if (input && input.programaticallyCheck) {
         input.programaticallyCheck()
       }
@@ -105,7 +104,7 @@ class EditLanguage extends React.Component {
     }
 
     return (
-      <form onSubmit={this.onSubmit} ref='form'>
+      <Form onSubmit={this.save}>
         <div className='mdl-grid'>
           <div className={`mdl-cell mdl-cell--12-col ${style.checklist}`}>
             {map(languageCriteria, ({id, name}) =>
@@ -135,7 +134,7 @@ class EditLanguage extends React.Component {
             <Message>save</Message>
           </Submit>
         </div>
-      </form>
+      </Form>
     )
   }
 }

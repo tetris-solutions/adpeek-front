@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import {Button, Submit} from '../../Button'
+import Form from '../../Form'
 import noop from 'lodash/noop'
 import pick from 'lodash/pick'
 import map from 'lodash/map'
@@ -35,9 +36,7 @@ class EditNetwork extends React.Component {
     onSubmit: noop
   }
 
-  onSubmit = e => {
-    e.preventDefault()
-
+  save = e => {
     const {onSubmit, params, dispatch} = this.props
     const network = {}
 
@@ -45,7 +44,7 @@ class EditNetwork extends React.Component {
       network[name] = e.target.elements[name].checked
     })
 
-    dispatch(updateCampaignNetworkAction, params, network)
+    return dispatch(updateCampaignNetworkAction, params, network)
       .then(onSubmit)
   }
 
@@ -60,7 +59,7 @@ class EditNetwork extends React.Component {
     const readOnly = isDisplayCampaign(networks)
 
     return (
-      <form onSubmit={this.onSubmit}>
+      <Form onSubmit={this.save}>
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--12-col'>
             {map(networks, (enabledForCampaign, name) =>
@@ -82,7 +81,7 @@ class EditNetwork extends React.Component {
             <Message>save</Message>
           </Submit>
         </div>
-      </form>
+      </Form>
     )
   }
 }
