@@ -15,6 +15,7 @@ import csjs from 'csjs'
 import {styledComponent} from '../../higher-order/styled'
 import {updateCampaignLocationAction} from '../../../actions/update-campaign-location'
 import {updateCampaignProximityAction} from '../../../actions/update-campaign-proximity'
+import floor from 'lodash/floor'
 
 const style = csjs`
 .actions {
@@ -32,7 +33,9 @@ const NEW_POINT_PREFIX = '__NEW__.'
 
 const preparePoint = point =>
   assign({}, point, {
-    id: startsWith(point.id, NEW_POINT_PREFIX) ? null : point.id
+    id: startsWith(point.id, NEW_POINT_PREFIX) ? null : point.id,
+    lat: floor(point.lat * Math.pow(10, 6)),
+    lng: floor(point.lng * Math.pow(10, 6))
   })
 
 const normalizeLocation = ({id, location: name, location_type: type}) => ({id, name, type})
