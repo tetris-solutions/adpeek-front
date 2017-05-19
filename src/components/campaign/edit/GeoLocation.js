@@ -99,7 +99,8 @@ class EditGeoLocation extends React.Component {
     this.setState({
       points: concat(this.state.points, {
         id: NEW_POINT_PREFIX + Math.random().toString(36).substr(2),
-        unit: 'KILOMETERS'
+        unit: 'KILOMETERS',
+        radius: 5
       })
     })
   }

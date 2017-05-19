@@ -54,11 +54,6 @@ class EditProximity extends React.Component {
     update: PropTypes.func
   }
 
-  static defaultProps = {
-    unit: 'KILOMETERS',
-    radius: 5
-  }
-
   state = {
     searchValue: stringifyAddressComponents(this.props.address),
     suggestions: []

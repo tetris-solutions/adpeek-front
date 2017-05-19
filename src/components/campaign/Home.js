@@ -60,7 +60,7 @@ class CampaignHome extends React.PureComponent {
     return this.props.dispatch(loadCampaignDetailsAction, this.props.params, fresh)
   }
 
-  reload () {
+  reload = () => {
     return this.loadDetails(true)
   }
 
