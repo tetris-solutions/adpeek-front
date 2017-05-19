@@ -408,5 +408,5 @@ module.exports = {
   campaignLocations: 'Selected',
   radiusInKmLabel: 'Radius in Km',
   radiusInMilesLabel: 'Radius in miles',
-  addPoint: 'Create Proximity Criteria'
+  addPoint: 'Add Coordinates'
 }

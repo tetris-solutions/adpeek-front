@@ -76,8 +76,7 @@ class EditProximity extends React.Component {
   }
 
   onMarkerMove = (lat, lng) => {
-    this.setState({searchValue: ''},
-      () => this.props.update({lat, lng}))
+    this.setState({searchValue: ''}, () => this.props.update({lat, lng}))
   }
 
   render () {

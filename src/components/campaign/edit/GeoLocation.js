@@ -24,7 +24,7 @@ const style = csjs`
 .actions > button:first-child {
   float: left;
 }
-.actions > button:last-child {
+.actions > button:not(:first-child) {
   margin-left: .5em;
 }`
 
@@ -36,10 +36,10 @@ const preparePoint = point =>
   })
 
 const normalizeLocation = ({id, location: name, location_type: type}) => ({id, name, type})
-const normalizeProximity = ({id, geo_point: {latitudeInMicroDegrees: lat, longitudeInMicroDegrees: lng}, radius, radius_unit: unit, address}) => ({
+const normalizeProximity = ({id, geo_point: {latitudeInMicroDegrees, longitudeInMicroDegrees}, radius, radius_unit: unit, address}) => ({
   id,
-  lat,
-  lng,
+  lat: latitudeInMicroDegrees / Math.pow(10, 6),
+  lng: longitudeInMicroDegrees / Math.pow(10, 6),
   radius,
   unit,
   address
@@ -67,6 +67,7 @@ class EditGeoLocation extends React.Component {
   }
 
   state = {
+    activeTab: 'location-criteria',
     locations: map(filter(this.props.campaign.details.criteria, isLocation), normalizeLocation),
     points: map(filter(this.props.campaign.details.criteria, isProximity), normalizeProximity)
   }
@@ -105,7 +106,9 @@ class EditGeoLocation extends React.Component {
     })
   }
 
-  updatePoint = (id, changes) => {
+  updatePoint = changes => {
+    const id = this.getSelectedPoint()
+
     this.setState({
       points: map(this.state.points, point =>
         point.id === id
@@ -114,19 +117,37 @@ class EditGeoLocation extends React.Component {
     })
   }
 
+  removePoint = () => {
+    const id = this.getSelectedPoint()
+
+    this.setState({
+      points: filter(this.state.points, point => point.id !== id)
+    })
+  }
+
   cancel = () => {
     this.props.onSubmit(false)
+  }
+
+  onChangeTab = (activeTab) => {
+    this.setState({activeTab})
+  }
+
+  getSelectedPoint () {
+    return this.state.activeTab.split('-')[1]
   }
 
   render () {
     const {messages} = this.context
     const {dispatch} = this.props
-    const {points, locations} = this.state
+    const {points, locations, activeTab} = this.state
+    const tab = id => ({id, active: id === activeTab})
+    const isPointTab = startsWith(activeTab, 'point-')
 
     return (
       <form onSubmit={this.onSubmit}>
-        <Tabs>
-          <Tab id='location-criteria' title={messages.locationCriteria}>
+        <Tabs onChangeTab={this.onChangeTab}>
+          <Tab {...tab('location-criteria')} title={messages.locationCriteria}>
             <Location
               dispatch={dispatch}
               add={this.addLocation}
@@ -135,14 +156,21 @@ class EditGeoLocation extends React.Component {
           </Tab>
 
           {map(points, point =>
-            <Tab key={point.id} id={`proximity-criteria-${point.id}`} title={messages.proximityCriteria}>
-              <Proximity {...point} update={changes => this.updatePoint(point.id, changes)}/>
+            <Tab key={point.id} {...tab(`point-${point.id}`)} title={messages.proximityCriteria}>
+              <Proximity {...point} update={this.updatePoint}/>
             </Tab>)}
         </Tabs>
         <div className={`${style.actions}`}>
           <Button className='mdl-button mdl-button--raised' onClick={this.cancel}>
             <Message>cancel</Message>
           </Button>
+
+          {isPointTab && (
+            <Button
+              onClick={this.removePoint}
+              className='mdl-button mdl-button--raised mdl-button--accent'>
+              <Message>remove</Message>
+            </Button>)}
 
           <Button onClick={this.addPoint} className='mdl-button mdl-button--raised'>
             <Message>addPoint</Message>
