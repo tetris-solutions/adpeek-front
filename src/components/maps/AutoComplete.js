@@ -30,7 +30,7 @@ function parseAddressComponents (components) {
       address.provinceName = long_name
       address.provinceCode = short_name
     }
-    if (type === 'locality') {
+    if (type === 'administrative_area_level_2' || type === 'locality') {
       address.cityName = long_name
     }
     if (type === 'street_number') {
