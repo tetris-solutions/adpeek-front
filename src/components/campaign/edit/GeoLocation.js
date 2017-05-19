@@ -100,9 +100,12 @@ class EditGeoLocation extends React.Component {
   }
 
   addPoint = () => {
+    const id = NEW_POINT_PREFIX + Math.random().toString(36).substr(2)
+
     this.setState({
+      activeTab: `point-${id}`,
       points: concat(this.state.points, {
-        id: NEW_POINT_PREFIX + Math.random().toString(36).substr(2),
+        id,
         unit: 'KILOMETERS',
         radius: 5
       })
@@ -124,6 +127,7 @@ class EditGeoLocation extends React.Component {
     const id = this.getSelectedPoint()
 
     this.setState({
+      activeTab: 'location-criteria',
       points: filter(this.state.points, point => point.id !== id)
     })
   }
