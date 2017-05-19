@@ -57,10 +57,10 @@ function AdwordsCampaign (props, context) {
     const navigate = () => router.push(urlFor(params))
 
     if (reloadFirst) {
-      reload().then(navigate)
-    } else {
-      navigate()
+      return reload().then(navigate)
     }
+
+    return navigate()
   }
 
   return (

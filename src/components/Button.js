@@ -1,4 +1,5 @@
 import React from 'react'
+import Message from 'tetris-iso/Message'
 import noop from 'lodash/noop'
 import PropTypes from 'prop-types'
 
@@ -13,8 +14,22 @@ Button.propTypes = {
   onClick: PropTypes.func
 }
 
-export function Submit (props) {
+export function Submit (props, {submitInProgress}) {
+  if (submitInProgress) {
+    return (
+      <button type='submit' className={props.className} disabled>
+        <Message>submitInProgress</Message>
+      </button>
+    )
+  }
+
   return <button {...props} type='submit'/>
 }
 
 Submit.displayName = 'Submit'
+Submit.propTypes = {
+  className: PropTypes.string
+}
+Submit.contextTypes = {
+  submitInProgress: PropTypes.bool
+}

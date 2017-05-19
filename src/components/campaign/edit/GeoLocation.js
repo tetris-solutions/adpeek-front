@@ -16,6 +16,7 @@ import {styledComponent} from '../../higher-order/styled'
 import {updateCampaignLocationAction} from '../../../actions/update-campaign-location'
 import {updateCampaignProximityAction} from '../../../actions/update-campaign-proximity'
 import floor from 'lodash/floor'
+import Form from '../../Form'
 
 const style = csjs`
 .actions {
@@ -85,13 +86,11 @@ class EditGeoLocation extends React.Component {
     })
   }
 
-  onSubmit = e => {
-    e.preventDefault()
-
+  save = () => {
     const {dispatch, params, onSubmit} = this.props
     const {locations, points} = this.state
 
-    Promise.all([
+    return Promise.all([
       dispatch(updateCampaignLocationAction, params, locations),
       dispatch(updateCampaignProximityAction, params, map(points, preparePoint))
     ]).then(onSubmit)
@@ -151,7 +150,7 @@ class EditGeoLocation extends React.Component {
     const isPointTab = startsWith(activeTab, 'point-')
 
     return (
-      <form onSubmit={this.onSubmit}>
+      <Form onSubmit={this.save}>
         <Tabs onChangeTab={this.onChangeTab}>
           <Tab {...tab('location-criteria')} title={messages.locationCriteria}>
             <Location
@@ -186,7 +185,7 @@ class EditGeoLocation extends React.Component {
             <Message>save</Message>
           </Submit>
         </div>
-      </form>
+      </Form>
     )
   }
 }

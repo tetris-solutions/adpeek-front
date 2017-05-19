@@ -406,5 +406,6 @@ module.exports = {
   campaignLocations: 'Selecionados',
   radiusInKmLabel: 'Raio em Km',
   radiusInMilesLabel: 'Raio em milhas',
-  addPoint: 'Adicionar coordenadas'
+  addPoint: 'Adicionar coordenadas',
+  submitInProgress: 'Enviando...'
 }
