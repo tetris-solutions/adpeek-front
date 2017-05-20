@@ -4,6 +4,7 @@ import Message from 'tetris-iso/Message'
 import Input from '../../Input'
 import PrettyNumber from '../../PrettyNumber'
 import {stringifyAddressComponents} from '../../../functions/stringify-address'
+import capitalize from 'lodash/capitalize'
 
 const unitAbbr = {
   KILOMETERS: 'km',
@@ -61,7 +62,7 @@ class CriteriaRow extends React.PureComponent {
             </div>)}
         </td>
         <td className='mdl-data-table__cell--non-numeric'>
-          {location_type || type}
+          {location_type || capitalize(type)}
         </td>
         <td>
           <div style={{width: '4em', float: 'right'}}>

@@ -66,7 +66,6 @@ const parseProximity = ({id, geo_point, radius, radius_unit: unit, address, bid_
   lng: geo_point.longitudeInMicroDegrees / Math.pow(10, 6),
   radius,
   type,
-  location_type: 'Proximity',
   unit,
   address,
   bid_modifier: isNumber(bid_modifier)
