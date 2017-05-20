@@ -38,7 +38,8 @@ class EditProximity extends React.Component {
       postalCode: PropTypes.string,
       countryCode: PropTypes.string
     }),
-    update: PropTypes.func
+    update: PropTypes.func,
+    close: PropTypes.func
   }
 
   static defaultProps = {

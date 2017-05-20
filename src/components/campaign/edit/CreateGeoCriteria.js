@@ -4,8 +4,10 @@ import Message from 'tetris-iso/Message'
 import Modal from 'tetris-iso/Modal'
 import csjs from 'csjs'
 import {styledComponent} from '../../higher-order/styled'
+import {Button} from '../../Button'
 // import Location from './Location'
 import Proximity from './Proximity'
+import isNumber from 'lodash/isNumber'
 
 const style = csjs`
 .item {
@@ -14,6 +16,12 @@ const style = csjs`
 }
 .item:hover {
   background-color: rgba(0, 0, 0, 0.2)
+}
+.actions {
+  text-align: right;
+}
+.actions button:first-child {
+  float: left;
 }`
 
 const SelectType = ({location, proximity}) => (
@@ -75,11 +83,17 @@ class CreateGeoCriteria extends React.PureComponent {
     this.setState(changes)
   }
 
+  close = () => {
+    this.props.save(this.state)
+  }
+
   render () {
+    const {lat, lng, type, name} = this.state
+
     let size
     let content
 
-    switch (this.state.type) {
+    switch (type) {
       case 'LOCATION':
         size = 'small'
         content = <h5>bad</h5>
@@ -87,7 +101,10 @@ class CreateGeoCriteria extends React.PureComponent {
       case 'PROXIMITY':
         size = 'large'
         content = (
-          <Proximity {...this.state} update={this.update}/>
+          <Proximity
+            {...this.state}
+            close={this.props.save}
+            update={this.update}/>
         )
         break
       default:
@@ -102,6 +119,18 @@ class CreateGeoCriteria extends React.PureComponent {
     return (
       <Modal size={size} minHeight={0}>
         {content}
+
+        <div className={style.actions}>
+          <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>
+            <Message>cancel</Message>
+          </Button>
+
+          {name || (isNumber(lat) && (isNumber(lng))) ? (
+            <Button className='mdl-button mdl-button--raised' onClick={this.close}>
+              <Message>save</Message>
+            </Button>) : null}
+        </div>
+
       </Modal>
     )
   }

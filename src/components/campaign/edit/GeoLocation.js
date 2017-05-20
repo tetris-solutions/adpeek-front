@@ -31,7 +31,7 @@ const style = csjs`
   margin-left: .5em;
 }
 .tableWrapper {
-  height: 40vh;
+  min-height: 40vh;
 }
 .tableWrapper > table {
   width: 100%;
