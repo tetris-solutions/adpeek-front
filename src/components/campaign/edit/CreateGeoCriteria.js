@@ -5,9 +5,10 @@ import Modal from 'tetris-iso/Modal'
 import csjs from 'csjs'
 import {styledComponent} from '../../higher-order/styled'
 import {Button} from '../../Button'
-// import Location from './Location'
-import Proximity from './Proximity'
+import EditLocation from './Location'
+import EditProximity from './Proximity'
 import isNumber from 'lodash/isNumber'
+import assign from 'lodash/assign'
 
 const style = csjs`
 .item {
@@ -28,13 +29,13 @@ const SelectType = ({location, proximity}) => (
   <ul className='mdl-list'>
     <li className={`mdl-list__item ${style.item}`} onClick={location}>
       <span className='mdl-list__item-primary-content'>
-        <i className='material-icons mdl-list__item-icon'>location_on</i>
+        <i className='material-icons mdl-list__item-icon'>location_city</i>
         <Message>locationCriteria</Message>
       </span>
     </li>
     <li className={`mdl-list__item ${style.item}`} onClick={proximity}>
       <span className='mdl-list__item-primary-content'>
-        <i className='material-icons mdl-list__item-icon'>location_city</i>
+        <i className='material-icons mdl-list__item-icon'>location_on</i>
         <Message>proximityCriteria</Message>
       </span>
     </li>
@@ -51,6 +52,7 @@ class CreateGeoCriteria extends React.PureComponent {
   static displayName = 'Create-Geo-Criteria'
 
   static propTypes = {
+    selectedIds: PropTypes.array.isRequired,
     dispatch: PropTypes.func.isRequired,
     save: PropTypes.func.isRequired,
     cancel: PropTypes.func.isRequired
@@ -79,8 +81,17 @@ class CreateGeoCriteria extends React.PureComponent {
     })
   }
 
-  update = (changes) => {
-    this.setState(changes)
+  update = (changes, cb) => {
+    this.setState(changes, cb)
+  }
+
+  saveLocation = location => {
+    location = assign({}, location, {
+      type: 'LOCATION',
+      location_type: location.type
+    })
+
+    this.update(location, this.close)
   }
 
   close = () => {
@@ -88,6 +99,7 @@ class CreateGeoCriteria extends React.PureComponent {
   }
 
   render () {
+    const {cancel, selectedIds, dispatch} = this.props
     const {lat, lng, type, name} = this.state
 
     let size
@@ -96,12 +108,17 @@ class CreateGeoCriteria extends React.PureComponent {
     switch (type) {
       case 'LOCATION':
         size = 'small'
-        content = <h5>bad</h5>
+        content = (
+          <EditLocation
+            selectedIds={selectedIds}
+            dispatch={dispatch}
+            select={this.saveLocation}/>
+        )
         break
       case 'PROXIMITY':
         size = 'large'
         content = (
-          <Proximity
+          <EditProximity
             {...this.state}
             close={this.props.save}
             update={this.update}/>
@@ -121,7 +138,7 @@ class CreateGeoCriteria extends React.PureComponent {
         {content}
 
         <div className={style.actions}>
-          <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>
+          <Button className='mdl-button mdl-button--raised' onClick={cancel}>
             <Message>cancel</Message>
           </Button>
 

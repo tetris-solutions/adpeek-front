@@ -13,7 +13,7 @@ const unitAbbr = {
 class CriteriaRow extends React.PureComponent {
   static displayName = 'Criteria-Row'
   static propTypes = {
-    id: PropTypes.string,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     name: PropTypes.string,
     lat: PropTypes.number,
     lng: PropTypes.number,

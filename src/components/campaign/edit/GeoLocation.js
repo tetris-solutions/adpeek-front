@@ -18,6 +18,7 @@ import Form from '../../Form'
 import isEmpty from 'lodash/isEmpty'
 import isNumber from 'lodash/isNumber'
 import CreateGeoCriteria from './CreateGeoCriteria'
+import round from 'lodash/round'
 
 const style = csjs`
 .actions {
@@ -45,7 +46,7 @@ const preparePoint = point => assign({}, point, {
 
 const normalizeCriteria = criteria => assign({}, criteria, {
   bid_modifier: isNumber(criteria.bid_modifier)
-    ? (criteria.bid_modifier / 100) + 1
+    ? round((criteria.bid_modifier / 100) + 1, 2)
     : null
 })
 
@@ -55,7 +56,7 @@ const parseLocation = ({id, location: name, location_type, type, bid_modifier}) 
   location_type,
   type,
   bid_modifier: isNumber(bid_modifier)
-    ? 100 * (bid_modifier - 1)
+    ? round(100 * (bid_modifier - 1), 2)
     : undefined
 })
 
@@ -69,7 +70,7 @@ const parseProximity = ({id, geo_point, radius, radius_unit: unit, address, bid_
   unit,
   address,
   bid_modifier: isNumber(bid_modifier)
-    ? 100 * (bid_modifier - 1)
+    ? round(100 * (bid_modifier - 1), 2)
     : undefined
 })
 
@@ -197,6 +198,7 @@ class EditGeoLocation extends React.Component {
 
         {createModalOpen && (
           <CreateGeoCriteria
+            selectedIds={map(criteria, 'id')}
             dispatch={this.props.dispatch}
             save={this.addCriteria}
             cancel={this.toggleCreationModal}/>)}

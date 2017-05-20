@@ -399,7 +399,7 @@ module.exports = {
   cannotEditDeliveryMethodWithoutOrder: 'Não é possível editar a forma de entrega dessa campanha pois ela não possui um Pedido associado',
   openOrders: 'Abrir Pedidos',
   editBudget: 'Editar Orçamento',
-  locationCriteria: 'Localização',
+  locationCriteria: 'Localidade',
   proximityCriteria: 'Proximidade',
   locationLabel: 'Digite uma localidade',
   locationSearchResult: 'Resultado da busca',
