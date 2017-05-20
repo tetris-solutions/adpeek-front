@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import CriteriaRow from './CriteriaRow'
 import noop from 'lodash/noop'
-import keyBy from 'lodash/keyBy'
+import groupBy from 'lodash/groupBy'
 import filter from 'lodash/filter'
 import assign from 'lodash/assign'
 import map from 'lodash/map'
@@ -110,7 +110,7 @@ class EditGeoLocation extends React.Component {
 
   save = () => {
     const {dispatch, params, onSubmit} = this.props
-    const criteria = keyBy(map(this.state.criteria, normalizeCriteria), 'type')
+    const criteria = groupBy(map(this.state.criteria, normalizeCriteria), 'type')
 
     return Promise.all([
       dispatch(updateCampaignLocationAction, params, criteria.LOCATION || []),
