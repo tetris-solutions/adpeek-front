@@ -14,6 +14,19 @@ function notEmptyInput (value) {
   return value !== '' && value !== undefined && value !== null
 }
 
+const protectedInputProps = [
+  'className',
+  'value',
+  'onChange',
+  'onBlur',
+  'onFocus',
+  'defaultValue',
+  'children',
+  'error',
+  'label',
+  'format'
+]
+
 export class Input extends React.Component {
   static displayName = 'Input'
 
@@ -219,19 +232,7 @@ export class Input extends React.Component {
 
     const Tag = 'input'
 
-    const protectedOnes = [
-      'className',
-      'value',
-      'onChange',
-      'onBlur',
-      'onFocus',
-      'defaultValue',
-      'children',
-      'error',
-      'label',
-      'format'
-    ]
-    const inputProps = assign(omit(this.props, protectedOnes), {
+    const inputProps = assign(omit(this.props, protectedInputProps), {
       value,
       className: 'mdl-textfield__input',
       onChange: this.onChange,

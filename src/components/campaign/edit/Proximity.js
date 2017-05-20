@@ -6,9 +6,8 @@ import keys from 'lodash/keys'
 import Map from '../../maps/Map'
 import Marker from '../../maps/Marker'
 import Circle from '../../maps/Circle'
-import compact from 'lodash/compact'
-import join from 'lodash/join'
 import isNumber from 'lodash/isNumber'
+import {stringifyAddressComponents} from '../../../functions/stringify-address'
 
 const unitAbbr = {
   KILOMETERS: 'Km',
@@ -18,19 +17,6 @@ const unitAbbr = {
 const unitMultiplier = {
   KILOMETERS: 1000,
   MILES: 1609.34
-}
-
-function stringifyAddressComponents (addr) {
-  addr = addr || {}
-
-  return join(compact([
-    addr.streetAddress,
-    addr.streetNumber,
-    addr.neighborhood,
-    addr.cityName,
-    addr.provinceCode,
-    addr.countryCode
-  ]), ', ')
 }
 
 class EditProximity extends React.Component {

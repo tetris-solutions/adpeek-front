@@ -406,5 +406,9 @@ module.exports = {
   campaignLocations: 'Selecionados',
   radiusInKmLabel: 'Raio em Km',
   radiusInMilesLabel: 'Raio em milhas',
-  addPoint: 'Adicionar coordenadas'
+  newLocation: 'Novo Local',
+  closeToLocation: 'próximo de {location}',
+  locationDescription: 'Localidade',
+  locationType: 'Tipo',
+  bidModifier: 'Ajuste de Lance'
 }

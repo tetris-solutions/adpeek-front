@@ -408,5 +408,9 @@ module.exports = {
   campaignLocations: 'Selected',
   radiusInKmLabel: 'Radius in Km',
   radiusInMilesLabel: 'Radius in miles',
-  addPoint: 'Add Coordinates'
+  newLocation: 'New Location',
+  closeToLocation: 'around {location}',
+  locationDescription: 'Location',
+  locationType: 'Type',
+  bidModifier: 'Bid Modifier'
 }

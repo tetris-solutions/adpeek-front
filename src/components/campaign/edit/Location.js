@@ -11,6 +11,8 @@ import csjs from 'csjs'
 import {styledComponent} from '../../higher-order/styled'
 import keyBy from 'lodash/keyBy'
 import filter from 'lodash/filter'
+import PrettyNumber from '../../PrettyNumber'
+import {stringifyAddressComponents} from '../../../functions/stringify-address'
 
 const style = csjs`
 .list {
@@ -19,6 +21,10 @@ const style = csjs`
 }`
 
 const MIN_SEARCH_TERM_LENGTH = 2
+const unitAbbr = {
+  KILOMETERS: 'km',
+  MILES: 'mi'
+}
 
 class Location extends React.PureComponent {
   static displayName = 'Location'
@@ -27,7 +33,10 @@ class Location extends React.PureComponent {
     location: PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       name: PropTypes.string,
-      type: PropTypes.string
+      type: PropTypes.string,
+      radius: PropTypes.number,
+      unit: PropTypes.string,
+      address: PropTypes
     }).isRequired,
     toggle: PropTypes.func.isRequired,
     icon: PropTypes.string.isRequired
@@ -42,10 +51,21 @@ class Location extends React.PureComponent {
   render () {
     const {location, icon} = this.props
 
+    const name = location.name ||
+      (
+        <span>
+          <PrettyNumber>{location.radius}</PrettyNumber> {unitAbbr[location.unit]}
+
+          <Message location={location.address
+            ? stringifyAddressComponents(location.address)
+            : `{${location.lat}°, ${location.lng}°}`}>closeToLocation</Message>
+        </span>
+      )
+
     return (
       <li className='mdl-list__item'>
         <span className='mdl-list__item-primary-content'>
-          {location.name}
+          {name}
         </span>
         <a href='' className='mdl-list__item-secondary-action' onClick={this.onClick}>
           <i className='material-icons'>{icon}</i>
@@ -89,7 +109,7 @@ function Locations ({add, remove, search, selected}) {
         <h5>
           <Message>locationSearchResult</Message>
         </h5>
-        <div className={`${style.list}`}>{map(groupBy(filter(search, notSelected), 'type'), (list, type) =>
+        <div className={`${style.list}`}>{map(groupBy(filter(search, notSelected), 'location_type'), (list, type) =>
           <LocationGroup key={type} list={list} type={type} toggle={add} icon='add'/>)}
         </div>
       </div>
@@ -97,7 +117,7 @@ function Locations ({add, remove, search, selected}) {
         <h5>
           <Message>campaignLocations</Message>
         </h5>
-        <div className={`${style.list}`}>{map(groupBy(selected, 'type'), (list, type) =>
+        <div className={`${style.list}`}>{map(groupBy(selected, 'location_type'), (list, type) =>
           <LocationGroup key={type} list={list} type={type} toggle={remove} icon='remove'/>)}
         </div>
       </div>

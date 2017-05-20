@@ -1,11 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
-import {Tab, Tabs} from '../../Tabs'
-import startsWith from 'lodash/startsWith'
+import CriteriaRow from './CriteriaRow'
 import noop from 'lodash/noop'
-import Location from './Location'
-import Proximity from './Proximity'
+import keyBy from 'lodash/keyBy'
 import filter from 'lodash/filter'
 import assign from 'lodash/assign'
 import map from 'lodash/map'
@@ -17,6 +15,7 @@ import {updateCampaignLocationAction} from '../../../actions/update-campaign-loc
 import {updateCampaignProximityAction} from '../../../actions/update-campaign-proximity'
 import floor from 'lodash/floor'
 import Form from '../../Form'
+import isEmpty from 'lodash/isEmpty'
 
 const style = csjs`
 .actions {
@@ -28,6 +27,12 @@ const style = csjs`
 }
 .actions > button:not(:first-child) {
   margin-left: .5em;
+}
+.tableWrapper {
+  height: 40vh;
+}
+.tableWrapper > table {
+  width: 100%;
 }`
 
 const preparePoint = point =>
@@ -37,18 +42,31 @@ const preparePoint = point =>
     lng: floor(point.lng * Math.pow(10, 6))
   })
 
-const normalizeLocation = ({id, location: name, location_type: type}) => ({id, name, type})
-const normalizeProximity = ({id, geo_point: {latitudeInMicroDegrees, longitudeInMicroDegrees}, radius, radius_unit: unit, address}) => ({
+const normalizeLocation = ({id, location: name, location_type, type, bid_modifier}) => ({
   id,
-  lat: latitudeInMicroDegrees / Math.pow(10, 6),
-  lng: longitudeInMicroDegrees / Math.pow(10, 6),
-  radius,
-  unit,
-  address
+  name,
+  location_type,
+  type,
+  bid_modifier
 })
 
-const isLocation = {type: 'LOCATION'}
-const isProximity = {type: 'PROXIMITY'}
+const normalizeProximity = ({id, geo_point, radius, radius_unit: unit, address, bid_modifier, type}) => ({
+  id,
+  lat: geo_point.latitudeInMicroDegrees / Math.pow(10, 6),
+  lng: geo_point.longitudeInMicroDegrees / Math.pow(10, 6),
+  radius,
+  type,
+  location_type: 'Proximity',
+  unit,
+  address,
+  bid_modifier
+})
+
+const isLocation = ({type}) => type === 'LOCATION' || type === 'PROXIMITY'
+
+const normalize = criteria => criteria.type === 'LOCATION'
+  ? normalizeLocation(criteria)
+  : normalizeProximity(criteria)
 
 class EditGeoLocation extends React.Component {
   static displayName = 'Edit-Geo-Location'
@@ -69,30 +87,23 @@ class EditGeoLocation extends React.Component {
   }
 
   state = {
-    activeTab: 'location-criteria',
-    locations: map(filter(this.props.campaign.details.criteria, isLocation), normalizeLocation),
-    points: map(filter(this.props.campaign.details.criteria, isProximity), normalizeProximity)
+    createModalOpen: false,
+    criteria: map(filter(this.props.campaign.details.criteria, isLocation), normalize)
   }
 
-  removeLocation = ({id}) => {
-    this.setState({
-      locations: filter(this.state.locations, location => location.id !== id)
-    })
-  }
-
-  addLocation = location => {
-    this.setState({
-      locations: concat(this.state.locations, location)
-    })
+  componentWillMount () {
+    if (isEmpty(this.state.criteria)) {
+      this.setState({createModalOpen: true})
+    }
   }
 
   save = () => {
     const {dispatch, params, onSubmit} = this.props
-    const {locations, points} = this.state
+    const criteria = keyBy(this.state.criteria, 'type')
 
     return Promise.all([
-      dispatch(updateCampaignLocationAction, params, locations),
-      dispatch(updateCampaignProximityAction, params, map(points, preparePoint))
+      dispatch(updateCampaignLocationAction, params, criteria.LOCATION || []),
+      dispatch(updateCampaignProximityAction, params, map(criteria.PROXIMITY, preparePoint))
     ]).then(onSubmit)
   }
 
@@ -100,7 +111,6 @@ class EditGeoLocation extends React.Component {
     const id = Math.random().toString(36).substr(2)
 
     this.setState({
-      activeTab: `point-${id}`,
       points: concat(this.state.points, {
         id,
         draft: true,
@@ -110,23 +120,24 @@ class EditGeoLocation extends React.Component {
     })
   }
 
-  updatePoint = changes => {
-    const id = this.getSelectedPoint()
-
+  addCriteria = criteria => {
     this.setState({
-      points: map(this.state.points, point =>
-        point.id === id
-          ? assign({}, point, changes)
-          : point)
+      criteria: concat(this.state.criteria, criteria)
     })
   }
 
-  removePoint = () => {
-    const id = this.getSelectedPoint()
-
+  updateCriteria = (id, changes) => {
     this.setState({
-      activeTab: 'location-criteria',
-      points: filter(this.state.points, point => point.id !== id)
+      criteria: map(this.state.criteria, item =>
+        item.id === id
+          ? assign({}, item, changes)
+          : item)
+    })
+  }
+
+  removeCriteria = id => {
+    this.setState({
+      criteria: filter(this.state.criteria, criteria => criteria.id !== id)
     })
   }
 
@@ -134,51 +145,50 @@ class EditGeoLocation extends React.Component {
     this.props.onSubmit(false)
   }
 
-  onChangeTab = (activeTab) => {
-    this.setState({activeTab})
-  }
-
-  getSelectedPoint () {
-    return this.state.activeTab.split('-')[1]
+  toggleCreationModal = () => {
+    this.setState({
+      createModalOpen: !this.state.createModalOpen
+    })
   }
 
   render () {
-    const {messages} = this.context
-    const {dispatch} = this.props
-    const {points, locations, activeTab} = this.state
-    const tab = id => ({id, active: id === activeTab})
-    const isPointTab = startsWith(activeTab, 'point-')
+    const {criteria} = this.state
 
     return (
       <Form onSubmit={this.save}>
-        <Tabs onChangeTab={this.onChangeTab}>
-          <Tab {...tab('location-criteria')} title={messages.locationCriteria}>
-            <Location
-              dispatch={dispatch}
-              add={this.addLocation}
-              remove={this.removeLocation}
-              locations={locations}/>
-          </Tab>
-
-          {map(points, point =>
-            <Tab key={point.id} {...tab(`point-${point.id}`)} title={messages.proximityCriteria}>
-              <Proximity {...point} update={this.updatePoint}/>
-            </Tab>)}
-        </Tabs>
+        <div className={style.tableWrapper}>
+          <table className='mdl-data-table'>
+            <thead>
+              <tr>
+                <th className='mdl-data-table__cell--non-numeric'>
+                  <Message>locationDescription</Message>
+                </th>
+                <th className='mdl-data-table__cell--non-numeric'>
+                  <Message>locationType</Message>
+                </th>
+                <th>
+                  <Message>bidModifier</Message>
+                </th>
+                <th/>
+              </tr>
+            </thead>
+            <tbody>
+              {map(criteria, criteria =>
+                <CriteriaRow
+                  key={criteria.id}
+                  {...criteria}
+                  remove={this.removeCriteria}
+                  change={this.updateCriteria}/>)}
+            </tbody>
+          </table>
+        </div>
         <div className={`${style.actions}`}>
           <Button className='mdl-button mdl-button--raised' onClick={this.cancel}>
             <Message>cancel</Message>
           </Button>
 
-          {isPointTab && (
-            <Button
-              onClick={this.removePoint}
-              className='mdl-button mdl-button--raised mdl-button--accent'>
-              <Message>remove</Message>
-            </Button>)}
-
-          <Button onClick={this.addPoint} className='mdl-button mdl-button--raised'>
-            <Message>addPoint</Message>
+          <Button onClick={this.toggleCreationModal} className='mdl-button mdl-button--raised'>
+            <Message>newLocation</Message>
           </Button>
 
           <Submit className='mdl-button mdl-button--raised mdl-button--colored'>
