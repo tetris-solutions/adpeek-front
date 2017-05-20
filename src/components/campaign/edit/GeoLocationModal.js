@@ -3,7 +3,7 @@ import Modal from 'tetris-iso/Modal'
 import EditGeoLocation from './GeoLocation'
 
 const EditGeoLocationModal = props =>
-  <Modal size='large'>
+  <Modal size='medium'>
     <EditGeoLocation {...props}/>
   </Modal>
 

@@ -17,6 +17,7 @@ import floor from 'lodash/floor'
 import Form from '../../Form'
 import isEmpty from 'lodash/isEmpty'
 import isNumber from 'lodash/isNumber'
+import CreateGeoCriteria from './CreateGeoCriteria'
 
 const style = csjs`
 .actions {
@@ -117,21 +118,9 @@ class EditGeoLocation extends React.Component {
     ]).then(onSubmit)
   }
 
-  addPoint = () => {
-    const id = Math.random().toString(36).substr(2)
-
-    this.setState({
-      points: concat(this.state.points, {
-        id,
-        draft: true,
-        unit: 'KILOMETERS',
-        radius: 5
-      })
-    })
-  }
-
   addCriteria = criteria => {
     this.setState({
+      createModalOpen: false,
       criteria: concat(this.state.criteria, criteria)
     })
   }
@@ -162,7 +151,7 @@ class EditGeoLocation extends React.Component {
   }
 
   render () {
-    const {criteria} = this.state
+    const {criteria, createModalOpen} = this.state
 
     return (
       <Form onSubmit={this.save}>
@@ -205,6 +194,12 @@ class EditGeoLocation extends React.Component {
             <Message>save</Message>
           </Submit>
         </div>
+
+        {createModalOpen && (
+          <CreateGeoCriteria
+            dispatch={this.props.dispatch}
+            save={this.addCriteria}
+            cancel={this.toggleCreationModal}/>)}
       </Form>
     )
   }
