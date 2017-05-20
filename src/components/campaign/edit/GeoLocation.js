@@ -16,6 +16,7 @@ import {updateCampaignProximityAction} from '../../../actions/update-campaign-pr
 import floor from 'lodash/floor'
 import Form from '../../Form'
 import isEmpty from 'lodash/isEmpty'
+import isNumber from 'lodash/isNumber'
 
 const style = csjs`
 .actions {
@@ -35,22 +36,29 @@ const style = csjs`
   width: 100%;
 }`
 
-const preparePoint = point =>
-  assign({}, point, {
-    id: point.draft ? null : point.id,
-    lat: floor(point.lat * Math.pow(10, 6)),
-    lng: floor(point.lng * Math.pow(10, 6))
-  })
+const preparePoint = point => assign({}, point, {
+  id: point.draft ? null : point.id,
+  lat: floor(point.lat * Math.pow(10, 6)),
+  lng: floor(point.lng * Math.pow(10, 6))
+})
 
-const normalizeLocation = ({id, location: name, location_type, type, bid_modifier}) => ({
+const normalizeCriteria = criteria => assign({}, criteria, {
+  bid_modifier: isNumber(criteria.bid_modifier)
+    ? (criteria.bid_modifier / 100) + 1
+    : null
+})
+
+const parseLocation = ({id, location: name, location_type, type, bid_modifier}) => ({
   id,
   name,
   location_type,
   type,
-  bid_modifier
+  bid_modifier: isNumber(bid_modifier)
+    ? 100 * (bid_modifier - 1)
+    : undefined
 })
 
-const normalizeProximity = ({id, geo_point, radius, radius_unit: unit, address, bid_modifier, type}) => ({
+const parseProximity = ({id, geo_point, radius, radius_unit: unit, address, bid_modifier, type}) => ({
   id,
   lat: geo_point.latitudeInMicroDegrees / Math.pow(10, 6),
   lng: geo_point.longitudeInMicroDegrees / Math.pow(10, 6),
@@ -59,14 +67,16 @@ const normalizeProximity = ({id, geo_point, radius, radius_unit: unit, address, 
   location_type: 'Proximity',
   unit,
   address,
-  bid_modifier
+  bid_modifier: isNumber(bid_modifier)
+    ? 100 * (bid_modifier - 1)
+    : undefined
 })
 
 const isLocation = ({type}) => type === 'LOCATION' || type === 'PROXIMITY'
 
-const normalize = criteria => criteria.type === 'LOCATION'
-  ? normalizeLocation(criteria)
-  : normalizeProximity(criteria)
+const parse = criteria => criteria.type === 'LOCATION'
+  ? parseLocation(criteria)
+  : parseProximity(criteria)
 
 class EditGeoLocation extends React.Component {
   static displayName = 'Edit-Geo-Location'
@@ -88,7 +98,7 @@ class EditGeoLocation extends React.Component {
 
   state = {
     createModalOpen: false,
-    criteria: map(filter(this.props.campaign.details.criteria, isLocation), normalize)
+    criteria: map(filter(this.props.campaign.details.criteria, isLocation), parse)
   }
 
   componentWillMount () {
@@ -99,7 +109,7 @@ class EditGeoLocation extends React.Component {
 
   save = () => {
     const {dispatch, params, onSubmit} = this.props
-    const criteria = keyBy(this.state.criteria, 'type')
+    const criteria = keyBy(map(this.state.criteria, normalizeCriteria), 'type')
 
     return Promise.all([
       dispatch(updateCampaignLocationAction, params, criteria.LOCATION || []),
