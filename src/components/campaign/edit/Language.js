@@ -80,7 +80,9 @@ class EditLanguage extends React.Component {
     return filter(this.props.campaign.details.criteria, {type: 'LANGUAGE'})
   }
 
-  selectAll = ({target: {form}}) => {
+  selectAll = ({target}) => {
+    const form = target.closest('form')
+
     forEach(form.elements, input => {
       if (input && input.programaticallyCheck) {
         input.programaticallyCheck()
