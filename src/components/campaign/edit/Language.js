@@ -7,12 +7,13 @@ import Checkbox from '../../Checkbox'
 import map from 'lodash/map'
 import filter from 'lodash/filter'
 import noop from 'lodash/noop'
-import keyBy from 'lodash/keyBy'
 import {loadLanguageCriteriaAction} from '../../../actions/load-campaign-language-criteria'
 import {updateCampaignLanguageAction} from '../../../actions/update-campaign-language'
 import csjs from 'csjs'
 import {styledComponent} from '../../higher-order/styled'
 import forEach from 'lodash/forEach'
+import isEmpty from 'lodash/isEmpty'
+import includes from 'lodash/includes'
 
 const style = csjs`
 .checklist {
@@ -58,6 +59,7 @@ class EditLanguage extends React.Component {
   save = e => {
     const {dispatch, params, onSubmit} = this.props
     const selected = []
+    let fullSelection = true
 
     /**
      * @type {HTMLFormElement}
@@ -69,8 +71,14 @@ class EditLanguage extends React.Component {
 
       if (el && el.checked) {
         selected.push(lang)
+      } else {
+        fullSelection = false
       }
     })
+
+    if (fullSelection) {
+      selected.length = 0
+    }
 
     return dispatch(updateCampaignLanguageAction, params, selected)
       .then(onSubmit)
@@ -98,7 +106,9 @@ class EditLanguage extends React.Component {
     let {folder: {languageCriteria}} = this.props
 
     const campaignLanguages = this.getCampaignLanguages()
-    const selectedLanguages = keyBy(campaignLanguages, 'id')
+    const selectedLanguages = isEmpty(campaignLanguages)
+      ? map(languageCriteria, 'id')
+      : map(campaignLanguages, 'id')
     const isLoading = !languageCriteria
 
     if (isLoading) {
@@ -114,7 +124,7 @@ class EditLanguage extends React.Component {
                 key={id}
                 label={name}
                 name={`lang-${id}`}
-                checked={Boolean(selectedLanguages[id])}/>)}
+                checked={includes(selectedLanguages, id)}/>)}
 
             {isLoading && (
               <p className={style.loading}>
