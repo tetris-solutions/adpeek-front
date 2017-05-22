@@ -7,6 +7,7 @@ import {updateCampaignOptimizationStatusAction} from '../../../actions/update-ca
 import noop from 'lodash/noop'
 import map from 'lodash/map'
 import camelCase from 'lodash/camelCase'
+import Radio from '../../Radio'
 
 const options = [
   'OPTIMIZE',
@@ -56,19 +57,11 @@ class EditOptimizationStatus extends React.Component {
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--12-col'>{map(options, name =>
             <div key={name}>
-              <label className='mdl-radio' htmlFor={name}>
-                <input
-                  type='radio'
-                  id={name}
-                  className='mdl-radio__button'
-                  name='optimization-status'
-                  value={name}
-                  onChange={this.onChange}
-                  checked={selected === name}/>
+              <Radio name={name} id={name} value={name} onChange={this.onChange} checked={selected === name}>
                 <Message className='mdl-radio__label'>
                   {camelCase(name) + 'StatusLabel'}
                 </Message>
-              </label>
+              </Radio>
             </div>)}
           </div>
         </div>
