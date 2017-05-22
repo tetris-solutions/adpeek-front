@@ -165,7 +165,7 @@ export class Chart extends React.Component {
   static propTypes = {
     tag: PropTypes.string,
     children: PropTypes.node,
-    className: PropTypes.string,
+    className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     style: PropTypes.object
   }
 
