@@ -410,5 +410,7 @@ module.exports = {
   closeToLocation: 'próximo de {location}',
   locationDescription: 'Localidade',
   locationType: 'Tipo',
-  bidModifier: 'Ajuste de Lance'
+  bidModifier: 'Ajuste de Lance',
+  everyLanguage: 'Todos idiomas',
+  everyLocation: 'Qualquer localização'
 }

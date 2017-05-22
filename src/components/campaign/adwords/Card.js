@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import Fence from '../../Fence'
-import {Wrapper, SubText, None, Info, Section, SectionTitle} from '../Utils'
+import {everyCriteria, Wrapper, SubText, None, Info, Section, SectionTitle} from '../Utils'
 import Network, {networkNames} from './Network'
 import BiddingStrategy from './BiddingStrategy'
 import OptimizationStatus from './OptimizationStatus'
@@ -19,11 +19,11 @@ import toLower from 'lodash/toLower'
 import isArray from 'lodash/isArray'
 import ProximityDescription from '../edit/ProximityDescription'
 
-function maybeList (ls) {
+function maybeList (ls, Empty = None) {
   ls = isArray(ls) ? compact(ls) : [ls]
 
   if (isEmpty(ls)) {
-    return <None/>
+    return <Empty/>
   }
 
   return ls
@@ -49,6 +49,9 @@ const urlFor = ({company, workspace, folder, campaign}, fragment = null) => {
     ? `${campaignUrl}/edit/${fragment}`
     : campaignUrl
 }
+
+const EveryLanguage = everyCriteria('language')
+const EveryLocation = everyCriteria('location')
 
 function AdwordsCampaign (props, context) {
   const {reload, children, params, campaign: {details, name}} = props
@@ -86,13 +89,13 @@ function AdwordsCampaign (props, context) {
             <SubText key={loc.id}>{loc.location
               ? `${loc.location} (${loc.location_type})`
               : <ProximityDescription {...loc} unit={loc.radius_unit}/>}
-            </SubText>)))}
+            </SubText>)), EveryLocation)}
         </Info>
 
         <Info editLink={editable ? urlFor(params, 'language') : null}>
           <Message>targetLanguage</Message>:
           {maybeList(crop(map(filter(details.criteria, isLanguage), ({id, language}) =>
-            <SubText key={id}>{language}</SubText>)))}
+            <SubText key={id}>{language}</SubText>)), EveryLanguage)}
         </Info>
 
         <Info>

@@ -4,6 +4,7 @@ import {styledFunctionalComponent} from '../higher-order/styled'
 import Message from 'tetris-iso/Message'
 import {Link} from 'react-router'
 import csjs from 'csjs'
+import upperFirst from 'lodash/upperFirst'
 
 export const style = csjs`
 .edit {
@@ -86,6 +87,18 @@ Info.propTypes = {
 
 export const None = () => <SubText/>
 None.displayName = 'None'
+
+export const everyCriteria = criteriaName => class E extends React.PureComponent {
+  static displayName = `Every-${upperFirst(criteriaName)}`
+
+  render () {
+    return (
+      <SubText>
+        <Message>{`every${upperFirst(criteriaName)}`}</Message>
+      </SubText>
+    )
+  }
+}
 
 export const Section = ({children}) => (
   <section className={style.section}>
