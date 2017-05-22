@@ -90,6 +90,7 @@ class EditProximity extends React.Component {
           <Input
             disabled={!draft}
             name='radius'
+            min={1}
             label={`radiusIn${unitAbbr[unit]}`}
             value={radius}
             onChange={this.onChangeRadius}
