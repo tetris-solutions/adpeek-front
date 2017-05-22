@@ -1,15 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Message from 'tetris-iso/Message'
 import Input from '../../Input'
-import PrettyNumber from '../../PrettyNumber'
-import {stringifyAddressComponents} from '../../../functions/stringify-address'
 import capitalize from 'lodash/capitalize'
-
-const unitAbbr = {
-  KILOMETERS: 'km',
-  MILES: 'mi'
-}
+import ProximityDescription from './ProximityDescription'
 
 class CriteriaRow extends React.PureComponent {
   static displayName = 'Criteria-Row'
@@ -43,23 +36,12 @@ class CriteriaRow extends React.PureComponent {
   }
 
   render () {
-    const {id, name, address, radius, unit, lat, lng, type, location_type} = this.props
+    const {id, name, type, location_type} = this.props
 
     return (
       <tr>
         <td className='mdl-data-table__cell--non-numeric'>
-          {name || (
-            <div>
-              <PrettyNumber>
-                {radius}
-              </PrettyNumber>
-
-              {` ${unitAbbr[unit]} `}
-
-              <Message location={address
-                ? stringifyAddressComponents(address)
-                : `{${lat}°, ${lng}°}`}>closeToLocation</Message>
-            </div>)}
+          {name || <ProximityDescription {...this.props}/>}
         </td>
         <td className='mdl-data-table__cell--non-numeric'>
           {location_type || capitalize(type)}

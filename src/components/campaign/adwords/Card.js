@@ -17,7 +17,7 @@ import compact from 'lodash/compact'
 import flatten from 'lodash/flatten'
 import toLower from 'lodash/toLower'
 import isArray from 'lodash/isArray'
-import {stringifyAddressComponents} from '../../../functions/stringify-address'
+import ProximityDescription from '../edit/ProximityDescription'
 
 function maybeList (ls) {
   ls = isArray(ls) ? compact(ls) : [ls]
@@ -82,15 +82,11 @@ function AdwordsCampaign (props, context) {
 
         <Info editLink={editable ? urlFor(params, 'geo-location') : null}>
           <Message>targetLocation</Message>:
-          {maybeList(crop(map(filter(details.criteria, isLocation),
-            ({id, location, location_type, address, lat, lng}) =>
-              <SubText key={id}>
-                {location
-                  ? `${location} (${location_type})`
-                  : (address
-                    ? stringifyAddressComponents(address)
-                    : `{${lat}°, ${lng}°}`)}
-              </SubText>)))}
+          {maybeList(crop(map(filter(details.criteria, isLocation), loc =>
+            <SubText key={loc.id}>{loc.location
+              ? `${loc.location} (${loc.location_type})`
+              : <ProximityDescription {...loc} unit={loc.radius_unit}/>}
+            </SubText>)))}
         </Info>
 
         <Info editLink={editable ? urlFor(params, 'language') : null}>
