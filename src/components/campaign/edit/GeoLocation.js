@@ -60,7 +60,7 @@ const parseLocation = ({id, location: name, location_type, type, bid_modifier}) 
     : undefined
 })
 
-const parseProximity = ({id, geo_point, radius, radius_unit: unit, address, bid_modifier, type}) => ({
+export const parseProximity = ({id, geo_point, radius, radius_unit: unit, address, bid_modifier, type}) => ({
   id,
   lat: geo_point.latitudeInMicroDegrees / Math.pow(10, 6),
   lng: geo_point.longitudeInMicroDegrees / Math.pow(10, 6),

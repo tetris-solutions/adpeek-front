@@ -6,7 +6,7 @@ import {everyCriteria, Wrapper, SubText, None, Info, Section, SectionTitle} from
 import Network, {networkNames} from './Network'
 import BiddingStrategy from './BiddingStrategy'
 import OptimizationStatus from './OptimizationStatus'
-import {isLocation} from '../edit/GeoLocation'
+import {isLocation, parseProximity} from '../edit/GeoLocation'
 import assign from 'lodash/assign'
 import map from 'lodash/map'
 import head from 'lodash/head'
@@ -88,7 +88,7 @@ function AdwordsCampaign (props, context) {
           {maybeList(crop(map(filter(details.criteria, isLocation), loc =>
             <SubText key={loc.id}>{loc.location
               ? `${loc.location} (${loc.location_type})`
-              : <ProximityDescription {...loc} unit={loc.radius_unit}/>}
+              : <ProximityDescription {...parseProximity(loc)}/>}
             </SubText>)), EveryLocation)}
         </Info>
 
