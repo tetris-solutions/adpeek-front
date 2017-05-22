@@ -40,7 +40,7 @@ Timestamp.contextTypes = {
 }
 
 const ActionHeader = ({children}) => (
-  <h4 className={String(style.actionHeader)}>{children}</h4>
+  <h4 className={style.actionHeader}>{children}</h4>
 )
 ActionHeader.displayName = 'Action-Header'
 ActionHeader.propTypes = {

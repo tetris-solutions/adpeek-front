@@ -21,7 +21,7 @@ const style = csjs`
 }
 .tetris {
   width: auto;
-  height: 24px;  
+  height: 24px;
 }
 .manager {
   width: auto;
@@ -72,7 +72,7 @@ const style = csjs`
 }
 .icon {
   width: 32px;
-  height: 32px;  
+  height: 32px;
 }
 .button extends .round, .crop {
   position: relative;
@@ -104,16 +104,16 @@ const pTypes = {
 
 const UserOptions = ({name, avatar, email, is_admin, company, logout}) => (
   <div>
-    <div className={String(style.menu)}>
-      <a href={`${process.env.FRONT_URL}/dashboard/profile`} className={String(style.link)}>
-        <img className={String(style.face)} src={avatar || gravatar.url(email, {s: '100'})}/>
+    <div className={style.menu}>
+      <a href={`${process.env.FRONT_URL}/dashboard/profile`} className={style.link}>
+        <img className={style.face} src={avatar || gravatar.url(email, {s: '100'})}/>
         <div>
           <Message>edit</Message>
         </div>
       </a>
-      <div className={String(style.name)}>{name}</div>
+      <div className={style.name}>{name}</div>
       <sup>{userType(company, is_admin)}</sup>
-      <div className={String(style.locale)}>
+      <div className={style.locale}>
         <LocaleSelector/>
       </div>
     </div>
@@ -128,9 +128,9 @@ UserOptions.displayName = 'User-Options'
 UserOptions.propTypes = pTypes
 
 const UserMenu = props => (
-  <a className={String(style.button)}>
+  <a className={style.button}>
     <img
-      className={String(style.icon)}
+      className={style.icon}
       src={props.avatar || gravatar.url(props.email, {s: '32'})}/>
 
     <Tooltip>
@@ -184,8 +184,8 @@ class Header extends React.Component {
       <header className={`mdl-layout__header mdl-color--primary-dark ${style.header}`}>
         <div className={`mdl-layout__header-row ${style.row}`}>
           <GoHome {...homeProps}>
-            <img className={String(style.tetris)} src={'/img/tetris-logo.png'}/>
-            <img className={String(style.manager)} src={'/img/manager-logo.png'}/>
+            <img className={style.tetris} src={'/img/tetris-logo.png'}/>
+            <img className={style.manager} src={'/img/manager-logo.png'}/>
           </GoHome>
           <div className='mdl-layout-spacer'/>
 

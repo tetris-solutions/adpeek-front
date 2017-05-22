@@ -81,14 +81,14 @@ class TotalChart extends React.Component {
     const {locales} = this.context
 
     return (
-      <div className={String(style.wrapper)}>
-        <h5 className={String(style.title)}>
+      <div className={style.wrapper}>
+        <h5 className={style.title}>
           {name}
         </h5>
 
         <div {...divProps}>
           {value === undefined
-            ? <span className={String(style.empty)}>---</span>
+            ? <span className={style.empty}>---</span>
             : prettyNumber(value, type, locales)}
         </div>
       </div>

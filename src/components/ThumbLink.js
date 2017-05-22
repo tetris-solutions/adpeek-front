@@ -198,7 +198,7 @@ function doNotBubble (e) {
 }
 
 export const Gear = ({children}) => (
-  <span className={String(style.gear)} onClick={doNotBubble}>
+  <span className={style.gear} onClick={doNotBubble}>
     <i className='material-icons'>settings</i>
     {children}
   </span>
@@ -210,7 +210,7 @@ Gear.propTypes = {
 }
 
 const Parent = ({children}) => (
-  <div className={String(style.container)}>
+  <div className={style.container}>
     {children}
   </div>
 )

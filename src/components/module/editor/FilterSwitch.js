@@ -18,7 +18,7 @@ const style = csjs`
 }`
 
 const FilterSwitch = (props, {activeOnly, toggleActiveOnly}) => (
-  <div className={String(style.switch)}>
+  <div className={style.switch}>
     <span>
       <Switch
         checked={activeOnly}

@@ -39,7 +39,7 @@ const style = csjs`
 .caret > span {
   display: inline-block;
   font-size: 8px;
-  margin: 40vh 0 0 2px;  
+  margin: 40vh 0 0 2px;
 }`
 
 class Page extends React.Component {
@@ -85,16 +85,16 @@ class Page extends React.Component {
     const caret = this.state.isNavOpen ? '◀' : '▶'
 
     return (
-      <div className={String(style.page)}>
+      <div className={style.page}>
         <nav className={`mdl-shadow--6dp ${style.nav}`}>
           {Aside && this.state.isNavOpen
             ? <Aside/>
             : null}
-          <div onClick={this.toggleNav} className={String(style.caret)}>
+          <div onClick={this.toggleNav} className={style.caret}>
             <span>{caret}</span>
           </div>
         </nav>
-        <div className={String(style.content)}>
+        <div className={style.content}>
           {this.props.children}
         </div>
       </div>

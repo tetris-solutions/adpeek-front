@@ -63,7 +63,7 @@ class EditSize extends React.Component {
           <div className='mdl-cell mdl-cell--2-col'/>
           {map(availableColSizes, ([cols, label]) =>
             <div key={cols} className='mdl-cell mdl-cell--2-col'>
-              <div className={String(style.col)}>
+              <div className={style.col}>
                 <small>
                   {label}
                 </small>
@@ -75,7 +75,7 @@ class EditSize extends React.Component {
         {map(availableRowSizes, rows =>
           <div key={rows} className={`mdl-grid ${style.grid}`}>
             <div className='mdl-cell mdl-cell--2-col'>
-              <div className={String(style.row)}>
+              <div className={style.row}>
                 <small>
                   {rows * 100}px
                 </small>

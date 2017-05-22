@@ -52,7 +52,7 @@ class OrderPie extends React.Component {
     }
 
     return (
-      <Chart className={String(style.orderPieChart)}>
+      <Chart className={style.orderPieChart}>
         <credits enabled={false}/>
 
         <chart

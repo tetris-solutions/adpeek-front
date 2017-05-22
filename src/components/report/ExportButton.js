@@ -26,7 +26,7 @@ const style = csjs`
 const Format = ({icon, onClick, children}) => (
   <div className='mdl-card mdl-shadow--2dp'>
     <div className='mdl-card__title mdl-card--expand'>
-      <span className={String(style.icon)}>
+      <span className={style.icon}>
         <i className='material-icons mdl-color-text--grey-600'>{icon}</i>
       </span>
     </div>
@@ -52,7 +52,7 @@ const ExportOptions = ({pdf, xls, cancel}) => (
         <Message>pickReportTypePromptTitle</Message>
       </h2>
       <br/>
-      <div className={String(style.cards)}>
+      <div className={style.cards}>
         <Format icon='border_clear' onClick={xls}>
           <Message>reportTypeSpreadsheet</Message>
         </Format>

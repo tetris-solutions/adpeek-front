@@ -59,7 +59,7 @@ class Recent extends React.Component {
     const path = calcPath(params)
 
     return (
-      <div className={String(style.box)}>
+      <div className={style.box}>
         <h6>
           <Message>{camelCase(`recent ${level}`)}</Message>
         </h6>
