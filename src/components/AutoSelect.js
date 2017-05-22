@@ -144,7 +144,7 @@ class AutoSelect extends React.Component {
   }
 
   componentWillMount () {
-    this.onSuggestionsFetchRequested(this.state)
+    this.calculateSuggestions(this.state)
   }
 
   componentWillUnmount () {
@@ -209,11 +209,13 @@ class AutoSelect extends React.Component {
     }
   }
 
-  onSuggestionsFetchRequested = debounce(({value}) => {
+  calculateSuggestions = ({value}) => {
     this.setState({
       suggestions: this.getSuggestions(this.removeValuePrefix(value))
     })
-  }, 300)
+  }
+
+  onSuggestionsFetchRequested = debounce(this.calculateSuggestions, 300)
 
   state = {
     selected: this.props.selected,
