@@ -67,6 +67,8 @@ function AdwordsCampaign (props, context) {
     return navigate()
   }
 
+  const cancel = () => closeModal(false)
+
   return (
     <Fence canEditCampaign>{({canEditCampaign: editable}) =>
       <Wrapper>
@@ -180,10 +182,9 @@ function AdwordsCampaign (props, context) {
           </SubText>
         </Info>
 
-        {children ? React.cloneElement(children,
-          assign({}, props, {
-            onSubmit: closeModal
-          })) : null}
+        {children
+          ? React.cloneElement(children, assign({}, props, {cancel, onSubmit: closeModal}))
+          : null}
       </Wrapper>}
     </Fence>
   )

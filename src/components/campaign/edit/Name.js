@@ -5,7 +5,6 @@ import Input from '../../Input'
 import {Submit, Button} from '../../Button'
 import Form from '../../Form'
 import {updateCampaignNameAction} from '../../../actions/update-campaign-name'
-import noop from 'lodash/noop'
 
 class EditName extends React.Component {
   static displayName = 'Edit-Name'
@@ -14,11 +13,8 @@ class EditName extends React.Component {
     campaign: PropTypes.object,
     dispatch: PropTypes.func,
     params: PropTypes.object,
-    onSubmit: PropTypes.func
-  }
-
-  static defaultProps = {
-    onSubmit: noop
+    onSubmit: PropTypes.func,
+    cancel: PropTypes.func
   }
 
   state = {
@@ -36,10 +32,6 @@ class EditName extends React.Component {
       .then(onSubmit)
   }
 
-  cancel = () => {
-    this.props.onSubmit(false)
-  }
-
   render () {
     return (
       <Form onSubmit={this.save}>
@@ -55,7 +47,7 @@ class EditName extends React.Component {
         </div>
 
         <div>
-          <Button className='mdl-button mdl-button--raised' onClick={this.cancel}>
+          <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>
             <Message>cancel</Message>
           </Button>
 

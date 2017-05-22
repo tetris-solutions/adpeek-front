@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import CriteriaRow from './CriteriaRow'
-import noop from 'lodash/noop'
 import groupBy from 'lodash/groupBy'
 import filter from 'lodash/filter'
 import assign from 'lodash/assign'
@@ -86,11 +85,8 @@ class EditGeoLocation extends React.Component {
     campaign: PropTypes.object,
     dispatch: PropTypes.func,
     params: PropTypes.object,
-    onSubmit: PropTypes.func
-  }
-
-  static defaultProps = {
-    onSubmit: noop
+    onSubmit: PropTypes.func,
+    cancel: PropTypes.func
   }
 
   static contextTypes = {
@@ -140,10 +136,6 @@ class EditGeoLocation extends React.Component {
     })
   }
 
-  cancel = () => {
-    this.props.onSubmit(false)
-  }
-
   toggleCreationModal = () => {
     this.setState({
       createModalOpen: !this.state.createModalOpen
@@ -182,7 +174,7 @@ class EditGeoLocation extends React.Component {
           </table>
         </div>
         <div className={style.actions}>
-          <Button className='mdl-button mdl-button--raised' onClick={this.cancel}>
+          <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>
             <Message>cancel</Message>
           </Button>
 

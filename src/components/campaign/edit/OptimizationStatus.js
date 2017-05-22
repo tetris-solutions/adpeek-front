@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import {Submit, Button} from '../../Button'
 import Form from '../../Form'
 import {updateCampaignOptimizationStatusAction} from '../../../actions/update-campaign-optimization-status'
-import noop from 'lodash/noop'
 import map from 'lodash/map'
 import camelCase from 'lodash/camelCase'
 import Radio from '../../Radio'
@@ -23,11 +22,8 @@ class EditOptimizationStatus extends React.Component {
     campaign: PropTypes.object,
     dispatch: PropTypes.func,
     params: PropTypes.object,
-    onSubmit: PropTypes.func
-  }
-
-  static defaultProps = {
-    onSubmit: noop
+    onSubmit: PropTypes.func,
+    cancel: PropTypes.func
   }
 
   state = {
@@ -43,10 +39,6 @@ class EditOptimizationStatus extends React.Component {
 
     return dispatch(updateCampaignOptimizationStatusAction, params, this.state.selected)
       .then(onSubmit)
-  }
-
-  cancel = () => {
-    this.props.onSubmit(false)
   }
 
   render () {
@@ -67,7 +59,7 @@ class EditOptimizationStatus extends React.Component {
         </div>
 
         <div>
-          <Button className='mdl-button mdl-button--raised' onClick={this.cancel}>
+          <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>
             <Message>cancel</Message>
           </Button>
 

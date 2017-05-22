@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import {Link} from 'react-router'
 import {Button} from '../../Button'
 import {loadCampaignOrderAction} from '../../../actions/load-campaign-order'
-import noop from 'lodash/noop'
 
 const CampaignOrder = ({cancel, params: {company, workspace, folder, campaign}, order: {id, name, budget}}) => (
   <div>
@@ -73,11 +72,8 @@ class EditDeliveryMethod extends React.Component {
     campaign: PropTypes.object,
     dispatch: PropTypes.func,
     params: PropTypes.object,
-    onSubmit: PropTypes.func
-  }
-
-  static defaultProps = {
-    onSubmit: noop
+    onSubmit: PropTypes.func,
+    cancel: PropTypes.func
   }
 
   state = {
@@ -98,10 +94,6 @@ class EditDeliveryMethod extends React.Component {
       .then(done, done)
   }
 
-  cancel = () => {
-    this.props.onSubmit(false)
-  }
-
   render () {
     if (this.state.isLoading) {
       return (
@@ -118,8 +110,8 @@ class EditDeliveryMethod extends React.Component {
     const {campaign: {order}, params} = this.props
 
     return order
-      ? <CampaignOrder params={params} order={order} cancel={this.cancel}/>
-      : <CreateOrderPrompt params={params} cancel={this.cancel}/>
+      ? <CampaignOrder params={params} order={order} cancel={this.props.cancel}/>
+      : <CreateOrderPrompt params={params} cancel={this.props.cancel}/>
   }
 }
 

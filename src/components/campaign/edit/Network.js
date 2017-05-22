@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import {Button, Submit} from '../../Button'
 import Form from '../../Form'
-import noop from 'lodash/noop'
 import pick from 'lodash/pick'
 import map from 'lodash/map'
 import omit from 'lodash/omit'
@@ -25,15 +24,12 @@ class EditNetwork extends React.Component {
     campaign: PropTypes.object,
     dispatch: PropTypes.func,
     params: PropTypes.object,
-    onSubmit: PropTypes.func
+    onSubmit: PropTypes.func,
+    cancel: PropTypes.func
   }
 
   static contextTypes = {
     messages: PropTypes.object
-  }
-
-  static defaultProps = {
-    onSubmit: noop
   }
 
   save = e => {
@@ -46,10 +42,6 @@ class EditNetwork extends React.Component {
 
     return dispatch(updateCampaignNetworkAction, params, network)
       .then(onSubmit)
-  }
-
-  cancel = () => {
-    this.props.onSubmit(false)
   }
 
   render () {
@@ -73,7 +65,7 @@ class EditNetwork extends React.Component {
         </div>
 
         <div>
-          <Button className='mdl-button mdl-button--raised' onClick={this.cancel}>
+          <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>
             <Message>cancel</Message>
           </Button>
 

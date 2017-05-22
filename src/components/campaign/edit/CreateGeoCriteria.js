@@ -134,7 +134,7 @@ class CreateGeoCriteria extends React.PureComponent {
     }
 
     return (
-      <Modal size={size} minHeight={0}>
+      <Modal onEscPress={cancel} size={size} minHeight={0}>
         {content}
 
         <div className={style.actions}>

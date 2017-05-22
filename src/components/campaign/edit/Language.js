@@ -6,7 +6,6 @@ import PropTypes from 'prop-types'
 import Checkbox from '../../Checkbox'
 import map from 'lodash/map'
 import filter from 'lodash/filter'
-import noop from 'lodash/noop'
 import {loadLanguageCriteriaAction} from '../../../actions/load-campaign-language-criteria'
 import {updateCampaignLanguageAction} from '../../../actions/update-campaign-language'
 import csjs from 'csjs'
@@ -41,11 +40,8 @@ class EditLanguage extends React.Component {
     folder: PropTypes.object,
     dispatch: PropTypes.func,
     params: PropTypes.object,
-    onSubmit: PropTypes.func
-  }
-
-  static defaultProps = {
-    onSubmit: noop
+    onSubmit: PropTypes.func,
+    cancel: PropTypes.func
   }
 
   componentDidMount () {
@@ -98,10 +94,6 @@ class EditLanguage extends React.Component {
     })
   }
 
-  cancel = () => {
-    this.props.onSubmit(false)
-  }
-
   render () {
     let {folder: {languageCriteria}} = this.props
 
@@ -134,7 +126,7 @@ class EditLanguage extends React.Component {
         </div>
 
         <div className={style.actions}>
-          <Button className='mdl-button mdl-button--raised' onClick={this.cancel}>
+          <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>
             <Message>cancel</Message>
           </Button>
 
