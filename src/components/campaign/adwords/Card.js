@@ -168,7 +168,7 @@ function AdwordsCampaign (props, context) {
               name={details.bidding_strategy_name}/>) : <None/>}
         </Info>
 
-        <Info>
+        <Info editLink={editable ? urlFor(params, 'optimization-status') : null}>
           <Message>optimizationStatus</Message>:
           <OptimizationStatus status={details.optimization_status}/>
         </Info>

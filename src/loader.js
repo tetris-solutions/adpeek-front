@@ -94,7 +94,8 @@ const campaign = provide => tempSyncEnsure(() => provide({
   language: require('./components/campaign/edit/LanguageModal'),
   deliveryMethod: require('./components/campaign/edit/DeliveryMethodModal'),
   network: require('./components/campaign/edit/NetworkModal'),
-  geoLocation: require('./components/campaign/edit/GeoLocationModal')
+  geoLocation: require('./components/campaign/edit/GeoLocationModal'),
+  optimizationStatus: require('./components/campaign/edit/OptimizationStatusModal')
 }))
 
 const orderCloning = provide => tempSyncEnsure(() => provide({
@@ -191,6 +192,7 @@ export const component = {
   CampaignDeliveryMethod: screen(campaign, 'deliveryMethod'),
   CampaignNetwork: screen(campaign, 'network'),
   CampaignGeoLocation: screen(campaign, 'geoLocation'),
+  CampaignOptimizationStatus: screen(campaign, 'optimizationStatus'),
   CampaignCreatives: screen(creatives, 'campaign'),
   FolderCreatives: screen(creatives, 'folder'),
 
