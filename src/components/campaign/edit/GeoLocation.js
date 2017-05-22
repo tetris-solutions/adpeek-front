@@ -73,7 +73,7 @@ const parseProximity = ({id, geo_point, radius, radius_unit: unit, address, bid_
     : undefined
 })
 
-const isLocation = ({type}) => type === 'LOCATION' || type === 'PROXIMITY'
+export const isLocation = ({type}) => type === 'LOCATION' || type === 'PROXIMITY'
 
 const parse = criteria => criteria.type === 'LOCATION'
   ? parseLocation(criteria)

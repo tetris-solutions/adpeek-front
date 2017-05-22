@@ -6,6 +6,7 @@ import {Wrapper, SubText, None, Info, Section, SectionTitle} from '../Utils'
 import Network, {networkNames} from './Network'
 import BiddingStrategy from './BiddingStrategy'
 import OptimizationStatus from './OptimizationStatus'
+import {isLocation} from '../edit/GeoLocation'
 import assign from 'lodash/assign'
 import map from 'lodash/map'
 import head from 'lodash/head'
@@ -16,6 +17,7 @@ import compact from 'lodash/compact'
 import flatten from 'lodash/flatten'
 import toLower from 'lodash/toLower'
 import isArray from 'lodash/isArray'
+import {stringifyAddressComponents} from '../../../functions/stringify-address'
 
 function maybeList (ls) {
   ls = isArray(ls) ? compact(ls) : [ls]
@@ -27,7 +29,6 @@ function maybeList (ls) {
   return ls
 }
 
-const isLocation = {type: 'LOCATION'}
 const isLanguage = {type: 'LANGUAGE'}
 const isUserList = {type: 'USER_LIST'}
 const isApplication = {type: 'MOBILE_APPLICATION'}
@@ -82,9 +83,13 @@ function AdwordsCampaign (props, context) {
         <Info editLink={editable ? urlFor(params, 'geo-location') : null}>
           <Message>targetLocation</Message>:
           {maybeList(crop(map(filter(details.criteria, isLocation),
-            ({id, location, location_type}) =>
+            ({id, location, location_type, address, lat, lng}) =>
               <SubText key={id}>
-                {location} ({location_type})
+                {location
+                  ? `${location} (${location_type})`
+                  : (address
+                    ? stringifyAddressComponents(address)
+                    : `{${lat}°, ${lng}°}`)}
               </SubText>)))}
         </Info>
 
@@ -147,7 +152,6 @@ function AdwordsCampaign (props, context) {
 
         <Info>
           <Message>targetAudience</Message>:
-
           {maybeList(crop(map(filter(details.criteria, isUserList),
             ({user_list_id: id, user_list_name: name}) =>
               <SubText key={id}>{name}</SubText>)))}
