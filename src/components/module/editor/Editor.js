@@ -179,7 +179,7 @@ class Editor extends React.Component {
           <Message>save</Message>
         </Button>
 
-        <span className={`${style.rightButtons}`}>
+        <span className={style.rightButtons}>
           {updateBt}
           <DateRangeButton className='mdl-button'/>
         </span>

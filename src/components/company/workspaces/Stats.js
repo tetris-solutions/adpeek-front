@@ -57,13 +57,13 @@ const Daily = ({budget, cost, locales}) => {
 
   return (
     <div>
-      <div className={`${style.label}`}>
+      <div className={style.label}>
         <Message>investmentDayLabel</Message>:
       </div>
 
       <div className={`${style.stats} ${color}`} title={`${currency(cost)} / ${currency(budget)}`}>
         <i className='material-icons'>{icon}</i>
-        <span className={`${style.iconLabel}`}>{label}</span>
+        <span className={style.iconLabel}>{label}</span>
       </div>
     </div>
   )
@@ -73,12 +73,12 @@ Daily.displayName = 'Daily'
 
 const Period = ({cost, budget, locales}) => (
   <div>
-    <div className={`${style.label}`}>
+    <div className={style.label}>
       <Message>investmentLabel</Message>:
     </div>
 
-    <div className={`${style.stats}`}>
-      <div className={`${style.numbers}`}>
+    <div className={style.stats}>
+      <div className={style.numbers}>
         <strong>
           {!isNumber(cost) ? '--' : prettyNumber(cost, 'currency', locales)}
         </strong>
@@ -134,7 +134,7 @@ EmptyStats.contextTypes = {
 const Stats = ({open, yesterday, orders}, {locales, location: {query}}) => orders && !orders.count
   ? <EmptyStats lastOrder={orders ? orders.last : null}/>
   : (
-    <div className={`${style.statsWrap}`}>
+    <div className={style.statsWrap}>
       <Period {...open} locales={locales}/>
       <Daily {...yesterday} locales={locales}/>
     </div>

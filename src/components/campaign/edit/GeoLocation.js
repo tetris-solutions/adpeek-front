@@ -181,7 +181,7 @@ class EditGeoLocation extends React.Component {
             </tbody>
           </table>
         </div>
-        <div className={`${style.actions}`}>
+        <div className={style.actions}>
           <Button className='mdl-button mdl-button--raised' onClick={this.cancel}>
             <Message>cancel</Message>
           </Button>

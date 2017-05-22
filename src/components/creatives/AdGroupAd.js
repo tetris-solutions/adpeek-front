@@ -119,8 +119,8 @@ const DestinationUrl = ({url}) => (
       <Message>finalUrl</Message>
     </strong>
     <br/>
-    <div className={`${style.finalUrl}`}>
-      <a className={`${style.anchor}`} href={url} title={url} target='_blank'>
+    <div className={style.finalUrl}>
+      <a className={style.anchor} href={url} title={url} target='_blank'>
         {url}
       </a>
     </div>
@@ -136,7 +136,7 @@ function DisplayUrl ({display_url, final_urls, path_1, path_2}) {
   display_url = display_url || inferDisplayUrl(final_urls, path_1, path_2)
 
   return (
-    <a className={`${style.anchor}`} title={display_url} href={`http://${display_url}`} target='_blank'>
+    <a className={style.anchor} title={display_url} href={`http://${display_url}`} target='_blank'>
       {display_url}
     </a>
   )
@@ -152,10 +152,10 @@ DisplayUrl.propTypes = {
 
 let Banner = ({url, previewMode, setPreviewMode}) => url
   ? (
-    <div className={`${style.banner}`} style={{backgroundImage: `url(${url})`}} onClick={() => setPreviewMode(true)}>
+    <div className={style.banner} style={{backgroundImage: `url(${url})`}} onClick={() => setPreviewMode(true)}>
       {previewMode && (
         <Modal onEscPress={() => setPreviewMode(false)}>
-          <img className={`${style.preview}`} src={url}/>
+          <img className={style.preview} src={url}/>
         </Modal>)}
     </div>
   ) : null
@@ -170,7 +170,7 @@ Banner.propTypes = {
 Banner = withPreview(Banner)
 
 const ImageAd = ({kpi, urls, final_urls}) => (
-  <div className={`${style.wrapper}`}>
+  <div className={style.wrapper}>
     <div className={`mdl-color--yellow-200 ${style.box}`}>
       {kpi && <KPI kpi={kpi}/>}
       <Banner url={findImageAdUrl(urls)}/>
@@ -200,7 +200,7 @@ KPI.propTypes = {
 }
 
 const TextAd = ({kpi, headline, headline_part_1, headline_part_2, display_url, description, description_1, description_2, path_1, path_2, final_urls}) => (
-  <div className={`${style.wrapper}`}>
+  <div className={style.wrapper}>
     <div className={`mdl-color--yellow-200 ${style.box}`}>
       {headline
         ? <h5>{headline}</h5>
@@ -227,8 +227,8 @@ const TextAd = ({kpi, headline, headline_part_1, headline_part_2, display_url, d
           <Message>finalUrl</Message>
         </strong>
         <br/>
-        <div className={`${style.finalUrl}`}>
-          <a className={`${style.anchor}`} href={url} title={url} target='_blank'>
+        <div className={style.finalUrl}>
+          <a className={style.anchor} href={url} title={url} target='_blank'>
             {url}
           </a>
         </div>
@@ -252,12 +252,12 @@ TextAd.propTypes = {
 }
 
 let TemplatePreview = ({url, previewMode, setPreviewMode}) => (
-  <div className={`${style.templatePreview}`}>
+  <div className={style.templatePreview}>
     <iframe src={url} frameBorder={0} height={200}/>
-    <div className={`${style.templatePreviewOverlay}`} onClick={() => setPreviewMode(true)}>{previewMode && (
+    <div className={style.templatePreviewOverlay} onClick={() => setPreviewMode(true)}>{previewMode && (
       <Modal onEscPress={() => setPreviewMode(false)}>
-        <div className={`${style.templatePreviewModal}`}>
-          <iframe src={url} frameBorder={0} height={300} className={`${style.templatePreviewIframe}`}/>
+        <div className={style.templatePreviewModal}>
+          <iframe src={url} frameBorder={0} height={300} className={style.templatePreviewIframe}/>
         </div>
       </Modal>)}
     </div>
@@ -273,7 +273,7 @@ TemplatePreview.propTypes = {
 TemplatePreview = withPreview(TemplatePreview)
 
 const TemplateLink = ({url}) => (
-  <a className={`${style.link}`} href={url || ''} target='_blank'>
+  <a className={style.link} href={url || ''} target='_blank'>
     {url || 'invalid template'}
   </a>
 )
@@ -316,7 +316,7 @@ class TemplateAd extends React.Component {
     const {kpi, preview, final_urls, urls} = this.props
 
     return (
-      <div className={`${style.wrapper}`}>
+      <div className={style.wrapper}>
         <div className={`mdl-color--yellow-200 ${style.box}`}>
           {kpi && <KPI kpi={kpi}/>}
           {preview
@@ -331,7 +331,7 @@ class TemplateAd extends React.Component {
 }
 
 let YouTubeAd = ({title, video_id, previewMode, setPreviewMode}) => (
-  <div className={`${style.wrapper}`}>
+  <div className={style.wrapper}>
     <div
       className={`mdl-color--yellow-200 ${style.box} ${style.youtubeThumb}`}
       onClick={() => setPreviewMode(!previewMode)}>

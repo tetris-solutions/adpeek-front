@@ -66,15 +66,15 @@ const style = csjs`
   text-align: center;
   opacity: 0;
   cursor: pointer;
-  
+
   background: white;
   color: grey;
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
-  
+
   border-radius: 50%;
   width: 32px;
   height: 32px;
-  
+
   padding: 0;
   top: -12px;
   right: -12px;
@@ -119,7 +119,7 @@ const backgroundStyle = img => ({
 })
 
 export const BottomLine = ({children}) => (
-  <div className={`${style.bottom}`}>
+  <div className={style.bottom}>
     {children}
   </div>
 )
@@ -179,7 +179,7 @@ ThumbLink.propTypes = {
 }
 
 export const Info = ({children}) => (
-  <div className={`${style.info}`}>
+  <div className={style.info}>
     {children}
   </div>
 )

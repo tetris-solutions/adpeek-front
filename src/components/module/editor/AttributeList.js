@@ -145,7 +145,7 @@ class Group extends React.Component {
             {name}
           </strong>
         </header>
-        <div className={`${style.subTree}`}>
+        <div className={style.subTree}>
           {isOpen ? children : null}
         </div>
       </li>
@@ -153,7 +153,7 @@ class Group extends React.Component {
   }
 }
 
-const List = ({children}) => <ul className={`${style.list}`}>{children}</ul>
+const List = ({children}) => <ul className={style.list}>{children}</ul>
 
 List.displayName = 'List'
 List.propTypes = {

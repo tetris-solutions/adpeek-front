@@ -35,7 +35,7 @@ export class LoadingHorizontal extends React.Component {
   render () {
     const {children} = this.props
     return (
-      <div className={`${style.wrapper}`}>
+      <div className={style.wrapper}>
         <Middle>
           <div>
             <div ref='prog' className='mdl-progress mdl-js-progress mdl-progress__indeterminate'/>

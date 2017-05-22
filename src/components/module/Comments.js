@@ -67,7 +67,7 @@ Middle.propTypes = {
 }
 
 const Comment = ({id, date, body, user, creation, del}, {messages, moment, locales}) => (
-  <div className={`${style.comment}`}>
+  <div className={style.comment}>
     <Fence isRegularUser>
       <DeleteButton
         tag={Button}
@@ -86,7 +86,7 @@ const Comment = ({id, date, body, user, creation, del}, {messages, moment, local
       __html: `<strong>${moment(date).format('D/MMM')}:</strong> ${body.replace(/\n/g, '<br>')}`
     }}/>
 
-    <small className={`${style.time}`}>
+    <small className={style.time}>
       {moment(creation).fromNow()}
     </small>
   </div>

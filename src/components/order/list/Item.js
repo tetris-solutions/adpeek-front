@@ -28,7 +28,7 @@ const Order = ({dispatch, amount, auto_budget, start, end, company, workspace, f
   return (
     <ThumbLink to={orderUrl} title={name}>
       <Cap>
-        <strong className={`${style.strong}`}>
+        <strong className={style.strong}>
           {name}
         </strong>
         <br/>

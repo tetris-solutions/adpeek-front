@@ -117,13 +117,13 @@ class EditLanguage extends React.Component {
                 checked={Boolean(selectedLanguages[id])}/>)}
 
             {isLoading && (
-              <p className={`${style.loading}`}>
+              <p className={style.loading}>
                 <Message>loadingLanguages</Message>
               </p>)}
           </div>
         </div>
 
-        <div className={`${style.actions}`}>
+        <div className={style.actions}>
           <Button className='mdl-button mdl-button--raised' onClick={this.cancel}>
             <Message>cancel</Message>
           </Button>

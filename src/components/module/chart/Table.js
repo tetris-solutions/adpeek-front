@@ -230,7 +230,7 @@ TBody.propTypes = {
 const EmptyTBody = ({isLoading, columns}) => (
   <tbody>
     <tr>
-      <td className={`${style.placeholder}`} colSpan={columns.length || 1}>
+      <td className={style.placeholder} colSpan={columns.length || 1}>
         <Message>{isLoading ? 'loadingReport' : 'emptyReportResult'}</Message>
       </td>
     </tr>

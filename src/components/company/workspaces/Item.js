@@ -29,23 +29,23 @@ const Workspace = ({workspace, params, dispatch, reload}) => {
       <Stats {...workspace.stats}/>
 
       <BottomLine>
-        <div className={`${style.label}`}>
+        <div className={style.label}>
           <Message>workspaceFoldersSummary</Message>:
         </div>
 
-        <div className={`${style.numbers}`}>
-          <img className={`${style.platform}`} src='/img/g-circle-32.png'/>
-          <strong className={`${style.number}`}>
+        <div className={style.numbers}>
+          <img className={style.platform} src='/img/g-circle-32.png'/>
+          <strong className={style.number}>
             {Number(workspace.summary.adwords || 0)}
           </strong>
 
-          <img className={`${style.platform}`} src='/img/fb-circle-32.png'/>
-          <strong className={`${style.number}`}>
+          <img className={style.platform} src='/img/fb-circle-32.png'/>
+          <strong className={style.number}>
             {Number(workspace.summary.facebook || 0)}
           </strong>
 
-          {workspace.summary.analytics && <img className={`${style.platform}`} src='/img/ga-logo-32.png'/>}
-          {workspace.summary.analytics && <strong className={`${style.number}`}>
+          {workspace.summary.analytics && <img className={style.platform} src='/img/ga-logo-32.png'/>}
+          {workspace.summary.analytics && <strong className={style.number}>
             {Number(workspace.summary.analytics || 0)}
           </strong>}
         </div>

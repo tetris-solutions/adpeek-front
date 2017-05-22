@@ -40,7 +40,7 @@ const typeComponent = {
   total: Total
 }
 const ChartSpinner = () => (
-  <div className={`${style.spinner}`}>
+  <div className={style.spinner}>
     <Spinner/>
   </div>
 )
@@ -63,9 +63,9 @@ const Chart = props => {
 
   return (
     <div>
-      <div className={`${style.wrap}`} style={{height: props.height}}>
+      <div className={style.wrap} style={{height: props.height}}>
         <Renderer {...props}/>
-        <div className={`${style.hidden}`} data-interface>
+        <div className={style.hidden} data-interface>
           {props.renderHiddenTable
             ? <Table {...props}/>
             : null}

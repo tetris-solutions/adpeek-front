@@ -77,13 +77,13 @@ const num = val => !isNumber(val) ? 0 : val
 const division = (a, b) => b === 0 ? 0 : a / b
 
 const Rail = ({cost, amount}, {locales}) => (
-  <div className={`${style.section}`}>
-    <div className={`${style.label}`}>
+  <div className={style.section}>
+    <div className={style.label}>
       <Message>investmentLabel</Message>:
     </div>
 
-    <div className={`${style.stats}`}>
-      <div className={`${style.numbers}`}>
+    <div className={style.stats}>
+      <div className={style.numbers}>
         <strong className='mdl-color-text--blue-A700'>
           {!isNumber(cost)
             ? '--'
@@ -112,11 +112,11 @@ Rail.contextTypes = {
 }
 
 const Period = ({start, end}, {moment, locales}) => (
-  <div className={`${style.section}`}>
-    <div className={`${style.label}`}>
+  <div className={style.section}>
+    <div className={style.label}>
       <Message>orderRangeTitle</Message>:
     </div>
-    <div className={`${style.stats}`}>
+    <div className={style.stats}>
       {start
         ? moment(start).format('D/MMM') + ' - ' + moment(end).format('D/MMM')
         : '---'}
@@ -136,11 +136,11 @@ const Goal = ({series, metric, kpi_goal}, {locales}) => {
   const currentValue = get(last(series), get(metric, 'id'))
 
   return (
-    <div className={`${style.section}`}>
-      <div className={`${style.label}`}>
+    <div className={style.section}>
+      <div className={style.label}>
         <Message metric={get(metric, 'name')}>kpiGoalMetricTitle</Message>:
       </div>
-      <div className={`${style.stats}`}>
+      <div className={style.stats}>
         <Message
           currentValue={currentValue
             ? prettyNumber(currentValue, get(metric, 'type'), locales)
@@ -213,7 +213,7 @@ let Stats = ({stats, kpi_goal}, {messages, locales}) => (
           }
         ])
       }}
-      className={`${style.chart}`}
+      className={style.chart}
       onClick={preventDefault}>
 
       <title>{null}</title>
@@ -294,7 +294,7 @@ Stats = pure(Stats)
 const EmptyStats = ({lastOrder}, {moment}) => (
   <div className={`${style.wrapper} ${style.empty} mdl-color-text--grey-600`}>
     <br/><br/><br/><br/>
-    <div className={`${style.section}`}>{lastOrder
+    <div className={style.section}>{lastOrder
       ? (
         <h6>
           <Message>lastActiveOrder</Message>:

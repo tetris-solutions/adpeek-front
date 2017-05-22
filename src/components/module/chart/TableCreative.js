@@ -39,7 +39,7 @@ const style = csjs`
 
 function Creative ({thumbnail, body}) {
   return (
-    <div className={`${style.post}`}>
+    <div className={style.post}>
       <img src={thumbnail}/>
       <p>{body}</p>
     </div>

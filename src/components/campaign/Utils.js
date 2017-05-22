@@ -31,7 +31,7 @@ export const style = csjs`
 }`
 
 export const SubText = ({children, tag: Tag}) => (
-  <Tag className={`${style.subText}`}>
+  <Tag className={style.subText}>
     {React.Children.count(children)
       ? children
       : <Message>targetNotSetForCampaign</Message>}
@@ -53,11 +53,11 @@ Italic.displayName = 'Italic'
 
 export const EditLink = ({onClick, to}) =>
   to ? (
-    <Link className={`${style.edit}`} to={to}>
+    <Link className={style.edit} to={to}>
       <Message>edit</Message>
     </Link>
   ) : (
-    <a className={`${style.edit}`} onClick={onClick}>
+    <a className={style.edit} onClick={onClick}>
       <Message>edit</Message>
     </a>
   )
@@ -69,7 +69,7 @@ EditLink.propTypes = {
 }
 
 export const Info = ({children, editLink, editClick}) => (
-  <h6 className={`${style.title}`}>
+  <h6 className={style.title}>
     {children}
     {editLink || editClick
       ? <EditLink onClick={editClick} to={editLink}/>
@@ -88,7 +88,7 @@ export const None = () => <SubText/>
 None.displayName = 'None'
 
 export const Section = ({children}) => (
-  <section className={`${style.section}`}>
+  <section className={style.section}>
     {children}
   </section>
 )
@@ -99,7 +99,7 @@ Section.propTypes = {
 }
 
 export const SectionTitle = ({children}) => (
-  <h6 className={`${style.secionTitle}`}>
+  <h6 className={style.secionTitle}>
     {children}
   </h6>
 )

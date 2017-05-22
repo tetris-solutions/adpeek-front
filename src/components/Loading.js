@@ -25,7 +25,7 @@ const style = csjs`
 const hidden = {display: 'none'}
 
 const Loading = ({running}) => (
-  <div className={`${style.relative}`} style={running ? undefined : hidden}>
+  <div className={style.relative} style={running ? undefined : hidden}>
     <Spinner/>
   </div>
 )

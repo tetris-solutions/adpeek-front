@@ -57,10 +57,10 @@ class AdGroups extends React.Component {
     return (
       <section className='mdl-grid'>
         <div className='mdl-cell mdl-cell--12-col'>
-          <div ref='wrapper' className={`${style.wrapper}`}>
-            <div className={`${style.grid}`} ref='grid' style={gridStyle}>
+          <div ref='wrapper' className={style.wrapper}>
+            <div className={style.grid} ref='grid' style={gridStyle}>
               {map(adGroups, ({id}) => (
-                <div key={id} className={`${style.column}`}>
+                <div key={id} className={style.column}>
                   <AdGroup params={{adGroup: id}}/>
                 </div>))}
             </div>

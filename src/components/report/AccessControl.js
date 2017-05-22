@@ -126,7 +126,7 @@ function Options ({user, report, setMedia, makePublic, unlock, setAsDefault, clo
         <br/>
 
         {noPossibleOptions && (
-          <p className={`${style.empty}`}>
+          <p className={style.empty}>
             <Message>emptyAccessControlOptions</Message>
           </p>)}
 

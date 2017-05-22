@@ -84,12 +84,12 @@ export const NavLink = props => <NavBt {...props} tag={Link}/>
 NavLink.displayName = 'Nav-Link'
 
 export const NavBts = ({children}) => (
-  <section className={`${style.menu}`}>
+  <section className={style.menu}>
     {children}
   </section>
 )
 export const Name = ({children}) => (
-  <section className={`${style.name}`}>
+  <section className={style.name}>
     <h4>
       {children}
     </h4>
@@ -103,7 +103,7 @@ Name.propTypes = NavBts.propTypes = {
 }
 
 const NavContainer = ({children}) => (
-  <div className={`${style.wrapper}`}>
+  <div className={style.wrapper}>
     {children}
   </div>
 )
@@ -160,7 +160,7 @@ class Navigation_ extends React.Component {
     let navIcon = null
 
     if (img) {
-      navIcon = <img className={`${style.img}`} src={img}/>
+      navIcon = <img className={style.img} src={img}/>
     } else if (isString(icon)) {
       navIcon = <i className={`material-icons ${style.icon}`}>{icon}</i>
     } else if (React.isValidElement(icon)) {

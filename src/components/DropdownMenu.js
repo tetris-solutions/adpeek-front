@@ -73,7 +73,7 @@ MenuItem.propTypes = {
 }
 
 export const HeaderMenuItem = props => (
-  <MenuItem {...props} tag='strong' className={`${style.menuHeader}`}>
+  <MenuItem {...props} tag='strong' className={style.menuHeader}>
     {props.children}
   </MenuItem>
 )

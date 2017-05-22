@@ -66,7 +66,7 @@ function Report (props, {moment}) {
       </small>}
 
       <BottomLine>
-        {author && <div className={`${style.author}`}>
+        {author && <div className={style.author}>
           <Message html name={author.name}>
             createdByName
           </Message>

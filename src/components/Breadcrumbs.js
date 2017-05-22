@@ -57,7 +57,7 @@ class Breadcrumbs extends React.Component {
     const breadcrumbs = flatten(compact(map(routes, 'breadcrumb')))
 
     return (
-      <span className={`${style.wrapper}`} ref='wrapper'>
+      <span className={style.wrapper} ref='wrapper'>
         {map(breadcrumbs, (Breadcrumb, index) => (
           <span key={index} className={style.breadcrumb}>
             <Breadcrumb params={params}/>

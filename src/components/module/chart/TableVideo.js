@@ -62,7 +62,7 @@ export class Channel extends React.Component {
 
 function Video ({id, name, duration, previewMode, setPreviewMode}) {
   return (
-    <figure className={`${style.video}`} onClick={() => setPreviewMode(!previewMode)}>
+    <figure className={style.video} onClick={() => setPreviewMode(!previewMode)}>
       <img src={`http://img.youtube.com/vi/${id}/mqdefault.jpg`}/>
 
       <figcaption>
