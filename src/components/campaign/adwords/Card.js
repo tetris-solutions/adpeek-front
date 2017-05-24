@@ -157,7 +157,7 @@ function AdwordsCampaign (props, context) {
               <SubText key={id}>{name}</SubText>)}
         </Info>
 
-        <Info>
+        <Info editLink={editable ? urlFor(params, 'bid-strategy') : null}>
           <Message>biddingConfiguration</Message>:
           {details.bidding_strategy_name || details.bidding_strategy_type ? (
             <BiddingStrategy
