@@ -16,6 +16,7 @@ import isEmpty from 'lodash/isEmpty'
 import compact from 'lodash/compact'
 import flatten from 'lodash/flatten'
 import toLower from 'lodash/toLower'
+import lowerFirst from 'lodash/lowerFirst'
 import isArray from 'lodash/isArray'
 import ProximityDescription from '../edit/ProximityDescription'
 
@@ -183,7 +184,9 @@ function AdwordsCampaign (props, context) {
         <Info editLink={editable ? urlFor(params, 'platform') : null}>
           <Message>platformCriteria</Message>:
           {list(filter(details.criteria, isPlatform), ({id, platform}) =>
-            <SubText key={id}>{platform}</SubText>)}
+            <SubText key={id}>
+              <Message>{lowerFirst(platform) + 'Device'}</Message>
+            </SubText>)}
         </Info>
 
         {children
