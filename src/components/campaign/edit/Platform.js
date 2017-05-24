@@ -9,7 +9,6 @@ import get from 'lodash/get'
 import {updateCampaignPlatformAction} from '../../../actions/update-campaign-platform'
 import {parseBidModifier, normalizeBidModifier} from '../../../functions/handle-bid-modifier'
 import Form from '../../Form'
-import Checkbox from '../../Checkbox'
 import Input from '../../Input'
 import {Button, Submit} from '../../Button'
 import csjs from 'csjs'
@@ -69,7 +68,7 @@ class EditPlatform extends React.PureComponent {
     return dispatch(
       updateCampaignPlatformAction,
       params,
-      map(filter(this.state.platforms, 'enabled'), normalize))
+      map(this.state.platforms, normalize))
       .then(onSubmit)
   }
 
@@ -84,24 +83,12 @@ class EditPlatform extends React.PureComponent {
     })
   }
 
-  onChangeEnabled = ({target: {name, checked: enabled}}) => {
-    const id = name.split('-').pop()
-
-    this.setState({
-      platforms: map(this.state.platforms,
-        platform => id === platform.id
-          ? assign({}, platform, {enabled})
-          : platform)
-    })
-  }
-
   render () {
     return (
       <Form onSubmit={this.save}>
         <table className={`mdl-data-table ${style.table}`}>
           <thead>
             <tr>
-              <th/>
               <th className='mdl-data-table__cell--non-numeric'>
                 <Message>deviceDescription</Message>
               </th>
@@ -112,13 +99,6 @@ class EditPlatform extends React.PureComponent {
           </thead>
           <tbody>{map(this.state.platforms, ({id, name, bid_modifier, enabled}) =>
             <tr key={id}>
-              <td className='mdl-data-table__cell--non-numeric'>
-                <Checkbox
-                  data-id={id}
-                  checked={enabled}
-                  onChange={this.onChangeEnabled}
-                  name={`enabled-${id}`}/>
-              </td>
               <td className='mdl-data-table__cell--non-numeric'>
                 <Message>{lowerFirst(name) + 'Device'}</Message>
               </td>
