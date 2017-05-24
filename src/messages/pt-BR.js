@@ -413,5 +413,9 @@ module.exports = {
   bidModifier: 'Ajuste de Lance',
   everyLanguage: 'Todos idiomas',
   everyLocation: 'Qualquer localização',
-  platformCriteria: 'Dispositivos'
+  platformCriteria: 'Dispositivos',
+  desktopDevice: 'Computadores',
+  highEndMobileDevice: 'Smartphones',
+  tabletDevice: 'Tablets',
+  deviceDescription: 'Dispositivo'
 }

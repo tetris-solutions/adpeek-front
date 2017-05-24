@@ -15,9 +15,8 @@ import {updateCampaignProximityAction} from '../../../actions/update-campaign-pr
 import floor from 'lodash/floor'
 import Form from '../../Form'
 import isEmpty from 'lodash/isEmpty'
-import isNumber from 'lodash/isNumber'
 import CreateGeoCriteria from './CreateGeoCriteria'
-import round from 'lodash/round'
+import {parseBidModifier, normalizeBidModifier} from '../../../functions/handle-bid-modifier'
 
 const style = csjs`
 .actions {
@@ -46,9 +45,7 @@ const preparePoint = point => assign({}, point, {
 })
 
 const normalizeCriteria = criteria => assign({}, criteria, {
-  bid_modifier: isNumber(criteria.bid_modifier)
-    ? round((criteria.bid_modifier / 100) + 1, 2)
-    : null
+  bid_modifier: normalizeBidModifier(criteria.bid_modifier)
 })
 
 const parseLocation = ({id, location: name, location_type, type, bid_modifier}) => ({
@@ -56,9 +53,7 @@ const parseLocation = ({id, location: name, location_type, type, bid_modifier}) 
   name,
   location_type,
   type,
-  bid_modifier: isNumber(bid_modifier)
-    ? round(100 * (bid_modifier - 1), 2)
-    : undefined
+  bid_modifier: parseBidModifier(bid_modifier)
 })
 
 export const parseProximity = ({id, geo_point, radius, radius_unit: unit, address, bid_modifier, type}) => ({
@@ -69,9 +64,7 @@ export const parseProximity = ({id, geo_point, radius, radius_unit: unit, addres
   type,
   unit,
   address,
-  bid_modifier: isNumber(bid_modifier)
-    ? round(100 * (bid_modifier - 1), 2)
-    : undefined
+  bid_modifier: parseBidModifier(bid_modifier)
 })
 
 export const isLocation = ({type}) => type === 'LOCATION' || type === 'PROXIMITY'

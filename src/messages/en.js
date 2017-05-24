@@ -415,5 +415,9 @@ module.exports = {
   bidModifier: 'Bid Modifier',
   everyLanguage: 'Any language',
   everyLocation: 'Any location',
-  platformCriteria: 'Target devices'
+  platformCriteria: 'Target devices',
+  desktopDevice: 'Desktop computers',
+  highEndMobileDevice: 'Smartphones',
+  tabletDevice: 'Tablets',
+  deviceDescription: 'Device'
 }

@@ -180,7 +180,7 @@ function AdwordsCampaign (props, context) {
           </SubText>
         </Info>
 
-        <Info>
+        <Info editLink={editable ? urlFor(params, 'platform') : null}>
           <Message>platformCriteria</Message>:
           {list(filter(details.criteria, isPlatform), ({id, platform}) =>
             <SubText key={id}>{platform}</SubText>)}
