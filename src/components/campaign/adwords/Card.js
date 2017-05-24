@@ -19,28 +19,29 @@ import toLower from 'lodash/toLower'
 import isArray from 'lodash/isArray'
 import ProximityDescription from '../edit/ProximityDescription'
 
-function maybeList (ls, Empty = None) {
-  ls = isArray(ls) ? compact(ls) : [ls]
+const crop = ls => ls.length > 10
+  ? ls.slice(0, 10).concat([
+    <SubText key={Math.random().toString(36).substr(2)}>
+      ...
+    </SubText>
+  ]) : ls
+
+function list (ls, iteratee, Empty = None) {
+  ls = isArray(ls) ? compact(ls) : ls
 
   if (isEmpty(ls)) {
     return <Empty/>
   }
 
-  return ls
+  return crop(map(ls, iteratee))
 }
 
 const isLanguage = {type: 'LANGUAGE'}
 const isUserList = {type: 'USER_LIST'}
+const isPlatform = {type: 'PLATFORM'}
 const isApplication = {type: 'MOBILE_APPLICATION'}
 
 const mapExtensions = (ls, type, cb) => map(flatten(map(filter(ls, {type}), 'extensions')), cb)
-
-const crop = ls => ls.length > 10 ? ls.slice(0, 10)
-  .concat([
-    <SubText key={Math.random().toString(36).substr(2)}>
-      ...
-    </SubText>
-  ]) : ls
 
 const urlFor = ({company, workspace, folder, campaign}, fragment = null) => {
   const campaignUrl = `/company/${company}/workspace/${workspace}/folder/${folder}/campaign/${campaign}`
@@ -79,31 +80,31 @@ function AdwordsCampaign (props, context) {
 
         <Info editLink={editable ? urlFor(params, 'network') : null}>
           <Message>targetNetworks</Message>:
-          {maybeList(map(pick(details, networkNames),
+          {list(pick(details, networkNames),
             (active, key) => active
               ? <Network key={key} name={key}/>
-              : null))}
+              : null)}
         </Info>
 
         <Info editLink={editable ? urlFor(params, 'geo-location') : null}>
           <Message>targetLocation</Message>:
-          {maybeList(crop(map(filter(details.criteria, isLocation), loc =>
+          {list(filter(details.criteria, isLocation), loc =>
             <SubText key={loc.id}>{loc.location
               ? `${loc.location} (${loc.location_type})`
               : <ProximityDescription {...parseProximity(loc)}/>}
-            </SubText>)), EveryLocation)}
+            </SubText>, EveryLocation)}
         </Info>
 
         <Info editLink={editable ? urlFor(params, 'language') : null}>
           <Message>targetLanguage</Message>:
-          {maybeList(crop(map(filter(details.criteria, isLanguage), ({id, language}) =>
-            <SubText key={id}>{language}</SubText>)), EveryLanguage)}
+          {list(filter(details.criteria, isLanguage), ({id, language}) =>
+            <SubText key={id}>{language}</SubText>, EveryLanguage)}
         </Info>
 
         <Info>
           <Message>conversionTracker</Message>:
-          {maybeList(crop(map(details.conversionTracker, ({id, name}) =>
-            <SubText key={id}>{name}</SubText>)))}
+          {list(details.conversionTracker, ({id, name}) =>
+            <SubText key={id}>{name}</SubText>)}
         </Info>
 
         <SectionTitle>
@@ -113,7 +114,7 @@ function AdwordsCampaign (props, context) {
         <Section>
           <Info>
             <Message>siteLinks</Message>:
-            {maybeList(mapExtensions(details.extension, 'SITELINK',
+            {list(mapExtensions(details.extension, 'SITELINK',
               ({sitelinkText, sitelinkFinalUrls: {urls}}, index) =>
                 <SubText key={index}>
                   <a href={head(urls)} target='_blank'>
@@ -124,7 +125,7 @@ function AdwordsCampaign (props, context) {
 
           <Info>
             <Message>callOut</Message>:
-            {maybeList(mapExtensions(details.extension, 'CALLOUT',
+            {list(mapExtensions(details.extension, 'CALLOUT',
               ({calloutText}, index) =>
                 <SubText key={index}>
                   "{calloutText}"
@@ -133,29 +134,26 @@ function AdwordsCampaign (props, context) {
 
           <Info>
             <Message>feedLocal</Message>:
-            {maybeList(map(details.localFeed, ({id, name, data}) =>
+            {list(details.localFeed, ({id, name, data}) =>
               <SubText key={id}>
                 {name} {data && data.emailAddress
                 ? <em>(<Message email={data.emailAddress}>feedLocalBusiness</Message>)</em>
                 : null}
-              </SubText>))}
+              </SubText>)}
           </Info>
 
           <Info>
             <Message>targetApp</Message>:
-            {maybeList(crop(map(filter(details.criteria, isApplication),
-              ({id, app_name}) =>
-                <SubText key={id}>
-                  {app_name}
-                </SubText>)))}
+            {list(filter(details.criteria, isApplication), ({id, app_name}) =>
+              <SubText key={id}>{app_name}</SubText>)}
           </Info>
         </Section>
 
         <Info>
           <Message>targetAudience</Message>:
-          {maybeList(crop(map(filter(details.criteria, isUserList),
+          {list(filter(details.criteria, isUserList),
             ({user_list_id: id, user_list_name: name}) =>
-              <SubText key={id}>{name}</SubText>)))}
+              <SubText key={id}>{name}</SubText>)}
         </Info>
 
         <Info>
@@ -180,6 +178,12 @@ function AdwordsCampaign (props, context) {
           <SubText>
             {messages[toLower(details.delivery_method) + 'Delivery']}
           </SubText>
+        </Info>
+
+        <Info>
+          <Message>platformCriteria</Message>:
+          {list(filter(details.criteria, isPlatform), ({id, platform}) =>
+            <SubText key={id}>{platform}</SubText>)}
         </Info>
 
         {children

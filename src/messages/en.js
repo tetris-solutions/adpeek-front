@@ -414,5 +414,6 @@ module.exports = {
   locationType: 'Type',
   bidModifier: 'Bid Modifier',
   everyLanguage: 'Any language',
-  everyLocation: 'Any location'
+  everyLocation: 'Any location',
+  platformCriteria: 'Target devices'
 }

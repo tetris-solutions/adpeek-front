@@ -412,5 +412,6 @@ module.exports = {
   locationType: 'Tipo',
   bidModifier: 'Ajuste de Lance',
   everyLanguage: 'Todos idiomas',
-  everyLocation: 'Qualquer localização'
+  everyLocation: 'Qualquer localização',
+  platformCriteria: 'Dispositivos'
 }
