@@ -51,7 +51,8 @@ export class Checkbox extends React.Component {
     disabled: PropTypes.bool,
     name: PropTypes.string.isRequired,
     label: PropTypes.node,
-    value: PropTypes.string
+    value: PropTypes.string,
+    onChange: PropTypes.func
   }
 
   static defaultProps = {
@@ -81,7 +82,22 @@ export class Checkbox extends React.Component {
     window.componentHandler.upgradeElement(wrapper)
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (
+      nextProps.checked !== this.props.checked &&
+      nextProps.checked !== this.state.checked
+    ) {
+      if (nextProps.checked) {
+        this.check()
+      } else {
+        this.uncheck()
+      }
+    }
+  }
+
   onChange = ({target, nativeEvent: {shiftKey, ctrlKey}}) => {
+    const {onChange} = this.props
+
     function onCheckStateChanged () {
       if (!target.form) return
 
@@ -90,9 +106,13 @@ export class Checkbox extends React.Component {
       }
 
       target.form._lastChecked = target
+
+      if (onChange) onChange({target})
     }
 
-    this.setState({checked: target.checked}, onCheckStateChanged)
+    this.setState({
+      checked: target.checked
+    }, onCheckStateChanged)
   }
 
   render () {

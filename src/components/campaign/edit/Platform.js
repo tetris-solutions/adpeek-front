@@ -2,10 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import keyBy from 'lodash/keyBy'
+import assign from 'lodash/assign'
 import filter from 'lodash/filter'
 import map from 'lodash/map'
 import get from 'lodash/get'
-import {parseBidModifier} from '../../../functions/handle-bid-modifier'
+import {updateCampaignPlatformAction} from '../../../actions/update-campaign-platform'
+import {parseBidModifier, normalizeBidModifier} from '../../../functions/handle-bid-modifier'
 import Form from '../../Form'
 import Checkbox from '../../Checkbox'
 import Input from '../../Input'
@@ -43,17 +45,55 @@ function mountPlatforms (criteria) {
   }))
 }
 
-class EditPlatform extends React.Component {
+const normalize = ({id, bid_modifier}) => ({
+  id,
+  bid_modifier: normalizeBidModifier(bid_modifier)
+})
+
+class EditPlatform extends React.PureComponent {
   static displayName = 'Edit-Platform'
 
   static propTypes = {
     cancel: PropTypes.func,
-    campaign: PropTypes.shape({
-      criteria: PropTypes.array
+    campaign: PropTypes.object,
+    onSubmit: PropTypes.func,
+    params: PropTypes.object,
+    dispatch: PropTypes.func
+  }
+
+  state = {platforms: mountPlatforms(this.props.campaign.details.criteria)}
+
+  save = () => {
+    const {onSubmit, params, dispatch} = this.props
+
+    return dispatch(
+      updateCampaignPlatformAction,
+      params,
+      map(filter(this.state.platforms, 'enabled'), normalize))
+      .then(onSubmit)
+  }
+
+  onChangeBidModifier = ({target: {name, value: bid_modifier}}) => {
+    const id = name.split('-').pop()
+
+    this.setState({
+      platforms: map(this.state.platforms,
+        platform => id === platform.id
+          ? assign({}, platform, {bid_modifier})
+          : platform)
     })
   }
 
-  state = {platforms: mountPlatforms(this.props.campaign.criteria)}
+  onChangeEnabled = ({target: {name, checked: enabled}}) => {
+    const id = name.split('-').pop()
+
+    this.setState({
+      platforms: map(this.state.platforms,
+        platform => id === platform.id
+          ? assign({}, platform, {enabled})
+          : platform)
+    })
+  }
 
   render () {
     return (
@@ -70,27 +110,30 @@ class EditPlatform extends React.Component {
               </th>
             </tr>
           </thead>
-          <tbody>
-            {map(this.state.platforms, ({id, name, bid_modifier, enabled}) =>
-              <tr key={id}>
-                <td className='mdl-data-table__cell--non-numeric'>
-                  <Checkbox
-                    checked={enabled}
-                    name={`platform-${id}-enabled`}/>
-                </td>
-                <td className='mdl-data-table__cell--non-numeric'>
-                  <Message>{lowerFirst(name) + 'Device'}</Message>
-                </td>
-                <td>
-                  <div style={{width: '4em', float: 'right'}}>
-                    <Input
-                      name={`platform-${id}-bid-modifier`}
-                      type='number'
-                      format='percentage'
-                      defaultValue={bid_modifier || 0}/>
-                  </div>
-                </td>
-              </tr>)}
+          <tbody>{map(this.state.platforms, ({id, name, bid_modifier, enabled}) =>
+            <tr key={id}>
+              <td className='mdl-data-table__cell--non-numeric'>
+                <Checkbox
+                  data-id={id}
+                  checked={enabled}
+                  onChange={this.onChangeEnabled}
+                  name={`enabled-${id}`}/>
+              </td>
+              <td className='mdl-data-table__cell--non-numeric'>
+                <Message>{lowerFirst(name) + 'Device'}</Message>
+              </td>
+              <td>
+                <div style={{width: '4em', float: 'right'}}>
+                  <Input
+                    data-id={id}
+                    onChange={this.onChangeBidModifier}
+                    name={`bid-modifier-${id}`}
+                    type='number'
+                    format='percentage'
+                    defaultValue={bid_modifier || 0}/>
+                </div>
+              </td>
+            </tr>)}
           </tbody>
         </table>
         <div className={style.actions}>
