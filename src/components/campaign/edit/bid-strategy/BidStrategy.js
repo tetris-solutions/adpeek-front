@@ -74,9 +74,15 @@ class EditBidStrategy extends React.PureComponent {
 
   save = () => {
     const {dispatch, params, onSubmit} = this.props
+    const willCreateSharedStrategy = (
+      !this.state.strategyId &&
+      this.state.type !== 'MANUAL_CPC'
+    )
 
     return dispatch(updateCampaignBidStrategyAction, params, this.state)
-      .then(this.state.strategyId ? undefined : this.loadStrategies)
+      .then(willCreateSharedStrategy
+        ? this.loadStrategies
+        : undefined)
       .then(onSubmit)
   }
 

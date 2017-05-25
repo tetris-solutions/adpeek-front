@@ -381,6 +381,7 @@ module.exports = {
   biddingConfiguration: 'Opção de lance',
   optimizationStatus: 'Rotação de anúncios',
   manualCpcLabel: 'CPC Manual',
+  manualCpmLabel: 'CPM Manual',
   standardDelivery: 'Padrão',
   acceleratedDelivery: 'Acelerado',
   targetCpaLabel: 'CPA de destino',

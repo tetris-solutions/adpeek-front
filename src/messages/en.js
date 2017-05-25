@@ -383,6 +383,7 @@ module.exports = {
   biddingConfiguration: 'Bidding configuration',
   optimizationStatus: 'Optimization Status',
   manualCpcLabel: 'Manual CPC',
+  manualCpmLabel: 'Manual CPM',
   standardDelivery: 'Standard',
   acceleratedDelivery: 'Accelerated',
   targetCpaLabel: 'Target CPA',
