@@ -418,5 +418,5 @@ module.exports = {
   highEndMobileDevice: 'Smartphones',
   tabletDevice: 'Tablets',
   deviceDescription: 'Dispositivo',
-  optimizeCPCLabel: 'Ativar CPC otimizado'
+  enhancedCPCLabel: 'Ativar CPC otimizado'
 }

@@ -420,5 +420,5 @@ module.exports = {
   highEndMobileDevice: 'Smartphones',
   tabletDevice: 'Tablets',
   deviceDescription: 'Device',
-  optimizeCPCLabel: 'Enable Optimized CPC'
+  enhancedCPC: 'Enable Optimized CPC'
 }

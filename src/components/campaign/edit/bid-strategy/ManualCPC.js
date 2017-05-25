@@ -2,20 +2,20 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Checkbox from '../../../Checkbox'
 
-const ManualCPC = ({update, optimizeCPC}, {messages}) => (
+const ManualCPC = ({update, enhancedCPC}, {messages}) => (
   <div>
     <Checkbox
       name='optimize-cpc'
-      label={messages.optimizeCPCLabel}
-      checked={Boolean(optimizeCPC)}
-      onChange={({target: {checked: optimizeCPC}}) => update({optimizeCPC})}/>
+      label={messages.enhancedCPCLabel}
+      checked={Boolean(enhancedCPC)}
+      onChange={({target: {checked: enhancedCPC}}) => update({enhancedCPC})}/>
   </div>
 )
 
 ManualCPC.displayName = 'Manual-CPC-Form'
 ManualCPC.propTypes = {
   update: PropTypes.func.isRequired,
-  optimizeCPC: PropTypes.bool
+  enhancedCPC: PropTypes.bool
 }
 ManualCPC.contextTypes = {
   messages: PropTypes.object

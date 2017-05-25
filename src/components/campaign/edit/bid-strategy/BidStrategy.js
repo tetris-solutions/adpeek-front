@@ -46,6 +46,7 @@ class EditBidStrategy extends React.PureComponent {
   }
 
   state = {
+    enhancedCPC: this.props.campaign.details.enhanced_cpc,
     type: this.props.campaign.details.bidding_strategy_type
   }
 
