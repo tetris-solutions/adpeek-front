@@ -42,8 +42,7 @@ const EnhancedCPC = ({update, defaultStrategyName, strategyId, strategyName, bid
         name='strategy-name'
         label='name'
         value={strategyName || defaultStrategyName}
-        onChange={({target}) => update({strategyName: target.name})}/>
-    )}
+        onChange={({target: {value: strategyName}}) => update({strategyName})}/>)}
   </div>
 )
 

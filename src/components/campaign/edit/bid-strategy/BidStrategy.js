@@ -59,11 +59,13 @@ class EditBidStrategy extends React.PureComponent {
   state = parseBidStrategy(this.props.campaign)
 
   componentDidMount () {
-    const {dispatch, params, folder} = this.props
-
-    if (!folder.bidStrategies) {
-      dispatch(loadFolderBidStrategiesAction, params)
+    if (!this.props.folder.bidStrategies) {
+      this.loadStrategies()
     }
+  }
+
+  loadStrategies = () => {
+    return this.props.dispatch(loadFolderBidStrategiesAction, this.props.params)
   }
 
   onChangeType = ({target: {value}}) => {
@@ -73,7 +75,8 @@ class EditBidStrategy extends React.PureComponent {
   save = () => {
     const {dispatch, params, onSubmit} = this.props
 
-    dispatch(updateCampaignBidStrategyAction, params, this.state)
+    return dispatch(updateCampaignBidStrategyAction, params, this.state)
+      .then(this.state.strategyId ? undefined : this.loadStrategies)
       .then(onSubmit)
   }
 
