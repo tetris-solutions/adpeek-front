@@ -9,6 +9,7 @@ import csjs from 'csjs'
 import {styledComponent} from '../../../higher-order/styled'
 import camelCase from 'lodash/camelCase'
 import ManualCPC from './ManualCPC'
+import {updateCampaignBidStrategyAction} from '../../../../actions/update-campaign-bid-strategy'
 
 const style = csjs`
 .actions {
@@ -55,7 +56,10 @@ class EditBidStrategy extends React.PureComponent {
   }
 
   save = () => {
+    const {dispatch, params, onSubmit} = this.props
 
+    dispatch(updateCampaignBidStrategyAction, params, this.state)
+      .then(onSubmit)
   }
 
   update = changes => {
