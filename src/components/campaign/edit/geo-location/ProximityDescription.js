@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
-import PrettyNumber from '../../PrettyNumber'
-import {stringifyAddressComponents} from '../../../functions/stringify-address'
+import PrettyNumber from '../../../PrettyNumber'
+import {stringifyAddressComponents} from '../../../../functions/stringify-address'
 
 const unitAbbr = {
   KILOMETERS: 'km',

@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Input from '../../Input'
-import AutoComplete from '../../maps/AutoComplete'
+import Input from '../../../Input'
+import AutoComplete from '../../../maps/AutoComplete'
 import keys from 'lodash/keys'
-import Map from '../../maps/Map'
-import Marker from '../../maps/Marker'
-import Circle from '../../maps/Circle'
+import Map from '../../../maps/Map'
+import Marker from '../../../maps/Marker'
+import Circle from '../../../maps/Circle'
 import isNumber from 'lodash/isNumber'
-import {stringifyAddressComponents} from '../../../functions/stringify-address'
+import {stringifyAddressComponents} from '../../../../functions/stringify-address'
 
 const unitAbbr = {
   KILOMETERS: 'Km',

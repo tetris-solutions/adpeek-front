@@ -6,7 +6,7 @@ import {everyCriteria, Wrapper, SubText, None, Info, Section, SectionTitle} from
 import Network, {networkNames} from './Network'
 import BiddingStrategy from './BiddingStrategy'
 import OptimizationStatus from './OptimizationStatus'
-import {isLocation, parseProximity} from '../edit/GeoLocation'
+import {isLocation, parseProximity} from '../edit/geo-location/GeoLocation'
 import assign from 'lodash/assign'
 import map from 'lodash/map'
 import head from 'lodash/head'
@@ -18,7 +18,7 @@ import flatten from 'lodash/flatten'
 import toLower from 'lodash/toLower'
 import lowerFirst from 'lodash/lowerFirst'
 import isArray from 'lodash/isArray'
-import ProximityDescription from '../edit/ProximityDescription'
+import ProximityDescription from '../edit/geo-location/ProximityDescription'
 
 const crop = ls => ls.length > 10
   ? ls.slice(0, 10).concat([

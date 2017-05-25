@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Input from '../../Input'
+import Input from '../../../Input'
 import capitalize from 'lodash/capitalize'
 import ProximityDescription from './ProximityDescription'
 

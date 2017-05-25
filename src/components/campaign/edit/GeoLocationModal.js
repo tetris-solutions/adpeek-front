@@ -1,6 +1,6 @@
 import React from 'react'
 import Modal from 'tetris-iso/Modal'
-import EditGeoLocation from './GeoLocation'
+import EditGeoLocation from './geo-location/GeoLocation'
 import PropTypes from 'prop-types'
 
 const EditGeoLocationModal = props =>
