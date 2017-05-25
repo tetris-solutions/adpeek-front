@@ -9,7 +9,9 @@ import csjs from 'csjs'
 import {styledComponent} from '../../../higher-order/styled'
 import camelCase from 'lodash/camelCase'
 import ManualCPC from './ManualCPC'
+import EnhancedCPC from './EnhancedCPC'
 import {updateCampaignBidStrategyAction} from '../../../../actions/update-campaign-bid-strategy'
+import {loadFolderBidStrategiesAction} from '../../../../actions/load-folder-bid-strategies'
 
 const style = csjs`
 .actions {
@@ -22,20 +24,28 @@ const style = csjs`
 
 const types = {
   MANUAL_CPC: ManualCPC,
+  ENHANCED_CPC: EnhancedCPC,
   MANUAL_CPM: null,
   PAGE_ONE_PROMOTED: null,
   TARGET_SPEND: null,
-  ENHANCED_CPC: null,
   TARGET_CPA: null,
   TARGET_ROAS: null,
   TARGET_OUTRANK_SHARE: null
 }
+
+const parseBidStrategy = ({details}) => ({
+  strategyId: details.bidding_strategy_id,
+  strategyName: details.bidding_strategy_name,
+  enhancedCPC: details.enhanced_cpc,
+  type: details.bidding_strategy_type
+})
 
 class EditBidStrategy extends React.PureComponent {
   static displayName = 'Edit-Bid-Strategy'
 
   static propTypes = {
     cancel: PropTypes.func,
+    folder: PropTypes.object,
     campaign: PropTypes.object,
     onSubmit: PropTypes.func,
     params: PropTypes.object,
@@ -46,9 +56,14 @@ class EditBidStrategy extends React.PureComponent {
     messages: PropTypes.object
   }
 
-  state = {
-    enhancedCPC: this.props.campaign.details.enhanced_cpc,
-    type: this.props.campaign.details.bidding_strategy_type
+  state = parseBidStrategy(this.props.campaign)
+
+  componentDidMount () {
+    const {dispatch, params, folder} = this.props
+
+    if (!folder.bidStrategies) {
+      dispatch(loadFolderBidStrategiesAction, params)
+    }
   }
 
   onChangeType = ({target: {value}}) => {
@@ -67,6 +82,7 @@ class EditBidStrategy extends React.PureComponent {
   }
 
   render () {
+    const {folder, campaign} = this.props
     const {messages} = this.context
     const {type: selectedType} = this.state
     const Component = types[selectedType]
@@ -86,10 +102,12 @@ class EditBidStrategy extends React.PureComponent {
               </Radio>
             </div>)}
           </div>
-          <div className='mdl-cell mdl-cell--7-col'>
-            {Component
-              ? <Component {...this.state} update={this.update}/>
-              : null}
+          <div className='mdl-cell mdl-cell--7-col'>{Component ? (
+            <Component
+              {...this.state}
+              defaultStrategyName={`${campaign.name} - ${messages[camelCase(selectedType) + 'Label'] || selectedType}`}
+              bidStrategies={folder.bidStrategies}
+              update={this.update}/>) : null}
           </div>
         </div>
         <div className={style.actions}>

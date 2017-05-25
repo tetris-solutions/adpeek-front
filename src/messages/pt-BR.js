@@ -418,5 +418,7 @@ module.exports = {
   highEndMobileDevice: 'Smartphones',
   tabletDevice: 'Tablets',
   deviceDescription: 'Dispositivo',
-  enhancedCPCLabel: 'Ativar CPC otimizado'
+  enhancedCPCLabel: 'Ativar CPC otimizado',
+  newBidStrategy: 'Criar uma nova estratégia de portfólio',
+  bidStrategyTitle: 'Estratégia de Portfólio'
 }
