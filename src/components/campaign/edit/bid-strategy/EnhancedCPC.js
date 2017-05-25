@@ -31,7 +31,7 @@ const EnhancedCPC = ({update, defaultStrategyName, strategyId, strategyName, bid
         id='create-strategy'
         name='strategy-id'
         checked={!strategyId}
-        value={null}
+        value=''
         onChange={() => update({strategyId: null})}>
         <Message>newBidStrategy</Message>
       </Radio>
