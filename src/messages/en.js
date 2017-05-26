@@ -427,5 +427,6 @@ module.exports = {
   loadingBidStrategies: 'Loading bid strategies...',
   disableSharedStrategy: 'Use default strategy',
   enableSharedStrategy: 'Use a bid strategy',
-  targetCPALabel: 'Target CPA'
+  targetCPALabel: 'Target CPA',
+  targetROASLabel: 'Target ROAS'
 }

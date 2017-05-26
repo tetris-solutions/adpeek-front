@@ -425,5 +425,6 @@ module.exports = {
   loadingBidStrategies: 'Carregando estratégias de porfólio...',
   disableSharedStrategy: 'Voltar a estratégia padrão',
   enableSharedStrategy: 'Usar uma estratégia de portfólio',
-  targetCPALabel: 'CPA desejado'
+  targetCPALabel: 'CPA desejado',
+  targetROASLabel: 'ROAS desejado'
 }

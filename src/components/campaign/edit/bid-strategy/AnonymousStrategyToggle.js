@@ -26,6 +26,9 @@ class AnonymousStrategyToggle extends React.PureComponent {
 
   enableSharedStrategy = () => {
     this.setState({useSharedStrategy: true})
+    this.props.update({
+      strategyId: null
+    })
   }
 
   render () {

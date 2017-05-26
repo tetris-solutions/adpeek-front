@@ -3,16 +3,21 @@ import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import Form from '../../../Form'
 import Radio from '../../../Radio'
+import assign from 'lodash/assign'
 import map from 'lodash/map'
+import find from 'lodash/find'
+import get from 'lodash/get'
 import {Button, Submit} from '../../../Button'
 import csjs from 'csjs'
 import {styledComponent} from '../../../higher-order/styled'
 import camelCase from 'lodash/camelCase'
 import ManualCPC from './ManualCPC'
 import TargetCPA from './TargetCPA'
+import TargetROAS from './TargetROAS'
 import EnhancedCPC from './EnhancedCPC'
 import {updateCampaignBidStrategyAction} from '../../../../actions/update-campaign-bid-strategy'
 import {loadFolderBidStrategiesAction} from '../../../../actions/load-folder-bid-strategies'
+import isNumber from 'lodash/isNumber'
 
 const style = csjs`
 .actions {
@@ -23,24 +28,17 @@ const style = csjs`
   float: left;
 }`
 
+const isset = a => a !== undefined
 const types = {
   MANUAL_CPC: ManualCPC,
   ENHANCED_CPC: EnhancedCPC,
   TARGET_CPA: TargetCPA,
+  TARGET_ROAS: TargetROAS,
   MANUAL_CPM: null,
   PAGE_ONE_PROMOTED: null,
   TARGET_SPEND: null,
-  TARGET_ROAS: null,
   TARGET_OUTRANK_SHARE: null
 }
-
-const parseBidStrategy = ({details}) => ({
-  strategyId: details.bidding_strategy_id,
-  strategyName: details.bidding_strategy_name,
-  enhancedCPC: details.enhanced_cpc,
-  type: details.bidding_strategy_type,
-  targetCPA: details.cpa
-})
 
 class EditBidStrategy extends React.PureComponent {
   static displayName = 'Edit-Bid-Strategy'
@@ -58,10 +56,11 @@ class EditBidStrategy extends React.PureComponent {
     messages: PropTypes.object
   }
 
-  state = parseBidStrategy(this.props.campaign)
-
   componentDidMount () {
-    this.loadStrategies()
+    this.loadStrategies().then(() =>
+      this.update(assign({}, this.state, {
+        isLoading: false
+      })))
   }
 
   loadStrategies = () => {
@@ -69,7 +68,7 @@ class EditBidStrategy extends React.PureComponent {
   }
 
   onChangeType = ({target: {value}}) => {
-    this.setState({type: value})
+    this.update({type: value})
   }
 
   save = () => {
@@ -79,14 +78,68 @@ class EditBidStrategy extends React.PureComponent {
       .then(onSubmit)
   }
 
-  update = changes => {
-    this.setState(changes)
+  normalize = (newState, currentState = this.state) => {
+    const type = newState.type || currentState.type
+
+    if (isset(newState.type)) {
+      newState.strategyId = isset(newState.strategyId)
+        ? newState.strategyId
+        : null
+    }
+
+    if (isset(newState.strategyId)) {
+      const selectedStrategy = find(this.props.folder.bidStrategies, {
+        id: newState.strategyId
+      })
+
+      if (selectedStrategy) {
+        // use strategy name instead
+        newState.strategyName = null
+      } else if (!newState.strategyName) {
+        // changed to new strategy option, set default name
+        newState.strategyName = this.getDefaultStrategyName(type)
+      }
+
+      switch (type) {
+        case 'TARGET_CPA':
+          newState.targetCPA = isNumber(newState.targetCPA)
+            ? newState.targetCPA
+            : get(selectedStrategy, 'scheme.targetCpa', currentState.targetCPA)
+          break
+
+        case 'TARGET_ROAS':
+          newState.targetROAS = isNumber(newState.targetROAS)
+            ? newState.targetROAS
+            : get(selectedStrategy, 'scheme.targetRoas', currentState.targetROAS)
+          break
+      }
+    }
+
+    return newState
   }
 
+  update = changes => {
+    this.setState(this.normalize(changes))
+  }
+
+  getDefaultStrategyName = (selectedType = this.state.type) => {
+    return `${this.props.campaign.name} - ${this.context.messages[camelCase(selectedType) + 'Label'] || selectedType}`
+  }
+
+  state = this.normalize({
+    isLoading: true,
+    strategyId: this.props.campaign.details.bidding_strategy_id,
+    strategyName: this.props.campaign.details.bidding_strategy_name,
+    enhancedCPC: this.props.campaign.details.enhanced_cpc,
+    type: this.props.campaign.details.bidding_strategy_type,
+    targetCPA: this.props.campaign.details.cpa,
+    targetROAS: this.props.campaign.details.roas
+  }, {})
+
   render () {
-    const {folder, campaign} = this.props
+    const {folder} = this.props
     const {messages} = this.context
-    const {type: selectedType} = this.state
+    const {isLoading, type: selectedType} = this.state
     const Component = types[selectedType]
 
     return (
@@ -104,18 +157,16 @@ class EditBidStrategy extends React.PureComponent {
               </Radio>
             </div>)}
           </div>
-          <div className='mdl-cell mdl-cell--7-col'>{folder.bidStrategies
-            ? Component && (
-              <Component
-                {...this.state}
-                defaultStrategyName={`${campaign.name} - ${messages[camelCase(selectedType) + 'Label'] || selectedType}`}
-                bidStrategies={folder.bidStrategies}
-                update={this.update}/>
-            ) : (
+          <div className='mdl-cell mdl-cell--7-col'>{isLoading
+            ? (
               <p>
                 <Message tag='em'>loadingBidStrategies</Message>
               </p>
-            )}
+            ) : Component && (
+              <Component
+                {...this.state}
+                bidStrategies={folder.bidStrategies}
+                update={this.update}/>)}
           </div>
         </div>
         <div className={style.actions}>
