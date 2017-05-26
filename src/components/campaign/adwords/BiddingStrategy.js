@@ -4,34 +4,29 @@ import PrettyNumber from '../../PrettyNumber'
 import {Italic, SubText} from '../Utils'
 import camelCase from 'lodash/camelCase'
 
-function BiddingStrategy ({type, name, cpa, roas}, {messages}) {
-  let label
+const BiddingStrategy = ({type, name, cpa, roas}, {messages}) => (
+  <span>
+    <SubText>
+      {messages[camelCase(type) + 'Label'] || type}
+    </SubText>
 
-  if (name) {
-    label = <span>{name}</span>
-  } else {
-    const labelName = camelCase(type) + 'Label'
-    label = messages[labelName] || type
-  }
+    {name ? (
+      <Italic>({name})</Italic>
+    ) : null}
 
-  return (
-    <span>
-      <SubText>{label}</SubText>
+    {cpa ? (
+      <Italic>
+        (CPA: <PrettyNumber type='currency'>{cpa}</PrettyNumber>)
+      </Italic>
+    ) : null}
 
-      {cpa ? (
-        <Italic>
-          (CPA: <PrettyNumber type='currency'>{cpa}</PrettyNumber>)
-        </Italic>
-      ) : null}
-
-      {roas ? (
-        <Italic>
-          (ROAS: <PrettyNumber type='currency'>{roas}</PrettyNumber>)
-        </Italic>
-      ) : null}
-    </span>
-  )
-}
+    {roas ? (
+      <Italic>
+        (ROAS: <PrettyNumber type='currency'>{roas}</PrettyNumber>)
+      </Italic>
+    ) : null}
+  </span>
+)
 
 BiddingStrategy.displayName = 'Bidding-Strategy'
 BiddingStrategy.propTypes = {
