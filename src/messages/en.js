@@ -423,5 +423,6 @@ module.exports = {
   deviceDescription: 'Device',
   enhancedCPC: 'Enable Optimized CPC',
   newBidStrategy: 'New Bid Strategy',
-  bidStrategyTitle: 'Bid Strategy'
+  bidStrategyTitle: 'Bid Strategy',
+  loadingBidStrategies: 'Loading bid strategies...'
 }

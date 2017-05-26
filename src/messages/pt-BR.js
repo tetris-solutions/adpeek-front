@@ -421,5 +421,6 @@ module.exports = {
   deviceDescription: 'Dispositivo',
   enhancedCPCLabel: 'Ativar CPC otimizado',
   newBidStrategy: 'Criar uma nova estratégia de portfólio',
-  bidStrategyTitle: 'Estratégia de Portfólio'
+  bidStrategyTitle: 'Estratégia de Portfólio',
+  loadingBidStrategies: 'Carregando estratégias de porfólio...'
 }

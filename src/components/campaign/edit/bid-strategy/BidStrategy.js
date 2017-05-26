@@ -111,12 +111,18 @@ class EditBidStrategy extends React.PureComponent {
               </Radio>
             </div>)}
           </div>
-          <div className='mdl-cell mdl-cell--7-col'>{Component ? (
-            <Component
-              {...this.state}
-              defaultStrategyName={`${campaign.name} - ${messages[camelCase(selectedType) + 'Label'] || selectedType}`}
-              bidStrategies={folder.bidStrategies}
-              update={this.update}/>) : null}
+          <div className='mdl-cell mdl-cell--7-col'>{folder.bidStrategies
+            ? Component && (
+              <Component
+                {...this.state}
+                defaultStrategyName={`${campaign.name} - ${messages[camelCase(selectedType) + 'Label'] || selectedType}`}
+                bidStrategies={folder.bidStrategies}
+                update={this.update}/>
+            ) : (
+              <p>
+                <Message tag='em'>loadingBidStrategies</Message>
+              </p>
+            )}
           </div>
         </div>
         <div className={style.actions}>
