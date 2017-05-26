@@ -9,6 +9,7 @@ import csjs from 'csjs'
 import {styledComponent} from '../../../higher-order/styled'
 import camelCase from 'lodash/camelCase'
 import ManualCPC from './ManualCPC'
+import TargetCPA from './TargetCPA'
 import EnhancedCPC from './EnhancedCPC'
 import {updateCampaignBidStrategyAction} from '../../../../actions/update-campaign-bid-strategy'
 import {loadFolderBidStrategiesAction} from '../../../../actions/load-folder-bid-strategies'
@@ -25,10 +26,10 @@ const style = csjs`
 const types = {
   MANUAL_CPC: ManualCPC,
   ENHANCED_CPC: EnhancedCPC,
+  TARGET_CPA: TargetCPA,
   MANUAL_CPM: null,
   PAGE_ONE_PROMOTED: null,
   TARGET_SPEND: null,
-  TARGET_CPA: null,
   TARGET_ROAS: null,
   TARGET_OUTRANK_SHARE: null
 }
@@ -37,7 +38,8 @@ const parseBidStrategy = ({details}) => ({
   strategyId: details.bidding_strategy_id,
   strategyName: details.bidding_strategy_name,
   enhancedCPC: details.enhanced_cpc,
-  type: details.bidding_strategy_type
+  type: details.bidding_strategy_type,
+  targetCPA: details.cpa
 })
 
 class EditBidStrategy extends React.PureComponent {

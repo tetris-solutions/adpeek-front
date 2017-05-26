@@ -424,5 +424,8 @@ module.exports = {
   enhancedCPC: 'Enable Optimized CPC',
   newBidStrategy: 'New Bid Strategy',
   bidStrategyTitle: 'Bid Strategy',
-  loadingBidStrategies: 'Loading bid strategies...'
+  loadingBidStrategies: 'Loading bid strategies...',
+  disableSharedStrategy: 'Use default strategy',
+  enableSharedStrategy: 'Use a bid strategy',
+  targetCPALabel: 'Target CPA'
 }

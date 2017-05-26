@@ -422,5 +422,8 @@ module.exports = {
   enhancedCPCLabel: 'Ativar CPC otimizado',
   newBidStrategy: 'Criar uma nova estratégia de portfólio',
   bidStrategyTitle: 'Estratégia de Portfólio',
-  loadingBidStrategies: 'Carregando estratégias de porfólio...'
+  loadingBidStrategies: 'Carregando estratégias de porfólio...',
+  disableSharedStrategy: 'Voltar a estratégia padrão',
+  enableSharedStrategy: 'Usar uma estratégia de portfólio',
+  targetCPALabel: 'CPA desejado'
 }
