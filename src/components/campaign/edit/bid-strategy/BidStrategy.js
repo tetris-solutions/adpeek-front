@@ -61,9 +61,7 @@ class EditBidStrategy extends React.PureComponent {
   state = parseBidStrategy(this.props.campaign)
 
   componentDidMount () {
-    if (!this.props.folder.bidStrategies) {
-      this.loadStrategies()
-    }
+    this.loadStrategies()
   }
 
   loadStrategies = () => {
@@ -76,15 +74,8 @@ class EditBidStrategy extends React.PureComponent {
 
   save = () => {
     const {dispatch, params, onSubmit} = this.props
-    const willCreateSharedStrategy = (
-      !this.state.strategyId &&
-      this.state.type !== 'MANUAL_CPC'
-    )
 
     return dispatch(updateCampaignBidStrategyAction, params, this.state)
-      .then(willCreateSharedStrategy
-        ? this.loadStrategies
-        : undefined)
       .then(onSubmit)
   }
 

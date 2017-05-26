@@ -14,21 +14,39 @@ const style = csjs`
   font-style: italic
 }`
 
-const SharedStrategy = ({update, type, defaultStrategyName, strategyId, strategyName, bidStrategies}) => (
+const pickStrategy = (strategy, config) => () => {
+  const changes = {
+    strategyId: strategy
+      ? strategy.id
+      : null
+  }
+
+  switch (config.type) {
+    case 'TARGET_CPA':
+      changes.targetCPA = strategy
+        ? strategy.scheme.targetCpa
+        : config.targetCPA
+      break
+  }
+
+  config.update(changes)
+}
+
+const SharedStrategy = props => (
   <div>
     <h6>
       <Message>bidStrategyTitle</Message>
     </h6>
 
-    {map(filter(bidStrategies, {type}), ({id, name}) =>
-      <div key={id}>
+    {map(filter(props.bidStrategies, {type: props.type}), strategy =>
+      <div key={strategy.id}>
         <Radio
-          id={`strategy-${id}`}
+          id={`strategy-${strategy.id}`}
           name='strategy-id'
-          checked={strategyId === id}
-          value={id}
-          onChange={() => update({strategyId: id})}>
-          {name}
+          checked={props.strategyId === strategy.id}
+          value={strategy.id}
+          onChange={pickStrategy(strategy, props)}>
+          {strategy.name}
         </Radio>
       </div>)}
 
@@ -36,21 +54,21 @@ const SharedStrategy = ({update, type, defaultStrategyName, strategyId, strategy
       <Radio
         id='create-strategy'
         name='strategy-id'
-        checked={!strategyId}
+        checked={!props.strategyId}
         value=''
-        onChange={() => update({strategyId: null})}>
+        onChange={pickStrategy(null, props)}>
         <Message>newBidStrategy</Message>
       </Radio>
     </div>
 
-    {!strategyId && (
+    {!props.strategyId && (
       <Input
         name='strategy-name'
         label='name'
-        value={isString(strategyName)
-          ? strategyName
-          : defaultStrategyName}
-        onChange={({target: {value: strategyName}}) => update({strategyName})}/>)}
+        value={isString(props.strategyName)
+          ? props.strategyName
+          : props.defaultStrategyName}
+        onChange={({target: {value: strategyName}}) => props.update({strategyName})}/>)}
   </div>
 )
 
