@@ -21,7 +21,7 @@ const style = csjs`
   height: 100%;
 }`
 
-export class LoadingHorizontal extends React.Component {
+class LoadingHorizontal extends React.Component {
   static displayName = 'Loading-Horizontal'
 
   static propTypes = {

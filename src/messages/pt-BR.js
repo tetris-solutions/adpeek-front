@@ -426,5 +426,6 @@ module.exports = {
   disableSharedStrategy: 'Voltar a estratégia padrão',
   enableSharedStrategy: 'Usar uma estratégia de portfólio',
   targetCPALabel: 'CPA desejado',
-  targetROASLabel: 'ROAS desejado'
+  targetROASLabel: 'ROAS desejado',
+  bidCeilingLabel: 'CPC máximo'
 }

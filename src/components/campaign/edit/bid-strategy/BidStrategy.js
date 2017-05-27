@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import Form from '../../../Form'
 import Radio from '../../../Radio'
-import assign from 'lodash/assign'
+import LoadingHorizontal from '../../../LoadingHorizontal'
 import map from 'lodash/map'
 import find from 'lodash/find'
 import get from 'lodash/get'
@@ -15,9 +15,11 @@ import ManualCPC from './ManualCPC'
 import TargetCPA from './TargetCPA'
 import TargetROAS from './TargetROAS'
 import EnhancedCPC from './EnhancedCPC'
+import TargetSpend from './TargetSpend'
 import {updateCampaignBidStrategyAction} from '../../../../actions/update-campaign-bid-strategy'
 import {loadFolderBidStrategiesAction} from '../../../../actions/load-folder-bid-strategies'
 import isNumber from 'lodash/isNumber'
+import includes from 'lodash/includes'
 
 const style = csjs`
 .actions {
@@ -28,17 +30,29 @@ const style = csjs`
   float: left;
 }`
 
+const changed = (a, b) => (
+  a !== undefined &&
+  b !== undefined &&
+  a !== b
+)
+
 const isset = a => a !== undefined
 const types = {
   MANUAL_CPC: ManualCPC,
   ENHANCED_CPC: EnhancedCPC,
   TARGET_CPA: TargetCPA,
   TARGET_ROAS: TargetROAS,
+  TARGET_SPEND: TargetSpend,
   MANUAL_CPM: null,
   PAGE_ONE_PROMOTED: null,
-  TARGET_SPEND: null,
   TARGET_OUTRANK_SHARE: null
 }
+
+const sharedOnly = [
+  'ENHANCED_CPC',
+  'TARGET_OUTRANK_SHARE',
+  'PAGE_ONE_PROMOTED'
+]
 
 class EditBidStrategy extends React.PureComponent {
   static displayName = 'Edit-Bid-Strategy'
@@ -57,10 +71,24 @@ class EditBidStrategy extends React.PureComponent {
   }
 
   componentDidMount () {
-    this.loadStrategies().then(() =>
-      this.update(assign({}, this.state, {
-        isLoading: false
-      })))
+    this.loadStrategies()
+      .then(this.initialize)
+  }
+
+  initialize = () => {
+    const {campaign: {details}} = this.props
+
+    this.update({
+      isLoading: false,
+      strategyName: null,
+      strategyId: details.bidding_strategy_id,
+      enhancedCPC: details.enhanced_cpc,
+      type: details.bidding_strategy_type,
+      targetCPA: details.cpa,
+      targetROAS: details.roas,
+      spendBidCeiling: details.spend_bid_ceiling,
+      spendEnhancedCPC: details.spend_enhanced_cpc
+    })
   }
 
   loadStrategies = () => {
@@ -81,21 +109,38 @@ class EditBidStrategy extends React.PureComponent {
   normalize = (newState, currentState = this.state) => {
     const type = newState.type || currentState.type
 
-    if (isset(newState.type)) {
+    if (changed(newState.type, currentState.type)) {
       newState.strategyId = isset(newState.strategyId)
         ? newState.strategyId
         : null
+
+      newState.useSharedStrategy = includes(sharedOnly, type)
     }
+
+    if (changed(newState.useSharedStrategy, currentState.useSharedStrategy)) {
+      // will change to shared strategy mode
+      // should empty strategy selection
+      newState.strategyId = null
+    } else if (newState.strategyId) {
+      newState.useSharedStrategy = true
+    }
+
+    newState.useSharedStrategy = isset(newState.useSharedStrategy)
+      ? newState.useSharedStrategy
+      : currentState.useSharedStrategy
 
     if (isset(newState.strategyId)) {
       const selectedStrategy = find(this.props.folder.bidStrategies, {
         id: newState.strategyId
       })
 
-      if (selectedStrategy) {
+      if (newState.strategyId || newState.useSharedStrategy === false) {
         // use strategy name instead
         newState.strategyName = null
-      } else if (!newState.strategyName) {
+      } else if (
+        !newState.strategyName &&
+        newState.useSharedStrategy
+      ) {
         // changed to new strategy option, set default name
         newState.strategyName = this.getDefaultStrategyName(type)
       }
@@ -112,6 +157,20 @@ class EditBidStrategy extends React.PureComponent {
             ? newState.targetROAS
             : get(selectedStrategy, 'scheme.targetRoas', currentState.targetROAS)
           break
+
+        case 'TARGET_SPEND':
+          if (newState.useSharedStrategy) {
+            newState.spendEnhancedCPC = null
+          } else {
+            newState.spendEnhancedCPC = isset(newState.spendEnhancedCPC)
+              ? newState.spendEnhancedCPC
+              : currentState.spendEnhancedCPC
+          }
+
+          newState.spendBidCeiling = isNumber(newState.spendBidCeiling)
+            ? newState.spendBidCeiling
+            : get(selectedStrategy, 'scheme.bidCeiling', currentState.spendBidCeiling)
+          break
       }
     }
 
@@ -126,21 +185,23 @@ class EditBidStrategy extends React.PureComponent {
     return `${this.props.campaign.name} - ${this.context.messages[camelCase(selectedType) + 'Label'] || selectedType}`
   }
 
-  state = this.normalize({
-    isLoading: true,
-    strategyId: this.props.campaign.details.bidding_strategy_id,
-    strategyName: this.props.campaign.details.bidding_strategy_name,
-    enhancedCPC: this.props.campaign.details.enhanced_cpc,
-    type: this.props.campaign.details.bidding_strategy_type,
-    targetCPA: this.props.campaign.details.cpa,
-    targetROAS: this.props.campaign.details.roas
-  }, {})
+  state = {
+    isLoading: true
+  }
 
   render () {
     const {folder} = this.props
     const {messages} = this.context
     const {isLoading, type: selectedType} = this.state
     const Component = types[selectedType]
+
+    if (isLoading) {
+      return (
+        <LoadingHorizontal>
+          <Message>loadingBidStrategies</Message>
+        </LoadingHorizontal>
+      )
+    }
 
     return (
       <Form onSubmit={this.save}>
@@ -157,16 +218,11 @@ class EditBidStrategy extends React.PureComponent {
               </Radio>
             </div>)}
           </div>
-          <div className='mdl-cell mdl-cell--7-col'>{isLoading
-            ? (
-              <p>
-                <Message tag='em'>loadingBidStrategies</Message>
-              </p>
-            ) : Component && (
-              <Component
-                {...this.state}
-                bidStrategies={folder.bidStrategies}
-                update={this.update}/>)}
+          <div className='mdl-cell mdl-cell--7-col'>{Component && (
+            <Component
+              {...this.state}
+              bidStrategies={folder.bidStrategies}
+              update={this.update}/>)}
           </div>
         </div>
         <div className={style.actions}>
