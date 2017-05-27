@@ -421,7 +421,7 @@ module.exports = {
   highEndMobileDevice: 'Smartphones',
   tabletDevice: 'Tablets',
   deviceDescription: 'Device',
-  enhancedCPC: 'Enable Optimized CPC',
+  enhancedCPCLabel: 'Enable Optimized CPC',
   newBidStrategy: 'New Bid Strategy',
   bidStrategyTitle: 'Bid Strategy',
   loadingBidStrategies: 'Loading bid strategies...',
