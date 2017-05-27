@@ -24,11 +24,13 @@ export const enableAnonymous = BiddingScheme => class AnonymousStrategyToggle ex
 
     return (
       <div>
-        {useSharedStrategy
-          ? <SharedStrategy {...this.props}/>
-          : null}
-
-        <BiddingScheme {...this.props}/>
+        {useSharedStrategy ? (
+          <SharedStrategy {...this.props}>
+            <BiddingScheme {...this.props}/>
+          </SharedStrategy>
+        ) : (
+          <BiddingScheme {...this.props}/>
+        )}
 
         <br/>
         <Button className='mdl-button' onClick={this.toggle}>

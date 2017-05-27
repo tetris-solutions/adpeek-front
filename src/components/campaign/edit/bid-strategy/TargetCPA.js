@@ -15,8 +15,6 @@ const TargetCPA = props => (
 
 TargetCPA.displayName = 'Target-CPA'
 TargetCPA.propTypes = {
-  bidStrategies: PropTypes.array,
-  strategyId: PropTypes.string,
   targetCPA: PropTypes.number,
   update: PropTypes.func.isRequired
 }

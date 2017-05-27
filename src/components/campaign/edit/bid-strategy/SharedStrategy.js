@@ -7,6 +7,7 @@ import map from 'lodash/map'
 import filter from 'lodash/filter'
 import csjs from 'csjs'
 import {styledFunctionalComponent} from '../../../higher-order/styled'
+import Well from '../../../Well'
 
 const style = csjs`
 .new label {
@@ -42,17 +43,23 @@ const SharedStrategy = props => (
       </Radio>
     </div>
 
-    {!props.strategyId && (
-      <Input
-        name='strategy-name'
-        label='name'
-        value={props.strategyName}
-        onChange={({target: {value: strategyName}}) => props.update({strategyName})}/>)}
+    {!props.strategyId || props.children ? (
+      <Well>
+        {!props.strategyId && (
+          <Input
+            name='strategy-name'
+            label='name'
+            value={props.strategyName}
+            onChange={({target: {value: strategyName}}) => props.update({strategyName})}/>)}
+
+        {props.children}
+      </Well>) : null}
   </div>
 )
 
 SharedStrategy.displayName = 'Shared-Strategy'
 SharedStrategy.propTypes = {
+  children: PropTypes.node,
   strategyId: PropTypes.string,
   strategyName: PropTypes.string,
   bidStrategies: PropTypes.array,

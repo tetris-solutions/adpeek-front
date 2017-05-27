@@ -16,6 +16,7 @@ import TargetCPA from './TargetCPA'
 import TargetROAS from './TargetROAS'
 import EnhancedCPC from './EnhancedCPC'
 import TargetSpend from './TargetSpend'
+import PageOnePromoted from './PageOnePromoted'
 import {updateCampaignBidStrategyAction} from '../../../../actions/update-campaign-bid-strategy'
 import {loadFolderBidStrategiesAction} from '../../../../actions/load-folder-bid-strategies'
 import isNumber from 'lodash/isNumber'
@@ -43,8 +44,8 @@ const types = {
   TARGET_CPA: TargetCPA,
   TARGET_ROAS: TargetROAS,
   TARGET_SPEND: TargetSpend,
+  PAGE_ONE_PROMOTED: PageOnePromoted,
   MANUAL_CPM: null,
-  PAGE_ONE_PROMOTED: null,
   TARGET_OUTRANK_SHARE: null
 }
 
@@ -171,6 +172,13 @@ class EditBidStrategy extends React.PureComponent {
             ? newState.spendBidCeiling
             : get(selectedStrategy, 'scheme.bidCeiling', currentState.spendBidCeiling)
           break
+
+        case 'PAGE_ONE_PROMOTED':
+          newState.strategyGoal = isset(newState.strategyGoal)
+            ? newState.strategyGoal
+            : get(selectedStrategy, 'scheme.strategyGoal', 'PAGE_ONE')
+
+          break
       }
     }
 
@@ -229,7 +237,6 @@ class EditBidStrategy extends React.PureComponent {
           <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>
             <Message>cancel</Message>
           </Button>
-
           <Submit className='mdl-button mdl-button--raised mdl-button--colored'>
             <Message>save</Message>
           </Submit>

@@ -429,5 +429,7 @@ module.exports = {
   enableSharedStrategy: 'Use a bid strategy',
   targetCPALabel: 'Target CPA',
   targetROASLabel: 'Target ROAS',
-  bidCeilingLabel: 'Max CPC Bid'
+  bidCeilingLabel: 'Max CPC Bid',
+  pageOneGoalLabel: 'First page on google.com',
+  pageOnePromotedGoalLabel: 'Top slots of the first page on google.com'
 }

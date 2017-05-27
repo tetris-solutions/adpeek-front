@@ -15,8 +15,6 @@ const TargetROAS = props => (
 
 TargetROAS.displayName = 'Target-ROAS'
 TargetROAS.propTypes = {
-  bidStrategies: PropTypes.array,
-  strategyId: PropTypes.string,
   targetROAS: PropTypes.number,
   update: PropTypes.func.isRequired
 }

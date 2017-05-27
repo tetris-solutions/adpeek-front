@@ -427,5 +427,7 @@ module.exports = {
   enableSharedStrategy: 'Usar uma estratégia de portfólio',
   targetCPALabel: 'CPA desejado',
   targetROASLabel: 'ROAS desejado',
-  bidCeilingLabel: 'CPC máximo'
+  bidCeilingLabel: 'CPC máximo',
+  pageOneGoalLabel: 'Em qualquer lugar na primeira página de resultados',
+  pageOnePromotedGoalLabel: 'Parte superior da primeira página de resultados'
 }
