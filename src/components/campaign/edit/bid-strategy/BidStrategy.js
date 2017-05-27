@@ -4,9 +4,9 @@ import Message from 'tetris-iso/Message'
 import Form from '../../../Form'
 import Radio from '../../../Radio'
 import LoadingHorizontal from '../../../LoadingHorizontal'
+import assign from 'lodash/assign'
 import map from 'lodash/map'
 import find from 'lodash/find'
-import get from 'lodash/get'
 import {Button, Submit} from '../../../Button'
 import csjs from 'csjs'
 import {styledComponent} from '../../../higher-order/styled'
@@ -16,11 +16,13 @@ import TargetCPA from './TargetCPA'
 import TargetROAS from './TargetROAS'
 import EnhancedCPC from './EnhancedCPC'
 import TargetSpend from './TargetSpend'
+import TargetOutrankShare from './TargetOutrankShare'
 import PageOnePromoted from './PageOnePromoted'
 import {updateCampaignBidStrategyAction} from '../../../../actions/update-campaign-bid-strategy'
 import {loadFolderBidStrategiesAction} from '../../../../actions/load-folder-bid-strategies'
 import isNumber from 'lodash/isNumber'
 import includes from 'lodash/includes'
+import isString from 'lodash/isString'
 
 const style = csjs`
 .actions {
@@ -45,8 +47,8 @@ const types = {
   TARGET_ROAS: TargetROAS,
   TARGET_SPEND: TargetSpend,
   PAGE_ONE_PROMOTED: PageOnePromoted,
-  MANUAL_CPM: null,
-  TARGET_OUTRANK_SHARE: null
+  // MANUAL_CPM: null,
+  TARGET_OUTRANK_SHARE: TargetOutrankShare
 }
 
 const sharedOnly = [
@@ -54,6 +56,23 @@ const sharedOnly = [
   'TARGET_OUTRANK_SHARE',
   'PAGE_ONE_PROMOTED'
 ]
+
+function normalizeScheme (originalValue = {}) {
+  const scheme = assign({}, originalValue.scheme)
+
+  if (isNumber(scheme.targetRoas)) {
+    scheme.targetRoas = scheme.targetRoas * 100
+  }
+
+  if (isNumber(scheme.targetOutrankShare)) {
+    scheme.targetOutrankShare = scheme.targetOutrankShare / 10000
+  }
+
+  return scheme
+}
+
+const firstNumber = (...args) => find(args, isNumber)
+const firstString = (...args) => find(args, isString)
 
 class EditBidStrategy extends React.PureComponent {
   static displayName = 'Edit-Bid-Strategy'
@@ -131,9 +150,7 @@ class EditBidStrategy extends React.PureComponent {
       : currentState.useSharedStrategy
 
     if (isset(newState.strategyId)) {
-      const selectedStrategy = find(this.props.folder.bidStrategies, {
-        id: newState.strategyId
-      })
+      const scheme = normalizeScheme(find(this.props.folder.bidStrategies, {id: newState.strategyId}))
 
       if (newState.strategyId || newState.useSharedStrategy === false) {
         // use strategy name instead
@@ -148,37 +165,56 @@ class EditBidStrategy extends React.PureComponent {
 
       switch (type) {
         case 'TARGET_CPA':
-          newState.targetCPA = isNumber(newState.targetCPA)
-            ? newState.targetCPA
-            : get(selectedStrategy, 'scheme.targetCpa', currentState.targetCPA)
+          newState.targetCPA = firstNumber(
+            newState.targetCPA,
+            scheme.targetCpa,
+            currentState.targetCPA)
           break
 
         case 'TARGET_ROAS':
-          newState.targetROAS = isNumber(newState.targetROAS)
-            ? newState.targetROAS
-            : get(selectedStrategy, 'scheme.targetRoas', currentState.targetROAS)
+          newState.targetROAS = firstNumber(
+            newState.targetROAS,
+            scheme.targetRoas,
+            currentState.targetROAS)
           break
 
         case 'TARGET_SPEND':
           if (newState.useSharedStrategy) {
             newState.spendEnhancedCPC = null
-          } else {
-            newState.spendEnhancedCPC = isset(newState.spendEnhancedCPC)
-              ? newState.spendEnhancedCPC
-              : currentState.spendEnhancedCPC
+          } else if (!isset(newState.spendEnhancedCPC)) {
+            newState.spendEnhancedCPC = currentState.spendEnhancedCPC
           }
 
-          newState.spendBidCeiling = isNumber(newState.spendBidCeiling)
-            ? newState.spendBidCeiling
-            : get(selectedStrategy, 'scheme.bidCeiling', currentState.spendBidCeiling)
+          newState.spendBidCeiling = firstNumber(
+            newState.spendBidCeiling,
+            scheme.bidCeiling,
+            currentState.spendBidCeiling)
           break
 
         case 'PAGE_ONE_PROMOTED':
-          newState.strategyGoal = isset(newState.strategyGoal)
-            ? newState.strategyGoal
-            : get(selectedStrategy, 'scheme.strategyGoal', 'PAGE_ONE')
+          newState.strategyGoal = firstString(
+            newState.strategyGoal,
+            scheme.strategyGoal,
+            currentState.strategyGoal,
+            'PAGE_ONE')
 
           break
+
+        case 'TARGET_OUTRANK_SHARE':
+          newState.targetOutrankShare = firstNumber(
+            newState.targetOutrankShare,
+            scheme.targetOutrankShare,
+            currentState.targetOutrankShare)
+
+          newState.competitorDomain = firstString(
+            newState.competitorDomain,
+            scheme.competitorDomain,
+            currentState.competitorDomain)
+
+          newState.outrankBidCeiling = firstNumber(
+            newState.outrankBidCeiling,
+            scheme.maxCpcBidCeiling,
+            currentState.outrankBidCeiling)
       }
     }
 

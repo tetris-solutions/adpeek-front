@@ -33,8 +33,5 @@ PageOnePromoted.propTypes = {
   strategyGoal: PropTypes.oneOf(['PAGE_ONE', 'PAGE_ONE_PROMOTED']),
   update: PropTypes.func
 }
-PageOnePromoted.contextTypes = {
-  messages: PropTypes.object
-}
 
 export default PageOnePromoted

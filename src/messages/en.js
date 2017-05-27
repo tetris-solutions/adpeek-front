@@ -431,5 +431,7 @@ module.exports = {
   targetROASLabel: 'Target ROAS',
   bidCeilingLabel: 'Max CPC Bid',
   pageOneGoalLabel: 'First page on google.com',
-  pageOnePromotedGoalLabel: 'Top slots of the first page on google.com'
+  pageOnePromotedGoalLabel: 'Top slots of the first page on google.com',
+  competitorDomainLabel: 'Competitor\'s visible domain URL',
+  targetOutrankSharePercentLabel: 'Target Outrank Share (%)'
 }
