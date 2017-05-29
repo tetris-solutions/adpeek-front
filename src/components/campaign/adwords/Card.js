@@ -135,7 +135,7 @@ function AdwordsCampaign (props, context) {
 
           <Info>
             <Message>feedLocal</Message>:
-            {list(details.localFeed, ({id, name, data}) =>
+            {list(details.feed, ({id, name, data}) =>
               <SubText key={id}>
                 {name} {data && data.emailAddress
                 ? <em>(<Message email={data.emailAddress}>feedLocalBusiness</Message>)</em>
