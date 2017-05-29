@@ -433,5 +433,10 @@ module.exports = {
   pageOneGoalLabel: 'First page on google.com',
   pageOnePromotedGoalLabel: 'Top slots of the first page on google.com',
   competitorDomainLabel: 'Competitor\'s visible domain URL',
-  targetOutrankSharePercentLabel: 'Target Outrank Share (%)'
+  targetOutrankSharePercentLabel: 'Target Outrank Share (%)',
+  newSiteLink: 'New',
+  sitelinkLine2Label: '1º description line',
+  sitelinkLine3Label: '2º description line',
+  sitelinkTextLabel: 'Link text',
+  sitelinkFinalUrlLabel: 'Final Url'
 }

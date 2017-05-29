@@ -7,7 +7,6 @@ import flatten from 'lodash/flatten'
 import concat from 'lodash/concat'
 import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
-import csjs from 'csjs'
 import {styledComponent} from '../../../higher-order/styled'
 import {loadFolderSiteLinksAction} from '../../../../actions/load-folder-site-links'
 import {updateCampaignSiteLinksAction} from '../../../../actions/update-campaign-site-links'
@@ -15,19 +14,9 @@ import includes from 'lodash/includes'
 import FeedItem from './FeedItem'
 import without from 'lodash/without'
 import unionBy from 'lodash/unionBy'
-
-const style = csjs`
-.list {
-  max-height: 400px;
-  overflow-y: auto;
-}
-.actions {
-  margin-top: 1em;
-  text-align: right;
-}
-.actions > button:first-child {
-  float: left;
-}`
+import Modal from 'tetris-iso/Modal'
+import NewSiteLink from './NewSiteLink'
+import {style} from '../style'
 
 const unwrap = extensions => flatten(map(filter(extensions, {type: 'SITELINK'}), 'extensions'))
 
@@ -44,6 +33,10 @@ class EditSiteLinks extends React.Component {
   }
 
   componentDidMount () {
+    this.loadFolderSiteLinks()
+  }
+
+  loadFolderSiteLinks = () => {
     const {dispatch, params} = this.props
 
     dispatch(loadFolderSiteLinksAction, params)
@@ -76,11 +69,22 @@ class EditSiteLinks extends React.Component {
   }
 
   state = {
+    openCreateModal: false,
     selected: this.getCampaignSiteLinkExtensions()
   }
 
+  toggleModal = () => {
+    this.setState({openCreateModal: !this.state.openCreateModal})
+  }
+
+  reloadList = () => {
+    this.loadFolderSiteLinks()
+      .then(this.toggleModal)
+  }
+
   render () {
-    const {campaign, folder} = this.props
+    const {selected, openCreateModal} = this.state
+    const {cancel, campaign, folder} = this.props
     const ls = unionBy(
       unwrap(campaign.details.extension),
       folder.siteLinks,
@@ -96,19 +100,30 @@ class EditSiteLinks extends React.Component {
                 {...item}
                 add={this.add}
                 remove={this.remove}
-                checked={includes(this.state.selected, item.feedItemId)}
+                checked={includes(selected, item.feedItemId)}
                 key={item.feedItemId}/>)}
             </div>
           </div>
         </div>
         <div className={style.actions}>
-          <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>
+          <Button className='mdl-button mdl-button--raised' onClick={cancel}>
             <Message>cancel</Message>
+          </Button>
+
+          <Button className='mdl-button mdl-button--raised' onClick={this.toggleModal}>
+            <Message>newSiteLink</Message>
           </Button>
           <Submit className='mdl-button mdl-button--raised mdl-button--colored'>
             <Message>save</Message>
           </Submit>
         </div>
+
+        {openCreateModal && (
+          <Modal size='small' onEscPress={this.toggleModal}>
+            <NewSiteLink
+              cancel={this.toggleModal}
+              onSubmit={this.reloadList}/>
+          </Modal>)}
       </Form>
     )
   }

@@ -431,5 +431,10 @@ module.exports = {
   pageOneGoalLabel: 'Em qualquer lugar na primeira página de resultados',
   pageOnePromotedGoalLabel: 'Parte superior da primeira página de resultados',
   competitorDomainLabel: 'Nome de domínio a ser superado',
-  targetOutrankSharePercentLabel: 'Valor a ser superado (%)'
+  targetOutrankSharePercentLabel: 'Valor a ser superado (%)',
+  newSiteLink: 'Novo',
+  sitelinkLine2Label: '1ª linha da descrição',
+  sitelinkLine3Label: '2ª linha da descrição',
+  sitelinkTextLabel: 'Texto do link',
+  sitelinkFinalUrlLabel: 'Url final'
 }
