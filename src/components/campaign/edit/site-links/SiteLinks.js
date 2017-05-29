@@ -9,7 +9,9 @@ import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
 import csjs from 'csjs'
 import {styledComponent} from '../../../higher-order/styled'
-import head from 'lodash/head'
+import includes from 'lodash/includes'
+import FeedItem from './FeedItem'
+import without from 'lodash/without'
 
 const style = csjs`
 .actions {
@@ -40,6 +42,18 @@ class EditSiteLinks extends React.Component {
     return Promise.resolve()
   }
 
+  add = id => {
+    this.setState({
+      selected: concat(this.state.selected, id)
+    })
+  }
+
+  remove = id => {
+    this.setState({
+      selected: without(this.state.selected, id)
+    })
+  }
+
   render () {
     const ls = concat(unwrap(this.props.campaign.details.extension))
 
@@ -47,19 +61,13 @@ class EditSiteLinks extends React.Component {
       <Form onSubmit={this.save}>
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--12-col'>
-            {map(ls, ({feedItemId, sitelinkLine2, sitelinkLine3, sitelinkText, sitelinkFinalUrls: {urls}}) =>
-              <div key={feedItemId} className='mdl-list__item mdl-list__item--three-line'>
-                <div className='mdl-list__item-primary-content'>
-                  <a href={head(urls)} target='_blank'>
-                    {sitelinkText}
-                  </a>
-                  <div className='mdl-list__item-text-body'>
-                    {sitelinkLine2}
-                    <br/>
-                    {sitelinkLine3}
-                  </div>
-                </div>
-              </div>)}
+            {map(ls, item =>
+              <FeedItem
+                {...item}
+                add={this.add}
+                remove={this.remove}
+                checked={includes(this.state.selected, item.feedItemId)}
+                key={item.feedItemId}/>)}
           </div>
         </div>
         <div className={style.actions}>
