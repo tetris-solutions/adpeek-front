@@ -10,6 +10,7 @@ import {Button, Submit} from '../../../Button'
 import csjs from 'csjs'
 import {styledComponent} from '../../../higher-order/styled'
 import {loadFolderSiteLinksAction} from '../../../../actions/load-folder-site-links'
+import {updateCampaignSiteLinksAction} from '../../../../actions/update-campaign-site-links'
 import includes from 'lodash/includes'
 import FeedItem from './FeedItem'
 import without from 'lodash/without'
@@ -36,13 +37,10 @@ class EditSiteLinks extends React.Component {
   static propTypes = {
     folder: PropTypes.object,
     cancel: PropTypes.func,
+    onSubmit: PropTypes.func,
     dispatch: PropTypes.func,
     params: PropTypes.object,
     campaign: PropTypes.object
-  }
-
-  state = {
-    selected: map(unwrap(this.props.campaign.details.extension), 'feedItemId')
   }
 
   componentDidMount () {
@@ -53,7 +51,12 @@ class EditSiteLinks extends React.Component {
   }
 
   save = () => {
-    return Promise.resolve()
+    const {onSubmit, dispatch, params, folder} = this.props
+    const siteLinks = filter(folder.siteLinks,
+      ({feedItemId}) => includes(this.state.selected, feedItemId))
+
+    return dispatch(updateCampaignSiteLinksAction, params, siteLinks)
+      .then(onSubmit)
   }
 
   add = id => {
@@ -68,9 +71,16 @@ class EditSiteLinks extends React.Component {
     })
   }
 
+  getCampaignSiteLinkExtensions = () => {
+    return map(unwrap(this.props.campaign.details.extension), 'feedItemId')
+  }
+
+  state = {
+    selected: this.getCampaignSiteLinkExtensions()
+  }
+
   render () {
     const {campaign, folder} = this.props
-
     const ls = unionBy(
       unwrap(campaign.details.extension),
       folder.siteLinks,
