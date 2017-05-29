@@ -113,7 +113,7 @@ function AdwordsCampaign (props, context) {
         </SectionTitle>
 
         <Section>
-          <Info>
+          <Info editLink={editable ? urlFor(params, 'site-links') : null}>
             <Message>siteLinks</Message>:
             {list(mapExtensions(details.extension, 'SITELINK',
               ({sitelinkText, sitelinkFinalUrls: {urls}}, index) =>

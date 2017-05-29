@@ -47,8 +47,8 @@ const types = {
   TARGET_ROAS: TargetROAS,
   TARGET_SPEND: TargetSpend,
   PAGE_ONE_PROMOTED: PageOnePromoted,
-  // MANUAL_CPM: null,
   TARGET_OUTRANK_SHARE: TargetOutrankShare
+  // MANUAL_CPM: null,
 }
 
 const sharedOnly = [
