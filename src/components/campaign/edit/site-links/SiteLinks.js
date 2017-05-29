@@ -9,12 +9,10 @@ import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
 import csjs from 'csjs'
 import {styledComponent} from '../../../higher-order/styled'
-import {loadFolderFeedAction} from '../../../../actions/load-folder-feed'
+import {loadFolderSiteLinksAction} from '../../../../actions/load-folder-site-links'
 import includes from 'lodash/includes'
 import FeedItem from './FeedItem'
 import without from 'lodash/without'
-import get from 'lodash/get'
-import forEach from 'lodash/forEach'
 import unionBy from 'lodash/unionBy'
 
 const style = csjs`
@@ -31,33 +29,6 @@ const style = csjs`
 }`
 
 const unwrap = extensions => flatten(map(filter(extensions, {type: 'SITELINK'}), 'extensions'))
-
-const translateFeed = items => map(filter(items, item => get(item, 'policy.0.placeholderType') === 1),
-  function ({attributes, feed_item_id}) {
-    const item = {
-      feedItemId: feed_item_id,
-      attributes
-    }
-
-    forEach(attributes, attr => {
-      switch (Number(attr.feedAttributeId)) {
-        case 1:
-          item.sitelinkText = attr.stringValue
-          break
-        case 3:
-          item.sitelinkLine2 = attr.stringValue
-          break
-        case 4:
-          item.sitelinkLine3 = attr.stringValue
-          break
-        case 5:
-          item.sitelinkFinalUrls = {urls: attr.stringValues}
-          break
-      }
-    })
-
-    return item
-  })
 
 class EditSiteLinks extends React.Component {
   static displayName = 'Edit-Site-Links'
@@ -77,7 +48,7 @@ class EditSiteLinks extends React.Component {
   componentDidMount () {
     const {dispatch, params} = this.props
 
-    dispatch(loadFolderFeedAction, params)
+    dispatch(loadFolderSiteLinksAction, params)
       .then(() => this.forceUpdate())
   }
 
@@ -102,7 +73,7 @@ class EditSiteLinks extends React.Component {
 
     const ls = unionBy(
       unwrap(campaign.details.extension),
-      translateFeed(folder.feed),
+      folder.siteLinks,
       'feedItemId'
     )
 
