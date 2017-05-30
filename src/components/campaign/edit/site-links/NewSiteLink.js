@@ -10,9 +10,9 @@ import Input from '../../../Input'
 import map from 'lodash/map'
 
 const txtInputs = [
+  'sitelinkText',
   'sitelinkLine2',
   'sitelinkLine3',
-  'sitelinkText',
   'sitelinkFinalUrl'
 ]
 
@@ -20,6 +20,7 @@ class NewSiteLink extends React.Component {
   static displayName = 'New-Site-Link'
 
   static propTypes = {
+    feedId: PropTypes.string,
     folder: PropTypes.object,
     cancel: PropTypes.func,
     onSubmit: PropTypes.func,
@@ -29,9 +30,9 @@ class NewSiteLink extends React.Component {
   }
 
   save = () => {
-    const {dispatch, onSubmit, params} = this.props
+    const {dispatch, feedId, onSubmit, params} = this.props
 
-    return dispatch(createSiteLinkExtensionAction, params, this.state)
+    return dispatch(createSiteLinkExtensionAction, params, feedId, this.state)
       .then(onSubmit)
   }
 

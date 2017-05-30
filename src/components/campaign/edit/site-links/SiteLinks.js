@@ -17,8 +17,18 @@ import unionBy from 'lodash/unionBy'
 import Modal from 'tetris-iso/Modal'
 import NewSiteLink from './NewSiteLink'
 import {style} from '../style'
+import get from 'lodash/get'
+import head from 'lodash/head'
+import isEmpty from 'lodash/isEmpty'
 
 const unwrap = extensions => flatten(map(filter(extensions, {type: 'SITELINK'}), 'extensions'))
+
+const isValidSiteLink = item => (
+  !isEmpty(item.sitelinkText) &&
+  !isEmpty(item.sitelinkLine2) &&
+  !isEmpty(item.sitelinkLine3) &&
+  !isEmpty(item.sitelinkFinalUrls)
+)
 
 class EditSiteLinks extends React.Component {
   static displayName = 'Edit-Site-Links'
@@ -39,7 +49,7 @@ class EditSiteLinks extends React.Component {
   loadFolderSiteLinks = () => {
     const {dispatch, params} = this.props
 
-    dispatch(loadFolderSiteLinksAction, params)
+    return dispatch(loadFolderSiteLinksAction, params)
       .then(() => this.forceUpdate())
   }
 
@@ -74,28 +84,25 @@ class EditSiteLinks extends React.Component {
   }
 
   toggleModal = () => {
-    this.setState({openCreateModal: !this.state.openCreateModal})
-  }
-
-  reloadList = () => {
-    this.loadFolderSiteLinks()
-      .then(this.toggleModal)
+    this.setState({
+      openCreateModal: !this.state.openCreateModal
+    })
   }
 
   render () {
     const {selected, openCreateModal} = this.state
-    const {cancel, campaign, folder} = this.props
-    const ls = unionBy(
+    const {cancel, campaign, folder, dispatch, params} = this.props
+    const siteLinks = filter(unionBy(
       unwrap(campaign.details.extension),
       folder.siteLinks,
       'feedItemId'
-    )
+    ), isValidSiteLink)
 
     return (
       <Form onSubmit={this.save}>
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--12-col'>
-            <div className={`mdl-list ${style.list}`}>{map(ls, item =>
+            <div className={`mdl-list ${style.list}`}>{map(siteLinks, item =>
               <FeedItem
                 {...item}
                 add={this.add}
@@ -121,10 +128,10 @@ class EditSiteLinks extends React.Component {
         {openCreateModal && (
           <Modal size='small' onEscPress={this.toggleModal}>
             <NewSiteLink
-              dispatch={this.props.dispatch}
-              params={this.props.params}
+              {...{folder, campaign, dispatch, params}}
+              feedId={get(head(siteLinks), 'feedId')}
               cancel={this.toggleModal}
-              onSubmit={this.reloadList}/>
+              onSubmit={this.toggleModal}/>
           </Modal>)}
       </Form>
     )
