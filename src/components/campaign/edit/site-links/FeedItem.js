@@ -11,6 +11,7 @@ class FeedItem extends React.PureComponent {
     remove: PropTypes.func,
     feedItemId: PropTypes.string,
     checked: PropTypes.bool,
+    status: PropTypes.string,
     sitelinkLine2: PropTypes.string,
     sitelinkLine3: PropTypes.string,
     sitelinkText: PropTypes.string,
@@ -28,10 +29,19 @@ class FeedItem extends React.PureComponent {
   }
 
   render () {
-    const {checked, feedItemId, sitelinkLine2, sitelinkLine3, sitelinkText, sitelinkFinalUrls: {urls}} = this.props
+    const {status, checked, feedItemId, sitelinkLine2, sitelinkLine3, sitelinkText, sitelinkFinalUrls: {urls}} = this.props
+    const divProps = {
+      className: 'mdl-list__item mdl-list__item--three-line',
+      key: feedItemId
+    }
+
+    if (status !== 'ENABLED') {
+      divProps.style = {opacity: 0.7}
+      divProps.title = status
+    }
 
     return (
-      <div key={feedItemId} className='mdl-list__item mdl-list__item--three-line'>
+      <div {...divProps}>
         <div className='mdl-list__item-primary-content'>
           <a href={head(urls)} target='_blank'>
             {sitelinkText}
