@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {DateRange} from 'react-date-range'
+import memoize from 'lodash/memoize'
 
-const calculateRanges = ({today, yesterday, pastWeek, currentMonth, pastMonth, last30Days}) => ({
+const calculateRanges = memoize(({today, yesterday, pastWeek, currentMonth, pastMonth, last30Days}) => ({
   [today]: {
     startDate (now) {
       return now
@@ -51,16 +52,10 @@ const calculateRanges = ({today, yesterday, pastWeek, currentMonth, pastMonth, l
       return now.subtract(1, 'day')
     }
   }
-})
-let defaultRanges
+}))
 
-function DateRangePicker (props, {messages}) {
-  defaultRanges = defaultRanges || calculateRanges(messages)
-
-  return (
-    <DateRange {...props} ranges={props.ranges || defaultRanges}/>
-  )
-}
+const DateRangePicker = (props, {messages}) =>
+  <DateRange {...props} ranges={props.ranges || calculateRanges(messages)}/>
 
 DateRangePicker.displayName = 'Date-Range-Picker'
 DateRangePicker.propTypes = {

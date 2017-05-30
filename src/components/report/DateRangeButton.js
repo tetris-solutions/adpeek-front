@@ -53,13 +53,12 @@ function DateRangeButton ({disabled, className}, {moment, reportParams: {from, t
   }
 
   return (
-    <ButtonWithPrompt className={className} label={label} size='medium'>
-      {({dismiss}) => (
-        <DateRangeSelector
-          close={dismiss}
-          onChange={changeDateRange}
-          startDate={startDate}
-          endDate={endDate}/>)}
+    <ButtonWithPrompt className={className} label={label} size='medium'>{({dismiss}) =>
+      <DateRangeSelector
+        close={dismiss}
+        onChange={changeDateRange}
+        startDate={startDate}
+        endDate={endDate}/>}
     </ButtonWithPrompt>
   )
 }

@@ -4,8 +4,9 @@ import {Button} from '../Button'
 import Message from 'tetris-iso/Message'
 import DateRangePicker from '../DateRangePicker'
 import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
+import memoize from 'lodash/memoize'
 
-const calculateDateRanges = ({nextWeek, nextMonth, nextSemester, nextYear}) => ({
+const calculateDateRanges = memoize(({nextWeek, nextMonth, nextSemester, nextYear}) => ({
   [nextWeek]: {
     startDate (now) {
       return now.add(7, 'days').startOf('week')
@@ -46,35 +47,29 @@ const calculateDateRanges = ({nextWeek, nextMonth, nextSemester, nextYear}) => (
       return now.endOf('year').add(1, 'days').endOf('year')
     }
   }
-})
+}))
 
-let ranges
+const DateRangeModal = ({startDate, endDate, close, onChange}, {messages}) => (
+  <div className='mdl-grid'>
+    <div className='mdl-cell mdl-cell--12-col'>
+      <h4>
+        <Message>orderRangeTitle</Message>
+      </h4>
 
-function DateRangeModal ({startDate, endDate, close, onChange}, {messages}) {
-  ranges = ranges || calculateDateRanges(messages)
+      <DateRangePicker
+        ranges={calculateDateRanges(messages)}
+        onChange={onChange}
+        startDate={startDate}
+        endDate={endDate}/>
 
-  return (
-    <div className='mdl-grid'>
-      <div className='mdl-cell mdl-cell--12-col'>
-        <h4>
-          <Message>orderRangeTitle</Message>
-        </h4>
-
-        <DateRangePicker
-          ranges={ranges}
-          onChange={onChange}
-          startDate={startDate}
-          endDate={endDate}/>
-
-        <br/>
-        <hr/>
-        <Button className='mdl-button' onClick={close}>
-          <Message>close</Message>
-        </Button>
-      </div>
+      <br/>
+      <hr/>
+      <Button className='mdl-button' onClick={close}>
+        <Message>close</Message>
+      </Button>
     </div>
-  )
-}
+  </div>
+)
 
 DateRangeModal.displayName = 'Date-Range-Modal'
 DateRangeModal.propTypes = {
