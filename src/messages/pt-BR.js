@@ -402,7 +402,8 @@ module.exports = {
   editBudget: 'Editar Orçamento',
   locationCriteria: 'Localidade',
   proximityCriteria: 'Proximidade',
-  locationLabel: 'Digite uma localidade',
+  locationLabel: 'Digite uma localida' +
+  'de',
   locationSearchResult: 'Resultado da busca',
   campaignLocations: 'Selecionados',
   radiusInKmLabel: 'Raio em Km',
@@ -444,5 +445,8 @@ module.exports = {
   siteLinkTitle: 'SiteLink',
   urlCustomParameterKeyLabel: 'Nome',
   urlCustomParameterValueLabel: 'Valor',
-  urlCustomParameters: 'Parâmetros da url'
+  urlCustomParameters: 'Parâmetros da url',
+  siteLinkScheduling: 'Programação',
+  startTimeLabel: 'Início',
+  endTimeLabel: 'Término'
 }

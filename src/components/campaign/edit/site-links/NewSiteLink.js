@@ -6,11 +6,11 @@ import {Button, Submit} from '../../../Button'
 import {style} from '../style'
 import {styledComponent} from '../../../higher-order/styled'
 import {createSiteLinkExtensionAction} from '../../../../actions/create-site-link'
-import Input from '../../../Input'
-import Checkbox from '../../../Checkbox'
 import set from 'lodash/set'
-import map from 'lodash/map'
 import {Tab, Tabs} from '../../../Tabs'
+import RequiredFields from './RequiredFields'
+import Tracking from './Tracking'
+import Scheduling from './Scheduling'
 
 class NewSiteLink extends React.Component {
   static displayName = 'New-Site-Link'
@@ -23,6 +23,10 @@ class NewSiteLink extends React.Component {
     dispatch: PropTypes.func,
     params: PropTypes.object,
     campaign: PropTypes.object
+  }
+
+  static contextTypes = {
+    moment: PropTypes.func
   }
 
   save = () => {
@@ -40,6 +44,9 @@ class NewSiteLink extends React.Component {
     sitelinkFinalMobileUrl: '',
     sitelinkTrackingUrlTemplate: '',
     devicePreference: null,
+    startTime: null,
+    endTime: null,
+    scheduling: [],
     urlCustomParameters: [
       {key: '', value: ''},
       {key: '', value: ''},
@@ -49,6 +56,17 @@ class NewSiteLink extends React.Component {
 
   onChangeText = ({target: {name, value}}) => {
     this.setState(set(this.state, name, value))
+  }
+
+  onChangeRange = ({startDate, endDate}) => {
+    this.setState({
+      startTime: startDate
+        ? startDate.format('YYYY-MM-DD')
+        : null,
+      endTime: endDate
+        ? endDate.format('YYYY-MM-DD')
+        : null
+    })
   }
 
   onToggleDevice = ({target: {checked, value}}) => {
@@ -68,89 +86,20 @@ class NewSiteLink extends React.Component {
       <Form onSubmit={this.save}>
         <Tabs>
           <Tab id='base' title={<Message>siteLinkTitle</Message>}>
-            <div className='mdl-grid'>
-              <div className='mdl-cell mdl-cell--12-col'>
-                <Input
-                  required
-                  name='sitelinkText'
-                  label='sitelinkText'
-                  value={this.state.sitelinkText}
-                  onChange={this.onChangeText}/>
-                <Input
-                  required
-                  name='sitelinkLine2'
-                  label='sitelinkLine2'
-                  value={this.state.sitelinkLine2}
-                  onChange={this.onChangeText}/>
-                <Input
-                  required
-                  name='sitelinkLine3'
-                  label='sitelinkLine3'
-                  value={this.state.sitelinkLine3}
-                  onChange={this.onChangeText}/>
-                <Input
-                  required
-                  name='sitelinkFinalUrl'
-                  label='sitelinkFinalUrl'
-                  type='url'
-                  value={this.state.sitelinkFinalUrl}
-                  onChange={this.onChangeText}/>
-              </div>
-              <div className='mdl-cell mdl-cell--12-col'>
-                <Checkbox
-                  name='devicePreference'
-                  value='30001'
-                  checked={Boolean(this.state.devicePreference)}
-                  label={<Message>mobileDevicePreference</Message>}
-                  onChange={this.onToggleDevice}/>
-              </div>
-
-              {!this.state.devicePreference && (
-                <div className='mdl-cell mdl-cell--12-col'>
-                  <Input
-                    name='sitelinkFinalMobileUrl'
-                    label='sitelinkFinalMobileUrl'
-                    type='url'
-                    value={this.state.sitelinkFinalMobileUrl}
-                    onChange={this.onChangeText}/>
-                </div>)}
-            </div>
+            <RequiredFields
+              {...this.state}
+              onChange={this.onChangeText}
+              onToggleDevice={this.onToggleDevice}/>
           </Tab>
           <Tab id='tracking' title={<Message>trackingUrlTitle</Message>}>
-            <div className='mdl-grid'>
-              <div className='mdl-cell mdl-cell--12-col'>
-                <Input
-                  name='sitelinkTrackingUrlTemplate'
-                  label='sitelinkTrackingUrlTemplate'
-                  type='url'
-                  value={this.state.sitelinkTrackingUrlTemplate}
-                  onChange={this.onChangeText}/>
-              </div>
-            </div>
-
-            <div className='mdl-grid'>
-              <div className='mdl-cell mdl-cell--12-col'>
-                <h6><Message>urlCustomParameters</Message></h6>
-              </div>
-            </div>
-
-            {map(this.state.urlCustomParameters, ({key, value}, index) => (
-              <div key={index} className='mdl-grid'>
-                <div className='mdl-cell mdl-cell--5-col'>
-                  <Input
-                    name={`urlCustomParameters.${index}.key`}
-                    label='urlCustomParameterKey'
-                    value={key}
-                    onChange={this.onChangeText}/>
-                </div>
-                <div className='mdl-cell mdl-cell--7-col'>
-                  <Input
-                    name={`urlCustomParameters.${index}.value`}
-                    label='urlCustomParameterValue'
-                    value={value}
-                    onChange={this.onChangeText}/>
-                </div>
-              </div>))}
+            <Tracking
+              {...this.state}
+              onChange={this.onChangeText}/>
+          </Tab>
+          <Tab id='scheduling' title={<Message>siteLinkScheduling</Message>}>
+            <Scheduling
+              {...this.state}
+              onChangeRange={this.onChangeRange}/>
           </Tab>
         </Tabs>
 

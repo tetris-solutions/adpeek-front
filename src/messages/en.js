@@ -446,5 +446,8 @@ module.exports = {
   siteLinkTitle: 'SiteLink',
   urlCustomParameterKeyLabel: 'Key',
   urlCustomParameterValueLabel: 'Value',
-  urlCustomParameters: 'Url Parameters'
+  urlCustomParameters: 'Url Parameters',
+  siteLinkScheduling: 'Scheduling',
+  startTimeLabel: 'Start',
+  endTimeLabel: 'End'
 }

@@ -5,15 +5,15 @@ import Tooltip from 'tetris-iso/Tooltip'
 import Input from './Input'
 
 const DatePicker = (props, {moment}) => {
-  const date = moment(props.value)
+  const date = props.value ? moment(props.value) : undefined
 
   return (
     <Input
       name={'__date__'}
-      label='date'
+      label={props.label || 'date'}
       readOnly
-      data-value={date.format('YYYY-MM-DD')}
-      value={date.format('DD/MM/YYYY')}>
+      data-value={date ? date.format('YYYY-MM-DD') : ''}
+      value={date ? date.format('DD/MM/YYYY') : ''}>
       <Tooltip hover>
         <Calendar {...props} date={date}/>
       </Tooltip>
@@ -23,6 +23,7 @@ const DatePicker = (props, {moment}) => {
 
 DatePicker.displayName = 'Date-Picker'
 DatePicker.propTypes = {
+  label: PropTypes.node,
   value: PropTypes.string
 }
 DatePicker.contextTypes = {

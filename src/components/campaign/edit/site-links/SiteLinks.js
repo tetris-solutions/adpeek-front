@@ -126,7 +126,7 @@ class EditSiteLinks extends React.Component {
         </div>
 
         {openCreateModal && (
-          <Modal size='small' onEscPress={this.toggleModal}>
+          <Modal onEscPress={this.toggleModal}>
             <NewSiteLink
               {...{folder, campaign, dispatch, params}}
               feedId={get(head(siteLinks), 'feedId')}
