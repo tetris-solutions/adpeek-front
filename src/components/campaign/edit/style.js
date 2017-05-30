@@ -9,6 +9,9 @@ export const style = csjs`
   margin-top: 1em;
   text-align: right;
 }
-.actions > button:first-child {
+.actions button:not(:last-child) {
+  margin-right: .5em;
+}
+.actions button:first-child {
   float: left;
 }`
