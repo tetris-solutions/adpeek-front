@@ -7,14 +7,7 @@ import {style} from '../style'
 import {styledComponent} from '../../../higher-order/styled'
 import {createSiteLinkExtensionAction} from '../../../../actions/create-site-link'
 import Input from '../../../Input'
-import map from 'lodash/map'
-
-const txtInputs = [
-  'sitelinkText',
-  'sitelinkLine2',
-  'sitelinkLine3',
-  'sitelinkFinalUrl'
-]
+import Checkbox from '../../../Checkbox'
 
 class NewSiteLink extends React.Component {
   static displayName = 'New-Site-Link'
@@ -40,30 +33,76 @@ class NewSiteLink extends React.Component {
     sitelinkLine2: '',
     sitelinkLine3: '',
     sitelinkText: '',
-    sitelinkFinalUrl: ''
+    sitelinkFinalUrl: '',
+    sitelinkFinalMobileUrl: '',
+    devicePreference: null
   }
 
   onChangeText = ({target: {name, value}}) => {
     this.setState({[name]: value})
   }
 
-  input = name => {
-    const props = {
-      name,
-      label: name,
-      onChange: this.onChangeText
-    }
+  onToggleDevice = ({target: {checked, value}}) => {
+    this.setState({
+      devicePreference: checked
+        ? Number(value)
+        : null,
 
-    return (
-      <Input key={name} {...props}/>
-    )
+      sitelinkFinalMobileUrl: checked
+        ? ''
+        : this.state.sitelinkFinalMobileUrl
+    })
   }
 
   render () {
     return (
       <Form onSubmit={this.save}>
         <div className='mdl-grid'>
-          {map(txtInputs, this.input)}
+          <div className='mdl-cell mdl-cell--12-col'>
+            <Input
+              required
+              name='sitelinkText'
+              label='sitelinkText'
+              value={this.state.sitelinkText}
+              onChange={this.onChangeText}/>
+            <Input
+              required
+              name='sitelinkLine2'
+              label='sitelinkLine2'
+              value={this.state.sitelinkLine2}
+              onChange={this.onChangeText}/>
+            <Input
+              required
+              name='sitelinkLine3'
+              label='sitelinkLine3'
+              value={this.state.sitelinkLine3}
+              onChange={this.onChangeText}/>
+            <Input
+              required
+              name='sitelinkFinalUrl'
+              label='sitelinkFinalUrl'
+              type='url'
+              value={this.state.sitelinkFinalUrl}
+              onChange={this.onChangeText}/>
+          </div>
+          <div className='mdl-cell mdl-cell--12-col'>
+            <Checkbox
+              name='devicePreference'
+              value={30001}
+              checked={Boolean(this.state.devicePreference)}
+              label={<Message>mobileDevicePreference</Message>}
+              onChange={this.onToggleDevice}/>
+          </div>
+
+          {!this.state.devicePreference && (
+            <div className='mdl-cell mdl-cell--12-col'>
+              <Input
+                name='sitelinkFinalMobileUrl'
+                label='sitelinkFinalMobileUrl'
+                type='url'
+                value={this.state.sitelinkFinalMobileUrl}
+                onChange={this.onChangeText}/>
+            </div>)}
         </div>
 
         <div className={style.actions}>

@@ -436,5 +436,7 @@ module.exports = {
   sitelinkLine2Label: '1ª linha da descrição',
   sitelinkLine3Label: '2ª linha da descrição',
   sitelinkTextLabel: 'Texto do link',
-  sitelinkFinalUrlLabel: 'Url final'
+  sitelinkFinalUrlLabel: 'Url final',
+  mobileDevicePreference: 'Preferir dispositivo móvel',
+  sitelinkFinalMobileUrlLabel: 'Url dispositivos móveis'
 }
