@@ -10,8 +10,8 @@ import TextMessage from 'intl-messageformat'
 import {prettyNumber} from '../functions/pretty-number'
 import omit from 'lodash/omit'
 
-function notEmptyInput (value) {
-  return value !== '' && value !== undefined && value !== null
+function emptyInput (value) {
+  return value === '' || value === undefined || value === null
 }
 
 const protectedInputProps = [
@@ -72,8 +72,7 @@ export class Input extends React.Component {
     }
 
     const state = {
-      value: value === undefined ? '' : value,
-      isDirty: notEmptyInput(value)
+      value: value === undefined ? '' : value
     }
 
     state.error = this.getError(assign({}, this.props, state))
@@ -113,7 +112,6 @@ export class Input extends React.Component {
     newState.error = this.getError(assign({}, this.state, nextProps, newState))
 
     if (newState.value !== undefined || newState.error !== this.state.error) {
-      newState.isDirty = notEmptyInput(newState.value)
       this.setState(newState)
     }
   }
@@ -201,8 +199,7 @@ export class Input extends React.Component {
 
     this.setState({
       error,
-      value: input.value,
-      isDirty: notEmptyInput(input.value)
+      value: input.value
     }, onStateChange)
   }
 
@@ -220,17 +217,17 @@ export class Input extends React.Component {
   }
 
   render () {
-    const {value, isDirty, isFocused} = this.state
+    const {value, isFocused} = this.state
     const {label, children} = this.props
     const error = this.state.error || this.props.error
 
-    const wrapperClasses = cx('mdl-textfield',
-      label && 'mdl-textfield--floating-label',
-      error && 'is-invalid',
-      isDirty && 'is-dirty',
-      isFocused && 'is-focused')
-
-    const Tag = 'input'
+    const wrapperClasses = cx({
+      'mdl-textfield': true,
+      'mdl-textfield--floating-label': Boolean(label),
+      'is-invalid': Boolean(error),
+      'is-dirty': !emptyInput(value),
+      'is-focused': isFocused
+    })
 
     const inputProps = assign(omit(this.props, protectedInputProps), {
       value,
@@ -246,8 +243,7 @@ export class Input extends React.Component {
 
     return (
       <div className={wrapperClasses} ref='wrapper'>
-
-        <Tag {...inputProps}/>
+        <input {...inputProps}/>
 
         {isString(label)
           ? (
