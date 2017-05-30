@@ -440,5 +440,11 @@ module.exports = {
   sitelinkTextLabel: 'Link text',
   sitelinkFinalUrlLabel: 'Final Url',
   mobileDevicePreference: 'Prefer mobile device',
-  sitelinkFinalMobileUrlLabel: 'Mobile devices Url'
+  sitelinkFinalMobileUrlLabel: 'Mobile devices Url',
+  trackingUrlTitle: 'Tracking',
+  sitelinkTrackingUrlTemplateLabel: 'Tracking Url template',
+  siteLinkTitle: 'SiteLink',
+  urlCustomParameterKeyLabel: 'Key',
+  urlCustomParameterValueLabel: 'Value',
+  urlCustomParameters: 'Url Parameters'
 }
