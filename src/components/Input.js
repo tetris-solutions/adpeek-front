@@ -56,7 +56,10 @@ export class Input extends React.Component {
     format: 'decimal'
   }
 
-  state = {isFocused: false}
+  state = {
+    touched: false,
+    isFocused: false
+  }
 
   getValue = () => {
     return this.state.value
@@ -74,8 +77,6 @@ export class Input extends React.Component {
     const state = {
       value: value === undefined ? '' : value
     }
-
-    state.error = this.getError(assign({}, this.props, state))
 
     this.setState(state)
   }
@@ -109,11 +110,7 @@ export class Input extends React.Component {
       newState.value = newPropsValue
     }
 
-    newState.error = this.getError(assign({}, this.state, nextProps, newState))
-
-    if (newState.value !== undefined || newState.error !== this.state.error) {
-      this.setState(newState)
-    }
+    this.setState(newState)
   }
 
   getRawNumber = (value) => {
@@ -171,7 +168,7 @@ export class Input extends React.Component {
   getError = (input) => {
     let error = null
 
-    if (input.required && !trim(input.value)) {
+    if (this.state.touched && input.required && !trim(input.value)) {
       error = this.context.messages.requiredInput
     } else if (this.props.type === 'number') {
       error = this.getNumberError(input)
@@ -197,10 +194,7 @@ export class Input extends React.Component {
 
     const onStateChange = !error && onChange ? propagate : undefined
 
-    this.setState({
-      error,
-      value: input.value
-    }, onStateChange)
+    this.setState({value: input.value}, onStateChange)
   }
 
   onFocus = () => {
@@ -211,6 +205,7 @@ export class Input extends React.Component {
     const {value} = this.state
 
     this.setState({
+      touched: true,
       isFocused: false,
       value: this.props.type === 'number' ? this.formatNumber(value) : value
     })
@@ -219,7 +214,7 @@ export class Input extends React.Component {
   render () {
     const {value, isFocused} = this.state
     const {label, children} = this.props
-    const error = this.state.error || this.props.error
+    const error = this.getError(assign({}, this.props, this.state)) || this.props.error
 
     const wrapperClasses = cx({
       'mdl-textfield': true,
