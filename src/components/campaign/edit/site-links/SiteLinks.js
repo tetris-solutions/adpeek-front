@@ -121,6 +121,8 @@ class EditSiteLinks extends React.Component {
         {openCreateModal && (
           <Modal size='small' onEscPress={this.toggleModal}>
             <NewSiteLink
+              dispatch={this.props.dispatch}
+              params={this.props.params}
               cancel={this.toggleModal}
               onSubmit={this.reloadList}/>
           </Modal>)}

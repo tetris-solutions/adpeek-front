@@ -5,6 +5,7 @@ import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
 import {style} from '../style'
 import {styledComponent} from '../../../higher-order/styled'
+import {createSiteLinkExtensionAction} from '../../../../actions/create-site-link'
 import Input from '../../../Input'
 import map from 'lodash/map'
 
@@ -28,7 +29,9 @@ class NewSiteLink extends React.Component {
   }
 
   save = () => {
+    const {dispatch, params} = this.props
 
+    return dispatch(createSiteLinkExtensionAction, params, this.state)
   }
 
   state = {

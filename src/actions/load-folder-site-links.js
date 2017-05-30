@@ -3,7 +3,7 @@ import {saveResponseData} from '../functions/save-response-data'
 import {getApiFetchConfig, saveResponseTokenAsCookie, pushResponseErrorToState} from 'tetris-iso/utils'
 
 function loadFolderSiteLinks (folder, config) {
-  return GET(`${process.env.ADPEEK_API_URL}/folder/${folder}/site-links`, config)
+  return GET(`${process.env.ADPEEK_API_URL}/folder/${folder}/extension/site-links`, config)
 }
 
 export function loadFolderSiteLinksAction (tree, {company, workspace, folder}) {
