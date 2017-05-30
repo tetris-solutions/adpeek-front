@@ -29,9 +29,10 @@ class NewSiteLink extends React.Component {
   }
 
   save = () => {
-    const {dispatch, params} = this.props
+    const {dispatch, onSubmit, params} = this.props
 
     return dispatch(createSiteLinkExtensionAction, params, this.state)
+      .then(onSubmit)
   }
 
   state = {
