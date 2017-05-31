@@ -10,6 +10,8 @@ import set from 'lodash/set'
 import {Tab, Tabs} from '../../../Tabs'
 import RequiredFields from './RequiredFields'
 import Tracking from './Tracking'
+import Period from './Period'
+import concat from 'lodash/concat'
 import Scheduling from './Scheduling'
 
 class NewSiteLink extends React.Component {
@@ -81,6 +83,19 @@ class NewSiteLink extends React.Component {
     })
   }
 
+  addSchedule = () => {
+    this.setState({
+      scheduling: concat(this.state.scheduling, {
+        id: Math.random().toString(36).substr(2),
+        dayOfWeek: 'ALL_WEEK',
+        startHour: '0',
+        startMinute: 'ZERO',
+        endHour: '0',
+        endMinute: 'ZERO'
+      })
+    })
+  }
+
   render () {
     return (
       <Form onSubmit={this.save}>
@@ -91,15 +106,21 @@ class NewSiteLink extends React.Component {
               onChange={this.onChangeText}
               onToggleDevice={this.onToggleDevice}/>
           </Tab>
-          <Tab id='tracking' title={<Message>trackingUrlTitle</Message>}>
+          <Tab id='tracking' title={<Message>siteLinkTrackingUrlTitle</Message>}>
             <Tracking
               {...this.state}
               onChange={this.onChangeText}/>
           </Tab>
-          <Tab id='scheduling' title={<Message>siteLinkScheduling</Message>}>
-            <Scheduling
+          <Tab id='period' title={<Message>siteLinkPeriodTitle</Message>}>
+            <Period
               {...this.state}
               onChangeRange={this.onChangeRange}/>
+          </Tab>
+          <Tab id='scheduling' title={<Message>siteLinkSchedulingTitle</Message>}>
+            <Scheduling
+              onChange={this.onChangeText}
+              addSchedule={this.addSchedule}
+              schedules={this.state.scheduling}/>
           </Tab>
         </Tabs>
 

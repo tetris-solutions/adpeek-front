@@ -440,13 +440,17 @@ module.exports = {
   sitelinkFinalUrlLabel: 'Url final',
   mobileDevicePreference: 'Preferir dispositivo móvel',
   sitelinkFinalMobileUrlLabel: 'Url dispositivos móveis',
-  trackingUrlTitle: 'Tracking',
+  siteLinkTrackingUrlTitle: 'Tracking',
   sitelinkTrackingUrlTemplateLabel: 'Url de acompanhamento',
   siteLinkTitle: 'SiteLink',
   urlCustomParameterKeyLabel: 'Nome',
   urlCustomParameterValueLabel: 'Valor',
   urlCustomParameters: 'Parâmetros da url',
-  siteLinkScheduling: 'Programação',
+  siteLinkSchedulingTitle: 'Programação',
   startTimeLabel: 'Início',
-  endTimeLabel: 'Término'
+  endTimeLabel: 'Término',
+  siteLinkPeriodTitle: 'Prazo',
+  newSchedule: 'Nova programação',
+  allWeek: 'Todos os dias',
+  weekDays: 'Dias de semana'
 }
