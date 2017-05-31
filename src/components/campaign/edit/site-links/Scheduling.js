@@ -25,7 +25,7 @@ for (let i = 0; i < 24; i++) {
 
 const Hour = ({name, value, onChange}) => (
   <Select name={name} value={value} onChange={onChange}>{map(hours, h =>
-    <option value={h}>
+    <option key={h} value={h}>
       {h < 10
         ? '0' + h
         : String(h)}
@@ -63,10 +63,10 @@ class Schedule extends React.PureComponent {
     index: PropTypes.number.isRequired,
     onChange: PropTypes.func.isRequired,
     dayOfWeek: PropTypes.string.isRequired,
-    startHour: PropTypes.number.isRequired,
-    startMinute: PropTypes.number.isRequired,
-    endHour: PropTypes.number.isRequired,
-    endMinute: PropTypes.number.isRequired
+    startHour: PropTypes.string.isRequired,
+    startMinute: PropTypes.string.isRequired,
+    endHour: PropTypes.string.isRequired,
+    endMinute: PropTypes.string.isRequired
   }
 
   static contextTypes = {
@@ -154,7 +154,7 @@ class Scheduling extends React.Component {
   static propTypes = {
     schedules: PropTypes.array,
     onChange: PropTypes.func,
-    addSchedule: PropTypes.array
+    addSchedule: PropTypes.func
   }
 
   render () {
