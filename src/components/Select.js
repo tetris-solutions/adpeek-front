@@ -1,5 +1,6 @@
 import csjs from 'csjs'
 import cx from 'classnames'
+import isString from 'lodash/isString'
 import pick from 'lodash/pick'
 import Message from 'tetris-iso/Message'
 import React from 'react'
@@ -31,7 +32,7 @@ export class Select extends React.Component {
     value: PropTypes.any,
     defaultValue: PropTypes.any,
     error: PropTypes.string,
-    label: PropTypes.string,
+    label: PropTypes.node,
     name: PropTypes.string.isRequired,
     onChange: PropTypes.func
   }
@@ -82,11 +83,11 @@ export class Select extends React.Component {
           {this.props.children}
         </select>
 
-        {label && (
+        {isString(label) ? (
           <label className='mdl-selectfield__label'>
             <Message>{label + 'Label'}</Message>
           </label>
-        )}
+        ) : label}
 
         {error && (<span className='mdl-textfield__error'>{error}</span>)}
 

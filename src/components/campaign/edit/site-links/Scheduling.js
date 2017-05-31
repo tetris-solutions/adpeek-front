@@ -6,42 +6,32 @@ import map from 'lodash/map'
 import {Button} from '../../../Button'
 import {style} from '../style'
 
-const Option = ({value, children}) => (
-  <Message tag='option' value={value}>
-    {children}
-  </Message>
-)
-
-Option.displayName = 'Option'
-Option.propTypes = {
-  value: PropTypes.any,
-  children: PropTypes.string
-}
-
 const hours = []
 for (let i = 0; i < 24; i++) {
   hours.push(i)
 }
 
-const Hour = ({name, value, onChange}) => (
-  <Select name={name} value={value} onChange={onChange}>{map(hours, h =>
-    <option key={h} value={h}>
-      {h < 10
-        ? '0' + h
-        : String(h)}
-    </option>)}
+const Hour = ({label, name, value, onChange}) => (
+  <Select label={label} name={name} value={value} onChange={onChange}>
+    {map(hours, h =>
+      <option key={h} value={h}>
+        {h < 10
+          ? '0' + h
+          : String(h)}
+      </option>)}
   </Select>
 )
 
 Hour.displayName = 'Hour'
 Hour.propTypes = {
+  label: PropTypes.node.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.any.isRequired,
   onChange: PropTypes.func.isRequired
 }
 
-const Minute = ({name, value, onChange}) => (
-  <Select name={name} value={value} onChange={onChange}>
+const Minute = ({label, name, value, onChange}) => (
+  <Select name={name} value={value} onChange={onChange} label={label}>
     <option value='ZERO'>00</option>
     <option value='FIFTEEN'>15</option>
     <option value='THIRTY'>30</option>
@@ -51,6 +41,7 @@ const Minute = ({name, value, onChange}) => (
 
 Minute.displayName = 'Minute'
 Minute.propTypes = {
+  label: PropTypes.node.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.any.isRequired,
   onChange: PropTypes.func.isRequired
@@ -97,7 +88,7 @@ class Schedule extends React.PureComponent {
     return (
       <div className='mdl-grid'>
         <div className='mdl-cell mdl-cell--3-col'>
-          <Select name={`scheduling.${i}.dayOfWeek`} value={dayOfWeek} onChange={onChange}>
+          <Select name={`scheduling.${i}.dayOfWeek`} value={dayOfWeek} onChange={onChange} label='dayOfWeek'>
             <option value='ALL_WEEK'>
               {messages.allWeek}
             </option>
@@ -129,29 +120,34 @@ class Schedule extends React.PureComponent {
         </div>
         <div className='mdl-cell mdl-cell--2-col'>
           <Hour
+            label='startHour'
             name={`scheduling.${i}.startHour`}
             value={startHour}
             onChange={onChange}/>
         </div>
         <div className='mdl-cell mdl-cell--2-col'>
           <Minute
+            label='startMinute'
             name={`scheduling.${i}.startMinute`}
             value={startMinute}
             onChange={onChange}/>
         </div>
         <div className='mdl-cell mdl-cell--2-col'>
           <Hour
+            label='endHour'
             name={`scheduling.${i}.endHour`}
             value={endHour}
             onChange={onChange}/>
         </div>
         <div className='mdl-cell mdl-cell--2-col'>
           <Minute
+            label='endMinute'
             name={`scheduling.${i}.endMinute`}
             value={endMinute}
             onChange={onChange}/>
         </div>
         <div className='mdl-cell mdl-cell--1-col'>
+          <br/>
           <a href='' onClick={this.remove}>
             <i className='material-icons'>close</i>
           </a>

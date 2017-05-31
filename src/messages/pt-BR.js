@@ -452,5 +452,9 @@ module.exports = {
   siteLinkPeriodTitle: 'Prazo',
   newSchedule: 'Nova programação',
   allWeek: 'Todos os dias',
-  weekDays: 'Dias de semana'
+  weekDays: 'Dias de semana',
+  startHourLabel: 'Hora início',
+  startMinuteLabel: 'Min. início',
+  endHourLabel: 'Hora fim',
+  endMinuteLabel: 'Min. Fim'
 }

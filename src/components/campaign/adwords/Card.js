@@ -118,7 +118,7 @@ function AdwordsCampaign (props, context) {
             {list(mapExtensions(details.extension, 'SITELINK',
               ({sitelinkText, sitelinkFinalUrls: {urls}}, index) =>
                 <SubText key={index}>
-                  <a href={head(urls)} target='_blank'>
+                  <a className='mdl-color-text--blue-grey-500' href={head(urls)} target='_blank'>
                     {sitelinkText}
                   </a>
                 </SubText>))}

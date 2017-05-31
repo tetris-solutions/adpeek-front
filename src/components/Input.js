@@ -40,7 +40,7 @@ export class Input extends React.Component {
     value: PropTypes.any,
     defaultValue: PropTypes.any,
     error: PropTypes.string,
-    label: PropTypes.string,
+    label: PropTypes.node,
     name: PropTypes.string.isRequired,
     onChange: PropTypes.func,
     format: PropTypes.oneOf(['currency', 'percentage', 'decimal'])

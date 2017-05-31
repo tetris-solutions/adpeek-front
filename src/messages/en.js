@@ -453,5 +453,9 @@ module.exports = {
   endTimeLabel: 'End',
   newSchedule: 'New schedule',
   allWeek: 'All week',
-  weekDays: 'Week days'
+  weekDays: 'Week days',
+  startHourLabel: 'Start hour',
+  startMinuteLabel: 'Start min.',
+  endHourLabel: 'End hour',
+  endMinuteLabel: 'End min.'
 }
