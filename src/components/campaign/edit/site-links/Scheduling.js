@@ -66,11 +66,19 @@ class Schedule extends React.PureComponent {
     startHour: PropTypes.string.isRequired,
     startMinute: PropTypes.string.isRequired,
     endHour: PropTypes.string.isRequired,
-    endMinute: PropTypes.string.isRequired
+    endMinute: PropTypes.string.isRequired,
+    removeSchedule: PropTypes.func.isRequired
   }
 
   static contextTypes = {
-    moment: PropTypes.func.isRequired
+    moment: PropTypes.func.isRequired,
+    messages: PropTypes.object.isRequired
+  }
+
+  remove = e => {
+    e.preventDefault()
+
+    this.props.removeSchedule(this.props.index)
   }
 
   render () {
@@ -84,18 +92,18 @@ class Schedule extends React.PureComponent {
       onChange
     } = this.props
 
-    const {moment} = this.context
+    const {moment, messages} = this.context
 
     return (
       <div className='mdl-grid'>
-        <div className='mdl-cell mdl-cell--4-col'>
+        <div className='mdl-cell mdl-cell--3-col'>
           <Select name={`scheduling.${i}.dayOfWeek`} value={dayOfWeek} onChange={onChange}>
-            <Option value='ALL_WEEK'>
-              allWeek
-            </Option>
-            <Option value='WEEK_DAYS'>
-              weekDays
-            </Option>
+            <option value='ALL_WEEK'>
+              {messages.allWeek}
+            </option>
+            <option value='WEEK_DAYS'>
+              {messages.weekDays}
+            </option>
             <option value='MONDAY'>
               {moment().day(1).format('dddd')}
             </option>
@@ -143,6 +151,11 @@ class Schedule extends React.PureComponent {
             value={endMinute}
             onChange={onChange}/>
         </div>
+        <div className='mdl-cell mdl-cell--1-col'>
+          <a href='' onClick={this.remove}>
+            <i className='material-icons'>close</i>
+          </a>
+        </div>
       </div>
     )
   }
@@ -154,6 +167,7 @@ class Scheduling extends React.Component {
   static propTypes = {
     schedules: PropTypes.array,
     onChange: PropTypes.func,
+    removeSchedule: PropTypes.func,
     addSchedule: PropTypes.func
   }
 
@@ -166,6 +180,7 @@ class Scheduling extends React.Component {
               key={schedule.id}
               index={index}
               {...schedule}
+              removeSchedule={this.props.removeSchedule}
               onChange={this.props.onChange}/>)}
         </div>
 

@@ -15,7 +15,7 @@ class Tracking extends React.PureComponent {
 
   render () {
     return (
-      <div>
+      <div style={{maxWidth: 400, margin: '0 auto'}}>
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--12-col'>
             <Input

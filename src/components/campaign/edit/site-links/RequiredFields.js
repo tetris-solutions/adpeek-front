@@ -19,52 +19,60 @@ class RequiredFields extends React.PureComponent {
 
   render () {
     return (
-      <div className='mdl-grid'>
-        <div className='mdl-cell mdl-cell--12-col'>
-          <Input
-            required
-            name='sitelinkText'
-            label='sitelinkText'
-            value={this.props.sitelinkText}
-            onChange={this.props.onChange}/>
-          <Input
-            required
-            name='sitelinkLine2'
-            label='sitelinkLine2'
-            value={this.props.sitelinkLine2}
-            onChange={this.props.onChange}/>
-          <Input
-            required
-            name='sitelinkLine3'
-            label='sitelinkLine3'
-            value={this.props.sitelinkLine3}
-            onChange={this.props.onChange}/>
-          <Input
-            required
-            name='sitelinkFinalUrl'
-            label='sitelinkFinalUrl'
-            type='url'
-            value={this.props.sitelinkFinalUrl}
-            onChange={this.props.onChange}/>
-        </div>
-        <div className='mdl-cell mdl-cell--12-col'>
-          <Checkbox
-            name='devicePreference'
-            value='30001'
-            checked={Boolean(this.props.devicePreference)}
-            label={<Message>mobileDevicePreference</Message>}
-            onChange={this.props.onToggleDevice}/>
-        </div>
-
-        {!this.props.devicePreference && (
+      <div style={{maxWidth: 400, margin: '0 auto'}}>
+        <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--12-col'>
             <Input
-              name='sitelinkFinalMobileUrl'
-              label='sitelinkFinalMobileUrl'
-              type='url'
-              value={this.props.sitelinkFinalMobileUrl}
+              required
+              name='sitelinkText'
+              label='sitelinkText'
+              value={this.props.sitelinkText}
               onChange={this.props.onChange}/>
-          </div>)}
+          </div>
+          <div className='mdl-cell mdl-cell--12-col'>
+            <Input
+              required
+              name='sitelinkLine2'
+              label='sitelinkLine2'
+              value={this.props.sitelinkLine2}
+              onChange={this.props.onChange}/>
+          </div>
+          <div className='mdl-cell mdl-cell--12-col'>
+            <Input
+              required
+              name='sitelinkLine3'
+              label='sitelinkLine3'
+              value={this.props.sitelinkLine3}
+              onChange={this.props.onChange}/>
+          </div>
+          <div className='mdl-cell mdl-cell--12-col'>
+            <Input
+              required
+              name='sitelinkFinalUrl'
+              label='sitelinkFinalUrl'
+              type='url'
+              value={this.props.sitelinkFinalUrl}
+              onChange={this.props.onChange}/>
+          </div>
+          <div className='mdl-cell mdl-cell--12-col'>
+            <Checkbox
+              name='devicePreference'
+              value='30001'
+              checked={Boolean(this.props.devicePreference)}
+              label={<Message>mobileDevicePreference</Message>}
+              onChange={this.props.onToggleDevice}/>
+          </div>
+
+          {!this.props.devicePreference && (
+            <div className='mdl-cell mdl-cell--12-col'>
+              <Input
+                name='sitelinkFinalMobileUrl'
+                label='sitelinkFinalMobileUrl'
+                type='url'
+                value={this.props.sitelinkFinalMobileUrl}
+                onChange={this.props.onChange}/>
+            </div>)}
+        </div>
       </div>
     )
   }

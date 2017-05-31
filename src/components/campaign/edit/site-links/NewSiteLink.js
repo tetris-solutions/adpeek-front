@@ -13,6 +13,7 @@ import Tracking from './Tracking'
 import Period from './Period'
 import concat from 'lodash/concat'
 import Scheduling from './Scheduling'
+import filter from 'lodash/filter'
 
 class NewSiteLink extends React.Component {
   static displayName = 'New-Site-Link'
@@ -96,6 +97,12 @@ class NewSiteLink extends React.Component {
     })
   }
 
+  removeSchedule = rmIndex => {
+    this.setState({
+      scheduling: filter(this.state.scheduling, (_, index) => index !== rmIndex)
+    })
+  }
+
   render () {
     return (
       <Form onSubmit={this.save}>
@@ -119,6 +126,7 @@ class NewSiteLink extends React.Component {
           <Tab id='scheduling' title={<Message>siteLinkSchedulingTitle</Message>}>
             <Scheduling
               onChange={this.onChangeText}
+              removeSchedule={this.removeSchedule}
               addSchedule={this.addSchedule}
               schedules={this.state.scheduling}/>
           </Tab>
