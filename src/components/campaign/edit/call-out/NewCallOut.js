@@ -4,7 +4,7 @@ import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
 import {style} from '../style'
 import {styledComponent} from '../../../higher-order/styled'
-// import {createCallOutExtensionAction} from '../../../../actions/create-call-out'
+import {createCallOutExtensionAction} from '../../../../actions/create-call-out'
 import {Tab, Tabs} from '../../../Tabs'
 import RequiredFields from './RequiredFields'
 import Period from '../shared/Period'
@@ -14,12 +14,12 @@ import Scheduling from '../shared/Scheduling'
 class NewCallOut extends NewFeedItem {
   static displayName = 'New-Call-Out'
 
-  // save = () => {
-  //   const {dispatch, feedId, onSubmit, params} = this.props
-  //
-  //   return dispatch(createCallOutExtensionAction, params, feedId, this.state)
-  //     .then(onSubmit)
-  // }
+  save = () => {
+    const {dispatch, feedId, onSubmit, params} = this.props
+
+    return dispatch(createCallOutExtensionAction, params, feedId, this.state)
+      .then(onSubmit)
+  }
 
   state = {
     calloutText: '',
