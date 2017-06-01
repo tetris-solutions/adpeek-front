@@ -8,7 +8,7 @@ import concat from 'lodash/concat'
 import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
 import {styledComponent} from '../../../higher-order/styled'
-// import {loadFolderAppsAction} from '../../../../actions/load-folder-apps'
+import {loadFolderAppsAction} from '../../../../actions/load-folder-apps'
 // import {updateCampaignAppsAction} from '../../../../actions/update-campaign-apps'
 import Checkbox from '../../../Checkbox'
 import includes from 'lodash/includes'
@@ -39,10 +39,10 @@ class EditApp extends React.Component {
   }
 
   loadFolderApps = () => {
-    // const {dispatch, params} = this.props
-    //
-    // return dispatch(loadFolderAppsAction, params)
-    //   .then(() => this.forceUpdate())
+    const {dispatch, params} = this.props
+
+    return dispatch(loadFolderAppsAction, params)
+      .then(() => this.forceUpdate())
   }
 
   getCampaignAppExtensions = () => {
