@@ -9,6 +9,7 @@ import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
 import {styledComponent} from '../../../higher-order/styled'
 import {loadFolderCallOutsAction} from '../../../../actions/load-folder-call-outs'
+import {updateCampaignCallOutsAction} from '../../../../actions/update-campaign-call-outs'
 import Checkbox from '../../../Checkbox'
 import includes from 'lodash/includes'
 import without from 'lodash/without'
@@ -18,7 +19,6 @@ import {style} from '../style'
 import NewCallOut from './NewCallOut'
 import get from 'lodash/get'
 import head from 'lodash/head'
-// import isEmpty from 'lodash/isEmpty'
 
 const unwrap = extensions => flatten(map(filter(extensions, {type: 'CALLOUT'}), 'extensions'))
 
@@ -30,7 +30,8 @@ class EditCallOut extends React.Component {
     folder: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
     campaign: PropTypes.object.isRequired,
-    cancel: PropTypes.func.isRequired
+    cancel: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired
   }
 
   componentDidMount () {
@@ -80,7 +81,12 @@ class EditCallOut extends React.Component {
   }
 
   save = () => {
+    const {onSubmit, dispatch, params, folder} = this.props
+    const callOuts = filter(folder.callOuts,
+      ({feedItemId}) => includes(this.state.selected, feedItemId))
 
+    return dispatch(updateCampaignCallOutsAction, params, callOuts)
+      .then(onSubmit)
   }
 
   render () {
