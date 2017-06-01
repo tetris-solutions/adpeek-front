@@ -446,10 +446,10 @@ module.exports = {
   urlCustomParameterKeyLabel: 'Nome',
   urlCustomParameterValueLabel: 'Valor',
   urlCustomParameters: 'Parâmetros da url',
-  siteLinkSchedulingTitle: 'Programação',
+  feedItemSchedulingTitle: 'Programação',
   startTimeLabel: 'Início',
   endTimeLabel: 'Término',
-  siteLinkPeriodTitle: 'Prazo',
+  feedItemPeriodTitle: 'Prazo',
   newSchedule: 'Nova programação',
   allWeek: 'Todos os dias',
   weekDays: 'Dias de semana',
@@ -457,5 +457,7 @@ module.exports = {
   startMinuteLabel: 'Min. início',
   endHourLabel: 'Hora fim',
   endMinuteLabel: 'Min. Fim',
-  newCallOut: 'Nova Frase'
+  newCallOut: 'Nova Frase',
+  calloutTextLabel: 'Frase de destaque',
+  callOutTitle: 'Frase'
 }

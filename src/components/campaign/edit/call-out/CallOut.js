@@ -15,8 +15,9 @@ import without from 'lodash/without'
 import unionBy from 'lodash/unionBy'
 import Modal from 'tetris-iso/Modal'
 import {style} from '../style'
-// import get from 'lodash/get'
-// import head from 'lodash/head'
+import NewCallOut from './NewCallOut'
+import get from 'lodash/get'
+import head from 'lodash/head'
 // import isEmpty from 'lodash/isEmpty'
 
 const unwrap = extensions => flatten(map(filter(extensions, {type: 'CALLOUT'}), 'extensions'))
@@ -84,7 +85,7 @@ class EditCallOut extends React.Component {
 
   render () {
     const {selected, openCreateModal} = this.state
-    const {cancel, campaign, folder} = this.props
+    const {dispatch, params, cancel, campaign, folder} = this.props
     const callOuts = unionBy(
       unwrap(campaign.details.extension),
       folder.callOuts,
@@ -126,7 +127,11 @@ class EditCallOut extends React.Component {
 
         {openCreateModal && (
           <Modal onEscPress={this.toggleModal}>
-            etc etc etc
+            <NewCallOut
+              {...{folder, campaign, dispatch, params}}
+              feedId={get(head(callOuts), 'feedId')}
+              cancel={this.toggleModal}
+              onSubmit={this.toggleModal}/>
           </Modal>)}
       </Form>
     )

@@ -4,51 +4,36 @@ import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
 import {style} from '../style'
 import {styledComponent} from '../../../higher-order/styled'
-import {createSiteLinkExtensionAction} from '../../../../actions/create-site-link'
+// import {createCallOutExtensionAction} from '../../../../actions/create-call-out'
 import {Tab, Tabs} from '../../../Tabs'
 import RequiredFields from './RequiredFields'
-import Tracking from './Tracking'
 import Period from '../shared/Period'
 import NewFeedItem from '../shared/NewFeedItem'
 import Scheduling from '../shared/Scheduling'
 
-class NewSiteLink extends NewFeedItem {
-  static displayName = 'New-Site-Link'
+class NewCallOut extends NewFeedItem {
+  static displayName = 'New-Call-Out'
 
-  save = () => {
-    const {dispatch, feedId, onSubmit, params} = this.props
-
-    return dispatch(createSiteLinkExtensionAction, params, feedId, this.state)
-      .then(onSubmit)
-  }
+  // save = () => {
+  //   const {dispatch, feedId, onSubmit, params} = this.props
+  //
+  //   return dispatch(createCallOutExtensionAction, params, feedId, this.state)
+  //     .then(onSubmit)
+  // }
 
   state = {
-    sitelinkLine2: '',
-    sitelinkLine3: '',
-    sitelinkText: '',
-    sitelinkFinalUrl: '',
-    sitelinkFinalMobileUrl: '',
-    sitelinkTrackingUrlTemplate: '',
+    calloutText: '',
     devicePreference: null,
     startTime: null,
     endTime: null,
-    scheduling: [],
-    urlCustomParameters: [
-      {key: '', value: ''},
-      {key: '', value: ''},
-      {key: '', value: ''}
-    ]
+    scheduling: []
   }
 
   onToggleDevice = ({target: {checked, value}}) => {
     this.setState({
       devicePreference: checked
         ? Number(value)
-        : null,
-
-      sitelinkFinalMobileUrl: checked
-        ? ''
-        : this.state.sitelinkFinalMobileUrl
+        : null
     })
   }
 
@@ -56,23 +41,18 @@ class NewSiteLink extends NewFeedItem {
     return (
       <Form onSubmit={this.save}>
         <Tabs>
-          <Tab id='site-link-required-fields' title={<Message>siteLinkTitle</Message>}>
+          <Tab id='base' title={<Message>callOutTitle</Message>}>
             <RequiredFields
               {...this.state}
               onChange={this.onChangeText}
               onToggleDevice={this.onToggleDevice}/>
           </Tab>
-          <Tab id='site-link-tracking' title={<Message>siteLinkTrackingUrlTitle</Message>}>
-            <Tracking
-              {...this.state}
-              onChange={this.onChangeText}/>
-          </Tab>
-          <Tab id='site-link-period' title={<Message>feedItemPeriodTitle</Message>}>
+          <Tab id='period' title={<Message>feedItemPeriodTitle</Message>}>
             <Period
               {...this.state}
               onChangeRange={this.onChangeRange}/>
           </Tab>
-          <Tab id='site-link-scheduling' title={<Message>feedItemSchedulingTitle</Message>}>
+          <Tab id='scheduling' title={<Message>feedItemSchedulingTitle</Message>}>
             <Scheduling
               onChange={this.onChangeText}
               removeSchedule={this.removeSchedule}
@@ -95,4 +75,4 @@ class NewSiteLink extends NewFeedItem {
   }
 }
 
-export default styledComponent(NewSiteLink, style)
+export default styledComponent(NewCallOut, style)

@@ -443,8 +443,8 @@ module.exports = {
   bidStrategyTitle: 'Bid Strategy',
   siteLinkTrackingUrlTitle: 'Tracking',
   siteLinkTitle: 'SiteLink',
-  siteLinkPeriodTitle: 'Period',
-  siteLinkSchedulingTitle: 'Scheduling',
+  feedItemPeriodTitle: 'Period',
+  feedItemSchedulingTitle: 'Scheduling',
   sitelinkTrackingUrlTemplateLabel: 'Tracking Url template',
   urlCustomParameterKeyLabel: 'Key',
   urlCustomParameterValueLabel: 'Value',
@@ -458,5 +458,7 @@ module.exports = {
   startMinuteLabel: 'Start min.',
   endHourLabel: 'End hour',
   endMinuteLabel: 'End min.',
-  newCallOut: 'New Call Out'
+  newCallOut: 'New Call Out',
+  calloutTextLabel: 'Call Out',
+  callOutTitle: 'Call Out'
 }
