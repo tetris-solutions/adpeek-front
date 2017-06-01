@@ -1,14 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
-import Modal from 'tetris-iso/Modal'
+import filter from 'lodash/filter'
+import map from 'lodash/map'
+import flatten from 'lodash/flatten'
+import concat from 'lodash/concat'
 import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
-import {style} from '../style'
 import {styledComponent} from '../../../higher-order/styled'
-import map from 'lodash/map'
-import filter from 'lodash/filter'
-import flatten from 'lodash/flatten'
+import {loadFolderCallOutsAction} from '../../../../actions/load-folder-call-outs'
+import Checkbox from '../../../Checkbox'
+import includes from 'lodash/includes'
+import without from 'lodash/without'
+import unionBy from 'lodash/unionBy'
+import Modal from 'tetris-iso/Modal'
+import {style} from '../style'
+// import get from 'lodash/get'
+// import head from 'lodash/head'
+// import isEmpty from 'lodash/isEmpty'
 
 const unwrap = extensions => flatten(map(filter(extensions, {type: 'CALLOUT'}), 'extensions'))
 
@@ -16,8 +25,22 @@ class EditCallOut extends React.Component {
   static displayName = 'Edit-Call-Out'
 
   static propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    folder: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired,
     campaign: PropTypes.object.isRequired,
     cancel: PropTypes.func.isRequired
+  }
+
+  componentDidMount () {
+    this.loadFolderSiteLinks()
+  }
+
+  loadFolderSiteLinks = () => {
+    const {dispatch, params} = this.props
+
+    return dispatch(loadFolderCallOutsAction, params)
+      .then(() => this.forceUpdate())
   }
 
   getCampaignCallOutExtensions = () => {
@@ -35,19 +58,57 @@ class EditCallOut extends React.Component {
     })
   }
 
+  add = id => {
+    this.setState({
+      selected: concat(this.state.selected, id)
+    })
+  }
+
+  remove = id => {
+    this.setState({
+      selected: without(this.state.selected, id)
+    })
+  }
+
+  onCheck = ({target: {checked, value: id}}) => {
+    if (checked) {
+      this.add(id)
+    } else {
+      this.remove(id)
+    }
+  }
+
   save = () => {
 
   }
 
   render () {
-    const {cancel} = this.props
-    const {openCreateModal} = this.state
+    const {selected, openCreateModal} = this.state
+    const {cancel, campaign, folder} = this.props
+    const callOuts = unionBy(
+      unwrap(campaign.details.extension),
+      folder.callOuts,
+      'feedItemId'
+    )
 
     return (
       <Form onSubmit={this.save}>
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--12-col'>
-            <div className={`mdl-list ${style.list}`}/>
+            <div className={`mdl-list ${style.list}`}>{map(callOuts, ({feedItemId, calloutText}) =>
+              <div key={feedItemId} className='mdl-list__item'>
+                <span className='mdl-list__item-primary-content'>
+                  {calloutText}
+                </span>
+                <span className='mdl-list__item-secondary-action'>
+                  <Checkbox
+                    name={`call-out-${feedItemId}`}
+                    value={feedItemId}
+                    onChange={this.onCheck}
+                    checked={includes(selected, feedItemId)}/>
+                </span>
+              </div>)}
+            </div>
           </div>
         </div>
         <div className={style.actions}>
