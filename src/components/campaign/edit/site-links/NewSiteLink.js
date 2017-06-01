@@ -1,37 +1,19 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
 import {style} from '../style'
 import {styledComponent} from '../../../higher-order/styled'
 import {createSiteLinkExtensionAction} from '../../../../actions/create-site-link'
-import set from 'lodash/set'
 import {Tab, Tabs} from '../../../Tabs'
 import RequiredFields from './RequiredFields'
 import Tracking from './Tracking'
 import Period from '../shared/Period'
-import concat from 'lodash/concat'
+import NewFeedItem from '../shared/NewFeedItem'
 import Scheduling from '../shared/Scheduling'
-import filter from 'lodash/filter'
 
-class NewSiteLink extends React.Component {
+class NewSiteLink extends NewFeedItem {
   static displayName = 'New-Site-Link'
-
-  static propTypes = {
-    feedId: PropTypes.string,
-    folder: PropTypes.object,
-    cancel: PropTypes.func,
-    onSubmit: PropTypes.func,
-    dispatch: PropTypes.func,
-    params: PropTypes.object,
-    campaign: PropTypes.object
-  }
-
-  static contextTypes = {
-    moment: PropTypes.func
-  }
-
   save = () => {
     const {dispatch, feedId, onSubmit, params} = this.props
 
@@ -57,21 +39,6 @@ class NewSiteLink extends React.Component {
     ]
   }
 
-  onChangeText = ({target: {name, value}}) => {
-    this.setState(set(this.state, name, value))
-  }
-
-  onChangeRange = ({startDate, endDate}) => {
-    this.setState({
-      startTime: startDate
-        ? startDate.format('YYYY-MM-DD')
-        : null,
-      endTime: endDate
-        ? endDate.format('YYYY-MM-DD')
-        : null
-    })
-  }
-
   onToggleDevice = ({target: {checked, value}}) => {
     this.setState({
       devicePreference: checked
@@ -81,25 +48,6 @@ class NewSiteLink extends React.Component {
       sitelinkFinalMobileUrl: checked
         ? ''
         : this.state.sitelinkFinalMobileUrl
-    })
-  }
-
-  addSchedule = () => {
-    this.setState({
-      scheduling: concat(this.state.scheduling, {
-        id: Math.random().toString(36).substr(2),
-        dayOfWeek: 'ALL_WEEK',
-        startHour: '0',
-        startMinute: 'ZERO',
-        endHour: '0',
-        endMinute: 'ZERO'
-      })
-    })
-  }
-
-  removeSchedule = rmIndex => {
-    this.setState({
-      scheduling: filter(this.state.scheduling, (_, index) => index !== rmIndex)
     })
   }
 
