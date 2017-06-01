@@ -440,8 +440,8 @@ module.exports = {
   sitelinkFinalUrlLabel: 'Url final',
   mobileDevicePreference: 'Preferir dispositivo móvel',
   sitelinkFinalMobileUrlLabel: 'Url dispositivos móveis',
-  siteLinkTrackingUrlTitle: 'Tracking',
-  sitelinkTrackingUrlTemplateLabel: 'Url de acompanhamento',
+  trackingUrlTitle: 'Tracking',
+  trackingUrlTemplateLabel: 'Url de acompanhamento',
   siteLinkTitle: 'SiteLink',
   urlCustomParameterKeyLabel: 'Nome',
   urlCustomParameterValueLabel: 'Valor',
@@ -459,5 +459,12 @@ module.exports = {
   endMinuteLabel: 'Min. Fim',
   newCallOut: 'Nova Frase',
   calloutTextLabel: 'Frase de destaque',
-  callOutTitle: 'Frase'
+  callOutTitle: 'Frase',
+  newApp: 'Novo App',
+  appStoreLabel: 'Sistema Operacional',
+  appTitle: 'App',
+  appIdLabel: 'Id do Aplicativo',
+  appLinkTextLabel: 'Texto do Link',
+  appFinalUrlLabel: 'Url de Download',
+  appFinalMobileUrlLabel: 'Url Mobile'
 }

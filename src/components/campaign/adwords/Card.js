@@ -40,7 +40,6 @@ function list (ls, iteratee, Empty = None) {
 const isLanguage = {type: 'LANGUAGE'}
 const isUserList = {type: 'USER_LIST'}
 const isPlatform = {type: 'PLATFORM'}
-const isApplication = {type: 'MOBILE_APPLICATION'}
 
 const mapExtensions = (ls, type, cb) => map(flatten(map(filter(ls, {type}), 'extensions')), cb)
 
@@ -143,10 +142,15 @@ function AdwordsCampaign (props, context) {
               </SubText>)}
           </Info>
 
-          <Info>
+          <Info editLink={editable ? urlFor(params, 'apps') : null}>
             <Message>targetApp</Message>:
-            {list(filter(details.criteria, isApplication), ({id, app_name}) =>
-              <SubText key={id}>{app_name}</SubText>)}
+            {list(mapExtensions(details.extension, 'APP',
+              ({appLinkText, appFinalUrls: {urls}}, index) =>
+                <SubText key={index}>
+                  <a className='mdl-color-text--blue-grey-500' href={head(urls)} target='_blank'>
+                    {appLinkText}
+                  </a>
+                </SubText>))}
           </Info>
         </Section>
 

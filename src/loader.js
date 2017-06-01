@@ -99,7 +99,8 @@ const campaign = provide => tempSyncEnsure(() => provide({
   platform: require('./components/campaign/edit/PlatformModal'),
   bidStrategy: require('./components/campaign/edit/BidStrategyModal'),
   siteLinks: require('./components/campaign/edit/SiteLinkModal'),
-  callOuts: require('./components/campaign/edit/CalloutModal')
+  callOuts: require('./components/campaign/edit/CalloutModal'),
+  apps: require('./components/campaign/edit/AppsModal')
 }))
 
 const orderCloning = provide => tempSyncEnsure(() => provide({
@@ -201,6 +202,7 @@ export const component = {
   CampaignBidStrategy: screen(campaign, 'bidStrategy'),
   CampaignSiteLinks: screen(campaign, 'siteLinks'),
   CampaignCallOuts: screen(campaign, 'callOuts'),
+  CampaignApps: screen(campaign, 'apps'),
   CampaignCreatives: screen(creatives, 'campaign'),
   FolderCreatives: screen(creatives, 'folder'),
 

@@ -8,21 +8,24 @@ class Tracking extends React.PureComponent {
   static displayName = 'Tracking'
 
   static propTypes = {
-    sitelinkTrackingUrlTemplate: PropTypes.string.isRequired,
+    extensionName: PropTypes.oneOf(['app', 'sitelink']),
     urlCustomParameters: PropTypes.array.isRequired,
     onChange: PropTypes.func.isRequired
   }
 
   render () {
+    const {extensionName} = this.props
+    const trackingUrlPropName = `${extensionName}TrackingUrlTemplate`
+
     return (
       <div style={{maxWidth: 400, margin: '0 auto'}}>
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--12-col'>
             <Input
-              name='sitelinkTrackingUrlTemplate'
-              label='sitelinkTrackingUrlTemplate'
+              name={trackingUrlPropName}
+              label='trackingUrlTemplate'
               type='url'
-              value={this.props.sitelinkTrackingUrlTemplate}
+              value={this.props[trackingUrlPropName]}
               onChange={this.props.onChange}/>
           </div>
         </div>

@@ -8,21 +8,21 @@ import concat from 'lodash/concat'
 import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
 import {styledComponent} from '../../../higher-order/styled'
-import {loadFolderCallOutsAction} from '../../../../actions/load-folder-call-outs'
-import {updateCampaignCallOutsAction} from '../../../../actions/update-campaign-call-outs'
+// import {loadFolderAppsAction} from '../../../../actions/load-folder-apps'
+// import {updateCampaignAppsAction} from '../../../../actions/update-campaign-apps'
 import Checkbox from '../../../Checkbox'
 import includes from 'lodash/includes'
 import without from 'lodash/without'
 import unionBy from 'lodash/unionBy'
 import Modal from 'tetris-iso/Modal'
 import {style} from '../style'
-import NewCallOut from './NewCallOut'
+import NewApp from './NewApp'
 import get from 'lodash/get'
 import head from 'lodash/head'
 
-const unwrap = extensions => flatten(map(filter(extensions, {type: 'CALLOUT'}), 'extensions'))
+const unwrap = extensions => flatten(map(filter(extensions, {type: 'APP'}), 'extensions'))
 
-class EditCallOut extends React.Component {
+class EditApp extends React.Component {
   static displayName = 'Edit-Call-Out'
 
   static propTypes = {
@@ -35,23 +35,23 @@ class EditCallOut extends React.Component {
   }
 
   componentDidMount () {
-    this.loadFolderCallOuts()
+    this.loadFolderApps()
   }
 
-  loadFolderCallOuts = () => {
-    const {dispatch, params} = this.props
-
-    return dispatch(loadFolderCallOutsAction, params)
-      .then(() => this.forceUpdate())
+  loadFolderApps = () => {
+    // const {dispatch, params} = this.props
+    //
+    // return dispatch(loadFolderAppsAction, params)
+    //   .then(() => this.forceUpdate())
   }
 
-  getCampaignCallOutExtensions = () => {
+  getCampaignAppExtensions = () => {
     return map(unwrap(this.props.campaign.details.extension), 'feedItemId')
   }
 
   state = {
     openCreateModal: false,
-    selected: this.getCampaignCallOutExtensions()
+    selected: this.getCampaignAppExtensions()
   }
 
   toggleModal = () => {
@@ -80,21 +80,21 @@ class EditCallOut extends React.Component {
     }
   }
 
-  save = () => {
-    const {onSubmit, dispatch, params, folder} = this.props
-    const callOuts = filter(folder.callOuts,
-      ({feedItemId}) => includes(this.state.selected, feedItemId))
-
-    return dispatch(updateCampaignCallOutsAction, params, callOuts)
-      .then(onSubmit)
-  }
+  // save = () => {
+  //   const {onSubmit, dispatch, params, folder} = this.props
+  //   const apps = filter(folder.apps,
+  //     ({feedItemId}) => includes(this.state.selected, feedItemId))
+  //
+  //   return dispatch(updateCampaignAppsAction, params, apps)
+  //     .then(onSubmit)
+  // }
 
   render () {
     const {selected, openCreateModal} = this.state
     const {dispatch, params, cancel, campaign, folder} = this.props
-    const callOuts = unionBy(
+    const apps = unionBy(
       unwrap(campaign.details.extension),
-      folder.callOuts,
+      folder.apps,
       'feedItemId'
     )
 
@@ -102,14 +102,14 @@ class EditCallOut extends React.Component {
       <Form onSubmit={this.save}>
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--12-col'>
-            <div className={`mdl-list ${style.list}`}>{map(callOuts, ({feedItemId, calloutText}) =>
+            <div className={`mdl-list ${style.list}`}>{map(apps, ({feedItemId, appLinkText, appFinalUrls: {urls}}) =>
               <div key={feedItemId} className='mdl-list__item'>
-                <span className='mdl-list__item-primary-content'>
-                  {calloutText}
-                </span>
+                <a href={head(urls)} className='mdl-list__item-primary-content'>
+                  {appLinkText}
+                </a>
                 <span className='mdl-list__item-secondary-action'>
                   <Checkbox
-                    name={`call-out-${feedItemId}`}
+                    name={`app-${feedItemId}`}
                     value={feedItemId}
                     onChange={this.onCheck}
                     checked={includes(selected, feedItemId)}/>
@@ -124,7 +124,7 @@ class EditCallOut extends React.Component {
           </Button>
 
           <Button className='mdl-button mdl-button--raised' onClick={this.toggleModal}>
-            <Message>newCallOut</Message>
+            <Message>newApp</Message>
           </Button>
           <Submit className='mdl-button mdl-button--raised mdl-button--colored'>
             <Message>save</Message>
@@ -133,9 +133,9 @@ class EditCallOut extends React.Component {
 
         {openCreateModal && (
           <Modal onEscPress={this.toggleModal}>
-            <NewCallOut
+            <NewApp
               {...{folder, campaign, dispatch, params}}
-              feedId={get(head(callOuts), 'feedId')}
+              feedId={get(head(apps), 'feedId')}
               cancel={this.toggleModal}
               onSubmit={this.toggleModal}/>
           </Modal>)}
@@ -144,4 +144,4 @@ class EditCallOut extends React.Component {
   }
 }
 
-export default styledComponent(EditCallOut, style)
+export default styledComponent(EditApp, style)

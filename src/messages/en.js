@@ -441,11 +441,11 @@ module.exports = {
   mobileDevicePreference: 'Prefer mobile device',
   sitelinkFinalMobileUrlLabel: 'Mobile devices Url',
   bidStrategyTitle: 'Bid Strategy',
-  siteLinkTrackingUrlTitle: 'Tracking',
+  trackingUrlTitle: 'Tracking',
   siteLinkTitle: 'SiteLink',
   feedItemPeriodTitle: 'Period',
   feedItemSchedulingTitle: 'Scheduling',
-  sitelinkTrackingUrlTemplateLabel: 'Tracking Url template',
+  trackingUrlTemplateLabel: 'Tracking Url template',
   urlCustomParameterKeyLabel: 'Key',
   urlCustomParameterValueLabel: 'Value',
   urlCustomParameters: 'Url Parameters',
@@ -460,5 +460,12 @@ module.exports = {
   endMinuteLabel: 'End min.',
   newCallOut: 'New Call Out',
   calloutTextLabel: 'Call Out',
-  callOutTitle: 'Call Out'
+  callOutTitle: 'Call Out',
+  newApp: 'New App',
+  appStoreLabel: 'Operational System',
+  appTitle: 'App',
+  appIdLabel: 'App Id',
+  appLinkTextLabel: 'App Link Text',
+  appFinalUrlLabel: 'App Download Url',
+  appFinalMobileUrlLabel: 'Url Mobile'
 }
