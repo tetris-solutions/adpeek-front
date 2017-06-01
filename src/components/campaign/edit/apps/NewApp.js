@@ -4,7 +4,7 @@ import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
 import {style} from '../style'
 import {styledComponent} from '../../../higher-order/styled'
-// import {createAppExtensionAction} from '../../../../actions/create-app'
+import {createAppExtensionAction} from '../../../../actions/create-app'
 import {Tab, Tabs} from '../../../Tabs'
 import RequiredFields from './RequiredFields'
 import Tracking from '../shared/Tracking'
@@ -15,12 +15,12 @@ import Scheduling from '../shared/Scheduling'
 class NewApp extends NewFeedItem {
   static displayName = 'New-App'
 
-  // save = () => {
-  //   const {dispatch, feedId, onSubmit, params} = this.props
-  //
-  //   return dispatch(createAppExtensionAction, params, feedId, this.state)
-  //     .then(onSubmit)
-  // }
+  save = () => {
+    const {dispatch, feedId, onSubmit, params} = this.props
+
+    return dispatch(createAppExtensionAction, params, feedId, this.state)
+      .then(onSubmit)
+  }
 
   state = {
     appId: '',
