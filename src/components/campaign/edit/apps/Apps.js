@@ -9,7 +9,7 @@ import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
 import {styledComponent} from '../../../higher-order/styled'
 import {loadFolderAppsAction} from '../../../../actions/load-folder-apps'
-// import {updateCampaignAppsAction} from '../../../../actions/update-campaign-apps'
+import {updateCampaignAppsAction} from '../../../../actions/update-campaign-apps'
 import Checkbox from '../../../Checkbox'
 import includes from 'lodash/includes'
 import without from 'lodash/without'
@@ -80,14 +80,14 @@ class EditApp extends React.Component {
     }
   }
 
-  // save = () => {
-  //   const {onSubmit, dispatch, params, folder} = this.props
-  //   const apps = filter(folder.apps,
-  //     ({feedItemId}) => includes(this.state.selected, feedItemId))
-  //
-  //   return dispatch(updateCampaignAppsAction, params, apps)
-  //     .then(onSubmit)
-  // }
+  save = () => {
+    const {onSubmit, dispatch, params, folder} = this.props
+    const apps = filter(folder.apps,
+      ({feedItemId}) => includes(this.state.selected, feedItemId))
+
+    return dispatch(updateCampaignAppsAction, params, apps)
+      .then(onSubmit)
+  }
 
   render () {
     const {selected, openCreateModal} = this.state
