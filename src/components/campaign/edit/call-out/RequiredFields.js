@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import Input from '../../../Input'
 import Checkbox from '../../../Checkbox'
+import {style} from '../style'
 
 class RequiredFields extends React.PureComponent {
   static displayName = 'Required-Fields'
@@ -15,7 +16,8 @@ class RequiredFields extends React.PureComponent {
 
   render () {
     return (
-      <div style={{maxWidth: 400, margin: '0 auto'}}>
+      <div className={style.thinForm}>
+        <br/>
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--12-col'>
             <Input

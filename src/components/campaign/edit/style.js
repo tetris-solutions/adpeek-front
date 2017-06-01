@@ -14,4 +14,9 @@ export const style = csjs`
 }
 .actions button:first-child {
   float: left;
+}
+.thinForm {
+  min-height: 300px;
+  max-width: 400px; 
+  margin: 0 auto;
 }`
