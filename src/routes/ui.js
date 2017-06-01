@@ -173,6 +173,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                     <Route path='platform' {...render(component.CampaignPlatform)}/>
                     <Route path='bid-strategy' {...render(component.CampaignBidStrategy)}/>
                     <Route path='site-links' {...render(component.CampaignSiteLinks)} />
+                    <Route path='call-outs' {...render(component.CampaignCallOuts)} />
                   </Route>
 
                   <Route path='creatives' {...render(component.CampaignCreatives)}/>

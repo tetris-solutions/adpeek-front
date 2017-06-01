@@ -124,7 +124,7 @@ function AdwordsCampaign (props, context) {
                 </SubText>))}
           </Info>
 
-          <Info>
+          <Info editLink={editable ? urlFor(params, 'call-outs') : null}>
             <Message>callOut</Message>:
             {list(mapExtensions(details.extension, 'CALLOUT',
               ({calloutText}, index) =>

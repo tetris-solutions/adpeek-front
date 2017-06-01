@@ -10,9 +10,9 @@ import set from 'lodash/set'
 import {Tab, Tabs} from '../../../Tabs'
 import RequiredFields from './RequiredFields'
 import Tracking from './Tracking'
-import Period from './Period'
+import Period from '../shared/Period'
 import concat from 'lodash/concat'
-import Scheduling from './Scheduling'
+import Scheduling from '../shared/Scheduling'
 import filter from 'lodash/filter'
 
 class NewSiteLink extends React.Component {

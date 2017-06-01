@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'tetris-iso/Modal'
-import EditSiteLinks from './site-links/SiteLinks'
+import EditSiteLinks from './site-links/SiteLink'
 
 const EditSiteLinksModal = props =>
   <Modal onEscPress={props.cancel} size='small' minHeight={0}>

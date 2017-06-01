@@ -457,5 +457,6 @@ module.exports = {
   startHourLabel: 'Start hour',
   startMinuteLabel: 'Start min.',
   endHourLabel: 'End hour',
-  endMinuteLabel: 'End min.'
+  endMinuteLabel: 'End min.',
+  newCallOut: 'New Call Out'
 }

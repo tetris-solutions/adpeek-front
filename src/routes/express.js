@@ -209,6 +209,7 @@ export function setAppRoutes (app, render) {
     '/edit/platform',
     '/edit/bid-strategy',
     '/edit/site-links',
+    '/edit/call-outs',
     '/creatives'], path =>
     app.get(`/company/:company/workspace/:workspace/folder/:folder/campaign/:campaign${path}`,
       protect,
