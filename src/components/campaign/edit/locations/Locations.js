@@ -1,14 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
-import map from 'lodash/map'
 import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
 import {style} from '../style'
 import {styledComponent} from '../../../higher-order/styled'
+// import {Tabs, Tab} from '../../../Tabs'
+import LocationsTable from './Table'
 
-class EditPlatform extends React.PureComponent {
-  static displayName = 'Edit-Platform'
+class EditLocations extends React.PureComponent {
+  static displayName = 'Edit-Locations'
 
   static propTypes = {
     cancel: PropTypes.func,
@@ -29,40 +30,7 @@ class EditPlatform extends React.PureComponent {
     return (
       <Form onSubmit={this.save}>
         <div className={style.list}>
-          <table className={`mdl-data-table ${style.table}`}>
-            <thead>
-              <tr>
-                <th className='mdl-data-table__cell--non-numeric'>
-                  BusinessName
-                </th>
-                <th className='mdl-data-table__cell--non-numeric'>
-                  AddressLine1
-                </th>
-                <th className='mdl-data-table__cell--non-numeric'>
-                  City
-                </th>
-                <th>
-                  PhoneNumber
-                </th>
-              </tr>
-            </thead>
-            <tbody>{map(locations, l =>
-              <tr key={l.feedItemId}>
-                <td className='mdl-data-table__cell--non-numeric'>
-                  {l.businessName}
-                </td>
-                <td className='mdl-data-table__cell--non-numeric'>
-                  {l.addressLine1}
-                </td>
-                <td className='mdl-data-table__cell--non-numeric'>
-                  {l.city}
-                </td>
-                <td>
-                  {l.phoneNumber}
-                </td>
-              </tr>)}
-            </tbody>
-          </table>
+          <LocationsTable locations={locations}/>
         </div>
         <div className={style.actions}>
           <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>
@@ -78,4 +46,4 @@ class EditPlatform extends React.PureComponent {
   }
 }
 
-export default styledComponent(EditPlatform, style)
+export default styledComponent(EditLocations, style)
