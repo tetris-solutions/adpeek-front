@@ -104,7 +104,7 @@ class EditApp extends React.Component {
           <div className='mdl-cell mdl-cell--12-col'>
             <div className={`mdl-list ${style.list}`}>{map(apps, ({feedItemId, appLinkText, appFinalUrls: {urls}}) =>
               <div key={feedItemId} className='mdl-list__item'>
-                <a href={head(urls)} className='mdl-list__item-primary-content'>
+                <a href={head(urls)} target='_blank' className='mdl-list__item-primary-content'>
                   {appLinkText}
                 </a>
                 <span className='mdl-list__item-secondary-action'>
