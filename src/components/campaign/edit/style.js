@@ -15,6 +15,9 @@ export const style = csjs`
 .actions button:first-child {
   float: left;
 }
+.table {
+  width: 100%;
+}
 .thinForm {
   min-height: 300px;
   max-width: 400px; 

@@ -101,7 +101,7 @@ const campaign = provide => tempSyncEnsure(() => provide({
   siteLinks: require('./components/campaign/edit/SiteLinkModal'),
   callOuts: require('./components/campaign/edit/CalloutModal'),
   apps: require('./components/campaign/edit/AppsModal'),
-  locations: require('./components/campaign/edit/LocationModal')
+  locations: require('./components/campaign/edit/LocationsModal')
 }))
 
 const orderCloning = provide => tempSyncEnsure(() => provide({
