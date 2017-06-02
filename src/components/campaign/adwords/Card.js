@@ -132,14 +132,10 @@ function AdwordsCampaign (props, context) {
                 </SubText>))}
           </Info>
 
-          <Info>
+          <Info editLink={editable ? urlFor(params, 'locations') : null}>
             <Message>feedLocal</Message>:
-            {list(details.feed, ({id, name, data}) =>
-              <SubText key={id}>
-                {name} {data && data.emailAddress
-                ? <em>(<Message email={data.emailAddress}>feedLocalBusiness</Message>)</em>
-                : null}
-              </SubText>)}
+            {list(details.locationFeeds, ({id, name}) =>
+              <SubText key={id}>{name}</SubText>)}
           </Info>
 
           <Info editLink={editable ? urlFor(params, 'apps') : null}>

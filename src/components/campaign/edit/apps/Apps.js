@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
+import Modal from 'tetris-iso/Modal'
 import filter from 'lodash/filter'
 import map from 'lodash/map'
 import flatten from 'lodash/flatten'
@@ -14,7 +15,6 @@ import Checkbox from '../../../Checkbox'
 import includes from 'lodash/includes'
 import without from 'lodash/without'
 import unionBy from 'lodash/unionBy'
-import Modal from 'tetris-iso/Modal'
 import {style} from '../style'
 import NewApp from './NewApp'
 import get from 'lodash/get'
@@ -23,7 +23,7 @@ import head from 'lodash/head'
 const unwrap = extensions => flatten(map(filter(extensions, {type: 'APP'}), 'extensions'))
 
 class EditApp extends React.Component {
-  static displayName = 'Edit-Call-Out'
+  static displayName = 'Edit-App'
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
