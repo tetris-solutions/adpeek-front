@@ -12,7 +12,7 @@ class RequiredFields extends React.PureComponent {
     sitelinkLine2: PropTypes.string.isRequired,
     sitelinkLine3: PropTypes.string.isRequired,
     sitelinkFinalUrl: PropTypes.string.isRequired,
-    devicePreference: PropTypes.string,
+    devicePreference: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     sitelinkFinalMobileUrl: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     onToggleDevice: PropTypes.func.isRequired

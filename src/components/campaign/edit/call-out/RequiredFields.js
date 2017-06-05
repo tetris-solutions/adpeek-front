@@ -9,7 +9,7 @@ class RequiredFields extends React.PureComponent {
   static displayName = 'Required-Fields'
   static propTypes = {
     calloutText: PropTypes.string.isRequired,
-    devicePreference: PropTypes.string,
+    devicePreference: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     onChange: PropTypes.func.isRequired,
     onToggleDevice: PropTypes.func.isRequired
   }

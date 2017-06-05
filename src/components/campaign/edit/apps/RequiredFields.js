@@ -13,7 +13,7 @@ class RequiredFields extends React.PureComponent {
     appStore: PropTypes.oneOf(['APPLE_ITUNES', 'GOOGLE_PLAY']).isRequired,
     appId: PropTypes.string.isRequired,
     appFinalUrl: PropTypes.string.isRequired,
-    devicePreference: PropTypes.string,
+    devicePreference: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     appFinalMobileUrl: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     onToggleDevice: PropTypes.func.isRequired
