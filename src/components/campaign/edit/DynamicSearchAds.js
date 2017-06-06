@@ -5,11 +5,13 @@ import Form from '../../Form'
 import PropTypes from 'prop-types'
 import map from 'lodash/map'
 import {loadLanguageCriteriaAction} from '../../../actions/load-campaign-language-criteria'
+import {updateCampaignDynamicSearchAdsAction} from '../../../actions/update-campaign-dynamic-search-ads'
 import {styledComponent} from '../../higher-order/styled'
 import startsWith from 'lodash/startsWith'
 import Select from '../../Select'
 import Input from '../../Input'
 import {style} from './style'
+import find from 'lodash/find'
 
 class EditLanguage extends React.Component {
   static displayName = 'Edit-Language'
@@ -27,16 +29,17 @@ class EditLanguage extends React.Component {
     locales: PropTypes.string
   }
 
-  state = {
-    domainName: ''
-  }
+  state = find(this.props.campaign.details.settings, {SettingType: 'DynamicSearchAdsSetting'}) ||
+    {domainName: ''}
 
   componentWillMount () {
-    this.setState({
-      languageCode: startsWith(this.context.locales, 'pt')
-        ? 'pt'
-        : 'en'
-    })
+    if (!this.state.languageCode) {
+      this.setState({
+        languageCode: startsWith(this.context.locales, 'pt')
+          ? 'pt'
+          : 'en'
+      })
+    }
   }
 
   componentDidMount () {
@@ -47,8 +50,11 @@ class EditLanguage extends React.Component {
     }
   }
 
-  save = e => {
-    return Promise.resolve()
+  save = () => {
+    const {dispatch, params, onSubmit} = this.props
+
+    return dispatch(updateCampaignDynamicSearchAdsAction, params, this.state)
+      .then(onSubmit)
   }
 
   onChange = ({target: {name, value}}) => {

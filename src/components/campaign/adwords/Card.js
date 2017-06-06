@@ -191,7 +191,7 @@ function AdwordsCampaign (props, context) {
 
         <Info editLink={editable ? urlFor(params, 'dynamic-search-ads') : null}>
           <Message>dynamicSearchAdSettings</Message>
-          {list(filter(details.settings, 'domainName'),
+          {list(filter(details.settings, {SettingType: 'DynamicSearchAdsSetting'}),
             ({domainName}, index) =>
               <SubText key={index}>
                 {domainName}
