@@ -22,4 +22,8 @@ export const style = csjs`
   min-height: 300px;
   max-width: 400px; 
   margin: 0 auto;
+}
+.loading {
+  margin-top: 2em;
+  font-style: italic;
 }`
