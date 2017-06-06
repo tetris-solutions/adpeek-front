@@ -93,7 +93,8 @@ const HTML = ({state, children, css, helmet}) => (
       <div id='app' dangerouslySetInnerHTML={{__html: children}}/>
 
       {gTMIFrame}
-      {talkTo}
+
+      {process.env.NODE_ENV === 'production' && talkTo}
     </body>
   </html>
 )
