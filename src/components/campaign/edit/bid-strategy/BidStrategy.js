@@ -7,6 +7,7 @@ import LoadingHorizontal from '../../../LoadingHorizontal'
 import assign from 'lodash/assign'
 import map from 'lodash/map'
 import find from 'lodash/find'
+import omit from 'lodash/omit'
 import {Button, Submit} from '../../../Button'
 import csjs from 'csjs'
 import {styledComponent} from '../../../higher-order/styled'
@@ -23,6 +24,8 @@ import {loadFolderBidStrategiesAction} from '../../../../actions/load-folder-bid
 import isNumber from 'lodash/isNumber'
 import includes from 'lodash/includes'
 import isString from 'lodash/isString'
+import identity from 'lodash/identity'
+import {isDisplayCampaign, campaignNetworks} from '../Network'
 
 const style = csjs`
 .actions {
@@ -47,8 +50,8 @@ const types = {
   TARGET_ROAS: TargetROAS,
   TARGET_SPEND: TargetSpend,
   PAGE_ONE_PROMOTED: PageOnePromoted,
-  TARGET_OUTRANK_SHARE: TargetOutrankShare
-  // MANUAL_CPM: null,
+  TARGET_OUTRANK_SHARE: TargetOutrankShare,
+  MANUAL_CPM: identity(null)
 }
 
 const sharedOnly = [
@@ -234,10 +237,13 @@ class EditBidStrategy extends React.PureComponent {
   }
 
   render () {
-    const {folder} = this.props
+    const {folder, campaign} = this.props
     const {messages} = this.context
     const {isLoading, type: selectedType} = this.state
     const Component = types[selectedType]
+    const availableTypes = isDisplayCampaign(campaignNetworks(campaign))
+      ? types
+      : omit(types, 'MANUAL_CPM')
 
     if (isLoading) {
       return (
@@ -250,7 +256,7 @@ class EditBidStrategy extends React.PureComponent {
     return (
       <Form onSubmit={this.save}>
         <div className='mdl-grid'>
-          <div className='mdl-cell mdl-cell--5-col'>{map(types, (_, type) =>
+          <div className='mdl-cell mdl-cell--5-col'>{map(availableTypes, (_, type) =>
             <div key={type}>
               <Radio
                 value={type}

@@ -12,10 +12,12 @@ import {updateCampaignNetworkAction} from '../../../actions/update-campaign-netw
 import {networkNames, networkMessages} from '../adwords/Network'
 import forEach from 'lodash/forEach'
 
-const isDisplayCampaign = networks => (
+export const isDisplayCampaign = networks => (
   networks.content_network &&
   !some(omit(networks, 'content_network'))
 )
+
+export const campaignNetworks = ({details}) => pick(details, networkNames)
 
 class EditNetwork extends React.Component {
   static displayName = 'Edit-Network'
@@ -46,8 +48,7 @@ class EditNetwork extends React.Component {
 
   render () {
     const {messages} = this.context
-    const {campaign: {details}} = this.props
-    const networks = pick(details, networkNames)
+    const networks = campaignNetworks(this.props.campaign)
     const readOnly = isDisplayCampaign(networks)
 
     return (
