@@ -189,6 +189,15 @@ function AdwordsCampaign (props, context) {
             </SubText>)}
         </Info>
 
+        <Info editLink={editable ? urlFor(params, 'dynamic-search-ads') : null}>
+          <Message>dynamicSearchAdSettings</Message>
+          {list(filter(details.settings, 'domainName'),
+            ({domainName}, index) =>
+              <SubText key={index}>
+                {domainName}
+              </SubText>)}
+        </Info>
+
         {children
           ? React.cloneElement(children, assign({}, props, {cancel, onSubmit: closeModal}))
           : null}

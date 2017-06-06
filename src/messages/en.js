@@ -466,5 +466,6 @@ module.exports = {
   appIdLabel: 'App Id',
   appLinkTextLabel: 'App Link Text',
   appFinalUrlLabel: 'App Download Url',
-  appFinalMobileUrlLabel: 'Url Mobile'
+  appFinalMobileUrlLabel: 'Url Mobile',
+  dynamicSearchAdSettings: 'Dynamic Search Ad'
 }
