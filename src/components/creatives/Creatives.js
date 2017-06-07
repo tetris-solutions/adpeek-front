@@ -20,6 +20,7 @@ import flatten from 'lodash/flatten'
 import map from 'lodash/map'
 import uniq from 'lodash/uniq'
 import chunk from 'lodash/chunk'
+import endsWith from 'lodash/endsWith'
 
 const statusIcons = {
   enabled: 'play_arrow',
@@ -203,6 +204,7 @@ export class Creatives extends React.Component {
   }
 
   render () {
+    const editMode = endsWith(this.context.location.pathname, '/edit')
     const {
       loadingSearchTerms,
       creatingReport,
@@ -222,9 +224,10 @@ export class Creatives extends React.Component {
     return (
       <div>
         <SubHeader title={<Message>creatives</Message>}>
-          <Button onClick={this.save} className='mdl-button mdl-color-text--grey-100'>
-            <Message>save</Message>
-          </Button>
+          {editMode && !isLoading && (
+            <Button onClick={this.save} className='mdl-button mdl-color-text--grey-100'>
+              <Message>save</Message>
+            </Button>)}
 
           <Button className='mdl-button mdl-js-button mdl-button--icon'>
             <i className='material-icons'>more_vert</i>
