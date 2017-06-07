@@ -8,6 +8,7 @@ import Message from 'tetris-iso/Message'
 import {loadAdGroupsAction} from '../../actions/load-adgroups'
 import {loadAdGroupSearchTermsAction} from '../../actions/load-adgroup-search-terms'
 import {createAdGroupsReportAction} from '../../actions/create-folder-adgroups-report'
+import {pushAdGroupAction} from '../../actions/create-adgroup'
 import NotImplemented from '../NotImplemented'
 import LoadingHorizontal from '../LoadingHorizontal'
 import SubHeader from '../SubHeader'
@@ -172,6 +173,12 @@ export class Creatives extends React.Component {
     return props
   }
 
+  createAdGroup = () => {
+    const {dispatch, params} = this.props
+
+    dispatch(pushAdGroupAction, params)
+  }
+
   state = {
     loadingSearchTerms: false,
     calculatingKPI: false,
@@ -191,7 +198,7 @@ export class Creatives extends React.Component {
     const {adGroups, folder} = this.props
 
     const inner = this.isAdwords()
-      ? <AdGroups adGroups={adGroups}/>
+      ? <AdGroups createAdGroup={this.createAdGroup} adGroups={adGroups}/>
       : <NotImplemented />
 
     return (

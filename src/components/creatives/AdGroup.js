@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {node} from '../higher-order/branch'
 import {pure} from 'recompose'
+import {liveEditAdGroupAction} from '../../actions/update-adgroup'
+import endsWith from 'lodash/endsWith'
 import AdGroupAd from './AdGroupAd'
 import AdGroupKeyword from './AdGroupKeyword'
 import map from 'lodash/map'
@@ -10,6 +12,7 @@ import {styledComponent} from '../higher-order/styled'
 import groupBy from 'lodash/groupBy'
 import Message from 'tetris-iso/Message'
 import upper from 'lodash/toUpper'
+import DiscreteInput from './DiscreteInput'
 
 const style = csjs`
 .header {
@@ -27,10 +30,23 @@ class AdGroup_ extends React.Component {
     searchTerms: PropTypes.array,
     name: PropTypes.string,
     ads: PropTypes.array,
-    keywords: PropTypes.array
+    keywords: PropTypes.array,
+    dispatch: PropTypes.func,
+    params: PropTypes.object
+  }
+
+  static contextTypes = {
+    location: PropTypes.object
+  }
+
+  onChangeName = ({target: {value}}) => {
+    const {dispatch, params} = this.props
+
+    dispatch(liveEditAdGroupAction, params, {name: value})
   }
 
   render () {
+    const editMode = endsWith(this.context.location.pathname, '/edit')
     const {name, status, ads, keywords, searchTerms} = this.props
     const criterions = groupBy(keywords, 'criterion_use')
     let color, textColor
@@ -51,10 +67,10 @@ class AdGroup_ extends React.Component {
 
     return (
       <div>
-        <header
-          title={status}
-          className={`mdl-color--${color} mdl-color-text--${textColor} ${style.header}`}>
-          {name}
+        <header title={status} className={`mdl-color--${color} mdl-color-text--${textColor} ${style.header}`}>
+          {editMode
+            ? <DiscreteInput value={name} onChange={this.onChangeName}/>
+            : name}
         </header>
         <div>
           {map(ads, ad => <AdGroupAd key={ad.id} {...ad}/>)}

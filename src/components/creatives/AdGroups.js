@@ -31,11 +31,12 @@ function fitWrapper (wrapper) {
   wrapper.style.height = (window.innerHeight - rect.top - 20) + 'px'
 }
 
-class AdGroups extends React.Component {
+class AdGroups extends React.PureComponent {
   static displayName = 'AdGroups'
 
   static propTypes = {
-    adGroups: PropTypes.array
+    adGroups: PropTypes.array,
+    createAdGroup: PropTypes.func
   }
 
   static defaultProps = {
@@ -44,6 +45,22 @@ class AdGroups extends React.Component {
 
   componentDidMount () {
     fitWrapper(this.refs.wrapper)
+
+    window.event$.on('create::adgroup', this.createAdGroup)
+  }
+
+  componentWillUnmount () {
+    window.event$.off('create::adgroup', this.createAdGroup)
+  }
+
+  createAdGroup = () => {
+    this.props.createAdGroup()
+
+    setTimeout(() => {
+      const container = this.refs.wrapper
+
+      container.scrollLeft = container.scrollWidth - container.clientWidth
+    }, 500)
   }
 
   render () {

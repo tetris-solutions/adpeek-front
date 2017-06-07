@@ -21,7 +21,7 @@ class CampaignAside extends React.PureComponent {
   }
 
   createAdGroup = e => {
-
+    window.event$.emit('create::adgroup')
   }
 
   render () {
