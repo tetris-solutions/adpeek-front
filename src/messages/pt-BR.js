@@ -468,5 +468,6 @@ module.exports = {
   appFinalMobileUrlLabel: 'Url Mobile',
   dynamicSearchAdSettings: 'Anúncios dinâmicos de pesquisa',
   domainLanguageLabel: 'Idioma do domínio',
-  domainNameLabel: 'Website'
+  domainNameLabel: 'Website',
+  newAdGroup: 'Novo AdGroup'
 }
