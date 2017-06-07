@@ -44,14 +44,14 @@ class AdGroups extends React.PureComponent {
 
   componentDidMount () {
     fitWrapper(this.refs.wrapper)
-    window.event$.on('create::adgroup', this.scrollLeft)
+    window.event$.on('create::adgroup', this.scrollRight)
   }
 
   componentWillUnmount () {
-    window.event$.off('create::adgroup', this.scrollLeft)
+    window.event$.off('create::adgroup', this.scrollRight)
   }
 
-  scrollLeft = () => {
+  scrollRight = () => {
     setTimeout(() => {
       const container = this.refs.wrapper
 
