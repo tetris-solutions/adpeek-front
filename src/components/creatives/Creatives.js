@@ -187,9 +187,12 @@ export class Creatives extends React.Component {
   }
 
   save = () => {
+    if (!this.isAdwords()) return
+
     const {dispatch, params, getAdGroupsWithRelevance} = this.props
 
     dispatch(updateAdGroupsAction, params, getAdGroupsWithRelevance())
+      .then(this.loadAdGroups)
   }
 
   state = {
