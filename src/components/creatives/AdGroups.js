@@ -35,8 +35,7 @@ class AdGroups extends React.PureComponent {
   static displayName = 'AdGroups'
 
   static propTypes = {
-    adGroups: PropTypes.array,
-    createAdGroup: PropTypes.func
+    adGroups: PropTypes.array
   }
 
   static defaultProps = {
@@ -45,17 +44,14 @@ class AdGroups extends React.PureComponent {
 
   componentDidMount () {
     fitWrapper(this.refs.wrapper)
-
-    window.event$.on('create::adgroup', this.createAdGroup)
+    window.event$.on('create::adgroup', this.scrollLeft)
   }
 
   componentWillUnmount () {
-    window.event$.off('create::adgroup', this.createAdGroup)
+    window.event$.off('create::adgroup', this.scrollLeft)
   }
 
-  createAdGroup = () => {
-    this.props.createAdGroup()
-
+  scrollLeft = () => {
     setTimeout(() => {
       const container = this.refs.wrapper
 

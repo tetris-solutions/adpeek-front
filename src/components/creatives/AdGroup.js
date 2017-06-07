@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {node} from '../higher-order/branch'
 import {pure} from 'recompose'
-import {liveEditAdGroupAction} from '../../actions/update-adgroup'
+import {liveEditAdGroupAction} from '../../actions/update-adgroups'
 import endsWith from 'lodash/endsWith'
 import AdGroupAd from './AdGroupAd'
 import AdGroupKeyword from './AdGroupKeyword'
@@ -65,15 +65,19 @@ class AdGroup_ extends React.Component {
         textColor = 'white'
     }
 
+    const headerClassName = `mdl-color--${color} mdl-color-text--${textColor} ${style.header}`
+
     return (
       <div>
-        <header title={status} className={`mdl-color--${color} mdl-color-text--${textColor} ${style.header}`}>
+        <header title={status} className={headerClassName}>
           {editMode
             ? <DiscreteInput value={name} onChange={this.onChangeName}/>
             : name}
         </header>
+
         <div>
-          {map(ads, ad => <AdGroupAd key={ad.id} {...ad}/>)}
+          {map(ads, ad =>
+            <AdGroupAd key={ad.id} {...ad}/>)}
         </div>
 
         {criterions.BIDDABLE

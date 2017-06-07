@@ -9,6 +9,7 @@ import {loadAdGroupsAction} from '../../actions/load-adgroups'
 import {loadAdGroupSearchTermsAction} from '../../actions/load-adgroup-search-terms'
 import {createAdGroupsReportAction} from '../../actions/create-folder-adgroups-report'
 import {pushAdGroupAction} from '../../actions/create-adgroup'
+import {updateAdGroupsAction} from '../../actions/update-adgroups'
 import NotImplemented from '../NotImplemented'
 import LoadingHorizontal from '../LoadingHorizontal'
 import SubHeader from '../SubHeader'
@@ -47,6 +48,8 @@ export class Creatives extends React.Component {
   }
 
   componentDidMount () {
+    window.event$.on('create::adgroup', this.createAdGroup)
+
     if (this.isAdwords()) {
       this.loadAdGroups()
     }
@@ -59,6 +62,10 @@ export class Creatives extends React.Component {
     if (!this.state.isLoading && newFilter !== currentFilter) {
       this.setState({isLoading: true}, this.loadAdGroups)
     }
+  }
+
+  componentWillUnmount () {
+    window.event$.off('create::adgroup', this.createAdGroup)
   }
 
   onReportCreated = (response) => {
@@ -179,6 +186,12 @@ export class Creatives extends React.Component {
     dispatch(pushAdGroupAction, params)
   }
 
+  save = () => {
+    const {dispatch, params, getAdGroupsWithRelevance} = this.props
+
+    dispatch(updateAdGroupsAction, params, getAdGroupsWithRelevance())
+  }
+
   state = {
     loadingSearchTerms: false,
     calculatingKPI: false,
@@ -197,13 +210,19 @@ export class Creatives extends React.Component {
 
     const {adGroups, folder} = this.props
 
-    const inner = this.isAdwords()
-      ? <AdGroups createAdGroup={this.createAdGroup} adGroups={adGroups}/>
-      : <NotImplemented />
+    const inner = this.isAdwords() ? (
+      <AdGroups
+        location={this.context.location}
+        adGroups={adGroups}/>
+    ) : <NotImplemented />
 
     return (
       <div>
         <SubHeader title={<Message>creatives</Message>}>
+          <Button onClick={this.save} className='mdl-button mdl-color-text--grey-100'>
+            <Message>save</Message>
+          </Button>
+
           <Button className='mdl-button mdl-js-button mdl-button--icon'>
             <i className='material-icons'>more_vert</i>
 
