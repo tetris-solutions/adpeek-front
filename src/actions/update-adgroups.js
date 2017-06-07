@@ -17,7 +17,7 @@ export function liveEditAdGroupAction (tree, {company, workspace, folder, campai
 }
 
 function updateAdGroups (campaign, adGroups, config) {
-  return PUT(`${process.env.ADPEEK_API_URL}/campaign/${campaign}/adGroups`,
+  return PUT(`${process.env.ADPEEK_API_URL}/campaign/${campaign}/adgroups`,
     assign({body: adGroups}, config))
 }
 
