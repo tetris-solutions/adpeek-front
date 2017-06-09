@@ -13,6 +13,8 @@ import groupBy from 'lodash/groupBy'
 import Message from 'tetris-iso/Message'
 import upper from 'lodash/toUpper'
 import DiscreteInput from './DiscreteInput'
+import Modal from 'tetris-iso/Modal'
+import AdGroupEdit from './AdGroupEdit'
 
 const style = csjs`
 .header {
@@ -39,13 +41,24 @@ class AdGroup_ extends React.Component {
     location: PropTypes.object
   }
 
-  onChangeName = ({target: {value}}) => {
+  state = {
+    modalOpen: false
+  }
+
+  onChange = ({target: {name, value}}) => {
     const {dispatch, params} = this.props
 
-    dispatch(liveEditAdGroupAction, params, {name: value})
+    dispatch(liveEditAdGroupAction, params, {[name]: value})
+  }
+
+  toggleModal = () => {
+    this.setState({
+      modalOpen: !this.state.modalOpen
+    })
   }
 
   render () {
+    const {modalOpen} = this.state
     const editMode = endsWith(this.context.location.pathname, '/edit')
     const {name, status, ads, keywords, searchTerms} = this.props
     const criterions = groupBy(keywords, 'criterion_use')
@@ -71,8 +84,11 @@ class AdGroup_ extends React.Component {
       <div>
         <header title={status} className={headerClassName}>
           {editMode
-            ? <DiscreteInput value={name} onChange={this.onChangeName}/>
+            ? <DiscreteInput name='name' value={name} onChange={this.onChange}/>
             : name}
+
+          {editMode && (
+            <i onClick={this.toggleModal} className='material-icons'>settings</i>)}
         </header>
 
         <div>
@@ -112,6 +128,14 @@ class AdGroup_ extends React.Component {
                 ({query, impressions}, index) =>
                   <AdGroupKeyword key={index} text={query}/>)}
             </div>) : null}
+
+        {modalOpen && (
+          <Modal onEscPress={this.toggleModal} size='small' minHeight={0}>
+            <AdGroupEdit
+              name={name}
+              status={status}
+              onChange={this.onChange}/>
+          </Modal>)}
       </div>
     )
   }

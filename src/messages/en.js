@@ -470,5 +470,6 @@ module.exports = {
   dynamicSearchAdSettings: 'Dynamic Search Ad',
   domainLanguageLabel: 'Domain Language',
   domainNameLabel: 'Website',
-  newAdGroup: 'New AdGroup'
+  newAdGroup: 'New AdGroup',
+  adGroupStatusLabel: 'AdGroup Status'
 }

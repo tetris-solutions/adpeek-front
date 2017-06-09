@@ -469,5 +469,6 @@ module.exports = {
   dynamicSearchAdSettings: 'Anúncios dinâmicos de pesquisa',
   domainLanguageLabel: 'Idioma do domínio',
   domainNameLabel: 'Website',
-  newAdGroup: 'Novo AdGroup'
+  newAdGroup: 'Novo AdGroup',
+  adGroupStatusLabel: 'Status do AdGroup'
 }

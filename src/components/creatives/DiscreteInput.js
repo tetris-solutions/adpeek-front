@@ -15,6 +15,7 @@ class DiscreteInput extends React.PureComponent {
   static displayName = 'Discrete-Input'
 
   static propTypes = {
+    name: PropTypes.string,
     value: PropTypes.string,
     onChange: PropTypes.func
   }
@@ -24,8 +25,7 @@ class DiscreteInput extends React.PureComponent {
       <input
         className={style.input}
         type='text'
-        onChange={this.props.onChange}
-        value={this.props.value}/>
+        {...this.props}/>
     )
   }
 }
