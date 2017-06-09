@@ -22,6 +22,13 @@ const style = csjs`
   font-weight: 600;
   padding: .7em 0;
   text-align: center;
+}
+.settingsButton {
+  color: white;
+  cursor: pointer;
+  font-size: smaller;
+  float: right;
+  margin-right: .3em;
 }`
 
 class AdGroup_ extends React.Component {
@@ -88,7 +95,11 @@ class AdGroup_ extends React.Component {
             : name}
 
           {editMode && (
-            <i onClick={this.toggleModal} className='material-icons'>settings</i>)}
+            <a className={style.settingsButton} onClick={this.toggleModal}>
+              <i className='material-icons'>
+                arrow_drop_down
+              </i>
+            </a>)}
         </header>
 
         <div>
