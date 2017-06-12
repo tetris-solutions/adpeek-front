@@ -67,7 +67,7 @@ class AdGroup_ extends React.Component {
   render () {
     const {modalOpen} = this.state
     const editMode = endsWith(this.context.location.pathname, '/edit')
-    const {params, name, status, ads, keywords, searchTerms} = this.props
+    const {dispatch, params, name, status, ads, keywords, searchTerms} = this.props
     const criterions = groupBy(keywords, 'criterion_use')
     let color, textColor
 
@@ -106,6 +106,7 @@ class AdGroup_ extends React.Component {
           {map(ads, ad =>
             <AdGroupAd
               params={params}
+              dispatch={dispatch}
               editMode={editMode}
               key={ad.id}
               {...ad}/>)}
