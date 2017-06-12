@@ -1,11 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
+import Modal from 'tetris-iso/Modal'
 import map from 'lodash/map'
 import {style, DisplayUrl, KPI, kpiType} from './AdUtils'
 import {liveEditAdAction} from '../../actions/update-adgroups'
 import DiscreteInput from './DiscreteInput'
+import AdEdit from './AdEdit'
 import assign from 'lodash/assign'
+import join from 'lodash/join'
+import compact from 'lodash/compact'
+
+const statusIcon = {
+  ENABLED: 'play_arrow',
+  PAUSED: 'pause',
+  DISABLED: 'remove'
+}
 
 class TextAd extends React.PureComponent {
   static displayName = 'Text-Ad'
@@ -27,12 +37,20 @@ class TextAd extends React.PureComponent {
     path_2: PropTypes.string
   }
 
+  state = {
+    modalOpen: false
+  }
+
   onChange = ({target: {name, value}}) => {
     const {dispatch, params, id} = this.props
 
     dispatch(liveEditAdAction,
       assign({ad: id}, params),
       {[name]: value})
+  }
+
+  toggleModal = () => {
+    this.setState({modalOpen: !this.state.modalOpen})
   }
 
   render () {
@@ -69,6 +87,11 @@ class TextAd extends React.PureComponent {
           {ad.description_2
             ? <div>{ad.description_2}</div>
             : null}
+
+          {editMode &&
+            <a className={style.editLink} onClick={this.toggleModal}>
+              <i className='material-icons'>{statusIcon[ad.status]}</i>
+            </a>}
         </div>
 
         {map(ad.final_urls, (url, index) =>
@@ -83,6 +106,15 @@ class TextAd extends React.PureComponent {
               </a>
             </div>
           </div>)}
+
+        {this.state.modalOpen && (
+          <Modal size='small' minHeight={0} onEscPress={this.toggleModal}>
+            <AdEdit
+              close={this.toggleModal}
+              name={join(compact([ad.headline, ad.headline_part_1, ad.headline_part_2]), ' ')}
+              status={ad.status}
+              onChange={this.onChange}/>
+          </Modal>)}
       </div>
     )
   }

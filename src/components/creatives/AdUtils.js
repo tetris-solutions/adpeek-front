@@ -92,6 +92,15 @@ export const style = csjs`
 .youtubeThumb > img{
   width: 100%;
   height: auto;
+}
+.editLink {
+  display: block;
+  text-align: right;
+  margin-top: 1em;
+  font-size: smaller;
+}
+.editLink > i {
+  cursor: pointer;
 }`
 
 export const DestinationUrl = ({url}) => (

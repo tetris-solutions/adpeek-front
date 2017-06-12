@@ -470,5 +470,6 @@ module.exports = {
   domainLanguageLabel: 'Idioma do domínio',
   domainNameLabel: 'Website',
   newAdGroup: 'Novo AdGroup',
-  adGroupStatusLabel: 'Status do AdGroup'
+  adGroupStatusLabel: 'Status do AdGroup',
+  adStatusLabel: 'Status do Anúncio'
 }
