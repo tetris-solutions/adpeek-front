@@ -7,7 +7,7 @@ import ImageAd from './ImageAd'
 import TemplateAd from './TemplateAd'
 import YouTubeAd from './YouTubeAd'
 
-class AdGroupAd extends React.Component {
+class AdGroupAd extends React.PureComponent {
   static displayName = 'AdGroup-Ad'
   static propTypes = {
     type: PropTypes.string

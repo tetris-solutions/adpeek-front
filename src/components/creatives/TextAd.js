@@ -46,7 +46,15 @@ class TextAd extends React.PureComponent {
             ? <h5>{editMode
               ? <DiscreteInput name='headline' value={ad.headline} onChange={this.onChange}/>
               : ad.headline}</h5>
-            : <h6>{ad.headline_part_1}<br/>{ad.headline_part_2}</h6>}
+
+            : <h6>
+              {editMode
+                ? <DiscreteInput name='headline_part_1' value={ad.headline_part_1} onChange={this.onChange}/>
+                : ad.headline_part_1}
+              <br/>
+              {editMode
+                ? <DiscreteInput name='headline_part_2' value={ad.headline_part_2} onChange={this.onChange}/>
+                : ad.headline_part_2}</h6>}
 
           {ad.kpi && <KPI kpi={ad.kpi}/>}
 
