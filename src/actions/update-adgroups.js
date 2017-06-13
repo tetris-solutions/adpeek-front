@@ -32,6 +32,21 @@ export function liveEditAdAction (tree, {company, workspace, folder, campaign, a
   tree.commit()
 }
 
+export function liveEditKeywordAction (tree, {company, workspace, folder, campaign, adGroup, keyword}, changes) {
+  const cursor = getDeepCursor(tree, [
+    'user',
+    ['companies', company],
+    ['workspaces', workspace],
+    ['folders', folder],
+    ['campaigns', campaign],
+    ['adGroups', adGroup],
+    ['keywords', keyword]
+  ])
+
+  tree.merge(cursor, assign({lastUpdate: Date.now()}, changes))
+  tree.commit()
+}
+
 function updateAdGroups (campaign, adGroups, config) {
   return PUT(`${process.env.ADPEEK_API_URL}/campaign/${campaign}/adgroups`,
     assign({body: adGroups}, config))

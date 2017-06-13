@@ -88,10 +88,10 @@ class TextAd extends React.PureComponent {
             ? <div>{ad.description_2}</div>
             : null}
 
-          {editMode &&
-            <a className={style.editLink} onClick={this.toggleModal}>
+          {editMode && (
+            <a className={`${style.editLink} mdl-color-text--grey-700`} title={ad.status} onClick={this.toggleModal}>
               <i className='material-icons'>{statusIcon[ad.status]}</i>
-            </a>}
+            </a>)}
         </div>
 
         {map(ad.final_urls, (url, index) =>

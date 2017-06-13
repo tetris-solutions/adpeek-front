@@ -69,6 +69,7 @@ class AdGroup_ extends React.Component {
     const editMode = endsWith(this.context.location.pathname, '/edit')
     const {dispatch, params, name, status, ads, keywords, searchTerms} = this.props
     const criterions = groupBy(keywords, 'criterion_use')
+    const childProps = {params, dispatch, editMode}
     let color, textColor
 
     switch (upper(status)) {
@@ -105,10 +106,8 @@ class AdGroup_ extends React.Component {
         <div>
           {map(ads, ad =>
             <AdGroupAd
-              params={params}
-              dispatch={dispatch}
-              editMode={editMode}
               key={ad.id}
+              {...childProps}
               {...ad}/>)}
         </div>
 
@@ -118,9 +117,11 @@ class AdGroup_ extends React.Component {
               <h5>
                 <Message>biddableKeywords</Message>
               </h5>
-              {map(criterions.BIDDABLE, keyword => (
-                <AdGroupKeyword key={keyword.id} {...keyword}/>
-              ))}
+              {map(criterions.BIDDABLE, keyword =>
+                <AdGroupKeyword
+                  key={keyword.id}
+                  {...childProps}
+                  {...keyword}/>)}
             </div>) : null}
 
         {criterions.NEGATIVE
@@ -129,9 +130,11 @@ class AdGroup_ extends React.Component {
               <h5>
                 <Message>negativeKeywords</Message>
               </h5>
-              {map(criterions.NEGATIVE, keyword => (
-                <AdGroupKeyword key={keyword.id} {...keyword}/>
-              ))}
+              {map(criterions.NEGATIVE, keyword =>
+                <AdGroupKeyword
+                  key={keyword.id}
+                  {...childProps}
+                  {...keyword}/>)}
             </div>) : null}
 
         {searchTerms
@@ -142,7 +145,9 @@ class AdGroup_ extends React.Component {
               </h5>
               {map(searchTerms,
                 ({query, impressions}, index) =>
-                  <AdGroupKeyword key={index} text={query}/>)}
+                  <AdGroupKeyword
+                    key={index}
+                    text={query}/>)}
             </div>) : null}
 
         {modalOpen && (
