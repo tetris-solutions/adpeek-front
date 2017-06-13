@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import csjs from 'csjs'
 import {withState} from 'recompose'
-import {inferDisplayUrl} from '../../functions/infer-display-url'
 
 export const withPreview = withState('previewMode', 'setPreviewMode', false)
 
@@ -120,24 +119,6 @@ export const DestinationUrl = ({url}) => (
 DestinationUrl.displayName = 'Destination-URL'
 DestinationUrl.propTypes = {
   url: PropTypes.string
-}
-
-export function DisplayUrl ({display_url, final_urls, path_1, path_2}) {
-  display_url = display_url || inferDisplayUrl(final_urls, path_1, path_2)
-
-  return (
-    <a className={style.anchor} title={display_url} href={`http://${display_url}`} target='_blank'>
-      {display_url}
-    </a>
-  )
-}
-
-DisplayUrl.displayName = 'Display-URL'
-DisplayUrl.propTypes = {
-  display_url: PropTypes.string,
-  final_urls: PropTypes.array,
-  path_1: PropTypes.string,
-  path_2: PropTypes.string
 }
 
 const colors = {

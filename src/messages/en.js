@@ -478,5 +478,6 @@ module.exports = {
   adHeadline2Placeholder: 'Title 2',
   adDescriptionPlaceholder: 'Description',
   adDescription1Placeholder: 'Description 1',
-  adDescription2Placeholder: 'Description 2'
+  adDescription2Placeholder: 'Description 2',
+  displayUrlPlaceholder: 'Display URL'
 }

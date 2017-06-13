@@ -476,5 +476,6 @@ module.exports = {
   newAd: 'Novo Anúncio',
   adHeadline1Placeholder: 'Título 1',
   adHeadline2Placeholder: 'Título 2',
-  adDescriptionPlaceholder: 'Descrição'
+  adDescriptionPlaceholder: 'Descrição',
+  displayUrlPlaceholder: 'Url Exibição'
 }
