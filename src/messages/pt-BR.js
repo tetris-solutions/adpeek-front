@@ -471,5 +471,6 @@ module.exports = {
   domainNameLabel: 'Website',
   newAdGroup: 'Novo AdGroup',
   adGroupStatusLabel: 'Status do AdGroup',
-  adStatusLabel: 'Status do Anúncio'
+  adStatusLabel: 'Status do Anúncio',
+  campaignStatusLabel: 'Status da Campanha'
 }

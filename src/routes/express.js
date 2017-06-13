@@ -201,6 +201,7 @@ export function setAppRoutes (app, render) {
 
   forEach(['',
     '/edit/name',
+    '/edit/status',
     '/edit/language',
     '/edit/delivery-method',
     '/edit/network',

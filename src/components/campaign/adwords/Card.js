@@ -55,7 +55,7 @@ const EveryLanguage = everyCriteria('language')
 const EveryLocation = everyCriteria('location')
 
 function AdwordsCampaign (props, context) {
-  const {reload, children, params, campaign: {details, name}} = props
+  const {reload, children, params, campaign: {status: {status}, details, name}} = props
   const {messages, router} = context
 
   function closeModal (reloadFirst = true) {
@@ -76,6 +76,11 @@ function AdwordsCampaign (props, context) {
         <Info editLink={editable ? urlFor(params, 'name') : null}>
           <Message>nameLabel</Message>:
           <SubText>{name}</SubText>
+        </Info>
+
+        <Info editLink={editable ? urlFor(params, 'status') : null}>
+          <Message>campaignStatusLabel</Message>:
+          <SubText>{status}</SubText>
         </Info>
 
         <Info editLink={editable ? urlFor(params, 'network') : null}>

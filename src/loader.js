@@ -91,6 +91,7 @@ const campaign = provide => tempSyncEnsure(() => provide({
   breadcrumb: require('./components/campaign/Breadcrumb'),
   home: require('./components/campaign/Home'),
   name: require('./components/campaign/edit/NameModal'),
+  status: require('./components/campaign/edit/StatusModal'),
   language: require('./components/campaign/edit/LanguageModal'),
   deliveryMethod: require('./components/campaign/edit/DeliveryMethodModal'),
   network: require('./components/campaign/edit/NetworkModal'),
@@ -195,6 +196,7 @@ export const component = {
 
   CampaignHome: screen(campaign, 'home'),
   CampaignName: screen(campaign, 'name'),
+  CampaignStatus: screen(campaign, 'status'),
   CampaignLanguage: screen(campaign, 'language'),
   CampaignDeliveryMethod: screen(campaign, 'deliveryMethod'),
   CampaignNetwork: screen(campaign, 'network'),
