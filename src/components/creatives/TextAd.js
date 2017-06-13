@@ -48,7 +48,7 @@ DescriptionLine.propTypes = {
   multiline: PropTypes.bool,
   editMode: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired
 }
@@ -103,7 +103,7 @@ export function DisplayUrl ({display_url, final_urls, path_1, path_2, editMode, 
           style={{width: 60}}
           maxLength={15}
           value={path_1}
-          onChange={path_1}/>)}
+          onChange={onChange}/>)}
 
       {editMode && ' / '}
 
@@ -113,17 +113,17 @@ export function DisplayUrl ({display_url, final_urls, path_1, path_2, editMode, 
           style={{width: 60}}
           maxLength={15}
           value={path_2}
-          onChange={path_2}/>)}
+          onChange={onChange}/>)}
     </DisplayUrlAnchor>
   )
 }
 
 DisplayUrl.displayName = 'Display-URL'
 DisplayUrl.propTypes = {
-  display_url: PropTypes.string.isRequired,
+  display_url: PropTypes.string,
   final_urls: PropTypes.array.isRequired,
-  path_1: PropTypes.string.isRequired,
-  path_2: PropTypes.string.isRequired,
+  path_1: PropTypes.string,
+  path_2: PropTypes.string,
   editMode: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired
 }
@@ -219,8 +219,8 @@ class TextAd extends React.PureComponent {
             onChange={this.onChange}
             display_url={ad.display_url}
             final_urls={ad.final_urls}
-            path_1={ad.path_1}
-            path_2={ad.path_2}/>
+            path_1={ad.path_1 || ''}
+            path_2={ad.path_2 || ''}/>
 
           <DescriptionLine
             editMode={editMode}
