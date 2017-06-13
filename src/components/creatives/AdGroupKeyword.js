@@ -76,7 +76,7 @@ class Keyword extends React.PureComponent {
 
     return (
       <div className={`${style.keyword} mdl-color-text--${color(relevance).text} mdl-color--${color(relevance).bg}`}>
-        {editMode && (
+        {editMode && status && (
           <a className={`${style.icon} mdl-color-text--grey-700`} title={status} onClick={this.toggleModal}>
             <i className='material-icons'>
               {statusIcon[status]}
