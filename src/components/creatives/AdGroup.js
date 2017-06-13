@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {node} from '../higher-order/branch'
 import {pure} from 'recompose'
 import {liveEditAdGroupAction} from '../../actions/update-adgroups'
+import {pushAdAction} from '../../actions/create-ad'
 import endsWith from 'lodash/endsWith'
 import AdGroupAd from './AdGroupAd'
 import AdGroupKeyword from './AdGroupKeyword'
@@ -15,6 +16,7 @@ import upper from 'lodash/toUpper'
 import DiscreteInput from './DiscreteInput'
 import Modal from 'tetris-iso/Modal'
 import AdGroupEdit from './AdGroupEdit'
+import {Button} from '../Button'
 
 const style = csjs`
 .header {
@@ -29,6 +31,9 @@ const style = csjs`
   font-size: smaller;
   float: right;
   margin-right: .3em;
+}
+.newBtRow {
+  text-align: center;
 }`
 
 class AdGroup_ extends React.Component {
@@ -56,6 +61,12 @@ class AdGroup_ extends React.Component {
     const {dispatch, params} = this.props
 
     dispatch(liveEditAdGroupAction, params, {[name]: value})
+  }
+
+  createAd = () => {
+    const {dispatch, params} = this.props
+
+    dispatch(pushAdAction, params)
   }
 
   toggleModal = () => {
@@ -103,12 +114,16 @@ class AdGroup_ extends React.Component {
             </a>)}
         </header>
 
-        <div>
-          {map(ads, ad =>
-            <AdGroupAd
-              key={ad.id}
-              {...childProps}
-              {...ad}/>)}
+        {map(ads, ad =>
+          <AdGroupAd
+            key={ad.id}
+            {...childProps}
+            {...ad}/>)}
+
+        <div className={style.newBtRow}>
+          <Button className='mdl-button' onClick={this.createAd}>
+            <Message>newAd</Message>
+          </Button>
         </div>
 
         {criterions.BIDDABLE

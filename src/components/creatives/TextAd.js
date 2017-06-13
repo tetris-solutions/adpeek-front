@@ -10,11 +10,46 @@ import AdEdit from './AdEdit'
 import assign from 'lodash/assign'
 import join from 'lodash/join'
 import compact from 'lodash/compact'
+import isString from 'lodash/isString'
+import omit from 'lodash/omit'
 
 const statusIcon = {
   ENABLED: 'play_arrow',
   PAUSED: 'pause',
   DISABLED: 'remove'
+}
+
+function DescriptionLine (props) {
+  if (!isString(props.value)) return null
+
+  if (props.editMode) {
+    return (
+      <div>
+        <DiscreteInput
+          {...omit(props, 'editMode')}
+          style={props.multiline ? undefined : {width: '100%'}}/>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      {props.value}
+    </div>
+  )
+}
+
+DescriptionLine.displayName = 'Description-Line'
+DescriptionLine.defaultProps = {
+  multiline: false
+}
+DescriptionLine.propTypes = {
+  multiline: PropTypes.bool,
+  editMode: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired
 }
 
 class TextAd extends React.PureComponent {
@@ -37,6 +72,10 @@ class TextAd extends React.PureComponent {
     path_2: PropTypes.string
   }
 
+  static contextTypes = {
+    messages: PropTypes.object
+  }
+
   state = {
     modalOpen: false
   }
@@ -54,6 +93,7 @@ class TextAd extends React.PureComponent {
   }
 
   render () {
+    const {messages} = this.context
     const {editMode} = this.props
     const ad = this.props
 
@@ -67,11 +107,23 @@ class TextAd extends React.PureComponent {
 
             : <h6>
               {editMode
-                ? <DiscreteInput name='headline_part_1' value={ad.headline_part_1} onChange={this.onChange}/>
+                ? <DiscreteInput
+                  name='headline_part_1'
+                  maxLength={30}
+                  placeholder={messages.adHeadline1Placeholder}
+                  value={ad.headline_part_1}
+                  onChange={this.onChange}/>
                 : ad.headline_part_1}
+
               <br/>
+
               {editMode
-                ? <DiscreteInput name='headline_part_2' value={ad.headline_part_2} onChange={this.onChange}/>
+                ? <DiscreteInput
+                  name='headline_part_2'
+                  maxLength={30}
+                  placeholder={messages.adHeadline2Placeholder}
+                  value={ad.headline_part_2}
+                  onChange={this.onChange}/>
                 : ad.headline_part_2}</h6>}
 
           {ad.kpi && <KPI kpi={ad.kpi}/>}
@@ -82,11 +134,28 @@ class TextAd extends React.PureComponent {
             path_1={ad.path_1}
             path_2={ad.path_2}/>
 
-          <div>{ad.description || ad.description_1}</div>
+          <DescriptionLine
+            editMode={editMode}
+            name='description'
+            maxLength={80}
+            multiline
+            placeholder={messages.adDescriptionPlaceholder}
+            value={ad.description}
+            onChange={this.onChange}/>
 
-          {ad.description_2
-            ? <div>{ad.description_2}</div>
-            : null}
+          <DescriptionLine
+            editMode={editMode}
+            name='description_1'
+            placeholder={messages.adDescription1Placeholder}
+            value={ad.description_1}
+            onChange={this.onChange}/>
+
+          <DescriptionLine
+            editMode={editMode}
+            name='description_2'
+            placeholder={messages.adDescription2Placeholder}
+            value={ad.description_2}
+            onChange={this.onChange}/>
 
           {editMode && (
             <a className={`${style.editLink} mdl-color-text--grey-700`} title={ad.status} onClick={this.toggleModal}>

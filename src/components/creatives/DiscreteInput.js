@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import csjs from 'csjs'
 import {styledComponent} from '../higher-order/styled'
+import omit from 'lodash/omit'
 
 const style = csjs`
 .input {
@@ -9,6 +10,13 @@ const style = csjs`
   border: none;
   color: inherit;
   font: inherit;
+}
+textarea.input {
+  width: 100%;
+  resize: none;
+  overflow: hidden;
+  line-height: 1.3em;
+  height: 2.6em;
 }`
 
 class DiscreteInput extends React.PureComponent {
@@ -17,15 +25,20 @@ class DiscreteInput extends React.PureComponent {
   static propTypes = {
     name: PropTypes.string,
     value: PropTypes.string,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    multiline: PropTypes.bool
   }
 
   render () {
+    const Tag = this.props.multiline
+      ? 'textarea'
+      : 'input'
+
     return (
-      <input
+      <Tag
         className={style.input}
         type='text'
-        {...this.props}/>
+        {...omit(this.props, 'multiline')}/>
     )
   }
 }

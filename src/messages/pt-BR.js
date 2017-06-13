@@ -472,5 +472,9 @@ module.exports = {
   newAdGroup: 'Novo AdGroup',
   adGroupStatusLabel: 'Status do AdGroup',
   adStatusLabel: 'Status do Anúncio',
-  campaignStatusLabel: 'Status da Campanha'
+  campaignStatusLabel: 'Status da Campanha',
+  newAd: 'Novo Anúncio',
+  adHeadline1Placeholder: 'Título 1',
+  adHeadline2Placeholder: 'Título 2',
+  adDescriptionPlaceholder: 'Descrição'
 }
