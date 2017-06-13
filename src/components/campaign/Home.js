@@ -9,9 +9,9 @@ import AdwordsCampaign from './adwords/Card'
 import LoadingHorizontal from '../LoadingHorizontal'
 import {Card, Content, Header} from '../Card'
 import {Wrapper, Info, SubText} from './Utils'
-import upperFirst from 'lodash/upperFirst'
+import capitalize from 'lodash/capitalize'
 
-const NotAvailable = ({campaign: {name, platform, is_adwords_video, details}}) => (
+const NotAvailable = ({campaign: {name, platform, is_adwords_video, details, status: {status}}}) => (
   <Wrapper>
     <Info disabled>
       <Message>nameLabel</Message>:
@@ -20,7 +20,12 @@ const NotAvailable = ({campaign: {name, platform, is_adwords_video, details}}) =
 
     <Info disabled>
       <Message>platformLabel</Message>:
-      <SubText>{upperFirst(platform)}</SubText>
+      <SubText>{capitalize(platform)}</SubText>
+    </Info>
+
+    <Info disabled>
+      <Message>campaignStatusLabel</Message>:
+      <SubText>{status}</SubText>
     </Info>
 
     <br/>
@@ -66,7 +71,14 @@ class CampaignHome extends React.PureComponent {
 
   render () {
     const {campaign} = this.props
-    const Campaign = campaign.platform === 'adwords' && !campaign.is_adwords_video
+
+    const isValidAdwordsCampaign = (
+      campaign.platform === 'adwords' &&
+      campaign.status.status !== 'REMOVED' &&
+      !campaign.is_adwords_video
+    )
+
+    const Campaign = isValidAdwordsCampaign
       ? AdwordsCampaign
       : NotAvailable
 
