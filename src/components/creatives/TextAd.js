@@ -188,12 +188,13 @@ class TextAd extends React.PureComponent {
         <div className={`mdl-color--yellow-200 ${style.box}`}>
           {ad.headline
             ? <h5>{editMode
-              ? <DiscreteInput name='headline' value={ad.headline} onChange={this.onChange}/>
+              ? <DiscreteInput block name='headline' value={ad.headline} onChange={this.onChange}/>
               : ad.headline}</h5>
 
             : <h6>
               {editMode
                 ? <DiscreteInput
+                  block
                   name='headline_part_1'
                   maxLength={30}
                   placeholder={messages.adHeadline1Placeholder}
@@ -201,10 +202,11 @@ class TextAd extends React.PureComponent {
                   onChange={this.onChange}/>
                 : ad.headline_part_1}
 
-              <br/>
+              {!editMode && <br/>}
 
               {editMode
                 ? <DiscreteInput
+                  block
                   name='headline_part_2'
                   maxLength={30}
                   placeholder={messages.adHeadline2Placeholder}

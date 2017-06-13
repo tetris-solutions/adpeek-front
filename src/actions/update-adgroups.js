@@ -2,6 +2,7 @@ import {PUT} from '@tetris/http'
 import assign from 'lodash/assign'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {getDeepCursor} from '../functions/get-deep-cursor'
+import forEach from 'lodash/forEach'
 
 export function liveEditAdGroupAction (tree, {company, workspace, folder, campaign, adGroup}, changes) {
   const cursor = getDeepCursor(tree, [
@@ -28,7 +29,13 @@ export function liveEditAdAction (tree, {company, workspace, folder, campaign, a
     ['ads', ad]
   ])
 
-  tree.merge(cursor, assign({lastUpdate: Date.now()}, changes))
+  const lastUpdate = assign({}, tree.get(cursor).lastUpdate)
+
+  forEach(changes, (_, key) => {
+    lastUpdate[key] = Date.now()
+  })
+
+  tree.merge(cursor, assign({lastUpdate}, changes))
   tree.commit()
 }
 

@@ -120,11 +120,12 @@ class AdGroup_ extends React.Component {
             {...childProps}
             {...ad}/>)}
 
-        <div className={style.newBtRow}>
-          <Button className='mdl-button' onClick={this.createAd}>
-            <Message>newAd</Message>
-          </Button>
-        </div>
+        {editMode && (
+          <div className={style.newBtRow}>
+            <Button className='mdl-button' onClick={this.createAd}>
+              <Message>newAd</Message>
+            </Button>
+          </div>)}
 
         {criterions.BIDDABLE
           ? (
