@@ -19,6 +19,9 @@ export function pushAdAction (tree, {company, workspace, folder, campaign, adGro
     adgroup_id: adGroup,
     headline_part_1: '',
     headline_part_2: '',
+    path_1: '',
+    path_2: '',
+    final_urls: [''],
     description: '',
     type: 'EXPANDED_TEXT_AD',
     status: 'ENABLED'

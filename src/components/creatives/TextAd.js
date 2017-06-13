@@ -82,10 +82,17 @@ class TextAd extends React.PureComponent {
 
   onChange = ({target: {name, value}}) => {
     const {dispatch, params, id} = this.props
+    const update = {}
+
+    if (name === 'final_urls') {
+      update.final_urls = [value]
+    } else {
+      update[name] = value
+    }
 
     dispatch(liveEditAdAction,
       assign({ad: id}, params),
-      {[name]: value})
+      update)
   }
 
   toggleModal = () => {
@@ -170,8 +177,20 @@ class TextAd extends React.PureComponent {
             </strong>
             <br/>
             <div className={style.finalUrl}>
-              <a className={style.anchor} href={url} title={url} target='_blank'>
-                {url}
+              <a
+                className={style.anchor}
+                title={url}
+                href={editMode ? undefined : url}
+                target='_blank'>
+                {editMode
+                  ? (
+                    <DiscreteInput
+                      value={url}
+                      style={{width: '100%'}}
+                      placeholder='example.com'
+                      onChange={this.onChange}
+                      name='final_urls'/>
+                  ) : url}
               </a>
             </div>
           </div>)}
