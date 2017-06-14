@@ -100,6 +100,9 @@ export const style = csjs`
 }
 .editLink > i {
   cursor: pointer;
+}
+.alert {
+  margin: 1em 0;
 }`
 
 export const DestinationUrl = ({url}) => (

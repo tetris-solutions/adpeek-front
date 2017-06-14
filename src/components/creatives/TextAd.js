@@ -13,11 +13,31 @@ import join from 'lodash/join'
 import compact from 'lodash/compact'
 import isString from 'lodash/isString'
 import omit from 'lodash/omit'
+import some from 'lodash/some'
+import toLower from 'lodash/toLower'
+import deburr from 'lodash/deburr'
+import includes from 'lodash/includes'
+import split from 'lodash/split'
+import debounce from 'lodash/debounce'
 
 const statusIcon = {
   ENABLED: 'play_arrow',
   PAUSED: 'pause',
   DISABLED: 'remove'
+}
+
+function containsBadWords (str) {
+  if (!isString(str)) return false
+
+  const cleanStr = deburr(toLower(str))
+  const words = split(cleanStr, ' ')
+
+  return (
+    includes(str, '!!') ||
+    includes(words, 'clique') ||
+    includes(words, 'confira') ||
+    includes(words, 'visite')
+  )
 }
 
 function DescriptionLine (props) {
@@ -156,7 +176,14 @@ class TextAd extends React.PureComponent {
   }
 
   state = {
-    modalOpen: false
+    modalOpen: false,
+    badWords: false
+  }
+
+  componentWilReceiveProps (nextProps) {
+    if (this.shouldCheckAgain) {
+      this.checkBadWords(nextProps)
+    }
   }
 
   onChange = ({target: {name, value}}) => {
@@ -172,7 +199,24 @@ class TextAd extends React.PureComponent {
     dispatch(liveEditAdAction,
       assign({ad: id}, params),
       update)
+
+    this.shouldCheckAgain = true
   }
+
+  checkBadWords = debounce(ad => {
+    this.shouldCheckAgain = false
+
+    const badWords = some([
+      ad.headline,
+      ad.headline_part_1,
+      ad.headline_part_2,
+      ad.description,
+      ad.description_1,
+      ad.description_2
+    ], containsBadWords)
+
+    this.setState({badWords})
+  }, 1000)
 
   toggleModal = () => {
     this.setState({modalOpen: !this.state.modalOpen})
@@ -183,6 +227,15 @@ class TextAd extends React.PureComponent {
     const {editMode} = this.props
     const ad = this.props
     const deprecated = ad.type === 'TEXT_AD'
+    const badWords = editMode && !deprecated &&
+      some([
+        ad.headline,
+        ad.headline_part_1,
+        ad.headline_part_2,
+        ad.description,
+        ad.description_1,
+        ad.description_2
+      ], containsBadWords)
 
     return (
       <div className={style.wrapper}>
@@ -250,6 +303,11 @@ class TextAd extends React.PureComponent {
               <i className='material-icons'>{statusIcon[ad.status]}</i>
             </a>)}
         </div>
+
+        {badWords && (
+          <p className={`${style.alert} mdl-color-text--red-700`}>
+            <Message html>adContainsBadWords</Message>
+          </p>)}
 
         {map(ad.final_urls, (url, index) =>
           <div className={`mdl-color--yellow-200 ${style.box}`} key={index}>
