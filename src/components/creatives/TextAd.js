@@ -182,15 +182,13 @@ class TextAd extends React.PureComponent {
     const {messages} = this.context
     const {editMode} = this.props
     const ad = this.props
+    const deprecated = ad.type === 'TEXT_AD'
 
     return (
       <div className={style.wrapper}>
         <div className={`mdl-color--yellow-200 ${style.box}`}>
           {ad.headline
-            ? <h5>{editMode
-              ? <DiscreteInput block name='headline' value={ad.headline} onChange={this.onChange}/>
-              : ad.headline}</h5>
-
+            ? <h5>{ad.headline}</h5>
             : <h6>
               {editMode
                 ? <DiscreteInput
@@ -217,7 +215,7 @@ class TextAd extends React.PureComponent {
           {ad.kpi && <KPI kpi={ad.kpi}/>}
 
           <DisplayUrl
-            editMode={editMode}
+            editMode={editMode && !deprecated}
             onChange={this.onChange}
             display_url={ad.display_url}
             final_urls={ad.final_urls}
@@ -234,14 +232,14 @@ class TextAd extends React.PureComponent {
             onChange={this.onChange}/>
 
           <DescriptionLine
-            editMode={editMode}
+            editMode={false}
             name='description_1'
             placeholder={messages.adDescription1Placeholder}
             value={ad.description_1}
             onChange={this.onChange}/>
 
           <DescriptionLine
-            editMode={editMode}
+            editMode={false}
             name='description_2'
             placeholder={messages.adDescription2Placeholder}
             value={ad.description_2}
@@ -263,9 +261,9 @@ class TextAd extends React.PureComponent {
               <a
                 className={style.anchor}
                 title={url}
-                href={editMode ? undefined : url}
+                href={!deprecated && editMode ? undefined : url}
                 target='_blank'>
-                {editMode
+                {!deprecated && editMode
                   ? (
                     <DiscreteInput
                       value={url}
