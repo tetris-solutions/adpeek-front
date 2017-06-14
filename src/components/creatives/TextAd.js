@@ -4,7 +4,7 @@ import Message from 'tetris-iso/Message'
 import Modal from 'tetris-iso/Modal'
 import map from 'lodash/map'
 import {style, KPI, kpiType} from './AdUtils'
-import {liveEditAdAction} from '../../actions/update-adgroups'
+import {liveEditAdAction, removeAdAction} from '../../actions/update-adgroups'
 import {inferDisplayUrl, finalUrlsDomain} from '../../functions/infer-display-url'
 import DiscreteInput from './DiscreteInput'
 import AdEdit from './AdEdit'
@@ -159,6 +159,7 @@ class TextAd extends React.PureComponent {
     dispatch: PropTypes.func,
     kpi: kpiType,
     id: PropTypes.string,
+    draft: PropTypes.bool,
     headline: PropTypes.string,
     headline_part_1: PropTypes.string,
     headline_part_2: PropTypes.string,
@@ -187,8 +188,14 @@ class TextAd extends React.PureComponent {
   }
 
   onChange = ({target: {name, value}}) => {
-    const {dispatch, params, id} = this.props
+    const {dispatch, params, id, draft} = this.props
     const update = {}
+
+    if (name === 'status' && value === 'DISABLED' && draft) {
+      dispatch(removeAdAction,
+        assign({ad: id}, params))
+      return
+    }
 
     if (name === 'final_urls') {
       update.final_urls = [value]

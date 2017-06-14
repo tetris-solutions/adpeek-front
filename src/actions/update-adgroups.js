@@ -18,6 +18,21 @@ export function liveEditAdGroupAction (tree, {company, workspace, folder, campai
   tree.commit()
 }
 
+export function removeAdAction (tree, {company, workspace, folder, campaign, adGroup, ad}) {
+  const cursor = getDeepCursor(tree, [
+    'user',
+    ['companies', company],
+    ['workspaces', workspace],
+    ['folders', folder],
+    ['campaigns', campaign],
+    ['adGroups', adGroup],
+    ['ads', ad]
+  ])
+
+  tree.unset(cursor)
+  tree.commit()
+}
+
 export function liveEditAdAction (tree, {company, workspace, folder, campaign, adGroup, ad}, changes) {
   const cursor = getDeepCursor(tree, [
     'user',
