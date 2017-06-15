@@ -66,7 +66,13 @@ export function liveEditKeywordAction (tree, {company, workspace, folder, campai
     ['keywords', keyword]
   ])
 
-  tree.merge(cursor, assign({lastUpdate: Date.now()}, changes))
+  const lastUpdate = assign({}, tree.get(cursor).lastUpdate)
+
+  forEach(changes, (_, key) => {
+    lastUpdate[key] = Date.now()
+  })
+
+  tree.merge(cursor, assign({lastUpdate}, changes))
   tree.commit()
 }
 
