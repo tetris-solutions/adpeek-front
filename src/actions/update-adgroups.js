@@ -3,6 +3,7 @@ import assign from 'lodash/assign'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {getDeepCursor} from '../functions/get-deep-cursor'
 import forEach from 'lodash/forEach'
+import map from 'lodash/map'
 
 export function liveEditAdGroupAction (tree, {company, workspace, folder, campaign, adGroup}, changes) {
   const cursor = getDeepCursor(tree, [
@@ -74,8 +75,19 @@ function updateAdGroups (campaign, adGroups, config) {
     assign({body: adGroups}, config))
 }
 
+const normalizeAdGroups = adGroups => map(adGroups,
+  adGroup =>
+    assign({}, adGroup, {
+      keywords: map(adGroup.keywords,
+        keyword => assign({}, keyword, {
+          text: keyword.text
+            .replace(/^["[]/g, '')
+            .replace(/["\]]$/g, '')
+        }))
+    }))
+
 export function updateAdGroupsAction (tree, {campaign}, adGroups) {
-  return updateAdGroups(campaign, adGroups, getApiFetchConfig(tree))
+  return updateAdGroups(campaign, normalizeAdGroups(adGroups), getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
