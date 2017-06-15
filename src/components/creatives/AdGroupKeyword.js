@@ -50,7 +50,7 @@ function inferMatchType (str) {
   const firstChar = str[0]
   const lastChar = str[str.length - 1]
 
-  if (firstChar === '[' && firstChar === lastChar) {
+  if (firstChar === '[' && lastChar === ']') {
     return 'EXACT'
   }
 
