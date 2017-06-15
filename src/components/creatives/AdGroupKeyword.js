@@ -46,6 +46,21 @@ const colorPerQualityScore = {
 
 const color = qualityScore => colorPerQualityScore[qualityScore] || colorPerQualityScore.UNKNOWN
 
+function inferMatchType (str) {
+  const firstChar = str[0]
+  const lastChar = str[str.length - 1]
+
+  if (firstChar === '[' && firstChar === lastChar) {
+    return 'EXACT'
+  }
+
+  if (firstChar === '"' && firstChar === lastChar) {
+    return 'PHRASE'
+  }
+
+  return 'BROAD'
+}
+
 class Keyword extends React.PureComponent {
   static displayName = 'AdGroup-Keyword'
 
@@ -70,10 +85,15 @@ class Keyword extends React.PureComponent {
 
   onChange = ({target: {name, value}}) => {
     const {dispatch, params, id} = this.props
+    const changes = {[name]: value}
+
+    if (name === 'text') {
+      changes.match_type = inferMatchType(value)
+    }
 
     dispatch(liveEditKeywordAction,
       assign({keyword: id}, params),
-      {[name]: value})
+      changes)
   }
 
   toggleModal = () => {
@@ -82,8 +102,7 @@ class Keyword extends React.PureComponent {
 
   render () {
     const {messages} = this.context
-    const {editMode, text, match_type, status, relevance} = this.props
-    const content = match_type === 'EXACT' ? `[${text}]` : text
+    const {editMode, text, status, relevance} = this.props
 
     return (
       <div className={`${style.keyword} mdl-color-text--${color(relevance).text} mdl-color--${color(relevance).bg}`}>
@@ -99,13 +118,13 @@ class Keyword extends React.PureComponent {
             placeholder={messages.keywordPlaceholder}
             name='text'
             value={text}
-            onChange={this.onChange}/>) : content}
+            onChange={this.onChange}/>) : text}
 
         {this.state.modalOpen && (
           <Modal size='small' minHeight={0} onEscPress={this.toggleModal}>
             <KeywordEdit
               close={this.toggleModal}
-              name={content}
+              name={text}
               status={status}
               onChange={this.onChange}/>
           </Modal>)}
