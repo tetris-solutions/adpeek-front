@@ -6,14 +6,20 @@ import {liveEditKeywordAction} from '../../actions/update-adgroups'
 import csjs from 'csjs'
 import assign from 'lodash/assign'
 import KeywordEdit from './KeywordEdit'
+import DiscreteInput from './DiscreteInput'
 
 const style = csjs`
 .keyword {
   position: relative;
   text-align: center;
   line-height: 1.6em;
+  min-height: 1.6em;
   margin: .3em 0;
   padding: 0 20px
+}
+.keyword input {
+  text-align: center;
+  width: 100%;
 }
 .icon {
   cursor: pointer;
@@ -54,6 +60,10 @@ class Keyword extends React.PureComponent {
     match_type: PropTypes.string
   }
 
+  static contextTypes = {
+    messages: PropTypes.object
+  }
+
   state = {
     modalOpen: false
   }
@@ -71,6 +81,7 @@ class Keyword extends React.PureComponent {
   }
 
   render () {
+    const {messages} = this.context
     const {editMode, text, match_type, status, relevance} = this.props
     const content = match_type === 'EXACT' ? `[${text}]` : text
 
@@ -83,7 +94,12 @@ class Keyword extends React.PureComponent {
             </i>
           </a>)}
 
-        {content}
+        {editMode ? (
+          <DiscreteInput
+            placeholder={messages.keywordPlaceholder}
+            name='text'
+            value={text}
+            onChange={this.onChange}/>) : content}
 
         {this.state.modalOpen && (
           <Modal size='small' minHeight={0} onEscPress={this.toggleModal}>

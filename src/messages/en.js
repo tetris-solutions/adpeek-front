@@ -480,5 +480,7 @@ module.exports = {
   adDescription1Placeholder: 'Description 1',
   adDescription2Placeholder: 'Description 2',
   displayUrlPlaceholder: 'Display URL',
-  adContainsBadWords: 'Your ad contains seem to contain words not allowed by Adwords, <a target="_blank" href="https://support.google.com/adwordspolicy/answer/6021546">check the full style guide here</a>'
+  adContainsBadWords: 'Your ad contains seem to contain words not allowed by Adwords, <a target="_blank" href="https://support.google.com/adwordspolicy/answer/6021546">check the full style guide here</a>',
+  newKeyword: 'New Keyword',
+  keywordPlaceholder: 'Keyword'
 }

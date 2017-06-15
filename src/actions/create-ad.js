@@ -1,7 +1,7 @@
 import {getDeepCursor} from '../functions/get-deep-cursor'
 
 export function pushAdAction (tree, {company, workspace, folder, campaign, adGroup}) {
-  const cursor = tree.select(getDeepCursor(tree, [
+  const adsCursor = tree.select(getDeepCursor(tree, [
     'user',
     ['companies', company],
     ['workspaces', workspace],
@@ -13,7 +13,7 @@ export function pushAdAction (tree, {company, workspace, folder, campaign, adGro
 
   // @todo support other ad types
 
-  cursor.push({
+  adsCursor.push({
     id: Math.random().toString(36).substr(2),
     draft: true,
     adgroup_id: adGroup,
@@ -27,8 +27,6 @@ export function pushAdAction (tree, {company, workspace, folder, campaign, adGro
     status: 'ENABLED'
   })
 
-  cursor.set('_update_', Date.now())
-
   tree.commit()
-  cursor.release()
+  adsCursor.release()
 }

@@ -4,6 +4,7 @@ import {node} from '../higher-order/branch'
 import {pure} from 'recompose'
 import {liveEditAdGroupAction} from '../../actions/update-adgroups'
 import {pushAdAction} from '../../actions/create-ad'
+import {pushKeyworddAction} from '../../actions/create-keyword'
 import endsWith from 'lodash/endsWith'
 import AdGroupAd from './AdGroupAd'
 import AdGroupKeyword from './AdGroupKeyword'
@@ -69,6 +70,20 @@ class AdGroup_ extends React.Component {
     dispatch(pushAdAction, params)
   }
 
+  createKeyword = criterionUse => {
+    const {dispatch, params} = this.props
+
+    dispatch(pushKeyworddAction, params, criterionUse)
+  }
+
+  createBiddableKeyword = () => {
+    this.createKeyword('BIDDABLE')
+  }
+
+  createNegativeKeyword = () => {
+    this.createKeyword('NEGATIVE')
+  }
+
   toggleModal = () => {
     this.setState({
       modalOpen: !this.state.modalOpen
@@ -127,7 +142,7 @@ class AdGroup_ extends React.Component {
             </Button>
           </div>)}
 
-        {criterions.BIDDABLE
+        {editMode || criterions.BIDDABLE
           ? (
             <div>
               <h5>
@@ -140,7 +155,14 @@ class AdGroup_ extends React.Component {
                   {...keyword}/>)}
             </div>) : null}
 
-        {criterions.NEGATIVE
+        {editMode && (
+          <div className={style.newBtRow}>
+            <Button className='mdl-button' onClick={this.createBiddableKeyword}>
+              <Message>newKeyword</Message>
+            </Button>
+          </div>)}
+
+        {editMode || criterions.NEGATIVE
           ? (
             <div>
               <h5>
@@ -152,6 +174,13 @@ class AdGroup_ extends React.Component {
                   {...childProps}
                   {...keyword}/>)}
             </div>) : null}
+
+        {editMode && (
+          <div className={style.newBtRow}>
+            <Button className='mdl-button' onClick={this.createNegativeKeyword}>
+              <Message>newKeyword</Message>
+            </Button>
+          </div>)}
 
         {searchTerms
           ? (
