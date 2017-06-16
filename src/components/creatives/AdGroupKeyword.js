@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'tetris-iso/Modal'
 import {styledComponent} from '../higher-order/styled'
-import {liveEditKeywordAction} from '../../actions/update-adgroups'
+import {liveEditKeywordAction, removeKeywordAction} from '../../actions/update-adgroups'
 import csjs from 'csjs'
 import assign from 'lodash/assign'
 import KeywordEdit from './KeywordEdit'
@@ -67,6 +67,7 @@ class Keyword extends React.PureComponent {
   static propTypes = {
     params: PropTypes.object,
     dispatch: PropTypes.func,
+    draft: PropTypes.bool,
     editMode: PropTypes.bool,
     id: PropTypes.string,
     relevance: PropTypes.oneOf(['UNKNOWN', 'BELOW_AVERAGE', 'AVERAGE', 'ABOVE_AVERAGE']),
@@ -84,8 +85,14 @@ class Keyword extends React.PureComponent {
   }
 
   onChange = ({target: {name, value}}) => {
-    const {dispatch, params, id} = this.props
+    const {dispatch, params, id, draft} = this.props
     const changes = {[name]: value}
+
+    if (name === 'status' && value === 'REMOVED' && draft) {
+      dispatch(removeKeywordAction,
+        assign({keyword: id}, params))
+      return
+    }
 
     if (name === 'text') {
       changes.match_type = inferMatchType(value)
