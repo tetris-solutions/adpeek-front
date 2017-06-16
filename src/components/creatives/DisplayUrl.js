@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {style} from './AdUtils'
 import {inferDisplayUrl, finalUrlsDomain} from '../../functions/infer-display-url'
-import DiscreteInput from './DiscreteInput'
+import CleanInput from './CleanInput'
 import isString from 'lodash/isString'
 
 const DisplayUrlAnchor = ({clickable, url, children, style: css}) => (
@@ -29,7 +29,7 @@ export function DisplayUrl ({display_url, final_urls, path_1, path_2, editMode, 
     return (
       <DisplayUrlAnchor url={display_url} clickable={!editMode}>
         {editMode && (
-          <DiscreteInput
+          <CleanInput
             style={{width: '100%'}}
             name='display_url'
             value={display_url}
@@ -50,7 +50,7 @@ export function DisplayUrl ({display_url, final_urls, path_1, path_2, editMode, 
       {editMode && ' / '}
 
       {editMode && (
-        <DiscreteInput
+        <CleanInput
           name='path_1'
           style={{width: 60}}
           maxLength={15}
@@ -60,7 +60,7 @@ export function DisplayUrl ({display_url, final_urls, path_1, path_2, editMode, 
       {editMode && ' / '}
 
       {editMode && (
-        <DiscreteInput
+        <CleanInput
           name='path_2'
           style={{width: 60}}
           maxLength={15}
@@ -73,7 +73,7 @@ export function DisplayUrl ({display_url, final_urls, path_1, path_2, editMode, 
 DisplayUrl.displayName = 'Display-URL'
 DisplayUrl.propTypes = {
   display_url: PropTypes.string,
-  final_urls: PropTypes.array.isRequired,
+  final_urls: PropTypes.array,
   path_1: PropTypes.string,
   path_2: PropTypes.string,
   editMode: PropTypes.bool.isRequired,

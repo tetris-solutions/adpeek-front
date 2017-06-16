@@ -6,7 +6,7 @@ import {liveEditKeywordAction, removeKeywordAction} from '../../actions/update-a
 import csjs from 'csjs'
 import assign from 'lodash/assign'
 import KeywordEdit from './KeywordEdit'
-import DiscreteInput from './DiscreteInput'
+import CleanInput from './CleanInput'
 
 const style = csjs`
 .keyword {
@@ -127,7 +127,7 @@ class Keyword extends React.PureComponent {
           </a>)}
 
         {editMode ? (
-          <DiscreteInput
+          <CleanInput
             placeholder={messages.keywordPlaceholder}
             name='text'
             value={keyword.text}

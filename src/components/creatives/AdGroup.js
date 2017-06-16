@@ -14,7 +14,7 @@ import {styledComponent} from '../higher-order/styled'
 import groupBy from 'lodash/groupBy'
 import Message from 'tetris-iso/Message'
 import upper from 'lodash/toUpper'
-import DiscreteInput from './DiscreteInput'
+import CleanInput from './CleanInput'
 import Modal from 'tetris-iso/Modal'
 import AdGroupEdit from './AdGroupEdit'
 import {Button} from '../Button'
@@ -127,7 +127,7 @@ class AdGroup_ extends React.Component {
       <div>
         <header title={status} className={headerClassName}>
           {editMode
-            ? <DiscreteInput name='name' value={name} onChange={this.onChange}/>
+            ? <CleanInput name='name' value={name} onChange={this.onChange}/>
             : name}
 
           {editMode && (

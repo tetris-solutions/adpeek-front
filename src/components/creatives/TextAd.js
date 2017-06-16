@@ -6,7 +6,7 @@ import map from 'lodash/map'
 import {style, KPI, kpiType} from './AdUtils'
 import {liveEditAdAction, removeAdAction} from '../../actions/update-adgroups'
 import {checkBlacklistedWords} from '../../functions/check-blacklisted-words'
-import DiscreteInput from './DiscreteInput'
+import CleanInput from './CleanInput'
 import AdEdit from './AdEdit'
 import assign from 'lodash/assign'
 import join from 'lodash/join'
@@ -115,7 +115,7 @@ class TextAd extends React.PureComponent {
             ? <h5>{ad.headline}</h5>
             : <h6>
               {editMode
-                ? <DiscreteInput
+                ? <CleanInput
                   block
                   name='headline_part_1'
                   maxLength={30}
@@ -127,7 +127,7 @@ class TextAd extends React.PureComponent {
               {!editMode && <br/>}
 
               {editMode
-                ? <DiscreteInput
+                ? <CleanInput
                   block
                   name='headline_part_2'
                   maxLength={30}
@@ -194,7 +194,7 @@ class TextAd extends React.PureComponent {
                 target='_blank'>
                 {!deprecated && editMode
                   ? (
-                    <DiscreteInput
+                    <CleanInput
                       value={url}
                       style={{width: '100%'}}
                       placeholder='example.com'

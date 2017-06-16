@@ -25,8 +25,8 @@ textarea.input {
   height: 2.6em;
 }`
 
-class DiscreteInput extends React.PureComponent {
-  static displayName = 'Discrete-Input'
+class CleanInput extends React.PureComponent {
+  static displayName = 'Clean-Input'
 
   static propTypes = {
     name: PropTypes.string,
@@ -55,4 +55,4 @@ class DiscreteInput extends React.PureComponent {
   }
 }
 
-export default styledComponent(DiscreteInput, style)
+export default styledComponent(CleanInput, style)

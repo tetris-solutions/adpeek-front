@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import DiscreteInput from './DiscreteInput'
+import CleanInput from './CleanInput'
 import isString from 'lodash/isString'
 import omit from 'lodash/omit'
 
@@ -10,7 +10,7 @@ function DescriptionLine (props) {
   if (props.editMode) {
     return (
       <div>
-        <DiscreteInput
+        <CleanInput
           {...omit(props, 'editMode')}
           style={props.multiline ? undefined : {width: '100%'}}/>
       </div>

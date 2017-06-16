@@ -12,6 +12,8 @@ import compact from 'lodash/compact'
 import some from 'lodash/some'
 import debounce from 'lodash/debounce'
 import DescriptionLine from './DescriptionLine'
+import CleanInput from './CleanInput'
+import DisplayUrl from './DisplayUrl'
 
 const statusIcon = {
   ENABLED: 'play_arrow',
@@ -99,8 +101,42 @@ class CallOnlyAd extends React.PureComponent {
     return (
       <div className={style.wrapper}>
         <div className={`mdl-color--yellow-200 ${style.box}`}>
+          <h5>
+            {editMode
+              ? <CleanInput
+                block
+                name='business_name'
+                maxLength={30}
+                placeholder={messages.businessNamePlaceholder}
+                value={ad.business_name}
+                onChange={this.onChange}/>
+              : ad.business_name}
+          </h5>
 
           {ad.kpi && <KPI kpi={ad.kpi}/>}
+
+          <DisplayUrl
+            editMode={editMode}
+            onChange={this.onChange}
+            display_url={ad.display_url}/>
+
+          <div className='mdl-grid'>
+            <div className='mdl-cell mdl-cell--3-col'>
+              <CleanInput
+                maxLength={2}
+                name='country_code'
+                placeholder='BR'
+                value={ad.country_code}
+                onChange={this.onChange}/>
+            </div>
+            <div className='mdl-cell mdl-cell--9-col'>
+              <CleanInput
+                name='phone_number'
+                placeholder='(00) 0000-0000'
+                value={ad.phone_number}
+                onChange={this.onChange}/>
+            </div>
+          </div>
 
           <DescriptionLine
             editMode={editMode}

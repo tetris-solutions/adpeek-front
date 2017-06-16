@@ -487,5 +487,6 @@ module.exports = {
   newKeyword: 'Nova palavra-chave',
   keywordPlaceholder: 'Palavra-chave',
   finalUrlLabel: 'URL final',
-  destinationUrlLabel: 'Url de Destino'
+  destinationUrlLabel: 'Url de Destino',
+  businessNamePlaceholder: 'Nome do estabelecimento'
 }

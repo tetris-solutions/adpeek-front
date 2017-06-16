@@ -32,11 +32,17 @@ export function pushAdAction (tree, {company, workspace, folder, campaign, adGro
       break
 
     case 'CALL_ONLY_AD':
-      ad.country_code = 'BR'
+      ad.country_code = ''
+      ad.display_url = ''
       ad.call_ad_description_1 = ''
       ad.call_ad_description_2 = ''
       ad.phone_number = ''
-      ad.business_name = ''
+      ad.business_name = tree.get(getDeepCursor(tree, [
+        'user',
+        ['companies', company],
+        'name'
+      ]))
+
       break
   }
 
