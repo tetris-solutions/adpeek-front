@@ -475,6 +475,8 @@ module.exports = {
   campaignStatusLabel: 'Status da Campanha',
   keywordStatusLabel: 'Status da palavra-chave',
   newAd: 'Novo Anúncio',
+  textAd: 'Anúncio de texto',
+  callOnlyAd: 'Anúncio de chamada',
   adHeadline1Placeholder: 'Título 1',
   adHeadline2Placeholder: 'Título 2',
   adDescriptionPlaceholder: 'Descrição',

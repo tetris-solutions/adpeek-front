@@ -1,6 +1,6 @@
 import {getDeepCursor} from '../functions/get-deep-cursor'
 
-export function pushAdAction (tree, {company, workspace, folder, campaign, adGroup}) {
+export function pushAdAction (tree, {company, workspace, folder, campaign, adGroup}, type) {
   const adsCursor = tree.select(getDeepCursor(tree, [
     'user',
     ['companies', company],
@@ -13,19 +13,34 @@ export function pushAdAction (tree, {company, workspace, folder, campaign, adGro
 
   // @todo support other ad types
 
-  adsCursor.push({
+  const ad = {
     id: Math.random().toString(36).substr(2),
     draft: true,
     adgroup_id: adGroup,
-    headline_part_1: '',
-    headline_part_2: '',
-    path_1: '',
-    path_2: '',
-    final_urls: [''],
-    description: '',
-    type: 'EXPANDED_TEXT_AD',
-    status: 'ENABLED'
-  })
+    status: 'ENABLED',
+    type
+  }
+
+  switch (type) {
+    case 'EXPANDED_TEXT_AD':
+      ad.headline_part_1 = ''
+      ad.headline_part_2 = ''
+      ad.path_1 = ''
+      ad.path_2 = ''
+      ad.final_urls = ['']
+      ad.description = ''
+      break
+
+    case 'CALL_ONLY_AD':
+      ad.country_code = 'BR'
+      ad.call_ad_description_1 = ''
+      ad.call_ad_description_2 = ''
+      ad.phone_number = ''
+      ad.business_name = ''
+      break
+  }
+
+  adsCursor.push(ad)
 
   tree.commit()
   adsCursor.release()

@@ -18,6 +18,7 @@ import DiscreteInput from './DiscreteInput'
 import Modal from 'tetris-iso/Modal'
 import AdGroupEdit from './AdGroupEdit'
 import {Button} from '../Button'
+import {DropdownMenu, MenuItem} from '../DropdownMenu'
 
 const style = csjs`
 .header {
@@ -64,10 +65,18 @@ class AdGroup_ extends React.Component {
     dispatch(liveEditAdGroupAction, params, {[name]: value})
   }
 
-  createAd = () => {
+  createAd = type => {
     const {dispatch, params} = this.props
 
-    dispatch(pushAdAction, params)
+    dispatch(pushAdAction, params, type)
+  }
+
+  createTextAd = () => {
+    this.createAd('EXPANDED_TEXT_AD')
+  }
+
+  createCallOnlyAd = () => {
+    this.createAd('CALL_ONLY_AD')
   }
 
   createKeyword = criterionUse => {
@@ -137,8 +146,18 @@ class AdGroup_ extends React.Component {
 
         {editMode && (
           <div className={style.newBtRow}>
-            <Button className='mdl-button' onClick={this.createAd}>
+            <Button className='mdl-button'>
               <Message>newAd</Message>
+
+              <DropdownMenu>
+                <MenuItem onClick={this.createTextAd}>
+                  <Message>textAd</Message>
+                </MenuItem>
+
+                <MenuItem onClick={this.createCallOnlyAd}>
+                  <Message>callOnlyAd</Message>
+                </MenuItem>
+              </DropdownMenu>
             </Button>
           </div>)}
 
