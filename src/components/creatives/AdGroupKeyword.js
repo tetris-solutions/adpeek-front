@@ -129,11 +129,10 @@ class Keyword extends React.PureComponent {
         {this.state.modalOpen && (
           <Modal size='small' minHeight={0} onEscPress={this.toggleModal}>
             <KeywordEdit
+              {...keyword}
               close={this.toggleModal}
-              name={keyword.text || messages.newKeyword}
-              criterionUse={keyword.criterion_use}
-              status={keyword.status}
-              onChange={this.onChange}/>
+              onChange={this.onChange}
+              text={keyword.text || messages.newKeyword}/>
           </Modal>)}
       </div>
     )

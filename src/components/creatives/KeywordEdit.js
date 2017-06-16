@@ -15,25 +15,25 @@ class KeywordEdit extends React.Component {
   static displayName = 'Keyword-Edit'
 
   static propTypes = {
-    name: PropTypes.node,
-    criterionUse: PropTypes.string,
+    text: PropTypes.node,
+    criterion_use: PropTypes.string,
     status: PropTypes.string,
     onChange: PropTypes.func,
     close: PropTypes.func
   }
 
   render () {
-    const {name, criterionUse, status, onChange, close} = this.props
+    const {text, criterion_use, status, onChange, close} = this.props
 
     return (
       <div>
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--12-col'>
-            <h5>{name}</h5>
+            <h5>{text}</h5>
             <br/>
 
-            <Select label='adStatus' name='status' value={status} onChange={onChange}>
-              {map(statuses[criterionUse], currentStatus =>
+            <Select name='status' label='keywordStatus' text='status' value={status} onChange={onChange}>
+              {map(statuses[criterion_use], currentStatus =>
                 <option key={currentStatus} value={currentStatus}>
                   {capitalize(currentStatus)}
                 </option>)}

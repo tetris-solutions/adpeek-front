@@ -473,6 +473,7 @@ module.exports = {
   adGroupStatusLabel: 'Status do AdGroup',
   adStatusLabel: 'Status do Anúncio',
   campaignStatusLabel: 'Status da Campanha',
+  keywordStatusLabel: 'Status da palavra-chave',
   newAd: 'Novo Anúncio',
   adHeadline1Placeholder: 'Título 1',
   adHeadline2Placeholder: 'Título 2',
