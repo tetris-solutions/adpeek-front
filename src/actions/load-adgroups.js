@@ -25,6 +25,9 @@ const normalizeAdGroups = adGroups => map(adGroups,
     assign({}, adGroup, {
       keywords: map(adGroup.keywords,
         keyword => assign({}, keyword, {
+          status: keyword.status
+            ? keyword.status
+            : 'ENABLED',
           text: normalizeTextBasedOnMatchType(keyword)
         }))
     }))

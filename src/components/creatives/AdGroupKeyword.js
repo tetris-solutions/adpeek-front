@@ -102,14 +102,20 @@ class Keyword extends React.PureComponent {
 
   render () {
     const {messages} = this.context
-    const {editMode, text, status, relevance} = this.props
+    const {editMode} = this.props
+    const keyword = this.props
 
     return (
-      <div className={`${style.keyword} mdl-color-text--${color(relevance).text} mdl-color--${color(relevance).bg}`}>
-        {editMode && status && (
-          <a className={`${style.icon} mdl-color-text--grey-700`} title={status} onClick={this.toggleModal}>
+      <div
+        className={`${style.keyword} mdl-color-text--${color(keyword.relevance).text} mdl-color--${color(keyword.relevance).bg}`}>
+        {editMode && (
+          <a
+            className={`${style.icon} mdl-color-text--grey-700`}
+            title={keyword.status}
+            onClick={this.toggleModal}>
+
             <i className='material-icons'>
-              {statusIcon[status]}
+              {statusIcon[keyword.status]}
             </i>
           </a>)}
 
@@ -117,15 +123,16 @@ class Keyword extends React.PureComponent {
           <DiscreteInput
             placeholder={messages.keywordPlaceholder}
             name='text'
-            value={text}
-            onChange={this.onChange}/>) : text}
+            value={keyword.text}
+            onChange={this.onChange}/>) : keyword.text}
 
         {this.state.modalOpen && (
           <Modal size='small' minHeight={0} onEscPress={this.toggleModal}>
             <KeywordEdit
               close={this.toggleModal}
-              name={text}
-              status={status}
+              name={keyword.text || messages.newKeyword}
+              criterionUse={keyword.criterion_use}
+              status={keyword.status}
               onChange={this.onChange}/>
           </Modal>)}
       </div>

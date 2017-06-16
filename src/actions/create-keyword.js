@@ -11,7 +11,7 @@ export function pushKeyworddAction (tree, {company, workspace, folder, campaign,
     'keywords'
   ]))
 
-  const keyword = {
+  keywordsCursor.push({
     draft: true,
     adgroup_id: adGroup,
     approval_status: 'APPROVED',
@@ -20,14 +20,9 @@ export function pushKeyworddAction (tree, {company, workspace, folder, campaign,
     final_urls: null,
     id: Math.random().toString(36).substr(2),
     match_type: 'BROAD',
+    status: 'ENABLED',
     text: ''
-  }
-
-  if (criterionUse === 'BIDDABLE') {
-    keyword.status = 'ENABLED'
-  }
-
-  keywordsCursor.push(keyword)
+  })
 
   tree.commit()
   keywordsCursor.release()
