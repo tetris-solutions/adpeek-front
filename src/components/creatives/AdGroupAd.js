@@ -6,6 +6,7 @@ import TextAd from './TextAd'
 import ImageAd from './ImageAd'
 import TemplateAd from './TemplateAd'
 import YouTubeAd from './YouTubeAd'
+import CallOnlyAd from './CallOnlyAd'
 
 class AdGroupAd extends React.PureComponent {
   static displayName = 'AdGroup-Ad'
@@ -16,6 +17,9 @@ class AdGroupAd extends React.PureComponent {
     let content = null
 
     switch (this.props.type) {
+      case 'CALL_ONLY_AD':
+        content = <CallOnlyAd {...this.props}/>
+        break
       case 'EXPANDED_TEXT_AD':
       case 'TEXT_AD':
         content = <TextAd {...this.props}/>

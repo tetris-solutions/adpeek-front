@@ -2,18 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import Modal from 'tetris-iso/Modal'
-import map from 'lodash/map'
 import {style, KPI, kpiType} from './AdUtils'
 import {liveEditAdAction, removeAdAction} from '../../actions/update-adgroups'
 import {checkBlacklistedWords} from '../../functions/check-blacklisted-words'
-import DiscreteInput from './DiscreteInput'
 import AdEdit from './AdEdit'
 import assign from 'lodash/assign'
 import join from 'lodash/join'
 import compact from 'lodash/compact'
 import some from 'lodash/some'
 import debounce from 'lodash/debounce'
-import DisplayUrl from './DisplayUrl'
 import DescriptionLine from './DescriptionLine'
 
 const statusIcon = {
@@ -22,8 +19,8 @@ const statusIcon = {
   DISABLED: 'remove'
 }
 
-class TextAd extends React.PureComponent {
-  static displayName = 'Text-Ad'
+class CallOnlyAd extends React.PureComponent {
+  static displayName = 'Call-Only-Ad'
   static propTypes = {
     editMode: PropTypes.bool,
     params: PropTypes.object,
@@ -31,16 +28,11 @@ class TextAd extends React.PureComponent {
     kpi: kpiType,
     id: PropTypes.string,
     draft: PropTypes.bool,
-    headline: PropTypes.string,
-    headline_part_1: PropTypes.string,
-    headline_part_2: PropTypes.string,
-    display_url: PropTypes.string,
-    description: PropTypes.string,
-    description_1: PropTypes.string,
-    description_2: PropTypes.string,
-    final_urls: PropTypes.array,
-    path_1: PropTypes.string,
-    path_2: PropTypes.string
+    business_name: PropTypes.string,
+    country_code: PropTypes.string,
+    call_ad_description_1: PropTypes.string,
+    call_ad_description_2: PropTypes.string,
+    phone_number: PropTypes.string
   }
 
   static contextTypes = {
@@ -85,12 +77,8 @@ class TextAd extends React.PureComponent {
     this.shouldCheckAgain = false
 
     const badWords = some([
-      ad.headline,
-      ad.headline_part_1,
-      ad.headline_part_2,
-      ad.description,
-      ad.description_1,
-      ad.description_2
+      ad.call_ad_description_1,
+      ad.call_ad_description_2
     ], checkBlacklistedWords)
 
     this.setState({badWords})
@@ -111,62 +99,21 @@ class TextAd extends React.PureComponent {
     return (
       <div className={style.wrapper}>
         <div className={`mdl-color--yellow-200 ${style.box}`}>
-          {ad.headline
-            ? <h5>{ad.headline}</h5>
-            : <h6>
-              {editMode
-                ? <DiscreteInput
-                  block
-                  name='headline_part_1'
-                  maxLength={30}
-                  placeholder={messages.adHeadline1Placeholder}
-                  value={ad.headline_part_1}
-                  onChange={this.onChange}/>
-                : ad.headline_part_1}
-
-              {!editMode && <br/>}
-
-              {editMode
-                ? <DiscreteInput
-                  block
-                  name='headline_part_2'
-                  maxLength={30}
-                  placeholder={messages.adHeadline2Placeholder}
-                  value={ad.headline_part_2}
-                  onChange={this.onChange}/>
-                : ad.headline_part_2}</h6>}
 
           {ad.kpi && <KPI kpi={ad.kpi}/>}
 
-          <DisplayUrl
-            editMode={editMode && !deprecated}
-            onChange={this.onChange}
-            display_url={ad.display_url}
-            final_urls={ad.final_urls}
-            path_1={ad.path_1 || ''}
-            path_2={ad.path_2 || ''}/>
+          <DescriptionLine
+            editMode={editMode}
+            name='call_ad_description_1'
+            placeholder={messages.adDescription1Placeholder}
+            value={ad.call_ad_description_1}
+            onChange={this.onChange}/>
 
           <DescriptionLine
             editMode={editMode}
-            name='description'
-            maxLength={80}
-            multiline
-            placeholder={messages.adDescriptionPlaceholder}
-            value={ad.description}
-            onChange={this.onChange}/>
-
-          <DescriptionLine
-            editMode={false}
-            name='description_1'
-            placeholder={messages.adDescription1Placeholder}
-            value={ad.description_1}
-            onChange={this.onChange}/>
-
-          <DescriptionLine
-            editMode={false}
-            name='description_2'
+            name='call_ad_description_2'
             placeholder={messages.adDescription2Placeholder}
-            value={ad.description_2}
+            value={ad.call_ad_description_2}
             onChange={this.onChange}/>
 
           {editMode && (
@@ -180,36 +127,11 @@ class TextAd extends React.PureComponent {
             <Message html>adContainsBadWords</Message>
           </p>)}
 
-        {map(ad.final_urls, (url, index) =>
-          <div className={`mdl-color--yellow-200 ${style.box}`} key={index}>
-            <strong>
-              <Message>finalUrl</Message>
-            </strong>
-            <br/>
-            <div className={style.finalUrl}>
-              <a
-                className={style.anchor}
-                title={url}
-                href={!deprecated && editMode ? undefined : url}
-                target='_blank'>
-                {!deprecated && editMode
-                  ? (
-                    <DiscreteInput
-                      value={url}
-                      style={{width: '100%'}}
-                      placeholder='example.com'
-                      onChange={this.onChange}
-                      name='final_urls'/>
-                  ) : url}
-              </a>
-            </div>
-          </div>)}
-
         {this.state.modalOpen && (
           <Modal size='small' minHeight={0} onEscPress={this.toggleModal}>
             <AdEdit
               close={this.toggleModal}
-              name={join(compact([ad.headline, ad.headline_part_1, ad.headline_part_2]), ' ')}
+              name={join(compact([ad.call_ad_description_1, ad.call_ad_description_2]), ' ')}
               status={ad.status}
               onChange={this.onChange}/>
           </Modal>)}
@@ -218,4 +140,4 @@ class TextAd extends React.PureComponent {
   }
 }
 
-export default TextAd
+export default CallOnlyAd
