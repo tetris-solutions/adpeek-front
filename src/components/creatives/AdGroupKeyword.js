@@ -91,6 +91,10 @@ class Keyword extends React.PureComponent {
       changes.match_type = inferMatchType(value)
     }
 
+    if (name === 'final_urls') {
+      changes.final_urls = [value]
+    }
+
     dispatch(liveEditKeywordAction,
       assign({keyword: id}, params),
       changes)

@@ -5,6 +5,9 @@ import Select from '../Select'
 import {Button} from '../Button'
 import capitalize from 'lodash/capitalize'
 import map from 'lodash/map'
+import Input from '../Input'
+import head from 'lodash/head'
+import {Tabs, Tab} from '../Tabs'
 
 const statuses = {
   NEGATIVE: ['ENABLED', 'REMOVED'],
@@ -22,25 +25,54 @@ class KeywordEdit extends React.Component {
     close: PropTypes.func
   }
 
+  static contextTypes = {
+    messages: PropTypes.object
+  }
+
   render () {
-    const {text, criterion_use, status, onChange, close} = this.props
+    const keyword = this.props
+    const {messages} = this.context
+    const {onChange, close} = this.props
 
     return (
       <div>
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--12-col'>
-            <h5>{text}</h5>
+            <h5>{keyword.text}</h5>
             <br/>
 
-            <Select name='status' label='keywordStatus' text='status' value={status} onChange={onChange}>
-              {map(statuses[criterion_use], currentStatus =>
+            <Select name='status' label='keywordStatus' text='status' value={keyword.status} onChange={onChange}>
+              {map(statuses[keyword.criterion_use], currentStatus =>
                 <option key={currentStatus} value={currentStatus}>
                   {capitalize(currentStatus)}
                 </option>)}
             </Select>
           </div>
-        </div>
-        <div className='mdl-grid'>
+
+          {keyword.criterion_use === 'BIDDABLE' && (
+            <div className='mdl-cell mdl-cell--12-col'>
+              <Tabs>
+                <Tab id='keyword-final-url' title={messages.finalUrlLabel}>
+                  <br/>
+                  <Input
+                    type='url'
+                    name='final_urls'
+                    label='finalUrl'
+                    value={head(keyword.final_urls) || ''}
+                    onChange={onChange}/>
+                </Tab>
+                <Tab id='destination-url' title={messages.destinationUrlLabel}>
+                  <br/>
+                  <Input
+                    type='url'
+                    name='destination_url'
+                    label='destinationUrl'
+                    value={head(keyword.destination_url) || ''}
+                    onChange={onChange}/>
+                </Tab>
+              </Tabs>
+            </div>)}
+
           <div className='mdl-cell mdl-cell--12-col' style={{textAlign: 'right'}}>
             <Button className='mdl-button' onClick={close}>
               <Message>close</Message>

@@ -483,5 +483,7 @@ module.exports = {
   displayUrlPlaceholder: 'Url Exibição',
   adContainsBadWords: 'Seu anúncio contém palavras não autorizadas pelo adwords, <a href="https://support.google.com/adwordspolicy/answer/6021546">confira as regras aqui</a>',
   newKeyword: 'Nova palavra-chave',
-  keywordPlaceholder: 'Palavra-chave'
+  keywordPlaceholder: 'Palavra-chave',
+  finalUrlLabel: 'URL final',
+  destinationUrlLabel: 'Url de Destino'
 }
