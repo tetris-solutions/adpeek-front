@@ -93,7 +93,7 @@ class EditPlatform extends React.PureComponent {
                 <Message>deviceDescription</Message>
               </th>
               <th>
-                <Message>bidModifier</Message>
+                <Message>bidModifierLabel</Message>
               </th>
             </tr>
           </thead>

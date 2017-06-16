@@ -412,7 +412,7 @@ module.exports = {
   closeToLocation: 'around {location}',
   locationDescription: 'Location',
   locationType: 'Type',
-  bidModifier: 'Bid Modifier',
+  bidModifierLabel: 'Bid Modifier (%)',
   everyLanguage: 'Any language',
   everyLocation: 'Any location',
   platformCriteria: 'Target devices',

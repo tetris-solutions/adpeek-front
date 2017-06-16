@@ -33,6 +33,7 @@ class KeywordEdit extends React.Component {
     const keyword = this.props
     const {messages} = this.context
     const {onChange, close} = this.props
+    const biddable = keyword.criterion_use === 'BIDDABLE'
 
     return (
       <div>
@@ -49,7 +50,18 @@ class KeywordEdit extends React.Component {
             </Select>
           </div>
 
-          {keyword.criterion_use === 'BIDDABLE' && (
+          {biddable && (
+            <div className='mdl-cell mdl-cell--12-col'>
+              <Input
+                type='number'
+                format='percentage'
+                name='bid_modifier'
+                label='bidModifier'
+                value={keyword.bid_modifier}
+                onChange={onChange}/>
+            </div>)}
+
+          {biddable && (
             <div className='mdl-cell mdl-cell--12-col'>
               <Tabs>
                 <Tab id='keyword-final-url' title={messages.finalUrlLabel}>

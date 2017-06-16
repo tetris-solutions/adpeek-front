@@ -115,16 +115,12 @@ class Keyword extends React.PureComponent {
     const {messages} = this.context
     const {editMode} = this.props
     const keyword = this.props
+    const keywordClassName = `${style.keyword} mdl-color-text--${color(keyword.relevance).text} mdl-color--${color(keyword.relevance).bg}`
 
     return (
-      <div
-        className={`${style.keyword} mdl-color-text--${color(keyword.relevance).text} mdl-color--${color(keyword.relevance).bg}`}>
+      <div className={keywordClassName}>
         {editMode && (
-          <a
-            className={`${style.icon} mdl-color-text--grey-700`}
-            title={keyword.status}
-            onClick={this.toggleModal}>
-
+          <a className={`${style.icon} mdl-color-text--grey-700`} title={keyword.status} onClick={this.toggleModal}>
             <i className='material-icons'>
               {statusIcon[keyword.status]}
             </i>

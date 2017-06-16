@@ -153,7 +153,7 @@ class EditGeoLocation extends React.Component {
                   <Message>locationType</Message>
                 </th>
                 <th>
-                  <Message>bidModifier</Message>
+                  <Message>bidModifierLabel</Message>
                 </th>
                 <th/>
               </tr>
