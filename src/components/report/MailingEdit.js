@@ -26,6 +26,7 @@ import without from 'lodash/without'
 import uniq from 'lodash/uniq'
 import range from 'lodash/range'
 import includes from 'lodash/includes'
+
 const ranges = [
   'today',
   'yesterday',
@@ -41,6 +42,7 @@ const NotFound = () => (
     Not found!
   </p>
 )
+
 const Middle = ({className, children}) => (
   <VerticalAlign className={className}>
     <div>{children}</div>

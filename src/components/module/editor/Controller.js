@@ -38,8 +38,8 @@ function requiredDimensions (entity) {
 
 function defaultFilters (entity) {
   switch (entity) {
-    case 'Location':
-      return {locationtype: ['equals', 'LOCATION_OF_PRESENCE', '']}
+    // case 'Location':
+    //   return {locationtype: ['equals', 'LOCATION_OF_PRESENCE', '']}
     default:
       return {}
   }
