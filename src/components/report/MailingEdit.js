@@ -30,6 +30,7 @@ const ranges = [
   'today',
   'yesterday',
   'last week',
+  'last 7 days',
   'last month',
   'last 30 days',
   'this month'
@@ -56,6 +57,7 @@ const RangeSelect = ({value, onChange}, {messages}) => (
   <Select name='date_range' label='mailingRange' value={value} onChange={onChange}>
     <option value='today'>{messages.today}</option>
     <option value='yesterday'>{messages.yesterday}</option>
+    <option value='last 7 days'>{messages.past7Days}</option>
     <option value='last week'>{messages.pastWeek}</option>
     <option value='last month'>{messages.pastMonth}</option>
     <option value='last 30 days'>{messages.last30Days}</option>

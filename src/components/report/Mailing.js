@@ -108,6 +108,7 @@ class MailingLink extends React.Component {
     const dateRangeMessages = {
       today: messages.today,
       yesterday: messages.yesterday,
+      'last 7 days': messages.past7Days,
       'last week': messages.pastWeek,
       'last month': messages.pastMonth,
       'last 30 days': messages.last30Days,

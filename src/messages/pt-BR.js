@@ -122,6 +122,7 @@ module.exports = {
   // date ranges
   today: 'Hoje',
   yesterday: 'Ontém',
+  past7Days: 'Últimos 7 dias',
   pastWeek: 'Semana passada',
   currentMonth: 'Mês atual',
   last30Days: 'Últimos 30 dias',
