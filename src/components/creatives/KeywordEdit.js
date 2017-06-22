@@ -54,10 +54,10 @@ class KeywordEdit extends React.Component {
             <div className='mdl-cell mdl-cell--12-col'>
               <Input
                 type='number'
-                format='percentage'
-                name='bid_modifier'
-                label='bidModifier'
-                value={keyword.bid_modifier}
+                format='currency'
+                name='cpc_bid'
+                label='cpcBid'
+                value={keyword.cpc_bid}
                 onChange={onChange}/>
             </div>)}
 

@@ -490,5 +490,6 @@ module.exports = {
   keywordPlaceholder: 'Keyword',
   finalUrlLabel: 'Final URL',
   destinationUrlLabel: 'Destination URL',
-  businessNamePlaceholder: 'Business Name'
+  businessNamePlaceholder: 'Business Name',
+  cpcBidLabel: 'Max CPC'
 }

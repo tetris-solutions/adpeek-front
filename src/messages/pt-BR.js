@@ -490,5 +490,6 @@ module.exports = {
   keywordPlaceholder: 'Palavra-chave',
   finalUrlLabel: 'URL final',
   destinationUrlLabel: 'Url de Destino',
-  businessNamePlaceholder: 'Nome do estabelecimento'
+  businessNamePlaceholder: 'Nome do estabelecimento',
+  cpcBidLabel: 'CPC máximo'
 }

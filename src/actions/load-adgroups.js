@@ -4,7 +4,6 @@ import {saveResponseData} from '../functions/save-response-data'
 import compact from 'lodash/compact'
 import map from 'lodash/map'
 import assign from 'lodash/assign'
-import {parseBidModifier} from '../functions/handle-bid-modifier'
 
 function loadAdGroups (level, id, filter, config) {
   return GET(`${process.env.ADPEEK_API_URL}/${level}/${id}/adgroups?filter=${filter}`, config)
@@ -26,7 +25,6 @@ const normalizeAdGroups = adGroups => map(adGroups,
     assign({}, adGroup, {
       keywords: map(adGroup.keywords,
         keyword => assign({}, keyword, {
-          bid_modifier: parseBidModifier(keyword.bid_modifier),
           status: keyword.status
             ? keyword.status
             : 'ENABLED',

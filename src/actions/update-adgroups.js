@@ -4,7 +4,6 @@ import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} 
 import {getDeepCursor} from '../functions/get-deep-cursor'
 import forEach from 'lodash/forEach'
 import map from 'lodash/map'
-import {normalizeBidModifier} from '../functions/handle-bid-modifier'
 
 export function liveEditAdGroupAction (tree, {company, workspace, folder, campaign, adGroup}, changes) {
   const cursor = getDeepCursor(tree, [
@@ -102,7 +101,6 @@ const normalizeAdGroups = adGroups => map(adGroups,
     assign({}, adGroup, {
       keywords: map(adGroup.keywords,
         keyword => assign({}, keyword, {
-          bid_modifier: normalizeBidModifier(keyword.bid_modifier),
           text: keyword.text
             .replace(/^["[]/g, '')
             .replace(/["\]]$/g, '')

@@ -237,11 +237,9 @@ export class Creatives extends React.Component {
 
     const {adGroups, folder} = this.props
 
-    const inner = this.isAdwords() ? (
-      <AdGroups
-        location={this.context.location}
-        adGroups={adGroups}/>
-    ) : <NotImplemented />
+    const inner = this.isAdwords()
+      ? <AdGroups location={this.context.location} adGroups={adGroups}/>
+      : <NotImplemented />
 
     return (
       <div>
