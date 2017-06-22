@@ -116,6 +116,7 @@ module.exports = {
   loadingCampaignOrder: 'Loading Campaign Order...',
   loadingLanguages: 'Loading available languages...',
   loading: 'Loading...',
+  saving: 'Saving...',
   calculating: 'Calculating...',
   extractReport: 'Download',
   creatingReport: 'Creating Report...',

@@ -115,6 +115,7 @@ module.exports = {
   loadingCampaignOrder: 'Carregando Pedido da campamha...',
   loadingLanguages: 'Carregando lista de linguagens...',
   loading: 'Carregando...',
+  saving: 'Salvando...',
   calculating: 'Calculando...',
   extractReport: 'Baixar',
   creatingReport: 'Gerando Relatório...',

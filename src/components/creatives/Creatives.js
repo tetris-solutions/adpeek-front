@@ -44,6 +44,22 @@ export class Creatives extends React.Component {
     location: PropTypes.object.isRequired
   }
 
+  static childContextTypes = {
+    setDirty: PropTypes.func
+  }
+
+  getChildContext () {
+    return {
+      setDirty: this.setDirty
+    }
+  }
+
+  setDirty = (dirty = true) => {
+    if (dirty !== this.state.dirty) {
+      this.setState({dirty})
+    }
+  }
+
   isAdwords = () => {
     return this.props.platform === 'adwords'
   }
@@ -192,11 +208,16 @@ export class Creatives extends React.Component {
 
     const {dispatch, params, getAdGroupsWithRelevance} = this.props
 
+    this.setState({saving: true})
+
     dispatch(updateAdGroupsAction, params, getAdGroupsWithRelevance())
       .then(this.loadAdGroups)
+      .then(() => this.setState({saving: false}))
   }
 
   state = {
+    dirty: false,
+    saving: false,
     loadingSearchTerms: false,
     calculatingKPI: false,
     calculatingRelevance: false,
@@ -206,6 +227,7 @@ export class Creatives extends React.Component {
   render () {
     const editMode = endsWith(this.context.location.pathname, '/edit')
     const {
+      saving,
       loadingSearchTerms,
       creatingReport,
       calculatingKPI,
@@ -225,8 +247,10 @@ export class Creatives extends React.Component {
       <div>
         <SubHeader title={<Message>creatives</Message>}>
           {editMode && !isLoading && (
-            <Button onClick={this.save} className='mdl-button mdl-color-text--grey-100'>
-              <Message>save</Message>
+            <Button disabled={saving} onClick={this.save} className='mdl-button mdl-color-text--grey-100'>
+              {saving
+                ? <Message>saving</Message>
+                : <Message>save</Message>}
             </Button>)}
 
           <Button className='mdl-button mdl-js-button mdl-button--icon'>
