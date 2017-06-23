@@ -25,9 +25,17 @@ class AdGroupEdit extends React.Component {
   }
 
   componentDidMount () {
+    this.loadDetails()
+  }
+
+  loadDetails = (fresh = false) => {
     const {dispatch, params} = this.props
 
-    dispatch(loadAdGroupDetailsAction, params)
+    return dispatch(loadAdGroupDetailsAction, params, fresh)
+  }
+
+  reload = () => {
+    return this.loadDetails(true)
   }
 
   render () {
@@ -55,7 +63,7 @@ class AdGroupEdit extends React.Component {
             </Select>
 
             {details
-              ? <AdGroupDetails {...this.props} {...details}/>
+              ? <AdGroupDetails {...this.props} {...details} reload={this.reload}/>
               : <p><Message>loadingAdGroupDetails</Message></p>}
           </div>
         </div>

@@ -14,23 +14,21 @@ const modalComponent = {
 class AdGroupDetails extends React.Component {
   static displayName = 'AdGroup-Details'
   static propTypes = {
-    criteria: PropTypes.array
+    criteria: PropTypes.array,
+    reload: PropTypes.func
   }
 
   state = {
     openModal: null
   }
 
-  setModal = modal => {
+  setModal = modal => () => {
     this.setState({openModal: modal})
   }
 
-  openPlatformModal = () => {
-    this.setModal('platform')
-  }
-
-  closeModal = () => {
-    this.setModal(null)
+  save = () => {
+    return this.props.reload()
+      .then(this.setModal(null))
   }
 
   render () {
@@ -39,7 +37,7 @@ class AdGroupDetails extends React.Component {
 
     return (
       <Wrapper>
-        <Info editClick={this.openPlatformModal}>
+        <Info editClick={this.setModal('platform')}>
           <Message>platformCriteria</Message>:
           {list(filter(criteria, isPlatform), ({platform}) =>
             <SubText key={platform}>
@@ -50,8 +48,8 @@ class AdGroupDetails extends React.Component {
         {Modal && (
           <Modal
             {...this.props}
-            onSubmit={this.closeModal}
-            cancel={this.closeModal}/>)}
+            onSubmit={this.save}
+            cancel={this.setModal(null)}/>)}
       </Wrapper>
     )
   }
