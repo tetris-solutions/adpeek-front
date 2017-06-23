@@ -97,7 +97,7 @@ const campaign = provide => tempSyncEnsure(() => provide({
   network: require('./components/campaign/edit/NetworkModal'),
   geoLocation: require('./components/campaign/edit/GeoLocationModal'),
   optimizationStatus: require('./components/campaign/edit/OptimizationStatusModal'),
-  platform: require('./components/campaign/edit/PlatformModal'),
+  platform: require('./components/campaign/edit/Platform'),
   bidStrategy: require('./components/campaign/edit/BidStrategyModal'),
   siteLinks: require('./components/campaign/edit/SiteLinkModal'),
   callOuts: require('./components/campaign/edit/CalloutModal'),

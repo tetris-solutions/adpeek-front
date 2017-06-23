@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'tetris-iso/Modal'
-import EditPlatform from './Platform'
+import EditPlatform from './Form'
 
 const EditPlatformModal = props =>
   <Modal onEscPress={props.cancel} size='small' minHeight={0}>
