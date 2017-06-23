@@ -11,7 +11,7 @@ const modalComponent = {
   platform: injectAdGroup(Platform)
 }
 
-class AdGroupDetails extends React.Component {
+class AdGroupDetails extends React.PureComponent {
   static displayName = 'AdGroup-Details'
   static propTypes = {
     criteria: PropTypes.array,

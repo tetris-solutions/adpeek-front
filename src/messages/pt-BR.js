@@ -492,5 +492,6 @@ module.exports = {
   finalUrlLabel: 'URL final',
   destinationUrlLabel: 'Url de Destino',
   businessNamePlaceholder: 'Nome do estabelecimento',
-  cpcBidLabel: 'CPC máximo'
+  cpcBidLabel: 'CPC máximo',
+  newCustomParam: 'Novo Parâmetro'
 }
