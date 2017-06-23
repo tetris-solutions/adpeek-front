@@ -55,7 +55,7 @@ class AdGroupEdit extends React.Component {
             </Select>
 
             {details
-              ? <AdGroupDetails {...details}/>
+              ? <AdGroupDetails {...this.props} {...details}/>
               : <p><Message>loadingAdGroupDetails</Message></p>}
           </div>
         </div>

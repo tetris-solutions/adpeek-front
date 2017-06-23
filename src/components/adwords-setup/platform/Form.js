@@ -7,6 +7,7 @@ import filter from 'lodash/filter'
 import map from 'lodash/map'
 import get from 'lodash/get'
 import {updateCampaignPlatformAction} from '../../../actions/update-campaign-platform'
+import {updateAdGroupPlatformAction} from '../../../actions/update-adgroup-platform'
 import {parseBidModifier, normalizeBidModifier} from '../../../functions/handle-bid-modifier'
 import Form from '../../Form'
 import Input from '../../Input'
@@ -33,6 +34,11 @@ const platforms = {
   30002: 'Tablet'
 }
 
+const actions = {
+  campaign: updateCampaignPlatformAction,
+  adGroup: updateAdGroupPlatformAction
+}
+
 function mountPlatforms (criteria) {
   const enabledPlatforms = keyBy(filter(criteria, {type: 'PLATFORM'}), 'id')
 
@@ -53,6 +59,7 @@ class EditPlatform extends React.PureComponent {
   static displayName = 'Edit-Platform'
 
   static propTypes = {
+    level: PropTypes.string,
     cancel: PropTypes.func,
     criteria: PropTypes.array,
     onSubmit: PropTypes.func,
@@ -63,10 +70,10 @@ class EditPlatform extends React.PureComponent {
   state = {platforms: mountPlatforms(this.props.criteria)}
 
   save = () => {
-    const {onSubmit, params, dispatch} = this.props
+    const {level, onSubmit, params, dispatch} = this.props
 
     return dispatch(
-      updateCampaignPlatformAction,
+      actions[level],
       params,
       map(this.state.platforms, normalize))
       .then(onSubmit)

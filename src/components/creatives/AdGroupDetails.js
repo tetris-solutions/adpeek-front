@@ -21,8 +21,16 @@ class AdGroupDetails extends React.Component {
     openModal: null
   }
 
-  setModal = modal => () => {
+  setModal = modal => {
     this.setState({openModal: modal})
+  }
+
+  openPlatformModal = () => {
+    this.setModal('platform')
+  }
+
+  closeModal = () => {
+    this.setModal(null)
   }
 
   render () {
@@ -31,7 +39,7 @@ class AdGroupDetails extends React.Component {
 
     return (
       <Wrapper>
-        <Info editClick={this.setModal('platform')}>
+        <Info editClick={this.openPlatformModal}>
           <Message>platformCriteria</Message>:
           {list(filter(criteria, isPlatform), ({platform}) =>
             <SubText key={platform}>
@@ -42,7 +50,8 @@ class AdGroupDetails extends React.Component {
         {Modal && (
           <Modal
             {...this.props}
-            cancel={this.setModal(null)}/>)}
+            onSubmit={this.closeModal}
+            cancel={this.closeModal}/>)}
       </Wrapper>
     )
   }
