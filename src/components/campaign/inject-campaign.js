@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import omit from 'lodash/omit'
 
 export const injectCampaign = Component => class extends React.Component {
-  static displayName = `inectCampaign(${Component.displayName})`
+  static displayName = `injectCampaign(${Component.displayName})`
 
   static propTypes = {
     campaign: PropTypes.shape({

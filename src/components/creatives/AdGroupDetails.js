@@ -3,7 +3,13 @@ import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import lowerFirst from 'lodash/lowerFirst'
 import filter from 'lodash/filter'
+import Platform from '../adwords-setup/platform/Modal'
+import {injectAdGroup} from './inject-adgroup'
 import {Wrapper, Info, SubText, list, isPlatform} from '../campaign/Utils'
+
+const modalComponent = {
+  platform: injectAdGroup(Platform)
+}
 
 class AdGroupDetails extends React.Component {
   static displayName = 'AdGroup-Details'
@@ -20,6 +26,7 @@ class AdGroupDetails extends React.Component {
   }
 
   render () {
+    const Modal = modalComponent[this.state.openModal]
     const {criteria} = this.props
 
     return (
@@ -31,6 +38,11 @@ class AdGroupDetails extends React.Component {
               <Message>{lowerFirst(platform) + 'Device'}</Message>
             </SubText>)}
         </Info>
+
+        {Modal && (
+          <Modal
+            {...this.props}
+            cancel={this.setModal(null)}/>)}
       </Wrapper>
     )
   }
