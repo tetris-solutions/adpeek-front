@@ -5,6 +5,10 @@ import Message from 'tetris-iso/Message'
 import {Link} from 'react-router'
 import csjs from 'csjs'
 import upperFirst from 'lodash/upperFirst'
+import isEmpty from 'lodash/isEmpty'
+import compact from 'lodash/compact'
+import isArray from 'lodash/isArray'
+import map from 'lodash/map'
 
 export const style = csjs`
 .edit {
@@ -134,3 +138,24 @@ Wrapper_.propTypes = {
 }
 
 export const Wrapper = styledFunctionalComponent(Wrapper_, style)
+
+const crop = ls => ls.length > 10
+  ? ls.slice(0, 10).concat([
+    <SubText key={Math.random().toString(36).substr(2)}>
+      ...
+    </SubText>
+  ]) : ls
+
+export function list (ls, iteratee, Empty = None) {
+  ls = isArray(ls) ? compact(ls) : ls
+
+  if (isEmpty(ls)) {
+    return <Empty/>
+  }
+
+  return crop(map(ls, iteratee))
+}
+
+export const isLanguage = {type: 'LANGUAGE'}
+export const isUserList = {type: 'USER_LIST'}
+export const isPlatform = {type: 'PLATFORM'}

@@ -217,9 +217,8 @@ class AdGroup_ extends React.Component {
         {modalOpen && (
           <Modal onEscPress={this.toggleModal} size='small' minHeight={0}>
             <AdGroupEdit
+              {...this.props}
               close={this.toggleModal}
-              name={name}
-              status={status}
               onChange={this.onChange}/>
           </Modal>)}
       </div>

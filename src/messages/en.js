@@ -113,6 +113,7 @@ module.exports = {
   loadingReport: 'Loading Report...',
   loadingCampaigns: 'Loading Campaigns...',
   loadingCampaignDetails: 'Loading Campaign Details...',
+  loadingAdGroupDetails: 'Loading AdGroup Details...',
   loadingCampaignOrder: 'Loading Campaign Order...',
   loadingLanguages: 'Loading available languages...',
   loading: 'Loading...',

@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import Fence from '../../Fence'
-import {everyCriteria, Wrapper, SubText, None, Info, Section, SectionTitle} from '../Utils'
 import Network, {networkNames} from './Network'
 import BiddingStrategy from './BiddingStrategy'
 import OptimizationStatus from './OptimizationStatus'
@@ -12,34 +11,23 @@ import map from 'lodash/map'
 import head from 'lodash/head'
 import pick from 'lodash/pick'
 import filter from 'lodash/filter'
-import isEmpty from 'lodash/isEmpty'
-import compact from 'lodash/compact'
 import flatten from 'lodash/flatten'
 import toLower from 'lodash/toLower'
 import lowerFirst from 'lodash/lowerFirst'
-import isArray from 'lodash/isArray'
 import ProximityDescription from '../edit/geo-location/ProximityDescription'
-
-const crop = ls => ls.length > 10
-  ? ls.slice(0, 10).concat([
-    <SubText key={Math.random().toString(36).substr(2)}>
-      ...
-    </SubText>
-  ]) : ls
-
-function list (ls, iteratee, Empty = None) {
-  ls = isArray(ls) ? compact(ls) : ls
-
-  if (isEmpty(ls)) {
-    return <Empty/>
-  }
-
-  return crop(map(ls, iteratee))
-}
-
-const isLanguage = {type: 'LANGUAGE'}
-const isUserList = {type: 'USER_LIST'}
-const isPlatform = {type: 'PLATFORM'}
+import {
+  list,
+  isLanguage,
+  isPlatform,
+  isUserList,
+  everyCriteria,
+  Wrapper,
+  SubText,
+  None,
+  Info,
+  Section,
+  SectionTitle
+} from '../Utils'
 
 const mapExtensions = (ls, type, cb) => map(flatten(map(filter(ls, {type}), 'extensions')), cb)
 

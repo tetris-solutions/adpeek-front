@@ -112,6 +112,7 @@ module.exports = {
   loadingReport: 'Carregando relatório...',
   loadingCampaigns: 'Carregando campanhas...',
   loadingCampaignDetails: 'Carregando detalhes da campanha...',
+  loadingAdGroupDetails: 'Carregando detalhes do grupo de anúncio...',
   loadingCampaignOrder: 'Carregando Pedido da campamha...',
   loadingLanguages: 'Carregando lista de linguagens...',
   loading: 'Carregando...',
