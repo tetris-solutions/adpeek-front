@@ -12,6 +12,7 @@ import map from 'lodash/map'
 import concat from 'lodash/concat'
 import set from 'lodash/set'
 import csjs from 'csjs'
+import get from 'lodash/get'
 
 const style = csjs`
 .title {
@@ -39,7 +40,7 @@ class AdGroupEdit extends React.Component {
 
   state = {
     status: this.props.status,
-    custom_params: concat(this.props.custom_params || []),
+    custom_params: concat(get(this.props, 'custom_params.parameters', [])),
     url_template: this.props.url_template || ''
   }
 
