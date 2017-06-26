@@ -26,6 +26,7 @@ class CreateAdwordsCampaign extends React.Component {
   }
 
   state = {
+    saving: false,
     name: '',
     type: 'SEARCH'
   }
@@ -37,9 +38,12 @@ class CreateAdwordsCampaign extends React.Component {
   onSubmit = e => {
     const {dispatch, params} = this.props
     const {company, workspace, folder} = params
+    const {name, type} = this.state
 
-    const create = () => dispatch(createCampaignAction, params, this.state)
+    const create = () => dispatch(createCampaignAction, params, {name, type})
     const reload = () => dispatch(loadFolderCampaignsAction, company, workspace, folder)
+
+    this.setState({saving: true})
 
     create()
       .then(createResponse => reload().then(() => createResponse))
@@ -55,8 +59,10 @@ class CreateAdwordsCampaign extends React.Component {
     return (
       <Form onSubmit={this.onSubmit}>
         <SubHeader>
-          <Submit className='mdl-button mdl-color-text--grey-100'>
-            <Message>save</Message>
+          <Submit disabled={this.state.saving} className='mdl-button mdl-color-text--grey-100'>
+            {this.state.saving
+              ? <Message>saving</Message>
+              : <Message>save</Message>}
           </Submit>
         </SubHeader>
         <Page>
