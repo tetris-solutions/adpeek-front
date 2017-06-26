@@ -19,7 +19,8 @@ export function pushAdGroupAction (tree, {company, workspace, folder, campaign})
     name: tree.get(['intl', 'messages', 'newAdGroup']),
     keywords: [],
     ads: [],
-    status: 'ENABLED'
+    status: 'ENABLED',
+    lastUpdate: Date.now()
   })
 
   campaignCursor.set('_update_', Date.now())

@@ -157,14 +157,13 @@ class AdGroupEdit extends React.Component {
             </option>
           </Select>
 
+          <div>
+            {bidInput}
+          </div>
+
           {this.props.details
             ? <AdGroupDetails {...this.props} {...this.props.details} reload={this.reload}/>
             : <p><Message>loadingAdGroupDetails</Message></p>}
-
-          {bidInput && (
-            <div>
-              {bidInput}
-            </div>)}
         </div>
 
         <div className='mdl-cell mdl-cell--6-col'>
