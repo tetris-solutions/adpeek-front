@@ -372,6 +372,8 @@ module.exports = {
   searchNetwork: 'Search',
   contentNetwork: 'Display',
   partnerNetwork: 'Partner',
+  shoppingNetwork: 'Google Shopping',
+  multiChannelNetwork: 'Universal Apps',
   targetLocation: 'Target Location',
   targetLanguage: 'Target Language',
   conversionTracker: 'Conversion Tracker',
@@ -493,6 +495,7 @@ module.exports = {
   destinationUrlLabel: 'Destination URL',
   businessNamePlaceholder: 'Business Name',
   cpcBidLabel: 'Max CPC',
-  newCustomParam: 'New Param',
-  newCampaign: 'New Campaign'
+  newCustomParam: 'New param',
+  newCampaign: 'New campaign',
+  campaignTypeLabel: 'Campaign type'
 }
