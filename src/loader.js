@@ -104,7 +104,7 @@ const campaign = provide => tempSyncEnsure(() => provide({
   apps: require('./components/campaign/edit/AppsModal'),
   locations: require('./components/campaign/edit/LocationsModal'),
   dynamicSearchAds: require('./components/campaign/edit/DynamicSearchAdsModal'),
-  create: require('./components/campaign/Create')
+  create: require('./components/campaign/create/Create')
 }))
 
 const orderCloning = provide => tempSyncEnsure(() => provide({
