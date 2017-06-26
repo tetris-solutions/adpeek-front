@@ -1,6 +1,7 @@
 import find from 'lodash/find'
 import map from 'lodash/map'
 import React from 'react'
+import cx from 'classnames'
 
 import PropTypes from 'prop-types'
 
@@ -11,7 +12,7 @@ function TabHeader ({children, switchTab, id, active}) {
   }
 
   return (
-    <a className={'mdl-tabs__tab' + (active ? ' is-active' : '')} href='' onClick={onClick}>
+    <a className={cx({'mdl-tabs__tab': true, 'is-active': active})} href='' onClick={onClick}>
       {children}
     </a>
   )

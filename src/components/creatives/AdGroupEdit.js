@@ -13,6 +13,9 @@ import concat from 'lodash/concat'
 import set from 'lodash/set'
 import csjs from 'csjs'
 import get from 'lodash/get'
+import last from 'lodash/last'
+import isArray from 'lodash/isArray'
+import forEach from 'lodash/forEach'
 
 const style = csjs`
 .title {
@@ -22,6 +25,9 @@ const style = csjs`
 .actions button:last-child {
   float: right;  
 }`
+
+export const pickBid = val => isArray(val) ? last(val) : val
+export const bidType = PropTypes.oneOfType([PropTypes.number, PropTypes.array])
 
 class AdGroupEdit extends React.Component {
   static displayName = 'Ad-Group-Edit'
@@ -34,14 +40,23 @@ class AdGroupEdit extends React.Component {
     status: PropTypes.string,
     onChange: PropTypes.func,
     close: PropTypes.func,
-    custom_params: PropTypes.array,
-    url_template: PropTypes.string
+    custom_params: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+    url_template: PropTypes.string,
+    target_cpa: bidType,
+    target_cpc: bidType,
+    target_roas: bidType,
+    bid_strategy_type: PropTypes.string
   }
 
   state = {
     status: this.props.status,
-    custom_params: concat(get(this.props, 'custom_params.parameters', [])),
-    url_template: this.props.url_template || ''
+    custom_params: isArray(this.props.custom_params)
+      ? concat(this.props.custom_params)
+      : concat(get(this.props, 'custom_params.parameters', [])),
+    url_template: this.props.url_template || '',
+    target_cpa: pickBid(this.props.target_cpa),
+    target_cpc: pickBid(this.props.target_cpc),
+    target_roas: pickBid(this.props.target_roas)
   }
 
   componentDidMount () {
@@ -63,9 +78,9 @@ class AdGroupEdit extends React.Component {
   }
 
   save = () => {
-    this.write('status', this.state.status)
-    this.write('url_template', this.state.url_template)
-    this.write('custom_params', this.state.custom_params)
+    forEach(this.state, (value, key) =>
+      this.write(key, value))
+
     this.props.close()
   }
 
@@ -83,87 +98,128 @@ class AdGroupEdit extends React.Component {
   }
 
   render () {
+    let bidInput = null
+
+    switch (this.props.bid_strategy_type) {
+      case 'TARGET_CPA':
+        bidInput = (
+          <Input
+            type='number'
+            format='currency'
+            name='target_cpa'
+            label='targetCpa'
+            value={this.state.target_cpa}
+            onChange={this.onChange}/>
+        )
+        break
+      case 'MANUAL_CPC':
+        bidInput = (
+          <Input
+            type='number'
+            format='currency'
+            name='target_cpc'
+            label='cpcBid'
+            value={this.state.target_cpc}
+            onChange={this.onChange}/>
+        )
+        break
+      case 'TARGET_ROAS':
+        bidInput = (
+          <Input
+            type='number'
+            format='percentage'
+            name='target_roas'
+            label='targetRoas'
+            value={this.state.target_roas}
+            onChange={this.onChange}/>
+        )
+        break
+    }
+
     return (
-      <div>
-        <div className='mdl-grid'>
-          <div className={`mdl-cell mdl-cell--12-col ${style.title}`}>
-            <h5>{this.props.name}</h5>
+      <div className='mdl-grid'>
+        <div className={`mdl-cell mdl-cell--12-col ${style.title}`}>
+          <h5>{this.props.name}</h5>
+        </div>
+
+        <div className='mdl-cell mdl-cell--6-col'>
+          <Select label='adGroupStatus' name='status' value={this.state.status} onChange={this.onChange}>
+            <option value='ENABLED'>
+              {capitalize('ENABLED')}
+            </option>
+
+            <option value='PAUSED'>
+              {capitalize('PAUSED')}
+            </option>
+
+            <option value='REMOVED'>
+              {capitalize('REMOVED')}
+            </option>
+          </Select>
+
+          {this.props.details
+            ? <AdGroupDetails {...this.props} {...this.props.details} reload={this.reload}/>
+            : <p><Message>loadingAdGroupDetails</Message></p>}
+
+          {bidInput && (
+            <div>
+              {bidInput}
+            </div>)}
+        </div>
+
+        <div className='mdl-cell mdl-cell--6-col'>
+          <div className='mdl-grid'>
+            <div className='mdl-cell mdl-cell--12-col'>
+              <Input
+                name='url_template'
+                label='trackingUrlTemplate'
+                type='url'
+                value={this.state.url_template}
+                onChange={this.onChange}/>
+            </div>
           </div>
 
-          <div className='mdl-cell mdl-cell--6-col'>
-            <Select label='adGroupStatus' name='status' value={this.state.status} onChange={this.onChange}>
-              <option value='ENABLED'>
-                {capitalize('ENABLED')}
-              </option>
-
-              <option value='PAUSED'>
-                {capitalize('PAUSED')}
-              </option>
-
-              <option value='REMOVED'>
-                {capitalize('REMOVED')}
-              </option>
-            </Select>
-
-            {this.props.details
-              ? <AdGroupDetails {...this.props} {...this.props.details} reload={this.reload}/>
-              : <p><Message>loadingAdGroupDetails</Message></p>}
+          <div className='mdl-grid'>
+            <div className='mdl-cell mdl-cell--12-col'>
+              <h6><Message>urlCustomParameters</Message></h6>
+            </div>
           </div>
 
-          <div className='mdl-cell mdl-cell--6-col'>
-            <div className='mdl-grid'>
-              <div className='mdl-cell mdl-cell--12-col'>
+          {map(this.state.custom_params, ({key, value}, index) => (
+            <div key={index} className='mdl-grid'>
+              <div className='mdl-cell mdl-cell--5-col'>
                 <Input
-                  name='url_template'
-                  label='trackingUrlTemplate'
-                  type='url'
-                  value={this.state.url_template}
+                  name={`custom_params.${index}.key`}
+                  label='urlCustomParameterKey'
+                  value={key}
                   onChange={this.onChange}/>
               </div>
-            </div>
-
-            <div className='mdl-grid'>
-              <div className='mdl-cell mdl-cell--12-col'>
-                <h6><Message>urlCustomParameters</Message></h6>
+              <div className='mdl-cell mdl-cell--7-col'>
+                <Input
+                  name={`custom_params.${index}.value`}
+                  label='urlCustomParameterValue'
+                  value={value}
+                  onChange={this.onChange}/>
               </div>
-            </div>
+            </div>))}
 
-            {map(this.state.custom_params, ({key, value}, index) => (
-              <div key={index} className='mdl-grid'>
-                <div className='mdl-cell mdl-cell--5-col'>
-                  <Input
-                    name={`custom_params.${index}.key`}
-                    label='urlCustomParameterKey'
-                    value={key}
-                    onChange={this.onChange}/>
-                </div>
-                <div className='mdl-cell mdl-cell--7-col'>
-                  <Input
-                    name={`custom_params.${index}.value`}
-                    label='urlCustomParameterValue'
-                    value={value}
-                    onChange={this.onChange}/>
-                </div>
-              </div>))}
-
-            <p className={style.actions}>
-              <Button className='mdl-button' onClick={this.addCustomParam}>
-                <Message>newCustomParam</Message>
-              </Button>
-            </p>
-          </div>
-
-          <div className={`mdl-cell mdl-cell--12-col ${style.actions}`}>
-            <hr/>
-
-            <Button className='mdl-button mdl-button--accent' onClick={this.props.close}>
-              <Message>cancel</Message>
+          <p className={style.actions}>
+            <Button className='mdl-button' onClick={this.addCustomParam}>
+              <Message>newCustomParam</Message>
             </Button>
+          </p>
+        </div>
 
-            <Button className='mdl-button' onClick={this.save}>
-              <Message>save</Message>
-            </Button>
-          </div>
+        <div className={`mdl-cell mdl-cell--12-col ${style.actions}`}>
+          <hr/>
+
+          <Button className='mdl-button mdl-button--accent' onClick={this.props.close}>
+            <Message>cancel</Message>
+          </Button>
+
+          <Button className='mdl-button' onClick={this.save}>
+            <Message>save</Message>
+          </Button>
         </div>
       </div>
     )
