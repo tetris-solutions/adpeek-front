@@ -493,5 +493,6 @@ module.exports = {
   destinationUrlLabel: 'Destination URL',
   businessNamePlaceholder: 'Business Name',
   cpcBidLabel: 'Max CPC',
-  newCustomParam: 'New Param'
+  newCustomParam: 'New Param',
+  newCampaign: 'New Campaign'
 }
