@@ -16,6 +16,9 @@ import get from 'lodash/get'
 import last from 'lodash/last'
 import isArray from 'lodash/isArray'
 import forEach from 'lodash/forEach'
+import assign from 'lodash/assign'
+import CustomParam from './CustomParam'
+import keyBy from 'lodash/keyBy'
 
 const style = csjs`
 .title {
@@ -29,6 +32,14 @@ const style = csjs`
 export const pickBid = val => isArray(val) ? last(val) : val
 export const bidType = PropTypes.oneOfType([PropTypes.number, PropTypes.array])
 
+const cParams = ls =>
+  keyBy(map(isArray(ls) ? concat(ls) : concat(get(ls, 'parameters', [])),
+    ({key, value}) => ({
+      key,
+      value,
+      id: Math.random().toString(36).substr(2)
+    })), 'id')
+
 class AdGroupEdit extends React.Component {
   static displayName = 'Ad-Group-Edit'
 
@@ -37,6 +48,7 @@ class AdGroupEdit extends React.Component {
     params: PropTypes.object,
     details: PropTypes.object,
     name: PropTypes.string,
+    draft: PropTypes.bool,
     status: PropTypes.string,
     onChange: PropTypes.func,
     close: PropTypes.func,
@@ -50,9 +62,7 @@ class AdGroupEdit extends React.Component {
 
   state = {
     status: this.props.status,
-    custom_params: isArray(this.props.custom_params)
-      ? concat(this.props.custom_params)
-      : concat(get(this.props, 'custom_params.parameters', [])),
+    custom_params: cParams(this.props.custom_params),
     url_template: this.props.url_template || '',
     target_cpa: pickBid(this.props.target_cpa),
     target_cpc: pickBid(this.props.target_cpc),
@@ -64,9 +74,11 @@ class AdGroupEdit extends React.Component {
   }
 
   loadDetails = (fresh = false) => {
-    const {dispatch, params} = this.props
+    const {dispatch, params, draft} = this.props
 
-    return dispatch(loadAdGroupDetailsAction, params, fresh)
+    return draft
+      ? Promise.resolve()
+      : dispatch(loadAdGroupDetailsAction, params, fresh)
   }
 
   reload = () => {
@@ -78,7 +90,11 @@ class AdGroupEdit extends React.Component {
   }
 
   save = () => {
-    forEach(this.state, (value, key) =>
+    const updates = assign({}, this.state)
+
+    updates.custom_params = map(updates.custom_params)
+
+    forEach(updates, (value, key) =>
       this.write(key, value))
 
     this.props.close()
@@ -89,12 +105,24 @@ class AdGroupEdit extends React.Component {
   }
 
   addCustomParam = () => {
-    this.setState({
-      custom_params: concat(
-        this.state.custom_params,
-        {key: '', value: ''}
-      )
-    })
+    const id = Math.random().toString(36).substr(2)
+    const custom_params = assign({}, this.state.custom_params)
+
+    custom_params[id] = {
+      id,
+      key: '',
+      value: ''
+    }
+
+    this.setState({custom_params})
+  }
+
+  dropCustomParam = id => {
+    const custom_params = assign({}, this.state.custom_params)
+
+    delete custom_params[id]
+
+    this.setState({custom_params})
   }
 
   render () {
@@ -161,9 +189,12 @@ class AdGroupEdit extends React.Component {
             {bidInput}
           </div>
 
-          {this.props.details
-            ? <AdGroupDetails {...this.props} {...this.props.details} reload={this.reload}/>
-            : <p><Message>loadingAdGroupDetails</Message></p>}
+          {this.props.draft ? null : (
+            this.props.details
+              ? <AdGroupDetails {...this.props} {...this.props.details} reload={this.reload}/>
+              : <p><Message>loadingAdGroupDetails</Message></p>
+          )}
+
         </div>
 
         <div className='mdl-cell mdl-cell--6-col'>
@@ -178,29 +209,16 @@ class AdGroupEdit extends React.Component {
             </div>
           </div>
 
-          <div className='mdl-grid'>
-            <div className='mdl-cell mdl-cell--12-col'>
-              <h6><Message>urlCustomParameters</Message></h6>
-            </div>
+          <div className='mdl-cell mdl-cell--12-col'>
+            <h6><Message>urlCustomParameters</Message></h6>
           </div>
 
-          {map(this.state.custom_params, ({key, value}, index) => (
-            <div key={index} className='mdl-grid'>
-              <div className='mdl-cell mdl-cell--5-col'>
-                <Input
-                  name={`custom_params.${index}.key`}
-                  label='urlCustomParameterKey'
-                  value={key}
-                  onChange={this.onChange}/>
-              </div>
-              <div className='mdl-cell mdl-cell--7-col'>
-                <Input
-                  name={`custom_params.${index}.value`}
-                  label='urlCustomParameterValue'
-                  value={value}
-                  onChange={this.onChange}/>
-              </div>
-            </div>))}
+          {map(this.state.custom_params, param =>
+            <CustomParam
+              key={param.id}
+              param={param}
+              onChange={this.onChange}
+              drop={this.dropCustomParam}/>)}
 
           <p className={style.actions}>
             <Button className='mdl-button' onClick={this.addCustomParam}>
