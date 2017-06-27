@@ -5,6 +5,8 @@ export function getCanonicalReportEntity (entity) {
     case 'Search':
     case 'Audience':
     case 'Location':
+    case 'Category':
+    case 'Query':
       return 'AdGroup'
     default:
       return entity
