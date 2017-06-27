@@ -85,7 +85,16 @@ export function mountModuleEntities (entities, moduleEntity, selectedIds, active
 
   entities.Campaign = filterByStatus(entities.Campaign)
 
-  forEach(['AdGroup', 'AdSet', 'Search', 'Audience', 'Video', 'Location'], level => {
+  forEach([
+    'AdGroup',
+    'AdSet',
+    'Search',
+    'Audience',
+    'Video',
+    'Location',
+    'Category',
+    'Query'
+  ], level => {
     if (entities[level]) {
       entities[level] = filterByParent(entities[level], entities.Campaign, 'campaign_id')
     }

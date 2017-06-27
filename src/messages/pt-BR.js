@@ -143,6 +143,8 @@ module.exports = {
   searchLevel: 'Search Query',
   locationLevel: 'Geolocation',
   audienceLevel: 'Audiência',
+  keywordlessCategoryLevel: 'Keywordless Category',
+  keywordlessQueryLevel: 'Keywordless Query',
   adGroups: 'Ad Groups',
   videos: 'Vídeos',
   keywords: 'Palavras chaves',

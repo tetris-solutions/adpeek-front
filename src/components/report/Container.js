@@ -139,6 +139,20 @@ class Container extends React.Component {
         })
 
         entities.push({
+          id: 'Category',
+          name: messages.keywordlessCategoryLevel,
+          list: adGroups || empty,
+          isLoading: !adGroups || this.getLoadingState('Category')
+        })
+
+        entities.push({
+          id: 'Query',
+          name: messages.keywordlessQueryLevel,
+          list: adGroups || empty,
+          isLoading: !adGroups || this.getLoadingState('Query')
+        })
+
+        entities.push({
           id: 'Search',
           name: messages.searchLevel,
           list: adGroups || empty,
