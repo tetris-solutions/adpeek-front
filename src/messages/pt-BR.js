@@ -146,6 +146,8 @@ module.exports = {
   keywordlessCategoryLevel: 'Keywordless Category',
   keywordlessQueryLevel: 'Keywordless Query',
   strategyLevel: 'Bid Goal',
+  partitionLevel: 'Product Partition',
+
   adGroups: 'Ad Groups',
   videos: 'Vídeos',
   keywords: 'Palavras chaves',
@@ -160,6 +162,7 @@ module.exports = {
   accountEntity: 'Conta',
   keywordEntity: 'Palavra chave',
   strategyEntity: 'Estratégia',
+  partitionEntity: 'Product Partition',
 
   newModule: 'Novo módulo',
   moduleTypeLabel: 'Tipo de módulo',

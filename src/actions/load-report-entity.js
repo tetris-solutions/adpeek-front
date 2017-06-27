@@ -41,7 +41,8 @@ const entityListName = {
   AdSet: 'adSets',
   Video: 'videos',
   Keyword: 'keywords',
-  Strategy: 'strategies'
+  Strategy: 'strategies',
+  Partition: 'partitions'
 }
 
 function dispatchAction (tree, params, query, entity) {

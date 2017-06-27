@@ -105,9 +105,21 @@ class Container extends React.Component {
 
   entitiesSource = () => {
     const {messages} = this.context
-    const {campaigns, adSets, adGroups, ads, keywords, videos, strategies} = this.props
 
-    return {
+    return assign({messages}, pick(this.props, [
+      'campaigns',
+      'adSets',
+      'ads',
+      'keywords',
+      'adGroups',
+      'videos',
+      'strategies',
+      'partitions'
+    ]))
+  }
+
+  calculateEntities = source => {
+    const {
       messages,
       campaigns,
       adSets,
@@ -115,11 +127,10 @@ class Container extends React.Component {
       keywords,
       adGroups,
       videos,
-      strategies
-    }
-  }
+      strategies,
+      partitions
+    } = source
 
-  calculateEntities = ({messages, campaigns, adSets, ads, keywords, adGroups, videos, strategies}) => {
     const entities = [{
       id: 'Campaign',
       name: messages.campaigns,
@@ -201,6 +212,13 @@ class Container extends React.Component {
           name: messages.keywords,
           list: keywords || empty,
           isLoading: !keywords || this.getLoadingState('Keyword')
+        })
+
+        entities.push({
+          id: 'Partition',
+          name: messages.partitionLevel,
+          list: partitions || empty,
+          isLoading: !partitions || this.getLoadingState('Partition')
         })
       }
 
@@ -295,6 +313,13 @@ class Container extends React.Component {
           load: () => this.loadEntity('AdGroup'),
           query: () => ({adGroups: map(this.props.adGroups, 'id')})
         }
+
+      case 'Partition':
+        return {
+          load: () => this.loadEntity('AdGroup'),
+          query: () => ({adGroups: map(this.props.adGroups, 'id')})
+        }
+
       case 'Keyword':
         const isActive = ({status, campaign_status}) => (
           status === 'ENABLED' && (
