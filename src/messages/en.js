@@ -147,6 +147,7 @@ module.exports = {
   audienceLevel: 'Audience',
   keywordlessCategoryLevel: 'Keywordless Category',
   keywordlessQueryLevel: 'Keywordless Query',
+  strategyLevel: 'Bid Strategy',
   adGroups: 'AdGroups',
   videos: 'Videos',
   keywords: 'Keywords',
@@ -160,6 +161,7 @@ module.exports = {
   adSetEntity: 'Ad Set',
   accountEntity: 'Account',
   keywordEntity: 'Keyword',
+  strategyEntity: 'Strategy',
 
   newModule: 'New module',
   moduleTypeLabel: 'Module type',

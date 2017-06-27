@@ -25,7 +25,8 @@ class FolderReport extends React.Component {
         adSets: PropTypes.array,
         keywords: PropTypes.array,
         adGroups: PropTypes.array,
-        ads: PropTypes.array
+        ads: PropTypes.array,
+        strategies: PropTypes.array
       })
     })
   }

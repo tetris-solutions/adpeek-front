@@ -16,11 +16,7 @@ class CompanyReport extends React.Component {
     dispatch: PropTypes.func,
     company: PropTypes.shape({
       entities: PropTypes.shape({
-        campaigns: PropTypes.array,
-        adSets: PropTypes.array,
-        keywords: PropTypes.array,
-        adGroups: PropTypes.array,
-        ads: PropTypes.array
+        campaigns: PropTypes.array
       }),
       savedAccounts: PropTypes.arrayOf(PropTypes.shape({
         external_id: PropTypes.string,

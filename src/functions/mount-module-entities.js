@@ -83,6 +83,10 @@ export function mountModuleEntities (entities, moduleEntity, selectedIds, active
     entities.Placement = filterByStatus(entities.Placement)
   }
 
+  if (entities.Strategy) {
+    entities.Strategy = filterByStatus(entities.Strategy)
+  }
+
   entities.Campaign = filterByStatus(entities.Campaign)
 
   forEach([

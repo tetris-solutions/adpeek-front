@@ -71,6 +71,7 @@ class Container extends React.Component {
     params: PropTypes.object.isRequired,
     metaData: PropTypes.object,
     campaigns: PropTypes.array,
+    strategies: PropTypes.array,
     adSets: PropTypes.array,
     adGroups: PropTypes.array,
     ads: PropTypes.array,
@@ -104,7 +105,7 @@ class Container extends React.Component {
 
   entitiesSource = () => {
     const {messages} = this.context
-    const {campaigns, adSets, adGroups, ads, keywords, videos} = this.props
+    const {campaigns, adSets, adGroups, ads, keywords, videos, strategies} = this.props
 
     return {
       messages,
@@ -113,11 +114,12 @@ class Container extends React.Component {
       ads,
       keywords,
       adGroups,
-      videos
+      videos,
+      strategies
     }
   }
 
-  calculateEntities = ({messages, campaigns, adSets, ads, keywords, adGroups, videos}) => {
+  calculateEntities = ({messages, campaigns, adSets, ads, keywords, adGroups, videos, strategies}) => {
     const entities = [{
       id: 'Campaign',
       name: messages.campaigns,
@@ -136,6 +138,13 @@ class Container extends React.Component {
           name: messages.placementLevel,
           list: campaigns || empty,
           isLoading: !campaigns || this.getLoadingState('Placement')
+        })
+
+        entities.push({
+          id: 'Strategy',
+          name: messages.strategyLevel,
+          list: strategies || empty,
+          isLoading: !strategies || this.getLoadingState('Strategy')
         })
 
         entities.push({
@@ -262,6 +271,7 @@ class Container extends React.Component {
     const {report} = this.props
 
     switch (entity) {
+      case 'Strategy':
       case 'Campaign':
         return {
           load: nooP,

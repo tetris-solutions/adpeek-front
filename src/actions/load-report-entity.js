@@ -40,7 +40,8 @@ const entityListName = {
   AdGroup: 'adGroups',
   AdSet: 'adSets',
   Video: 'videos',
-  Keyword: 'keywords'
+  Keyword: 'keywords',
+  Strategy: 'strategies'
 }
 
 function dispatchAction (tree, params, query, entity) {

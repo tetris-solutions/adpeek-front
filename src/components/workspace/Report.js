@@ -17,11 +17,7 @@ class WorkspaceReport extends React.Component {
     dispatch: PropTypes.func,
     workspace: PropTypes.shape({
       entities: PropTypes.shape({
-        campaigns: PropTypes.array,
-        adSets: PropTypes.array,
-        keywords: PropTypes.array,
-        adGroups: PropTypes.array,
-        ads: PropTypes.array
+        campaigns: PropTypes.array
       }),
       accounts: PropTypes.object
     })
