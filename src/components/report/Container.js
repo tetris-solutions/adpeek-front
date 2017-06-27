@@ -114,8 +114,7 @@ class Container extends React.Component {
       'adGroups',
       'videos',
       'strategies',
-      'partitions',
-      'products'
+      'partitions'
     ]))
   }
 
@@ -129,8 +128,7 @@ class Container extends React.Component {
       adGroups,
       videos,
       strategies,
-      partitions,
-      products
+      partitions
     } = source
 
     const entities = [{
@@ -226,8 +224,8 @@ class Container extends React.Component {
         entities.push({
           id: 'Product',
           name: messages.productLevel,
-          list: products || empty,
-          isLoading: !products || this.getLoadingState('Product')
+          list: adGroups || empty,
+          isLoading: !adGroups || this.getLoadingState('Product')
         })
       }
 
@@ -343,7 +341,6 @@ class Container extends React.Component {
         }
 
       case 'Partition':
-      case 'Product':
       case 'Video':
         return {
           load: () => this.loadEntity('AdGroup'),

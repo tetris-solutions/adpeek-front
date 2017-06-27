@@ -97,7 +97,8 @@ export function mountModuleEntities (entities, moduleEntity, selectedIds, active
     'Video',
     'Location',
     'Category',
-    'Query'
+    'Query',
+    'Product'
   ], level => {
     if (entities[level]) {
       entities[level] = filterByParent(entities[level], entities.Campaign, 'campaign_id')
@@ -116,10 +117,6 @@ export function mountModuleEntities (entities, moduleEntity, selectedIds, active
 
   if (entities.Partition) {
     entities.Partition = filterByParent(entities.Partition, entities.AdGroup, 'adgroup_id')
-  }
-
-  if (entities.Product) {
-    entities.Product = filterByParent(entities.Product, entities.AdGroup, 'adgroup_id')
   }
 
   return entities
