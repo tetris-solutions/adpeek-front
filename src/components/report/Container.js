@@ -114,7 +114,8 @@ class Container extends React.Component {
       'adGroups',
       'videos',
       'strategies',
-      'partitions'
+      'partitions',
+      'products'
     ]))
   }
 
@@ -128,7 +129,8 @@ class Container extends React.Component {
       adGroups,
       videos,
       strategies,
-      partitions
+      partitions,
+      products
     } = source
 
     const entities = [{
@@ -220,6 +222,13 @@ class Container extends React.Component {
           list: partitions || empty,
           isLoading: !partitions || this.getLoadingState('Partition')
         })
+
+        entities.push({
+          id: 'Product',
+          name: messages.productLevel,
+          list: products || empty,
+          isLoading: !products || this.getLoadingState('Product')
+        })
       }
 
       if (hasFacebook) {
@@ -300,22 +309,18 @@ class Container extends React.Component {
           load: () => this.loadEntity('Campaign'),
           query: () => ({campaigns: map(this.props.campaigns, 'id')})
         }
+
       case 'AdSet':
         return {
           load: () => this.loadEntity('Campaign'),
           query: () => ({campaigns: map(this.props.campaigns, 'id')})
         }
+
       case 'Ad':
         return report.platform === 'facebook' ? {
           load: () => this.loadEntity('AdSet'),
           query: () => ({campaigns: map(this.props.campaigns, 'id')})
         } : {
-          load: () => this.loadEntity('AdGroup'),
-          query: () => ({adGroups: map(this.props.adGroups, 'id')})
-        }
-
-      case 'Partition':
-        return {
           load: () => this.loadEntity('AdGroup'),
           query: () => ({adGroups: map(this.props.adGroups, 'id')})
         }
@@ -336,6 +341,9 @@ class Container extends React.Component {
             inactiveAdGroups: map(filter(this.props.adGroups, negate(isActive)), 'id')
           })
         }
+
+      case 'Partition':
+      case 'Product':
       case 'Video':
         return {
           load: () => this.loadEntity('AdGroup'),

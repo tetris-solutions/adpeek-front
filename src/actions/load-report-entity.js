@@ -42,7 +42,8 @@ const entityListName = {
   Video: 'videos',
   Keyword: 'keywords',
   Strategy: 'strategies',
-  Partition: 'partitions'
+  Partition: 'partitions',
+  Product: 'products'
 }
 
 function dispatchAction (tree, params, query, entity) {

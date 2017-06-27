@@ -118,5 +118,9 @@ export function mountModuleEntities (entities, moduleEntity, selectedIds, active
     entities.Partition = filterByParent(entities.Partition, entities.AdGroup, 'adgroup_id')
   }
 
+  if (entities.Product) {
+    entities.Product = filterByParent(entities.Product, entities.AdGroup, 'adgroup_id')
+  }
+
   return entities
 }

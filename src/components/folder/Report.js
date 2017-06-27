@@ -27,7 +27,8 @@ class FolderReport extends React.Component {
         adGroups: PropTypes.array,
         ads: PropTypes.array,
         strategies: PropTypes.array,
-        partitions: PropTypes.array
+        partitions: PropTypes.array,
+        products: PropTypes.array
       })
     })
   }

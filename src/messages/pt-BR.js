@@ -147,6 +147,7 @@ module.exports = {
   keywordlessQueryLevel: 'Keywordless Query',
   strategyLevel: 'Bid Goal',
   partitionLevel: 'Product Partition',
+  productLevel: 'Shopping Performance',
 
   adGroups: 'Ad Groups',
   videos: 'Vídeos',
@@ -163,6 +164,7 @@ module.exports = {
   keywordEntity: 'Palavra chave',
   strategyEntity: 'Estratégia',
   partitionEntity: 'Product Partition',
+  productEntity: 'Produto',
 
   newModule: 'Novo módulo',
   moduleTypeLabel: 'Tipo de módulo',
