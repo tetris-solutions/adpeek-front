@@ -486,6 +486,7 @@ module.exports = {
   domainLanguageLabel: 'Domain Language',
   domainNameLabel: 'Website',
   newAdGroup: 'New AdGroup',
+  adGroupStatusLabel: 'AdGroup Status',
   adStatusLabel: 'Ad Status',
   campaignStatusLabel: 'Campaign Status',
   keywordStatusLabel: 'Keyword Status',

@@ -6,6 +6,7 @@ import filter from 'lodash/filter'
 import Platform from '../adwords-setup/platform/Modal'
 import UserLists from '../adwords-setup/user-lists/Modal'
 import {injectAdGroup} from './inject-adgroup'
+import {node} from '../higher-order/branch'
 import {Wrapper, Info, SubText, list, isPlatform, isUserList} from '../campaign/Utils'
 
 const modalComponent = {
@@ -45,13 +46,13 @@ class AdGroupDetails extends React.PureComponent {
             <SubText key={platform}>
               <Message>{lowerFirst(platform) + 'Device'}</Message>
             </SubText>)}
+        </Info>
 
-          <Info editLink={this.setModal('user-lists')}>
-            <Message>targetAudience</Message>:
-            {list(filter(criteria, isUserList),
-              ({user_list_id: id, user_list_name: name}) =>
-                <SubText key={id}>{name}</SubText>)}
-          </Info>
+        <Info editClick={this.setModal('user-lists')}>
+          <Message>targetAudience</Message>:
+          {list(filter(criteria, isUserList),
+            ({user_list_id: id, user_list_name: name}) =>
+              <SubText key={id}>{name}</SubText>)}
         </Info>
 
         {Modal && (
@@ -64,4 +65,4 @@ class AdGroupDetails extends React.PureComponent {
   }
 }
 
-export default AdGroupDetails
+export default node('workspace', 'folder', AdGroupDetails)
