@@ -143,7 +143,7 @@ function AdwordsCampaign (props, context) {
           </Info>
         </Section>
 
-        <Info>
+        <Info editLink={editable ? urlFor(params, 'user-list') : null}>
           <Message>targetAudience</Message>:
           {list(filter(details.criteria, isUserList),
             ({user_list_id: id, user_list_name: name}) =>
