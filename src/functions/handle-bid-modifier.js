@@ -8,5 +8,5 @@ export const parseBidModifier = value =>
 
 export const normalizeBidModifier = value =>
   isNumber(value)
-    ? round((value / 100) + 1, 2)
+    ? round((value / 100) + 1, 3)
     : null

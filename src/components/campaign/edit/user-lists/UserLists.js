@@ -70,13 +70,13 @@ class EditUserLists extends React.PureComponent {
   }
 
   getUserListById = id => {
-    return normalize(find(this.props.folder.userLists, {id}))
+    return parse(find(this.props.folder.userLists, {id}))
   }
 
   save = () => {
     const {dispatch, params, onSubmit} = this.props
 
-    return dispatch(updateCampaignUserListsAction, params, values(this.state.selected))
+    return dispatch(updateCampaignUserListsAction, params, map(this.state.selected, normalize))
       .then(onSubmit)
   }
 
