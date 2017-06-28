@@ -4,11 +4,13 @@ import Message from 'tetris-iso/Message'
 import lowerFirst from 'lodash/lowerFirst'
 import filter from 'lodash/filter'
 import Platform from '../adwords-setup/platform/Modal'
+import UserLists from '../adwords-setup/user-lists/Modal'
 import {injectAdGroup} from './inject-adgroup'
-import {Wrapper, Info, SubText, list, isPlatform} from '../campaign/Utils'
+import {Wrapper, Info, SubText, list, isPlatform, isUserList} from '../campaign/Utils'
 
 const modalComponent = {
-  platform: injectAdGroup(Platform)
+  platform: injectAdGroup(Platform),
+  'user-lists': injectAdGroup(UserLists)
 }
 
 class AdGroupDetails extends React.PureComponent {
@@ -43,6 +45,13 @@ class AdGroupDetails extends React.PureComponent {
             <SubText key={platform}>
               <Message>{lowerFirst(platform) + 'Device'}</Message>
             </SubText>)}
+
+          <Info editLink={this.setModal('user-lists')}>
+            <Message>targetAudience</Message>:
+            {list(filter(criteria, isUserList),
+              ({user_list_id: id, user_list_name: name}) =>
+                <SubText key={id}>{name}</SubText>)}
+          </Info>
         </Info>
 
         {Modal && (

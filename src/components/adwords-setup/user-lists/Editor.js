@@ -1,21 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
-import Form from '../../../Form'
-import {Button, Submit} from '../../../Button'
-import {Checkbox} from '../../../Checkbox'
-import {style} from '../style'
-import {styledComponent} from '../../../higher-order/styled'
+import Form from '../../Form'
+import {Button, Submit} from '../../Button'
+import {Checkbox} from '../../Checkbox'
+import {style} from '../../campaign/edit/style'
+import {styledComponent} from '../../higher-order/styled'
 import filter from 'lodash/filter'
 import assign from 'lodash/assign'
 import map from 'lodash/map'
 import keyBy from 'lodash/keyBy'
-import {isUserList} from '../../Utils'
-import {loadFolderUserListsAction} from '../../../../actions/load-folder-user-lists'
-import {updateCampaignUserListsAction} from '../../../../actions/update-campaign-user-list'
+import {isUserList} from '../../campaign/Utils'
+import {loadFolderUserListsAction} from '../../../actions/load-folder-user-lists'
+import {updateCampaignUserListsAction} from '../../../actions/update-campaign-user-list'
 import find from 'lodash/find'
-import Input from '../../../Input'
-import {parseBidModifier, normalizeBidModifier} from '../../../../functions/handle-bid-modifier'
+import Input from '../../Input'
+import {parseBidModifier, normalizeBidModifier} from '../../../functions/handle-bid-modifier'
 import orderBy from 'lodash/orderBy'
 
 const parse = u => ({
@@ -37,7 +37,7 @@ class EditUserLists extends React.PureComponent {
 
   static propTypes = {
     cancel: PropTypes.func,
-    campaign: PropTypes.object,
+    criteria: PropTypes.array,
     folder: PropTypes.shape({
       userLists: PropTypes.array
     }),
@@ -59,13 +59,9 @@ class EditUserLists extends React.PureComponent {
       .then(() => this.setState({loading: false}))
   }
 
-  campaignUserLists = () => {
-    return filter(this.props.campaign.details.criteria, isUserList)
-  }
-
   state = {
     loading: !this.props.folder.userLists,
-    selected: keyBy(map(this.campaignUserLists(), parse), 'id')
+    selected: keyBy(map(filter(this.props.criteria, isUserList), parse), 'id')
   }
 
   getUserListById = id => {
@@ -104,12 +100,12 @@ class EditUserLists extends React.PureComponent {
     this.setState({selected})
   }
 
-  parseAndCheck = u => {
-    u = parse(u)
+  parseAndCheck = userList => {
+    userList = parse(userList)
 
-    u._selected = Boolean(this.state.selected[u.id])
+    userList._selected = Boolean(this.state.selected[userList.id])
 
-    return u
+    return userList
   }
 
   sortedList = () => {
