@@ -12,11 +12,17 @@ import map from 'lodash/map'
 import keyBy from 'lodash/keyBy'
 import {isUserList} from '../../campaign/Utils'
 import {loadFolderUserListsAction} from '../../../actions/load-folder-user-lists'
-import {updateCampaignUserListsAction} from '../../../actions/update-campaign-user-list'
+import {updateCampaignUserListsAction} from '../../../actions/update-campaign-user-lists'
+import {updateAdGroupUserListsAction} from '../../../actions/update-adgroup-user-lists'
 import find from 'lodash/find'
 import Input from '../../Input'
 import {parseBidModifier, normalizeBidModifier} from '../../../functions/handle-bid-modifier'
 import orderBy from 'lodash/orderBy'
+
+const actions = {
+  campaign: updateCampaignUserListsAction,
+  adGroup: updateAdGroupUserListsAction
+}
 
 const parse = u => ({
   id: u.user_list_id || u.id,
@@ -36,6 +42,7 @@ class EditUserLists extends React.PureComponent {
   static displayName = 'Edit-User-Lists'
 
   static propTypes = {
+    level: PropTypes.oneOf(['campaign', 'adGroup']),
     cancel: PropTypes.func,
     criteria: PropTypes.array,
     folder: PropTypes.shape({
@@ -69,9 +76,9 @@ class EditUserLists extends React.PureComponent {
   }
 
   save = () => {
-    const {dispatch, params, onSubmit} = this.props
+    const {dispatch, params, level, onSubmit} = this.props
 
-    return dispatch(updateCampaignUserListsAction, params, map(this.state.selected, normalize))
+    return dispatch(actions[level], params, map(this.state.selected, normalize))
       .then(onSubmit)
   }
 

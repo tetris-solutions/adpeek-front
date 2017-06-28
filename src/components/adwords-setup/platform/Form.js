@@ -59,7 +59,7 @@ class EditPlatform extends React.PureComponent {
   static displayName = 'Edit-Platform'
 
   static propTypes = {
-    level: PropTypes.string,
+    level: PropTypes.oneOf(['campaign', 'adGroup']),
     cancel: PropTypes.func,
     criteria: PropTypes.array,
     onSubmit: PropTypes.func,
