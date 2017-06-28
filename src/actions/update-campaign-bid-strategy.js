@@ -2,8 +2,8 @@ import {PUT} from '@tetris/http'
 import assign from 'lodash/assign'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 
-function updateCampaignBidStrategy (id, network, config) {
-  return PUT(`${process.env.ADPEEK_API_URL}/campaign/${id}/bid-strategy`, assign({body: network}, config))
+function updateCampaignBidStrategy (id, bidStrategy, config) {
+  return PUT(`${process.env.ADPEEK_API_URL}/campaign/${id}/bid-strategy`, assign({body: bidStrategy}, config))
 }
 
 export function updateCampaignBidStrategyAction (tree, {campaign}, bidStrategy) {

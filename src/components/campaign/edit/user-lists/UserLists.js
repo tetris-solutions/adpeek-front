@@ -11,9 +11,11 @@ import map from 'lodash/map'
 import unionBy from 'lodash/unionBy'
 import {isUserList} from '../../Utils'
 import {loadFolderUserListsAction} from '../../../../actions/load-folder-user-lists'
+import {updateCampaignUserListsAction} from '../../../../actions/update-campaign-user-list'
 import includes from 'lodash/includes'
 import concat from 'lodash/concat'
 import without from 'lodash/without'
+import find from 'lodash/find'
 
 const parse = ({user_list_id: id, user_list_name: name, user_list_status: status}) => ({id, name, status})
 
@@ -54,7 +56,11 @@ class EditUserLists extends React.PureComponent {
   }
 
   save = () => {
+    const {dispatch, params} = this.props
 
+    return dispatch(updateCampaignUserListsAction, params,
+      map(this.state.selected, id =>
+        find(this.props.folder.userLists, {id})))
   }
 
   onChange = ({target: {checked, value: id}}) => {
@@ -113,7 +119,7 @@ class EditUserLists extends React.PureComponent {
             <Message>cancel</Message>
           </Button>
 
-          <Submit className='mdl-button mdl-button--raised mdl-button--colored'>
+          <Submit className='mdl-button mdl-button--raised mdl-button--colored' disabled={loading}>
             <Message>save</Message>
           </Submit>
         </div>
