@@ -56,11 +56,11 @@ class EditUserLists extends React.PureComponent {
   }
 
   save = () => {
-    const {dispatch, params} = this.props
+    const {dispatch, params, onSubmit} = this.props
+    const newUserLists = map(this.state.selected, id => find(this.props.folder.userLists, {id}))
 
-    return dispatch(updateCampaignUserListsAction, params,
-      map(this.state.selected, id =>
-        find(this.props.folder.userLists, {id})))
+    return dispatch(updateCampaignUserListsAction, params, newUserLists)
+      .then(onSubmit)
   }
 
   onChange = ({target: {checked, value: id}}) => {
