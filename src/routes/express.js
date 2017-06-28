@@ -219,7 +219,7 @@ export function setAppRoutes (app, render) {
     '/edit/apps',
     '/edit/locations',
     '/edit/dynamic-search-ads',
-    '/edit/user-list',
+    '/edit/user-lists',
     '/creatives',
     '/creatives/edit'], path =>
     app.get(`/company/:company/workspace/:workspace/folder/:folder/campaign/:campaign${path}`,

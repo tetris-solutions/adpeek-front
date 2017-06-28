@@ -179,7 +179,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                     <Route path='apps' {...render(component.CampaignApps)} />
                     <Route path='locations' {...render(component.CampaignLocations)} />
                     <Route path='dynamic-search-ads' {...render(component.CampaignDynamicSearchAds)} />
-                    <Route path='user-list' {...render(component.CampaignUserList)} />
+                    <Route path='user-lists' {...render(component.CampaignUserLists)} />
                   </Route>
 
                   <Route path='creatives' {...render(component.CampaignCreatives)}>
