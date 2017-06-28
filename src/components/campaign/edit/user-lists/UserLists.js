@@ -85,7 +85,7 @@ class EditUserLists extends React.PureComponent {
                 <th className='mdl-data-table__cell--non-numeric'>
                   Name
                 </th>
-                <th>
+                <th className='mdl-data-table__cell--non-numeric'>
                   Status
                 </th>
               </tr>
