@@ -7,17 +7,31 @@ import {Checkbox} from '../../../Checkbox'
 import {style} from '../style'
 import {styledComponent} from '../../../higher-order/styled'
 import filter from 'lodash/filter'
+import assign from 'lodash/assign'
 import map from 'lodash/map'
-import unionBy from 'lodash/unionBy'
+import keyBy from 'lodash/keyBy'
 import {isUserList} from '../../Utils'
 import {loadFolderUserListsAction} from '../../../../actions/load-folder-user-lists'
 import {updateCampaignUserListsAction} from '../../../../actions/update-campaign-user-list'
-import includes from 'lodash/includes'
-import concat from 'lodash/concat'
-import without from 'lodash/without'
+import values from 'lodash/values'
 import find from 'lodash/find'
+import Input from '../../../Input'
+import {parseBidModifier, normalizeBidModifier} from '../../../../functions/handle-bid-modifier'
+import unionBy from 'lodash/unionBy'
 
-const parse = ({user_list_id: id, user_list_name: name, user_list_status: status}) => ({id, name, status})
+const parse = u => ({
+  id: u.user_list_id || u.id,
+  name: u.user_list_name || u.name,
+  status: u.user_list_status || u.status,
+  bid_modifier: parseBidModifier(u.bid_modifier)
+})
+
+const normalize = ({id, name, status, bid_modifier}) => ({
+  id,
+  name,
+  status,
+  bid_modifier: normalizeBidModifier(bid_modifier)
+})
 
 class EditUserLists extends React.PureComponent {
   static displayName = 'Edit-User-Lists'
@@ -47,33 +61,53 @@ class EditUserLists extends React.PureComponent {
   }
 
   campaignUserLists = () => {
-    return map(filter(this.props.campaign.details.criteria, isUserList), parse)
+    return filter(this.props.campaign.details.criteria, isUserList)
   }
 
   state = {
     loading: !this.props.folder.userLists,
-    selected: map(this.campaignUserLists(), 'id')
+    selected: keyBy(map(this.campaignUserLists(), parse), 'id')
+  }
+
+  getUserListById = id => {
+    return normalize(find(this.props.folder.userLists, {id}))
   }
 
   save = () => {
     const {dispatch, params, onSubmit} = this.props
-    const newUserLists = map(this.state.selected, id => find(this.props.folder.userLists, {id}))
 
-    return dispatch(updateCampaignUserListsAction, params, newUserLists)
+    return dispatch(updateCampaignUserListsAction, params, values(this.state.selected))
       .then(onSubmit)
   }
 
-  onChange = ({target: {checked, value: id}}) => {
-    this.setState({
-      selected: checked
-        ? concat(this.state.selected, id)
-        : without(this.state.selected, id)
-    })
+  onCheck = ({target: {checked, value: id}}) => {
+    const selected = assign({}, this.state.selected)
+
+    if (checked) {
+      delete selected[id]
+    } else {
+      selected[id] = this.getUserListById(id)
+    }
+
+    this.setState({selected})
+  }
+
+  onChangeBidModifier = ({target: {name, value}}) => {
+    const selected = assign({}, this.state.selected)
+    const id = name.split('-').pop()
+
+    if (!selected[id]) {
+      selected[id] = this.getUserListById(id)
+    }
+
+    selected[id].bid_modifier = value
+
+    this.setState({selected})
   }
 
   render () {
     const {selected, loading} = this.state
-    const userLists = unionBy(this.campaignUserLists(), this.props.folder.userLists, 'id')
+    const userLists = unionBy(values(selected), map(this.props.folder.userLists, parse), 'id')
 
     return (
       <Form onSubmit={this.save}>
@@ -83,27 +117,32 @@ class EditUserLists extends React.PureComponent {
               <tr>
                 <th className='mdl-data-table__cell--non-numeric'/>
                 <th className='mdl-data-table__cell--non-numeric'>
-                  Name
+                  <Message>nameLabel</Message>
                 </th>
-                <th className='mdl-data-table__cell--non-numeric'>
-                  Status
+                <th>
+                  <Message>bidModifierLabel</Message>
                 </th>
               </tr>
             </thead>
-            <tbody>{map(userLists, ({id, name, status}) =>
+            <tbody>{map(userLists, ({id, name, status, bid_modifier}) =>
               <tr key={id}>
                 <td className='mdl-data-table__cell--non-numeric'>
                   <Checkbox
-                    checked={includes(selected, id)}
+                    checked={Boolean(selected[id])}
                     name='user-list'
                     value={id}
-                    onChange={this.onChange}/>
+                    onChange={this.onCheck}/>
                 </td>
                 <td className='mdl-data-table__cell--non-numeric'>
                   {name}
                 </td>
-                <td className='mdl-data-table__cell--non-numeric'>
-                  {status}
+                <td>
+                  <Input
+                    name={`bid-modifier-${id}`}
+                    type='number'
+                    format='percentage'
+                    value={bid_modifier || 0}
+                    onChange={this.onChangeBidModifier}/>
                 </td>
               </tr>)}
             </tbody>
