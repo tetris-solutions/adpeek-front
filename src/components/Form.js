@@ -59,9 +59,7 @@ class Form extends React.Component {
 
   render () {
     return (
-      <form onSubmit={this.handleSubmit}>
-        {this.props.children}
-      </form>
+      <form {...this.props} onSubmit={this.handleSubmit}/>
     )
   }
 }

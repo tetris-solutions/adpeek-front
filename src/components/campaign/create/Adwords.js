@@ -3,9 +3,7 @@ import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import Page from '../../Page'
 import SubHeader from '../../SubHeader'
-import {Submit} from '../../Button'
-import Form from '../../Form'
-import {Card, Content, Header} from '../../Card'
+import {Form, Content, Header, Footer} from '../../Card'
 import Input from '../../Input'
 import Select from '../../Select'
 import {createCampaignAction} from '../../../actions/create-campaign'
@@ -26,7 +24,6 @@ class CreateAdwordsCampaign extends React.Component {
   }
 
   state = {
-    saving: false,
     name: '',
     type: 'SEARCH'
   }
@@ -35,18 +32,16 @@ class CreateAdwordsCampaign extends React.Component {
     this.setState({[name]: value})
   }
 
-  onSubmit = e => {
+  onSubmit = () => {
     const {dispatch, params} = this.props
     const {company, workspace, folder} = params
-    const {name, type} = this.state
 
-    const create = () => dispatch(createCampaignAction, params, {name, type})
+    const create = () => dispatch(createCampaignAction, params, this.state)
     const reload = () => dispatch(loadFolderCampaignsAction, company, workspace, folder)
 
-    this.setState({saving: true})
-
-    create()
-      .then(createResponse => reload().then(() => createResponse))
+    return create()
+      .then(createResponse => reload()
+        .then(() => createResponse))
       .then(({data: {id}}) => {
         this.context.router
           .push(`/company/${company}/workspace/${workspace}/folder/${folder}/campaign/${id}`)
@@ -57,18 +52,12 @@ class CreateAdwordsCampaign extends React.Component {
     const {messages} = this.context
 
     return (
-      <Form onSubmit={this.onSubmit}>
-        <SubHeader>
-          <Submit disabled={this.state.saving} className='mdl-button mdl-color-text--grey-100'>
-            {this.state.saving
-              ? <Message>saving</Message>
-              : <Message>save</Message>}
-          </Submit>
-        </SubHeader>
+      <div>
+        <SubHeader/>
         <Page>
           <div className='mdl-grid'>
             <div className='mdl-cell mdl-cell--12-col'>
-              <Card>
+              <Form onSubmit={this.onSubmit}>
                 <Header>
                   <Message>newCampaign</Message>
                 </Header>
@@ -85,11 +74,14 @@ class CreateAdwordsCampaign extends React.Component {
                     <option value='MULTI_CHANNEL'>{messages.multiChannelNetwork}</option>
                   </Select>
                 </Content>
-              </Card>
+                <Footer>
+                  <Message>save</Message>
+                </Footer>
+              </Form>
             </div>
           </div>
         </Page>
-      </Form>
+      </div>
     )
   }
 }

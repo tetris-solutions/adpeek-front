@@ -4,6 +4,7 @@ import {Submit} from './Button'
 import csjs from 'csjs'
 import omit from 'lodash/omit'
 import {styledComponent} from './higher-order/styled'
+import BaseForm from './Form'
 
 const style = csjs`
 .card {
@@ -48,7 +49,7 @@ class Card_ extends React.Component {
 
   static propTypes = {
     size: PropTypes.oneOf(['small', 'medium', 'large', 'full']),
-    tag: PropTypes.string,
+    tag: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
     children: PropTypes.node.isRequired
   }
 
@@ -79,7 +80,7 @@ export class Form extends React.Component {
   }
 
   render () {
-    return <Card {...this.props} tag='form'/>
+    return <Card {...this.props} tag={BaseForm}/>
   }
 }
 
