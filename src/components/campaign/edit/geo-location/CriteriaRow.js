@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Input from '../../../Input'
 import capitalize from 'lodash/capitalize'
 import ProximityDescription from './ProximityDescription'
+import {style} from '../style'
 
 class CriteriaRow extends React.PureComponent {
   static displayName = 'Criteria-Row'
@@ -47,7 +48,7 @@ class CriteriaRow extends React.PureComponent {
           {location_type || capitalize(type)}
         </td>
         <td>
-          <div style={{width: '4em', float: 'right'}}>
+          <div className={style.numberInputCell}>
             <Input
               name={`bid-modifier-${id}`}
               type='number'

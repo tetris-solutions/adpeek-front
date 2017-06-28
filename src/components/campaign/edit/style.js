@@ -26,4 +26,8 @@ export const style = csjs`
 .loading {
   margin-top: 2em;
   font-style: italic;
+}
+.numberInputCell {
+  width: 4em;
+  float: right
 }`

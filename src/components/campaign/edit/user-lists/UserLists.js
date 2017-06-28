@@ -13,11 +13,10 @@ import keyBy from 'lodash/keyBy'
 import {isUserList} from '../../Utils'
 import {loadFolderUserListsAction} from '../../../../actions/load-folder-user-lists'
 import {updateCampaignUserListsAction} from '../../../../actions/update-campaign-user-list'
-import values from 'lodash/values'
 import find from 'lodash/find'
 import Input from '../../../Input'
 import {parseBidModifier, normalizeBidModifier} from '../../../../functions/handle-bid-modifier'
-import unionBy from 'lodash/unionBy'
+import orderBy from 'lodash/orderBy'
 
 const parse = u => ({
   id: u.user_list_id || u.id,
@@ -48,13 +47,13 @@ class EditUserLists extends React.PureComponent {
   }
 
   componentDidMount () {
-    if (!this.props.folder.userLists) {
-      this.load()
-    }
+    this.load()
   }
 
   load = () => {
-    const {dispatch, params} = this.props
+    const {dispatch, params, folder: {userLists}} = this.props
+
+    if (userLists) return Promise.resolve()
 
     return dispatch(loadFolderUserListsAction, params)
       .then(() => this.setState({loading: false}))
@@ -84,9 +83,9 @@ class EditUserLists extends React.PureComponent {
     const selected = assign({}, this.state.selected)
 
     if (checked) {
-      delete selected[id]
-    } else {
       selected[id] = this.getUserListById(id)
+    } else {
+      delete selected[id]
     }
 
     this.setState({selected})
@@ -105,9 +104,29 @@ class EditUserLists extends React.PureComponent {
     this.setState({selected})
   }
 
+  parseAndCheck = u => {
+    u = parse(u)
+
+    u._selected = Boolean(this.state.selected[u.id])
+
+    return u
+  }
+
+  sortedList = () => {
+    if (!this.props.folder.userLists) return []
+
+    if (!this._ls) {
+      this._ls = orderBy(
+        map(this.props.folder.userLists, this.parseAndCheck),
+        ['_selected', 'name'], ['desc', 'asc']
+      )
+    }
+
+    return this._ls
+  }
+
   render () {
     const {selected, loading} = this.state
-    const userLists = unionBy(values(selected), map(this.props.folder.userLists, parse), 'id')
 
     return (
       <Form onSubmit={this.save}>
@@ -124,7 +143,7 @@ class EditUserLists extends React.PureComponent {
                 </th>
               </tr>
             </thead>
-            <tbody>{map(userLists, ({id, name, status, bid_modifier}) =>
+            <tbody>{map(this.sortedList(), ({id, name, status}) =>
               <tr key={id}>
                 <td className='mdl-data-table__cell--non-numeric'>
                   <Checkbox
@@ -137,12 +156,14 @@ class EditUserLists extends React.PureComponent {
                   {name}
                 </td>
                 <td>
-                  <Input
-                    name={`bid-modifier-${id}`}
-                    type='number'
-                    format='percentage'
-                    value={bid_modifier || 0}
-                    onChange={this.onChangeBidModifier}/>
+                  <div className={style.numberInputCell}>
+                    <Input
+                      name={`bid-modifier-${id}`}
+                      type='number'
+                      format='percentage'
+                      value={selected[id] ? selected[id].bid_modifier || 0 : 0}
+                      onChange={this.onChangeBidModifier}/>
+                  </div>
                 </td>
               </tr>)}
             </tbody>
