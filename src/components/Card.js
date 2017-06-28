@@ -59,13 +59,13 @@ class Card_ extends React.Component {
   }
 
   render () {
-    const {children, size, tag: Tag} = this.props
-    const subProps = omit(this.props, 'tag')
+    const {size, tag: Tag} = this.props
+    const subProps = omit(this.props, 'tag', 'size')
+
+    subProps.className = `mdl-card mdl-shadow--6dp ${style[size]}`
 
     return (
-      <Tag className={`mdl-card mdl-shadow--6dp ${style[size]}`} {...subProps}>
-        {children}
-      </Tag>
+      <Tag {...subProps}/>
     )
   }
 }
