@@ -8,6 +8,50 @@ import Input from '../../Input'
 import Select from '../../Select'
 import {createCampaignAction} from '../../../actions/create-campaign'
 import {loadFolderCampaignsAction} from '../../../actions/load-folder-campaigns'
+import {loadFolderServiceLinksAction} from '../../../actions/load-folder-service-links'
+import map from 'lodash/map'
+import Radio from '../../Radio'
+import Checkbox from '../../Checkbox'
+import toLower from 'lodash/toLower'
+import toUpper from 'lodash/toUpper'
+
+const priorities = [[0, 'low'], [1, 'medium'], [2, 'high']]
+
+const types = {
+  SEARCH: 'searchNetwork',
+  DISPLAY: 'contentNetwork',
+  SHOPPING: 'shoppingNetwork',
+  MULTI_CHANNEL: 'multiChannelNetwork'
+}
+
+function TheContent ({type, children}) {
+  const ls = []
+
+  React.Children
+    .toArray(children)
+    .forEach(el => {
+      const tag = toUpper(el.type)
+
+      if (!types[tag]) {
+        ls.push(el)
+      }
+
+      if (type === tag) {
+        ls.splice(ls.length, 0, ...el.props.children)
+      }
+    })
+
+  return React.createElement(
+    Content,
+    null,
+    ls
+  )
+}
+TheContent.displayName = 'Content-Wrapper'
+TheContent.propTypes = {
+  type: PropTypes.string,
+  children: PropTypes.node
+}
 
 class CreateAdwordsCampaign extends React.Component {
   static displayName = 'Create-Adwords-Campaign'
@@ -24,19 +68,31 @@ class CreateAdwordsCampaign extends React.Component {
   }
 
   state = {
+    loading: !this.props.folder.serviceLinks,
     name: '',
-    type: 'SEARCH'
+    merchantId: '',
+    country: 'BR',
+    priority: 0,
+    type: 'SEARCH',
+    enableLocal: false
   }
 
-  onChange = ({target: {name, value}}) => {
-    this.setState({[name]: value})
+  componentDidMount () {
+    if (this.state.loading) {
+      this.loadServiceLinks()
+    }
+  }
+
+  loadServiceLinks () {
+    this.props.dispatch(loadFolderServiceLinksAction, this.props.params)
   }
 
   onSubmit = () => {
     const {dispatch, params} = this.props
     const {company, workspace, folder} = params
+    const {name, type} = this.state
 
-    const create = () => dispatch(createCampaignAction, params, this.state)
+    const create = () => dispatch(createCampaignAction, params, {name, type})
     const reload = () => dispatch(loadFolderCampaignsAction, company, workspace, folder)
 
     return create()
@@ -48,8 +104,17 @@ class CreateAdwordsCampaign extends React.Component {
       })
   }
 
+  onChange = ({target: {type, name, checked, value}}) => {
+    this.setState({
+      [name]: type === 'checkbox'
+        ? checked
+        : value
+    })
+  }
+
   render () {
     const {messages} = this.context
+    const {name, type, country, merchantId, priority, enableLocal} = this.state
 
     return (
       <div>
@@ -61,19 +126,49 @@ class CreateAdwordsCampaign extends React.Component {
                 <Header>
                   <Message>newCampaign</Message>
                 </Header>
+                <TheContent type={type}>
+                  <Input required name='name' value={name} onChange={this.onChange} label='name'/>
 
-                <Content>
-                  <Input required name='name' value={this.state.name} onChange={this.onChange} label='name'/>
-
-                  <br/><br/>
-
-                  <Select name='type' label='campaignType' value={this.state.type} onChange={this.onChange}>
-                    <option value='SEARCH'>{messages.searchNetwork}</option>
-                    <option value='DISPLAY'>{messages.contentNetwork}</option>
-                    <option value='SHOPPING'>{messages.shoppingNetwork}</option>
-                    <option value='MULTI_CHANNEL'>{messages.multiChannelNetwork}</option>
+                  <Select name='type' label='campaignType' value={type} onChange={this.onChange}>
+                    {map(types, (msg, type) =>
+                      <option key={type} value={type}>{messages[msg]}</option>)}
                   </Select>
-                </Content>
+
+                  <shopping>
+                    <Select name='country' label='salesCountry' value={country} onChange={this.onChange}>
+                      {map(messages.salesCountries, (name, code) =>
+                        <option key={code} value={code}>{name}</option>)}
+                    </Select>
+
+                    <Select required name='merchantId' label='merchant' value={merchantId} onChange={this.onChange}>
+                      <option value=''/>
+                      {map(this.props.folder.serviceLinks, ({serviceLinkId, name}) => (
+                        <option key={serviceLinkId} value={serviceLinkId}>{name}</option>))}
+                    </Select>
+
+                    <Checkbox
+                      name='enableLocal'
+                      label={<Message>enableLocal</Message>}
+                      checked={enableLocal}
+                      onChange={this.onChange}/>
+
+                    <h6>
+                      <Message>campaignPriority</Message>:
+                    </h6>
+
+                    {map(priorities, ([code, name]) =>
+                      <div key={code}>
+                        <Radio
+                          id={`${name}-priority`}
+                          name='priority'
+                          value={code}
+                          checked={Number(priority) === code}
+                          onChange={this.onChange}>
+                          <Message>{name + 'Priority'}</Message>
+                        </Radio>
+                      </div>)}
+                  </shopping>
+                </TheContent>
                 <Footer>
                   <Message>save</Message>
                 </Footer>
