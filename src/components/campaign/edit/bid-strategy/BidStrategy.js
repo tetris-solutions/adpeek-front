@@ -25,7 +25,6 @@ import isNumber from 'lodash/isNumber'
 import includes from 'lodash/includes'
 import isString from 'lodash/isString'
 import identity from 'lodash/identity'
-import {isDisplayCampaign, campaignNetworks} from '../Network'
 
 const style = csjs`
 .actions {
@@ -241,7 +240,7 @@ class EditBidStrategy extends React.PureComponent {
     const {messages} = this.context
     const {isLoading, type: selectedType} = this.state
     const Component = types[selectedType]
-    const availableTypes = isDisplayCampaign(campaignNetworks(campaign))
+    const availableTypes = campaign.details.channel === 'DISPLAY'
       ? types
       : omit(types, 'MANUAL_CPM')
 

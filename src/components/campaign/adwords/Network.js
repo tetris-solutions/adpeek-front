@@ -1,17 +1,23 @@
 import React from 'react'
 import Message from 'tetris-iso/Message'
 import PropTypes from 'prop-types'
-import keys from 'lodash/keys'
 import {SubText} from '../Utils'
 
 export const networkMessages = {
   google_search: 'googleSearchNetwork',
   search_network: 'searchNetwork',
   content_network: 'contentNetwork',
-  partner_network: 'partnerNetwork'
+  partner_network: 'partnerNetwork',
+  shopping_network: 'shoppingNetwork',
+  multi_channel_network: 'multiChannelNetwork'
 }
 
-export const networkNames = keys(networkMessages)
+export const networkNames = [
+  'google_search',
+  'search_network',
+  'content_network',
+  'partner_network'
+]
 
 const Network = ({name}) => (
   <SubText>

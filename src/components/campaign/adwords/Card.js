@@ -2,14 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import Fence from '../../Fence'
-import Network, {networkNames} from './Network'
+import Network from './Network'
 import BiddingStrategy from './BiddingStrategy'
 import OptimizationStatus from './OptimizationStatus'
 import {isLocation, parseProximity} from '../edit/geo-location/GeoLocation'
 import assign from 'lodash/assign'
 import map from 'lodash/map'
 import head from 'lodash/head'
-import pick from 'lodash/pick'
 import filter from 'lodash/filter'
 import flatten from 'lodash/flatten'
 import toLower from 'lodash/toLower'
@@ -73,10 +72,16 @@ function AdwordsCampaign (props, context) {
 
         <Info editLink={editable ? urlFor(params, 'network') : null}>
           <Message>targetNetworks</Message>:
-          {list(pick(details, networkNames),
-            (active, key) => active
-              ? <Network key={key} name={key}/>
-              : null)}
+
+          {list({
+            google_search: details.google_search,
+            search_network: details.channel === 'SEARCH' || details.search_network,
+            content_network: details.channel === 'DISPLAY' || details.content_network,
+            partner_network: details.partner_network,
+            shopping_network: details.channel === 'SHOPPING',
+            multi_channel_network: details.channel === 'MULTI_CHANNEL'
+          }, (active, key) => active && <Network key={key} name={key}/>)}
+
         </Info>
 
         <Info editLink={editable ? urlFor(params, 'geo-location') : null}>
