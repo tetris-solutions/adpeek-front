@@ -10,79 +10,85 @@ import {deleteFolderAction} from '../../actions/delete-folder'
 import {node} from '../higher-order/branch'
 import get from 'lodash/get'
 
-export function FolderAside ({
-                               dispatch,
-                               folder,
-                               params
-                             }, {router, location}) {
-  const {company, workspace} = params
+class FolderAside extends React.PureComponent {
+  static displayName = 'Folder-Aside'
 
-  function onClick () {
-    dispatch(deleteFolderAction, params, folder.id)
+  static propTypes = {
+    dispatch: PropTypes.func,
+    folder: PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string
+    }),
+    params: PropTypes.shape({
+      company: PropTypes.string,
+      workspace: PropTypes.string
+    })
+  }
+
+  static contextTypes = {
+    router: PropTypes.object,
+    location: PropTypes.object
+  }
+
+  onClickDelete = () => {
+    const {dispatch, params} = this.props
+    const {router} = this.context
+    const {company, workspace, folder} = params
+
+    return dispatch(deleteFolderAction, params, folder)
       .then(() => {
         router.replace(`/company/${company}/workspace/${workspace}`)
       })
   }
 
-  const isAnalytics = get(folder, 'account.platform') === 'analytics'
-  const baseUrl = `/company/${company}/workspace/${workspace}/folder/${folder.id}`
-  const backspaceUrl = endsWith(location.pathname, folder.id)
-    ? `/company/${company}/workspace/${workspace}`
-    : baseUrl
+  render () {
+    const {dispatch, folder, params} = this.props
+    const {location} = this.context
+    const {company, workspace} = params
 
-  return (
-    <Fence canEditFolder>{({canEditFolder}) =>
-      <Navigation icon='folder'>
-        <Name>
-          {folder.name}
-        </Name>
-        <NavBts>
-          {!isAnalytics && <NavLink to={`${baseUrl}/creatives`} icon='receipt'>
-            <Message>creatives</Message>
-          </NavLink>}
+    const isAnalytics = get(folder, 'account.platform') === 'analytics'
+    const baseUrl = `/company/${company}/workspace/${workspace}/folder/${folder.id}`
+    const backspaceUrl = endsWith(location.pathname, folder.id)
+      ? `/company/${company}/workspace/${workspace}`
+      : baseUrl
 
-          {!isAnalytics && <NavLink to={`${baseUrl}/orders`} icon='attach_money'>
-            <Message>folderOrders</Message>
-          </NavLink>}
+    return (
+      <Fence canEditFolder>{({canEditFolder}) =>
+        <Navigation icon='folder'>
+          <Name>
+            {folder.name}
+          </Name>
+          <NavBts>
+            {!isAnalytics && <NavLink to={`${baseUrl}/creatives`} icon='receipt'>
+              <Message>creatives</Message>
+            </NavLink>}
 
-          <ReportLink tag={NavLink} params={params} reports={folder.reports} dispatch={dispatch}>
-            <Message>folderReport</Message>
-          </ReportLink>
+            {!isAnalytics && <NavLink to={`${baseUrl}/orders`} icon='attach_money'>
+              <Message>folderOrders</Message>
+            </NavLink>}
 
-          {canEditFolder && (
-            <NavLink to={`${baseUrl}/edit`} icon='mode_edit'>
-              <Message>editFolder</Message>
-            </NavLink>)}
+            <ReportLink tag={NavLink} params={params} reports={folder.reports} dispatch={dispatch}>
+              <Message>folderReport</Message>
+            </ReportLink>
 
-          {canEditFolder && (
-            <NavBt tag={DeleteButton} entityName={folder.name} onClick={onClick} icon='delete'>
-              <Message>deleteFolder</Message>
-            </NavBt>)}
+            {canEditFolder && (
+              <NavLink to={`${baseUrl}/edit`} icon='mode_edit'>
+                <Message>editFolder</Message>
+              </NavLink>)}
 
-          <NavLink to={backspaceUrl} icon='close'>
-            <Message>oneLevelUpNavigation</Message>
-          </NavLink>
-        </NavBts>
-      </Navigation>}
-    </Fence>
-  )
-}
+            {canEditFolder && (
+              <NavBt tag={DeleteButton} entityName={folder.name} onClick={this.onClickDelete} icon='delete'>
+                <Message>deleteFolder</Message>
+              </NavBt>)}
 
-FolderAside.displayName = 'Folder-Aside'
-FolderAside.contextTypes = {
-  router: PropTypes.object,
-  location: PropTypes.object
-}
-FolderAside.propTypes = {
-  dispatch: PropTypes.func,
-  folder: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string
-  }),
-  params: PropTypes.shape({
-    company: PropTypes.string,
-    workspace: PropTypes.string
-  })
+            <NavLink to={backspaceUrl} icon='close'>
+              <Message>oneLevelUpNavigation</Message>
+            </NavLink>
+          </NavBts>
+        </Navigation>}
+      </Fence>
+    )
+  }
 }
 
 export default node('workspace', 'folder', FolderAside)

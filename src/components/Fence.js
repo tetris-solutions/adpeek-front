@@ -17,6 +17,7 @@ const permissionNames = {
   canEditOrder: 'APEditOrders',
   canEditReport: 'APEditReports',
   canBrowseReports: 'APBrowseReports',
+  canConfigShopping: 'APShoppingSetup',
   isRegularUser: 'isRegularUser',
   isAdmin: 'isAdmin',
   isLoggedIn: 'isLoggedIn'
@@ -65,6 +66,7 @@ class Fence extends React.Component {
     canEditCampaign: PropTypes.bool,
     canEditOrder: PropTypes.bool,
     canEditReport: PropTypes.bool,
+    canConfigShopping: PropTypes.bool,
     canBrowseReports: PropTypes.bool,
     isLoggedIn: PropTypes.bool,
     isRegularUser: PropTypes.bool,
