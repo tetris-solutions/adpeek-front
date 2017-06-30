@@ -156,6 +156,9 @@ const expired = provide => tempSyncEnsure(() =>
 const mailing = provide => tempSyncEnsure(() =>
   provide(require('./components/report/Mailing')))
 
+const shoppingSetup = provide => tempSyncEnsure(() =>
+  provide(require('./components/folder/shopping-setup/Container')))
+
 const companies = provide => tempSyncEnsure(() =>
   provide(require('./components/Companies')))
 
@@ -215,6 +218,7 @@ export const component = {
   CampaignCreatives: screen(creatives, 'campaign'),
   CreateCampaign: screen(campaign, 'create'),
   FolderCreatives: screen(creatives, 'folder'),
+  ShoppingSetup: screen(shoppingSetup),
 
   WorkspaceCreate: screen(forms, 'workspaceCreate'),
   WorkspaceEdit: screen(forms, 'workspaceEdit'),

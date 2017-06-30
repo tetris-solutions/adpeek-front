@@ -155,6 +155,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 <IndexRoute {...render(component.FolderCampaigns)}/>
                 <Route path='creatives' {...render(component.FolderCreatives)}/>
                 <Route path='create/campaign' {...render(component.CreateCampaign)}/>
+                <Route path='shopping-setup' {...render(component.ShoppingSetup)}/>
 
                 <Route
                   component={node('folder', 'campaign')}

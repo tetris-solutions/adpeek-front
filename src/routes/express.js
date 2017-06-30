@@ -169,6 +169,11 @@ export function setAppRoutes (app, render) {
     ensureLoad(...subFolderActions),
     render)
 
+  app.get('/company/:company/workspace/:workspace/folder/:folder/shopping-setup',
+    protect,
+    ensureLoad(...subFolderActions),
+    render)
+
   subFolderActions.push(reports)
 
   app.get('/company/:company/workspace/:workspace/folder/:folder/reports',

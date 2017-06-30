@@ -518,6 +518,7 @@ module.exports = {
   enableLocal: 'Enable local inventory ads',
   noMerchantAvailable: 'No linked merchants',
   loadingMerchantsLabel: 'Loading merchants...',
+  shoppingSetup: 'Shopping Setup',
   salesCountries: {
     DE: 'Germany',
     AR: 'Argentina',
