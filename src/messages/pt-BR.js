@@ -519,7 +519,8 @@ module.exports = {
   highPriority: 'Alta',
   noMerchantAvailable: 'Nenhum comerciante associado',
   loadingMerchantsLabel: 'Carregando comerciantes...',
-  shoppingSetup: 'Config. Shopping',
+  shoppingSetupBt: 'Config. Shopping',
+  shoppingSetupTitle: 'Configurações de Shopping',
   salesCountries: {
     DE: 'Alemanha',
     AR: 'Argentina',

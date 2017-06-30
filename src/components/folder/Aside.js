@@ -73,7 +73,7 @@ class FolderAside extends React.PureComponent {
 
             <Fence canConfigShopping>
               <NavLink to={`${baseUrl}/shopping-setup`} icon='shopping_cart'>
-                <Message>shoppingSetup</Message>
+                <Message>shoppingSetupBt</Message>
               </NavLink>
             </Fence>
 
