@@ -71,12 +71,6 @@ class FolderAside extends React.PureComponent {
               <Message>folderReport</Message>
             </ReportLink>
 
-            <Fence canConfigShopping>
-              <NavLink to={`${baseUrl}/shopping-setup`} icon='shopping_cart'>
-                <Message>shoppingSetupBt</Message>
-              </NavLink>
-            </Fence>
-
             {canEditFolder && (
               <NavLink to={`${baseUrl}/edit`} icon='mode_edit'>
                 <Message>editFolder</Message>

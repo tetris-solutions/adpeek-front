@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {node} from '../higher-order/branch'
-import {Link} from 'react-router'
 import Message from 'tetris-iso/Message'
 import startsWith from 'lodash/startsWith'
-import {Navigation, NavBt, NavBts, Name} from '../Navigation'
+import {Navigation, NavBt, NavLink, NavBts, Name} from '../Navigation'
 import qs from 'query-string'
 import isEmpty from 'lodash/isEmpty'
+import Fence from '../Fence'
 
 class CampaignAside extends React.PureComponent {
   static displayName = 'Campaign-Aside'
@@ -44,29 +44,39 @@ class CampaignAside extends React.PureComponent {
       editCreativesUrl = editCreativesUrl + '?' + qs.stringify(query)
     }
 
+    const oneWayUpUrl = editCreativesMode ? creativesUrl : (
+      inCreativesScreen ? campaignUrl : folderUrl
+    )
+
     return (
       <Navigation icon='format_shapes'>
         <Name>{campaign.name}</Name>
 
         <NavBts>
           {!inCreativesScreen && (
-            <NavBt tag={Link} to={creativesUrl} icon='format_shapes'>
+            <NavLink to={creativesUrl} icon='format_shapes'>
               <Message>creatives</Message>
-            </NavBt>)}
+            </NavLink>)}
 
           {inCreativesScreen && !editCreativesMode && (
-            <NavBt tag={Link} to={editCreativesUrl} icon='create'>
+            <NavLink to={editCreativesUrl} icon='create'>
               <Message>edit</Message>
-            </NavBt>)}
+            </NavLink>)}
+
+          <Fence canConfigShopping canEditCampaign>
+            <NavLink to={`${campaignUrl}/shopping-setup`} icon='shopping_cart'>
+              <Message>shoppingSetupBt</Message>
+            </NavLink>
+          </Fence>
 
           {editCreativesMode && (
             <NavBt onClick={this.createAdGroup} icon='library_add'>
               <Message>newAdGroup</Message>
             </NavBt>)}
 
-          <NavBt tag={Link} to={editCreativesMode ? creativesUrl : (inCreativesScreen ? campaignUrl : folderUrl)} icon='close'>
+          <NavLink to={oneWayUpUrl} icon='close'>
             <Message>oneLevelUpNavigation</Message>
-          </NavBt>
+          </NavLink>
         </NavBts>
       </Navigation>
     )

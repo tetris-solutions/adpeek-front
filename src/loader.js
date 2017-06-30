@@ -157,7 +157,7 @@ const mailing = provide => tempSyncEnsure(() =>
   provide(require('./components/report/Mailing')))
 
 const shoppingSetup = provide => tempSyncEnsure(() =>
-  provide(require('./components/folder/shopping-setup/Container')))
+  provide(require('./components/campaign/shopping-setup/Container')))
 
 const companies = provide => tempSyncEnsure(() =>
   provide(require('./components/Companies')))

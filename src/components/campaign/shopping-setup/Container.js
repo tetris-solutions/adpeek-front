@@ -10,6 +10,7 @@ class ShoppingSetupContainer extends React.PureComponent {
 
   static propTypes = {
     folder: PropTypes.object,
+    campaign: PropTypes.object,
     params: PropTypes.object,
     dispatch: PropTypes.func
   }
