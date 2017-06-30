@@ -2,6 +2,7 @@ import React from 'react'
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import Input from '../Input'
+import {Submit} from '../Button'
 import FormMixin from '../mixins/FormMixin'
 import {createReportAction} from '../../actions/create-report'
 import {cloneReportAction} from '../../actions/clone-report'
@@ -83,7 +84,9 @@ const ReportCreate = createReactClass({
             </Content>
 
             <Footer>
-              <Message>newReportCallToAction</Message>
+              <Submit className='mdl-button mdl-button--colored'>
+                <Message>newReportCallToAction</Message>
+              </Submit>
             </Footer>
           </Form>
         </Page>

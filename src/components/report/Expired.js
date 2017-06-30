@@ -29,7 +29,7 @@ const ExpiredReport = ({params, location}) => (
         </p>
       </Content>
 
-      <Footer multipleButtons>
+      <Footer>
         <a className='mdl-button mdl-button--colored' href={makeLoginUrl(location)}>
           <Message>navLogin</Message>
         </a>

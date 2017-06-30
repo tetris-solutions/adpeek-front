@@ -479,7 +479,7 @@ const MailingEdit = createReactClass({
               </div>
             )}
         </Content>
-        <Footer multipleButtons>
+        <Footer>
           <Link to={this.getMailingUrl()} className='mdl-button mdl-button--accent'>
             <Message>cancel</Message>
           </Link>

@@ -5,7 +5,7 @@ import FormMixin from '../mixins/FormMixin'
 import Message from 'tetris-iso/Message'
 import Input from '../Input'
 import AccountSelector from './AccountSelector'
-
+import {Submit} from '../Button'
 import RolesSelector from './RolesSelector'
 import {createWorkspaceAction} from '../../actions/create-workspace'
 import {Form, Content, Header, Footer} from '../Card'
@@ -75,7 +75,9 @@ export const CreateWorkspace = createReactClass({
             </Content>
 
             <Footer>
-              <Message>newWorkspaceCallToAction</Message>
+              <Submit className='mdl-button mdl-button--colored'>
+                <Message>newWorkspaceCallToAction</Message>
+              </Submit>
             </Footer>
           </Form>
         </Page>

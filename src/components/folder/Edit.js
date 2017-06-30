@@ -8,6 +8,7 @@ import React from 'react'
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import Checkbox from '../Checkbox'
+import {Submit} from '../Button'
 import Input from '../Input'
 import Select from '../Select'
 import {pushSuccessMessageAction} from '../../actions/push-success-message-action'
@@ -249,7 +250,9 @@ export const EditFolder = createReactClass({
             </Content>
 
             <Footer>
-              <Message>save</Message>
+              <Submit className='mdl-button mdl-button--colored'>
+                <Message>save</Message>
+              </Submit>
             </Footer>
           </Form>
         </Page>

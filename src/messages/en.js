@@ -516,6 +516,8 @@ module.exports = {
   mediumPriority: 'Medium',
   highPriority: 'High',
   enableLocal: 'Enable local inventory ads',
+  noMerchantAvailable: 'No linked merchants',
+  loadingMerchantsLabel: 'Loading merchants...',
   salesCountries: {
     DE: 'Germany',
     AR: 'Argentina',

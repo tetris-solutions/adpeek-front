@@ -5,6 +5,7 @@ import FormMixin from '../mixins/FormMixin'
 import concat from 'lodash/concat'
 import Message from 'tetris-iso/Message'
 import Input from '../Input'
+import {Submit} from '../Button'
 import {createFolderAction} from '../../actions/create-folder'
 import {pushSuccessMessageAction} from '../../actions/push-success-message-action'
 import Select from '../Select'
@@ -240,7 +241,9 @@ export const CreateFolder = createReactClass({
 
             </Content>
             <Footer>
-              <Message>newFolderCallToAction</Message>
+              <Submit className='mdl-button mdl-button--colored'>
+                <Message>newFolderCallToAction</Message>
+              </Submit>
             </Footer>
           </Form>
         </Page>

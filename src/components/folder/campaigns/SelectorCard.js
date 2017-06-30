@@ -163,7 +163,7 @@ class FolderCampaignsSelector extends React.Component {
           <InactiveCampaigns campaigns={grouped.false || []} renderer={Component} readOnly={readOnly}/>
         </Content>
         <Fence canEditCampaign>
-          <Footer multipleButtons>
+          <Footer>
             {isLoading && (
               <Button disabled className='mdl-button mdl-button--colored mdl-color-text--grey-600'>
                 <Message>loadingCampaigns</Message>

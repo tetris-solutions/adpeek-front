@@ -6,6 +6,7 @@ import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'
 import AccountSelector from './AccountSelector'
 import Input from '../Input'
+import {Submit} from '../Button'
 import RolesSelector from './RolesSelector'
 import {updateWorkspaceAction} from '../../actions/update-workspace'
 import {Form, Content, Header, Footer} from '../Card'
@@ -140,7 +141,9 @@ export const WorkspaceEdit = createReactClass({
             </Content>
 
             <Footer>
-              <Message>save</Message>
+              <Submit className='mdl-button mdl-button--colored'>
+                <Message>save</Message>
+              </Submit>
             </Footer>
           </Form>
         </Page>

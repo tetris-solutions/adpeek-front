@@ -161,7 +161,7 @@ export class BudgetEdit extends React.Component {
             </Tab>
           </Tabs>
         </Content>
-        <Footer multipleButtons>
+        <Footer>
           <Button className='mdl-button mdl-button--colored' onClick={remove}>
             <Message>remove</Message>
           </Button>

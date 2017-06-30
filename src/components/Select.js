@@ -89,7 +89,10 @@ export class Select extends React.Component {
           </label>
         ) : label}
 
-        {error && (<span className='mdl-textfield__error'>{error}</span>)}
+        {error && (
+          <span className='mdl-textfield__error' style={{visibility: 'visible'}}>
+            {error}
+          </span>)}
 
       </div>
     )

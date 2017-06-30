@@ -36,7 +36,7 @@ function ErrorScreen ({error, dispatch}, {router}) {
           </small>
         </div>
       </Content>
-      <Footer multipleButtons>
+      <Footer>
         <Button className='mdl-button mdl-button--colored' onClick={goBack}>
           <Message>errorScreenExit</Message>
         </Button>

@@ -12,10 +12,14 @@ import {loadFolderServiceLinksAction} from '../../../actions/load-folder-service
 import map from 'lodash/map'
 import Radio from '../../Radio'
 import Checkbox from '../../Checkbox'
-import toLower from 'lodash/toLower'
 import toUpper from 'lodash/toUpper'
+import isEmpty from 'lodash/isEmpty'
+import isArray from 'lodash/isArray'
+import {Submit} from '../../Button'
 
 const priorities = [[0, 'low'], [1, 'medium'], [2, 'high']]
+
+const isEmptyArray = x => isArray(x) && isEmpty(x)
 
 const types = {
   SEARCH: 'searchNetwork',
@@ -67,18 +71,8 @@ class CreateAdwordsCampaign extends React.Component {
     messages: PropTypes.object
   }
 
-  state = {
-    loading: !this.props.folder.serviceLinks,
-    name: '',
-    merchantId: '',
-    country: 'BR',
-    priority: 0,
-    type: 'SEARCH',
-    enableLocal: false
-  }
-
   componentDidMount () {
-    if (this.state.loading) {
+    if (!this.serviceLinksReady()) {
       this.loadServiceLinks()
     }
   }
@@ -87,12 +81,24 @@ class CreateAdwordsCampaign extends React.Component {
     this.props.dispatch(loadFolderServiceLinksAction, this.props.params)
   }
 
+  serviceLinksReady () {
+    return Boolean(this.props.folder.serviceLinks)
+  }
+
+  state = {
+    name: '',
+    merchantId: '',
+    country: 'BR',
+    priority: 0,
+    type: 'SEARCH',
+    enableLocal: false
+  }
+
   onSubmit = () => {
     const {dispatch, params} = this.props
     const {company, workspace, folder} = params
-    const {name, type} = this.state
 
-    const create = () => dispatch(createCampaignAction, params, {name, type})
+    const create = () => dispatch(createCampaignAction, params, this.state)
     const reload = () => dispatch(loadFolderCampaignsAction, company, workspace, folder)
 
     return create()
@@ -115,6 +121,12 @@ class CreateAdwordsCampaign extends React.Component {
   render () {
     const {messages} = this.context
     const {name, type, country, merchantId, priority, enableLocal} = this.state
+    const {serviceLinks} = this.props.folder
+
+    const merchantRequiredError = (
+      type === 'SHOPPING' &&
+      isEmptyArray(serviceLinks)
+    )
 
     return (
       <div>
@@ -140,11 +152,22 @@ class CreateAdwordsCampaign extends React.Component {
                         <option key={code} value={code}>{name}</option>)}
                     </Select>
 
-                    <Select required name='merchantId' label='merchant' value={merchantId} onChange={this.onChange}>
+                    <Select
+                      required
+                      error={merchantRequiredError
+                        ? messages.noMerchantAvailable
+                        : undefined}
+                      name='merchantId'
+                      label={this.serviceLinksReady() ? 'merchant' : 'loadingMerchants'}
+                      value={merchantId}
+                      onChange={this.onChange}>
+
                       <option value=''/>
-                      {map(this.props.folder.serviceLinks, ({serviceLinkId, name}) => (
+                      {map(serviceLinks, ({serviceLinkId, name}) => (
                         <option key={serviceLinkId} value={serviceLinkId}>{name}</option>))}
                     </Select>
+
+                    <br/><br/>
 
                     <Checkbox
                       name='enableLocal'
@@ -170,7 +193,9 @@ class CreateAdwordsCampaign extends React.Component {
                   </shopping>
                 </TheContent>
                 <Footer>
-                  <Message>save</Message>
+                  <Submit className='mdl-button mdl-button--colored' disabled={merchantRequiredError}>
+                    <Message>save</Message>
+                  </Submit>
                 </Footer>
               </Form>
             </div>

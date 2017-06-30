@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Submit} from './Button'
 import csjs from 'csjs'
 import omit from 'lodash/omit'
 import {styledComponent} from './higher-order/styled'
@@ -122,19 +121,15 @@ Header.propTypes = {
   children: PropTypes.node.isRequired
 }
 
-export function Footer ({children, multipleButtons}) {
+export function Footer ({children}) {
   return (
     <footer className='mdl-card__actions mdl-card--border'>
-      {multipleButtons ? children : (
-        <Submit className='mdl-button mdl-button--colored'>
-          {children}
-        </Submit>)}
+      {children}
     </footer>
   )
 }
 
 Footer.displayName = 'Footer'
 Footer.propTypes = {
-  multipleButtons: PropTypes.bool,
   children: PropTypes.node
 }

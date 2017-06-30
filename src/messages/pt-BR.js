@@ -517,6 +517,8 @@ module.exports = {
   lowPriority: 'Baixa',
   mediumPriority: 'Média',
   highPriority: 'Alta',
+  noMerchantAvailable: 'Nenhum comerciante associado',
+  loadingMerchantsLabel: 'Carregando comerciantes...',
   salesCountries: {
     DE: 'Alemanha',
     AR: 'Argentina',

@@ -16,7 +16,7 @@ const DefaultErrorComponent = () => (
       </p>
       <br/>
     </Content>
-    <Footer multipleButtons>
+    <Footer>
       <Link className='mdl-button mdl-button--colored' to='/'>
         <Message>errorScreenExit</Message>
       </Link>
