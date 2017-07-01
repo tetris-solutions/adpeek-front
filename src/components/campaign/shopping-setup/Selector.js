@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+// import Message from 'tetris-iso/Message'
 import Select from '../../Select'
 import Input from '../../Input'
 import map from 'lodash/map'
 import keys from 'lodash/keys'
+import camelCase from 'lodash/camelCase'
 
 const dimensionClassMap = {
   ProductBiddingCategory: {
@@ -33,6 +35,7 @@ const dimensionClassMap = {
 }
 
 const dimensionClasses = keys(dimensionClassMap)
+const inferMsgName = type => camelCase(`PRODUCT_${type}`)
 
 const dimensionTypeMap = {
   BIDDING_CATEGORY_L1: 'ProductBiddingCategory',
@@ -75,6 +78,10 @@ class Selector extends React.PureComponent {
     ])
   }
 
+  static contextTypes = {
+    messages: PropTypes.object
+  }
+
   onChangeType = ({target: {value: type}}) => {
     this.props.update(this.props.id, {
       type,
@@ -93,6 +100,7 @@ class Selector extends React.PureComponent {
   }
 
   render () {
+    const {messages} = this.context
     const type = (
       this.props.type ||
       dimensionClassMap[this.props.ProductDimensionType].defaultType
@@ -105,11 +113,9 @@ class Selector extends React.PureComponent {
             name='type'
             value={type}
             onChange={this.onChangeType}>
-            {map(dimensionTypeMap, (_, type) =>
-              <option
-                key={type}
-                value={type}>
-                {type}
+            {map(dimensionTypes, type =>
+              <option key={type} value={type}>
+                {messages[inferMsgName(type)]}
               </option>)}
           </Select>
         </div>

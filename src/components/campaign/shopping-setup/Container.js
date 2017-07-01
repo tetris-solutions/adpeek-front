@@ -9,7 +9,7 @@ import ProductScope from './ProductScope'
 import {loadCampaignShoppingSetupAction} from '../../../actions/load-campaign-shopping-setup'
 import Loading from '../../LoadingHorizontal'
 
-class ShoppingSetupContainer extends React.PureComponent {
+class ShoppingSetupContainer extends React.Component {
   static displayName = 'Shopping-Setup-Container'
 
   static propTypes = {

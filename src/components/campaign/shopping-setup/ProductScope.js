@@ -1,12 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Message from 'tetris-iso/Message'
 import map from 'lodash/map'
 import Selector from './Selector'
 import {loadProductCategoriesAction} from '../../../actions/load-product-categories'
 import assign from 'lodash/assign'
 import concat from 'lodash/concat'
+import memoize from 'lodash/memoize'
+import filter from 'lodash/filter'
 
-class ProductScope extends React.PureComponent {
+class ProductScope extends React.Component {
   static displayName = 'Product-Scope'
 
   static propTypes = {
@@ -61,19 +64,28 @@ class ProductScope extends React.PureComponent {
     this.setState({dimensions})
   }
 
-  render () {
-    const categories = this.props.folder.productCategories
+  filterCategories = memoize((ProductDimensionType, type) => {
+    return filter(this.props.folder.productCategories, {
+      ProductDimensionType,
+      type
+    })
+  })
 
+  render () {
     return (
       <div>
-        {map(this.state.dimensions, (dimension, index) =>
+        {this.metaDataReady() ? map(this.state.dimensions, (dimension, index) =>
           <Selector
             key={index}
+            {...dimension}
+            id={index}
             update={this.updateDimension}
             remove={this.removeDimension}
-            categories={categories}
-            id={index}
-            {...dimension}/>)}
+            categories={this.filterCategories(
+              dimension.ProductDimensionType,
+              dimension.type
+            )}/>)
+          : <Message>loadingCategories</Message>}
       </div>
     )
   }
