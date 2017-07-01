@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import map from 'lodash/map'
 import Selector from './Selector'
-import {loadFolderProductCategoryMetaDataAction} from '../../../actions/load-folder-product-category-meta-data'
+import {loadProductCategoriesAction} from '../../../actions/load-product-categories'
 import assign from 'lodash/assign'
 import concat from 'lodash/concat'
 
@@ -11,10 +11,11 @@ class ProductScope extends React.PureComponent {
 
   static propTypes = {
     folder: PropTypes.shape({
-      productCategoryMetaData: PropTypes.array
+      productCategories: PropTypes.array
     }),
     campaign: PropTypes.shape({
-      productScope: ProductScope.array
+      productScope: ProductScope.array,
+      salesCountry: PropTypes.string
     }),
     params: PropTypes.object,
     dispatch: PropTypes.func
@@ -31,11 +32,15 @@ class ProductScope extends React.PureComponent {
   }
 
   metaDataReady () {
-    return Boolean(this.props.folder.productCategoryMetaData)
+    return Boolean(this.props.folder.productCategories)
   }
 
   loadMetaData () {
-    return this.props.dispatch(loadFolderProductCategoryMetaDataAction, this.props.params)
+    return this.props.dispatch(
+      loadProductCategoriesAction,
+      this.props.params,
+      this.props.campaign.salesCountry
+    )
   }
 
   updateDimension = (index, changes) => {
@@ -57,7 +62,7 @@ class ProductScope extends React.PureComponent {
   }
 
   render () {
-    const metaData = this.props.folder.productCategoryMetaData
+    const categories = this.props.folder.productCategories
 
     return (
       <div>
@@ -66,7 +71,7 @@ class ProductScope extends React.PureComponent {
             key={index}
             update={this.updateDimension}
             remove={this.removeDimension}
-            metaData={metaData}
+            categories={categories}
             id={index}
             {...dimension}/>)}
       </div>

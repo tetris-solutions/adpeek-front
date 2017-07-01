@@ -65,7 +65,7 @@ class Selector extends React.PureComponent {
   static propTypes = {
     update: PropTypes.func,
     remove: PropTypes.func,
-    metaData: PropTypes.array,
+    categories: PropTypes.array,
     id: PropTypes.number,
     ProductDimensionType: PropTypes.oneOf(dimensionClasses),
     type: PropTypes.oneOf(dimensionTypes),
