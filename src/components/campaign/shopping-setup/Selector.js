@@ -6,6 +6,7 @@ import Input from '../../Input'
 import map from 'lodash/map'
 import keys from 'lodash/keys'
 import camelCase from 'lodash/camelCase'
+import isEmpty from 'lodash/isEmpty'
 
 const dimensionClassMap = {
   ProductBiddingCategory: {
@@ -120,10 +121,18 @@ class Selector extends React.PureComponent {
           </Select>
         </div>
         <div className='mdl-cell mdl-cell--5-col'>
-          <Input
-            name='value'
-            value={this.props.value}
-            onChange={this.onChangeValue}/>
+          {isEmpty(this.props.categories) ? (
+            <Input
+              name='value'
+              value={this.props.value}
+              onChange={this.onChangeValue}/>
+          ) : (
+            <Select name='value' value={this.props.value} onChange={this.onChangeValue}>
+              {map(this.props.categories, ({name, value}) =>
+                <option key={value} value={value}>
+                  {name}
+                </option>)}
+            </Select>)}
         </div>
         <div className='mdl-cell mdl-cell--2-col'>
           <a href='' onClick={this.onClickRemove}>

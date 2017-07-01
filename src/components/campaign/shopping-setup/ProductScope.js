@@ -6,7 +6,6 @@ import Selector from './Selector'
 import {loadProductCategoriesAction} from '../../../actions/load-product-categories'
 import assign from 'lodash/assign'
 import concat from 'lodash/concat'
-import memoize from 'lodash/memoize'
 import filter from 'lodash/filter'
 
 class ProductScope extends React.Component {
@@ -64,12 +63,12 @@ class ProductScope extends React.Component {
     this.setState({dimensions})
   }
 
-  filterCategories = memoize((ProductDimensionType, type) => {
+  filterCategories = (ProductDimensionType, type) => {
     return filter(this.props.folder.productCategories, {
       ProductDimensionType,
       type
     })
-  })
+  }
 
   render () {
     return (
