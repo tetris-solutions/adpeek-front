@@ -85,6 +85,7 @@ class Selector extends React.PureComponent {
 
   onChangeType = ({target: {value: type}}) => {
     this.props.update(this.props.id, {
+      value: null,
       type,
       ProductDimensionType: dimensionTypeMap[type]
     })
@@ -127,7 +128,7 @@ class Selector extends React.PureComponent {
               value={this.props.value}
               onChange={this.onChangeValue}/>
           ) : (
-            <Select name='value' value={this.props.value} onChange={this.onChangeValue}>
+            <Select name='value' value={this.props.value || undefined} onChange={this.onChangeValue}>
               {map(this.props.categories, ({name, value}) =>
                 <option key={value} value={value}>
                   {name}
