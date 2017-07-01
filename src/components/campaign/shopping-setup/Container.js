@@ -4,6 +4,8 @@ import Message from 'tetris-iso/Message'
 import Page from '../../Page'
 import SubHeader from '../../SubHeader'
 import {Card, Content} from '../../Card'
+import {Tabs, Tab} from '../../Tabs'
+import ProductScope from './ProductScope'
 
 class ShoppingSetupContainer extends React.PureComponent {
   static displayName = 'Shopping-Setup-Container'
@@ -23,7 +25,13 @@ class ShoppingSetupContainer extends React.PureComponent {
           <div className='mdl-grid'>
             <div className='mdl-cell mdl-cell--12-col'>
               <Card size='full'>
-                <Content/>
+                <Content>
+                  <Tabs>
+                    <Tab id='product-scope' title={<Message>productScope</Message>}>
+                      <ProductScope {...this.props}/>
+                    </Tab>
+                  </Tabs>
+                </Content>
               </Card>
             </div>
           </div>

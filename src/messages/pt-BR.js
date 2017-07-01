@@ -521,6 +521,7 @@ module.exports = {
   loadingMerchantsLabel: 'Carregando comerciantes...',
   shoppingSetupBt: 'Config. Shopping',
   shoppingSetupTitle: 'Configurações de Shopping',
+  productScope: 'Filtro de inventário',
   salesCountries: {
     DE: 'Alemanha',
     AR: 'Argentina',

@@ -520,6 +520,7 @@ module.exports = {
   loadingMerchantsLabel: 'Loading merchants...',
   shoppingSetupBt: 'Shopping Setup',
   shoppingSetupTitle: 'Shopping Setup',
+  productScope: 'Product Scope',
   salesCountries: {
     DE: 'Germany',
     AR: 'Argentina',
