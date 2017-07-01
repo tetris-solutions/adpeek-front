@@ -7,6 +7,7 @@ import {loadProductCategoriesAction} from '../../../actions/load-product-categor
 import assign from 'lodash/assign'
 import concat from 'lodash/concat'
 import filter from 'lodash/filter'
+import memoize from 'lodash/memoize'
 
 class ProductScope extends React.Component {
   static displayName = 'Product-Scope'
@@ -63,12 +64,9 @@ class ProductScope extends React.Component {
     this.setState({dimensions})
   }
 
-  filterCategories = (ProductDimensionType, type) => {
-    return filter(this.props.folder.productCategories, {
-      ProductDimensionType,
-      type
-    })
-  }
+  filterCategories = memoize(type => {
+    return filter(this.props.folder.productCategories, {type})
+  })
 
   render () {
     return (
@@ -80,10 +78,7 @@ class ProductScope extends React.Component {
             id={index}
             update={this.updateDimension}
             remove={this.removeDimension}
-            categories={this.filterCategories(
-              dimension.ProductDimensionType,
-              dimension.type
-            )}/>)
+            categories={this.filterCategories(dimension.type)}/>)
           : <Message>loadingCategories</Message>}
       </div>
     )
