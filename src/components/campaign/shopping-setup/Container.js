@@ -6,6 +6,8 @@ import SubHeader from '../../SubHeader'
 import {Card, Content} from '../../Card'
 import {Tabs, Tab} from '../../Tabs'
 import ProductScope from './ProductScope'
+import {loadCampaignShoppingSetupAction} from '../../../actions/load-campaign-shopping-setup'
+import Loading from '../../LoadingHorizontal'
 
 class ShoppingSetupContainer extends React.PureComponent {
   static displayName = 'Shopping-Setup-Container'
@@ -17,17 +19,35 @@ class ShoppingSetupContainer extends React.PureComponent {
     dispatch: PropTypes.func
   }
 
+  componentDidMount () {
+    if (!this.setupReady()) {
+      this.loadSetup()
+    }
+  }
+
+  setupReady () {
+    return Boolean(this.props.campaign.productScope)
+  }
+
+  loadSetup () {
+    return this.props.dispatch(
+      loadCampaignShoppingSetupAction,
+      this.props.params
+    )
+  }
+
   render () {
     return (
       <div>
         <SubHeader title={<Message>shoppingSetupTitle</Message>}/>
-        <Page>
+        <Page>{this.setupReady() ? (
           <div className='mdl-grid'>
             <div className='mdl-cell mdl-cell--12-col'>
               <Card size='full'>
                 <Content>
                   <Tabs>
                     <Tab id='product-scope' title={<Message>productScope</Message>}>
+                      <br/>
                       <ProductScope {...this.props}/>
                     </Tab>
                   </Tabs>
@@ -35,6 +55,12 @@ class ShoppingSetupContainer extends React.PureComponent {
               </Card>
             </div>
           </div>
+        ) : (
+          <Loading>
+            <Message name={<Message>shoppingSetupTitle</Message>}>
+              loadingEntity
+            </Message>
+          </Loading>)}
         </Page>
       </div>
     )
