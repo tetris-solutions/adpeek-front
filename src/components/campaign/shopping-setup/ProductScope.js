@@ -2,12 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import map from 'lodash/map'
-import Selector from './Selector'
+import Selector, {dimensionTypeMap} from './Selector'
 import {loadProductCategoriesAction} from '../../../actions/load-product-categories'
 import assign from 'lodash/assign'
 import concat from 'lodash/concat'
 import filter from 'lodash/filter'
-import memoize from 'lodash/memoize'
+import keyBy from 'lodash/keyBy'
+import size from 'lodash/size'
+import findIndex from 'lodash/findIndex'
+
+const availableTypes = map(dimensionTypeMap, (d, type) => assign({}, d, {type}))
 
 class ProductScope extends React.Component {
   static displayName = 'Product-Scope'
@@ -64,21 +68,29 @@ class ProductScope extends React.Component {
     this.setState({dimensions})
   }
 
-  filterCategories = memoize(type => {
-    return filter(this.props.folder.productCategories, {type})
-  })
-
   render () {
+    const {dimensions} = this.state
+    const lastOne = size(dimensions) - 1
+    const enabledTypes = filter(availableTypes, ({parent}) => {
+      if (!parent) return true
+      const index = findIndex(dimensions, {type: parent})
+
+      return index >= 0 && index < lastOne
+    })
+
     return (
       <div>
-        {this.metaDataReady() ? map(this.state.dimensions, (dimension, index) =>
+        {this.metaDataReady() ? map(dimensions, (dimension, index) =>
           <Selector
             key={index}
             {...dimension}
             id={index}
+            editable={index === lastOne}
             update={this.updateDimension}
             remove={this.removeDimension}
-            categories={this.filterCategories(dimension.type)}/>)
+            dimensions={keyBy(dimensions, 'type')}
+            types={enabledTypes}
+            categories={this.props.folder.productCategories}/>)
           : <Message>loadingCategories</Message>}
       </div>
     )
