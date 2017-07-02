@@ -194,6 +194,7 @@ class Selector extends React.PureComponent {
       <div className='mdl-grid'>
         <div className='mdl-cell mdl-cell--5-col'>
           <Select
+            required
             disabled={!editable}
             name='type'
             value={selectedType}
@@ -207,12 +208,13 @@ class Selector extends React.PureComponent {
         <div className='mdl-cell mdl-cell--5-col'>
           {isEmpty(enabledCategories) ? (
             <Input
+              required
               disabled={!editable}
               name='value'
               value={inputValue}
               onChange={this.onChangeValue}/>
           ) : (
-            <Select disabled={!editable} name='value' value={inputValue} onChange={this.onChangeValue}>
+            <Select required disabled={!editable} name='value' value={inputValue} onChange={this.onChangeValue}>
               <option/>
               {map(enabledCategories, ({name, value}) =>
                 <option key={value} value={value}>
