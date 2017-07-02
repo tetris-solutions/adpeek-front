@@ -68,15 +68,26 @@ class ProductScope extends React.Component {
     this.setState({dimensions})
   }
 
-  render () {
-    const {dimensions} = this.state
-    const lastOne = size(dimensions) - 1
-    const enabledTypes = filter(availableTypes, ({parent}) => {
+  listEnabledTypesFor = (dimensionType, mappedDimensions) => {
+    return filter(availableTypes, ({parent, type}, i) => {
+      if (type !== dimensionType && mappedDimensions[type]) {
+        return false
+      }
+
       if (!parent) return true
+
+      const {dimensions} = this.state
       const index = findIndex(dimensions, {type: parent})
+      const lastOne = size(dimensions) - 1
 
       return index >= 0 && index < lastOne
     })
+  }
+
+  render () {
+    const {dimensions} = this.state
+    const lastOne = size(dimensions) - 1
+    const mappedDimensions = keyBy(dimensions, 'type')
 
     return (
       <div>
@@ -88,8 +99,8 @@ class ProductScope extends React.Component {
             editable={index === lastOne}
             update={this.updateDimension}
             remove={this.removeDimension}
-            dimensions={keyBy(dimensions, 'type')}
-            types={enabledTypes}
+            dimensions={mappedDimensions}
+            types={this.listEnabledTypesFor(dimension.type, mappedDimensions)}
             categories={this.props.folder.productCategories}/>)
           : <Message>loadingCategories</Message>}
       </div>

@@ -213,6 +213,7 @@ class Selector extends React.PureComponent {
               onChange={this.onChangeValue}/>
           ) : (
             <Select disabled={!editable} name='value' value={inputValue} onChange={this.onChangeValue}>
+              <option/>
               {map(enabledCategories, ({name, value}) =>
                 <option key={value} value={value}>
                   {name}
