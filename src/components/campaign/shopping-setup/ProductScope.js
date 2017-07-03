@@ -6,6 +6,7 @@ import Selector, {dimensionTypeMap} from './Selector'
 import Form from '../../Form'
 import {Button, Submit} from '../../Button'
 import {loadProductCategoriesAction} from '../../../actions/load-product-categories'
+import {updateCampaignProductScopeAction} from '../../../actions/update-campaign-product-scope'
 import assign from 'lodash/assign'
 import concat from 'lodash/concat'
 import filter from 'lodash/filter'
@@ -106,7 +107,11 @@ class ProductScope extends React.Component {
   }
 
   save = () => {
-
+    return this.props.dispatch(
+      updateCampaignProductScopeAction,
+      this.props.params,
+      this.state.dimensions
+    )
   }
 
   render () {

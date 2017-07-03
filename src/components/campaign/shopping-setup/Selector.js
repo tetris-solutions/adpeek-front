@@ -38,84 +38,111 @@ const dimensionClassMap = {
 }
 
 const inferMsgName = type => camelCase(`PRODUCT_${type}`)
+const valueOnly = ['value']
 
 export const dimensionTypeMap = {
   BIDDING_CATEGORY_L1: {
     category: 'ProductBiddingCategory',
-    parent: null
+    parent: null,
+    fields: valueOnly
   },
   BIDDING_CATEGORY_L2: {
     category: 'ProductBiddingCategory',
-    parent: 'BIDDING_CATEGORY_L1'
+    parent: 'BIDDING_CATEGORY_L1',
+    fields: valueOnly
   },
   BIDDING_CATEGORY_L3: {
     category: 'ProductBiddingCategory',
-    parent: 'BIDDING_CATEGORY_L2'
+    parent: 'BIDDING_CATEGORY_L2',
+    fields: valueOnly
   },
   BIDDING_CATEGORY_L4: {
     category: 'ProductBiddingCategory',
-    parent: 'BIDDING_CATEGORY_L3'
+    parent: 'BIDDING_CATEGORY_L3',
+    fields: valueOnly
   },
   BIDDING_CATEGORY_L5: {
     category: 'ProductBiddingCategory',
-    parent: 'BIDDING_CATEGORY_L4'
+    parent: 'BIDDING_CATEGORY_L4',
+    fields: valueOnly
   },
-  BRAND: {category: 'ProductBrand'},
+  BRAND: {
+    category: 'ProductBrand',
+    parent: null,
+    fields: valueOnly
+  },
   CANONICAL_CONDITION: {
     category: 'ProductCanonicalCondition',
-    parent: null
+    parent: null,
+    fields: ['condition'],
+    options: ['NEW', 'USED', 'REFURBISHED']
   },
   CUSTOM_ATTRIBUTE_0: {
     category: 'ProductCustomAttribute',
-    parent: null
+    parent: null,
+    fields: valueOnly
   },
   CUSTOM_ATTRIBUTE_1: {
     category: 'ProductCustomAttribute',
-    parent: null
+    parent: null,
+    fields: valueOnly
   },
   CUSTOM_ATTRIBUTE_2: {
     category: 'ProductCustomAttribute',
-    parent: null
+    parent: null,
+    fields: valueOnly
   },
   CUSTOM_ATTRIBUTE_3: {
     category: 'ProductCustomAttribute',
-    parent: null
+    parent: null,
+    fields: valueOnly
   },
   CUSTOM_ATTRIBUTE_4: {
     category: 'ProductCustomAttribute',
-    parent: null
+    parent: null,
+    fields: valueOnly
   },
   OFFER_ID: {
     category: 'ProductOfferId',
-    parent: null
+    parent: null,
+    fields: valueOnly
   },
   PRODUCT_TYPE_L1: {
     category: 'ProductType',
-    parent: null
+    parent: null,
+    fields: valueOnly
   },
   PRODUCT_TYPE_L2: {
     category: 'ProductType',
-    parent: 'PRODUCT_TYPE_L1'
+    parent: 'PRODUCT_TYPE_L1',
+    fields: valueOnly
   },
   PRODUCT_TYPE_L3: {
     category: 'ProductType',
-    parent: 'PRODUCT_TYPE_L2'
+    parent: 'PRODUCT_TYPE_L2',
+    fields: valueOnly
   },
   PRODUCT_TYPE_L4: {
     category: 'ProductType',
-    parent: 'PRODUCT_TYPE_L3'
+    parent: 'PRODUCT_TYPE_L3',
+    fields: valueOnly
   },
   PRODUCT_TYPE_L5: {
     category: 'ProductType',
-    parent: 'PRODUCT_TYPE_L4'
+    parent: 'PRODUCT_TYPE_L4',
+    fields: valueOnly
   },
   CHANNEL: {
     category: 'ProductChannel',
-    parent: null
+    parent: null,
+    fields: ['channel'],
+    optiosn: ['ONLINE', 'LOCAL']
   },
   CHANNEL_EXCLUSIVITY: {
     category: 'ProductChannelExclusivity',
-    parent: null
+    parent: null,
+    fields: ['channelExclusivity'],
+    options: ['SINGLE_CHANNEL', 'MULTI_CHANNEL']
   }
 }
 
@@ -226,7 +253,7 @@ class Selector extends React.PureComponent {
           <br/>
           {editable ? (
             <a href='' onClick={this.onClickRemove}>
-              <i className='material-icons'>remove</i>
+              <i className='material-icons'>close</i>
             </a>
           ) : (
             <i className='material-icons' style={{cursor: 'not-allowed'}}>
