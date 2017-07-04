@@ -7,7 +7,7 @@ import AdGroups from './AdGroups'
 import Message from 'tetris-iso/Message'
 import {loadCreativesAction} from '../../actions/load-creatives'
 import {loadAdGroupSearchTermsAction} from '../../actions/load-adgroup-search-terms'
-import {createAdGroupsReportAction} from '../../actions/create-folder-adgroups-report'
+import {exportCreativesReportAction} from '../../actions/export-creatives-report'
 import {pushAdGroupAction} from '../../actions/create-adgroup'
 import {updateCampaignCreativesAction} from '../../actions/update-campaign-creatives'
 import NotImplemented from '../NotImplemented'
@@ -98,10 +98,10 @@ class Creatives extends React.Component {
       .then(() => this.setState({isLoading: false}))
   }
 
-  onAdGroupsLoaded = () => {
+  extractReportOnReady = () => {
     const {getAdGroupsWithRelevance, dispatch, params} = this.props
 
-    dispatch(createAdGroupsReportAction, params, getAdGroupsWithRelevance())
+    dispatch(exportCreativesReportAction, params, getAdGroupsWithRelevance())
       .then(this.onReportCreated)
   }
 
@@ -110,7 +110,7 @@ class Creatives extends React.Component {
 
     this.setState({creatingReport: true})
 
-    this.loadingAdGroups.then(this.onAdGroupsLoaded)
+    this.loadingAdGroups.then(this.extractReportOnReady)
   }
 
   loadKeywordsRelevance = () => {
