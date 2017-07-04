@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import map from 'lodash/map'
-import Selector, {dimensionTypeMap} from './Selector'
+import ProductScopeEditor from './ProductScopeEditor'
+import {productScopeTypes, productScopeClasses} from './types'
 import Form from '../../Form'
 import {Button, Submit} from '../../Button'
 import {loadProductCategoriesAction} from '../../../actions/load-product-categories'
@@ -15,8 +16,10 @@ import size from 'lodash/size'
 import findIndex from 'lodash/findIndex'
 import first from 'lodash/first'
 import isEmpty from 'lodash/isEmpty'
+import get from 'lodash/get'
 
-const availableTypes = map(dimensionTypeMap, (d, type) => assign({}, d, {type}))
+const availableTypes = map(productScopeTypes, (d, type) =>
+  assign({}, d, {type}))
 
 class ProductScope extends React.Component {
   static displayName = 'Product-Scope'
@@ -34,7 +37,10 @@ class ProductScope extends React.Component {
   }
 
   state = {
-    dimensions: this.props.campaign.productScope
+    dimensions: filter(this.props.campaign.productScope, ({type, ProductDimensionType}) => (
+      productScopeTypes[type] ||
+      get(productScopeClasses, [ProductDimensionType, 'defaultType'])
+    ))
   }
 
   componentDidMount () {
@@ -55,22 +61,6 @@ class ProductScope extends React.Component {
     )
   }
 
-  listEnabledTypesFor (dimensionType, mappedDimensions) {
-    return filter(availableTypes, ({parent, type}) => {
-      if (type !== dimensionType && mappedDimensions[type]) {
-        return false
-      }
-
-      if (!parent) return true
-
-      const {dimensions} = this.state
-      const index = findIndex(dimensions, {type: parent})
-      const lastOne = size(dimensions) - 1
-
-      return index >= 0 && index < lastOne
-    })
-  }
-
   getRemainingTypes () {
     const selected = keyBy(this.state.dimensions, 'type')
 
@@ -82,7 +72,7 @@ class ProductScope extends React.Component {
 
     const dimensions = concat(this.state.dimensions, {
       type: next.type,
-      ProductDimensionType: next.category,
+      ProductDimensionType: next.scopeClass,
       value: null
     })
 
@@ -114,29 +104,60 @@ class ProductScope extends React.Component {
     )
   }
 
+  indexOfDimension (type) {
+    return findIndex(this.state.dimensions, {type})
+  }
+
+  dimensionTransformer = () => {
+    const categories = this.props.folder.productCategories
+    const {dimensions} = this.state
+    const lastOne = size(dimensions) - 1
+    const selectedDimensions = keyBy(dimensions, 'type')
+
+    return (currentDimension, myIndex) => {
+      const config = productScopeTypes[currentDimension.type]
+
+      const scope = assign({ProductDimensionType: config.scopeClass}, currentDimension, {
+        id: myIndex,
+        config,
+        categories,
+        editable: myIndex === lastOne,
+        update: this.updateDimension,
+        remove: this.removeDimension,
+        parentScope: selectedDimensions[config.parent]
+      })
+
+      scope.types = filter(availableTypes, ({parent, type}) => {
+        const isCurrentType = type === scope.type
+        const alreadySelected = Boolean(selectedDimensions[type])
+        const parentTypeIndex = parent ? this.indexOfDimension(type) : 0
+        const parentTypeIsSelected = parentTypeIndex >= 0
+        const parentTypeIsAbove = parentTypeIndex <= myIndex
+
+        return isCurrentType ||
+          (
+            !alreadySelected &&
+            parentTypeIsSelected &&
+            parentTypeIsAbove
+          )
+      })
+
+      return scope
+    }
+  }
+
   render () {
     if (!this.metaDataReady()) {
       return <Message>loadingCategories</Message>
     }
 
-    const {dimensions} = this.state
-    const lastOne = size(dimensions) - 1
-    const mappedDimensions = keyBy(this.state.dimensions, 'type')
+    const transform = this.dimensionTransformer()
 
     return (
       <Form onSubmit={this.save}>
-        {map(dimensions, (dimension, index) =>
-          <Selector
-            key={index}
-            {...dimension}
-            id={index}
-            editable={index === lastOne}
-            update={this.updateDimension}
-            remove={this.removeDimension}
-            dimensions={mappedDimensions}
-            types={this.listEnabledTypesFor(dimension.type, mappedDimensions)}
-            categories={this.props.folder.productCategories}/>)}
-
+        {map(this.state.dimensions,
+          (dimension, index) =>
+            <ProductScopeEditor key={index} {...transform(dimension, index)}/>)}
         <hr/>
         <div>
           <Button
