@@ -5,6 +5,7 @@ import map from 'lodash/map'
 import camelCase from 'lodash/camelCase'
 import filter from 'lodash/filter'
 import ProductScopeValue from './ProductScopeValue'
+import {productScopeTypes} from './types'
 
 const inferMsgName = type => camelCase(`PRODUCT_${type}`)
 
@@ -41,8 +42,11 @@ class ProductScopeEditor extends React.PureComponent {
 
   onChangeType = ({target: {value: type}}) => {
     const {update, config, id} = this.props
+    const newConfig = productScopeTypes[type]
 
     update(id, {
+      ProductDimensionType: newConfig.scopeClass,
+      [newConfig.valueField]: null,
       [config.valueField]: null,
       type
     })
