@@ -7,8 +7,8 @@ import capitalize from 'lodash/capitalize'
 import map from 'lodash/map'
 import Input from '../Input'
 import head from 'lodash/head'
-import {Tabs, Tab} from '../Tabs'
 import {bidType, pickBid} from './AdGroupEdit'
+import get from 'lodash/get'
 
 const statuses = {
   NEGATIVE: ['ENABLED', 'REMOVED'],
@@ -25,16 +25,10 @@ class KeywordEdit extends React.Component {
     onChange: PropTypes.func,
     close: PropTypes.func,
     cpc_bid: bidType,
-    final_urls: PropTypes.array,
-    destination_url: PropTypes.string
-  }
-
-  static contextTypes = {
-    messages: PropTypes.object
+    final_urls: PropTypes.array
   }
 
   render () {
-    const {messages} = this.context
     const {onChange, close} = this.props
     const biddable = this.props.criterion_use === 'BIDDABLE'
 
@@ -66,26 +60,12 @@ class KeywordEdit extends React.Component {
 
           {biddable && (
             <div className='mdl-cell mdl-cell--12-col'>
-              <Tabs>
-                <Tab id='keyword-final-url' title={messages.finalUrlLabel}>
-                  <br/>
-                  <Input
-                    type='url'
-                    name='final_urls'
-                    label='finalUrl'
-                    value={head(this.props.final_urls) || ''}
-                    onChange={onChange}/>
-                </Tab>
-                <Tab id='destination-url' title={messages.destinationUrlLabel}>
-                  <br/>
-                  <Input
-                    type='url'
-                    name='destination_url'
-                    label='destinationUrl'
-                    value={head(this.props.destination_url) || ''}
-                    onChange={onChange}/>
-                </Tab>
-              </Tabs>
+              <Input
+                type='url'
+                name='final_urls'
+                label='finalUrl'
+                value={head(get(this.props.final_urls, 'urls', this.props.final_urls)) || ''}
+                onChange={onChange}/>
             </div>)}
 
           <div className='mdl-cell mdl-cell--12-col' style={{textAlign: 'right'}}>
