@@ -20,7 +20,7 @@ class ProductScopeEditor extends React.PureComponent {
     types: PropTypes.array.isRequired,
     parentScope: PropTypes.object,
     config: PropTypes.shape({
-      category: PropTypes.string.isRequired,
+      scopeClass: PropTypes.string.isRequired,
       parent: PropTypes.string,
       valueField: PropTypes.string.isRequired,
       options: PropTypes.array

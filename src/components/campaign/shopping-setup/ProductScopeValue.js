@@ -44,7 +44,7 @@ ProductScopeValue.displayName = 'Product-Scope-Value'
 ProductScopeValue.propTypes = {
   categories: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired,
-  options: PropTypes.array.isRequired,
+  options: PropTypes.array,
   editable: PropTypes.bool.isRequired,
   value: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired
