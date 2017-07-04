@@ -6,7 +6,6 @@ import ProductScopeEditor from './ProductScopeEditor'
 import {productScopeTypes, productScopeClasses} from './types'
 import Form from '../../Form'
 import {Button, Submit} from '../../Button'
-import {loadProductCategoriesAction} from '../../../actions/load-product-categories'
 import {updateCampaignProductScopeAction} from '../../../actions/update-campaign-product-scope'
 import assign from 'lodash/assign'
 import concat from 'lodash/concat'
@@ -26,7 +25,7 @@ class ProductScope extends React.Component {
 
   static propTypes = {
     folder: PropTypes.shape({
-      productCategories: PropTypes.array
+      productCategories: PropTypes.array.isRequired
     }),
     campaign: PropTypes.shape({
       productScope: ProductScope.array,
@@ -41,24 +40,6 @@ class ProductScope extends React.Component {
       productScopeTypes[type] ||
       get(productScopeClasses, [ProductDimensionType, 'defaultType'])
     ))
-  }
-
-  componentDidMount () {
-    if (!this.metaDataReady()) {
-      this.loadMetaData()
-    }
-  }
-
-  metaDataReady () {
-    return Boolean(this.props.folder.productCategories)
-  }
-
-  loadMetaData () {
-    return this.props.dispatch(
-      loadProductCategoriesAction,
-      this.props.params,
-      this.props.campaign.salesCountry
-    )
   }
 
   getRemainingTypes () {
@@ -147,10 +128,6 @@ class ProductScope extends React.Component {
   }
 
   render () {
-    if (!this.metaDataReady()) {
-      return <Message>loadingCategories</Message>
-    }
-
     const transform = this.dimensionTransformer()
 
     return (
