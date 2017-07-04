@@ -6,7 +6,7 @@ function loadCampaignAdGroups (campaign, config) {
   return GET(`${process.env.ADPEEK_API_URL}/campaign/${campaign}/adGroups`, config)
 }
 
-export function loadCampaignAdGroupsAction (tree, company, workspace, folder, campaign, token) {
+export function loadCampaignAdGroupsAction (tree, {company, workspace, folder, campaign}, token) {
   return loadCampaignAdGroups(campaign, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
     .then(saveResponseData(tree, [

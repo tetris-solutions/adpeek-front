@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import Form from '../../Form'
 import {Submit} from '../../Button'
+import {loadCampaignAdGroupsAction} from '../../../actions/load-campaign-adgroups'
+import map from 'lodash/map'
 
 class ProductPartition extends React.Component {
   static displayName = 'Product-Partition'
@@ -20,14 +22,39 @@ class ProductPartition extends React.Component {
 
   state = {}
 
+  componentDidMount () {
+    if (!this.ready()) {
+      this.loadAdGroups()
+    }
+  }
+
+  ready () {
+    return Boolean(this.props.campaign.adGroups)
+  }
+
+  loadAdGroups () {
+    return this.props.dispatch(
+      loadCampaignAdGroupsAction,
+      this.props.params)
+  }
+
   save = () => {
 
   }
 
   render () {
+    if (!this.ready()) {
+      return <Message>loadingAdGroups</Message>
+    }
+
     return (
       <Form onSubmit={this.save}>
-        here goes partition tree
+        {map(this.props.campaign.adGroups, ({id, name}) => (
+          <div key={id}>
+            <strong>
+              {name}
+            </strong>
+          </div>))}
         <hr/>
         <div>
           <Submit className='mdl-button mdl-button-primary' style={{float: 'right'}}>
