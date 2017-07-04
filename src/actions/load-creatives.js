@@ -7,7 +7,7 @@ import assign from 'lodash/assign'
 import head from 'lodash/head'
 
 function loadAdGroups (level, id, filter, config) {
-  return GET(`${process.env.ADPEEK_API_URL}/${level}/${id}/adgroups?filter=${filter}`, config)
+  return GET(`${process.env.ADPEEK_API_URL}/${level}/${id}/creatives?filter=${filter}`, config)
 }
 
 function normalizeTextBasedOnMatchType ({text, match_type}) {
@@ -35,7 +35,7 @@ const normalizeAdGroups = adGroups => map(adGroups,
         }))
     }))
 
-export function loadAdGroupsAction (tree, {company, workspace, folder, campaign}, filter) {
+export function loadCreativesAction (tree, {company, workspace, folder, campaign}, filter) {
   const level = campaign ? 'campaign' : 'folder'
 
   return loadAdGroups(level, campaign || folder, filter, getApiFetchConfig(tree))

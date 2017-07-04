@@ -2,8 +2,8 @@ import {GET} from '@tetris/http'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {saveResponseData} from '../functions/save-response-data'
 
-export function loadCampaignAdGroups (campaign, config) {
-  return GET(`${process.env.ADPEEK_API_URL}/campaign/${campaign}/adgroups`, config)
+function loadCampaignAdGroups (campaign, config) {
+  return GET(`${process.env.ADPEEK_API_URL}/campaign/${campaign}/adGroups`, config)
 }
 
 export function loadCampaignAdGroupsAction (tree, company, workspace, folder, campaign, token) {

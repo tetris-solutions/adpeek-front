@@ -91,8 +91,8 @@ export function liveEditKeywordAction (tree, {company, workspace, folder, campai
   tree.commit()
 }
 
-function updateAdGroups (campaign, adGroups, config) {
-  return PUT(`${process.env.ADPEEK_API_URL}/campaign/${campaign}/adgroups`,
+function updateCreatives (campaign, adGroups, config) {
+  return PUT(`${process.env.ADPEEK_API_URL}/campaign/${campaign}/creatives`,
     assign({body: adGroups}, config))
 }
 
@@ -107,8 +107,8 @@ const normalizeAdGroups = adGroups => map(adGroups,
         }))
     }))
 
-export function updateAdGroupsAction (tree, {campaign}, adGroups) {
-  return updateAdGroups(campaign, normalizeAdGroups(adGroups), getApiFetchConfig(tree))
+export function updateCampaignCreativesAction (tree, {campaign}, adGroups) {
+  return updateCreatives(campaign, normalizeAdGroups(adGroups), getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }

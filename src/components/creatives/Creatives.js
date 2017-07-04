@@ -5,11 +5,11 @@ import {DropdownMenu, MenuItem} from '../DropdownMenu'
 import {Button} from '../Button'
 import AdGroups from './AdGroups'
 import Message from 'tetris-iso/Message'
-import {loadAdGroupsAction} from '../../actions/load-adgroups'
+import {loadCreativesAction} from '../../actions/load-creatives'
 import {loadAdGroupSearchTermsAction} from '../../actions/load-adgroup-search-terms'
 import {createAdGroupsReportAction} from '../../actions/create-folder-adgroups-report'
 import {pushAdGroupAction} from '../../actions/create-adgroup'
-import {updateAdGroupsAction} from '../../actions/update-adgroups'
+import {updateCampaignCreativesAction} from '../../actions/update-campaign-creatives'
 import NotImplemented from '../NotImplemented'
 import LoadingHorizontal from '../LoadingHorizontal'
 import SubHeader from '../SubHeader'
@@ -28,7 +28,7 @@ const statusIcons = {
   all: 'playlist_add_check'
 }
 
-export class Creatives extends React.Component {
+class Creatives extends React.Component {
   static displayName = 'Creatives'
 
   static propTypes = {
@@ -94,7 +94,7 @@ export class Creatives extends React.Component {
   loadAdGroups = () => {
     const {params, dispatch} = this.props
 
-    this.loadingAdGroups = dispatch(loadAdGroupsAction, params, this.getStatusFilter())
+    this.loadingAdGroups = dispatch(loadCreativesAction, params, this.getStatusFilter())
       .then(() => this.setState({isLoading: false}))
   }
 
@@ -210,7 +210,7 @@ export class Creatives extends React.Component {
 
     this.setState({saving: true})
 
-    dispatch(updateAdGroupsAction, params, getAdGroupsWithRelevance())
+    dispatch(updateCampaignCreativesAction, params, getAdGroupsWithRelevance())
       .then(this.loadAdGroups)
       .then(() => this.setState({saving: false}))
   }
