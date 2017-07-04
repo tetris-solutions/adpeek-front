@@ -542,6 +542,7 @@ module.exports = {
   productCustomAttribute4: 'Custom attribute 4',
   productChannel: 'Channel',
   productChannelExclusivity: 'Channel Exclusivity',
+  productPartition: 'Product Partition',
   salesCountries: {
     DE: 'Germany',
     AR: 'Argentina',

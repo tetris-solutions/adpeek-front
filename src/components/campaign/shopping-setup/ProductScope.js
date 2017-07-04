@@ -28,8 +28,7 @@ class ProductScope extends React.Component {
       productCategories: PropTypes.array.isRequired
     }),
     campaign: PropTypes.shape({
-      productScope: ProductScope.array,
-      salesCountry: PropTypes.string
+      productScope: ProductScope.array
     }),
     params: PropTypes.object,
     dispatch: PropTypes.func

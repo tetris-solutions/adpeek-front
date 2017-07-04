@@ -6,6 +6,7 @@ import SubHeader from '../../SubHeader'
 import {Card, Content} from '../../Card'
 import {Tabs, Tab} from '../../Tabs'
 import ProductScope from './ProductScope'
+import ProductPartition from './ProductPartition'
 import {loadCampaignShoppingSetupAction} from '../../../actions/load-campaign-shopping-setup'
 import {loadProductCategoriesAction} from '../../../actions/load-product-categories'
 import Loading from '../../LoadingHorizontal'
@@ -16,7 +17,10 @@ class ShoppingSetupContainer extends React.Component {
 
   static propTypes = {
     folder: PropTypes.object,
-    campaign: PropTypes.object,
+    campaign: PropTypes.shape({
+      productScope: PropTypes.array,
+      salesCountry: PropTypes.string
+    }),
     params: PropTypes.object,
     dispatch: PropTypes.func
   }
@@ -85,6 +89,10 @@ class ShoppingSetupContainer extends React.Component {
                   <Tab id='product-scope' title={<Message>productScope</Message>}>
                     <br/>
                     <ProductScope {...this.props}/>
+                  </Tab>
+                  <Tab id='product-partition' title={<Message>productPartition</Message>}>
+                    <br/>
+                    <ProductPartition {...this.props}/>
                   </Tab>
                 </Tabs>
               </Content>

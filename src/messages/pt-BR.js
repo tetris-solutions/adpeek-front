@@ -543,6 +543,7 @@ module.exports = {
   productCustomAttribute4: 'Rótulo personalizado 4',
   productChannel: 'Canal',
   productChannelExclusivity: 'Exclusividade do canal',
+  productPartition: 'Partição de produtos',
   salesCountries: {
     DE: 'Alemanha',
     AR: 'Argentina',
