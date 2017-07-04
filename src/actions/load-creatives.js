@@ -5,6 +5,7 @@ import compact from 'lodash/compact'
 import map from 'lodash/map'
 import assign from 'lodash/assign'
 import head from 'lodash/head'
+import get from 'lodash/get'
 
 function loadAdGroups (level, id, filter, config) {
   return GET(`${process.env.ADPEEK_API_URL}/${level}/${id}/creatives?filter=${filter}`, config)
@@ -26,6 +27,7 @@ const normalizeAdGroups = adGroups => map(adGroups,
     assign({}, adGroup, {
       keywords: map(adGroup.keywords,
         keyword => assign({}, keyword, {
+          final_urls: get(keyword, 'final_urls.urls', null),
           cpc_bid: head(keyword.cpc_bid),
           cpm_bid: head(keyword.cpm_bid),
           status: keyword.status

@@ -8,7 +8,6 @@ import map from 'lodash/map'
 import Input from '../Input'
 import head from 'lodash/head'
 import {bidType, pickBid} from './AdGroupEdit'
-import get from 'lodash/get'
 
 const statuses = {
   NEGATIVE: ['ENABLED', 'REMOVED'],
@@ -64,7 +63,7 @@ class KeywordEdit extends React.Component {
                 type='url'
                 name='final_urls'
                 label='finalUrl'
-                value={head(get(this.props.final_urls, 'urls', this.props.final_urls)) || ''}
+                value={head(this.props.final_urls) || ''}
                 onChange={onChange}/>
             </div>)}
 
