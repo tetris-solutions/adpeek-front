@@ -116,7 +116,7 @@ module.exports = {
   loadingCampaignOrder: 'Carregando Pedido da campamha...',
   loadingLanguages: 'Carregando lista de linguagens...',
   loadingUserLists: 'Carregando listas de usuário...',
-  loadingAdGroups: 'Carregando grupos de anúncio',
+  loadingAdGroups: 'Carregando grupos de anúncio...',
   loading: 'Carregando...',
   saving: 'Salvando...',
   calculating: 'Calculando...',

@@ -3,7 +3,7 @@ import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} 
 import assign from 'lodash/assign'
 
 function updateAdGroupPlatform (campaign, adGroup, platforms, config) {
-  return PUT(`${process.env.ADPEEK_API_URL}/campaign/${campaign}/adgroup/${adGroup}/criteria/platform`,
+  return PUT(`${process.env.ADPEEK_API_URL}/campaign/${campaign}/adGroup/${adGroup}/criteria/platform`,
     assign({body: platforms}, config))
 }
 

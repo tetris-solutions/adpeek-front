@@ -2,12 +2,12 @@ import {GET} from '@tetris/http'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {saveResponseData} from '../functions/save-response-data'
 
-function loadAdGroupDetails (campaign, adGroup, fresh, config) {
-  return GET(`${process.env.ADPEEK_API_URL}/campaign/${campaign}/adGroup/${adGroup}/details${fresh ? '?fresh=true' : ''}`, config)
+function loadAdGroupPartitions (campaign, adGroup, config) {
+  return GET(`${process.env.ADPEEK_API_URL}/campaign/${campaign}/adGroup/${adGroup}/partitions`, config)
 }
 
-export function loadAdGroupDetailsAction (tree, {company, workspace, folder, campaign, adGroup}, fresh = false) {
-  return loadAdGroupDetails(campaign, adGroup, fresh, getApiFetchConfig(tree))
+export function loadAdGroupPartitionsAction (tree, {company, workspace, folder, campaign, adGroup}) {
+  return loadAdGroupPartitions(campaign, adGroup, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .then(saveResponseData(tree, [
       'user',
@@ -16,7 +16,7 @@ export function loadAdGroupDetailsAction (tree, {company, workspace, folder, cam
       ['folders', folder],
       ['campaigns', campaign],
       ['adGroups', adGroup],
-      'details'
+      'partitions'
     ]))
     .catch(pushResponseErrorToState(tree))
 }
