@@ -85,7 +85,7 @@ class ShoppingSetupContainer extends React.Component {
           <div className='mdl-cell mdl-cell--12-col'>
             <Card size='full'>
               <Content>
-                <Tabs>
+                <Tabs param='tab'>
                   <Tab id='product-scope' title={<Message>productScope</Message>}>
                     <br/>
                     <ProductScope {...this.props}/>
