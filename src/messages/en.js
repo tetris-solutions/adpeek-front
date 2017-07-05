@@ -544,6 +544,7 @@ module.exports = {
   productChannel: 'Channel',
   productChannelExclusivity: 'Channel Exclusivity',
   productPartition: 'Product Partition',
+  rootPartitionLabel: 'All products',
   salesCountries: {
     DE: 'Germany',
     AR: 'Argentina',

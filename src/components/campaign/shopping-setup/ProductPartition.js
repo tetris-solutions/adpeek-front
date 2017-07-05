@@ -6,6 +6,7 @@ import {Submit} from '../../Button'
 import {loadCampaignAdGroupsAction} from '../../../actions/load-campaign-adgroups'
 import map from 'lodash/map'
 import AdGroup from './AdGroup'
+import {Tree} from '../../Tree'
 
 class ProductPartition extends React.Component {
   static displayName = 'Product-Partition'
@@ -50,11 +51,13 @@ class ProductPartition extends React.Component {
 
     return (
       <Form onSubmit={this.save}>
-        {map(this.props.campaign.adGroups, adGroup =>
-          <AdGroup
-            key={adGroup.id}
-            categories={this.props.folder.productCategories}
-            params={{adGroup: adGroup.id}}/>)}
+        <Tree>
+          {map(this.props.campaign.adGroups, adGroup =>
+            <AdGroup
+              key={adGroup.id}
+              categories={this.props.folder.productCategories}
+              params={{adGroup: adGroup.id}}/>)}
+        </Tree>
         <hr/>
         <div>
           <Submit className='mdl-button mdl-button-primary' style={{float: 'right'}}>

@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Message from 'tetris-iso/Message'
 import {node} from '../../higher-order/branch'
 import {loadAdGroupPartitionsAction} from '../../../actions/load-adgroup-partitions'
 import once from 'lodash/once'
@@ -7,12 +8,15 @@ import forEach from 'lodash/forEach'
 import filter from 'lodash/filter'
 import assign from 'lodash/assign'
 import find from 'lodash/find'
+import {Tree, Node} from '../../Tree'
 
 const isCategory = partition => (
   partition.dimension &&
   partition.dimension.ProductDimensionType === 'ProductBiddingCategory' &&
   Boolean(partition.dimension.value)
 )
+
+const defaultRoot = {}
 
 class AdGroup extends React.Component {
   static displayName = 'AdGroup'
@@ -28,22 +32,10 @@ class AdGroup extends React.Component {
     })
   }
 
-  state = {
-    open: false
-  }
+  state = {tree: null}
 
   componentDidUpdate () {
-    this.check()
-  }
-
-  check () {
-    if (!this.state.open) return
-
-    if (!this.partitionsReady()) {
-      return this.loadPartitions()
-    }
-
-    if (!this.state.tree) {
+    if (this.partitionsReady() && !this.state.tree) {
       this.mountTree()
     }
   }
@@ -57,7 +49,7 @@ class AdGroup extends React.Component {
 
     const metaData = ({dimension: {value}}) => find(categories, {value})
 
-    function makeBranch (partition) {
+    function makeNode (partition) {
       const branch = assign({children: {}}, partition)
 
       if (isCategory(branch)) {
@@ -69,48 +61,37 @@ class AdGroup extends React.Component {
       return branch
     }
 
-    const mount = (partitions, parent) =>
+    const makeBranch = (partitions, parent) =>
       forEach(filter(partitions, {parent: parent.id}), leaf => {
-        leaf = makeBranch(leaf)
+        leaf = makeNode(leaf)
 
         parent.children[leaf.id] = leaf
 
-        mount(partitions, leaf)
+        makeBranch(partitions, leaf)
       })
 
-    const tree = makeBranch(find(partitions, {parent: null}))
+    const tree = makeNode(find(partitions, {parent: null}) || defaultRoot)
 
-    mount(partitions, tree)
+    makeBranch(partitions, tree)
 
     this.setState({tree})
   }
 
-  onClickToggle = e => {
-    e.preventDefault()
-
-    this.setState({
-      open: !this.state.open
-    })
-  }
-
-  loadPartitions = once(() =>
-    this.props.dispatch(
-      loadAdGroupPartitionsAction,
-      this.props.params))
+  load = once(() => {
+    if (!this.partitionsReady()) {
+      this.props.dispatch(loadAdGroupPartitionsAction, this.props.params)
+    }
+  })
 
   render () {
     return (
-      <div>
-        <a href='' onClick={this.onClickToggle}>
-          <i className='material-icons'>
-            keyboard_arrow_right
-          </i>
-        </a>
-
-        <strong>
-          {this.props.adGroup.name}
-        </strong>
-      </div>
+      <Node ref='node' onOpen={this.load} label={this.props.adGroup.name}>
+        <Tree>
+          <Node label={<Message>rootPartitionLabel</Message>}>
+            {JSON.stringify(this.state.tree, null, 2)}
+          </Node>
+        </Tree>
+      </Node>
     )
   }
 }
