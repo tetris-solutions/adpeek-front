@@ -53,6 +53,7 @@ class ProductPartition extends React.Component {
         {map(this.props.campaign.adGroups, adGroup =>
           <AdGroup
             key={adGroup.id}
+            categories={this.props.folder.productCategories}
             params={{adGroup: adGroup.id}}/>)}
         <hr/>
         <div>

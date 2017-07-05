@@ -8,16 +8,11 @@ import filter from 'lodash/filter'
 import assign from 'lodash/assign'
 import find from 'lodash/find'
 
-const make = node => assign({children: {}}, node)
-
-const mount = (partitions, node) =>
-  forEach(filter(partitions, {parent: node.id}), leaf => {
-    leaf = make(leaf)
-
-    node.children[leaf.id] = leaf
-
-    mount(partitions, leaf)
-  })
+const isCategory = partition => (
+  partition.dimension &&
+  partition.dimension.ProductDimensionType === 'ProductBiddingCategory' &&
+  Boolean(partition.dimension.value)
+)
 
 class AdGroup extends React.Component {
   static displayName = 'AdGroup'
@@ -25,6 +20,7 @@ class AdGroup extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func,
     params: PropTypes.object,
+    categories: PropTypes.array,
     adGroup: PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string,
@@ -57,8 +53,32 @@ class AdGroup extends React.Component {
   }
 
   mountTree () {
-    const {partitions} = this.props.adGroup
-    const tree = make(find(partitions, {parent: null}))
+    const {adGroup: {partitions}, categories} = this.props
+
+    const metaData = ({dimension: {value}}) => find(categories, {value})
+
+    function makeBranch (partition) {
+      const branch = assign({children: {}}, partition)
+
+      if (isCategory(branch)) {
+        branch.dimension = assign({},
+          metaData(partition),
+          partition.dimension)
+      }
+
+      return branch
+    }
+
+    const mount = (partitions, parent) =>
+      forEach(filter(partitions, {parent: parent.id}), leaf => {
+        leaf = makeBranch(leaf)
+
+        parent.children[leaf.id] = leaf
+
+        mount(partitions, leaf)
+      })
+
+    const tree = makeBranch(find(partitions, {parent: null}))
 
     mount(partitions, tree)
 
