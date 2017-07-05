@@ -9,6 +9,9 @@ const style = csjs`
   margin: 0;
   list-style: none;
 }
+.list:empty {
+  display: none
+}
 .total {
   color: #004465
 }

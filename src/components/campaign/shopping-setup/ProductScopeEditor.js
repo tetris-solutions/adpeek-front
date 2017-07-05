@@ -2,12 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Select from '../../Select'
 import map from 'lodash/map'
-import camelCase from 'lodash/camelCase'
 import filter from 'lodash/filter'
 import ProductScopeValue from './ProductScopeValue'
-import {productScopeTypes} from './types'
-
-const inferMsgName = type => camelCase(`PRODUCT_${type}`)
+import {productScopeTypes, inferMsgName} from './types'
 
 class ProductScopeEditor extends React.PureComponent {
   static displayName = 'Product-Scope-Editor'

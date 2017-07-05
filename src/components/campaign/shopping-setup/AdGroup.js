@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Message from 'tetris-iso/Message'
 import {node} from '../../higher-order/branch'
 import {loadAdGroupPartitionsAction} from '../../../actions/load-adgroup-partitions'
 import once from 'lodash/once'
@@ -9,6 +8,7 @@ import filter from 'lodash/filter'
 import assign from 'lodash/assign'
 import find from 'lodash/find'
 import {Tree, Node} from '../../Tree'
+import PartitionBranch from './PartitionBranch'
 
 const isCategory = partition => (
   partition.dimension &&
@@ -16,7 +16,12 @@ const isCategory = partition => (
   Boolean(partition.dimension.value)
 )
 
-const defaultRoot = {}
+const defaultRoot = {
+  id: Math.random().toString(36).substr(2),
+  children: {},
+  dimension: null,
+  parent: null
+}
 
 class AdGroup extends React.Component {
   static displayName = 'AdGroup'
@@ -49,8 +54,8 @@ class AdGroup extends React.Component {
 
     const metaData = ({dimension: {value}}) => find(categories, {value})
 
-    function makeNode (partition) {
-      const branch = assign({children: {}}, partition)
+    function makeNode (partition, parent) {
+      const branch = assign({}, partition, {children: {}, parent})
 
       if (isCategory(branch)) {
         branch.dimension = assign({},
@@ -58,21 +63,22 @@ class AdGroup extends React.Component {
           partition.dimension)
       }
 
+      if (parent) {
+        parent.children[branch.id] = branch
+      }
+
       return branch
     }
 
-    const makeBranch = (partitions, parent) =>
-      forEach(filter(partitions, {parent: parent.id}), leaf => {
-        leaf = makeNode(leaf)
+    const makeBranch = parent =>
+      forEach(filter(partitions, {parent: parent.id}),
+        leaf => makeBranch(makeNode(leaf, parent)))
 
-        parent.children[leaf.id] = leaf
+    const tree = makeNode(
+      find(partitions, {parent: null}) || defaultRoot
+    )
 
-        makeBranch(partitions, leaf)
-      })
-
-    const tree = makeNode(find(partitions, {parent: null}) || defaultRoot)
-
-    makeBranch(partitions, tree)
+    makeBranch(tree)
 
     this.setState({tree})
   }
@@ -84,12 +90,12 @@ class AdGroup extends React.Component {
   })
 
   render () {
+    const {adGroup, categories} = this.props
+
     return (
-      <Node ref='node' onOpen={this.load} label={this.props.adGroup.name}>
+      <Node ref='node' onOpen={this.load} label={adGroup.name}>
         <Tree>
-          <Node label={<Message>rootPartitionLabel</Message>}>
-            {JSON.stringify(this.state.tree, null, 2)}
-          </Node>
+          <PartitionBranch categories={categories} {...this.state.tree}/>
         </Tree>
       </Node>
     )
