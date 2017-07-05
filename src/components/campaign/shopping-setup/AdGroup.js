@@ -9,6 +9,8 @@ import assign from 'lodash/assign'
 import find from 'lodash/find'
 import {Tree, Node} from '../../Tree'
 import PartitionBranch from './PartitionBranch'
+import map from 'lodash/map'
+import {productScopeClasses} from './types'
 
 const isCategory = partition => (
   partition.dimension &&
@@ -21,6 +23,17 @@ const defaultRoot = {
   children: {},
   dimension: null,
   parent: null
+}
+
+function setTypeIfNone (partition) {
+  if (!partition.dimension || partition.dimension.type) {
+    return partition
+  }
+
+  partition = assign({}, partition)
+  partition.dimension.type = productScopeClasses[partition.dimension.ProductDimensionType].defaultType
+
+  return partition
 }
 
 class AdGroup extends React.Component {
@@ -50,7 +63,8 @@ class AdGroup extends React.Component {
   }
 
   mountTree () {
-    const {adGroup: {partitions}, categories} = this.props
+    const partitions = map(this.props.adGroup.partitions, setTypeIfNone)
+    const {categories} = this.props
 
     const metaData = ({dimension: {value}}) => find(categories, {value})
 

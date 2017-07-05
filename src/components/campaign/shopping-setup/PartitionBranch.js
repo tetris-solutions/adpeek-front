@@ -5,7 +5,7 @@ import {Node, Tree} from '../../Tree'
 import map from 'lodash/map'
 import find from 'lodash/find'
 import get from 'lodash/get'
-import {productScopeTypes, productScopeClasses} from './types'
+import {productScopeTypes} from './types'
 
 class PartitionBranch extends React.PureComponent {
   static displayName = 'Partition-Branch'
@@ -14,6 +14,7 @@ class PartitionBranch extends React.PureComponent {
     parent: PropTypes.object,
     categories: PropTypes.array,
     dimension: PropTypes.shape({
+      id: PropTypes.string,
       ProductDimensionType: PropTypes.string,
       type: PropTypes.string,
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
@@ -26,15 +27,6 @@ class PartitionBranch extends React.PureComponent {
     return (
       this.props.dimension.ProductDimensionType === 'ProductBiddingCategory' &&
       this.props.dimension.value
-    )
-  }
-
-  getType () {
-    const {dimension: {type, ProductDimensionType}} = this.props
-
-    return (
-      type ||
-      productScopeClasses[ProductDimensionType].defaultType
     )
   }
 
@@ -51,7 +43,7 @@ class PartitionBranch extends React.PureComponent {
       return get(category, 'name', dimension.value)
     }
 
-    const type = productScopeTypes[this.getType()]
+    const type = productScopeTypes[dimension.type]
 
     return dimension[type.valueField] || <Message>otherProducts</Message>
   }
