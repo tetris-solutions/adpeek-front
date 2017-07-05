@@ -1,4 +1,3 @@
-import csjs from 'csjs'
 import map from 'lodash/map'
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -7,7 +6,6 @@ import compact from 'lodash/compact'
 import size from 'lodash/size'
 import intersection from 'lodash/intersection'
 import isEmpty from 'lodash/isEmpty'
-import {styledFunctionalComponent} from '../../higher-order/styled'
 import AttributeItem from './AttributeItem'
 import forEach from 'lodash/forEach'
 import groupBy from 'lodash/groupBy'
@@ -17,36 +15,8 @@ import assign from 'lodash/assign'
 import head from 'lodash/head'
 import tail from 'lodash/tail'
 import every from 'lodash/every'
+import {Tree, Node} from '../../Tree'
 
-const style = csjs`
-.list {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-.total {
-  color: #004465
-}
-.partial {
-  color: #4650a0
-}
-.item {
-  display: block;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.item > strong {
-  cursor: pointer;
-}
-.item > i {
-  cursor: pointer;
-  float: left;
-  padding-right: .3em
-}
-.subTree {
-  margin-left: .7em;
-}`
 const ids = ({ids, id}) => ids || id
 
 function buildTree (attributes, levels, mount = false) {
@@ -113,14 +83,6 @@ class Group extends React.Component {
     openByDefault: false
   }
 
-  state = {
-    isOpen: this.props.openByDefault
-  }
-
-  toggleVisibility = () => {
-    this.setState({isOpen: !this.state.isOpen})
-  }
-
   toggleSelection = () => {
     const {selection} = this.props
 
@@ -132,32 +94,14 @@ class Group extends React.Component {
   }
 
   render () {
-    const {isOpen} = this.state
     const {children, name, selection} = this.props
 
     return (
-      <li>
-        <header className={`${style.item} ${selection ? style[selection] : ''}`}>
-          <i onClick={this.toggleVisibility} className='material-icons'>{
-            isOpen ? 'keyboard_arrow_down' : 'keyboard_arrow_right'
-          }</i>
-          <strong onClick={this.toggleSelection}>
-            {name}
-          </strong>
-        </header>
-        <div className={style.subTree}>
-          {isOpen ? children : null}
-        </div>
-      </li>
+      <Node label={name} selection={selection} onClick={this.toggleSelection}>
+        {children}
+      </Node>
     )
   }
-}
-
-const List = ({children}) => <ul className={style.list}>{children}</ul>
-
-List.displayName = 'List'
-List.propTypes = {
-  children: PropTypes.node.isRequired
 }
 
 const AttributeList = ({attributes, selectedAttributes, levels, remove, add}) => {
@@ -189,9 +133,9 @@ const AttributeList = ({attributes, selectedAttributes, levels, remove, add}) =>
         name={item.name}
         select={add}
         unselect={remove}>
-        <List>
+        <Tree>
           {map(item.list, node)}
-        </List>
+        </Tree>
       </Group>
     )
   }
@@ -199,9 +143,9 @@ const AttributeList = ({attributes, selectedAttributes, levels, remove, add}) =>
   const items = buildTree(attributes, levels, true)
 
   return (
-    <List>
+    <Tree>
       {map(items, node)}
-    </List>
+    </Tree>
   )
 }
 
@@ -215,4 +159,5 @@ AttributeList.propTypes = {
   add: PropTypes.func.isRequired
 }
 
-export default styledFunctionalComponent(AttributeList, style)
+export default AttributeList
+
