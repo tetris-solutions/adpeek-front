@@ -545,6 +545,13 @@ module.exports = {
   productChannelExclusivity: 'Channel Exclusivity',
   productPartition: 'Product Partition',
   rootPartitionLabel: 'All products',
+  productOptionNew: 'New',
+  productOptionUsed: 'Used',
+  productOptionRefurbished: 'Refurbished',
+  productOptionOnline: 'Online',
+  productOptionLocal: 'Local',
+  productOptionSingleChannel: 'Single channel',
+  productOptionMultiChannel: 'Multi channel',
   otherProducts: 'Other',
   salesCountries: {
     DE: 'Germany',

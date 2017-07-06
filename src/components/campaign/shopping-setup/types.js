@@ -1,6 +1,7 @@
 import camelCase from 'lodash/camelCase'
 
 export const inferMsgName = type => camelCase(`PRODUCT_${type}`)
+export const inferOptionMsgName = value => camelCase(`PRODUCT_OPTION_${value}`)
 
 export const productScopeTypes = {
   BIDDING_CATEGORY_L1: {

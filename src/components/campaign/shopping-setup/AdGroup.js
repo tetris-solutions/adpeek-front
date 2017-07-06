@@ -11,6 +11,7 @@ import {Tree, Node} from '../../Tree'
 import PartitionBranch from './PartitionBranch'
 import map from 'lodash/map'
 import {productScopeClasses} from './types'
+// import set from 'lodash/set'
 
 const isCategory = partition => (
   partition.dimension &&
@@ -26,12 +27,15 @@ const defaultRoot = {
 }
 
 function setTypeIfNone (partition) {
-  if (!partition.dimension || partition.dimension.type) {
-    return partition
-  }
-
   partition = assign({}, partition)
-  partition.dimension.type = productScopeClasses[partition.dimension.ProductDimensionType].defaultType
+
+  if (partition.dimension) {
+    partition.dimension = assign({}, partition.dimension)
+    partition.dimension.type = (
+      partition.dimension.type ||
+      productScopeClasses[partition.dimension.ProductDimensionType].defaultType
+    )
+  }
 
   return partition
 }
@@ -108,9 +112,10 @@ class AdGroup extends React.Component {
 
     return (
       <Node ref='node' onOpen={this.load} label={adGroup.name}>
-        <Tree>
-          <PartitionBranch categories={categories} {...this.state.tree}/>
-        </Tree>
+        {this.state.tree && (
+          <Tree>
+            <PartitionBranch categories={categories} {...this.state.tree}/>
+          </Tree>)}
       </Node>
     )
   }

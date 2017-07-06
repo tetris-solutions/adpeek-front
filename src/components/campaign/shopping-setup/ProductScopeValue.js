@@ -5,20 +5,8 @@ import Input from '../../Input'
 import map from 'lodash/map'
 import isEmpty from 'lodash/isEmpty'
 
-function ProductScopeValue ({categories, onChange, options, editable, value: inputValue, name}) {
-  if (options) {
-    return (
-      <Select required disabled={!editable} name={name} value={inputValue} onChange={onChange}>
-        <option/>
-        {map(options, value =>
-          <option key={value} value={value}>
-            {value}
-          </option>)}
-      </Select>
-    )
-  }
-
-  if (isEmpty(categories)) {
+function ProductScopeValue ({onChange, options, editable, value: inputValue, name}) {
+  if (isEmpty(options)) {
     return (
       <Input
         required
@@ -32,9 +20,9 @@ function ProductScopeValue ({categories, onChange, options, editable, value: inp
   return (
     <Select required disabled={!editable} name={name} value={inputValue} onChange={onChange}>
       <option/>
-      {map(categories, ({name, value}) =>
+      {map(options, ({text, value}) =>
         <option key={value} value={value}>
-          {name}
+          {text}
         </option>)}
     </Select>
   )
@@ -42,7 +30,6 @@ function ProductScopeValue ({categories, onChange, options, editable, value: inp
 
 ProductScopeValue.displayName = 'Product-Scope-Value'
 ProductScopeValue.propTypes = {
-  categories: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired,
   options: PropTypes.array,
   editable: PropTypes.bool.isRequired,

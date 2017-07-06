@@ -4,7 +4,7 @@ import Select from '../../Select'
 import map from 'lodash/map'
 import filter from 'lodash/filter'
 import ProductScopeValue from './ProductScopeValue'
-import {productScopeTypes, inferMsgName} from './types'
+import {productScopeTypes, inferOptionMsgName, inferMsgName} from './types'
 
 class ProductScopeEditor extends React.PureComponent {
   static displayName = 'Product-Scope-Editor'
@@ -59,13 +59,24 @@ class ProductScopeEditor extends React.PureComponent {
     this.props.remove(this.props.id)
   }
 
-  getEnabledCategories () {
+  parseOption = value => {
+    return {
+      value,
+      text: this.context.messages[inferOptionMsgName(value)]
+    }
+  }
+
+  getOptions () {
     const {
       categories,
       parentScope,
-      config: {valueField},
+      config: {valueField, options},
       type
     } = this.props
+
+    if (options) {
+      return map(options, this.parseOption)
+    }
 
     return parentScope ? filter(categories, {
       parent: Number(parentScope[valueField]),
@@ -75,7 +86,7 @@ class ProductScopeEditor extends React.PureComponent {
 
   render () {
     const {messages} = this.context
-    const {editable, type, types, config: {options, valueField}} = this.props
+    const {editable, type, types, config: {valueField}} = this.props
     const inputValue = this.props[valueField]
 
     return (
@@ -95,9 +106,8 @@ class ProductScopeEditor extends React.PureComponent {
         </div>
         <div className='mdl-cell mdl-cell--5-col'>
           <ProductScopeValue
-            categories={this.getEnabledCategories()}
             onChange={this.onChangeValue}
-            options={options}
+            options={this.getOptions()}
             editable={editable}
             value={String(inputValue || '')}
             name={valueField}/>
