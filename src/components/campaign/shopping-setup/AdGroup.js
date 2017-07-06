@@ -11,7 +11,7 @@ import {Tree, Node} from '../../Tree'
 import PartitionBranch from './PartitionBranch'
 import map from 'lodash/map'
 import {productScopeClasses} from './types'
-// import set from 'lodash/set'
+import set from 'lodash/set'
 
 const isCategory = partition => (
   partition.dimension &&
@@ -101,6 +101,30 @@ class AdGroup extends React.Component {
     this.setState({tree})
   }
 
+  update = (node, changes) => {
+    const {tree} = this.state
+
+    forEach(changes, (value, key) => {
+      const path = [key, 'dimension']
+      let currentNode = node
+
+      do {
+        if (!currentNode.parent) {
+          break
+        }
+
+        path.push(currentNode.id)
+        path.push('children')
+
+        currentNode = currentNode.parent
+      } while (currentNode)
+
+      set(tree, path.reverse().join('.'), value)
+    })
+
+    this.setState({tree})
+  }
+
   load = once(() => {
     if (!this.partitionsReady()) {
       this.props.dispatch(loadAdGroupPartitionsAction, this.props.params)
@@ -114,7 +138,7 @@ class AdGroup extends React.Component {
       <Node ref='node' onOpen={this.load} label={adGroup.name}>
         {this.state.tree && (
           <Tree>
-            <PartitionBranch categories={categories} {...this.state.tree}/>
+            <PartitionBranch update={this.update} categories={categories} {...this.state.tree}/>
           </Tree>)}
       </Node>
     )

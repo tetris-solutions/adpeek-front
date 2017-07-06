@@ -47,9 +47,10 @@ DimensionEditor.contextTypes = {
   messages: PropTypes.object
 }
 
-class PartitionBranch extends React.PureComponent {
+class PartitionBranch extends React.Component {
   static displayName = 'Partition-Branch'
   static propTypes = {
+    update: PropTypes.func.isRequired,
     children: PropTypes.object,
     parent: PropTypes.object,
     categories: PropTypes.array,
@@ -76,7 +77,7 @@ class PartitionBranch extends React.PureComponent {
     return (
       this.props.dimension &&
       this.props.dimension.ProductDimensionType === 'ProductBiddingCategory' &&
-      this.props.dimension.value
+      this.props.dimension.value !== null
     )
   }
 
@@ -130,8 +131,15 @@ class PartitionBranch extends React.PureComponent {
     )
   }
 
-  onChange = () => {
+  onChange = ({target: {name, value}}) => {
+    const changes = {[name]: value}
 
+    if (name === 'type') {
+      changes.ProductDimensionType = productScopeTypes[value].scopeClass
+      changes.value = ''
+    }
+
+    this.props.update(this.props, changes)
   }
 
   render () {
