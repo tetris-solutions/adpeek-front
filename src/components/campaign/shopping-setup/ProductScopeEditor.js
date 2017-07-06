@@ -6,6 +6,8 @@ import filter from 'lodash/filter'
 import ProductScopeValue from './ProductScopeValue'
 import {productScopeTypes, inferOptionMsgName, inferMsgName} from './types'
 
+const parseCategory = ({name: text, value}) => ({text, value})
+
 class ProductScopeEditor extends React.PureComponent {
   static displayName = 'Product-Scope-Editor'
 
@@ -78,10 +80,12 @@ class ProductScopeEditor extends React.PureComponent {
       return map(options, this.parseOption)
     }
 
-    return parentScope ? filter(categories, {
+    const ls = parentScope ? filter(categories, {
       parent: Number(parentScope[valueField]),
       type
     }) : filter(categories, {type})
+
+    return map(ls, parseCategory)
   }
 
   render () {
