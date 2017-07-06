@@ -41,7 +41,7 @@ DimensionEditor.propTypes = {
   options: PropTypes.array.isRequired,
   editable: PropTypes.bool.isRequired,
   value: PropTypes.any.isRequired,
-  name: PropTypes.string.isRequired
+  name: PropTypes.any.isRequired
 }
 DimensionEditor.contextTypes = {
   messages: PropTypes.object
@@ -57,7 +57,10 @@ class PartitionBranch extends React.PureComponent {
       id: PropTypes.string,
       ProductDimensionType: PropTypes.string,
       type: PropTypes.string,
-      value: PropTypes.any.isRequired
+      channel: PropTypes.string,
+      channelExclusivity: PropTypes.string,
+      condition: PropTypes.string,
+      value: PropTypes.any
     })
   }
 
