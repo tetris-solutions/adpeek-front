@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import {node} from '../../higher-order/branch'
 import {loadAdGroupPartitionsAction} from '../../../actions/load-adgroup-partitions'
+import {liveEditAdGroupAction} from '../../../actions/update-campaign-creatives'
 import once from 'lodash/once'
 import forEach from 'lodash/forEach'
 import filter from 'lodash/filter'
@@ -12,6 +13,8 @@ import {Tree, Node} from '../../Tree'
 import PartitionBranch from './PartitionBranch'
 import map from 'lodash/map'
 import {productScopeClasses} from './types'
+import omit from 'lodash/omit'
+import debounce from 'lodash/debounce'
 
 const isCategory = partition => (
   partition.dimension &&
@@ -38,6 +41,25 @@ function setTypeIfNone (partition) {
   }
 
   return partition
+}
+
+function flattenPartition (node, partitions = []) {
+  const partition = omit(node, 'parent', 'children')
+
+  partition.parent = node.parent
+    ? node.parent.id
+    : null
+
+  partition.dimension = partition.dimension
+    ? assign({}, partition.dimension)
+    : null
+
+  partitions.push(partition)
+
+  forEach(node.children, child =>
+    flattenPartition(child, partitions))
+
+  return partitions
 }
 
 class AdGroup extends React.Component {
@@ -101,10 +123,16 @@ class AdGroup extends React.Component {
     this.setState({tree})
   }
 
+  persist = debounce(() => {
+    this.props.dispatch(liveEditAdGroupAction, this.props.params, {
+      partitions: flattenPartition(this.state.tree)
+    })
+  }, 1000)
+
   refresh () {
     this.setState({
       tree: this.state.tree
-    })
+    }, this.persist)
   }
 
   update = (node, changes) => {

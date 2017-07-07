@@ -4,9 +4,15 @@ import Message from 'tetris-iso/Message'
 import Form from '../../Form'
 import {Submit} from '../../Button'
 import {loadCampaignAdGroupsAction} from '../../../actions/load-campaign-adgroups'
+import {updateAdGroupProductPartitionAction} from '../../../actions/update-adgroup-product-partitions'
 import map from 'lodash/map'
 import AdGroup from './AdGroup'
 import {Tree} from '../../Tree'
+import assign from 'lodash/assign'
+
+const campaignPropType = PropTypes.shape({
+  adGroups: PropTypes.array
+})
 
 class ProductPartition extends React.Component {
   static displayName = 'Product-Partition'
@@ -15,8 +21,9 @@ class ProductPartition extends React.Component {
     folder: PropTypes.shape({
       productCategories: PropTypes.array.isRequired
     }),
-    campaign: PropTypes.shape({
-      adGroups: PropTypes.array
+    campaign: campaignPropType,
+    cursors: PropTypes.shape({
+      campaign: campaignPropType
     }),
     params: PropTypes.object,
     dispatch: PropTypes.func
@@ -41,7 +48,15 @@ class ProductPartition extends React.Component {
   }
 
   save = () => {
+    const promises = map(this.props.cursors.campaign.adGroups,
+      ({id: adGroup, partitions}) =>
+        this.props.dispatch(
+          updateAdGroupProductPartitionAction,
+          assign({adGroup}, this.props.params),
+          partitions
+        ))
 
+    return Promise.all(promises)
   }
 
   render () {

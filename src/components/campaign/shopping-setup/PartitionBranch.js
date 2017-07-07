@@ -16,7 +16,7 @@ import {styledComponent} from '../../higher-order/styled'
 const style = csjs`
 .action {
   color: inherit;
-  margin-right: 1em
+  margin-left: 1em;
 }`
 
 const parseCategory = ({name: text, value}) => ({text, value})
@@ -40,6 +40,14 @@ function hasCategoryChild (children) {
   })
 
   return found
+}
+
+function findParentCategory (node) {
+  if (!node) return null
+
+  return isBiddingCategory(node.dimension)
+    ? node
+    : findParentCategory(node.parent)
 }
 
 class PartitionBranch extends React.Component {
@@ -149,7 +157,7 @@ class PartitionBranch extends React.Component {
     }
 
     const type = this.props.dimension.type
-    const parentValue = get(this.self(), 'parent.dimension.value')
+    const parentValue = get(findParentCategory(this.props.parent), 'dimension.value')
     const parent = parentValue ? Number(parentValue) : null
 
     return map(
