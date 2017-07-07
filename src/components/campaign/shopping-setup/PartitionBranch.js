@@ -81,7 +81,7 @@ class PartitionBranch extends React.Component {
 
     const {categories, dimension} = this.props
 
-    if (this.isCategory()) {
+    if (this.isCategory() && dimension.value) {
       const category = find(categories, {value: Number(dimension.value)})
 
       return get(category, 'name', dimension.value)
