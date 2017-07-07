@@ -59,6 +59,13 @@ class PartitionBranch extends React.Component {
     return !this.props.parent
   }
 
+  isPlaceholder () {
+    return (
+      !this.props.dimension ||
+      this.props.dimension[this.getTypeConfig().valueField] === null
+    )
+  }
+
   isCategory () {
     return isBiddingCategory(this.props.dimension)
   }
@@ -143,15 +150,15 @@ class PartitionBranch extends React.Component {
     const {dimension, children} = this.props
     let editor = null
 
-    if (!this.isRoot()) {
+    if (!this.isPlaceholder() && (!this.isCategory() || !hasCategoryChild(children))) {
       const {valueField} = this.getTypeConfig()
 
       editor = (
         <DimensionEditor
+          editable
           type={dimension.type}
           onChange={this.onChange}
           options={this.getOptions()}
-          editable={!this.isCategory() || !hasCategoryChild(children)}
           value={dimension[valueField]}
           name={valueField}/>
       )
