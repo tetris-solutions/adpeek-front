@@ -117,6 +117,7 @@ module.exports = {
   loadingLanguages: 'Carregando lista de linguagens...',
   loadingUserLists: 'Carregando listas de usuário...',
   loadingAdGroups: 'Carregando grupos de anúncio...',
+  loadingProductPartitions: 'Carregando grupos de produtos...',
   loading: 'Carregando...',
   saving: 'Salvando...',
   calculating: 'Calculando...',

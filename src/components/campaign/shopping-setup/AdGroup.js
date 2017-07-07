@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Message from 'tetris-iso/Message'
 import {node} from '../../higher-order/branch'
 import {loadAdGroupPartitionsAction} from '../../../actions/load-adgroup-partitions'
 import once from 'lodash/once'
@@ -136,10 +137,15 @@ class AdGroup extends React.Component {
 
     return (
       <Node ref='node' onOpen={this.load} label={adGroup.name}>
-        {this.state.tree && (
+        {this.state.tree ? (
           <Tree>
             <PartitionBranch update={this.update} categories={categories} {...this.state.tree}/>
-          </Tree>)}
+          </Tree>
+        ) : (
+          <p>
+            <Message>loadingProductPartitions</Message>
+          </p>
+        )}
       </Node>
     )
   }
