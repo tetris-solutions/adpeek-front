@@ -13,38 +13,46 @@ import {productScopeTypes, inferMsgName, inferOptionMsgName} from './types'
 
 const parseCategory = ({name: text, value}) => ({text, value})
 
-const DimensionEditor = ({onChange, options, editable, value, name, type}, {messages}) => (
-  <div className='mdl-grid'>
-    <div className='mdl-cell mdl-cell--5-col'>
-      <Select name='type' onChange={onChange} value={type} disabled={!editable}>
-        {map(productScopeTypes, (_, type) =>
-          <option key={type} value={type}>
-            {messages[inferMsgName(type)]}
-          </option>)}
-      </Select>
-    </div>
-    <div className='mdl-cell mdl-cell--5-col'>
-      <ProductScopeValue
-        onChange={onChange}
-        options={options}
-        editable={editable}
-        value={value}
-        name={name}/>
-    </div>
-  </div>
-)
+class DimensionEditor extends React.PureComponent {
+  static displayName = ' Dimension-Editor'
 
-DimensionEditor.displayName = 'Editor'
-DimensionEditor.propTypes = {
-  type: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  options: PropTypes.array.isRequired,
-  editable: PropTypes.bool.isRequired,
-  value: PropTypes.any.isRequired,
-  name: PropTypes.any.isRequired
-}
-DimensionEditor.contextTypes = {
-  messages: PropTypes.object
+  static propTypes = {
+    type: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    options: PropTypes.array.isRequired,
+    editable: PropTypes.bool.isRequired,
+    value: PropTypes.any.isRequired,
+    name: PropTypes.any.isRequired
+  }
+
+  static contextTypes = {
+    messages: PropTypes.object
+  }
+
+  render () {
+    const {onChange, options, editable, value, name, type} = this.props
+
+    return (
+      <div className='mdl-grid'>
+        <div className='mdl-cell mdl-cell--5-col'>
+          <Select name='type' onChange={onChange} value={type} disabled={!editable}>
+            {map(productScopeTypes, (_, type) =>
+              <option key={type} value={type}>
+                {this.context.messages[inferMsgName(type)]}
+              </option>)}
+          </Select>
+        </div>
+        <div className='mdl-cell mdl-cell--5-col'>
+          <ProductScopeValue
+            onChange={onChange}
+            options={options}
+            editable={editable}
+            value={value}
+            name={name}/>
+        </div>
+      </div>
+    )
+  }
 }
 
 class PartitionBranch extends React.Component {
@@ -98,9 +106,24 @@ class PartitionBranch extends React.Component {
       return get(category, 'name', dimension.value)
     }
 
+    const {messages} = this.context
     const {valueField} = this.getTypeConfig()
+    const config = this.getTypeConfig()
+    const typeName = messages[inferMsgName(dimension.type)]
 
-    return dimension[valueField] || <Message>otherProducts</Message>
+    let value = dimension[valueField]
+
+    if (value === null) {
+      return <Message>otherProducts</Message>
+    }
+
+    if (config.options) {
+      value = messages[inferOptionMsgName(value)]
+    }
+
+    value = value || '---'
+
+    return `${typeName}: ${value}`
   }
 
   parseOption = value => {
