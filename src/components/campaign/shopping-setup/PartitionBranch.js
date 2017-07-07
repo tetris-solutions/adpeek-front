@@ -9,6 +9,14 @@ import get from 'lodash/get'
 import {productScopeTypes, inferMsgName, inferOptionMsgName} from './types'
 import forEach from 'lodash/forEach'
 import DimensionEditor from './ProductPartitionDimensionEditor'
+import csjs from 'csjs'
+import {styledComponent} from '../../higher-order/styled'
+
+const style = csjs`
+.action {
+  color: inherit;
+  margin-right: 1em
+}`
 
 const parseCategory = ({name: text, value}) => ({text, value})
 
@@ -56,14 +64,22 @@ class PartitionBranch extends React.Component {
   }
 
   isRoot () {
-    return !this.props.parent
+    return !this.props.parent || !this.props.dimension
   }
 
   isPlaceholder () {
     return (
-      !this.props.dimension ||
+      !this.isRoot() &&
       this.props.dimension[this.getTypeConfig().valueField] === null
     )
+  }
+
+  isLeaf () {
+    return !this.isRoot() &&
+      (
+        this.isPlaceholder() ||
+        this.props.dimension.type === 'OFFER_ID'
+      )
   }
 
   isCategory () {
@@ -146,27 +162,52 @@ class PartitionBranch extends React.Component {
     this.props.update(this.props, changes)
   }
 
+  onClickAdd = e => {
+    e.preventDefault()
+  }
+
+  onClickRemove = e => {
+    e.preventDefault()
+    this.props.update(this.props, null)
+  }
+
   render () {
     const {dimension, children} = this.props
-    let editor = null
 
-    if (!this.isPlaceholder() && (!this.isCategory() || !hasCategoryChild(children))) {
-      const {valueField} = this.getTypeConfig()
-
-      editor = (
-        <DimensionEditor
-          editable
-          type={dimension.type}
-          onChange={this.onChange}
-          options={this.getOptions()}
-          value={dimension[valueField]}
-          name={valueField}/>
+    const editable = (
+      !this.isRoot() &&
+      !this.isPlaceholder() && (
+        !this.isCategory() ||
+        !hasCategoryChild(children)
       )
-    }
+    )
+    const valueField = editable ? this.getTypeConfig().valueField : null
+
+    const label = (
+      <span>
+        {this.inferLabel()}
+
+        {!this.isLeaf() && (
+          <a className={style.action} href='' onClick={this.onClickAdd}>
+            <i className='material-icons'>add</i>
+          </a>)}
+
+        {editable && (
+          <a className={style.action} href='' onClick={this.onClickRemove}>
+            <i className='material-icons'>close</i>
+          </a>)}
+      </span>
+    )
 
     return (
-      <Node label={this.inferLabel()}>
-        {editor}
+      <Node label={label}>
+        {editable && (
+          <DimensionEditor
+            type={dimension && dimension.type}
+            onChange={this.onChange}
+            options={this.getOptions()}
+            value={dimension[valueField]}
+            name={valueField}/>)}
         <Tree>
           {map(children, partition =>
             <PartitionBranch
@@ -179,4 +220,4 @@ class PartitionBranch extends React.Component {
   }
 }
 
-export default PartitionBranch
+export default styledComponent(PartitionBranch, style)

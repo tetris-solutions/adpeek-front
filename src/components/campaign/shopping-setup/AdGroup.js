@@ -12,7 +12,6 @@ import {Tree, Node} from '../../Tree'
 import PartitionBranch from './PartitionBranch'
 import map from 'lodash/map'
 import {productScopeClasses} from './types'
-import set from 'lodash/set'
 
 const isCategory = partition => (
   partition.dimension &&
@@ -103,27 +102,17 @@ class AdGroup extends React.Component {
   }
 
   update = (node, changes) => {
-    const {tree} = this.state
+    // @todo avoid mutability
 
-    forEach(changes, (value, key) => {
-      const path = [key, 'dimension']
-      let currentNode = node
+    if (changes) {
+      assign(node.dimension, changes)
+    } else {
+      delete node.parent.children[node.id]
+    }
 
-      do {
-        if (!currentNode.parent) {
-          break
-        }
-
-        path.push(currentNode.id)
-        path.push('children')
-
-        currentNode = currentNode.parent
-      } while (currentNode)
-
-      set(tree, path.reverse().join('.'), value)
+    this.setState({
+      tree: this.state.tree
     })
-
-    this.setState({tree})
   }
 
   load = once(() => {

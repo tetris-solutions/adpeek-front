@@ -12,7 +12,6 @@ class DimensionEditor extends React.PureComponent {
     type: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     options: PropTypes.array.isRequired,
-    editable: PropTypes.bool.isRequired,
     value: PropTypes.any.isRequired,
     name: PropTypes.any.isRequired
   }
@@ -22,12 +21,10 @@ class DimensionEditor extends React.PureComponent {
   }
 
   render () {
-    const {onChange, options, editable, value, name, type} = this.props
-
     return (
       <div className='mdl-grid'>
-        <div className='mdl-cell mdl-cell--5-col'>
-          <Select name='type' onChange={onChange} value={type} disabled={!editable}>
+        <div className='mdl-cell mdl-cell--5-col mdl-cell--2-offset'>
+          <Select name='type' onChange={this.props.onChange} value={this.props.type}>
             {map(productScopeTypes, (_, type) =>
               <option key={type} value={type}>
                 {this.context.messages[inferMsgName(type)]}
@@ -36,11 +33,11 @@ class DimensionEditor extends React.PureComponent {
         </div>
         <div className='mdl-cell mdl-cell--5-col'>
           <ProductScopeValue
-            onChange={onChange}
-            options={options}
-            editable={editable}
-            value={value}
-            name={name}/>
+            editable
+            onChange={this.props.onChange}
+            options={this.props.options}
+            value={this.props.value}
+            name={this.props.name}/>
         </div>
       </div>
     )
