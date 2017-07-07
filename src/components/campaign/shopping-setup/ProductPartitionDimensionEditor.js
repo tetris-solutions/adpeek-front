@@ -9,6 +9,7 @@ class DimensionEditor extends React.PureComponent {
   static displayName = ' Dimension-Editor'
 
   static propTypes = {
+    title: PropTypes.node.isRequired,
     type: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     options: PropTypes.array.isRequired,
@@ -23,15 +24,18 @@ class DimensionEditor extends React.PureComponent {
   render () {
     return (
       <div className='mdl-grid'>
-        <div className='mdl-cell mdl-cell--5-col mdl-cell--2-offset'>
-          <Select name='type' onChange={this.props.onChange} value={this.props.type}>
+        <div className='mdl-cell mdl-cell--12-col'>
+          <h5>{this.props.title}</h5>
+        </div>
+        <div className='mdl-cell mdl-cell--12-col'>
+          <Select name='type' label='productPartitionType' onChange={this.props.onChange} value={this.props.type}>
             {map(productScopeTypes, (_, type) =>
               <option key={type} value={type}>
                 {this.context.messages[inferMsgName(type)]}
               </option>)}
           </Select>
         </div>
-        <div className='mdl-cell mdl-cell--5-col'>
+        <div className='mdl-cell mdl-cell--12-col'>
           <ProductScopeValue
             editable
             onChange={this.props.onChange}

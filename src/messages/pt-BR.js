@@ -555,6 +555,8 @@ module.exports = {
   productOptionMultiChannel: 'Múltiplos canais',
   rootPartitionLabel: 'Todos produtos',
   otherProducts: 'Outros',
+  productPartitionTypeLabel: 'Tipo de partição',
+  productPartitionValueLabel: 'Valor',
   salesCountries: {
     DE: 'Alemanha',
     AR: 'Argentina',

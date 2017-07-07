@@ -10,6 +10,7 @@ function ProductScopeValue ({onChange, options, editable, value: inputValue, nam
     return (
       <Input
         required
+        label='productPartitionValue'
         disabled={!editable}
         name={name}
         value={inputValue}
@@ -18,7 +19,13 @@ function ProductScopeValue ({onChange, options, editable, value: inputValue, nam
   }
 
   return (
-    <Select required disabled={!editable} name={name} value={inputValue} onChange={onChange}>
+    <Select
+      required
+      label='productPartitionValue'
+      disabled={!editable}
+      name={name}
+      value={inputValue}
+      onChange={onChange}>
       <option/>
       {map(options, ({text, value}) =>
         <option key={value} value={value}>

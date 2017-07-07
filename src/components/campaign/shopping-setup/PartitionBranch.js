@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
+import Modal from 'tetris-iso/Modal'
 import {Node, Tree} from '../../Tree'
 import map from 'lodash/map'
 import find from 'lodash/find'
@@ -63,6 +64,10 @@ class PartitionBranch extends React.Component {
 
   static contextTypes = {
     messages: PropTypes.object
+  }
+
+  state = {
+    openEditor: false
   }
 
   isRoot () {
@@ -179,6 +184,16 @@ class PartitionBranch extends React.Component {
     this.props.update(this.props, null)
   }
 
+  onClickEdit = e => {
+    e.preventDefault()
+
+    this.toggleEditor()
+  }
+
+  toggleEditor = () => {
+    this.setState({openEditor: !this.state.openEditor})
+  }
+
   render () {
     const {dimension, children} = this.props
 
@@ -190,10 +205,16 @@ class PartitionBranch extends React.Component {
       )
     )
     const valueField = editable ? this.getTypeConfig().valueField : null
+    const title = this.inferLabel()
 
     const label = (
       <span>
-        {this.inferLabel()}
+        {title}
+
+        {editable && (
+          <a className={style.action} href='' onClick={this.onClickEdit}>
+            <i className='material-icons'>mode_edit</i>
+          </a>)}
 
         {!this.isLeaf() && (
           <a className={style.action} href='' onClick={this.onClickAdd}>
@@ -204,18 +225,22 @@ class PartitionBranch extends React.Component {
           <a className={style.action} href='' onClick={this.onClickRemove}>
             <i className='material-icons'>close</i>
           </a>)}
+
+        {editable && this.state.openEditor && (
+          <Modal size='small' minHeight={0} onEscPress={this.toggleEditor}>
+            <DimensionEditor
+              title={title}
+              type={dimension && dimension.type}
+              onChange={this.onChange}
+              options={this.getOptions()}
+              value={dimension[valueField]}
+              name={valueField}/>
+          </Modal>)}
       </span>
     )
 
     return (
       <Node label={label}>
-        {editable && (
-          <DimensionEditor
-            type={dimension && dimension.type}
-            onChange={this.onChange}
-            options={this.getOptions()}
-            value={dimension[valueField]}
-            name={valueField}/>)}
         <Tree>
           {map(children, partition =>
             <PartitionBranch
