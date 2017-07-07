@@ -6,10 +6,9 @@ import map from 'lodash/map'
 import find from 'lodash/find'
 import filter from 'lodash/filter'
 import get from 'lodash/get'
-import Select from '../../Select'
-import ProductScopeValue from './ProductScopeValue'
 import {productScopeTypes, inferMsgName, inferOptionMsgName} from './types'
 import forEach from 'lodash/forEach'
+import DimensionEditor from './ProductPartitionDimensionEditor'
 
 const parseCategory = ({name: text, value}) => ({text, value})
 
@@ -32,48 +31,6 @@ function hasCategoryChild (children) {
   })
 
   return found
-}
-
-class DimensionEditor extends React.PureComponent {
-  static displayName = ' Dimension-Editor'
-
-  static propTypes = {
-    type: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    options: PropTypes.array.isRequired,
-    editable: PropTypes.bool.isRequired,
-    value: PropTypes.any.isRequired,
-    name: PropTypes.any.isRequired
-  }
-
-  static contextTypes = {
-    messages: PropTypes.object
-  }
-
-  render () {
-    const {onChange, options, editable, value, name, type} = this.props
-
-    return (
-      <div className='mdl-grid'>
-        <div className='mdl-cell mdl-cell--5-col'>
-          <Select name='type' onChange={onChange} value={type} disabled={!editable}>
-            {map(productScopeTypes, (_, type) =>
-              <option key={type} value={type}>
-                {this.context.messages[inferMsgName(type)]}
-              </option>)}
-          </Select>
-        </div>
-        <div className='mdl-cell mdl-cell--5-col'>
-          <ProductScopeValue
-            onChange={onChange}
-            options={options}
-            editable={editable}
-            value={value}
-            name={name}/>
-        </div>
-      </div>
-    )
-  }
 }
 
 class PartitionBranch extends React.Component {
