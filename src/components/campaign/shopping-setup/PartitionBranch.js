@@ -8,10 +8,31 @@ import filter from 'lodash/filter'
 import get from 'lodash/get'
 import Select from '../../Select'
 import ProductScopeValue from './ProductScopeValue'
-import isEmpty from 'lodash/isEmpty'
 import {productScopeTypes, inferMsgName, inferOptionMsgName} from './types'
+import forEach from 'lodash/forEach'
 
 const parseCategory = ({name: text, value}) => ({text, value})
+
+function isBiddingCategory (dimension) {
+  return (
+    dimension &&
+    dimension.ProductDimensionType === 'ProductBiddingCategory' &&
+    dimension.value !== null
+  )
+}
+
+function hasCategoryChild (children) {
+  let found = false
+
+  forEach(children, child => {
+    if (isBiddingCategory(child.dimension) || hasCategoryChild(child.children)) {
+      found = true
+      return false
+    }
+  })
+
+  return found
+}
 
 class DimensionEditor extends React.PureComponent {
   static displayName = ' Dimension-Editor'
@@ -82,11 +103,7 @@ class PartitionBranch extends React.Component {
   }
 
   isCategory () {
-    return (
-      this.props.dimension &&
-      this.props.dimension.ProductDimensionType === 'ProductBiddingCategory' &&
-      this.props.dimension.value !== null
-    )
+    return isBiddingCategory(this.props.dimension)
   }
 
   getTypeConfig = () => {
@@ -177,7 +194,7 @@ class PartitionBranch extends React.Component {
           type={dimension.type}
           onChange={this.onChange}
           options={this.getOptions()}
-          editable={!this.isCategory() || isEmpty(children)}
+          editable={!this.isCategory() || !hasCategoryChild(children)}
           value={dimension[valueField]}
           name={valueField}/>
       )
