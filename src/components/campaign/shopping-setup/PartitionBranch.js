@@ -45,9 +45,11 @@ class PartitionBranch extends React.Component {
   static displayName = 'Partition-Branch'
   static propTypes = {
     update: PropTypes.func.isRequired,
+    appendChild: PropTypes.func.isRequired,
     children: PropTypes.object,
     parent: PropTypes.object,
     categories: PropTypes.array,
+    id: PropTypes.string.isRequired,
     dimension: PropTypes.shape({
       id: PropTypes.string,
       ProductDimensionType: PropTypes.string,
@@ -142,7 +144,7 @@ class PartitionBranch extends React.Component {
     }
 
     const type = this.props.dimension.type
-    const parentValue = get(this.props, 'parent.dimension.value')
+    const parentValue = get(this.self(), 'parent.dimension.value')
     const parent = parentValue ? Number(parentValue) : null
 
     return map(
@@ -159,11 +161,17 @@ class PartitionBranch extends React.Component {
       changes.value = ''
     }
 
-    this.props.update(this.props, changes)
+    this.props.update(this.self(), changes)
+  }
+
+  self () {
+    return get(this.props, `parent.children.${this.props.id}`, this.props)
   }
 
   onClickAdd = e => {
     e.preventDefault()
+
+    this.props.appendChild(this.self())
   }
 
   onClickRemove = e => {

@@ -101,6 +101,12 @@ class AdGroup extends React.Component {
     this.setState({tree})
   }
 
+  refresh () {
+    this.setState({
+      tree: this.state.tree
+    })
+  }
+
   update = (node, changes) => {
     // @todo avoid mutability
 
@@ -110,9 +116,25 @@ class AdGroup extends React.Component {
       delete node.parent.children[node.id]
     }
 
-    this.setState({
-      tree: this.state.tree
-    })
+    this.refresh()
+  }
+
+  appendChild = parent => {
+    const id = Math.random().toString(36).substr(2)
+
+    parent.children[id] = {
+      id,
+      draft: true,
+      children: {},
+      parent,
+      dimension: {
+        ProductDimensionType: 'ProductOfferId',
+        type: 'OFFER_ID',
+        value: ''
+      }
+    }
+
+    this.refresh()
   }
 
   load = once(() => {
@@ -128,7 +150,11 @@ class AdGroup extends React.Component {
       <Node ref='node' onOpen={this.load} label={adGroup.name}>
         {this.state.tree ? (
           <Tree>
-            <PartitionBranch update={this.update} categories={categories} {...this.state.tree}/>
+            <PartitionBranch
+              appendChild={this.appendChild}
+              update={this.update}
+              categories={categories}
+              {...this.state.tree}/>
           </Tree>
         ) : (
           <p>
