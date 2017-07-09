@@ -48,13 +48,13 @@ class ProductPartition extends React.Component {
   }
 
   save = () => {
-    const promises = map(this.props.cursors.campaign.adGroups,
+    const {cursors: {campaign}, dispatch, params} = this.props
+
+    const promises = map(campaign.adGroups,
       ({id: adGroup, partitions}) =>
-        this.props.dispatch(
-          updateAdGroupProductPartitionAction,
-          assign({adGroup}, this.props.params),
-          partitions
-        ))
+        partitions
+          ? dispatch(updateAdGroupProductPartitionAction, assign({adGroup}, params), partitions)
+          : Promise.resolve())
 
     return Promise.all(promises)
   }

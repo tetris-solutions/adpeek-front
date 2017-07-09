@@ -15,6 +15,7 @@ import map from 'lodash/map'
 import {productScopeClasses} from './types'
 import omit from 'lodash/omit'
 import debounce from 'lodash/debounce'
+import random from 'lodash/random'
 
 const isCategory = partition => (
   partition.dimension &&
@@ -22,8 +23,11 @@ const isCategory = partition => (
   Boolean(partition.dimension.value)
 )
 
+const genTempId = () => String(0 - random(Math.pow(10, 6), Math.pow(10, 12)))
+
 const defaultRoot = {
-  id: Math.random().toString(36).substr(2),
+  id: genTempId(),
+  draft: true,
   children: {},
   dimension: null,
   parent: null
@@ -148,7 +152,7 @@ class AdGroup extends React.Component {
   }
 
   appendChild = parent => {
-    const id = Math.random().toString(36).substr(2)
+    const id = genTempId()
 
     parent.children[id] = {
       id,
