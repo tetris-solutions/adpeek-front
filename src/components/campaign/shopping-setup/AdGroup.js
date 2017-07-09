@@ -16,6 +16,7 @@ import {productScopeClasses} from './types'
 import omit from 'lodash/omit'
 import debounce from 'lodash/debounce'
 import random from 'lodash/random'
+import isEmpty from 'lodash/isEmpty'
 
 const isCategory = partition => (
   partition.dimension &&
@@ -64,6 +65,23 @@ function flattenPartition (node, partitions = []) {
     flattenPartition(child, partitions))
 
   return partitions
+}
+
+function setPartitionType (node, type) {
+  if (node.type === type) return
+
+  node.type = type
+  node.lastUpdate = Date.now()
+}
+
+function fixPartitionType (node) {
+  if (isEmpty(node.children)) {
+    setPartitionType(node, 'UNIT')
+  } else {
+    setPartitionType(node, 'SUBDIVISION')
+
+    forEach(node.children, fixPartitionType)
+  }
 }
 
 class AdGroup extends React.Component {
@@ -134,18 +152,21 @@ class AdGroup extends React.Component {
   }, 1000)
 
   refresh () {
-    this.setState({
-      tree: this.state.tree
-    }, this.persist)
+    const {tree} = this.state
+
+    fixPartitionType(tree)
+
+    this.setState({tree}, this.persist)
   }
 
   update = (node, changes) => {
     // @todo avoid mutability
 
-    if (changes) {
-      assign(node.dimension, changes)
-    } else {
+    if (changes === null) {
       delete node.parent.children[node.id]
+    } else {
+      node.lastUpdate = Date.now()
+      assign(node.dimension, changes)
     }
 
     this.refresh()
