@@ -153,7 +153,7 @@ class PartitionBranch extends React.Component {
   }
 
   onChange = ({target: {name, value}}) => {
-    const changes = {[name]: value}
+    const changes = {}
 
     if (name === 'cpc') {
       changes[name] = value
