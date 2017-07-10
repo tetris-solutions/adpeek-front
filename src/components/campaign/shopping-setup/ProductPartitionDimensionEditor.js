@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import map from 'lodash/map'
 import Select from '../../Select'
+import Input from '../../Input'
 import ProductScopeValue from './ProductScopeValue'
 import {productScopeTypes, inferMsgName} from './types'
 
@@ -14,7 +15,10 @@ class DimensionEditor extends React.PureComponent {
     onChange: PropTypes.func.isRequired,
     options: PropTypes.array.isRequired,
     value: PropTypes.any,
-    name: PropTypes.any.isRequired
+    name: PropTypes.any.isRequired,
+    isUnit: PropTypes.bool.isRequired,
+    cpc: PropTypes.number,
+    isOther: PropTypes.bool.isRequired
   }
 
   static contextTypes = {
@@ -22,27 +26,44 @@ class DimensionEditor extends React.PureComponent {
   }
 
   render () {
+    const {isOther, title, onChange, type, isUnit, options, value, name, cpc} = this.props
+
     return (
       <div className='mdl-grid'>
         <div className='mdl-cell mdl-cell--12-col'>
-          <h5>{this.props.title}</h5>
+          <h5>{title}</h5>
         </div>
-        <div className='mdl-cell mdl-cell--12-col'>
-          <Select name='type' label='productPartitionType' onChange={this.props.onChange} value={this.props.type}>
-            {map(productScopeTypes, (_, type) =>
-              <option key={type} value={type}>
-                {this.context.messages[inferMsgName(type)]}
-              </option>)}
-          </Select>
-        </div>
-        <div className='mdl-cell mdl-cell--12-col'>
-          <ProductScopeValue
-            editable
-            onChange={this.props.onChange}
-            options={this.props.options}
-            value={this.props.value}
-            name={this.props.name}/>
-        </div>
+
+        {!isOther && (
+          <div className='mdl-cell mdl-cell--12-col'>
+            <Select name='type' label='productPartitionType' onChange={onChange} value={type}>
+              {map(productScopeTypes, (_, type) =>
+                <option key={type} value={type}>
+                  {this.context.messages[inferMsgName(type)]}
+                </option>)}
+            </Select>
+          </div>)}
+
+        {!isOther && (
+          <div className='mdl-cell mdl-cell--12-col'>
+            <ProductScopeValue
+              editable
+              onChange={onChange}
+              options={options}
+              value={value}
+              name={name}/>
+          </div>)}
+
+        {isUnit && (
+          <div className='mdl-cell mdl-cell--12-col'>
+            <Input
+              type='number'
+              format='currency'
+              value={cpc || ''}
+              onChange={onChange}
+              name='cpc'
+              label='cpcBid'/>
+          </div>)}
       </div>
     )
   }

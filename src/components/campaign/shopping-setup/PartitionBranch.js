@@ -11,7 +11,6 @@ import {productScopeTypes, inferMsgName, inferOptionMsgName} from './types'
 import DimensionEditor from './ProductPartitionDimensionEditor'
 import csjs from 'csjs'
 import {styledComponent} from '../../higher-order/styled'
-import isEmpty from 'lodash/isEmpty'
 
 const style = csjs`
 .action {
@@ -52,6 +51,8 @@ class PartitionBranch extends React.Component {
     parent: PropTypes.object,
     categories: PropTypes.array,
     id: PropTypes.string.isRequired,
+    type: PropTypes.oneOf(['SUBDIVISION', 'UNIT']).isRequired,
+    cpc: PropTypes.number,
     dimension: PropTypes.shape({
       id: PropTypes.string,
       ProductDimensionType: PropTypes.string,
@@ -152,14 +153,22 @@ class PartitionBranch extends React.Component {
   }
 
   onChange = ({target: {name, value}}) => {
-    const dimension = {[name]: value}
+    const changes = {[name]: value}
 
-    if (name === 'type') {
-      dimension.ProductDimensionType = productScopeTypes[value].scopeClass
-      dimension.value = ''
+    if (name === 'cpc') {
+      changes[name] = value
+    } else {
+      const dimension = {[name]: value}
+
+      if (name === 'type') {
+        dimension.ProductDimensionType = productScopeTypes[value].scopeClass
+        dimension.value = ''
+      }
+
+      changes.dimension = dimension
     }
 
-    this.props.update(this.self(), {dimension})
+    this.props.update(this.self(), changes)
   }
 
   self () {
@@ -188,15 +197,15 @@ class PartitionBranch extends React.Component {
   }
 
   render () {
-    const {dimension, children} = this.props
-
+    const {dimension, children, cpc, type} = this.props
+    const isUnit = type === 'UNIT'
+    const isOther = this.isOtherPartition()
     const editable = (
       !this.isRoot() &&
-      !this.isOtherPartition() && (
-        !this.isCategory() ||
-        !hasCategoryChild(children)
-      )
+      !(isOther && !isUnit) &&
+      !(this.isCategory() && hasCategoryChild(children))
     )
+
     const valueField = editable ? this.getTypeConfig().valueField : null
     const title = this.inferLabel()
 
@@ -209,7 +218,7 @@ class PartitionBranch extends React.Component {
             <i className='material-icons'>mode_edit</i>
           </a>)}
 
-        {isEmpty(children) && (
+        {isUnit && (
           <a className={style.action} href='' onClick={this.onClickAdd}>
             <i className='material-icons'>add</i>
           </a>)}
@@ -222,7 +231,10 @@ class PartitionBranch extends React.Component {
         {editable && this.state.openEditor && (
           <Modal size='small' minHeight={0} onEscPress={this.toggleEditor}>
             <DimensionEditor
+              isOther={isOther}
+              isUnit={isUnit}
               title={title}
+              cpc={cpc}
               type={dimension && dimension.type}
               onChange={this.onChange}
               options={this.getOptions()}
