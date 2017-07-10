@@ -8,10 +8,10 @@ import find from 'lodash/find'
 import filter from 'lodash/filter'
 import get from 'lodash/get'
 import {productScopeTypes, inferMsgName, inferOptionMsgName} from './types'
-import forEach from 'lodash/forEach'
 import DimensionEditor from './ProductPartitionDimensionEditor'
 import csjs from 'csjs'
 import {styledComponent} from '../../higher-order/styled'
+import isEmpty from 'lodash/isEmpty'
 
 const style = csjs`
 .action {
@@ -30,16 +30,9 @@ function isBiddingCategory (dimension) {
 }
 
 function hasCategoryChild (children) {
-  let found = false
-
-  forEach(children, child => {
-    if (isBiddingCategory(child.dimension) || hasCategoryChild(child.children)) {
-      found = true
-      return false
-    }
-  })
-
-  return found
+  return find(children, ({dimension, children}) => (
+    isBiddingCategory(dimension) || hasCategoryChild(children)
+  ))
 }
 
 function findParentCategory (node) {
@@ -79,22 +72,14 @@ class PartitionBranch extends React.Component {
   }
 
   isRoot () {
-    return !this.props.parent || !this.props.dimension
+    return !this.props.parent
   }
 
-  isPlaceholder () {
+  isOtherPartition () {
     return (
       !this.isRoot() &&
       this.props.dimension[this.getTypeConfig().valueField] === null
     )
-  }
-
-  isLeaf () {
-    return !this.isRoot() &&
-      (
-        this.isPlaceholder() ||
-        this.props.dimension.type === 'OFFER_ID'
-      )
   }
 
   isCategory () {
@@ -167,18 +152,18 @@ class PartitionBranch extends React.Component {
   }
 
   onChange = ({target: {name, value}}) => {
-    const changes = {[name]: value}
+    const dimension = {[name]: value}
 
     if (name === 'type') {
-      changes.ProductDimensionType = productScopeTypes[value].scopeClass
-      changes.value = ''
+      dimension.ProductDimensionType = productScopeTypes[value].scopeClass
+      dimension.value = ''
     }
 
-    this.props.update(this.self(), changes)
+    this.props.update(this.self(), {dimension})
   }
 
   self () {
-    return get(this.props, `parent.children.${this.props.id}`, this.props)
+    return get(this.props, `parent.children.${this.props.id}`)
   }
 
   onClickAdd = e => {
@@ -207,7 +192,7 @@ class PartitionBranch extends React.Component {
 
     const editable = (
       !this.isRoot() &&
-      !this.isPlaceholder() && (
+      !this.isOtherPartition() && (
         !this.isCategory() ||
         !hasCategoryChild(children)
       )
@@ -224,12 +209,12 @@ class PartitionBranch extends React.Component {
             <i className='material-icons'>mode_edit</i>
           </a>)}
 
-        {!this.isLeaf() && (
+        {isEmpty(children) && (
           <a className={style.action} href='' onClick={this.onClickAdd}>
             <i className='material-icons'>add</i>
           </a>)}
 
-        {editable && (
+        {!this.isRoot() && (
           <a className={style.action} href='' onClick={this.onClickRemove}>
             <i className='material-icons'>close</i>
           </a>)}

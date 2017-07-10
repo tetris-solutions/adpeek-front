@@ -18,6 +18,10 @@ import debounce from 'lodash/debounce'
 import random from 'lodash/random'
 import isEmpty from 'lodash/isEmpty'
 
+const aNull = field => ({[field]: null})
+const valueFields = ['value', 'channel', 'channelExclusivity', 'condition']
+const nullifiedValues = assign({}, ...map(valueFields, aNull))
+
 const isCategory = partition => (
   partition.dimension &&
   partition.dimension.ProductDimensionType === 'ProductBiddingCategory' &&
@@ -26,16 +30,19 @@ const isCategory = partition => (
 
 const genTempId = () => String(0 - random(Math.pow(10, 6), Math.pow(10, 12)))
 
-const defaultRoot = {
+const newUnit = parent => ({
   id: genTempId(),
-  draft: true,
+  lastUpdate: Date.now(),
   children: {},
+  type: 'UNIT',
   dimension: null,
-  parent: null
-}
+  parent
+})
 
-function setTypeIfNone (partition) {
+function normalize (partition) {
   partition = assign({}, partition)
+
+  partition.id = String(partition.id)
 
   if (partition.dimension) {
     partition.dimension = assign({}, partition.dimension)
@@ -67,21 +74,78 @@ function flattenPartition (node, partitions = []) {
   return partitions
 }
 
-function setPartitionType (node, type) {
-  if (node.type === type) return
-
-  node.type = type
+function flagAsChanged (node) {
   node.lastUpdate = Date.now()
+
+  const alreadyTempNode = Number(node.id) < 0
+
+  if (alreadyTempNode) return
+
+  const oldId = node.id
+  node.id = genTempId()
+
+  if (node.parent) {
+    delete node.parent.children[oldId]
+    node.parent.children[node.id] = node
+  }
 }
 
-function fixPartitionType (node) {
-  if (isEmpty(node.children)) {
-    setPartitionType(node, 'UNIT')
-  } else {
-    setPartitionType(node, 'SUBDIVISION')
+const findOtherPartition = node => node.parent
+  ? find(node.parent.children, ({id}) => id !== node.id)
+  : null
 
-    forEach(node.children, fixPartitionType)
+function mountTree (partitions, categories) {
+  const metaData = ({dimension: {value}}) => find(categories, {value})
+
+  function makeNode (partition, parent) {
+    const branch = assign({}, partition, {children: {}, parent})
+
+    if (isCategory(branch)) {
+      branch.dimension = assign({},
+        metaData(partition),
+        partition.dimension)
+    }
+
+    if (parent) {
+      parent.children[branch.id] = branch
+    }
+
+    return branch
   }
+
+  function makeBranch (parent) {
+    function descend (leaf) {
+      makeBranch(makeNode(leaf, parent))
+    }
+
+    forEach(filter(partitions, {parent: parent.id}), descend)
+  }
+
+  const tree = makeNode(find(partitions, {parent: null}), null)
+
+  makeBranch(tree)
+
+  return tree
+}
+
+function apply (node, changes, skipOther = false) {
+  if (!node) return
+
+  const dimensionChanges = changes.dimension
+
+  if (dimensionChanges) {
+    if (!skipOther && dimensionChanges.type) {
+      apply(findOtherPartition(node), {
+        dimension: omit(dimensionChanges, valueFields)
+      }, true)
+    }
+
+    assign(node.dimension, dimensionChanges)
+    delete changes.dimension
+  }
+
+  flagAsChanged(node)
+  assign(node, changes)
 }
 
 class AdGroup extends React.Component {
@@ -111,38 +175,16 @@ class AdGroup extends React.Component {
   }
 
   mountTree () {
-    const partitions = map(this.props.adGroup.partitions, setTypeIfNone)
-    const {categories} = this.props
+    const source = this.props.adGroup.partitions
 
-    const metaData = ({dimension: {value}}) => find(categories, {value})
-
-    function makeNode (partition, parent) {
-      const branch = assign({}, partition, {children: {}, parent})
-
-      if (isCategory(branch)) {
-        branch.dimension = assign({},
-          metaData(partition),
-          partition.dimension)
-      }
-
-      if (parent) {
-        parent.children[branch.id] = branch
-      }
-
-      return branch
-    }
-
-    const makeBranch = parent =>
-      forEach(filter(partitions, {parent: parent.id}),
-        leaf => makeBranch(makeNode(leaf, parent)))
-
-    const tree = makeNode(
-      find(partitions, {parent: null}) || defaultRoot
+    const partitions = map(
+      isEmpty(source) ? [newUnit(null)] : source,
+      normalize
     )
 
-    makeBranch(tree)
-
-    this.setState({tree})
+    this.setState({
+      tree: mountTree(partitions, this.props.categories)
+    })
   }
 
   persist = debounce(() => {
@@ -152,40 +194,51 @@ class AdGroup extends React.Component {
   }, 1000)
 
   refresh () {
-    const {tree} = this.state
-
-    fixPartitionType(tree)
-
-    this.setState({tree}, this.persist)
+    this.setState({
+      tree: this.state.tree
+    }, this.persist)
   }
 
   update = (node, changes) => {
+    node = node || this.state.tree
     // @todo avoid mutability
 
     if (changes === null) {
-      delete node.parent.children[node.id]
+      apply(node.parent, {
+        children: {},
+        type: 'UNIT'
+      })
     } else {
-      node.lastUpdate = Date.now()
-      assign(node.dimension, changes)
+      apply(node, changes)
     }
 
     this.refresh()
   }
 
-  appendChild = parent => {
-    const id = genTempId()
+  appendChild = (parent) => {
+    parent = parent || this.state.tree
 
-    parent.children[id] = {
-      id,
-      draft: true,
-      children: {},
-      parent,
-      dimension: {
-        ProductDimensionType: 'ProductOfferId',
-        type: 'OFFER_ID',
-        value: ''
-      }
+    const child = newUnit(parent)
+    const other = newUnit(parent)
+
+    child.dimension = {
+      ProductDimensionType: 'ProductOfferId',
+      type: 'OFFER_ID',
+      value: ''
     }
+
+    other.dimension = assign({},
+      child.dimension,
+      nullifiedValues
+    )
+
+    apply(parent, {
+      children: {
+        [child.id]: child,
+        [other.id]: other
+      },
+      type: 'SUBDIVISION'
+    })
 
     this.refresh()
   }
