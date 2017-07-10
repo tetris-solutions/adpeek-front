@@ -13,7 +13,7 @@ class DimensionEditor extends React.PureComponent {
     type: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     options: PropTypes.array.isRequired,
-    value: PropTypes.any.isRequired,
+    value: PropTypes.any,
     name: PropTypes.any.isRequired
   }
 

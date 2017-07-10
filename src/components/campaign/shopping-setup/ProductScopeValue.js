@@ -40,7 +40,7 @@ ProductScopeValue.propTypes = {
   onChange: PropTypes.func.isRequired,
   options: PropTypes.array,
   editable: PropTypes.bool.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   name: PropTypes.string.isRequired
 }
 
