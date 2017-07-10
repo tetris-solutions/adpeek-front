@@ -33,6 +33,7 @@ const genTempId = () => String(0 - random(Math.pow(10, 6), Math.pow(10, 12)))
 const newUnit = parent => ({
   id: genTempId(),
   lastUpdate: Date.now(),
+  cpc: 0.01,
   children: {},
   type: 'UNIT',
   dimension: null,
