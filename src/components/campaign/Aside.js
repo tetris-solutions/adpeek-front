@@ -48,6 +48,16 @@ class CampaignAside extends React.PureComponent {
       inCreativesScreen ? campaignUrl : folderUrl
     )
 
+    const shoppingUrl = `${campaignUrl}/shopping-setup`
+
+    const showShoppingLink = (
+      pathname === shoppingUrl ||
+      (
+        campaign.details &&
+        campaign.details.channel === 'SHOPPING'
+      )
+    )
+
     return (
       <Navigation icon='format_shapes'>
         <Name>{campaign.name}</Name>
@@ -63,11 +73,13 @@ class CampaignAside extends React.PureComponent {
               <Message>edit</Message>
             </NavLink>)}
 
-          <Fence canConfigShopping canEditCampaign>
-            <NavLink to={`${campaignUrl}/shopping-setup`} icon='shopping_cart'>
-              <Message>shoppingSetupBt</Message>
-            </NavLink>
-          </Fence>
+          {showShoppingLink && (
+            <Fence canConfigShopping canEditCampaign>
+              <NavLink to={shoppingUrl} icon='shopping_cart'>
+                <Message>shoppingSetupBt</Message>
+              </NavLink>
+            </Fence>
+          )}
 
           {editCreativesMode && (
             <NavBt onClick={this.createAdGroup} icon='library_add'>
