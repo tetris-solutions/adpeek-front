@@ -5,18 +5,18 @@ import filter from 'lodash/filter'
 import map from 'lodash/map'
 import flatten from 'lodash/flatten'
 import concat from 'lodash/concat'
-import Form from '../../../Form'
-import {Button, Submit} from '../../../Button'
-import {styledComponent} from '../../../higher-order/styled'
-import {loadFolderSiteLinksAction} from '../../../../actions/load-folder-site-links'
-import {updateCampaignSiteLinksAction} from '../../../../actions/update-campaign-site-links'
+import Form from '../../Form'
+import {Button, Submit} from '../../Button'
+import {styledComponent} from '../../higher-order/styled'
+import {loadFolderSiteLinksAction} from '../../../actions/load-folder-site-links'
+import {updateCampaignSiteLinksAction} from '../../../actions/update-campaign-site-links'
 import includes from 'lodash/includes'
 import FeedItem from './FeedItem'
 import without from 'lodash/without'
 import unionBy from 'lodash/unionBy'
 import Modal from 'tetris-iso/Modal'
 import NewSiteLink from './NewSiteLink'
-import {style} from '../style'
+import {style} from '../../campaign/edit/style'
 import get from 'lodash/get'
 import head from 'lodash/head'
 import isEmpty from 'lodash/isEmpty'
@@ -39,7 +39,7 @@ class EditSiteLinks extends React.Component {
     onSubmit: PropTypes.func,
     dispatch: PropTypes.func,
     params: PropTypes.object,
-    campaign: PropTypes.object
+    extension: PropTypes.array
   }
 
   componentDidMount () {
@@ -75,7 +75,7 @@ class EditSiteLinks extends React.Component {
   }
 
   getCampaignSiteLinkExtensions = () => {
-    return map(unwrap(this.props.campaign.details.extension), 'feedItemId')
+    return map(unwrap(this.props.extension), 'feedItemId')
   }
 
   state = {
@@ -91,9 +91,9 @@ class EditSiteLinks extends React.Component {
 
   render () {
     const {selected, openCreateModal} = this.state
-    const {cancel, campaign, folder, dispatch, params} = this.props
+    const {cancel, extension, folder, dispatch, params} = this.props
     const siteLinks = filter(unionBy(
-      unwrap(campaign.details.extension),
+      unwrap(extension),
       folder.siteLinks,
       'feedItemId'
     ), isValidSiteLink)
@@ -128,7 +128,7 @@ class EditSiteLinks extends React.Component {
         {openCreateModal && (
           <Modal onEscPress={this.toggleModal}>
             <NewSiteLink
-              {...{folder, campaign, dispatch, params}}
+              {...{folder, dispatch, params}}
               feedId={get(head(siteLinks), 'feedId')}
               cancel={this.toggleModal}
               onSubmit={this.toggleModal}/>

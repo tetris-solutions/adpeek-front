@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import head from 'lodash/head'
-import Checkbox from '../../../Checkbox'
+import Checkbox from '../../Checkbox'
 
 class FeedItem extends React.PureComponent {
   static displayName = 'Feed-Item'

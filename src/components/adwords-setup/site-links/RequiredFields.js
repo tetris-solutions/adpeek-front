@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
-import Input from '../../../Input'
-import Checkbox from '../../../Checkbox'
-import {style} from '../style'
+import Input from '../../Input'
+import Checkbox from '../../Checkbox'
+import {style} from '../../campaign/edit/style'
 
 class RequiredFields extends React.PureComponent {
   static displayName = 'Required-Fields'

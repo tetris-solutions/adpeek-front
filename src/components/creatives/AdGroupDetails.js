@@ -6,6 +6,7 @@ import filter from 'lodash/filter'
 import Platform from '../adwords-setup/platform/Modal'
 import UserLists from '../adwords-setup/user-lists/Modal'
 import CallOut from '../adwords-setup/call-out/Modal'
+import SiteLinks from '../adwords-setup/site-links/Modal'
 import {injectAdGroup} from './inject-adgroup'
 import {node} from '../higher-order/branch'
 import head from 'lodash/head'
@@ -22,7 +23,8 @@ import {
 const modalComponent = {
   platform: injectAdGroup(Platform),
   'user-lists': injectAdGroup(UserLists),
-  'call-outs': injectAdGroup(CallOut)
+  'call-outs': injectAdGroup(CallOut),
+  'site-links': injectAdGroup(SiteLinks)
 }
 
 class AdGroupDetails extends React.PureComponent {
