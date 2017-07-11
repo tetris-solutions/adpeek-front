@@ -206,6 +206,7 @@ export function setAppRoutes (app, render) {
 
   forEach(['',
     '/shopping-setup',
+    '/edit/tracking',
     '/edit/name',
     '/edit/status',
     '/edit/language',

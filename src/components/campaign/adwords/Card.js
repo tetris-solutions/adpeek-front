@@ -99,6 +99,20 @@ function AdwordsCampaign (props, context) {
             <SubText key={id}>{language}</SubText>, EveryLanguage)}
         </Info>
 
+        <Info editLink={editable ? urlFor(params, 'tracking') : null}>
+          <Message>conversionTracker</Message>:
+          {details.tracking_url && (
+            <SubText>
+              {details.tracking_url}
+            </SubText>)}
+
+          {details.url_params && list(details.url_params.parameters,
+            ({key, value}) =>
+              <SubText>
+                {`${key}=${value}`}
+              </SubText>)}
+        </Info>
+
         <Info>
           <Message>conversionTracker</Message>:
           {list(details.conversionTracker, ({id, name}) =>
