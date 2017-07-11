@@ -12,7 +12,7 @@ import find from 'lodash/find'
 import {Tree, Node} from '../../Tree'
 import PartitionBranch from './PartitionBranch'
 import map from 'lodash/map'
-import {productScopeClasses} from './types'
+import {productScopeTypes, productScopeClasses} from './types'
 import omit from 'lodash/omit'
 import debounce from 'lodash/debounce'
 import random from 'lodash/random'
@@ -91,8 +91,13 @@ function flagAsChanged (node) {
   }
 }
 
+const isOther = ({dimension}) => (
+  dimension &&
+  dimension[productScopeTypes[dimension.type].valueField] === null
+)
+
 const findOtherPartition = node => node.parent
-  ? find(node.parent.children, ({id}) => id !== node.id)
+  ? find(node.parent.children, isOther)
   : null
 
 function mountTree (partitions, categories) {
@@ -137,7 +142,7 @@ function apply (node, changes, skipOther = false) {
   if (dimensionChanges) {
     if (!skipOther && dimensionChanges.type) {
       apply(findOtherPartition(node), {
-        dimension: omit(dimensionChanges, valueFields)
+        dimension: assign({}, dimensionChanges, nullifiedValues)
       }, true)
     }
 
