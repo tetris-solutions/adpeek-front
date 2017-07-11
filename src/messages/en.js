@@ -556,6 +556,7 @@ module.exports = {
   otherProducts: 'Other',
   productPartitionTypeLabel: 'Partition Type',
   productPartitionValueLabel: 'Value',
+  campaignTracking: 'Tracking Url',
   salesCountries: {
     DE: 'Germany',
     AR: 'Argentina',

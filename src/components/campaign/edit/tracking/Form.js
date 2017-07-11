@@ -13,6 +13,7 @@ import map from 'lodash/map'
 class TrackingForm extends UrlTracking {
   static displayName = 'Tracking-Form'
   static propTypes = {
+    close: PropTypes.func.isRequired,
     campaign: PropTypes.shape({
       details: PropTypes.shape({
         tracking_url: PropTypes.string,
@@ -70,7 +71,7 @@ class TrackingForm extends UrlTracking {
           <div className={`mdl-cell mdl-cell--12-col ${style.actions}`}>
             <hr/>
 
-            <Button className='mdl-button mdl-button--accent' onClick={this.props.close}>
+            <Button className='mdl-button mdl-button--accent' onClick={this.props.cancel}>
               <Message>cancel</Message>
             </Button>
 

@@ -40,6 +40,7 @@ const urlFor = ({company, workspace, folder, campaign}, fragment = null) => {
 
 const EveryLanguage = everyCriteria('language')
 const EveryLocation = everyCriteria('location')
+const flattenParam = ({key, value}) => `${key}=${value}`
 
 function AdwordsCampaign (props, context) {
   const {reload, children, params, campaign: {status: {status}, details, name}} = props
@@ -100,17 +101,13 @@ function AdwordsCampaign (props, context) {
         </Info>
 
         <Info editLink={editable ? urlFor(params, 'tracking') : null}>
-          <Message>conversionTracker</Message>:
-          {details.tracking_url && (
-            <SubText>
-              {details.tracking_url}
-            </SubText>)}
-
-          {details.url_params && list(details.url_params.parameters,
-            ({key, value}) =>
-              <SubText>
-                {`${key}=${value}`}
-              </SubText>)}
+          <Message>campaignTracking</Message>:
+          {list([details.tracking_url]
+              .concat(map(details.url_params &&
+                details.url_params.parameters, flattenParam)),
+            txt => txt
+              ? <SubText>{txt}</SubText>
+              : null)}
         </Info>
 
         <Info>
