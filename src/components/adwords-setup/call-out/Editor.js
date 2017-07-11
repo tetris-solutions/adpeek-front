@@ -5,17 +5,17 @@ import filter from 'lodash/filter'
 import map from 'lodash/map'
 import flatten from 'lodash/flatten'
 import concat from 'lodash/concat'
-import Form from '../../../Form'
-import {Button, Submit} from '../../../Button'
-import {styledComponent} from '../../../higher-order/styled'
-import {loadFolderCallOutsAction} from '../../../../actions/load-folder-call-outs'
-import {updateCampaignCallOutsAction} from '../../../../actions/update-campaign-call-outs'
-import Checkbox from '../../../Checkbox'
+import Form from '../../Form'
+import {Button, Submit} from '../../Button'
+import {styledComponent} from '../../higher-order/styled'
+import {loadFolderCallOutsAction} from '../../../actions/load-folder-call-outs'
+import {updateCampaignCallOutsAction} from '../../../actions/update-campaign-call-outs'
+import Checkbox from '../../Checkbox'
 import includes from 'lodash/includes'
 import without from 'lodash/without'
 import unionBy from 'lodash/unionBy'
 import Modal from 'tetris-iso/Modal'
-import {style} from '../style'
+import {style} from '../../campaign/edit/style'
 import NewCallOut from './NewCallOut'
 import get from 'lodash/get'
 import head from 'lodash/head'
@@ -29,7 +29,7 @@ class EditCallOut extends React.Component {
     dispatch: PropTypes.func.isRequired,
     folder: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
-    campaign: PropTypes.object.isRequired,
+    extension: PropTypes.array.isRequired,
     cancel: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired
   }
@@ -46,7 +46,7 @@ class EditCallOut extends React.Component {
   }
 
   getCampaignCallOutExtensions = () => {
-    return map(unwrap(this.props.campaign.details.extension), 'feedItemId')
+    return map(unwrap(this.props.extension), 'feedItemId')
   }
 
   state = {
@@ -91,9 +91,9 @@ class EditCallOut extends React.Component {
 
   render () {
     const {selected, openCreateModal} = this.state
-    const {dispatch, params, cancel, campaign, folder} = this.props
+    const {dispatch, params, cancel, extension, folder} = this.props
     const callOuts = unionBy(
-      unwrap(campaign.details.extension),
+      unwrap(extension),
       folder.callOuts,
       'feedItemId'
     )
@@ -134,7 +134,7 @@ class EditCallOut extends React.Component {
         {openCreateModal && (
           <Modal onEscPress={this.toggleModal}>
             <NewCallOut
-              {...{folder, campaign, dispatch, params}}
+              {...{folder, dispatch, params}}
               feedId={get(head(callOuts), 'feedId')}
               cancel={this.toggleModal}
               onSubmit={this.toggleModal}/>

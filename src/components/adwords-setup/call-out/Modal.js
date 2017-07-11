@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'tetris-iso/Modal'
-import EditCallOut from './call-out/CallOut'
+import EditCallOut from './Editor'
 
 const EditCallOutModal = props =>
   <Modal onEscPress={props.cancel} size='small' minHeight={0}>

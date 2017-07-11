@@ -5,6 +5,7 @@ import lowerFirst from 'lodash/lowerFirst'
 import filter from 'lodash/filter'
 import Platform from '../adwords-setup/platform/Modal'
 import UserLists from '../adwords-setup/user-lists/Modal'
+import CallOut from '../adwords-setup/call-out/Modal'
 import {injectAdGroup} from './inject-adgroup'
 import {node} from '../higher-order/branch'
 import head from 'lodash/head'
@@ -20,7 +21,8 @@ import {
 
 const modalComponent = {
   platform: injectAdGroup(Platform),
-  'user-lists': injectAdGroup(UserLists)
+  'user-lists': injectAdGroup(UserLists),
+  'call-outs': injectAdGroup(CallOut)
 }
 
 class AdGroupDetails extends React.PureComponent {

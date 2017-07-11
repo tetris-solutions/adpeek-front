@@ -100,7 +100,7 @@ const campaign = provide => tempSyncEnsure(() => provide({
   platform: require('./components/campaign/edit/Platform'),
   bidStrategy: require('./components/campaign/edit/BidStrategyModal'),
   siteLinks: require('./components/campaign/edit/SiteLinkModal'),
-  callOuts: require('./components/campaign/edit/CalloutModal'),
+  callOuts: require('./components/campaign/edit/CallOutModal'),
   apps: require('./components/campaign/edit/AppsModal'),
   locations: require('./components/campaign/edit/LocationsModal'),
   dynamicSearchAds: require('./components/campaign/edit/DynamicSearchAdsModal'),
