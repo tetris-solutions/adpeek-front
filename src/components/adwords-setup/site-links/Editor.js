@@ -10,6 +10,7 @@ import {Button, Submit} from '../../Button'
 import {styledComponent} from '../../higher-order/styled'
 import {loadFolderSiteLinksAction} from '../../../actions/load-folder-site-links'
 import {updateCampaignSiteLinksAction} from '../../../actions/update-campaign-site-links'
+import {updateAdGroupSiteLinksAction} from '../../../actions/update-adgroup-site-links'
 import includes from 'lodash/includes'
 import FeedItem from './FeedItem'
 import without from 'lodash/without'
@@ -22,6 +23,10 @@ import head from 'lodash/head'
 import isEmpty from 'lodash/isEmpty'
 
 const unwrap = extensions => flatten(map(filter(extensions, {type: 'SITELINK'}), 'extensions'))
+const actions = {
+  campaign: updateCampaignSiteLinksAction,
+  adGroup: updateAdGroupSiteLinksAction
+}
 
 const isValidSiteLink = item => (
   !isEmpty(item.sitelinkText) &&
@@ -34,6 +39,7 @@ class EditSiteLinks extends React.Component {
   static displayName = 'Edit-Site-Links'
 
   static propTypes = {
+    level: PropTypes.oneOf(['campaign', 'adGroup']),
     folder: PropTypes.object,
     cancel: PropTypes.func,
     onSubmit: PropTypes.func,
@@ -54,11 +60,11 @@ class EditSiteLinks extends React.Component {
   }
 
   save = () => {
-    const {onSubmit, dispatch, params, folder} = this.props
+    const {onSubmit, level, dispatch, params, folder} = this.props
     const siteLinks = filter(folder.siteLinks,
       ({feedItemId}) => includes(this.state.selected, feedItemId))
 
-    return dispatch(updateCampaignSiteLinksAction, params, siteLinks)
+    return dispatch(actions[level], params, siteLinks)
       .then(onSubmit)
   }
 
