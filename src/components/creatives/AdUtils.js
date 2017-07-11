@@ -103,6 +103,13 @@ export const style = csjs`
 }
 .alert {
   margin: 1em 0;
+}
+.productAd {
+  text-align: center;
+}
+.productAd > i {
+  font-size: 62px;
+  margin-bottom: .3em;
 }`
 
 export const DestinationUrl = ({url}) => (

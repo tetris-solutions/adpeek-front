@@ -79,6 +79,10 @@ class AdGroup_ extends React.Component {
     this.createAd('CALL_ONLY_AD')
   }
 
+  createProductAd = () => {
+    this.createAd('PRODUCT_AD')
+  }
+
   createKeyword = criterionUse => {
     const {dispatch, params} = this.props
 
@@ -156,6 +160,10 @@ class AdGroup_ extends React.Component {
 
                 <MenuItem onClick={this.createCallOnlyAd}>
                   <Message>callOnlyAd</Message>
+                </MenuItem>
+
+                <MenuItem onClick={this.createProductAd}>
+                  <Message>productAd</Message>
                 </MenuItem>
               </DropdownMenu>
             </Button>

@@ -7,12 +7,14 @@ import ImageAd from './ImageAd'
 import TemplateAd from './TemplateAd'
 import YouTubeAd from './YouTubeAd'
 import CallOnlyAd from './CallOnlyAd'
+import ProductAd from './ProductAd'
 
 class AdGroupAd extends React.PureComponent {
   static displayName = 'AdGroup-Ad'
   static propTypes = {
     type: PropTypes.string
   }
+
   render () {
     let content = null
 
@@ -33,6 +35,8 @@ class AdGroupAd extends React.PureComponent {
       case 'YOUTUBE':
         content = <YouTubeAd {...this.props}/>
         break
+      case 'PRODUCT_AD':
+        content = <ProductAd {...this.props}/>
     }
 
     return (

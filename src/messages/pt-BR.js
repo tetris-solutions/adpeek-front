@@ -558,6 +558,7 @@ module.exports = {
   productPartitionTypeLabel: 'Tipo de partição',
   productPartitionValueLabel: 'Valor',
   campaignTracking: 'Acompanhamento',
+  productAd: 'Anúncio do Shopping',
   salesCountries: {
     DE: 'Alemanha',
     AR: 'Argentina',
