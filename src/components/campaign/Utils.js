@@ -9,6 +9,8 @@ import isEmpty from 'lodash/isEmpty'
 import compact from 'lodash/compact'
 import isArray from 'lodash/isArray'
 import map from 'lodash/map'
+import flatten from 'lodash/flatten'
+import filter from 'lodash/filter'
 
 export const style = csjs`
 .edit {
@@ -155,6 +157,8 @@ export function list (ls, iteratee, Empty = None) {
 
   return crop(map(ls, iteratee))
 }
+
+export const mapExtensions = (ls, type, cb) => map(flatten(map(filter(ls, {type}), 'extensions')), cb)
 
 export const isLanguage = {type: 'LANGUAGE'}
 export const isUserList = {type: 'USER_LIST'}

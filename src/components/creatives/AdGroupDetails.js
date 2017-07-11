@@ -7,7 +7,16 @@ import Platform from '../adwords-setup/platform/Modal'
 import UserLists from '../adwords-setup/user-lists/Modal'
 import {injectAdGroup} from './inject-adgroup'
 import {node} from '../higher-order/branch'
-import {Wrapper, Info, SubText, list, isPlatform, isUserList} from '../campaign/Utils'
+import head from 'lodash/head'
+import {
+  Wrapper,
+  Info,
+  SubText,
+  list,
+  isPlatform,
+  isUserList,
+  mapExtensions
+} from '../campaign/Utils'
 
 const modalComponent = {
   platform: injectAdGroup(Platform),
@@ -18,6 +27,7 @@ class AdGroupDetails extends React.PureComponent {
   static displayName = 'AdGroup-Details'
   static propTypes = {
     criteria: PropTypes.array,
+    extension: PropTypes.array,
     reload: PropTypes.func
   }
 
@@ -36,7 +46,7 @@ class AdGroupDetails extends React.PureComponent {
 
   render () {
     const Modal = modalComponent[this.state.openModal]
-    const {criteria} = this.props
+    const {extension, criteria} = this.props
 
     return (
       <Wrapper>
@@ -53,6 +63,26 @@ class AdGroupDetails extends React.PureComponent {
           {list(filter(criteria, isUserList),
             ({user_list_id: id, user_list_name: name}) =>
               <SubText key={id}>{name}</SubText>)}
+        </Info>
+
+        <Info editClick={this.setModal('site-links')}>
+          <Message>siteLinks</Message>:
+          {list(mapExtensions(extension, 'SITELINK',
+            ({sitelinkText, sitelinkFinalUrls: {urls}}, index) =>
+              <SubText key={index}>
+                <a className='mdl-color-text--blue-grey-500' href={head(urls)} target='_blank'>
+                  {sitelinkText}
+                </a>
+              </SubText>))}
+        </Info>
+
+        <Info editClick={this.setModal('call-outs')}>
+          <Message>callOut</Message>:
+          {list(mapExtensions(extension, 'CALLOUT',
+            ({calloutText}, index) =>
+              <SubText key={index}>
+                "{calloutText}"
+              </SubText>))}
         </Info>
 
         {Modal && (

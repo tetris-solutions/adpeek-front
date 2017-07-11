@@ -10,7 +10,6 @@ import assign from 'lodash/assign'
 import map from 'lodash/map'
 import head from 'lodash/head'
 import filter from 'lodash/filter'
-import flatten from 'lodash/flatten'
 import toLower from 'lodash/toLower'
 import lowerFirst from 'lodash/lowerFirst'
 import ProximityDescription from '../edit/geo-location/ProximityDescription'
@@ -25,10 +24,9 @@ import {
   None,
   Info,
   Section,
-  SectionTitle
+  SectionTitle,
+  mapExtensions
 } from '../Utils'
-
-const mapExtensions = (ls, type, cb) => map(flatten(map(filter(ls, {type}), 'extensions')), cb)
 
 const urlFor = ({company, workspace, folder, campaign}, fragment = null) => {
   const campaignUrl = `/company/${company}/workspace/${workspace}/folder/${folder}/campaign/${campaign}`

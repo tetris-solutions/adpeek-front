@@ -227,6 +227,8 @@ class AdGroup extends React.Component {
     const child = newUnit(parent)
     const other = newUnit(parent)
 
+    // @todo adapt for non-binary trees
+
     child.dimension = {
       ProductDimensionType: 'ProductOfferId',
       type: 'OFFER_ID',
