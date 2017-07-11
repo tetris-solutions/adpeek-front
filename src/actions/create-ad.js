@@ -44,6 +44,12 @@ export function pushAdAction (tree, {company, workspace, folder, campaign, adGro
       ]))
 
       break
+
+    case 'PRODUCT_AD':
+      // since product ads lack any editable field, just flag it as touched already
+      ad.lastUpdate = {status: Date.now()}
+
+      break
   }
 
   adsCursor.push(ad)
