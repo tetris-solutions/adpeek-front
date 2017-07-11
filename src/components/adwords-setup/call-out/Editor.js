@@ -10,6 +10,7 @@ import {Button, Submit} from '../../Button'
 import {styledComponent} from '../../higher-order/styled'
 import {loadFolderCallOutsAction} from '../../../actions/load-folder-call-outs'
 import {updateCampaignCallOutsAction} from '../../../actions/update-campaign-call-outs'
+import {updateAdGroupCallOutsAction} from '../../../actions/update-adgroup-call-outs'
 import Checkbox from '../../Checkbox'
 import includes from 'lodash/includes'
 import without from 'lodash/without'
@@ -22,10 +23,16 @@ import head from 'lodash/head'
 
 const unwrap = extensions => flatten(map(filter(extensions, {type: 'CALLOUT'}), 'extensions'))
 
+const actions = {
+  campaign: updateCampaignCallOutsAction,
+  adGroup: updateAdGroupCallOutsAction
+}
+
 class EditCallOut extends React.Component {
   static displayName = 'Edit-Call-Out'
 
   static propTypes = {
+    level: PropTypes.oneOf(['campaign', 'adGroup']),
     dispatch: PropTypes.func.isRequired,
     folder: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
@@ -81,11 +88,11 @@ class EditCallOut extends React.Component {
   }
 
   save = () => {
-    const {onSubmit, dispatch, params, folder} = this.props
+    const {onSubmit, level, dispatch, params, folder} = this.props
     const callOuts = filter(folder.callOuts,
       ({feedItemId}) => includes(this.state.selected, feedItemId))
 
-    return dispatch(updateCampaignCallOutsAction, params, callOuts)
+    return dispatch(actions[level], params, callOuts)
       .then(onSubmit)
   }
 
