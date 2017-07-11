@@ -65,7 +65,7 @@ class NewApp extends NewFeedItem {
           <Tab id='app-tracking' title={<Message>trackingUrlTitle</Message>}>
             <Tracking
               {...this.state}
-              extensionName='app'
+              prefix='app'
               onChange={this.onChangeText}/>
           </Tab>
           <Tab id='app-period' title={<Message>feedItemPeriodTitle</Message>}>

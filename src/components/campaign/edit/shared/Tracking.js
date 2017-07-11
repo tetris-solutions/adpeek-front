@@ -8,14 +8,14 @@ class Tracking extends React.PureComponent {
   static displayName = 'Tracking'
 
   static propTypes = {
-    extensionName: PropTypes.oneOf(['app', 'sitelink']),
+    prefix: PropTypes.string,
     urlCustomParameters: PropTypes.array.isRequired,
     onChange: PropTypes.func.isRequired
   }
 
   render () {
-    const {extensionName} = this.props
-    const trackingUrlPropName = `${extensionName}TrackingUrlTemplate`
+    const {prefix} = this.props
+    const trackingUrlPropName = `${prefix}TrackingUrlTemplate`
 
     return (
       <div style={{maxWidth: 400, margin: '0 auto'}}>

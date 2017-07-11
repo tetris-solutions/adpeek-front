@@ -65,7 +65,7 @@ class NewSiteLink extends NewFeedItem {
           <Tab id='site-link-tracking' title={<Message>trackingUrlTitle</Message>}>
             <Tracking
               {...this.state}
-              extensionName='sitelink'
+              prefix='sitelink'
               onChange={this.onChangeText}/>
           </Tab>
           <Tab id='site-link-period' title={<Message>feedItemPeriodTitle</Message>}>

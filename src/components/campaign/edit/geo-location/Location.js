@@ -27,6 +27,8 @@ const style = csjs`
 const MIN_SEARCH_TERM_LENGTH = 2
 
 class EditLocation extends React.Component {
+  static displayName = 'Edit-Location'
+
   static propTypes = {
     selectedIds: PropTypes.array.isRequired,
     dispatch: PropTypes.func.isRequired,
