@@ -6,14 +6,18 @@ import Input from '../../../Input'
 import {Button, Submit} from '../../../Button'
 import CustomParam from '../../../creatives/CustomParam'
 import {UrlTracking, cParams} from '../../../adwords-setup/UrlTracking'
-import {style} from '../style'
 import {styledComponent} from '../../../higher-order/styled'
+import {updateCampaignTrackingAction} from '../../../../actions/update-campaign-tracking'
+import {style} from '../style'
 import map from 'lodash/map'
+import values from 'lodash/values'
 
 class TrackingForm extends UrlTracking {
   static displayName = 'Tracking-Form'
   static propTypes = {
     close: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    params: PropTypes.object.isRequired,
     campaign: PropTypes.shape({
       details: PropTypes.shape({
         tracking_url: PropTypes.string,
@@ -33,12 +37,20 @@ class TrackingForm extends UrlTracking {
   }
 
   save = () => {
+    const {dispatch, params, onSubmit} = this.props
 
+    const payload = {
+      custom_params: values(this.state.custom_params),
+      url_template: this.state.url_template
+    }
+
+    return dispatch(updateCampaignTrackingAction, params, payload)
+      .then(onSubmit)
   }
 
   render () {
     return (
-      <Form onSubmit={this.save}>
+      <Form onSubmit={this.save} noValidate>
         <div className='mdl-grid'>
           <div className='mdl-cell mdl-cell--12-col'>
             <Input
