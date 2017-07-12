@@ -15,8 +15,10 @@ import size from 'lodash/size'
 import findIndex from 'lodash/findIndex'
 import first from 'lodash/first'
 import isEmpty from 'lodash/isEmpty'
-import get from 'lodash/get'
 
+const normalize = ls => map(ls, p => assign({
+  type: productScopeClasses[p.ProductDimensionType].defaultType
+}, p))
 const availableTypes = map(productScopeTypes, (d, type) =>
   assign({}, d, {type}))
 
@@ -35,10 +37,8 @@ class ProductScope extends React.Component {
   }
 
   state = {
-    dimensions: filter(this.props.campaign.productScope, ({type, ProductDimensionType}) => (
-      productScopeTypes[type] ||
-      get(productScopeClasses, [ProductDimensionType, 'defaultType'])
-    ))
+    dimensions: filter(normalize(this.props.campaign.productScope),
+      ({type}) => productScopeTypes[type])
   }
 
   getRemainingTypes () {

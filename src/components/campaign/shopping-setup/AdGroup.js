@@ -106,10 +106,14 @@ function mountTree (partitions, categories) {
   function makeNode (partition, parent) {
     const branch = assign({}, partition, {children: {}, parent})
 
+    if (branch.dimension) {
+      branch.dimension = assign({
+        type: productScopeClasses[branch.dimension.ProductDimensionType].defaultType
+      }, branch.dimension)
+    }
+
     if (isCategory(branch)) {
-      branch.dimension = assign({},
-        metaData(partition),
-        partition.dimension)
+      branch.dimension = assign({}, metaData(partition), branch.dimension)
     }
 
     if (parent) {
