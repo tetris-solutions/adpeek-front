@@ -208,7 +208,7 @@ function AdwordsCampaign (props, context) {
         </Info>
 
         {children
-          ? React.cloneElement(children, assign({}, props, {cancel, onSubmit: closeModal}))
+          ? React.cloneElement(children, assign({}, props, {reload, cancel, onSubmit: closeModal}))
           : null}
       </Wrapper>}
     </Fence>

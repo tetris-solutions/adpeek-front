@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
 import Form from '../../../Form'
-import {Button, Submit} from '../../../Button'
+import {Button} from '../../../Button'
 import {style} from '../style'
 import {styledComponent} from '../../../higher-order/styled'
-// import {Tabs, Tab} from '../../../Tabs'
+import Create from './Create'
 import LocationsTable from './Table'
 
 class EditLocations extends React.PureComponent {
@@ -13,6 +14,7 @@ class EditLocations extends React.PureComponent {
 
   static propTypes = {
     cancel: PropTypes.func,
+    reload: PropTypes.func,
     campaign: PropTypes.object,
     onSubmit: PropTypes.func,
     params: PropTypes.object,
@@ -25,6 +27,11 @@ class EditLocations extends React.PureComponent {
 
   toggleModal = () => {
     this.setState({openModal: !this.state.openModal})
+  }
+
+  onCreate = () => {
+    return this.props.reload()
+      .then(this.toggleModal)
   }
 
   save = () => {
@@ -41,16 +48,21 @@ class EditLocations extends React.PureComponent {
         </div>
         <div className={style.actions}>
           <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>
-            <Message>cancel</Message>
+            <Message>close</Message>
           </Button>
 
           <Button className='mdl-button mdl-button--raised' onClick={this.toggleModal}>
             <Message>newLocation</Message>
           </Button>
-          <Submit className='mdl-button mdl-button--raised mdl-button--colored'>
-            <Message>save</Message>
-          </Submit>
         </div>
+
+        {this.state.openModal && (
+          <Modal size='small'>
+            <Create
+              {...this.props}
+              cancel={this.toggleModal}
+              onSubmit={this.onCreate}/>
+          </Modal>)}
       </Form>
     )
   }
