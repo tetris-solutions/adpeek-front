@@ -1,12 +1,12 @@
 import React from 'react'
 import Message from 'tetris-iso/Message'
 import PropTypes from 'prop-types'
-import {Submit, Button} from '../../Button'
-import Form from '../../Form'
-import {updateCampaignOptimizationStatusAction} from '../../../actions/update-campaign-optimization-status'
+import {Submit, Button} from '../../../Button'
+import Form from '../../../Form'
+import {updateCampaignOptimizationStatusAction} from '../../../../actions/update-campaign-optimization-status'
 import map from 'lodash/map'
 import camelCase from 'lodash/camelCase'
-import Radio from '../../Radio'
+import Radio from '../../../Radio'
 
 const options = [
   'OPTIMIZE',

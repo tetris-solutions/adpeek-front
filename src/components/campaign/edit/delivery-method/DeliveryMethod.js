@@ -2,8 +2,8 @@ import React from 'react'
 import Message from 'tetris-iso/Message'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router'
-import {Button} from '../../Button'
-import {loadCampaignOrderAction} from '../../../actions/load-campaign-order'
+import {Button} from '../../../Button'
+import {loadCampaignOrderAction} from '../../../../actions/load-campaign-order'
 
 const CampaignOrder = ({cancel, params: {company, workspace, folder, campaign}, order: {id, name, budget}}) => (
   <div>

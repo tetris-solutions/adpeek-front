@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
-import {Button, Submit} from '../../Button'
-import Form from '../../Form'
+import {Button, Submit} from '../../../Button'
+import Form from '../../../Form'
 import pick from 'lodash/pick'
 import map from 'lodash/map'
-import Checkbox from '../../Checkbox'
-import {updateCampaignNetworkAction} from '../../../actions/update-campaign-network'
-import {networkNames, networkMessages} from '../adwords/Network'
+import Checkbox from '../../../Checkbox'
+import {updateCampaignNetworkAction} from '../../../../actions/update-campaign-network'
+import {networkNames, networkMessages} from '../../adwords/Network'
 import forEach from 'lodash/forEach'
 
 class EditNetwork extends React.Component {

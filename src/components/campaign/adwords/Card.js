@@ -109,7 +109,7 @@ function AdwordsCampaign (props, context) {
               : null)}
         </Info>
 
-        <Info>
+        <Info editLink={editable ? urlFor(params, 'conversion-tracker') : null}>
           <Message>conversionTracker</Message>:
           {list(details.conversionTracker, ({id, name}) =>
             <SubText key={id}>{name}</SubText>)}

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'tetris-iso/Modal'
-import EditApps from './apps/Apps'
+import EditApps from './Apps'
 
 const EditAppsModal = props =>
   <Modal onEscPress={props.cancel} size='small' minHeight={0}>

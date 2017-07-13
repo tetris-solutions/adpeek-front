@@ -1,10 +1,10 @@
 import React from 'react'
 import Message from 'tetris-iso/Message'
 import PropTypes from 'prop-types'
-import Input from '../../Input'
-import {Submit, Button} from '../../Button'
-import Form from '../../Form'
-import {updateCampaignNameAction} from '../../../actions/update-campaign-name'
+import Input from '../../../Input'
+import {Submit, Button} from '../../../Button'
+import Form from '../../../Form'
+import {updateCampaignNameAction} from '../../../../actions/update-campaign-name'
 
 class EditName extends React.Component {
   static displayName = 'Edit-Name'
