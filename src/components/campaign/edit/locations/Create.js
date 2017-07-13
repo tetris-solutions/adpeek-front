@@ -7,11 +7,20 @@ import {Button, Submit} from '../../../Button'
 import Message from 'tetris-iso/Message'
 import map from 'lodash/map'
 import {style} from '../style'
+import first from 'lodash/first'
+import {createLocationFeedItemAction} from '../../../../actions/create-location'
 
 class CreateLocation extends React.Component {
   static displayName = 'Create-Location'
   static propTypes = {
     dispatch: PropTypes.func,
+    campaign: PropTypes.shape({
+      details: PropTypes.shape({
+        locationFeeds: PropTypes.arrayOf(PropTypes.shape({
+          id: PropTypes.string
+        }))
+      })
+    }),
     params: PropTypes.object,
     onSubmit: PropTypes.func,
     cancel: PropTypes.func
@@ -33,7 +42,13 @@ class CreateLocation extends React.Component {
   }
 
   save = () => {
-    return Promise.resolve()
+    const {dispatch, params, campaign} = this.props
+
+    return dispatch(
+      createLocationFeedItemAction,
+      params,
+      first(campaign.details.locationFeeds).id,
+      this.state)
       .then(this.props.onSubmit)
   }
 
