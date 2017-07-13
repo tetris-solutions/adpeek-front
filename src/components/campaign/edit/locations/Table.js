@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {style} from '../style'
 import map from 'lodash/map'
+import filter from 'lodash/filter'
 
 const LocationsTable = ({locations}) => (
   <table className={`mdl-data-table ${style.table}`}>
@@ -21,7 +22,7 @@ const LocationsTable = ({locations}) => (
         </th>
       </tr>
     </thead>
-    <tbody>{map(locations, l =>
+    <tbody>{map(filter(locations, 'businessName'), l =>
       <tr key={l.feedItemId}>
         <td className='mdl-data-table__cell--non-numeric'>
           {l.businessName}

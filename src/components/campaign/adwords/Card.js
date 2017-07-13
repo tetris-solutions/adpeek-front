@@ -143,7 +143,7 @@ function AdwordsCampaign (props, context) {
           {!isEmpty(details.locationFeeds) && (
             <Info editLink={editable ? urlFor(params, 'locations') : null}>
               <Message>feedLocal</Message>:
-              {list(details.locations, ({feedItemId, businessName}) =>
+              {list(filter(details.locations, 'businessName'), ({feedItemId, businessName}) =>
                 <SubText key={feedItemId}>{businessName}</SubText>)}
             </Info>)}
 

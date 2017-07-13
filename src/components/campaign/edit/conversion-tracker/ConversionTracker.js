@@ -5,8 +5,6 @@ import Message from 'tetris-iso/Message'
 import {Button} from '../../../Button'
 import {style} from '../style'
 import {styledComponent} from '../../../higher-order/styled'
-import Create from './Create'
-import LocationsTable from './Table'
 
 class EditLocations extends React.PureComponent {
   static displayName = 'Edit-Locations'
@@ -33,14 +31,16 @@ class EditLocations extends React.PureComponent {
       .then(this.toggleModal)
   }
 
-  render () {
-    const {locations} = this.props.campaign.details
+  save = () => {
 
+  }
+
+  render () {
     return (
       <div className='mdl-grid'>
         <div className='mdl-cell mdl-cell--12-col'>
           <div className={style.list}>
-            <LocationsTable locations={locations}/>
+            <table/>
           </div>
           <div className={style.actions}>
             <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>
@@ -52,12 +52,10 @@ class EditLocations extends React.PureComponent {
             </Button>
           </div>
         </div>
+
         {this.state.openModal && (
-          <Modal size='small' onEscPress={this.toggleModal}>
-            <Create
-              {...this.props}
-              cancel={this.toggleModal}
-              onSubmit={this.onCreate}/>
+          <Modal size='small'>
+            <Message>notYetImplemented</Message>
           </Modal>)}
       </div>
     )
