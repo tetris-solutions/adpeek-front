@@ -567,6 +567,13 @@ module.exports = {
   postalCodeLabel: 'CEP',
   countryCodeLabel: 'País',
   phoneNumberLabel: 'Telefone',
+  newConversionTracker: 'Nova conversão',
+  conversionCategoryLabel: 'Categoria',
+  defaultConversion: 'Outro',
+  pageViewConversion: 'Visualização de uma página importante',
+  purchaseConversion: 'Compra/Venda',
+  signupConversion: 'Inscrição',
+  leadConversion: 'Lead',
   salesCountries: {
     DE: 'Alemanha',
     AR: 'Argentina',

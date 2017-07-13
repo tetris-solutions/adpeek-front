@@ -37,20 +37,22 @@ class EditLocations extends React.PureComponent {
     const {locations} = this.props.campaign.details
 
     return (
-      <div className='mdl-grid'>
-        <div className='mdl-cell mdl-cell--12-col'>
-          <div className={style.list}>
-            <LocationsTable locations={locations}/>
+      <div>
+        <div className='mdl-grid'>
+          <div className='mdl-cell mdl-cell--12-col'>
+            <div className={style.list}>
+              <LocationsTable locations={locations}/>
+            </div>
           </div>
-          <div className={style.actions}>
-            <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>
-              <Message>close</Message>
-            </Button>
+        </div>
+        <div className={style.actions}>
+          <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>
+            <Message>close</Message>
+          </Button>
 
-            <Button className='mdl-button mdl-button--raised' onClick={this.toggleModal}>
-              <Message>newLocation</Message>
-            </Button>
-          </div>
+          <Button className='mdl-button mdl-button--raised' onClick={this.toggleModal}>
+            <Message>newLocation</Message>
+          </Button>
         </div>
         {this.state.openModal && (
           <Modal size='small' onEscPress={this.toggleModal}>

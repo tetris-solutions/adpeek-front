@@ -100,6 +100,7 @@ class CreateLocation extends React.Component {
           </div>
           <div className='mdl-cell mdl-cell--12-col'>
             <Input
+              required
               onChange={this.onChange}
               value={this.state.province}
               name='province'
@@ -132,15 +133,15 @@ class CreateLocation extends React.Component {
               name='phoneNumber'
               label='phoneNumber'/>
           </div>
-          <div className={`mdl-cell mdl-cell--12-col ${style.actions}`}>
-            <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>
-              <Message>cancel</Message>
-            </Button>
+        </div>
+        <div className={style.actions}>
+          <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>
+            <Message>cancel</Message>
+          </Button>
 
-            <Submit className='mdl-button mdl-button--raised mdl-button--colored'>
-              <Message>save</Message>
-            </Submit>
-          </div>
+          <Submit className='mdl-button mdl-button--raised mdl-button--colored'>
+            <Message>save</Message>
+          </Submit>
         </div>
       </Form>
     )
