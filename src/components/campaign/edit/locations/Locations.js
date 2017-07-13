@@ -19,9 +19,16 @@ class EditLocations extends React.PureComponent {
     dispatch: PropTypes.func
   }
 
-  state = {}
+  state = {
+    openModal: false
+  }
+
+  toggleModal = () => {
+    this.setState({openModal: !this.state.openModal})
+  }
 
   save = () => {
+
   }
 
   render () {
@@ -37,6 +44,9 @@ class EditLocations extends React.PureComponent {
             <Message>cancel</Message>
           </Button>
 
+          <Button className='mdl-button mdl-button--raised' onClick={this.toggleModal}>
+            <Message>newLocation</Message>
+          </Button>
           <Submit className='mdl-button mdl-button--raised mdl-button--colored'>
             <Message>save</Message>
           </Submit>
