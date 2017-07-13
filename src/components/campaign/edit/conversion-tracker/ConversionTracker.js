@@ -38,10 +38,6 @@ class EditLocations extends React.PureComponent {
       .then(this.toggleModal)
   }
 
-  save = () => {
-
-  }
-
   render () {
     return (
       <div>
@@ -90,7 +86,7 @@ class EditLocations extends React.PureComponent {
           </Button>
 
           <Button className='mdl-button mdl-button--raised' onClick={this.toggleModal}>
-            <Message>newLocation</Message>
+            <Message>newConversionTracker</Message>
           </Button>
         </div>
       </div>

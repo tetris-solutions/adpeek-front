@@ -9,7 +9,7 @@ import map from 'lodash/map'
 import {style} from '../style'
 import first from 'lodash/first'
 import camelCase from 'lodash/camelCase'
-import {createLocationFeedItemAction} from '../../../../actions/create-location'
+import {createConversionTrackerAction} from '../../../../actions/create-conversion-tracker'
 
 class CreateConversionTracker extends React.Component {
   static displayName = 'Create-Conversion-Tracker'
@@ -38,12 +38,11 @@ class CreateConversionTracker extends React.Component {
   }
 
   save = () => {
-    const {dispatch, params, campaign} = this.props
+    const {dispatch, params} = this.props
 
     return dispatch(
-      createLocationFeedItemAction,
+      createConversionTrackerAction,
       params,
-      first(campaign.details.locationFeeds).id,
       this.state)
       .then(this.props.onSubmit)
   }
