@@ -12,6 +12,7 @@ import head from 'lodash/head'
 import filter from 'lodash/filter'
 import toLower from 'lodash/toLower'
 import lowerFirst from 'lodash/lowerFirst'
+import isEmpty from 'lodash/isEmpty'
 import ProximityDescription from '../edit/geo-location/ProximityDescription'
 import {
   list,
@@ -139,11 +140,12 @@ function AdwordsCampaign (props, context) {
                 </SubText>))}
           </Info>
 
-          <Info editLink={editable ? urlFor(params, 'locations') : null}>
-            <Message>feedLocal</Message>:
-            {list(details.locationFeeds, ({id, name}) =>
-              <SubText key={id}>{name}</SubText>)}
-          </Info>
+          {!isEmpty(details.locationFeeds) && (
+            <Info editLink={editable ? urlFor(params, 'locations') : null}>
+              <Message>feedLocal</Message>:
+              {list(details.locations, ({feedItemId, businessName}) =>
+                <SubText key={feedItemId}>{businessName}</SubText>)}
+            </Info>)}
 
           <Info editLink={editable ? urlFor(params, 'apps') : null}>
             <Message>targetApp</Message>:
