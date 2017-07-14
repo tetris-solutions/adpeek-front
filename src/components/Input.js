@@ -24,7 +24,8 @@ const protectedInputProps = [
   'children',
   'error',
   'label',
-  'format'
+  'format',
+  'currency'
 ]
 
 export class Input extends React.Component {
@@ -33,6 +34,7 @@ export class Input extends React.Component {
   static propTypes = {
     children: PropTypes.node,
     readOnly: PropTypes.bool,
+    currency: PropTypes.string,
     type: PropTypes.string,
     min: PropTypes.number,
     max: PropTypes.number,
@@ -53,7 +55,8 @@ export class Input extends React.Component {
 
   static defaultProps = {
     type: 'text',
-    format: 'decimal'
+    format: 'decimal',
+    currency: null
   }
 
   state = {
@@ -99,12 +102,13 @@ export class Input extends React.Component {
       )
 
       const haveFormatRulesChanged = (
+        nextProps.currency !== this.props.currency ||
         nextProps.format !== this.props.format ||
         nextContext.locales !== this.context.locales
       )
 
       if (hasNumberChanged || haveFormatRulesChanged) {
-        newState.value = this.formatNumber(newPropsValue, nextProps.format, nextContext.locales)
+        newState.value = this.formatNumber(newPropsValue, nextProps.format, nextContext.locales, nextProps.currency)
       }
     } else if (newPropsValue !== oldPropsValue && newPropsValue !== stateValue) {
       newState.value = newPropsValue
@@ -133,7 +137,7 @@ export class Input extends React.Component {
     )
   }
 
-  formatNumber = (val, format = this.props.format, locale = this.context.locales) => {
+  formatNumber = (val, format = this.props.format, locale = this.context.locales, currency = this.props.currency) => {
     if (isString(val)) {
       val = this.getRawNumber(val)
     }
@@ -141,9 +145,9 @@ export class Input extends React.Component {
     if (!isNumber(val)) return ''
 
     if (format === 'percentage') {
-      return prettyNumber(val, 'decimal', locale) + ' %'
+      return prettyNumber(val, 'decimal', locale, currency) + ' %'
     } else {
-      return prettyNumber(val, format, locale)
+      return prettyNumber(val, format, locale, currency)
     }
   }
 

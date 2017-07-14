@@ -75,6 +75,7 @@ class EditLocations extends React.PureComponent {
             <Modal size='medium' onEscPress={this.toggleModal}>
               <CreateConversionTracker
                 {...this.props}
+                ConversionTrackerType='AdWordsConversionTracker'
                 categories={['DEFAULT', 'PAGE_VIEW', 'PURCHASE', 'SIGNUP', 'LEAD']}
                 cancel={this.toggleModal}
                 onSubmit={this.onCreate}/>

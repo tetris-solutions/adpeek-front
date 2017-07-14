@@ -595,6 +595,7 @@ module.exports = {
   fixedRevenueValue: 'Valor de conversão fixo',
   flexibleRevenueValue: 'Valor de conversão variável',
   noRevenueValue: 'Não atribuir valor de conversão',
+  currencyCodeLabel: 'Moeda',
   lookbackWindow: {
     '7': '1 semana',
     '14': '2 semanas',

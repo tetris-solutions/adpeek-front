@@ -15,7 +15,7 @@ const naiveCurrency = {
   'pt-BR': 'BRL'
 }
 
-export function prettyNumber (value, type = 'decimal', locale = 'en-US') {
+export function prettyNumber (value, type = 'decimal', locale = 'en-US', currency = null) {
   if (!isNumber(value)) return value
 
   const style = typeToNumberStyle[type] || 'decimal'
@@ -31,7 +31,7 @@ export function prettyNumber (value, type = 'decimal', locale = 'en-US') {
   }
 
   if (options.style === 'currency') {
-    options.currency = naiveCurrency[locale]
+    options.currency = currency || naiveCurrency[locale]
   }
 
   /**

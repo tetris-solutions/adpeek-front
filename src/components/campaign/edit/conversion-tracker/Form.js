@@ -17,6 +17,7 @@ class CreateConversionTracker extends React.Component {
   static displayName = 'Create-Conversion-Tracker'
   static propTypes = {
     dispatch: PropTypes.func,
+    ConversionTrackerType: PropTypes.string,
     categories: PropTypes.array,
     campaign: PropTypes.shape({
       details: PropTypes.shape({
@@ -36,6 +37,7 @@ class CreateConversionTracker extends React.Component {
 
   state = {
     name: '',
+    ConversionTrackerType: this.props.ConversionTrackerType,
     exclude_from_bidding: false,
     category: first(this.props.categories),
     ctc_lookback_window: '7',
@@ -44,6 +46,7 @@ class CreateConversionTracker extends React.Component {
     attribution_model_type: 'LAST_CLICK',
     $model: 'flexible',
     always_use_default_revenue_value: false,
+    default_revenue_currency_code: 'BRL',
     default_revenue_value: 1
   }
 
@@ -204,9 +207,18 @@ class CreateConversionTracker extends React.Component {
 
             {this.state.$model !== 'none' && (
               <div style={{marginTop: '1em'}}>
+                <Select
+                  label='currencyCode'
+                  name='default_revenue_currency_code'
+                  value={this.state.default_revenue_currency_code}
+                  onChange={this.onChange}>
+                  <option value='BRL'>BRL, Real, (R$)</option>
+                  <option value='USD'>USD, US Dollar ($)</option>
+                </Select>
                 <Input
                   type='number'
                   format='currency'
+                  currency={this.state.default_revenue_currency_code}
                   min={1}
                   name='default_revenue_value'
                   label='defaultRevenueValue'
