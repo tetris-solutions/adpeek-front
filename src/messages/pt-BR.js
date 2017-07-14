@@ -574,6 +574,18 @@ module.exports = {
   purchaseConversion: 'Compra/Venda',
   signupConversion: 'Inscrição',
   leadConversion: 'Lead',
+  ctcLookbackWindowLabel: 'Janela de conversão',
+  viewthroughLookbackWindowLabel: 'Janela de conversão de visualização',
+  lookbackWindow: {
+    '7': '1 semana',
+    '14': '2 semanas',
+    '21': '3 semanas',
+    '28': '4 semanas',
+    '30': '30 dias',
+    '45': '45 dias',
+    '60': '60 dias',
+    '90': '90 dias'
+  },
   salesCountries: {
     DE: 'Alemanha',
     AR: 'Argentina',

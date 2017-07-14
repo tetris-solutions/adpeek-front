@@ -573,6 +573,18 @@ module.exports = {
   purchaseConversion: 'Purchase',
   signupConversion: 'Signup',
   leadConversion: 'Lead',
+  ctcLookbackWindowLabel: 'Lookback window',
+  viewthroughLookbackWindowLabel: 'Lookback window (view)',
+  lookbackWindow: {
+    '7': '1 week',
+    '14': '2 weeks',
+    '21': '3 weeks',
+    '28': '4 weeks',
+    '30': '30 days',
+    '45': '45 days',
+    '60': '60 days',
+    '90': '90 days'
+  },
   salesCountries: {
     DE: 'Germany',
     AR: 'Argentina',

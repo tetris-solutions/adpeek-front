@@ -34,7 +34,9 @@ class CreateConversionTracker extends React.Component {
 
   state = {
     name: '',
-    category: first(this.props.categories)
+    category: first(this.props.categories),
+    ctc_lookback_window: '7',
+    viewthrough_lookback_window: '7'
   }
 
   save = () => {
@@ -83,6 +85,33 @@ class CreateConversionTracker extends React.Component {
                 </option>)}
             </Select>
           </div>
+          <div className='mdl-cell mdl-cell--12-col'>
+            <Select
+              required
+              name='ctc_lookback_window'
+              label='ctcLookbackWindow'
+              value={this.state.ctc_lookback_window}
+              onChange={this.onChange}>
+              {map(messages.lookbackWindow, (txt, key) =>
+                <option key={key} value={key}>
+                  {txt}
+                </option>)}
+            </Select>
+          </div>
+          <div className='mdl-cell mdl-cell--12-col'>
+            <Select
+              required
+              name='viewthrough_lookback_window'
+              label='viewthroughLookbackWindow'
+              value={this.state.ctc_lookback_window}
+              onChange={this.onChange}>
+              {map(messages.lookbackWindow, (txt, key) =>
+                <option key={key} value={key}>
+                  {txt}
+                </option>)}
+            </Select>
+          </div>
+
         </div>
         <div className={style.actions}>
           <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>
