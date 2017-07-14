@@ -576,6 +576,19 @@ module.exports = {
   leadConversion: 'Lead',
   ctcLookbackWindowLabel: 'Janela de conversão',
   viewthroughLookbackWindowLabel: 'Janela de conversão de visualização',
+  countingTypeLabel: 'Contagem',
+  onePerClick: 'Uma por clique',
+  manyPerClick: 'Todas',
+  attributionModelTypeLabel: 'Modelo de atribuição',
+  attributionTypes: {
+    LAST_CLICK: 'Último clique',
+    FIRST_CLICK: 'Primeiro clique',
+    LINEAR: 'Linear',
+    TIME_DECAY: 'Redução de tempo',
+    U_SHAPED: 'Com base na posição'
+    // DATA_DRIVEN: 'Baseado nos dados'
+  },
+  excludeFromBiddingLabel: 'Incluir em conversões',
   lookbackWindow: {
     '7': '1 semana',
     '14': '2 semanas',

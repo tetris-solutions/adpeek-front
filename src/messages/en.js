@@ -575,6 +575,19 @@ module.exports = {
   leadConversion: 'Lead',
   ctcLookbackWindowLabel: 'Lookback window',
   viewthroughLookbackWindowLabel: 'Lookback window (view)',
+  countingTypeLabel: 'Counting',
+  onePerClick: 'One per click',
+  manyPerClick: 'Many',
+  attributionModelTypeLabel: 'Attribution model',
+  attributionTypes: {
+    LAST_CLICK: 'Last click',
+    FIRST_CLICK: 'First click',
+    LINEAR: 'Linear',
+    TIME_DECAY: 'Time decay',
+    U_SHAPED: 'U-shaped'
+    // DATA_DRIVEN: 'Data driven'
+  },
+  excludeFromBiddingLabel: 'Count for conversions',
   lookbackWindow: {
     '7': '1 week',
     '14': '2 weeks',

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Input from '../../../Input'
+import Checkbox from '../../../Checkbox'
 import Select from '../../../Select'
 import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
@@ -34,9 +35,12 @@ class CreateConversionTracker extends React.Component {
 
   state = {
     name: '',
+    exclude_from_bidding: false,
     category: first(this.props.categories),
     ctc_lookback_window: '7',
-    viewthrough_lookback_window: '7'
+    viewthrough_lookback_window: '7',
+    counting_type: 'MANY_PER_CLICK',
+    attribution_model_type: 'LAST_CLICK'
   }
 
   save = () => {
@@ -51,6 +55,10 @@ class CreateConversionTracker extends React.Component {
 
   onChange = ({target: {name, value}}) => {
     this.setState({[name]: value})
+  }
+
+  onChangeExcludeFromBidding = ({target: {checked}}) => {
+    this.setState({exclude_from_bidding: !checked})
   }
 
   render () {
@@ -103,7 +111,7 @@ class CreateConversionTracker extends React.Component {
               required
               name='viewthrough_lookback_window'
               label='viewthroughLookbackWindow'
-              value={this.state.ctc_lookback_window}
+              value={this.state.viewthrough_lookback_window}
               onChange={this.onChange}>
               {map(messages.lookbackWindow, (txt, key) =>
                 <option key={key} value={key}>
@@ -111,7 +119,38 @@ class CreateConversionTracker extends React.Component {
                 </option>)}
             </Select>
           </div>
-
+          <div className='mdl-cell mdl-cell--12-col'>
+            <Select
+              required
+              name='counting_type'
+              label='countingType'
+              value={this.state.counting_type}
+              onChange={this.onChange}>
+              <option value='ONE_PER_CLICK'>{messages.onePerClick}</option>
+              <option value='MANY_PER_CLICK'>{messages.manyPerClick}</option>
+            </Select>
+          </div>
+          <div className='mdl-cell mdl-cell--12-col'>
+            <Select
+              required
+              name='attribution_model_type'
+              label='attributionModelType'
+              value={this.state.attribution_model_type}
+              onChange={this.onChange}>
+              {map(messages.attributionTypes, (txt, key) =>
+                <option key={key} value={key}>
+                  {txt}
+                </option>)}
+            </Select>
+            <div className='mdl-cell mdl-cell--12-col'>
+              <Checkbox
+                required
+                name='exclude_from_bidding'
+                label={<Message>excludeFromBiddingLabel</Message>}
+                checked={!this.state.exclude_from_bidding}
+                onChange={this.onChangeExcludeFromBidding}/>
+            </div>
+          </div>
         </div>
         <div className={style.actions}>
           <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>
