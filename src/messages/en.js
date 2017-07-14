@@ -573,6 +573,8 @@ module.exports = {
   purchaseConversion: 'Purchase',
   signupConversion: 'Signup',
   leadConversion: 'Lead',
+  downloadConversion: 'Download',
+  remarketingConversion: 'Remarketing',
   ctcLookbackWindowLabel: 'Lookback window',
   viewthroughLookbackWindowLabel: 'Lookback window (view)',
   countingTypeLabel: 'Counting',
@@ -588,6 +590,10 @@ module.exports = {
     // DATA_DRIVEN: 'Data driven'
   },
   excludeFromBiddingLabel: 'Count for conversions',
+  defaultRevenueValueLabel: 'Revenue value',
+  fixedRevenueValue: 'Fixed conversion value',
+  flexibleRevenueValue: 'Conversion value may vary',
+  noRevenueValue: 'No conversion value',
   lookbackWindow: {
     '7': '1 week',
     '14': '2 weeks',

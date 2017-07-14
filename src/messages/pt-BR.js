@@ -574,6 +574,8 @@ module.exports = {
   purchaseConversion: 'Compra/Venda',
   signupConversion: 'Inscrição',
   leadConversion: 'Lead',
+  downloadConversion: 'Download',
+  remarketingConversion: 'Remarketing',
   ctcLookbackWindowLabel: 'Janela de conversão',
   viewthroughLookbackWindowLabel: 'Janela de conversão de visualização',
   countingTypeLabel: 'Contagem',
@@ -589,6 +591,10 @@ module.exports = {
     // DATA_DRIVEN: 'Baseado nos dados'
   },
   excludeFromBiddingLabel: 'Incluir em conversões',
+  defaultRevenueValueLabel: 'Valor da conversão',
+  fixedRevenueValue: 'Valor de conversão fixo',
+  flexibleRevenueValue: 'Valor de conversão variável',
+  noRevenueValue: 'Não atribuir valor de conversão',
   lookbackWindow: {
     '7': '1 semana',
     '14': '2 semanas',

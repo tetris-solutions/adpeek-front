@@ -72,7 +72,7 @@ class EditLocations extends React.PureComponent {
           </div>
 
           {this.state.openModal && (
-            <Modal size='small' onEscPress={this.toggleModal}>
+            <Modal size='medium' onEscPress={this.toggleModal}>
               <CreateConversionTracker
                 {...this.props}
                 categories={['DEFAULT', 'PAGE_VIEW', 'PURCHASE', 'SIGNUP', 'LEAD']}
