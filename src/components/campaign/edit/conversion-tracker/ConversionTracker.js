@@ -8,6 +8,7 @@ import {styledComponent} from '../../../higher-order/styled'
 import CreateConversionTracker from './Form'
 import map from 'lodash/map'
 import camelCase from 'lodash/camelCase'
+import PresetsSelector from './PresetsSelector'
 
 class EditLocations extends React.PureComponent {
   static displayName = 'Edit-Locations'
@@ -26,7 +27,8 @@ class EditLocations extends React.PureComponent {
   }
 
   state = {
-    openModal: false
+    openModal: false,
+    presets: null
   }
 
   toggleModal = () => {
@@ -38,7 +40,18 @@ class EditLocations extends React.PureComponent {
       .then(this.toggleModal)
   }
 
+  cancelCreation = () => {
+    this.setState({presets: null})
+    this.toggleModal()
+  }
+
+  setConversionPresets = presets => {
+    this.setState({presets})
+  }
+
   render () {
+    const {presets, openModal} = this.state
+
     return (
       <div>
         <div className='mdl-grid'>
@@ -71,14 +84,19 @@ class EditLocations extends React.PureComponent {
             </div>
           </div>
 
-          {this.state.openModal && (
-            <Modal size='medium' onEscPress={this.toggleModal}>
-              <CreateConversionTracker
-                {...this.props}
-                ConversionTrackerType='AdWordsConversionTracker'
-                categories={['DEFAULT', 'PAGE_VIEW', 'PURCHASE', 'SIGNUP', 'LEAD']}
-                cancel={this.toggleModal}
-                onSubmit={this.onCreate}/>
+          {openModal && (
+            <Modal size='medium' onEscPress={this.cancelCreation}>
+              {presets ? (
+                <CreateConversionTracker
+                  {...this.props}
+                  {...presets}
+                  categories={['DEFAULT', 'PAGE_VIEW', 'PURCHASE', 'SIGNUP', 'LEAD']}
+                  cancel={this.cancelCreation}
+                  onSubmit={this.onCreate}/>
+              ) : (
+                <PresetsSelector
+                  save={this.setConversionPresets}/>
+              )}
             </Modal>)}
         </div>
         <div className={style.actions}>

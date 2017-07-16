@@ -596,6 +596,13 @@ module.exports = {
   flexibleRevenueValue: 'Valor de conversão variável',
   noRevenueValue: 'Não atribuir valor de conversão',
   currencyCodeLabel: 'Moeda',
+  websiteConversionTrackerTitle: 'Website',
+  websiteConversionTrackerDescription: 'Acompanhe compras, envios de formulários ou outras ações adicionado uma tag ao seu website.',
+  appConversionTrackerTitle: 'Aplicativo',
+  appConversionTrackerDescription: 'Acompanhe downloads de aplicativos ou ações no aplicativo adicionando um snippet de código a ele.',
+  callConversionTrackerTitle: 'Telefonemas',
+  callConversionTrackerDescription: 'Acompanhe ligações para sua empresa usando um Número de telefone de encaminhamento de chamadas do Google ou adicionando uma tag ao seu website.',
+  conversionTypeSelectorTitle: 'Selecione a origem das conversões que você gostaria de acompanhar.',
   lookbackWindow: {
     '7': '1 semana',
     '14': '2 semanas',
