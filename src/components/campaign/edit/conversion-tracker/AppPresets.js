@@ -12,7 +12,8 @@ class AppPresets extends React.Component {
 
   static propTypes = {
     cancel: PropTypes.func.isRequired,
-    save: PropTypes.func.isRequired
+    save: PropTypes.func.isRequired,
+    enableFirebase: PropTypes.bool
   }
 
   state = {
@@ -20,7 +21,17 @@ class AppPresets extends React.Component {
   }
 
   save = () => {
+    const {type, app_platform, app_conversion_type} = this.state
 
+    // @todo account for firebase app
+
+    return this.props.save({
+      ConversionTrackerType: 'AppConversion',
+      app_platform: type === 'google-play'
+        ? 'ANDROID_MARKET'
+        : app_platform,
+      app_conversion_type
+    })
   }
 
   onCheck = ({target: {value, name}}) => {
@@ -30,6 +41,7 @@ class AppPresets extends React.Component {
   radioProps = (name, value) => {
     return {
       id: `radio-${name}-${value}`,
+      required: true,
       checked: this.state[name] === value,
       onChange: this.onCheck,
       name,
@@ -55,14 +67,17 @@ class AppPresets extends React.Component {
               </small>
             </h5>
           </div>
-          <div className='mdl-cell mdl-cell--12-col'>
-            <Radio {...this.radioProps('type', 'firebase')}>
-              <Message>firebaseAppTitle</Message>
-            </Radio>
-            <p>
-              <Message>firebaseAppDescription</Message>
-            </p>
-          </div>
+
+          {this.props.enableFirebase && (
+            <div className='mdl-cell mdl-cell--12-col'>
+              <Radio {...this.radioProps('type', 'firebase')}>
+                <Message>firebaseAppTitle</Message>
+              </Radio>
+              <p>
+                <Message>firebaseAppDescription</Message>
+              </p>
+            </div>
+          )}
           <div className='mdl-cell mdl-cell--12-col'>
             <Radio {...this.radioProps('type', 'google-play')}>
               <Message>googlePlayAppTitle</Message>
@@ -114,7 +129,7 @@ class AppPresets extends React.Component {
                         </Radio>
                       </div>
                       <div>
-                        <Radio {...this.radioProps('app_conversion_type', 'NONE')}>
+                        <Radio {...this.radioProps('app_conversion_type', 'IN_APP_PURCHASE')}>
                           <Message>appActions</Message>
                         </Radio>
                       </div>
@@ -134,7 +149,7 @@ class AppPresets extends React.Component {
                         </Radio>
                       </div>
                       <div>
-                        <Radio {...this.radioProps('app_conversion_type', 'NONE')}>
+                        <Radio {...this.radioProps('app_conversion_type', 'IN_APP_PURCHASE')}>
                           <Message>appActions</Message>
                         </Radio>
                       </div>
