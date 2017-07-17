@@ -595,6 +595,24 @@ module.exports = {
   flexibleRevenueValue: 'Conversion value may vary',
   noRevenueValue: 'No conversion value',
   currencyCodeLabel: 'Currency code',
+
+  websiteConversionTrackerTitle: 'Website',
+  websiteConversionTrackerDescription: 'Track purchases, form submissions or other actions by including a tag in your website.',
+  appConversionTrackerTitle: 'App',
+  appConversionTrackerDescription: 'Track your app installs and other actions by including a snippet of code on it.',
+  callConversionTrackerTitle: 'Calls',
+  callConversionTrackerDescription: 'Track calls to your company by using a Google forwarding phone number or including a tag in your website.',
+  conversionTypeSelectorTitle: 'Select the source of your conversions',
+
+  appConversionsTitle: 'App conversions',
+  appConversionSubTitle: 'Choose how to track your conversions. <a target="_blank" href="https://support.google.com/adwords/answer/6100665">help</a>',
+  firebaseAppTitle: 'Firebase',
+  firebaseAppDescription: 'Import conversions from a Firebase project',
+  googlePlayAppTitle: 'Google Play',
+  googlePlayAppDescription: 'Track your Android app installs and other actions, without adding code in your app.',
+  appActionsTitle: 'First access and app actions',
+  appActionsDescription: 'Include code in your app for tracking third party analytics',
+
   lookbackWindow: {
     '7': '1 week',
     '14': '2 weeks',

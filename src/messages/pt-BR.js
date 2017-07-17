@@ -596,6 +596,7 @@ module.exports = {
   flexibleRevenueValue: 'Valor de conversão variável',
   noRevenueValue: 'Não atribuir valor de conversão',
   currencyCodeLabel: 'Moeda',
+
   websiteConversionTrackerTitle: 'Website',
   websiteConversionTrackerDescription: 'Acompanhe compras, envios de formulários ou outras ações adicionado uma tag ao seu website.',
   appConversionTrackerTitle: 'Aplicativo',
@@ -603,6 +604,16 @@ module.exports = {
   callConversionTrackerTitle: 'Telefonemas',
   callConversionTrackerDescription: 'Acompanhe ligações para sua empresa usando um Número de telefone de encaminhamento de chamadas do Google ou adicionando uma tag ao seu website.',
   conversionTypeSelectorTitle: 'Selecione a origem das conversões que você gostaria de acompanhar.',
+
+  appConversionsTitle: 'Conversão de aplicativos',
+  appConversionSubTitle: 'Selecione como acompanhar suas conversões. <a target="_blank" href="https://support.google.com/adwords/answer/6100665">Saiba mais</a>',
+  firebaseAppTitle: 'Firebase',
+  firebaseAppDescription: 'Importar conversões de um projeto vinculado do Firebase',
+  googlePlayAppTitle: 'Google Play',
+  googlePlayAppDescription: 'Acompanhe automaticamente instalações de aplicativos para Android ou compras no aplicativo, sem adicionar um código ao seu aplicativo',
+  appActionsTitle: 'Primeiro acesso e ações no aplicativo',
+  appActionsDescription: 'Para acompanhar conversões de aplicativos, adicione um código ao seu aplicativo ou use análises de terceiros',
+
   lookbackWindow: {
     '7': '1 semana',
     '14': '2 semanas',

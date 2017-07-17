@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
 import {styledComponent} from '../../../higher-order/styled'
 import csjs from 'csjs'
 import bind from 'lodash/bind'
+import AppPresets from './AppPresets'
 
 const style = csjs`
 .blocks {
@@ -22,6 +24,10 @@ const style = csjs`
   font-size: 100px;
   margin-bottom: 20px;
 }`
+
+const presetsComponent = {
+  app: AppPresets
+}
 
 const Block = ({type, icon, onClick}) => (
   <div className={`${style.block} mdl-color-text--grey-800`} onClick={bind(onClick, null, type)}>
@@ -64,7 +70,13 @@ class Presets extends React.Component {
     }
   }
 
+  unset = () => {
+    this.setState({type: null})
+  }
+
   render () {
+    const PresetsComponent = presetsComponent[this.state.type]
+
     return (
       <div className='mdl-grid'>
         <div className='mdl-cell mdl-cell--12-col'>
@@ -78,6 +90,14 @@ class Presets extends React.Component {
             <Block type='call' icon='call' onClick={this.pick}/>
           </section>
         </div>
+
+        {PresetsComponent ? (
+          <Modal size='small' onEscPress={this.unset}>
+            <PresetsComponent
+              cancel={this.unset}
+              save={this.props.save}/>
+          </Modal>
+        ) : null}
       </div>
     )
   }
