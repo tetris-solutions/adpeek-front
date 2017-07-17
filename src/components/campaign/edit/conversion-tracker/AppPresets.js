@@ -23,19 +23,35 @@ class AppPresets extends React.Component {
   save = () => {
     const {type, app_platform, app_conversion_type} = this.state
 
-    // @todo account for firebase app
-
-    return this.props.save({
+    const presets = {
       ConversionTrackerType: 'AppConversion',
-      app_platform: type === 'google-play'
-        ? 'ANDROID_MARKET'
-        : app_platform,
+      app_platform,
       app_conversion_type
-    })
+    }
+
+    switch (type) {
+      case 'firebase':
+        // @todo double-check AppConversion presets for firebase
+        presets.app_platform = 'MOBILE_APP_CHANNEL'
+        presets.app_conversion_type = 'NONE'
+        break
+      case 'google-play':
+        presets.app_platform = 'ANDROID_MARKET'
+        break
+    }
+
+    return this.props.save(presets)
   }
 
   onCheck = ({target: {value, name}}) => {
-    this.setState({[name]: value})
+    const changes = {[name]: value}
+
+    if (name === 'type') {
+      changes.app_platform = null
+      changes.app_conversion_type = null
+    }
+
+    this.setState(changes)
   }
 
   radioProps = (name, value) => {
@@ -50,7 +66,12 @@ class AppPresets extends React.Component {
   }
 
   render () {
-    const {type, app_platform} = this.state
+    const {type, app_platform, app_conversion_type} = this.state
+    const formIsComplete = (
+      type &&
+      (app_platform || type !== 'app-actions') &&
+      (app_conversion_type || type === 'firebase')
+    )
 
     return (
       <Form onSubmit={this.save}>
@@ -170,7 +191,7 @@ class AppPresets extends React.Component {
             <Message>cancel</Message>
           </Button>
 
-          <Submit className='mdl-button mdl-button--raised mdl-button--colored'>
+          <Submit className='mdl-button mdl-button--raised mdl-button--colored' disabled={!formIsComplete}>
             <Message>save</Message>
           </Submit>
         </div>
