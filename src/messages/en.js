@@ -599,7 +599,7 @@ module.exports = {
   websiteConversionTrackerTitle: 'Website',
   websiteConversionTrackerDescription: 'Track purchases, form submissions or other actions by including a tag in your website.',
   appConversionTrackerTitle: 'App',
-  appConversionTrackerDescription: 'Track your app installs and other actions by including a snippet of code on it.',
+  appConversionTrackerDescription: 'Track your app downloads and other actions by including a snippet of code on it.',
   callConversionTrackerTitle: 'Calls',
   callConversionTrackerDescription: 'Track calls to your company by using a Google forwarding phone number or including a tag in your website.',
   conversionTypeSelectorTitle: 'Select the source of your conversions',
@@ -609,9 +609,16 @@ module.exports = {
   firebaseAppTitle: 'Firebase',
   firebaseAppDescription: 'Import conversions from a Firebase project',
   googlePlayAppTitle: 'Google Play',
-  googlePlayAppDescription: 'Track your Android app installs and other actions, without adding code in your app.',
+  googlePlayAppDescription: 'Track your Android app downloads and other actions, without adding code in your app.',
   appActionsTitle: 'First access and app actions',
   appActionsDescription: 'Include code in your app for tracking third party analytics',
+
+  appConversionTypeTitle: 'Select the type of conversions you want to track',
+  appPlatformTitle: 'Select the platform of your app',
+  appDownloads: 'Downloads',
+  inAppPurchases: 'In app purchase',
+  appFirstOpen: 'First open',
+  appActions: 'App actions',
 
   lookbackWindow: {
     '7': '1 week',

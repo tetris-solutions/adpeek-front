@@ -5,6 +5,7 @@ import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
 import Radio from '../../../Radio'
 import {style} from '../style'
+import Well from '../../../Well'
 
 class AppPresets extends React.Component {
   static displayName = 'App-Presets'
@@ -37,6 +38,8 @@ class AppPresets extends React.Component {
   }
 
   render () {
+    const {type, app_platform} = this.state
+
     return (
       <Form onSubmit={this.save}>
         <div className='mdl-grid'>
@@ -64,17 +67,86 @@ class AppPresets extends React.Component {
             <Radio {...this.radioProps('type', 'google-play')}>
               <Message>googlePlayAppTitle</Message>
             </Radio>
-            <p>
-              <Message>googlePlayAppDescription</Message>
-            </p>
+            {type === 'google-play' ? (
+              <Well>
+                <p>
+                  <Message>appConversionTypeTitle</Message>
+                </p>
+
+                <div>
+                  <Radio {...this.radioProps('app_conversion_type', 'DOWNLOAD')}>
+                    <Message>appDownloads</Message>
+                  </Radio>
+                </div>
+                <div>
+                  <Radio {...this.radioProps('app_conversion_type', 'IN_APP_PURCHASE')}>
+                    <Message>inAppPurchases</Message>
+                  </Radio>
+                </div>
+              </Well>
+            ) : (
+              <p>
+                <Message>googlePlayAppDescription</Message>
+              </p>
+            )}
           </div>
           <div className='mdl-cell mdl-cell--12-col'>
             <Radio {...this.radioProps('type', 'app-actions')}>
               <Message>appActionsTitle</Message>
             </Radio>
-            <p>
-              <Message>appActionsDescription</Message>
-            </p>
+
+            {type === 'app-actions' ? (
+              <Well>
+                <p>
+                  <Message>appPlatformTitle</Message>
+                </p>
+
+                <div>
+                  <Radio {...this.radioProps('app_platform', 'ANDROID_MARKET')}>
+                    Android
+                  </Radio>
+
+                  {app_platform === 'ANDROID_MARKET' && (
+                    <div style={{padding: '1em'}}>
+                      <div>
+                        <Radio {...this.radioProps('app_conversion_type', 'FIRST_OPEN')}>
+                          <Message>appFirstOpen</Message>
+                        </Radio>
+                      </div>
+                      <div>
+                        <Radio {...this.radioProps('app_conversion_type', 'NONE')}>
+                          <Message>appActions</Message>
+                        </Radio>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <Radio {...this.radioProps('app_platform', 'ITUNES')}>
+                    iOS
+                  </Radio>
+
+                  {app_platform === 'ITUNES' && (
+                    <div style={{padding: '1em'}}>
+                      <div>
+                        <Radio {...this.radioProps('app_conversion_type', 'FIRST_OPEN')}>
+                          <Message>appFirstOpen</Message>
+                        </Radio>
+                      </div>
+                      <div>
+                        <Radio {...this.radioProps('app_conversion_type', 'NONE')}>
+                          <Message>appActions</Message>
+                        </Radio>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </Well>
+            ) : (
+              <p>
+                <Message>appActionsDescription</Message>
+              </p>
+            )}
           </div>
         </div>
 

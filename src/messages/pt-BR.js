@@ -614,6 +614,13 @@ module.exports = {
   appActionsTitle: 'Primeiro acesso e ações no aplicativo',
   appActionsDescription: 'Para acompanhar conversões de aplicativos, adicione um código ao seu aplicativo ou use análises de terceiros',
 
+  appConversionTypeTitle: 'Selecione as conversões que você deseja acompanhar',
+  appPlatformTitle: 'Selecione sua plataforma de aplicativos para dispositivos móveis',
+  appDownloads: 'Instalações',
+  inAppPurchases: 'Compras no aplicativo',
+  appFirstOpen: 'Primeiro acesso',
+  appActions: 'Ações no aplicativo',
+
   lookbackWindow: {
     '7': '1 semana',
     '14': '2 semanas',

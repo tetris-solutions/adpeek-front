@@ -4,7 +4,7 @@ import Modal from 'tetris-iso/Modal'
 import EditConversionTracker from './ConversionTracker'
 
 const EditConversionTrackerModal = props =>
-  <Modal onEscPress={props.cancel} size='large' minHeight={0}>
+  <Modal onEscPress={props.cancel} size='medium' minHeight={0}>
     <EditConversionTracker {...props}/>
   </Modal>
 
