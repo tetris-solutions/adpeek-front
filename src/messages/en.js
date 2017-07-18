@@ -629,6 +629,9 @@ module.exports = {
   adwordsConversionCallTitle: 'Clicks on your phone number from mobile devices',
   adwordsConversionCallDescription: 'Requires a tab on your mobile website móveis. <a target="_blank" href="https://support.google.com/adwords/answer/6095878">Learn more</a>',
 
+  phoneCallDurationLabel: 'Call duration (seconds)',
+  phoneCallDurationDescription: 'Inform the number of seconds a call has to last for it to be counted as a conversion.',
+
   lookbackWindow: {
     '1': '1 day',
     '3': '3 days',

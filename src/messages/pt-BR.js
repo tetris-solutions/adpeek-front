@@ -630,6 +630,9 @@ module.exports = {
   adwordsConversionCallTitle: 'Cliques no seu número de telefone, no seu website para dispositivos móveis',
   adwordsConversionCallDescription: 'Exige a adição de uma tag no seu website para dispositivos móveis. <a target="_blank" href="https://support.google.com/adwords/answer/6095878">Saiba mais</a>',
 
+  phoneCallDurationLabel: 'Duração da chamada (segundos)',
+  phoneCallDurationDescription: 'Insira o tempo de duração necessário das chamadas para que elas sejam contabilizadas como conversões.',
+
   lookbackWindow: {
     '1': '1 dia',
     '3': '3 dias',

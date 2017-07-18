@@ -68,7 +68,8 @@ class CreateConversionTracker extends React.Component {
     mode: first(this.props.modes),
     always_use_default_revenue_value: false,
     default_revenue_currency_code: 'BRL',
-    default_revenue_value: 1
+    default_revenue_value: 1,
+    phone_call_duration: 60
   }
 
   save = () => {
@@ -117,6 +118,10 @@ class CreateConversionTracker extends React.Component {
 
   render () {
     const {ConversionTrackerType, category} = this.state
+    const isCall = (
+      ConversionTrackerType === 'AdCallMetricsConversion' ||
+      ConversionTrackerType === 'WebsiteCallMetricsConversion'
+    )
     const isApp = ConversionTrackerType === 'AppConversion'
     const isDownload = category === 'DOWNLOAD'
     const {messages} = this.context
@@ -156,6 +161,24 @@ class CreateConversionTracker extends React.Component {
                     {text}
                   </option>)}
               </Select>
+            </div>)}
+
+          {isCall && (
+            <div className='mdl-cell mdl-cell--6-col'>
+              <Input
+                required
+                type='number'
+                onChange={this.onChange}
+                value={this.state.phone_call_duration}
+                name='phone_call_duration'
+                label='phoneCallDuration'/>
+
+              <br/>
+              <small>
+                <em>
+                  <Message>phoneCallDurationDescription</Message>
+                </em>
+              </small>
             </div>)}
 
           {!(isApp && isDownload) && (
