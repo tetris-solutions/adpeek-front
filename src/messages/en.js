@@ -632,6 +632,9 @@ module.exports = {
   phoneCallDurationLabel: 'Call duration (seconds)',
   phoneCallDurationDescription: 'Inform the number of seconds a call has to last for it to be counted as a conversion.',
 
+  appPostbackUrlLabel: 'Postback URL',
+  appPostbackUrlDescription: 'Optional. Google AdWords can include conversion metadata in the analytics package of your app. For that to work, please fill your analytics provider URL where the conversions should be sent. <a target="_blank" href="https://developers.google.com/app-conversion-tracking/android/install-confirm">Learn more</a>',
+
   lookbackWindow: {
     '1': '1 day',
     '3': '3 days',

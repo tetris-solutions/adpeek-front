@@ -29,6 +29,8 @@ class CreateConversionTracker extends React.Component {
     viewthrough_lookback_window: PropTypes.number,
     counting_type: PropTypes.string,
     attribution_model_type: PropTypes.string,
+    app_platform: PropTypes.string,
+    app_conversion_type: PropTypes.string,
     campaign: PropTypes.shape({
       details: PropTypes.shape({
         locationFeeds: PropTypes.arrayOf(PropTypes.shape({
@@ -69,7 +71,11 @@ class CreateConversionTracker extends React.Component {
     always_use_default_revenue_value: false,
     default_revenue_currency_code: 'BRL',
     default_revenue_value: 1,
-    phone_call_duration: 60
+    phone_call_duration: 60,
+    app_platform: this.props.app_platform,
+    app_conversion_type: this.props.app_conversion_type,
+    app_id: '',
+    app_postback_url: ''
   }
 
   save = () => {
@@ -147,6 +153,16 @@ class CreateConversionTracker extends React.Component {
               name='name'
               label='name'/>
           </div>
+
+          {isApp && (
+            <div className='mdl-cell mdl-cell--6-col'>
+              <Input
+                required
+                onChange={this.onChange}
+                value={this.state.app_id}
+                name='app_id'
+                label='appId'/>
+            </div>)}
 
           {notFixed(categories) && (
             <div className='mdl-cell mdl-cell--6-col'>
@@ -286,6 +302,23 @@ class CreateConversionTracker extends React.Component {
                   value={this.state.default_revenue_value}/>
               </div>)}
           </div>
+
+          {isApp && (
+            <div className='mdl-cell mdl-cell--6-col'>
+              <Input
+                type='url'
+                onChange={this.onChange}
+                value={this.state.app_postback_url}
+                name='app_postback_url'
+                label='appPostbackUrl'/>
+
+              <br/>
+              <small>
+                <em>
+                  <Message html>appPostbackUrlDescription</Message>
+                </em>
+              </small>
+            </div>)}
         </div>
         <div className={style.actions}>
           <Button className='mdl-button mdl-button--raised' onClick={this.props.cancel}>

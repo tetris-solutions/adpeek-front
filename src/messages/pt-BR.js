@@ -633,6 +633,9 @@ module.exports = {
   phoneCallDurationLabel: 'Duração da chamada (segundos)',
   phoneCallDurationDescription: 'Insira o tempo de duração necessário das chamadas para que elas sejam contabilizadas como conversões.',
 
+  appPostbackUrlLabel: 'URL de postback',
+  appPostbackUrlDescription: 'Opcional. Se você desejar, o Google AdWords pode incluir informações de conversão no pacote de análise do seu aplicativo para Android. Basta inserir o URL do seu provedor de análise no qual você deseja que as conversões sejam incluídas. <a target="_blank" href="https://developers.google.com/app-conversion-tracking/android/install-confirm">Saiba mais</a>',
+
   lookbackWindow: {
     '1': '1 dia',
     '3': '3 dias',
