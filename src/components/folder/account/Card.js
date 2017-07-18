@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
 import Fence from '../../Fence'
 import assign from 'lodash/assign'
-import map from 'lodash/map'
 import head from 'lodash/head'
 import filter from 'lodash/filter'
 import isEmpty from 'lodash/isEmpty'
@@ -25,8 +24,6 @@ const urlFor = ({company, workspace, folder}, fragment = null) => {
     ? `${accountUrl}/${fragment}`
     : accountUrl
 }
-
-const flattenParam = ({key, value}) => `${key}=${value}`
 
 class AdwordsCampaign extends React.Component {
   static displayName = 'Adwords-Campaign'
@@ -75,12 +72,9 @@ class AdwordsCampaign extends React.Component {
 
           <Info editLink={editable ? urlFor(params, 'tracking') : null}>
             <Message>trackingUrl</Message>:
-            {list([details.tracking_url]
-                .concat(map(details.url_params &&
-                  details.url_params.parameters, flattenParam)),
-              txt => txt
-                ? <SubText>{txt}</SubText>
-                : null)}
+            {list([details.tracking_url], txt => txt
+              ? <SubText>{txt}</SubText>
+              : null)}
           </Info>
 
           <Info editLink={editable ? urlFor(params, 'conversion-trackers') : null}>

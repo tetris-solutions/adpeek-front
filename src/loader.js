@@ -105,7 +105,7 @@ const campaign = provide => tempSyncEnsure(() => provide({
   dynamicSearchAds: require('./components/campaign/edit/dynamic-search-ads/Modal'),
   create: require('./components/campaign/create/Create'),
   userLists: require('./components/campaign/edit/UserLists'),
-  tracking: require('./components/campaign/edit/tracking/Modal')
+  tracking: require('./components/campaign/edit/Tracking')
 }))
 
 const orderCloning = provide => tempSyncEnsure(() => provide({
@@ -145,7 +145,8 @@ const folderLevel = provide => tempSyncEnsure(() => provide({
   conversionTracker: require('./components/folder/account/conversion-tracker/Modal'),
   siteLinks: require('./components/folder/account/SiteLink'),
   callOuts: require('./components/folder/account/CallOut'),
-  apps: require('./components/folder/account/Apps')
+  apps: require('./components/folder/account/Apps'),
+  tracking: require('./components/folder/account/Tracking')
 }))
 
 const orderLevel = provide => tempSyncEnsure(() => provide({
@@ -250,6 +251,7 @@ export const component = {
   AccountSiteLinks: screen(folderLevel, 'siteLinks'),
   AccountCallOuts: screen(folderLevel, 'callOuts'),
   AccountApps: screen(folderLevel, 'apps'),
+  AccountTracking: screen(folderLevel, 'tracking'),
 
   Orders: screen(orderList),
 

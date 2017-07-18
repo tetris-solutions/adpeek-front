@@ -2,8 +2,8 @@ import {PUT} from '@tetris/http'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import assign from 'lodash/assign'
 
-function updateCampaignTracking (id, tracking, config) {
-  return PUT(`${process.env.ADPEEK_API_URL}/campaign/${id}/tracking`, assign({body: tracking}, config))
+function updateCampaignTracking (campaign, tracking, config) {
+  return PUT(`${process.env.ADPEEK_API_URL}/campaign/${campaign}/tracking`, assign({body: tracking}, config))
 }
 
 export function updateCampaignTrackingAction (tree, {campaign}, tracking) {
