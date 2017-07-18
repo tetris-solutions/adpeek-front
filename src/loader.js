@@ -142,7 +142,9 @@ const folderLevel = provide => tempSyncEnsure(() => provide({
   campaigns: require('./components/folder/Home'),
   account: require('./components/folder/account/Account'),
   locations: require('./components/folder/account/locations/Modal'),
-  conversionTracker: require('./components/folder/account/conversion-tracker/Modal')
+  conversionTracker: require('./components/folder/account/conversion-tracker/Modal'),
+  siteLinks: require('./components/folder/account/SiteLink'),
+  callOuts: require('./components/folder/account/CallOut')
 }))
 
 const orderLevel = provide => tempSyncEnsure(() => provide({
@@ -244,6 +246,8 @@ export const component = {
   FolderAside: piece(folderLevel, 'aside'),
   AccountLocations: screen(folderLevel, 'locations'),
   ConversionTracker: screen(folderLevel, 'conversionTracker'),
+  AccountSiteLinks: screen(folderLevel, 'siteLinks'),
+  AccountCallOuts: screen(folderLevel, 'callOuts'),
 
   Orders: screen(orderList),
 

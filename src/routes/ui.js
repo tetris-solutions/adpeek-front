@@ -155,9 +155,9 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                 <Route path='account' {...render(component.FolderAccount)}>
                   <Route path='locations' {...render(component.AccountLocations)}/>
                   <Route path='conversion-trackers' {...render(component.ConversionTracker)}/>
-                  <Route path='site-links'/>
+                  <Route path='site-links' {...render(component.AccountSiteLinks)}/>
+                  <Route path='call-outs' {...render(component.AccountCallOuts)}/>
                   <Route path='apps'/>
-                  <Route path='call-outs'/>
                   <Route path='tracking'/>
                 </Route>
 

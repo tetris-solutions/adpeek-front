@@ -89,7 +89,7 @@ class ConversionTracker extends React.PureComponent {
           </div>
 
           {openModal && (
-            <Modal size='medium' onEscPress={this.cancelCreation}>
+            <Modal size='medium' onEscPress={this.closeModal}>
               {presets ? (
                 <CreateConversionTracker
                   {...this.props}
