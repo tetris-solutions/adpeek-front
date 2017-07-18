@@ -102,12 +102,10 @@ const campaign = provide => tempSyncEnsure(() => provide({
   siteLinks: require('./components/campaign/edit/SiteLink'),
   callOuts: require('./components/campaign/edit/CallOut'),
   apps: require('./components/campaign/edit/apps/Modal'),
-  locations: require('./components/campaign/edit/locations/Modal'),
   dynamicSearchAds: require('./components/campaign/edit/dynamic-search-ads/Modal'),
   create: require('./components/campaign/create/Create'),
   userLists: require('./components/campaign/edit/UserLists'),
-  tracking: require('./components/campaign/edit/tracking/Modal'),
-  conversionTracker: require('./components/campaign/edit/conversion-tracker/Modal')
+  tracking: require('./components/campaign/edit/tracking/Modal')
 }))
 
 const orderCloning = provide => tempSyncEnsure(() => provide({
@@ -141,7 +139,10 @@ const workspaceLevel = provide => tempSyncEnsure(() => provide({
 
 const folderLevel = provide => tempSyncEnsure(() => provide({
   aside: require('./components/folder/Aside'),
-  campaigns: require('./components/folder/Home')
+  campaigns: require('./components/folder/Home'),
+  account: require('./components/folder/account/Account'),
+  locations: require('./components/folder/account/locations/Modal'),
+  conversionTracker: require('./components/folder/account/conversion-tracker/Modal')
 }))
 
 const orderLevel = provide => tempSyncEnsure(() => provide({
@@ -214,11 +215,10 @@ export const component = {
   CampaignSiteLinks: screen(campaign, 'siteLinks'),
   CampaignCallOuts: screen(campaign, 'callOuts'),
   CampaignApps: screen(campaign, 'apps'),
-  CampaignLocations: screen(campaign, 'locations'),
+
   CampaignDynamicSearchAds: screen(campaign, 'dynamicSearchAds'),
   CampaignUserLists: screen(campaign, 'userLists'),
   CampaignTracking: screen(campaign, 'tracking'),
-  ConversionTracker: screen(campaign, 'conversionTracker'),
   CampaignCreatives: screen(creatives, 'campaign'),
   CreateCampaign: screen(campaign, 'create'),
   FolderCreatives: screen(creatives, 'folder'),
@@ -240,7 +240,10 @@ export const component = {
   WorkspaceAside: piece(workspaceLevel, 'aside'),
 
   FolderCampaigns: screen(folderLevel, 'campaigns'),
+  FolderAccount: screen(folderLevel, 'account'),
   FolderAside: piece(folderLevel, 'aside'),
+  AccountLocations: screen(folderLevel, 'locations'),
+  ConversionTracker: screen(folderLevel, 'conversionTracker'),
 
   Orders: screen(orderList),
 

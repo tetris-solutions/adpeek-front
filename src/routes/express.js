@@ -157,6 +157,20 @@ export function setAppRoutes (app, render) {
     ensureLoad(workspace, accounts),
     render)
 
+  forEach([
+    '',
+    '/locations',
+    '/conversion-trackers',
+    '/site-links',
+    '/apps',
+    '/call-outs',
+    '/tracking'
+  ], section =>
+    app.get(`/company/:company/workspace/:workspace/folder/:folder/account${section}`,
+      protect,
+      ensureLoad(workspace, folder),
+      render))
+
   const subFolderActions = [workspace, folder, campaigns]
 
   app.get('/company/:company/workspace/:workspace/folder/:folder',
@@ -222,7 +236,6 @@ export function setAppRoutes (app, render) {
     '/edit/locations',
     '/edit/dynamic-search-ads',
     '/edit/user-lists',
-    '/edit/conversion-tracker',
     '/creatives',
     '/creatives/edit'], path =>
     app.get(`/company/:company/workspace/:workspace/folder/:folder/campaign/:campaign${path}`,

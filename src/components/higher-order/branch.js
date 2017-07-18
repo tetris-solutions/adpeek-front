@@ -199,7 +199,7 @@ export function derivative (parent, name, resolverOrComponent, Component, maxDep
 
   Component = Component || resolverOrComponent
 
-  return class extends React.Component {
+  class Temp extends React.Component {
     static displayName = `${name}(${Component.displayName})`
 
     static contextTypes = {
@@ -234,6 +234,8 @@ export function derivative (parent, name, resolverOrComponent, Component, maxDep
       return <Branch {...this.props}/>
     }
   }
+
+  return Temp
 }
 
 export const collection = derivative

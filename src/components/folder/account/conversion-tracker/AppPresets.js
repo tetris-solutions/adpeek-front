@@ -4,7 +4,7 @@ import Message from 'tetris-iso/Message'
 import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
 import Radio from '../../../Radio'
-import {style} from '../style'
+import {style} from '../../../campaign/edit/style'
 import Well from '../../../Well'
 
 class AppPresets extends React.Component {

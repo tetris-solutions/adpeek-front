@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
 import {Button} from '../../../Button'
-import {style} from '../style'
+import {style} from '../../../campaign/edit/style'
 import {styledComponent} from '../../../higher-order/styled'
 import Create from './Create'
 import LocationsTable from './Table'
@@ -14,7 +14,7 @@ class EditLocations extends React.PureComponent {
   static propTypes = {
     cancel: PropTypes.func,
     reload: PropTypes.func,
-    campaign: PropTypes.object,
+    account: PropTypes.object,
     onSubmit: PropTypes.func,
     params: PropTypes.object,
     dispatch: PropTypes.func
@@ -34,7 +34,7 @@ class EditLocations extends React.PureComponent {
   }
 
   render () {
-    const {locations} = this.props.campaign.details
+    const {locations} = this.props.account.details
 
     return (
       <div>

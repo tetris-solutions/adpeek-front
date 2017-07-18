@@ -46,7 +46,7 @@ class EditApp extends React.Component {
   }
 
   getCampaignAppExtensions = () => {
-    return map(unwrap(this.props.campaign.details.extension), 'feedItemId')
+    return map(unwrap(this.props.campaign.details.extensions), 'feedItemId')
   }
 
   state = {
@@ -93,7 +93,7 @@ class EditApp extends React.Component {
     const {selected, openCreateModal} = this.state
     const {dispatch, params, cancel, campaign, folder} = this.props
     const apps = unionBy(
-      unwrap(campaign.details.extension),
+      unwrap(campaign.details.extensions),
       folder.apps,
       'feedItemId'
     )

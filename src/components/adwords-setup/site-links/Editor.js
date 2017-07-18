@@ -45,7 +45,7 @@ class EditSiteLinks extends React.Component {
     onSubmit: PropTypes.func,
     dispatch: PropTypes.func,
     params: PropTypes.object,
-    extension: PropTypes.array
+    extensions: PropTypes.array
   }
 
   componentDidMount () {
@@ -81,7 +81,7 @@ class EditSiteLinks extends React.Component {
   }
 
   getCampaignSiteLinkExtensions = () => {
-    return map(unwrap(this.props.extension), 'feedItemId')
+    return map(unwrap(this.props.extensions), 'feedItemId')
   }
 
   state = {
@@ -97,9 +97,9 @@ class EditSiteLinks extends React.Component {
 
   render () {
     const {selected, openCreateModal} = this.state
-    const {cancel, extension, folder, dispatch, params} = this.props
+    const {cancel, extensions, folder, dispatch, params} = this.props
     const siteLinks = filter(unionBy(
-      unwrap(extension),
+      unwrap(extensions),
       folder.siteLinks,
       'feedItemId'
     ), isValidSiteLink)

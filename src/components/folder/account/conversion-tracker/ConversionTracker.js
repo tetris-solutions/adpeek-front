@@ -3,20 +3,20 @@ import PropTypes from 'prop-types'
 import Modal from 'tetris-iso/Modal'
 import Message from 'tetris-iso/Message'
 import {Button} from '../../../Button'
-import {style} from '../style'
+import {style} from '../../../campaign/edit/style'
 import {styledComponent} from '../../../higher-order/styled'
 import CreateConversionTracker from './Form'
 import map from 'lodash/map'
 import camelCase from 'lodash/camelCase'
 import PresetsSelector from './PresetsSelector'
 
-class EditLocations extends React.PureComponent {
-  static displayName = 'Edit-Locations'
+class ConversionTracker extends React.PureComponent {
+  static displayName = 'Conversion-Trackers'
 
   static propTypes = {
     cancel: PropTypes.func,
     reload: PropTypes.func,
-    campaign: PropTypes.object,
+    account: PropTypes.object,
     onSubmit: PropTypes.func,
     params: PropTypes.object,
     dispatch: PropTypes.func
@@ -73,7 +73,7 @@ class EditLocations extends React.PureComponent {
                   </tr>
                 </thead>
                 <tbody>
-                  {map(this.props.campaign.details.conversionTracker,
+                  {map(this.props.account.details.conversionTrackers,
                     ({id, name, category}) => (
                       <tr key={id}>
                         <td className='mdl-data-table__cell--non-numeric'>
@@ -94,7 +94,7 @@ class EditLocations extends React.PureComponent {
                 <CreateConversionTracker
                   {...this.props}
                   {...presets}
-                  cancel={this.cancelCreation}
+                  cancel={this.closeModal}
                   onSubmit={this.onCreate}/>
               ) : (
                 <PresetsSelector
@@ -116,4 +116,4 @@ class EditLocations extends React.PureComponent {
   }
 }
 
-export default styledComponent(EditLocations, style)
+export default styledComponent(ConversionTracker, style)

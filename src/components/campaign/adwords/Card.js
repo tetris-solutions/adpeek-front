@@ -12,7 +12,6 @@ import head from 'lodash/head'
 import filter from 'lodash/filter'
 import toLower from 'lodash/toLower'
 import lowerFirst from 'lodash/lowerFirst'
-import isEmpty from 'lodash/isEmpty'
 import ProximityDescription from '../edit/geo-location/ProximityDescription'
 import {
   list,
@@ -122,19 +121,13 @@ class AdwordsCampaign extends React.Component {
           </Info>
 
           <Info editLink={editable ? urlFor(params, 'tracking') : null}>
-            <Message>campaignTracking</Message>:
+            <Message>trackingUrl</Message>:
             {list([details.tracking_url]
                 .concat(map(details.url_params &&
                   details.url_params.parameters, flattenParam)),
               txt => txt
                 ? <SubText>{txt}</SubText>
                 : null)}
-          </Info>
-
-          <Info editLink={editable ? urlFor(params, 'conversion-tracker') : null}>
-            <Message>conversionTracker</Message>:
-            {list(details.conversionTracker, ({id, name}) =>
-              <SubText key={id}>{name}</SubText>)}
           </Info>
 
           <SectionTitle>
@@ -144,7 +137,7 @@ class AdwordsCampaign extends React.Component {
           <Section>
             <Info editLink={editable ? urlFor(params, 'site-links') : null}>
               <Message>siteLinks</Message>:
-              {list(mapExtensions(details.extension, 'SITELINK',
+              {list(mapExtensions(details.extensions, 'SITELINK',
                 ({sitelinkText, sitelinkFinalUrls: {urls}}, index) =>
                   <SubText key={index}>
                     <a className='mdl-color-text--blue-grey-500' href={head(urls)} target='_blank'>
@@ -155,23 +148,16 @@ class AdwordsCampaign extends React.Component {
 
             <Info editLink={editable ? urlFor(params, 'call-outs') : null}>
               <Message>callOut</Message>:
-              {list(mapExtensions(details.extension, 'CALLOUT',
+              {list(mapExtensions(details.extensions, 'CALLOUT',
                 ({calloutText}, index) =>
                   <SubText key={index}>
                     "{calloutText}"
                   </SubText>))}
             </Info>
 
-            {!isEmpty(details.locationFeeds) && (
-              <Info editLink={editable ? urlFor(params, 'locations') : null}>
-                <Message>feedLocal</Message>:
-                {list(filter(details.locations, 'businessName'), ({feedItemId, businessName}) =>
-                  <SubText key={feedItemId}>{businessName}</SubText>)}
-              </Info>)}
-
             <Info editLink={editable ? urlFor(params, 'apps') : null}>
               <Message>targetApp</Message>:
-              {list(mapExtensions(details.extension, 'APP',
+              {list(mapExtensions(details.extensions, 'APP',
                 ({appLinkText, appFinalUrls: {urls}}, index) =>
                   <SubText key={index}>
                     <a className='mdl-color-text--blue-grey-500' href={head(urls)} target='_blank'>

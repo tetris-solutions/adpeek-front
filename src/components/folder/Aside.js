@@ -72,6 +72,11 @@ class FolderAside extends React.PureComponent {
             </ReportLink>
 
             {canEditFolder && (
+              <NavLink to={`${baseUrl}/account`} icon='account_circle'>
+                <Message>editFolderAccount</Message>
+              </NavLink>)}
+
+            {canEditFolder && (
               <NavLink to={`${baseUrl}/edit`} icon='mode_edit'>
                 <Message>editFolder</Message>
               </NavLink>)}

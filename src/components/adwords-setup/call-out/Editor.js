@@ -36,7 +36,7 @@ class EditCallOut extends React.Component {
     dispatch: PropTypes.func.isRequired,
     folder: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
-    extension: PropTypes.array.isRequired,
+    extensions: PropTypes.array.isRequired,
     cancel: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired
   }
@@ -53,7 +53,7 @@ class EditCallOut extends React.Component {
   }
 
   getCampaignCallOutExtensions = () => {
-    return map(unwrap(this.props.extension), 'feedItemId')
+    return map(unwrap(this.props.extensions), 'feedItemId')
   }
 
   state = {
@@ -98,9 +98,9 @@ class EditCallOut extends React.Component {
 
   render () {
     const {selected, openCreateModal} = this.state
-    const {dispatch, params, cancel, extension, folder} = this.props
+    const {dispatch, params, cancel, extensions, folder} = this.props
     const callOuts = unionBy(
-      unwrap(extension),
+      unwrap(extensions),
       folder.callOuts,
       'feedItemId'
     )

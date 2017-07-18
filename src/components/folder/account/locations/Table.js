@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {style} from '../style'
+import {style} from '../../../campaign/edit/style'
 import map from 'lodash/map'
 import filter from 'lodash/filter'
 

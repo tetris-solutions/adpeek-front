@@ -152,6 +152,15 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                      breadcrumb={component.FolderBreadcrumb}
                      onEnter={preload(folder, campaigns)}>
 
+                <Route path='account' {...render(component.FolderAccount)}>
+                  <Route path='locations' {...render(component.AccountLocations)}/>
+                  <Route path='conversion-trackers' {...render(component.ConversionTracker)}/>
+                  <Route path='site-links'/>
+                  <Route path='apps'/>
+                  <Route path='call-outs'/>
+                  <Route path='tracking'/>
+                </Route>
+
                 <IndexRoute {...render(component.FolderCampaigns)}/>
                 <Route path='creatives' {...render(component.FolderCreatives)}/>
                 <Route path='create/campaign' {...render(component.CreateCampaign)}/>
@@ -179,11 +188,9 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                     <Route path='site-links' {...render(component.CampaignSiteLinks)} />
                     <Route path='call-outs' {...render(component.CampaignCallOuts)} />
                     <Route path='apps' {...render(component.CampaignApps)} />
-                    <Route path='locations' {...render(component.CampaignLocations)} />
-                    <Route path='dynamic-search-ads' {...render(component.CampaignDynamicSearchAds)} />
+                    <Route path='dynamic-search-ads' {...render(component.CampaignDynamicSearchAds)}/>
                     <Route path='user-lists' {...render(component.CampaignUserLists)} />
                     <Route path='tracking' {...render(component.CampaignTracking)}/>
-                    <Route path='conversion-tracker' {...render(component.ConversionTracker)}/>
                   </Route>
 
                   <Route path='creatives' {...render(component.CampaignCreatives)}>

@@ -6,7 +6,7 @@ import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
 import Message from 'tetris-iso/Message'
 import map from 'lodash/map'
-import {style} from '../style'
+import {style} from '../../../campaign/edit/style'
 import first from 'lodash/first'
 import {createLocationFeedItemAction} from '../../../../actions/create-location'
 

@@ -9,7 +9,7 @@ import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
 import Message from 'tetris-iso/Message'
 import map from 'lodash/map'
-import {style} from '../style'
+import {style} from '../../../campaign/edit/style'
 import first from 'lodash/first'
 import camelCase from 'lodash/camelCase'
 import {createConversionTrackerAction} from '../../../../actions/create-conversion-tracker'
@@ -28,13 +28,6 @@ class CreateConversionTracker extends React.Component {
     attribution_model_type: PropTypes.string,
     app_platform: PropTypes.string,
     app_conversion_type: PropTypes.string,
-    campaign: PropTypes.shape({
-      details: PropTypes.shape({
-        locationFeeds: PropTypes.arrayOf(PropTypes.shape({
-          id: PropTypes.string
-        }))
-      })
-    }),
     params: PropTypes.object,
     onSubmit: PropTypes.func,
     cancel: PropTypes.func

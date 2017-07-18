@@ -31,7 +31,7 @@ class AdGroupDetails extends React.PureComponent {
   static displayName = 'AdGroup-Details'
   static propTypes = {
     criteria: PropTypes.array,
-    extension: PropTypes.array,
+    extensions: PropTypes.array,
     reload: PropTypes.func
   }
 
@@ -50,7 +50,7 @@ class AdGroupDetails extends React.PureComponent {
 
   render () {
     const Modal = modalComponent[this.state.openModal]
-    const {extension, criteria} = this.props
+    const {extensions, criteria} = this.props
 
     return (
       <Wrapper>
@@ -71,7 +71,7 @@ class AdGroupDetails extends React.PureComponent {
 
         <Info editClick={this.setModal('site-links')}>
           <Message>siteLinks</Message>:
-          {list(mapExtensions(extension, 'SITELINK',
+          {list(mapExtensions(extensions, 'SITELINK',
             ({sitelinkText, sitelinkFinalUrls: {urls}}, index) =>
               <SubText key={index}>
                 <a className='mdl-color-text--blue-grey-500' href={head(urls)} target='_blank'>
@@ -82,7 +82,7 @@ class AdGroupDetails extends React.PureComponent {
 
         <Info editClick={this.setModal('call-outs')}>
           <Message>callOut</Message>:
-          {list(mapExtensions(extension, 'CALLOUT',
+          {list(mapExtensions(extensions, 'CALLOUT',
             ({calloutText}, index) =>
               <SubText key={index}>
                 "{calloutText}"
