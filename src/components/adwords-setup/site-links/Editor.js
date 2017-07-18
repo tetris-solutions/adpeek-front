@@ -11,6 +11,7 @@ import {styledComponent} from '../../higher-order/styled'
 import {loadFolderSiteLinksAction} from '../../../actions/load-folder-site-links'
 import {updateCampaignSiteLinksAction} from '../../../actions/update-campaign-site-links'
 import {updateAdGroupSiteLinksAction} from '../../../actions/update-adgroup-site-links'
+import {updateAccountSiteLinksAction} from '../../../actions/update-account-site-links'
 import includes from 'lodash/includes'
 import FeedItem from './FeedItem'
 import without from 'lodash/without'
@@ -23,15 +24,17 @@ import head from 'lodash/head'
 import isEmpty from 'lodash/isEmpty'
 
 const unwrap = extensions => flatten(map(filter(extensions, {type: 'SITELINK'}), 'extensions'))
+
 const actions = {
   campaign: updateCampaignSiteLinksAction,
-  adGroup: updateAdGroupSiteLinksAction
+  adGroup: updateAdGroupSiteLinksAction,
+  account: updateAccountSiteLinksAction
 }
 
 const isValidSiteLink = item => (
   !isEmpty(item.sitelinkText) &&
-  !isEmpty(item.sitelinkLine2) &&
-  !isEmpty(item.sitelinkLine3) &&
+  // !isEmpty(item.sitelinkLine2) &&
+  // !isEmpty(item.sitelinkLine3) &&
   !isEmpty(item.sitelinkFinalUrls)
 )
 
@@ -39,7 +42,7 @@ class EditSiteLinks extends React.Component {
   static displayName = 'Edit-Site-Links'
 
   static propTypes = {
-    level: PropTypes.oneOf(['campaign', 'adGroup']),
+    level: PropTypes.oneOf(['account', 'campaign', 'adGroup']),
     folder: PropTypes.object,
     cancel: PropTypes.func,
     onSubmit: PropTypes.func,
