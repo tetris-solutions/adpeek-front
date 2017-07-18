@@ -10,10 +10,6 @@ import map from 'lodash/map'
 import camelCase from 'lodash/camelCase'
 import PresetsSelector from './PresetsSelector'
 
-const typeCategories = {
-  AdWordsConversionTracker: ['DEFAULT', 'PAGE_VIEW', 'PURCHASE', 'SIGNUP', 'LEAD']
-}
-
 class EditLocations extends React.PureComponent {
   static displayName = 'Edit-Locations'
 
@@ -93,7 +89,6 @@ class EditLocations extends React.PureComponent {
               {presets ? (
                 <CreateConversionTracker
                   {...this.props}
-                  categories={typeCategories[presets.ConversionTrackerType]}
                   {...presets}
                   cancel={this.cancelCreation}
                   onSubmit={this.onCreate}/>

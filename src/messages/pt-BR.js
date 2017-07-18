@@ -594,7 +594,7 @@ module.exports = {
   defaultRevenueValueLabel: 'Valor da conversão',
   fixedRevenueValue: 'Valor de conversão fixo',
   flexibleRevenueValue: 'Valor de conversão variável',
-  noRevenueValue: 'Não atribuir valor de conversão',
+  noneRevenueValue: 'Não atribuir valor de conversão',
   currencyCodeLabel: 'Moeda',
 
   websiteConversionTrackerTitle: 'Website',
@@ -631,6 +631,8 @@ module.exports = {
   adwordsConversionCallDescription: 'Exige a adição de uma tag no seu website para dispositivos móveis. <a target="_blank" href="https://support.google.com/adwords/answer/6095878">Saiba mais</a>',
 
   lookbackWindow: {
+    '1': '1 dia',
+    '3': '3 dias',
     '7': '1 semana',
     '14': '2 semanas',
     '21': '3 semanas',

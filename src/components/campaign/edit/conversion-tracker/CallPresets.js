@@ -22,7 +22,11 @@ class CallPresets extends React.Component {
     const {ConversionTrackerType} = this.state
     const presets = {
       ConversionTrackerType,
-      categories: ['LEAD', 'DEFAULT', 'PURCHASE', 'SIGNUP']
+      categories: ['LEAD', 'DEFAULT', 'PURCHASE', 'SIGNUP'],
+      ctc_lookback_window: 30,
+      viewthrough_lookback_window: 1,
+      counting_type: 'ONE_PER_CLICK',
+      attribution_model_type: 'LAST_CLICK'
     }
 
     switch (ConversionTrackerType) {

@@ -13,13 +13,22 @@ import {style} from '../style'
 import first from 'lodash/first'
 import camelCase from 'lodash/camelCase'
 import {createConversionTrackerAction} from '../../../../actions/create-conversion-tracker'
+import size from 'lodash/size'
+import assign from 'lodash/assign'
+
+const notFixed = ls => size(ls) > 1
 
 class CreateConversionTracker extends React.Component {
   static displayName = 'Create-Conversion-Tracker'
   static propTypes = {
     dispatch: PropTypes.func,
     ConversionTrackerType: PropTypes.string,
-    categories: PropTypes.array,
+    categories: PropTypes.arrayOf(PropTypes.string),
+    modes: PropTypes.arrayOf(PropTypes.string),
+    ctc_lookback_window: PropTypes.number,
+    viewthrough_lookback_window: PropTypes.number,
+    counting_type: PropTypes.string,
+    attribution_model_type: PropTypes.string,
     campaign: PropTypes.shape({
       details: PropTypes.shape({
         locationFeeds: PropTypes.arrayOf(PropTypes.shape({
@@ -36,16 +45,27 @@ class CreateConversionTracker extends React.Component {
     messages: PropTypes.object
   }
 
+  static defaultProps = {
+    ctc_lookback_window: 30,
+    viewthrough_lookback_window: 1,
+    modes: ['flexible', 'fixed', 'none'],
+    categories: ['DEFAULT', 'PAGE_VIEW', 'PURCHASE', 'SIGNUP', 'LEAD'],
+    counting_type: 'MANY_PER_CLICK',
+    attribution_model_type: 'LAST_CLICK'
+  }
+
+  // appConversion + install: hide flexible mode
+  // appConversion + purchase: hide mode and revenue options; set default revenue to 0
   state = {
     name: '',
     ConversionTrackerType: this.props.ConversionTrackerType,
     exclude_from_bidding: false,
     category: first(this.props.categories),
-    ctc_lookback_window: '7',
-    viewthrough_lookback_window: '7',
-    counting_type: 'MANY_PER_CLICK',
-    attribution_model_type: 'LAST_CLICK',
-    $model: 'flexible',
+    ctc_lookback_window: String(this.props.ctc_lookback_window),
+    viewthrough_lookback_window: String(this.props.viewthrough_lookback_window),
+    counting_type: this.props.counting_type,
+    attribution_model_type: this.props.attribution_model_type,
+    mode: first(this.props.modes),
     always_use_default_revenue_value: false,
     default_revenue_currency_code: 'BRL',
     default_revenue_value: 1
@@ -53,11 +73,16 @@ class CreateConversionTracker extends React.Component {
 
   save = () => {
     const {dispatch, params} = this.props
+    const payload = assign({}, this.state)
+
+    if (payload.category === 'DOWNLOAD') {
+      payload.counting_type = 'ONE_PER_CLICK'
+    }
 
     return dispatch(
       createConversionTrackerAction,
       params,
-      this.state)
+      payload)
       .then(this.props.onSubmit)
   }
 
@@ -69,10 +94,10 @@ class CreateConversionTracker extends React.Component {
     this.setState({exclude_from_bidding: !checked})
   }
 
-  onChangeRevenueModel = ({target: {value: $model}}) => {
-    const changes = {$model}
+  onChangeRevenueModel = ({target: {value: mode}}) => {
+    const changes = {mode}
 
-    switch ($model) {
+    switch (mode) {
       case 'fixed':
         changes.always_use_default_revenue_value = true
         changes.default_revenue_value = changes.default_revenue_value || 1
@@ -91,6 +116,9 @@ class CreateConversionTracker extends React.Component {
   }
 
   render () {
+    const {ConversionTrackerType, category} = this.state
+    const isApp = ConversionTrackerType === 'AppConversion'
+    const isDownload = category === 'DOWNLOAD'
     const {messages} = this.context
     const categories = sortBy(map(this.props.categories, value => ({
       text: messages[`${camelCase(value)}Conversion`],
@@ -105,6 +133,7 @@ class CreateConversionTracker extends React.Component {
               <Message>newConversionTracker</Message>
             </h5>
           </div>
+
           <div className='mdl-cell mdl-cell--6-col'>
             <Input
               required
@@ -113,95 +142,98 @@ class CreateConversionTracker extends React.Component {
               name='name'
               label='name'/>
           </div>
-          <div className='mdl-cell mdl-cell--6-col'>
-            <Select
-              required
-              name='category'
-              label='conversionCategory'
-              value={this.state.category}
-              onChange={this.onChange}>
-              {map(categories, ({text, value}) =>
-                <option key={value} value={value}>
-                  {text}
-                </option>)}
-            </Select>
-          </div>
-          <div className='mdl-cell mdl-cell--6-col'>
-            <Select
-              required
-              name='ctc_lookback_window'
-              label='ctcLookbackWindow'
-              value={this.state.ctc_lookback_window}
-              onChange={this.onChange}>
-              {map(messages.lookbackWindow, (txt, key) =>
-                <option key={key} value={key}>
-                  {txt}
-                </option>)}
-            </Select>
-          </div>
-          <div className='mdl-cell mdl-cell--6-col'>
-            <Select
-              required
-              name='viewthrough_lookback_window'
-              label='viewthroughLookbackWindow'
-              value={this.state.viewthrough_lookback_window}
-              onChange={this.onChange}>
-              {map(messages.lookbackWindow, (txt, key) =>
-                <option key={key} value={key}>
-                  {txt}
-                </option>)}
-            </Select>
-          </div>
-          <div className='mdl-cell mdl-cell--6-col'>
-            <Select
-              required
-              name='counting_type'
-              label='countingType'
-              value={this.state.counting_type}
-              onChange={this.onChange}>
-              <option value='ONE_PER_CLICK'>{messages.onePerClick}</option>
-              <option value='MANY_PER_CLICK'>{messages.manyPerClick}</option>
-            </Select>
-          </div>
-          <div className='mdl-cell mdl-cell--6-col'>
-            <Select
-              required
-              name='attribution_model_type'
-              label='attributionModelType'
-              value={this.state.attribution_model_type}
-              onChange={this.onChange}>
-              {map(messages.attributionTypes, (txt, key) =>
-                <option key={key} value={key}>
-                  {txt}
-                </option>)}
-            </Select>
-          </div>
-          <div className='mdl-cell mdl-cell--6-col'>
-            <Radio
-              name='$model'
-              id='fixed-revenue-value'
-              checked={this.state.$model === 'fixed'}
-              onChange={this.onChangeRevenueModel}
-              value='fixed'>
-              <Message>fixedRevenueValue</Message>
-            </Radio>
-            <Radio
-              name='$model'
-              id='flexible-revenue-value'
-              checked={this.state.$model === 'flexible'}
-              onChange={this.onChangeRevenueModel}
-              value='flexible'>
-              <Message>flexibleRevenueValue</Message>
-            </Radio>
-            <Radio
-              name='$model'
-              id='no-revenue-value'
-              checked={this.state.$model === 'none'}
-              onChange={this.onChangeRevenueModel}
-              value='none'>
-              <Message>noRevenueValue</Message>
-            </Radio>
-          </div>
+
+          {notFixed(categories) && (
+            <div className='mdl-cell mdl-cell--6-col'>
+              <Select
+                required
+                name='category'
+                label='conversionCategory'
+                value={this.state.category}
+                onChange={this.onChange}>
+                {map(categories, ({text, value}) =>
+                  <option key={value} value={value}>
+                    {text}
+                  </option>)}
+              </Select>
+            </div>)}
+
+          {!(isApp && isDownload) && (
+            <div className='mdl-cell mdl-cell--6-col'>
+              <Select
+                required
+                name='ctc_lookback_window'
+                label='ctcLookbackWindow'
+                value={this.state.ctc_lookback_window}
+                onChange={this.onChange}>
+                {map(messages.lookbackWindow, (txt, key) =>
+                  <option key={key} value={key}>
+                    {txt}
+                  </option>)}
+              </Select>
+            </div>)}
+
+          {ConversionTrackerType === 'AdWordsConversionTracker' && (
+            <div className='mdl-cell mdl-cell--6-col'>
+              <Select
+                required
+                name='viewthrough_lookback_window'
+                label='viewthroughLookbackWindow'
+                value={this.state.viewthrough_lookback_window}
+                onChange={this.onChange}>
+                {map(messages.lookbackWindow, (txt, key) =>
+                  <option key={key} value={key}>
+                    {txt}
+                  </option>)}
+              </Select>
+            </div>)}
+
+          {!(isApp && isDownload) && (
+            <div className='mdl-cell mdl-cell--6-col'>
+              <Select
+                required
+                name='counting_type'
+                label='countingType'
+                value={this.state.counting_type}
+                onChange={this.onChange}>
+                <option value='ONE_PER_CLICK'>
+                  {messages.onePerClick}
+                </option>
+                <option value='MANY_PER_CLICK'>
+                  {messages.manyPerClick}
+                </option>
+              </Select>
+            </div>)}
+
+          {!isApp && (
+            <div className='mdl-cell mdl-cell--6-col'>
+              <Select
+                required
+                name='attribution_model_type'
+                label='attributionModelType'
+                value={this.state.attribution_model_type}
+                onChange={this.onChange}>
+                {map(messages.attributionTypes, (txt, key) =>
+                  <option key={key} value={key}>
+                    {txt}
+                  </option>)}
+              </Select>
+            </div>)}
+
+          {notFixed(this.props.modes) && (
+            <div className='mdl-cell mdl-cell--6-col'>
+              {map(this.props.modes, mode => (
+                <Radio
+                  key={mode}
+                  name='mode'
+                  id={`${mode}-revenue-value`}
+                  checked={this.state.mode === mode}
+                  onChange={this.onChangeRevenueModel}
+                  value={mode}>
+                  <Message>{`${mode}RevenueValue`}</Message>
+                </Radio>))}
+            </div>)}
+
           <div className='mdl-cell mdl-cell--6-col'>
             <Checkbox
               required
@@ -210,7 +242,7 @@ class CreateConversionTracker extends React.Component {
               checked={!this.state.exclude_from_bidding}
               onChange={this.onChangeExcludeFromBidding}/>
 
-            {this.state.$model !== 'none' && (
+            {this.state.mode !== 'none' && (
               <div style={{marginTop: '1em'}}>
                 <Select
                   label='currencyCode'

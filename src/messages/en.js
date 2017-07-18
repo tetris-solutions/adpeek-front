@@ -593,7 +593,7 @@ module.exports = {
   defaultRevenueValueLabel: 'Revenue value',
   fixedRevenueValue: 'Fixed conversion value',
   flexibleRevenueValue: 'Conversion value may vary',
-  noRevenueValue: 'No conversion value',
+  noneRevenueValue: 'No conversion value',
   currencyCodeLabel: 'Currency code',
 
   websiteConversionTrackerTitle: 'Website',
@@ -630,6 +630,8 @@ module.exports = {
   adwordsConversionCallDescription: 'Requires a tab on your mobile website móveis. <a target="_blank" href="https://support.google.com/adwords/answer/6095878">Learn more</a>',
 
   lookbackWindow: {
+    '1': '1 day',
+    '3': '3 days',
     '7': '1 week',
     '14': '2 weeks',
     '21': '3 weeks',

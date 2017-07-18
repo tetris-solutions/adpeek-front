@@ -26,7 +26,11 @@ class AppPresets extends React.Component {
     const presets = {
       ConversionTrackerType: 'AppConversion',
       app_platform,
-      app_conversion_type
+      app_conversion_type,
+      modes: ['fixed', 'none'],
+      ctc_lookback_window: 90,
+      viewthrough_lookback_window: 1,
+      attribution_model_type: 'LAST_CLICK'
     }
 
     switch (type) {
@@ -38,17 +42,27 @@ class AppPresets extends React.Component {
       case 'google-play':
         presets.app_platform = 'ANDROID_MARKET'
         break
+      case 'app-actions':
+        presets.modes = ['flexible', 'fixed', 'none']
     }
 
     switch (app_conversion_type) {
       case 'FIRST_OPEN':
       case 'DOWNLOAD':
         presets.categories = ['DOWNLOAD']
+        presets.counting_type = 'ONE_PER_CLICK'
         break
+
       case 'IN_APP_PURCHASE':
-        presets.categories = type === 'google-play'
-          ? ['PURCHASE']
-          : ['PURCHASE', 'SIGNUP', 'LEAD', 'PAGE_VIEW', 'DEFAULT']
+        presets.counting_type = 'MANY_PER_CLICK'
+
+        if (type === 'google-play') {
+          presets.categories = ['PURCHASE']
+          presets.modes = ['none']
+          presets.default_revenue_value = null
+        } else {
+          presets.categories = ['PURCHASE', 'SIGNUP', 'LEAD', 'PAGE_VIEW', 'DEFAULT']
+        }
         break
     }
 
