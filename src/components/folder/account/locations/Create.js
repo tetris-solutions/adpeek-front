@@ -14,7 +14,7 @@ class CreateLocation extends React.Component {
   static displayName = 'Create-Location'
   static propTypes = {
     dispatch: PropTypes.func,
-    campaign: PropTypes.shape({
+    account: PropTypes.shape({
       details: PropTypes.shape({
         locationFeeds: PropTypes.arrayOf(PropTypes.shape({
           id: PropTypes.string
@@ -42,12 +42,12 @@ class CreateLocation extends React.Component {
   }
 
   save = () => {
-    const {dispatch, params, campaign} = this.props
+    const {dispatch, params, account} = this.props
 
     return dispatch(
       createLocationFeedItemAction,
       params,
-      first(campaign.details.locationFeeds).id,
+      first(account.details.locationFeeds).id,
       this.state)
       .then(this.props.onSubmit)
   }
