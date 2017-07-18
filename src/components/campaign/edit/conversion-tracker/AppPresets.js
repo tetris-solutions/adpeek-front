@@ -40,6 +40,18 @@ class AppPresets extends React.Component {
         break
     }
 
+    switch (app_conversion_type) {
+      case 'FIRST_OPEN':
+      case 'DOWNLOAD':
+        presets.categories = ['DOWNLOAD']
+        break
+      case 'IN_APP_PURCHASE':
+        presets.categories = type === 'google-play'
+          ? ['PURCHASE']
+          : ['PURCHASE', 'SIGNUP', 'LEAD', 'PAGE_VIEW', 'DEFAULT']
+        break
+    }
+
     return this.props.save(presets)
   }
 
