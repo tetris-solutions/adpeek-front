@@ -11,6 +11,7 @@ import {styledComponent} from '../../higher-order/styled'
 import {loadFolderCallOutsAction} from '../../../actions/load-folder-call-outs'
 import {updateCampaignCallOutsAction} from '../../../actions/update-campaign-call-outs'
 import {updateAdGroupCallOutsAction} from '../../../actions/update-adgroup-call-outs'
+import {updateAccountCallOutsAction} from '../../../actions/update-account-call-outs'
 import Checkbox from '../../Checkbox'
 import includes from 'lodash/includes'
 import without from 'lodash/without'
@@ -25,14 +26,15 @@ const unwrap = extensions => flatten(map(filter(extensions, {type: 'CALLOUT'}), 
 
 const actions = {
   campaign: updateCampaignCallOutsAction,
-  adGroup: updateAdGroupCallOutsAction
+  adGroup: updateAdGroupCallOutsAction,
+  account: updateAccountCallOutsAction
 }
 
 class EditCallOut extends React.Component {
   static displayName = 'Edit-Call-Out'
 
   static propTypes = {
-    level: PropTypes.oneOf(['campaign', 'adGroup']),
+    level: PropTypes.oneOf(['account', 'campaign', 'adGroup']),
     dispatch: PropTypes.func.isRequired,
     folder: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
