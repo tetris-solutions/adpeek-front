@@ -31,18 +31,22 @@ class EditLocations extends React.PureComponent {
     presets: null
   }
 
-  toggleModal = () => {
-    this.setState({openModal: !this.state.openModal})
+  openModal = () => {
+    this.setState({
+      openModal: true
+    })
+  }
+
+  closeModal = () => {
+    this.setState({
+      presets: null,
+      openModal: false
+    })
   }
 
   onCreate = () => {
     return this.props.reload()
-      .then(this.toggleModal)
-  }
-
-  cancelCreation = () => {
-    this.setState({presets: null})
-    this.toggleModal()
+      .then(this.closeModal)
   }
 
   setConversionPresets = presets => {
@@ -103,7 +107,7 @@ class EditLocations extends React.PureComponent {
             <Message>close</Message>
           </Button>
 
-          <Button className='mdl-button mdl-button--raised' onClick={this.toggleModal}>
+          <Button className='mdl-button mdl-button--raised' onClick={this.openModal}>
             <Message>newConversionTracker</Message>
           </Button>
         </div>

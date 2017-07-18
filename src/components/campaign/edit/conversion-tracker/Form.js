@@ -13,10 +13,7 @@ import {style} from '../style'
 import first from 'lodash/first'
 import camelCase from 'lodash/camelCase'
 import {createConversionTrackerAction} from '../../../../actions/create-conversion-tracker'
-import size from 'lodash/size'
 import assign from 'lodash/assign'
-
-const notFixed = ls => size(ls) > 1
 
 class CreateConversionTracker extends React.Component {
   static displayName = 'Create-Conversion-Tracker'
@@ -164,20 +161,19 @@ class CreateConversionTracker extends React.Component {
                 label='appId'/>
             </div>)}
 
-          {notFixed(categories) && (
-            <div className='mdl-cell mdl-cell--6-col'>
-              <Select
-                required
-                name='category'
-                label='conversionCategory'
-                value={this.state.category}
-                onChange={this.onChange}>
-                {map(categories, ({text, value}) =>
-                  <option key={value} value={value}>
-                    {text}
-                  </option>)}
-              </Select>
-            </div>)}
+          <div className='mdl-cell mdl-cell--6-col'>
+            <Select
+              required
+              name='category'
+              label='conversionCategory'
+              value={this.state.category}
+              onChange={this.onChange}>
+              {map(categories, ({text, value}) =>
+                <option key={value} value={value}>
+                  {text}
+                </option>)}
+            </Select>
+          </div>
 
           {isCall && (
             <div className='mdl-cell mdl-cell--6-col'>
@@ -259,19 +255,18 @@ class CreateConversionTracker extends React.Component {
               </Select>
             </div>)}
 
-          {notFixed(this.props.modes) && (
-            <div className='mdl-cell mdl-cell--6-col'>
-              {map(this.props.modes, mode => (
-                <Radio
-                  key={mode}
-                  name='mode'
-                  id={`${mode}-revenue-value`}
-                  checked={this.state.mode === mode}
-                  onChange={this.onChangeRevenueModel}
-                  value={mode}>
-                  <Message>{`${mode}RevenueValue`}</Message>
-                </Radio>))}
-            </div>)}
+          <div className='mdl-cell mdl-cell--6-col'>
+            {map(this.props.modes, mode => (
+              <Radio
+                key={mode}
+                name='mode'
+                id={`${mode}-revenue-value`}
+                checked={this.state.mode === mode}
+                onChange={this.onChangeRevenueModel}
+                value={mode}>
+                <Message>{`${mode}RevenueValue`}</Message>
+              </Radio>))}
+          </div>
 
           <div className='mdl-cell mdl-cell--6-col'>
             <Checkbox

@@ -51,6 +51,7 @@ class AppPresets extends React.Component {
       case 'DOWNLOAD':
         presets.categories = ['DOWNLOAD']
         presets.counting_type = 'ONE_PER_CLICK'
+        presets.ctc_lookback_window = 30
         break
 
       case 'IN_APP_PURCHASE':
