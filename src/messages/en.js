@@ -605,7 +605,7 @@ module.exports = {
   conversionTypeSelectorTitle: 'Select the source of your conversions',
 
   appConversionsTitle: 'App conversions',
-  appConversionSubTitle: 'Choose how to track your conversions. <a target="_blank" href="https://support.google.com/adwords/answer/6100665">help</a>',
+  appConversionSubTitle: 'Choose how to track your conversions. <a target="_blank" href="https://support.google.com/adwords/answer/6100665">Learn more</a>',
   firebaseAppTitle: 'Firebase',
   firebaseAppDescription: 'Import conversions from a Firebase project',
   googlePlayAppTitle: 'Google Play',
@@ -619,6 +619,15 @@ module.exports = {
   inAppPurchases: 'In app purchase',
   appFirstOpen: 'First open',
   appActions: 'App actions',
+
+  callConversionsTitle: 'Phone call conversions',
+  callConversionsSubTitle: 'Select the source of the calls you would like to track:',
+  adCallMetricsConversionTitle: 'Calls made from Call-Only ads or ads with the Call Extension',
+  adCallMetricsConversionDescription: 'Requires the use of Google forwarding phone number, only available in some countries. <a target="_blank" href="https://support.google.com/adwords/answer/6095882">Learn more</a>',
+  websiteCallMetricsConversionTitle: 'Calls to a phone number on your website',
+  websiteCallMetricsConversionDescription: 'Requires a tag on your website and the use of Google forwarding phone numbers, only available in some countries. <a target="_blank" href="https://support.google.com/adwords/answer/6095883">Learn more</a>',
+  adwordsConversionCallTitle: 'Clicks on your phone number from mobile devices',
+  adwordsConversionCallDescription: 'Requires a tab on your mobile website móveis. <a target="_blank" href="https://support.google.com/adwords/answer/6095878">Learn more</a>',
 
   lookbackWindow: {
     '7': '1 week',

@@ -4,6 +4,7 @@ import Input from '../../../Input'
 import Checkbox from '../../../Checkbox'
 import Radio from '../../../Radio'
 import Select from '../../../Select'
+import sortBy from 'lodash/sortBy'
 import Form from '../../../Form'
 import {Button, Submit} from '../../../Button'
 import Message from 'tetris-iso/Message'
@@ -91,6 +92,10 @@ class CreateConversionTracker extends React.Component {
 
   render () {
     const {messages} = this.context
+    const categories = sortBy(map(this.props.categories, value => ({
+      text: messages[`${camelCase(value)}Conversion`],
+      value
+    })), 'text')
 
     return (
       <Form onSubmit={this.save}>
@@ -115,9 +120,9 @@ class CreateConversionTracker extends React.Component {
               label='conversionCategory'
               value={this.state.category}
               onChange={this.onChange}>
-              {map(this.props.categories, (name) =>
-                <option key={name} value={name}>
-                  {messages[`${camelCase(name)}Conversion`]}
+              {map(categories, ({text, value}) =>
+                <option key={value} value={value}>
+                  {text}
                 </option>)}
             </Select>
           </div>

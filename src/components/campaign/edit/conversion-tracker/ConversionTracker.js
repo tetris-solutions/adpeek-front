@@ -93,8 +93,8 @@ class EditLocations extends React.PureComponent {
               {presets ? (
                 <CreateConversionTracker
                   {...this.props}
-                  {...presets}
                   categories={typeCategories[presets.ConversionTrackerType]}
+                  {...presets}
                   cancel={this.cancelCreation}
                   onSubmit={this.onCreate}/>
               ) : (

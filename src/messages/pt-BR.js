@@ -621,6 +621,15 @@ module.exports = {
   appFirstOpen: 'Primeiro acesso',
   appActions: 'Ações no aplicativo',
 
+  callConversionsTitle: 'Conversões de ligações telefônicas',
+  callConversionsSubTitle: 'Selecione a origem das ligações telefônicas que você gostaria de acompanhar:',
+  adCallMetricsConversionTitle: 'Chamadas realizadas a partir de anúncios com extensões de chamada ou anúncios só para chamadas',
+  adCallMetricsConversionDescription: 'Exige números de encaminhamento de chamadas do Google, que só estão disponíveis em alguns países. <a target="_blank" href="https://support.google.com/adwords/answer/6095882">Saiba mais</a>',
+  websiteCallMetricsConversionTitle: 'Chamadas para um número de telefone no seu website',
+  websiteCallMetricsConversionDescription: 'Exige a adição de uma tag ao seu website e o uso de números de encaminhamento de chamadas do Google, que estão disponíveis somente em alguns países. <a target="_blank" href="https://support.google.com/adwords/answer/6095883">Saiba mais</a>',
+  adwordsConversionCallTitle: 'Cliques no seu número de telefone, no seu website para dispositivos móveis',
+  adwordsConversionCallDescription: 'Exige a adição de uma tag no seu website para dispositivos móveis. <a target="_blank" href="https://support.google.com/adwords/answer/6095878">Saiba mais</a>',
+
   lookbackWindow: {
     '7': '1 semana',
     '14': '2 semanas',

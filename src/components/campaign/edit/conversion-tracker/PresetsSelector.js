@@ -6,6 +6,7 @@ import {styledComponent} from '../../../higher-order/styled'
 import csjs from 'csjs'
 import bind from 'lodash/bind'
 import AppPresets from './AppPresets'
+import CallPresets from './CallPresets'
 
 const style = csjs`
 .blocks {
@@ -26,7 +27,8 @@ const style = csjs`
 }`
 
 const presetsComponent = {
-  app: AppPresets
+  app: AppPresets,
+  call: CallPresets
 }
 
 const Block = ({type, icon, onClick}) => (
