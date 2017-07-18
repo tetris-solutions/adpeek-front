@@ -6,30 +6,37 @@ import filter from 'lodash/filter'
 import map from 'lodash/map'
 import flatten from 'lodash/flatten'
 import concat from 'lodash/concat'
-import Form from '../../../Form'
-import {Button, Submit} from '../../../Button'
-import {styledComponent} from '../../../higher-order/styled'
-import {loadFolderAppsAction} from '../../../../actions/load-folder-apps'
-import {updateCampaignAppsAction} from '../../../../actions/update-campaign-apps'
-import Checkbox from '../../../Checkbox'
+import Form from '../../Form'
+import {Button, Submit} from '../../Button'
+import {styledComponent} from '../../higher-order/styled'
+import {loadFolderAppsAction} from '../../../actions/load-folder-apps'
+import {updateCampaignAppsAction} from '../../../actions/update-campaign-apps'
+import {updateAccountAppsAction} from '../../../actions/update-account-apps'
+import Checkbox from '../../Checkbox'
 import includes from 'lodash/includes'
 import without from 'lodash/without'
 import unionBy from 'lodash/unionBy'
-import {style} from '../style'
+import {style} from '../../campaign/edit/style'
 import NewApp from './NewApp'
 import get from 'lodash/get'
 import head from 'lodash/head'
 
 const unwrap = extensions => flatten(map(filter(extensions, {type: 'APP'}), 'extensions'))
 
+const actions = {
+  campaign: updateCampaignAppsAction,
+  account: updateAccountAppsAction
+}
+
 class EditApp extends React.Component {
   static displayName = 'Edit-App'
 
   static propTypes = {
+    level: PropTypes.oneOf(['account', 'campaign', 'adGroup']),
     dispatch: PropTypes.func.isRequired,
     folder: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
-    campaign: PropTypes.object.isRequired,
+    extensions: PropTypes.array.isRequired,
     cancel: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired
   }
@@ -46,7 +53,7 @@ class EditApp extends React.Component {
   }
 
   getCampaignAppExtensions = () => {
-    return map(unwrap(this.props.campaign.details.extensions), 'feedItemId')
+    return map(unwrap(this.props.extensions), 'feedItemId')
   }
 
   state = {
@@ -81,19 +88,19 @@ class EditApp extends React.Component {
   }
 
   save = () => {
-    const {onSubmit, dispatch, params, folder} = this.props
+    const {onSubmit, level, dispatch, params, folder} = this.props
     const apps = filter(folder.apps,
       ({feedItemId}) => includes(this.state.selected, feedItemId))
 
-    return dispatch(updateCampaignAppsAction, params, apps)
+    return dispatch(actions[level], params, apps)
       .then(onSubmit)
   }
 
   render () {
     const {selected, openCreateModal} = this.state
-    const {dispatch, params, cancel, campaign, folder} = this.props
+    const {dispatch, params, cancel, extensions, folder} = this.props
     const apps = unionBy(
-      unwrap(campaign.details.extensions),
+      unwrap(extensions),
       folder.apps,
       'feedItemId'
     )
@@ -134,7 +141,7 @@ class EditApp extends React.Component {
         {openCreateModal && (
           <Modal onEscPress={this.toggleModal}>
             <NewApp
-              {...{folder, campaign, dispatch, params}}
+              {...{folder, dispatch, params}}
               feedId={get(head(apps), 'feedId')}
               cancel={this.toggleModal}
               onSubmit={this.toggleModal}/>
