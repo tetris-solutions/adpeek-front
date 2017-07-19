@@ -43,7 +43,8 @@ const entityListName = {
   Keyword: 'keywords',
   Strategy: 'strategies',
   Partition: 'partitions',
-  Product: 'products'
+  Product: 'products',
+  Audience: 'audiences'
 }
 
 function dispatchAction (tree, params, query, entity) {

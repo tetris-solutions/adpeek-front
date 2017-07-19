@@ -93,7 +93,6 @@ export function mountModuleEntities (entities, moduleEntity, selectedIds, active
     'AdGroup',
     'AdSet',
     'Search',
-    'Audience',
     'Video',
     'Location',
     'Category',
@@ -117,6 +116,10 @@ export function mountModuleEntities (entities, moduleEntity, selectedIds, active
 
   if (entities.Partition) {
     entities.Partition = filterByParent(entities.Partition, entities.AdGroup, 'adgroup_id')
+  }
+
+  if (entities.Audience) {
+    entities.Audience = filterByParent(entities.Audience, entities.AdGroup, 'adgroup_id')
   }
 
   return entities

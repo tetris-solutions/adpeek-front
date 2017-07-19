@@ -71,6 +71,7 @@ class Container extends React.Component {
     params: PropTypes.object.isRequired,
     metaData: PropTypes.object,
     campaigns: PropTypes.array,
+    audiences: PropTypes.array,
     strategies: PropTypes.array,
     partitions: PropTypes.array,
     adSets: PropTypes.array,
@@ -109,6 +110,7 @@ class Container extends React.Component {
     const {
       accounts,
       campaigns,
+      audiences,
       adSets,
       ads,
       keywords,
@@ -121,6 +123,7 @@ class Container extends React.Component {
     return {
       messages,
       accounts,
+      audiences,
       campaigns,
       adSets,
       ads,
@@ -136,6 +139,7 @@ class Container extends React.Component {
     ({
        messages,
        accounts,
+       audiences,
        campaigns,
        adSets,
        ads,
@@ -210,8 +214,8 @@ class Container extends React.Component {
           entities.push({
             id: 'Audience',
             name: messages.audienceLevel,
-            list: adGroups || empty,
-            isLoading: !adGroups || this.getLoadingState('Audience')
+            list: audiences || empty,
+            isLoading: !audiences || this.getLoadingState('Audience')
           })
 
           entities.push({
@@ -366,6 +370,7 @@ class Container extends React.Component {
           })
         }
 
+      case 'Audience':
       case 'Partition':
       case 'Video':
         return {

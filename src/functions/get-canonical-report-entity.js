@@ -4,7 +4,6 @@ export function getCanonicalReportEntity (entity) {
       return 'Campaign'
     case 'Product':
     case 'Search':
-    case 'Audience':
     case 'Location':
     case 'Category':
     case 'Query':
