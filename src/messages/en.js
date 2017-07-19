@@ -381,6 +381,7 @@ module.exports = {
   tooManyDimensions: 'You cannot select more than {limit} <strong>GA</strong> dimensions, you have {selected}',
   loadingEntity: 'Loading {name}...',
   campaignDetailsTitle: 'Campaign Details',
+  accountDetailsTitle: 'Account Details',
   targetNetworks: 'Target Networks',
   googleSearchNetwork: 'Google Search',
   searchNetwork: 'Search',

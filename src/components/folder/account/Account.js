@@ -83,12 +83,12 @@ class FolderAccount extends React.PureComponent {
             <div className='mdl-cell mdl-cell--12-col'>
               {isLoading ? (
                 <LoadingHorizontal>
-                  <Message>loadingCampaignDetails</Message>
+                  <Message>loadingAccountDetails</Message>
                 </LoadingHorizontal>
               ) : (
                 <Card size='medium'>
                   <Header>
-                    <Message>campaignDetailsTitle</Message>
+                    <Message>accountDetailsTitle</Message>
                   </Header>
                   <Content>
                     <Account {...this.props} reload={this.reload}/>
