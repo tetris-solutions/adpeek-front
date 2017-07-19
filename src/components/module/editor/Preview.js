@@ -7,6 +7,7 @@ import TypeSelect from './TypeSelect'
 import _ReportChart from '../chart/Chart'
 import {expandVertically} from '../../higher-order/expand-vertically'
 import map from 'lodash/map'
+import sortBy from 'lodash/sortBy'
 
 const ReportChart = expandVertically(_ReportChart)
 
@@ -20,7 +21,7 @@ const EditContent = ({entities}, {report, onChangeName, onChangeType, onChangeEn
       {report.platform !== 'analytics' && (
         <div className='mdl-cell mdl-cell--4-col'>
           <Select label='entity' name='entity' onChange={onChangeEntity} value={entity.id}>
-            {map(entities, ({id, name}) =>
+            {map(sortBy(entities, 'name'), ({id, name}) =>
               <option key={id} value={id}>
                 {name}
               </option>)}

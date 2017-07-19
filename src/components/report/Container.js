@@ -72,6 +72,7 @@ class Container extends React.Component {
     metaData: PropTypes.object,
     campaigns: PropTypes.array,
     strategies: PropTypes.array,
+    partitions: PropTypes.array,
     adSets: PropTypes.array,
     adGroups: PropTypes.array,
     ads: PropTypes.array,
@@ -105,22 +106,8 @@ class Container extends React.Component {
 
   entitiesSource = () => {
     const {messages} = this.context
-
-    return assign({messages}, pick(this.props, [
-      'campaigns',
-      'adSets',
-      'ads',
-      'keywords',
-      'adGroups',
-      'videos',
-      'strategies',
-      'partitions'
-    ]))
-  }
-
-  calculateEntities = source => {
     const {
-      messages,
+      accounts,
       campaigns,
       adSets,
       ads,
@@ -129,125 +116,159 @@ class Container extends React.Component {
       videos,
       strategies,
       partitions
-    } = source
+    } = this.props
 
-    const entities = [{
-      id: 'Campaign',
-      name: messages.campaigns,
-      list: campaigns || empty,
-      isLoading: !campaigns || this.getLoadingState('Campaign')
-    }]
-
-    if (this.isFolderLevel()) {
-      const platforms = this.getPlatforms()
-      const hasAdwords = includes(platforms, 'adwords')
-      const hasFacebook = includes(platforms, 'facebook')
-
-      if (hasAdwords) {
-        entities.push({
-          id: 'Placement',
-          name: messages.placementLevel,
-          list: campaigns || empty,
-          isLoading: !campaigns || this.getLoadingState('Placement')
-        })
-
-        entities.push({
-          id: 'Strategy',
-          name: messages.strategyLevel,
-          list: strategies || empty,
-          isLoading: !strategies || this.getLoadingState('Strategy')
-        })
-
-        entities.push({
-          id: 'Category',
-          name: messages.keywordlessCategoryLevel,
-          list: adGroups || empty,
-          isLoading: !adGroups || this.getLoadingState('Category')
-        })
-
-        entities.push({
-          id: 'Query',
-          name: messages.keywordlessQueryLevel,
-          list: adGroups || empty,
-          isLoading: !adGroups || this.getLoadingState('Query')
-        })
-
-        entities.push({
-          id: 'Search',
-          name: messages.searchLevel,
-          list: adGroups || empty,
-          isLoading: !adGroups || this.getLoadingState('Search')
-        })
-
-        entities.push({
-          id: 'Location',
-          name: messages.locationLevel,
-          list: adGroups || empty,
-          isLoading: !adGroups || this.getLoadingState('Location')
-        })
-
-        entities.push({
-          id: 'Audience',
-          name: messages.audienceLevel,
-          list: adGroups || empty,
-          isLoading: !adGroups || this.getLoadingState('Audience')
-        })
-
-        entities.push({
-          id: 'AdGroup',
-          name: messages.adGroups,
-          list: adGroups || empty,
-          isLoading: !adGroups || this.getLoadingState('AdGroup')
-        })
-
-        entities.push({
-          id: 'Video',
-          name: messages.videos,
-          list: videos || empty,
-          isLoading: !videos || this.getLoadingState('Video')
-        })
-
-        entities.push({
-          id: 'Keyword',
-          name: messages.keywords,
-          list: keywords || empty,
-          isLoading: !keywords || this.getLoadingState('Keyword')
-        })
-
-        entities.push({
-          id: 'Partition',
-          name: messages.partitionLevel,
-          list: partitions || empty,
-          isLoading: !partitions || this.getLoadingState('Partition')
-        })
-
-        entities.push({
-          id: 'Product',
-          name: messages.productLevel,
-          list: adGroups || empty,
-          isLoading: !adGroups || this.getLoadingState('Product')
-        })
-      }
-
-      if (hasFacebook) {
-        entities.push({
-          id: 'AdSet',
-          name: messages.adSets,
-          list: adSets || empty,
-          isLoading: !adSets || this.getLoadingState('AdSet')
-        })
-      }
-
-      entities.push({
-        id: 'Ad',
-        name: messages.ads,
-        list: ads || empty,
-        isLoading: !ads || this.getLoadingState('Ad')
-      })
+    return {
+      messages,
+      accounts,
+      campaigns,
+      adSets,
+      ads,
+      keywords,
+      adGroups,
+      videos,
+      strategies,
+      partitions
     }
-
-    return entities
   }
+
+  calculateEntities =
+    ({
+       messages,
+       accounts,
+       campaigns,
+       adSets,
+       ads,
+       keywords,
+       adGroups,
+       videos,
+       strategies,
+       partitions
+     }) => {
+      const entities = [{
+        id: 'Campaign',
+        name: messages.campaigns,
+        list: campaigns || empty,
+        isLoading: !campaigns || this.getLoadingState('Campaign')
+      }]
+
+      if (this.isFolderLevel()) {
+        const platforms = this.getPlatforms()
+        const hasAdwords = includes(platforms, 'adwords')
+        const hasFacebook = includes(platforms, 'facebook')
+
+        if (hasAdwords) {
+          entities.push({
+            id: 'Account',
+            name: messages.accountLevel,
+            list: accounts,
+            isLoading: false
+          })
+
+          entities.push({
+            id: 'Placement',
+            name: messages.placementLevel,
+            list: campaigns || empty,
+            isLoading: !campaigns || this.getLoadingState('Placement')
+          })
+
+          entities.push({
+            id: 'Strategy',
+            name: messages.strategyLevel,
+            list: strategies || empty,
+            isLoading: !strategies || this.getLoadingState('Strategy')
+          })
+
+          entities.push({
+            id: 'Category',
+            name: messages.keywordlessCategoryLevel,
+            list: adGroups || empty,
+            isLoading: !adGroups || this.getLoadingState('Category')
+          })
+
+          entities.push({
+            id: 'Query',
+            name: messages.keywordlessQueryLevel,
+            list: adGroups || empty,
+            isLoading: !adGroups || this.getLoadingState('Query')
+          })
+
+          entities.push({
+            id: 'Search',
+            name: messages.searchLevel,
+            list: adGroups || empty,
+            isLoading: !adGroups || this.getLoadingState('Search')
+          })
+
+          entities.push({
+            id: 'Location',
+            name: messages.locationLevel,
+            list: adGroups || empty,
+            isLoading: !adGroups || this.getLoadingState('Location')
+          })
+
+          entities.push({
+            id: 'Audience',
+            name: messages.audienceLevel,
+            list: adGroups || empty,
+            isLoading: !adGroups || this.getLoadingState('Audience')
+          })
+
+          entities.push({
+            id: 'AdGroup',
+            name: messages.adGroups,
+            list: adGroups || empty,
+            isLoading: !adGroups || this.getLoadingState('AdGroup')
+          })
+
+          entities.push({
+            id: 'Video',
+            name: messages.videos,
+            list: videos || empty,
+            isLoading: !videos || this.getLoadingState('Video')
+          })
+
+          entities.push({
+            id: 'Keyword',
+            name: messages.keywords,
+            list: keywords || empty,
+            isLoading: !keywords || this.getLoadingState('Keyword')
+          })
+
+          entities.push({
+            id: 'Partition',
+            name: messages.partitionLevel,
+            list: partitions || empty,
+            isLoading: !partitions || this.getLoadingState('Partition')
+          })
+
+          entities.push({
+            id: 'Product',
+            name: messages.productLevel,
+            list: adGroups || empty,
+            isLoading: !adGroups || this.getLoadingState('Product')
+          })
+        }
+
+        if (hasFacebook) {
+          entities.push({
+            id: 'AdSet',
+            name: messages.adSets,
+            list: adSets || empty,
+            isLoading: !adSets || this.getLoadingState('AdSet')
+          })
+        }
+
+        entities.push({
+          id: 'Ad',
+          name: messages.ads,
+          list: ads || empty,
+          isLoading: !ads || this.getLoadingState('Ad')
+        })
+      }
+
+      return entities
+    }
 
   getEntities = () => {
     return this.calculateEntities(this.entitiesSource())
@@ -296,6 +317,11 @@ class Container extends React.Component {
     const {report} = this.props
 
     switch (entity) {
+      case 'Account':
+        return {
+          load: nooP,
+          query: none
+        }
       case 'Strategy':
       case 'Campaign':
         return {
@@ -420,13 +446,19 @@ class Container extends React.Component {
   }
 }
 
+function normalizeAccount (acc) {
+  return assign({id: acc.external_id, name: '[undefined]'},
+    acc)
+}
+
 const Report = props =>
   props.children
     ? props.children
-    : <Container {...props}/>
+    : <Container {...props} accounts={map(props.accounts, normalizeAccount)}/>
 
 Report.displayName = 'Report'
 Report.propTypes = {
+  accounts: PropTypes.array,
   children: PropTypes.node
 }
 

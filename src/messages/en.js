@@ -145,6 +145,7 @@ module.exports = {
   reportRangeTitle: 'Report date range',
   campaigns: 'Campaigns',
 
+  accountLevel: 'Account',
   placementLevel: 'Placement',
   searchLevel: 'Search Query',
   locationLevel: 'Geolocation',

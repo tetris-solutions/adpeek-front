@@ -83,6 +83,10 @@ function dispatchAction (tree, params, query, entity) {
 const byPlatformCalls = {}
 
 export function loadReportEntityAction (tree, params, query, entity) {
+  if (entity === 'Account') {
+    return Promise.resolve()
+  }
+
   const call = () => dispatchAction(tree, params, query, entity)
 
   if (byPlatformCalls[query.platform]) {

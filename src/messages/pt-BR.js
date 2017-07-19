@@ -143,6 +143,8 @@ module.exports = {
   dateRangeLabel: 'de {startDate} até {endDate}',
   reportRangeTitle: 'Intervalo do relatório',
   campaigns: 'Campanhas',
+
+  accountLevel: 'Conta',
   placementLevel: 'Placement',
   searchLevel: 'Search Query',
   locationLevel: 'Geolocation',
