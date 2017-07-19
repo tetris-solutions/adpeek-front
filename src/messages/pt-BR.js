@@ -164,6 +164,7 @@ module.exports = {
   campaignEntity: 'Campanha',
   adEntity: 'Anúncio',
   adGroupEntity: 'Ad Group',
+  audienceEntity: 'Audience',
   videoEntity: 'Vídeo',
   adSetEntity: 'Ad Set',
   accountEntity: 'Conta',

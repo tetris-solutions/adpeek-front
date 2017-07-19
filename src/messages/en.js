@@ -166,6 +166,7 @@ module.exports = {
   videoEntity: 'Video',
   adEntity: 'Ad',
   adGroupEntity: 'Ad Group',
+  audienceEntity: 'Audience',
   adSetEntity: 'Ad Set',
   accountEntity: 'Account',
   keywordEntity: 'Keyword',
