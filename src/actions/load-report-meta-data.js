@@ -127,7 +127,7 @@ const excluded = [
 ]
 
 function loadReportMetaData (platform, entity, config) {
-  return GET(`${process.env.NUMBERS_API_URL}/v2/meta-data?platform=${platform}&entity=${entity}`, config)
+  return GET(`${process.env.NUMBERS_API_URL}/meta-data?platform=${platform}&entity=${entity}`, config)
 }
 
 function loadCrossPlatformMetaData (platforms, entity, config) {

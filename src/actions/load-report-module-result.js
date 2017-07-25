@@ -22,14 +22,14 @@ import {replaceCriteriaIdWithName} from './load-location-criteria'
 const RESULT_LENGTH_LIMIT = 1000
 
 function loadReportModuleResult (query, isCrossPlatform, config) {
-  const path = '/' + (isCrossPlatform ? 'x' : 'v2/report')
+  const path = isCrossPlatform ? 'x' : ''
 
   if (!isCrossPlatform) {
     query = assign({}, query, head(query.accounts))
     delete query.accounts
   }
 
-  return POST(`${process.env.NUMBERS_API_URL}${path}`, assign({body: query}, config))
+  return POST(`${process.env.NUMBERS_API_URL}/${path}`, assign({body: query}, config))
 }
 
 const lastCall = {}
