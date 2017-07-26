@@ -21,7 +21,7 @@ function one (action) {
   return exec
 }
 
-export const loadCreativeAction = one((tree, company, account, creative) =>
+export const loadCreativeAction = one((tree, {company, creative}, account) =>
   loadCreative(company, account, creative, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .then(saveResponseData(tree, [

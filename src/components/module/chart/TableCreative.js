@@ -1,5 +1,4 @@
 import csjs from 'csjs'
-import find from 'lodash/find'
 import React from 'react'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
@@ -57,6 +56,7 @@ class AdCreative extends React.Component {
 
   static propTypes = {
     reportParams: reportParamsType,
+    creative: PropTypes.object,
     params: PropTypes.shape({
       company: PropTypes.string,
       account: PropTypes.string
@@ -66,33 +66,22 @@ class AdCreative extends React.Component {
     }),
     account: PropTypes.string,
     dispatch: PropTypes.func,
-    creative: PropTypes.object,
     creative_id: PropTypes.string,
     name: PropTypes.string
   }
 
   componentDidMount () {
-    const {reportParams, creative_id, dispatch, params} = this.props
+    const {reportParams, creative, dispatch, params} = this.props
 
-    if (this.getCreative()) return
+    if (creative) return
 
     dispatch(loadCreativeAction,
-      params.company,
-      get(reportParams, ['accounts', 0, 'tetris_account']),
-      creative_id)
-  }
-
-  getCreative = () => {
-    const {company, creative_id} = this.props
-
-    return find(company.creatives, {
-      id: creative_id
-    })
+      params,
+      get(reportParams, ['accounts', 0, 'tetris_account']))
   }
 
   render () {
-    const {name} = this.props
-    const creative = this.getCreative()
+    const {name, creative} = this.props
 
     if (!creative) {
       return <span>{name}</span>
@@ -102,5 +91,15 @@ class AdCreative extends React.Component {
   }
 }
 
-export default node('user', 'company',
-  styledComponent(AdCreative, style))
+const AdCreativeBranch = node('company', 'creative', styledComponent(AdCreative, style))
+
+const AdCreativeWrapper = props => (
+  <AdCreativeBranch {...props} params={{creative: props.creative_id}}/>
+)
+
+AdCreativeWrapper.displayName = 'Ad-Creative-Wrapper'
+AdCreativeWrapper.propTypes = {
+  creative_id: PropTypes.string
+}
+
+export default AdCreativeWrapper
