@@ -22,6 +22,7 @@ import SubHeader from '../../SubHeader'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
 import forEach from 'lodash/forEach'
+import Page from '../../Page'
 
 const style = csjs`
 .table {
@@ -180,40 +181,42 @@ export const OrdersClone = createReactClass({
               : <Message>selectOrders</Message>}
           </Submit>
         </SubHeader>
-        <div className='mdl-grid'>
-          <div className='mdl-cell--12-col' style={{overflowX: 'auto'}}>
-            {hasSelected && selectedOrders.length > 1 && (
-              <EditableHeader/>
-            )}
-            <table className={`${style.table} mdl-data-table mdl-data-table--selectable mdl-shadow--2dp`}>
-              <thead>
-                <tr>
-                  <th className='mdl-data-table__cell--non-numeric'>
-                    ✓
-                  </th>
-                  <th className='mdl-data-table__cell--non-numeric'>
-                    <Message>nameLabel</Message>
-                  </th>
-                  <th className='mdl-data-table__cell--non-numeric'>
-                    <Message>startDateLabel</Message>
-                    {' / '}
-                    <Message>endDateLabel</Message>
-                  </th>
-                  <th className={hasSelected ? 'mdl-data-table__cell--non-numeric' : ''}>
-                    <Message>investmentLabel</Message>
-                  </th>
-                  {hasSelected && <th>Auto Budget</th>}
-                </tr>
-              </thead>
-              <tbody>
-                {map(selectedOrders || sortBy(orders, 'start').reverse(),
-                  (order, index) => hasSelected
-                    ? <EditableRow key={index} {...order} index={index}/>
-                    : <ClonableRow key={order.id} {...order}/>)}
-              </tbody>
-            </table>
+        <Page>
+          <div className='mdl-grid'>
+            <div className='mdl-cell--12-col' style={{overflowX: 'auto'}}>
+              {hasSelected && selectedOrders.length > 1 && (
+                <EditableHeader/>
+              )}
+              <table className={`${style.table} mdl-data-table mdl-data-table--selectable mdl-shadow--2dp`}>
+                <thead>
+                  <tr>
+                    <th className='mdl-data-table__cell--non-numeric'>
+                      ✓
+                    </th>
+                    <th className='mdl-data-table__cell--non-numeric'>
+                      <Message>nameLabel</Message>
+                    </th>
+                    <th className='mdl-data-table__cell--non-numeric'>
+                      <Message>startDateLabel</Message>
+                      {' / '}
+                      <Message>endDateLabel</Message>
+                    </th>
+                    <th className={hasSelected ? 'mdl-data-table__cell--non-numeric' : ''}>
+                      <Message>investmentLabel</Message>
+                    </th>
+                    {hasSelected && <th>Auto Budget</th>}
+                  </tr>
+                </thead>
+                <tbody>
+                  {map(selectedOrders || sortBy(orders, 'start').reverse(),
+                    (order, index) => hasSelected
+                      ? <EditableRow key={index} {...order} index={index}/>
+                      : <ClonableRow key={order.id} {...order}/>)}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        </Page>
       </form>
     )
   }

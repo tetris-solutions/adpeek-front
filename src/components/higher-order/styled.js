@@ -28,8 +28,6 @@ function exportASHoc (Component, style) {
       insertCss: PropTypes.func.isRequired
     }
 
-    cClass = Component
-
     componentWillMount () {
       this.context.insertCss(style)
     }
