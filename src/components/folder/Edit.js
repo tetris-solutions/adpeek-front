@@ -20,7 +20,7 @@ import AutoSelect from '../AutoSelect'
 import Page from '../Page'
 import SubHeader from '../SubHeader'
 
-export const EditFolder = createReactClass({
+const EditFolder = createReactClass({
   displayName: 'Edit-Folder',
   mixins: [FormMixin, FolderFormMixin],
   propTypes: {

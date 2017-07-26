@@ -20,7 +20,7 @@ import FolderFormMixin from '../mixins/FolderForm'
 import Page from '../Page'
 import SubHeader from '../SubHeader'
 
-export const CreateFolder = createReactClass({
+const CreateFolder = createReactClass({
   displayName: 'Create-Folder',
   mixins: [FormMixin, FolderFormMixin],
   propTypes: {

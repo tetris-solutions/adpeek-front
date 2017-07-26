@@ -14,7 +14,7 @@ import Page from '../Page'
 import SubHeader from '../SubHeader'
 import {PropertySelector, ViewSelector} from './GAFieldSelector'
 
-export const CreateWorkspace = createReactClass({
+const CreateWorkspace = createReactClass({
   displayName: 'Create-Workspace',
   mixins: [FormMixin, WorkspaceForm],
   propTypes: {

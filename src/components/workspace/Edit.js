@@ -18,7 +18,7 @@ import {PropertySelector, ViewSelector} from './GAFieldSelector'
 import {loadGAPropertiesAction} from '../../actions/load-ga-properties'
 import {loadGAViewsAction} from '../../actions/load-ga-views'
 
-export const WorkspaceEdit = createReactClass({
+const WorkspaceEdit = createReactClass({
   displayName: 'Workspace-Edit',
   mixins: [FormMixin, WorkspaceForm],
   propTypes: {
