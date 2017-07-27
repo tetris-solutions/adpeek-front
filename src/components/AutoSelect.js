@@ -12,17 +12,17 @@ import {removeFromStart} from '../functions/remove-from-start'
 import {styledComponent} from './higher-order/styled'
 import get from 'lodash/get'
 
-const yes = () => true
+export const yes = () => true
 
 const getSuggestionValue = property('text')
 
-function preventSubmit (e) {
+export function preventSubmit (e) {
   if (e.keyCode === 13) e.preventDefault()
 }
 
-const cleanStr = str => deburr(lowerCase(str))
+export const cleanStr = str => deburr(lowerCase(str))
 
-const style = csjs`
+export const style = csjs`
 .container {
   position: relative;
   margin: 1em 0;
@@ -59,8 +59,9 @@ const style = csjs`
   background-color: #fff;
   z-index: 2;
 }
+
 .suggestionsContainer:empty {
-  visibility: hidden;
+  display: none;
 }
 
 .suggestionsList {
@@ -88,7 +89,7 @@ const style = csjs`
   background-color: #ddd;
 }`
 
-const theme = {}
+export const theme = {}
 
 // assemble `theme` object, required by Autosuggest
 
@@ -98,16 +99,17 @@ function setThemeClassName (className) {
 
 Object.keys(style).forEach(setThemeClassName)
 
-function Suggestion ({text}) {
+export function Suggestion ({text, name}) {
   return (
     <span className={style.suggestionLine}>
-      {text}
+      {text || name}
     </span>
   )
 }
 
 Suggestion.displayName = 'Suggestion'
 Suggestion.propTypes = {
+  name: PropTypes.string,
   text: PropTypes.string
 }
 

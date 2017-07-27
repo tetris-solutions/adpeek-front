@@ -1,10 +1,7 @@
-import csjs from 'csjs'
 import noop from 'lodash/noop'
 import debounce from 'lodash/debounce'
-import deburr from 'lodash/deburr'
 import filter from 'lodash/filter'
 import includes from 'lodash/includes'
-import lowerCase from 'lodash/toLower'
 import property from 'lodash/property'
 import upperFirst from 'lodash/upperFirst'
 import Autosuggest from 'react-autosuggest'
@@ -15,21 +12,16 @@ import {removeFromStart} from '../../functions/remove-from-start'
 import {loadCompanyAccountsAction} from '../../actions/load-company-accounts'
 import {node} from '../higher-order/branch'
 import {styledComponent} from '../higher-order/styled'
-
-const yes = () => true
+import {
+  style,
+  theme,
+  Suggestion,
+  preventSubmit,
+  cleanStr,
+  yes
+} from '../AutoSelect'
 
 const getSuggestionValue = property('name')
-
-/**
- * prevent formSubmit
- * @param {KeyboardEvent} e keydown event
- * @returns {undefined}
- */
-function preventSubmit (e) {
-  if (e.keyCode === 13) e.preventDefault()
-}
-
-const cleanStr = str => deburr(lowerCase(str))
 
 /**
  * filters matching accounts
@@ -39,6 +31,7 @@ const cleanStr = str => deburr(lowerCase(str))
  */
 function filterAccounts (platform, value) {
   value = cleanStr(value)
+
   /**
    * actually compares account
    * @param {Object} account account object
@@ -46,109 +39,12 @@ function filterAccounts (platform, value) {
    */
   function filterCallback (account) {
     return account.platform === platform && (
-        includes(cleanStr(account.name), value) ||
-        includes(cleanStr(account.external_id), value)
-      )
+      includes(cleanStr(account.name), value) ||
+      includes(cleanStr(account.external_id), value)
+    )
   }
 
   return filterCallback
-}
-
-const style = csjs`
-.container {
-  position: relative;
-  margin: 1em 0;
-}
-
-.input {
-  width: 100%;
-  text-indent: .5em;
-  font-size: medium;
-  font-weight: 300;
-  line-height: 2.5em;
-  border: none;
-  border-bottom: 1px solid rgba(0,0,0,.12);
-}
-
-.input[disabled] {
-  cursor: not-allowed;
-  background: rgba(250, 250, 250, 0.6) !important;
-}
-.input:focus {
-  outline: none;
-}
-
-.containerOpen > .input {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.suggestionsContainer {
-  position: absolute;
-  top: 2.5em;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-  border: 1px solid rgb(220, 220, 220);
-  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
-  background-color: #fff;
-  font-weight: 300;
-  font-size: medium;
-  z-index: 2;
-}
-.suggestionsContainer:empty {
-  visibility: hidden;
-}
-
-.suggestionsList {
-  margin: 0;
-  padding: 0;
-}
-
-.suggestion {
-  cursor: pointer;
-  line-height: 3em;
-  text-indent: 1em;
-}
-
-.suggestionLine {
-  display: block;
-  width: 94%;
-  margin: 0 auto;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.suggestionHighlighted {
-  background-color: #ddd;
-}
-.sectionContainer {}
-.sectionTitle {}
-.sectionSuggestionsContainer {}`
-
-const theme = {}
-
-// assemble `theme` object, required by ReactAutosuggest
-
-function setThemeClassName (className) {
-  theme[className] = String(style[className])
-}
-
-Object.keys(style).forEach(setThemeClassName)
-
-function Suggestion ({name}) {
-  return (
-    <span className={style.suggestionLine}>
-      {name}
-    </span>
-  )
-}
-
-Suggestion.displayName = 'Suggestion'
-Suggestion.propTypes = {
-  name: PropTypes.string
 }
 
 /**
