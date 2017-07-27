@@ -58,18 +58,20 @@ export default {
 
     const {gaProperty, gaView} = this.state
 
-    if (gaProperty) {
-      assign(data.accounts.analytics, {
-        ga_property_id: gaProperty.id,
-        ga_property_name: gaProperty.name
-      })
-    }
+    if (data.accounts.analytics) {
+      if (gaProperty) {
+        assign(data.accounts.analytics, {
+          ga_property_id: gaProperty.id,
+          ga_property_name: gaProperty.name
+        })
+      }
 
-    if (gaView) {
-      assign(data.accounts.analytics, {
-        ga_view_id: gaView.id,
-        ga_view_name: gaView.name
-      })
+      if (gaProperty && gaView) {
+        assign(data.accounts.analytics, {
+          ga_view_id: gaView.id,
+          ga_view_name: gaView.name
+        })
+      }
     }
 
     forEach(elements, ({type, name, checked}) => {
@@ -86,7 +88,7 @@ export default {
     const {dispatch, params} = this.props
 
     if (gaAccount) {
-      this.setState({gaAccount})
+      this.setState({gaAccount, gaView: null, gaProperty: null})
 
       dispatch(loadGAPropertiesAction, params, gaAccount)
     } else {
@@ -97,11 +99,11 @@ export default {
     const {dispatch, params} = this.props
 
     if (gaProperty) {
-      this.setState({gaProperty})
+      this.setState({gaProperty, gaView: null})
 
       dispatch(loadGAViewsAction, params, this.state.gaAccount, gaProperty.id)
     } else {
-      this.setState({gaAccount: null})
+      this.setState({gaProperty: null})
     }
   },
   onChangeView (gaView) {
