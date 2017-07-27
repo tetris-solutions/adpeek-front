@@ -53,16 +53,10 @@ const style = csjs`
 
 .suggestionsContainer {
   position: absolute;
-  top: 2.5em;
   width: 100%;
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
   border: 1px solid rgb(220, 220, 220);
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
   background-color: #fff;
-  font-weight: 300;
-  font-size: medium;
   z-index: 2;
 }
 .suggestionsContainer:empty {
@@ -70,6 +64,7 @@ const style = csjs`
 }
 
 .suggestionsList {
+  list-style: none;
   margin: 0;
   padding: 0;
 }
@@ -91,10 +86,7 @@ const style = csjs`
 
 .suggestionHighlighted {
   background-color: #ddd;
-}
-.sectionContainer {}
-.sectionTitle {}
-.sectionSuggestionsContainer {}`
+}`
 
 const theme = {}
 
