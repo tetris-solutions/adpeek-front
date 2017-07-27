@@ -81,7 +81,7 @@ class ReportLink extends React.Component {
     const {children, tag: Tag} = this.props
 
     return (
-      <Tag icon='show_chart' onClick={this.onClick}>
+      <Tag icon='insert_chart' onClick={this.onClick}>
         {children}
       </Tag>
     )
