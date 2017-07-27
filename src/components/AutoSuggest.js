@@ -5,7 +5,7 @@ import filter from 'lodash/filter'
 import includes from 'lodash/includes'
 import lowerCase from 'lodash/toLower'
 import property from 'lodash/property'
-import Autosuggest from 'react-autosuggest'
+import ReactAutosuggest from 'react-autosuggest'
 import React from 'react'
 import PropTypes from 'prop-types'
 import {removeFromStart} from '../functions/remove-from-start'
@@ -115,8 +115,8 @@ Suggestion.propTypes = {
   text: PropTypes.string
 }
 
-class AutoSelect extends React.Component {
-  static displayName = 'Auto-Select'
+class AutoSuggest extends React.Component {
+  static displayName = 'Auto-Suggest'
 
   static propTypes = {
     disabled: PropTypes.bool,
@@ -230,7 +230,7 @@ class AutoSelect extends React.Component {
     }
 
     return (
-      <Autosuggest
+      <ReactAutosuggest
         theme={theme}
         suggestions={suggestions}
         shouldRenderSuggestions={yes}
@@ -244,4 +244,4 @@ class AutoSelect extends React.Component {
   }
 }
 
-export default styledComponent(AutoSelect, style)
+export default styledComponent(AutoSuggest, style)

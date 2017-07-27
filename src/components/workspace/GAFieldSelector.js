@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {node} from '../higher-order/branch'
-import AutoSelect from '../AutoSelect'
+import AutoSuggest from '../AutoSuggest'
 import get from 'lodash/get'
 import map from 'lodash/map'
 import find from 'lodash/find'
@@ -64,7 +64,7 @@ class Selector extends React.Component {
     const {placeholder, disabled} = this.props
 
     return (
-      <AutoSelect
+      <AutoSuggest
         disabled={disabled}
         placeholder={placeholder}
         selected={selected ? this.normalize(selected) : null}

@@ -16,7 +16,7 @@ import {updateFolderAction} from '../../actions/update-folder'
 import {Form, Content, Header, Footer} from '../Card'
 import {many} from '../higher-order/branch'
 import FolderFormMixin from '../mixins/FolderForm'
-import AutoSelect from '../AutoSelect'
+import AutoSuggest from '../AutoSuggest'
 import Page from '../Page'
 import SubHeader from '../SubHeader'
 
@@ -204,7 +204,7 @@ const EditFolder = createReactClass({
                   onChange={this.onChangeInput}/>)}
 
               {this.isConnectedToDash() && (
-                <AutoSelect
+                <AutoSuggest
                   disabled={this.state.isLoadingDashCampaigns}
                   placeholder={messages.dashCampaignLabel}
                   onChange={this.onChangeDashCampaign}
@@ -213,8 +213,8 @@ const EditFolder = createReactClass({
               )}
 
               {hasAnalytics ? (
-                <AutoSelect
-                  selected={gaSegment ? this.normalizeAutoSelectOpt(gaSegment) : null}
+                <AutoSuggest
+                  selected={gaSegment ? this.normalizeAutoSuggestOption(gaSegment) : null}
                   onChange={this.onChangeSegment}
                   placeholder={messages.gaSegmentLabel}
                   options={this.getSegments()}/>

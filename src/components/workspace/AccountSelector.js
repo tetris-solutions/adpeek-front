@@ -19,7 +19,7 @@ import {
   preventSubmit,
   cleanStr,
   yes
-} from '../AutoSelect'
+} from '../AutoSuggest'
 
 const getSuggestionValue = property('name')
 

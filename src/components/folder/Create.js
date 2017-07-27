@@ -15,7 +15,7 @@ import get from 'lodash/get'
 import {Form, Content, Header, Footer} from '../Card'
 import {many} from '../higher-order/branch'
 import Checkbox from '../Checkbox'
-import AutoSelect from '../AutoSelect'
+import AutoSuggest from '../AutoSuggest'
 import FolderFormMixin from '../mixins/FolderForm'
 import Page from '../Page'
 import SubHeader from '../SubHeader'
@@ -196,7 +196,7 @@ const CreateFolder = createReactClass({
                   onChange={this.onChangeInput}/>)}
 
               {this.isConnectedToDash() && (
-                <AutoSelect
+                <AutoSuggest
                   disabled={this.state.isLoadingDashCampaigns}
                   placeholder={messages.dashCampaignLabel}
                   onChange={this.onChangeDashCampaign}
@@ -209,8 +209,8 @@ const CreateFolder = createReactClass({
 
               {hasAnalytics
                 ? (
-                  <AutoSelect
-                    selected={gaSegment ? this.normalizeAutoSelectOpt(gaSegment) : null}
+                  <AutoSuggest
+                    selected={gaSegment ? this.normalizeAutoSuggestOption(gaSegment) : null}
                     onChange={this.onChangeSegment}
                     placeholder={messages.gaSegmentLabel}
                     options={this.getSegments()}/>

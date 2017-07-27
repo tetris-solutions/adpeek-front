@@ -165,10 +165,10 @@ export default {
     return get(this.props.cursors, 'workspace.accounts.analytics.segments', [])
   },
   getSegments () {
-    return map(sortBy(this.rawSegments(), this.customFirst), this.normalizeAutoSelectOpt)
+    return map(sortBy(this.rawSegments(), this.customFirst), this.normalizeAutoSuggestOption)
   },
   customFirst: ({type}) => type === 'CUSTOM' ? 0 : 1,
-  normalizeAutoSelectOpt: ({id: value, name: text}) => ({text, value}),
+  normalizeAutoSuggestOption: ({id: value, name: text}) => ({text, value}),
   hasAnalytics () {
     return Boolean(this.props.workspace.accounts.analytics)
   },
