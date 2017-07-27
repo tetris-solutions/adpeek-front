@@ -217,7 +217,7 @@ const CreateFolder = createReactClass({
                 ) : null}
 
               {isAnalytics && !gaSegment ? (
-                <p>
+                <p style={{wordBreak: 'break-all'}}>
                   <Message>defaultGASegmentAlert</Message>
                 </p>
               ) : null}

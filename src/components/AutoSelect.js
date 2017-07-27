@@ -68,6 +68,8 @@ export const style = csjs`
   list-style: none;
   margin: 0;
   padding: 0;
+  max-height: 30em;
+  overflow-y: auto;
 }
 
 .suggestion {

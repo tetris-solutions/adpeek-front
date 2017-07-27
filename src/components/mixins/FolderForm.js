@@ -40,11 +40,9 @@ export default {
   componentWillMount () {
     const {folder} = this.props
 
-    if (this.hasAnalytics()) {
+    if (folder) {
       this.setState({
-        gaSegment: folder
-          ? folder.ga_segment || null
-          : this.DEFAULT_GA_SEGMENT
+        gaSegment: folder.ga_segment || null
       })
     }
   },

@@ -227,7 +227,7 @@ const EditFolder = createReactClass({
               ) : null}
 
               {gaSegment && gaSegment.definition ? (
-                <p>
+                <p style={{wordBreak: 'break-all'}}>
                   <em>
                     {gaSegment.definition}
                   </em>
