@@ -120,6 +120,7 @@ const EditFolder = createReactClass({
       media,
       tag
     } = this.state
+    const hasAnalytics = this.hasAnalytics()
     const isAnalytics = this.isAnalytics()
 
     return (
@@ -137,15 +138,14 @@ const EditFolder = createReactClass({
                 name='name'
                 error={errors.name}
                 value={name}
-                onChange={this.saveAndDismiss('name')}/>
+                onChange={this.onChangeInput}/>
 
               <Select
                 disabled
                 name='workspace_account'
                 label='externalAccount'
                 error={errors.workspace_account}
-                value={workspace_account}
-                onChange={this.saveAndDismiss('workspace_account')}>
+                value={workspace_account}>
 
                 <option value=''/>
 
@@ -164,7 +164,7 @@ const EditFolder = createReactClass({
                   label='media'
                   error={errors.media}
                   value={media}
-                  onChange={this.saveAndDismiss('media')}>
+                  onChange={this.onChangeInput}>
 
                   <option value=''/>
 
@@ -182,7 +182,7 @@ const EditFolder = createReactClass({
                   label='kpi'
                   error={errors.kpi}
                   value={kpi}
-                  onChange={this.saveAndDismiss('kpi')}>
+                  onChange={this.onChangeInput}>
 
                   <option value=''/>
 
@@ -201,7 +201,7 @@ const EditFolder = createReactClass({
                   name='kpi_goal'
                   value={kpi_goal}
                   format={this.getKPIFormat()}
-                  onChange={this.saveAndDismiss('kpi_goal')}/>)}
+                  onChange={this.onChangeInput}/>)}
 
               {this.isConnectedToDash() && (
                 <AutoSelect
@@ -212,25 +212,27 @@ const EditFolder = createReactClass({
                   selected={dashCampaign ? this.normalizeDashCampaignOption(dashCampaign) : null}/>
               )}
 
-              {accounts.analytics
-                ? (
-                  <AutoSelect
-                    selected={gaSegment ? this.normalizeAutoSelectOpt(gaSegment) : null}
-                    onChange={this.onChangeSegment}
-                    placeholder={messages.gaSegmentLabel}
-                    options={this.getSegments()}/>
-                ) : null}
+              {hasAnalytics ? (
+                <AutoSelect
+                  selected={gaSegment ? this.normalizeAutoSelectOpt(gaSegment) : null}
+                  onChange={this.onChangeSegment}
+                  placeholder={messages.gaSegmentLabel}
+                  options={this.getSegments()}/>
+              ) : null}
 
-              {gaSegment
-                ? (
-                  <Input
-                    disabled
-                    name='segmentDefinition'
-                    label='gaSegmentDefinition'
-                    value={gaSegment.definition}
-                    error={errors.segmentDefinition}
-                    onChange={this.onChangeSegmentDefinition}/>
-                ) : null}
+              {isAnalytics && !gaSegment ? (
+                <p>
+                  <Message>defaultGASegmentAlert</Message>
+                </p>
+              ) : null}
+
+              {gaSegment && gaSegment.definition ? (
+                <p>
+                  <em>
+                    {gaSegment.definition}
+                  </em>
+                </p>
+              ) : null}
 
               {!isAnalytics && (
                 <Input
@@ -238,7 +240,7 @@ const EditFolder = createReactClass({
                   label='folderTag'
                   error={errors.tag}
                   value={tag || ''}
-                  onChange={this.saveAndDismiss('tag')}/>)}
+                  onChange={this.onChangeInput}/>)}
 
               <br/>
 

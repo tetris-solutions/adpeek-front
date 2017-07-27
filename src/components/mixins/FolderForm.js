@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types'
-import assign from 'lodash/assign'
 import find from 'lodash/find'
 import get from 'lodash/get'
 import map from 'lodash/map'
@@ -41,9 +40,11 @@ export default {
   componentWillMount () {
     const {folder} = this.props
 
-    if (folder) {
+    if (this.hasAnalytics()) {
       this.setState({
-        gaSegment: folder.ga_segment || null
+        gaSegment: folder
+          ? folder.ga_segment || null
+          : this.DEFAULT_GA_SEGMENT
       })
     }
   },
@@ -106,11 +107,11 @@ export default {
       text: `${id} :: ${name || '???'}`
     }
   },
-  saveAndDismiss (name) {
-    return ({target: {value}}) => {
-      const errors = omit(this.state.errors, name)
-      this.update({errors, [name]: value})
-    }
+  onChangeInput ({target: {value, name}}) {
+    this.update({
+      [name]: value,
+      errors: omit(this.state.errors, name)
+    })
   },
   getPlatform (workspace_account) {
     if (!workspace_account) return null
@@ -162,11 +163,6 @@ export default {
         : null
     })
   },
-  onChangeSegmentDefinition ({target: {value}}) {
-    this.setState({
-      gaSegment: assign({}, this.state.gaSegment, {definition: value})
-    })
-  },
   rawSegments () {
     return get(this.props.cursors, 'workspace.accounts.analytics.segments', [])
   },
@@ -175,6 +171,9 @@ export default {
   },
   customFirst: ({type}) => type === 'CUSTOM' ? 0 : 1,
   normalizeAutoSelectOpt: ({id: value, name: text}) => ({text, value}),
+  hasAnalytics () {
+    return Boolean(this.props.workspace.accounts.analytics)
+  },
   isAnalytics () {
     const accountPlatform = get(find(this.props.workspace.accounts, {id: this.state.workspace_account}), 'platform')
     return accountPlatform === 'analytics'

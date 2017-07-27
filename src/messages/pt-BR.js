@@ -372,6 +372,7 @@ module.exports = {
   gaPropertyLabel: 'Selecione a Propriedade GA',
   gaViewLabel: 'Selecione a View GA',
   gaSegmentLabel: 'Selecione o Segmento GA',
+  defaultGASegmentAlert: 'O segmento padrão (All Users) será selecionado',
   newGASegmentLabel: 'Novo Segmento',
   gaSegmentDefinitionLabel: 'Definição Segmento GA',
   analyticsFolderTitle: 'Pasta GA \'{name}\'',

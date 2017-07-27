@@ -111,6 +111,7 @@ const CreateFolder = createReactClass({
     const {messages} = this.context
     const {medias, company, workspace: {accounts}} = this.props
     const {errors, kpi, kpi_goal, workspace_account, selectedMedia, showTagCheckbox, dashCampaign, gaSegment} = this.state
+    const hasAnalytics = this.hasAnalytics()
     const isAnalytics = this.isAnalytics()
 
     return (
@@ -124,17 +125,19 @@ const CreateFolder = createReactClass({
 
             <Content>
               <Input
+                required
                 label='name'
                 name='name'
                 error={errors.name}
                 onChange={this.dismissError}/>
 
               <Select
+                required
                 name='workspace_account'
                 label='externalAccount'
                 error={errors.workspace_account}
                 value={workspace_account}
-                onChange={this.saveAndDismiss('workspace_account')}>
+                onChange={this.onChangeInput}>
 
                 <option value=''/>
 
@@ -171,7 +174,7 @@ const CreateFolder = createReactClass({
                   label='kpi'
                   error={errors.kpi}
                   value={kpi}
-                  onChange={this.saveAndDismiss('kpi')}>
+                  onChange={this.onChangeInput}>
 
                   <option value=''/>
 
@@ -190,7 +193,7 @@ const CreateFolder = createReactClass({
                   name='kpi_goal'
                   value={kpi_goal}
                   format={this.getKPIFormat()}
-                  onChange={this.saveAndDismiss('kpi_goal')}/>)}
+                  onChange={this.onChangeInput}/>)}
 
               {this.isConnectedToDash() && (
                 <AutoSelect
@@ -204,7 +207,7 @@ const CreateFolder = createReactClass({
                   }, map(company.dashCampaigns, this.normalizeDashCampaignOption))}/>
               )}
 
-              {accounts.analytics
+              {hasAnalytics
                 ? (
                   <AutoSelect
                     selected={gaSegment ? this.normalizeAutoSelectOpt(gaSegment) : null}
@@ -213,16 +216,19 @@ const CreateFolder = createReactClass({
                     options={this.getSegments()}/>
                 ) : null}
 
-              {gaSegment
-                ? (
-                  <Input
-                    disabled
-                    name='segmentDefinition'
-                    label='gaSegmentDefinition'
-                    value={gaSegment.definition}
-                    error={errors.segmentDefinition}
-                    onChange={this.onChangeSegmentDefinition}/>
-                ) : null}
+              {isAnalytics && !gaSegment ? (
+                <p>
+                  <Message>defaultGASegmentAlert</Message>
+                </p>
+              ) : null}
+
+              {gaSegment && gaSegment.definition ? (
+                <p>
+                  <em>
+                    {gaSegment.definition}
+                  </em>
+                </p>
+              ) : null}
 
               {!isAnalytics && (
                 <Input

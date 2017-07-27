@@ -371,6 +371,7 @@ module.exports = {
   gaPropertyLabel: 'Select Analytics Property',
   gaViewLabel: 'Select Analytics View',
   gaSegmentLabel: 'Select Analytics Segment',
+  defaultGASegmentAlert: 'Default segment (All Users)',
   newGASegmentLabel: 'Create Segment',
   gaSegmentDefinitionLabel: 'Segment Definition',
   analyticsFolderTitle: 'Analytics Folder "{name}"',
