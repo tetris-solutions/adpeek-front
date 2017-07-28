@@ -32,6 +32,7 @@ import {loadWorkspaceActionRouterAdaptor as workspace} from '../actions/load-wor
 import {loadCompanySavedAccountsActionRouterAdaptor as savedAccounts} from '../actions/load-company-saved-accounts'
 import {loadMailingListActionRouterAdaptor as mailings} from '../actions/load-mailing-list'
 import {unsubscribeActionRouterAdaptor as unsub} from '../actions/unsub'
+
 /**
  * returns the route config
  * @param {Baobab} tree state tree
@@ -194,7 +195,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
                   </Route>
 
                   <Route path='creatives' {...render(component.CampaignCreatives)}>
-                    <Route path='edit'/>
+                    <Route path='edit' {...render(component.EditCreatives)}/>
                   </Route>
                 </Route>
 

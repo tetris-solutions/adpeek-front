@@ -32,12 +32,13 @@ class Creatives extends React.Component {
   static displayName = 'Creatives'
 
   static propTypes = {
-    dispatch: PropTypes.func,
+    children: PropTypes.node,
+    dispatch: PropTypes.func.isRequired,
     folder: PropTypes.object.isRequired,
     adGroups: PropTypes.array,
     getAdGroupsWithRelevance: PropTypes.func,
     platform: PropTypes.string,
-    params: PropTypes.object
+    params: PropTypes.object.isRequired
   }
 
   static contextTypes = {
@@ -239,7 +240,7 @@ class Creatives extends React.Component {
 
     const inner = this.isAdwords()
       ? <AdGroups location={this.context.location} adGroups={adGroups}/>
-      : <NotImplemented />
+      : <NotImplemented/>
 
     return (
       <div>
@@ -300,6 +301,8 @@ class Creatives extends React.Component {
             </LoadingHorizontal>
           ) : inner}
         </Page>
+
+        {this.props.children}
       </div>
     )
   }
