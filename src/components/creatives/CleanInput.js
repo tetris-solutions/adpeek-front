@@ -64,10 +64,10 @@ class CleanInput extends React.PureComponent {
     return (
       <Tag
         ref='el'
-        className={className}
         type='text'
-        onKeyUp={this.onKeyUp}
-        {...omit(this.props, 'multiline', 'block')}/>
+        className={className}
+        {...omit(this.props, 'multiline', 'block')}
+        onKeyUp={this.onKeyUp}/>
     )
   }
 }
