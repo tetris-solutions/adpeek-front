@@ -4,6 +4,7 @@ import csjs from 'csjs'
 import {styledFunctionalComponent} from './higher-order/styled'
 import Tooltip from 'tetris-iso/Tooltip'
 import omit from 'lodash/omit'
+
 const style = csjs`
 .visible {
   position: relative;
@@ -41,35 +42,53 @@ const style = csjs`
   margin-right: 0;
 }`
 
-export const MenuItem = props => {
-  const {divider, children, tag: Tag, icon} = props
-  const ico = icon ? <i className={`material-icons ${style.ico}`}>{icon}</i> : null
-  const btProps = omit(props, 'children', 'icon', 'tag', 'divider')
-
-  if (btProps.disabled) {
-    delete btProps.onClick
+export class MenuItem extends React.Component {
+  static displayName = 'Menu-Item'
+  static defaultProps = {
+    tag: 'span',
+    divider: false
   }
 
-  return (
-    <li className={`mdl-menu__item ${style.item} ${divider ? 'mdl-menu__item--full-bleed-divider' : ''}`}>
-      <Tag {...btProps}>
-        {ico}
-        {children}
-      </Tag>
-    </li>
-  )
-}
+  static contextTypes = {
+    hideTooltip: PropTypes.func.isRequired
+  }
 
-MenuItem.displayName = 'Menu-Item'
-MenuItem.defaultProps = {
-  tag: 'span',
-  divider: false
-}
-MenuItem.propTypes = {
-  divider: PropTypes.bool,
-  tag: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-  icon: PropTypes.string,
-  children: PropTypes.node.isRequired
+  static propTypes = {
+    onClick: PropTypes.func,
+    divider: PropTypes.bool,
+    tag: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+    icon: PropTypes.string,
+    children: PropTypes.node.isRequired
+  }
+
+  onClick = e => {
+    this.props.onClick(e)
+    this.context.hideTooltip()
+  }
+
+  render () {
+    const {props} = this
+    const {divider, children, tag: Tag, icon} = props
+    const ico = icon ? <i className={`material-icons ${style.ico}`}>{icon}</i> : null
+    const btProps = omit(props, 'children', 'icon', 'tag', 'divider')
+
+    if (btProps.disabled) {
+      delete btProps.onClick
+    }
+
+    if (btProps.onClick) {
+      btProps.onClick = this.onClick
+    }
+
+    return (
+      <li className={`mdl-menu__item ${style.item} ${divider ? 'mdl-menu__item--full-bleed-divider' : ''}`}>
+        <Tag {...btProps}>
+          {ico}
+          {children}
+        </Tag>
+      </li>
+    )
+  }
 }
 
 export const HeaderMenuItem = props => (

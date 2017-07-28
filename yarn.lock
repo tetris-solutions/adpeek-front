@@ -2104,7 +2104,7 @@ hawk@~3.1.3:
     sntp "1.x.x"
 
 highcharts@^5.0.7:
-  version v5.0.11
+  version "5.0.11"
   resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-5.0.11.tgz#c8e7ebe4cb584ea99d113f7fc7925b2b90398453"
 
 history@^3.0.0:
@@ -4051,9 +4051,9 @@ tar@^2.2.1:
     fstream "^1.0.2"
     inherits "2"
 
-tetris-iso@^0.6.3:
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/tetris-iso/-/tetris-iso-0.6.3.tgz#59508b917d8f065e1edede0605f062c7af7fc74d"
+tetris-iso@^0.6.4:
+  version "0.6.4"
+  resolved "https://registry.yarnpkg.com/tetris-iso/-/tetris-iso-0.6.4.tgz#a1b9d1acf6853ea8dfa06c6ad364553f63de68da"
   dependencies:
     "@tetris/debug-middleware" "^0.1.0"
     "@tetris/locale-middleware" "^0.1.1"
