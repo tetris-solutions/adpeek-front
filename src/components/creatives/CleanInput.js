@@ -32,8 +32,23 @@ class CleanInput extends React.PureComponent {
     name: PropTypes.string,
     value: PropTypes.string,
     onChange: PropTypes.func,
+    onKeyUp: PropTypes.func,
     multiline: PropTypes.bool,
     block: PropTypes.bool
+  }
+
+  onKeyUp = e => {
+    if (e.keyCode === 27) {
+      /**
+       * @type {HTMLInputElement}
+       */
+      const el = this.refs.el
+      el.blur()
+    }
+
+    if (this.props.onKeyUp) {
+      this.props.onKeyUp(e)
+    }
   }
 
   render () {
@@ -48,8 +63,10 @@ class CleanInput extends React.PureComponent {
 
     return (
       <Tag
+        ref='el'
         className={className}
         type='text'
+        onKeyUp={this.onKeyUp}
         {...omit(this.props, 'multiline', 'block')}/>
     )
   }
