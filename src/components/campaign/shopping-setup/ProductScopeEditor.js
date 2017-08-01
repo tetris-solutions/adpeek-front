@@ -81,7 +81,7 @@ class ProductScopeEditor extends React.PureComponent {
     }
 
     const ls = parentScope ? filter(categories, {
-      parent: Number(parentScope[valueField]),
+      parent: parentScope[valueField],
       type
     }) : filter(categories, {type})
 

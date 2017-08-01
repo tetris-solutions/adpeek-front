@@ -89,6 +89,8 @@ function flagAsChanged (node) {
     delete node.parent.children[oldId]
     node.parent.children[node.id] = node
   }
+
+  forEach(node.children, flagAsChanged)
 }
 
 const isOther = ({dimension}) => (
@@ -151,7 +153,7 @@ function apply (node, changes, skipOther = false) {
     }
 
     assign(node.dimension, dimensionChanges)
-    delete changes.dimension
+    changes = omit(changes, 'dimension')
   }
 
   flagAsChanged(node)

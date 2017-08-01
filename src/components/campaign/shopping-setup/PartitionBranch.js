@@ -99,7 +99,7 @@ class PartitionBranch extends React.Component {
     const {categories, dimension} = this.props
 
     if (this.isCategory() && dimension.value) {
-      const category = find(categories, {value: Number(dimension.value)})
+      const category = find(categories, {value: dimension.value})
 
       return get(category, 'name', dimension.value)
     }
@@ -144,10 +144,9 @@ class PartitionBranch extends React.Component {
 
     const type = this.props.dimension.type
     const parentValue = get(findParentCategory(this.props.parent), 'dimension.value')
-    const parent = parentValue ? Number(parentValue) : null
 
     return map(
-      filter(this.props.categories, {type, parent}),
+      filter(this.props.categories, {type, parent: parentValue || null}),
       parseCategory
     )
   }
