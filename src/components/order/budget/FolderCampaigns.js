@@ -10,7 +10,7 @@ import {Button} from '../../Button'
 
 const enhance = withState('isExpanded', 'setVisibility', false)
 
-function BudgetEditFolderCampaigns ({add, isExpanded, setVisibility, campaigns}) {
+function BudgetEditFolderCampaigns ({add, isExpanded, setVisibility, campaigns, budget}) {
   const msgName = isExpanded ? 'hideNCampaigns' : 'showNCampaigns'
   const grouped = groupBy(campaigns, 'status.is_active')
   const activeCampaigns = grouped.true || []
@@ -23,6 +23,8 @@ function BudgetEditFolderCampaigns ({add, isExpanded, setVisibility, campaigns})
       {map(activeCampaigns, campaign => (
         <BudgetCampaign
           key={campaign.id}
+          budget={budget}
+          maybeDisabled
           campaign={campaign}
           actionIcon='add'
           onClick={add}/>
@@ -39,10 +41,11 @@ function BudgetEditFolderCampaigns ({add, isExpanded, setVisibility, campaigns})
           {map(isExpanded && inactiveCampaigns, campaign => (
             <BudgetCampaign
               key={campaign.id}
+              maybeDisabled
+              budget={budget}
               actionIcon='add'
               campaign={campaign}
-              onClick={add}/>
-          ))}
+              onClick={add}/>))}
         </div>
       ) : null}
     </div>
@@ -51,6 +54,7 @@ function BudgetEditFolderCampaigns ({add, isExpanded, setVisibility, campaigns})
 
 BudgetEditFolderCampaigns.displayName = 'Budget-Edit-Folder-Campaigns'
 BudgetEditFolderCampaigns.propTypes = {
+  budget: PropTypes.object,
   isExpanded: PropTypes.bool.isRequired,
   setVisibility: PropTypes.func.isRequired,
   campaigns: PropTypes.array.isRequired,

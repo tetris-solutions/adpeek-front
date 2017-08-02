@@ -71,8 +71,7 @@ export class OrderController extends React.Component {
       budget: PropTypes.string
     }),
     dispatch: PropTypes.func,
-    campaigns: PropTypes.array,
-    maxCampaignsPerBudget: PropTypes.number
+    campaigns: PropTypes.array
   }
 
   static contextTypes = {
@@ -277,7 +276,7 @@ export class OrderController extends React.Component {
   }
 
   render () {
-    const {campaigns, maxCampaignsPerBudget} = this.props
+    const {campaigns} = this.props
     const {order, selectedBudgetIndex} = this.state
     const budget = isNumber(selectedBudgetIndex)
       ? order.budgets[selectedBudgetIndex]
@@ -288,13 +287,6 @@ export class OrderController extends React.Component {
     const remainingValue = budget && budget.mode === 'percentage'
       ? toPercentage(remainingAmount, order.amount)
       : remainingAmount
-
-    const showFolderCampaigns = !(budget && budget.campaigns.length >= maxCampaignsPerBudget)
-    let folderCampaigns = []
-
-    if (showFolderCampaigns && budget) {
-      folderCampaigns = looseCampaigns(campaigns, order.budgets)
-    }
 
     return (
       <OrderEdit
@@ -311,8 +303,7 @@ export class OrderController extends React.Component {
         remainingValue={remainingValue}
         budget={budget}
         order={order}
-        showFolderCampaigns={showFolderCampaigns}
-        folderCampaigns={folderCampaigns}/>
+        folderCampaigns={looseCampaigns(campaigns, order.budgets)}/>
     )
   }
 }

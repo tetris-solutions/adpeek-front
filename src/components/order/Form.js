@@ -16,7 +16,7 @@ import Page from '../Page'
 import {Button} from '../Button'
 const notPercentage = budget => budget && budget.mode === 'amount'
 
-export function OrderEdit ({save, runAutoBudget, showFolderCampaigns, createBudget, removeBudget, removeCampaign, remainingValue, remainingAmount, addCampaigns, selectBudget, changeOrderField, changeBudgetField, budget, order, folderCampaigns}) {
+export function OrderEdit ({save, runAutoBudget, createBudget, removeBudget, removeCampaign, remainingValue, remainingAmount, addCampaigns, selectBudget, changeOrderField, changeBudgetField, budget, order, folderCampaigns}) {
   function closeBudget () {
     selectBudget(null)
   }
@@ -59,7 +59,6 @@ export function OrderEdit ({save, runAutoBudget, showFolderCampaigns, createBudg
                   removeCampaign={removeCampaign}
                   addCampaigns={addCampaigns}
                   key={budget.id}
-                  showFolderCampaigns={showFolderCampaigns}
                   max={remainingValue + budget.value}
                   budget={budget}
                   change={changeBudgetField}/>
@@ -77,7 +76,6 @@ export function OrderEdit ({save, runAutoBudget, showFolderCampaigns, createBudg
 
 OrderEdit.displayName = 'Order-Edit'
 OrderEdit.propTypes = {
-  showFolderCampaigns: PropTypes.bool,
   runAutoBudget: PropTypes.func,
   save: PropTypes.func,
   createBudget: PropTypes.func,

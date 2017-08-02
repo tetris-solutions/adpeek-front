@@ -37,9 +37,9 @@ export function Order ({deliveryMethods, dispatch, params, order, folder, status
   }
 
   order = order || defaultOrder()
-  const adsetMode = folder.account.platform === 'facebook'
+  const adSetMode = folder.account.platform === 'facebook'
   const folderCampaigns = filter(folder.campaigns, notAdwordsVideo)
-  const campaigns = adsetMode
+  const campaigns = adSetMode
     ? flatten(map(folderCampaigns, getCampaignAdsets))
     : folderCampaigns
 
@@ -50,7 +50,6 @@ export function Order ({deliveryMethods, dispatch, params, order, folder, status
       params={params}
       deliveryMethods={deliveryMethods}
       dispatch={dispatch}
-      maxCampaignsPerBudget={adsetMode ? 1 : Infinity}
       campaigns={campaigns}
       order={order}/>
   )

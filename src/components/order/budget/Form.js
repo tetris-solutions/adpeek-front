@@ -31,7 +31,6 @@ export class BudgetEdit extends React.Component {
     max: PropTypes.number,
     budget: budgetType,
     folderCampaigns: PropTypes.array,
-    showFolderCampaigns: PropTypes.bool,
     addCampaigns: PropTypes.func
   }
 
@@ -59,7 +58,6 @@ export class BudgetEdit extends React.Component {
     const {messages: {percentageLabel, amountLabel, folderCampaignsTitle, budgetCampaignsTitle}} = this.context
     const {
       folderCampaigns,
-      showFolderCampaigns,
       addCampaigns,
       remove,
       close,
@@ -155,9 +153,10 @@ export class BudgetEdit extends React.Component {
             </Tab>
             <Tab id='folder-campaigns' title={folderCampaignsTitle}>
               <br/>
-              {!showFolderCampaigns
-                ? <Message html>maxCampaignsPerBudgetReached</Message>
-                : <BudgetEditFolderCampaigns campaigns={folderCampaigns} add={includeCampaign}/>}
+              <BudgetEditFolderCampaigns
+                budget={this.props.budget}
+                campaigns={folderCampaigns}
+                add={includeCampaign}/>
             </Tab>
           </Tabs>
         </Content>
