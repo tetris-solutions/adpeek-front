@@ -71,6 +71,7 @@ module.exports = {
   addToBudget: 'Incluir no orçamento',
   facebookBudgetDisallowInsert: 'Orçamentos do Facebook sempre são individuais',
   conversionOptimizedDisallowInsert: 'Campanhas otimizadas pra conversão exigem orçamentos individuais',
+  removedCampaignDisallow: 'Campanhas removidas não podem ser incluídas em orçamento',
   budgetWithoutCampaigns: '<p>Você ainda não incluiu nenhuma campanha neste orçamento.</p>',
   newOrderName: 'PI de {month}',
   deliveryMethodLabel: 'Forma de entrega',

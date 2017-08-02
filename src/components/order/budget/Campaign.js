@@ -24,12 +24,17 @@ class BudgetCampaign extends React.Component {
     messages: PropTypes.object.isRequired
   }
 
-  state = {
-    modalOpen: false
-  }
-
   componentDidMount () {
-    if (!this.props.campaign.biddingStrategy) {
+    const {campaign: {biddingStrategy, platform}, maybeDisabled} = this.props
+
+    const shouldLoadBidStrategy = (
+      platform === 'adwords' &&
+      maybeDisabled &&
+      !biddingStrategy &&
+      !this.isRemoved()
+    )
+
+    if (shouldLoadBidStrategy) {
       this.props.dispatch(
         loadCampaignBiddingStrategyAction,
         this.props.params
@@ -43,6 +48,10 @@ class BudgetCampaign extends React.Component {
 
   isFacebook () {
     return this.props.campaign.platform === 'facebook'
+  }
+
+  isRemoved () {
+    return this.props.campaign.status.status === 'REMOVED'
   }
 
   isConversionOptimized () {
@@ -59,16 +68,11 @@ class BudgetCampaign extends React.Component {
     )
   }
 
-  closeModal = () => {
-    this.setState({modalOpen: false})
-  }
-
   onClick = e => {
     e.preventDefault()
+
     if (this.isAllowed()) {
       this.props.onClick(this.props.campaign)
-    } else {
-      this.setState({modalOpen: true})
     }
   }
 
@@ -79,13 +83,17 @@ class BudgetCampaign extends React.Component {
       'mdl-list__item-secondary-action': true,
       'mdl-color-text--grey-600': disabled
     })
-
-    let linkTitle = this.context.messages.addToBudget
+    const {messages} = this.context
+    let linkTitle = messages.addToBudget
 
     if (disabled) {
-      linkTitle = this.isFacebook()
-        ? this.context.messages.facebookBudgetDisallowInsert
-        : this.context.messages.conversionOptimizedDisallowInsert
+      if (this.isFacebook()) {
+        linkTitle = messages.facebookBudgetDisallowInsert
+      } else if (this.isConversionOptimized()) {
+        linkTitle = messages.conversionOptimizedDisallowInsert
+      } else if (this.isRemoved()) {
+        linkTitle = messages.removedCampaignDisallow
+      }
     }
 
     return (
