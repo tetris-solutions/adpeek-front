@@ -5,11 +5,14 @@ import {node} from '../../higher-order/branch'
 import isEmpty from 'lodash/isEmpty'
 import get from 'lodash/get'
 import cx from 'classnames'
+import {loadCampaignBiddingStrategyAction} from '../../../actions/load-campaign-bidding-strategy'
 
 class BudgetCampaign extends React.Component {
   static displayName = 'Budget-Campaign'
   static propTypes = {
     campaign: campaignType.isRequired,
+    dispatch: PropTypes.func,
+    params: PropTypes.object,
     budget: PropTypes.shape({
       campaigns: PropTypes.array
     }),
@@ -23,6 +26,15 @@ class BudgetCampaign extends React.Component {
 
   state = {
     modalOpen: false
+  }
+
+  componentDidMount () {
+    if (!this.props.campaign.biddingStrategy) {
+      this.props.dispatch(
+        loadCampaignBiddingStrategyAction,
+        this.props.params
+      )
+    }
   }
 
   isEmptyBudget () {
