@@ -53,7 +53,9 @@ const Companies = ({user, dispatch}) => (
     <SubHeader title={<Message>companyList</Message>}/>
     <Container>
       {map(user.companies, ({id: company}) =>
-        <CompanyBranch params={{company}}/>)}
+        <CompanyBranch
+          key={company}
+          params={{company}}/>)}
     </Container>
   </div>
 )
