@@ -72,7 +72,7 @@ module.exports = {
   addToBudget: 'Add to budget',
   facebookBudgetDisallowInsert: 'It is not possible to add more than one campaign to a Facebook budget',
   conversionOptimizedDisallowInsert: 'Conversion optimized campaigns require an individual budget',
-  removedCampaignDisallow: 'You cannot add a removed campaign to a budget',
+  removedCampaignDisallow: 'You cannot use a removed campaign in a budget',
   budgetWithoutCampaigns: '<p>You still did not include any campaign in this budget.</p>',
   newOrderName: '{month}',
   deliveryMethodLabel: 'Delivery method',

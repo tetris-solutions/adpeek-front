@@ -38,6 +38,7 @@ class Order extends React.PureComponent {
 
   static propTypes = {
     routes: PropTypes.array,
+    cursors: PropTypes.object,
     statuses: PropTypes.array,
     dispatch: PropTypes.func,
     deliveryMethods: PropTypes.array,
@@ -56,6 +57,10 @@ class Order extends React.PureComponent {
     isLoading: this.requiresBidStrategyLoad()
   }
 
+  getCurrentFolder () {
+    return this.props.cursors.folder
+  }
+
   componentDidMount () {
     if (this.requiresBidStrategyLoad()) {
       this.loadBidStrategy()
@@ -67,7 +72,7 @@ class Order extends React.PureComponent {
   }
 
   getCampaignsRequiringStrategy () {
-    return filter(this.props.folder.campaigns,
+    return filter(this.getCurrentFolder().campaigns,
       needsBidStrategy)
   }
 
@@ -110,7 +115,8 @@ class Order extends React.PureComponent {
       )
     }
 
-    const {deliveryMethods, dispatch, params, folder, routes} = this.props
+    const {deliveryMethods, dispatch, params, routes} = this.props
+    const folder = this.getCurrentFolder()
     const order = this.props.order || this.getDefaultOrder()
     const adSetMode = folder.account.platform === 'facebook'
     const folderCampaigns = filter(folder.campaigns, notAdwordsVideo)
@@ -133,6 +139,6 @@ class Order extends React.PureComponent {
 
 export default many([
   {deliveryMethods: ['deliveryMethods']},
-  ['workspace', 'folder'],
-  ['folder', 'order']
+  ['folder', 'order'],
+  ['workspace', 'folder']
 ], Order)

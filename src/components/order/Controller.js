@@ -22,6 +22,11 @@ import {spawnAutoBudgetAction} from '../../actions/spawn-auto-budget'
 
 const n = num => round(num, 2)
 
+const includeBidStrategyOnBudgetCampaigns = (budget, campaigns) =>
+  assign({}, budget, {
+    campaigns: map(budget.campaigns, ({id}) => find(campaigns, {id}))
+  })
+
 const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
 const toPercentage = (value, total) => n((value / total) * 100)
 const fromPercentage = (value, total) => n((value / 100) * total)
@@ -278,8 +283,8 @@ export class OrderController extends React.Component {
   render () {
     const {campaigns} = this.props
     const {order, selectedBudgetIndex} = this.state
-    const budget = isNumber(selectedBudgetIndex)
-      ? order.budgets[selectedBudgetIndex]
+    const budget = isNumber(selectedBudgetIndex) && selectedBudgetIndex >= 0
+      ? includeBidStrategyOnBudgetCampaigns(order.budgets[selectedBudgetIndex], campaigns)
       : null
 
     const remainingAmount = availableAmount(order.amount, order.budgets)

@@ -41,7 +41,10 @@ class BudgetCampaign extends React.Component {
   }
 
   getCampaignList () {
-    return concat(this.props.budget.campaigns, this.props.campaign)
+    return concat(
+      this.props.budget.campaigns,
+      this.props.campaign
+    )
   }
 
   isConversionOptimized () {
@@ -82,10 +85,10 @@ class BudgetCampaign extends React.Component {
     if (disabled) {
       if (this.isFacebook()) {
         linkTitle = messages.facebookBudgetDisallowInsert
-      } else if (this.isConversionOptimized()) {
-        linkTitle = messages.conversionOptimizedDisallowInsert
       } else if (this.isRemoved()) {
         linkTitle = messages.removedCampaignDisallow
+      } else if (this.isConversionOptimized()) {
+        linkTitle = messages.conversionOptimizedDisallowInsert
       }
     }
 
