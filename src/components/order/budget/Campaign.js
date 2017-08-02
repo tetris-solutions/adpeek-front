@@ -2,8 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import campaignType from '../../../propTypes/campaign'
 import {node} from '../../higher-order/branch'
-import Modal from 'tetris-iso/Modal'
-import Message from 'tetris-iso/Message'
 import isEmpty from 'lodash/isEmpty'
 import get from 'lodash/get'
 import cx from 'classnames'
@@ -18,6 +16,9 @@ class BudgetCampaign extends React.Component {
     actionIcon: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,
     maybeDisabled: PropTypes.bool
+  }
+  static contextTypes = {
+    messages: PropTypes.object.isRequired
   }
 
   state = {
@@ -62,10 +63,18 @@ class BudgetCampaign extends React.Component {
   render () {
     const {campaign, actionIcon} = this.props
     const disabled = !this.isAllowed()
-    const lClasses = cx({
+    const linkClasses = cx({
       'mdl-list__item-secondary-action': true,
-      'mdl-color-text--red-900': disabled
+      'mdl-color-text--grey-600': disabled
     })
+
+    let linkTitle = this.context.messages.addToBudget
+
+    if (disabled) {
+      linkTitle = this.isFacebook()
+        ? this.context.messages.facebookBudgetDisallowInsert
+        : this.context.messages.conversionOptimizedDisallowInsert
+    }
 
     return (
       <div className='mdl-list__item'>
@@ -75,17 +84,12 @@ class BudgetCampaign extends React.Component {
           </i>
           <span>{campaign.name}</span>
         </span>
-        <a className={lClasses} onClick={this.onClick}>
+
+        <a className={linkClasses} title={linkTitle} onClick={this.onClick}>
           <i className='material-icons'>
             {disabled ? 'info_outline' : actionIcon}
           </i>
         </a>
-        {this.state.modalOpen && (
-          <Modal size='small' onEscPress={this.closeModal} minHeight={0} className='mdl-color--yellow-400'>
-            {this.isFacebook() && <Message html>facebookBudgetDisallowInsert</Message>}
-            {this.isConversionOptimized() && <Message html>conversionOptimizedDisallowInsert</Message>}
-          </Modal>
-        )}
       </div>
     )
   }
