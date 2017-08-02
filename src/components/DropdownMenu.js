@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import {Link} from 'react-router'
 import csjs from 'csjs'
 import {styledFunctionalComponent} from './higher-order/styled'
 import Tooltip from 'tetris-iso/Tooltip'
@@ -67,10 +68,10 @@ export class MenuItem extends React.Component {
   }
 
   render () {
-    const {props} = this
-    const {divider, children, tag: Tag, icon} = props
+    let Tag = this.props.tag
+    const {divider, children, icon} = this.props
     const ico = icon ? <i className={`material-icons ${style.ico}`}>{icon}</i> : null
-    const btProps = omit(props, 'children', 'icon', 'tag', 'divider')
+    const btProps = omit(this.props, 'children', 'icon', 'tag', 'divider')
 
     if (btProps.disabled) {
       delete btProps.onClick
@@ -78,6 +79,8 @@ export class MenuItem extends React.Component {
 
     if (btProps.onClick) {
       btProps.onClick = this.onClick
+    } else if (btProps.to) {
+      Tag = Link
     }
 
     return (

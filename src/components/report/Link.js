@@ -21,39 +21,20 @@ class ReportLink extends React.Component {
     router: PropTypes.object.isRequired
   }
 
-  state = {
-    isLoading: false,
-    isReady: false
-  }
-
-  componentDidUpdate () {
-    if (!this.gone && this.state.isReady && this.props.reports) {
-      this.gone = true
-      this.context.router.push(this.getUrl())
-    }
+  componentDidMount () {
+    this.loadReports()
   }
 
   loadReports = () => {
     const {reports, dispatch, params} = this.props
-    const onReady = () => this.setState({isReady: true})
 
-    if (reports) {
-      return Promise.resolve().then(onReady)
-    }
-
-    this.setState({isLoading: true})
-
-    return dispatch(loadReportsAction, params, true)
-      .then(onReady)
+    return reports
+      ? Promise.resolve()
+      : dispatch(loadReportsAction, params, true)
+        .then(() => this.forceUpdate())
   }
 
-  onClick = () => {
-    if (this.state.isLoading) return
-
-    this.loadReports()
-  }
-
-  getUrl = () => {
+  getReportUrl = () => {
     const {params, reports} = this.props
     const {company, workspace, folder} = params
 
@@ -79,9 +60,10 @@ class ReportLink extends React.Component {
 
   render () {
     const {children, tag: Tag} = this.props
+    const url = this.getReportUrl()
 
     return (
-      <Tag icon='insert_chart' onClick={this.onClick}>
+      <Tag icon='insert_chart' to={url}>
         {children}
       </Tag>
     )
