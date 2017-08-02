@@ -23,9 +23,29 @@ function getCampaignAdsets (campaign) {
 
 const isOrderRoute = ({path}) => includes(path, 'order')
 
-export function Order ({deliveryMethods, dispatch, params, order, folder, statuses, routes}, {messages: {newOrderName}, moment, locales}) {
-  function defaultOrder () {
+class Order extends React.PureComponent {
+  static displayName = 'Order'
+
+  static propTypes = {
+    routes: PropTypes.array,
+    statuses: PropTypes.array,
+    dispatch: PropTypes.func,
+    deliveryMethods: PropTypes.array,
+    params: PropTypes.object,
+    folder: PropTypes.object,
+    order: PropTypes.any
+  }
+
+  static contextTypes = {
+    moment: PropTypes.func,
+    locales: PropTypes.string,
+    messages: PropTypes.object
+  }
+
+  getDefaultOrder () {
+    const {messages: {newOrderName}, moment, locales} = this.context
     const nextMonth = moment().add(1, 'month')
+
     return {
       name: new Message(newOrderName, locales).format({month: upperFirst(nextMonth.format('MMMM, YY'))}),
       start: nextMonth.date(1).format('YYYY-MM-DD'),
@@ -36,45 +56,30 @@ export function Order ({deliveryMethods, dispatch, params, order, folder, status
     }
   }
 
-  order = order || defaultOrder()
-  const adSetMode = folder.account.platform === 'facebook'
-  const folderCampaigns = filter(folder.campaigns, notAdwordsVideo)
-  const campaigns = adSetMode
-    ? flatten(map(folderCampaigns, getCampaignAdsets))
-    : folderCampaigns
+  render () {
+    const {deliveryMethods, dispatch, params, folder, routes} = this.props
+    const order = this.props.order || this.getDefaultOrder()
+    const adSetMode = folder.account.platform === 'facebook'
+    const folderCampaigns = filter(folder.campaigns, notAdwordsVideo)
+    const campaigns = adSetMode
+      ? flatten(map(folderCampaigns, getCampaignAdsets))
+      : folderCampaigns
 
-  return (
-    <OrderController
-      route={findLast(routes, isOrderRoute)}
-      key={params.order || 'new-order'}
-      params={params}
-      deliveryMethods={deliveryMethods}
-      dispatch={dispatch}
-      campaigns={campaigns}
-      order={order}/>
-  )
-}
-
-Order.displayName = 'Order'
-
-Order.propTypes = {
-  routes: PropTypes.array,
-  statuses: PropTypes.array,
-  dispatch: PropTypes.func,
-  deliveryMethods: PropTypes.array,
-  params: PropTypes.object,
-  folder: PropTypes.object,
-  order: PropTypes.any
-}
-
-Order.contextTypes = {
-  moment: PropTypes.func,
-  locales: PropTypes.string,
-  messages: PropTypes.object
+    return (
+      <OrderController
+        route={findLast(routes, isOrderRoute)}
+        key={params.order || 'new-order'}
+        params={params}
+        deliveryMethods={deliveryMethods}
+        dispatch={dispatch}
+        campaigns={campaigns}
+        order={order}/>
+    )
+  }
 }
 
 export default many([
-  {deliveryMethods: ['deliveryMethods'], statuses: ['statuses']},
+  {deliveryMethods: ['deliveryMethods']},
   ['workspace', 'folder'],
   ['folder', 'order']
 ], Order)
