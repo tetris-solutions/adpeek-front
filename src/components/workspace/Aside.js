@@ -33,7 +33,7 @@ export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
             <Message>workspaceOrders</Message>
           </NavLink>
 
-          <ReportLink tag={NavBt} params={params} reports={workspace.reports} dispatch={dispatch}>
+          <ReportLink tag={NavLink} params={params} reports={workspace.reports} dispatch={dispatch}>
             <Message>workspaceReport</Message>
           </ReportLink>
 

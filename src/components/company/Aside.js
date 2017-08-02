@@ -28,7 +28,7 @@ export const CompanyAside = ({company, params, dispatch}) => {
           <Message>companyOrders</Message>
         </NavLink>
 
-        <ReportLink tag={NavBt} params={params} reports={company.reports} dispatch={dispatch}>
+        <ReportLink tag={NavLink} params={params} reports={company.reports} dispatch={dispatch}>
           <Message>companyReport</Message>
         </ReportLink>
 
