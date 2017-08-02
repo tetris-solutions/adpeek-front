@@ -9,7 +9,6 @@ import includes from 'lodash/includes'
 import isNumber from 'lodash/isNumber'
 import map from 'lodash/map'
 import sum from 'lodash/sum'
-import without from 'lodash/without'
 import React from 'react'
 import PropTypes from 'prop-types'
 import isObject from 'lodash/isObject'
@@ -205,7 +204,8 @@ export class OrderController extends React.Component {
 
   removeCampaign = (campaign) => {
     this.changeCurrentBudget({
-      campaigns: without(this.getCurrentBudget().campaigns, campaign)
+      campaigns: filter(this.getCurrentBudget().campaigns,
+        ({id}) => id !== campaign.id)
     })
   }
 

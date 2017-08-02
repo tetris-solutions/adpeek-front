@@ -14,6 +14,7 @@ import Fence from '../Fence'
 import SubHeader from '../SubHeader'
 import Page from '../Page'
 import {Button} from '../Button'
+
 const notPercentage = budget => budget && budget.mode === 'amount'
 
 export function OrderEdit ({save, runAutoBudget, createBudget, removeBudget, removeCampaign, remainingValue, remainingAmount, addCampaigns, selectBudget, changeOrderField, changeBudgetField, budget, order, folderCampaigns}) {

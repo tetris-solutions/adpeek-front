@@ -5,7 +5,11 @@ import {node} from '../../higher-order/branch'
 import isEmpty from 'lodash/isEmpty'
 import get from 'lodash/get'
 import cx from 'classnames'
-import {loadCampaignBiddingStrategyAction} from '../../../actions/load-campaign-bidding-strategy'
+import some from 'lodash/some'
+import concat from 'lodash/concat'
+
+const isConversionOptimized = campaign =>
+  get(campaign, 'biddingStrategy.type') === 'UNKNOWN'
 
 class BudgetCampaign extends React.Component {
   static displayName = 'Budget-Campaign'
@@ -24,24 +28,6 @@ class BudgetCampaign extends React.Component {
     messages: PropTypes.object.isRequired
   }
 
-  componentDidMount () {
-    const {campaign: {biddingStrategy, platform}, maybeDisabled} = this.props
-
-    const shouldLoadBidStrategy = (
-      platform === 'adwords' &&
-      maybeDisabled &&
-      !biddingStrategy &&
-      !this.isRemoved()
-    )
-
-    if (shouldLoadBidStrategy) {
-      this.props.dispatch(
-        loadCampaignBiddingStrategyAction,
-        this.props.params
-      )
-    }
-  }
-
   isEmptyBudget () {
     return isEmpty(this.props.budget.campaigns)
   }
@@ -54,8 +40,15 @@ class BudgetCampaign extends React.Component {
     return this.props.campaign.status.status === 'REMOVED'
   }
 
+  getCampaignList () {
+    return concat(this.props.budget.campaigns, this.props.campaign)
+  }
+
   isConversionOptimized () {
-    return get(this.props.campaign, 'biddingStrategy.type') === 'UNKNOWN'
+    return some(
+      this.getCampaignList(),
+      isConversionOptimized
+    )
   }
 
   isAllowed () {
@@ -107,7 +100,7 @@ class BudgetCampaign extends React.Component {
 
         <a className={linkClasses} title={linkTitle} onClick={this.onClick}>
           <i className='material-icons'>
-            {disabled ? 'info_outline' : actionIcon}
+            {disabled ? 'block' : actionIcon}
           </i>
         </a>
       </div>
