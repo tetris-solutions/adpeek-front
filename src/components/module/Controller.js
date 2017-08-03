@@ -22,6 +22,7 @@ import CroppedResultDialog from './CroppedResultDialog'
 import TextMessage from 'intl-messageformat'
 import DescriptionDialog from './DescriptionDialog'
 import log from 'loglevel'
+import isEqual from 'lodash/isEqual'
 
 const reportContext = [
   'accounts',
@@ -144,13 +145,18 @@ class ModuleController extends React.Component {
   getUsedAccounts = (ids) => {
     const {report: {platform}, reportParams: {accounts}} = this.context
 
-    if (platform === this.$platform && accounts === this.$accounts) {
+    if (
+      platform === this.$platform &&
+      accounts === this.$accounts &&
+      isEqual(this.$ids, ids)
+    ) {
       log.debug(`${this.props.module.name} skipped account change`)
       return this.$usedAccounts
     }
 
     log.info(`${this.props.module.name} is updating accounts`)
 
+    this.$ids = ids
     this.$platform = platform
     this.$accounts = accounts
 
