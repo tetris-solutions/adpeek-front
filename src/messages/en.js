@@ -243,6 +243,7 @@ module.exports = {
   folderList: 'Folders',
   companyList: 'Companies',
   emptyReportResult: 'Empty Report',
+  invalidModuleLabel: 'Invalid module options',
   invalidModuleConfig: 'Please select at least 1 item from: {entity}, Segments and Metrics',
   resultLimitLabel: 'Limit',
   all: 'All',

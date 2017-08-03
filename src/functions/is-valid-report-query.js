@@ -1,7 +1,7 @@
 import isEmpty from 'lodash/isEmpty'
 import get from 'lodash/get'
 
-export function isvalidReportQuery (type, query) {
+export function isValidReportQuery (type, query) {
   const isInvalid = (
     (isEmpty(get(query, 'dimensions')) && type !== 'total') ||
     isEmpty(get(query, 'metrics')) ||

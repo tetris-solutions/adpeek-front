@@ -113,6 +113,10 @@ class ModuleController extends React.Component {
     const {reportParams} = this.context
     const {module, entity} = this.props
 
+    if (entity.isLoading) {
+      return
+    }
+
     const query = {
       metrics: module.metrics,
       dimensions: module.dimensions,

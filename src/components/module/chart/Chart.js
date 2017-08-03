@@ -77,8 +77,7 @@ const Chart = props => {
 }
 
 Chart.defaultProps = {
-  height: '100%',
-  isLoading: true
+  height: '100%'
 }
 Chart.displayName = 'Pure-Chart'
 Chart.propTypes = {
@@ -164,7 +163,7 @@ class ChartContainer extends React.Component {
       locales: locales,
       sort: module.sort,
       limit: module.limit,
-      isLoading: entity.isLoading || module.isLoading,
+      isLoading: module.isLoading,
       reportParams: reportParams,
       sourceWidth: 1200,
       sourceHeight: floor(1200 * A4Ratio),

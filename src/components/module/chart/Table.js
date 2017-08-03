@@ -242,9 +242,6 @@ EmptyTBody.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   columns: PropTypes.array.isRequired
 }
-EmptyTBody.defaultProps = {
-  isLoading: false
-}
 
 class ReportModuleTableTH extends React.Component {
   static displayName = 'Header'

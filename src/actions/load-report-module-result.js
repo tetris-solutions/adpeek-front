@@ -14,7 +14,7 @@ import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} 
 import {POST} from '@tetris/http'
 import {normalizeResult} from '../functions/normalize-result'
 import {getDeepCursor} from '../functions/get-deep-cursor'
-import {isvalidReportQuery} from '../functions/is-valid-report-query'
+import {isValidReportQuery} from '../functions/is-valid-report-query'
 import compact from 'lodash/compact'
 import {inferLevelFromParams} from '../functions/infer-level-from-params'
 import {replaceCriteriaIdWithName} from './load-location-criteria'
@@ -81,7 +81,9 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
   const isCursorOk = () => moduleCursor && moduleCursor.tree
   const sameQuery = () => isEqual(query, moduleCursor.get('query'))
 
-  if (!isCursorOk() || !isvalidReportQuery(moduleCursor.get('type'), query)) return
+  if (!isCursorOk() || !isValidReportQuery(moduleCursor.get('type'), query)) {
+    return
+  }
 
   const isLoadingCursor = moduleCursor.select('isLoading')
   const myCall = lastCall[id] = Date.now()

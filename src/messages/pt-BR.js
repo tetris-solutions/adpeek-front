@@ -242,6 +242,7 @@ module.exports = {
   folderList: 'Pastas',
   companyList: 'Empresas',
   emptyReportResult: 'Relatório Vazio',
+  invalidModuleLabel: 'Configuração inválida',
   invalidModuleConfig: 'Selecione ao menos 1 de cada: {entity}, Dimensões e Métricas',
   resultLimitLabel: 'Limite de linhas',
   all: 'Todos',

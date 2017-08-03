@@ -16,10 +16,12 @@ import negate from 'lodash/negate'
 import omit from 'lodash/omit'
 import pick from 'lodash/pick'
 import orderBy from 'lodash/orderBy'
+import Message from 'intl-messageformat'
 import without from 'lodash/without'
 import {prettyNumber} from './pretty-number'
 import set from 'lodash/set'
 import isDate from 'lodash/isDate'
+import {isValidReportQuery} from '../functions/is-valid-report-query'
 
 const isEntityId = d => d === 'id' || d === 'name'
 const notEntityId = negate(isEntityId)
@@ -120,22 +122,35 @@ function detectXAxis (result, xAxisDimensions) {
   return types.linear
 }
 
-const emptyResultChart = ({isLoading, messages: {loadingReport, emptyReportResult}}) => ({
+const renderMsg = label => {
+  function plainMessage () {
+    /**
+     *
+     * @type {Highcharts.Chart}
+     */
+    const chart = this
+
+    const x = (chart.chartWidth / 2) - 50
+    const y = (chart.chartHeight / 2) - 20
+
+    if (chart._label_) {
+      chart._label_.destroy()
+    }
+
+    chart._label_ = chart.renderer
+      .label(label, x, y)
+      .css({fontStyle: 'italic', fontSize: '12pt'})
+      .add()
+  }
+
+  return plainMessage
+}
+
+const emptyResultChart = label => ({
   chart: {
     events: {
-      load () {
-        const x = (this.chartWidth / 2) - 50
-        const y = (this.chartHeight / 2) - 20
-
-        this.renderer
-          .label(
-            isLoading ? loadingReport : emptyReportResult,
-            x,
-            y
-          )
-          .css({fontStyle: 'italic', fontSize: '12pt'})
-          .add()
-      }
+      load: renderMsg(label),
+      redraw: renderMsg(label)
     },
     title: {
       style: {
@@ -163,14 +178,31 @@ function mountAnalyticsCampaign (id) {
   return {id: name, name}
 }
 
-export function reportToChartConfig (type, props) {
-  const {comments, query, entity, attributes} = props
+export function reportToChartConfig (type, moduleSetup) {
+  const {comments, query, entity, attributes, messages} = moduleSetup
   const {metrics} = query
-  let {result} = props
+  let {result} = moduleSetup
   let {dimensions} = query
 
+  if (entity.isLoading) {
+    return emptyResultChart(
+      new Message(messages.loadingEntity, moduleSetup.locales)
+        .format({
+          name: entity.name
+        })
+    )
+  }
+
+  if (!isValidReportQuery(type, query)) {
+    return emptyResultChart(messages.invalidModuleLabel)
+  }
+
+  if (moduleSetup.isLoading) {
+    return emptyResultChart(messages.loadingReport)
+  }
+
   if (isEmpty(result)) {
-    return emptyResultChart(props)
+    return emptyResultChart(messages.emptyReportResult)
   }
 
   const getAttributeName = attr => get(attributes, [attr, 'name'], attr)
@@ -187,7 +219,7 @@ export function reportToChartConfig (type, props) {
         return prettyNumber(
           this.value,
           readType(attributes[metric]),
-          props.locales
+          moduleSetup.locales
         )
       }
     },
@@ -216,8 +248,8 @@ export function reportToChartConfig (type, props) {
     result = orderBy(result, metrics[0], 'desc')
   }
 
-  if ((type === 'pie' || type === 'column') && props.limit) {
-    result = result.slice(0, props.limit)
+  if ((type === 'pie' || type === 'column') && moduleSetup.limit) {
+    result = result.slice(0, moduleSetup.limit)
   }
 
   dimensions = without(dimensions, xAxisDimension)
@@ -226,7 +258,7 @@ export function reportToChartConfig (type, props) {
   const getEntityById = memoize(id => {
     if (!id) return mockEntity
 
-    const {accounts, report: {platform: reportPlatform}} = props
+    const {accounts, report: {platform: reportPlatform}} = moduleSetup
     const platform = reportPlatform || get(find(accounts, getAccountSelector(id)), 'platform')
 
     if (platform === 'analytics') {
@@ -361,6 +393,12 @@ export function reportToChartConfig (type, props) {
   }
 
   const config = {
+    chart: {
+      events: {
+        load: null,
+        redraw: null
+      }
+    },
     yAxis,
     tooltip: {
       useHTML: true
@@ -394,7 +432,7 @@ export function reportToChartConfig (type, props) {
 
   function pointFormatter () {
     const attribute = attributes[this.options.metric]
-    const value = prettyNumber(this.y, readType(attribute), props.locales)
+    const value = prettyNumber(this.y, readType(attribute), moduleSetup.locales)
 
     return `
         <span style="color: ${this.color}">${this.series.name}:</span>
