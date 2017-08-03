@@ -122,35 +122,30 @@ function detectXAxis (result, xAxisDimensions) {
   return types.linear
 }
 
-const renderMsg = label => {
-  function plainMessage () {
-    /**
-     *
-     * @type {Highcharts.Chart}
-     */
-    const chart = this
+function plainMessage () {
+  /**
+   *
+   * @type {Highcharts.Chart}
+   */
+  const chart = this
 
-    const x = (chart.chartWidth / 2) - 50
-    const y = (chart.chartHeight / 2) - 20
+  const x = (chart.chartWidth / 2) - 50
+  const y = (chart.chartHeight / 2) - 20
 
-    if (chart._label_) {
-      chart._label_.destroy()
-    }
+  const label = chart._label_ = chart._label_ || chart.renderer.label().add()
 
-    chart._label_ = chart.renderer
-      .label(label, x, y)
-      .css({fontStyle: 'italic', fontSize: '12pt'})
-      .add()
-  }
-
-  return plainMessage
+  label.textSetter(chart.userOptions.labelMessage)
+  label.ySetter(y)
+  label.xSetter(x)
+  label.css({fontStyle: 'italic', fontSize: '12pt'})
 }
 
-const emptyResultChart = label => ({
+const emptyResultChart = labelMessage => ({
+  labelMessage,
   chart: {
     events: {
-      load: renderMsg(label),
-      redraw: renderMsg(label)
+      load: plainMessage,
+      redraw: plainMessage
     },
     title: {
       style: {
