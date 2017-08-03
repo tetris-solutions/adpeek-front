@@ -8,6 +8,8 @@ import {node} from '../higher-order/branch'
 import {Navigation, NavLink, NavBt, NavBts, Name} from '../Navigation'
 import Recent from '../Recent'
 import ReportLink from '../report/Link'
+import {notNullable} from '../higher-order/not-nullable'
+import constant from 'lodash/constant'
 
 export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
   const {company} = params
@@ -80,4 +82,5 @@ WorkspaceAside.propTypes = {
   })
 }
 
-export default node('company', 'workspace', WorkspaceAside)
+export default node('company', 'workspace',
+  notNullable(WorkspaceAside, constant(null), 'workspace'))
