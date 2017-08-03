@@ -10,6 +10,7 @@ import get from 'lodash/get'
 import some from 'lodash/some'
 import {Button} from '../Button'
 import {MenuItem} from '../DropdownMenu'
+
 const style = csjs`
 .cards > div {
   display: inline-block;
@@ -146,6 +147,7 @@ class ReportExportButton extends React.Component {
 
     return (
       <MenuItem
+        persist
         icon='file_download'
         disabled={isLoading}
         onClick={this.open}>

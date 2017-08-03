@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router'
 import csjs from 'csjs'
-import {styledFunctionalComponent} from './higher-order/styled'
+import {styledComponent} from './higher-order/styled'
 import Tooltip from 'tetris-iso/Tooltip'
 import omit from 'lodash/omit'
 
@@ -55,6 +55,7 @@ export class MenuItem extends React.Component {
   }
 
   static propTypes = {
+    persist: PropTypes.bool,
     onClick: PropTypes.func,
     divider: PropTypes.bool,
     tag: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
@@ -64,7 +65,10 @@ export class MenuItem extends React.Component {
 
   onClick = e => {
     this.props.onClick(e)
-    this.context.hideTooltip()
+
+    if (!this.props.persist) {
+      this.context.hideTooltip()
+    }
   }
 
   render () {
@@ -104,25 +108,33 @@ HeaderMenuItem.propTypes = {
   children: PropTypes.node.isRequired
 }
 
-const DMenu = ({children, provide, hover}) => (
-  <Tooltip provide={provide} hover={hover}>
-    <div className={`mdl-menu__container is-visible ${style.menu}`}>
-      <ul className={`mdl-menu ${style.options}`}>
-        {children}
-      </ul>
-    </div>
-  </Tooltip>
-)
+class DMenu extends React.Component {
+  static displayName = 'Dropdown-Menu'
+  static propTypes = {
+    children: PropTypes.node.isRequired,
+    provide: PropTypes.array,
+    hover: PropTypes.bool,
+    persist: PropTypes.bool
+  }
 
-DMenu.defaultProps = {
-  provide: [],
-  hover: false
-}
-DMenu.displayName = 'Dropdown-Menu'
-DMenu.propTypes = {
-  children: PropTypes.node.isRequired,
-  provide: PropTypes.array,
-  hover: PropTypes.bool
+  static defaultProps = {
+    provide: [],
+    hover: false,
+    persist: false
+  }
+
+  render () {
+    const {children, provide, hover, persist} = this.props
+    return (
+      <Tooltip provide={provide} hover={hover} persist={persist}>
+        <div className={`mdl-menu__container is-visible ${style.menu}`}>
+          <ul className={`mdl-menu ${style.options}`}>
+            {children}
+          </ul>
+        </div>
+      </Tooltip>
+    )
+  }
 }
 
-export const DropdownMenu = styledFunctionalComponent(DMenu, style)
+export const DropdownMenu = styledComponent(DMenu, style)

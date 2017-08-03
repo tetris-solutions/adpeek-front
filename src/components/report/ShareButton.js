@@ -85,7 +85,7 @@ class ShareDialog extends React.Component {
   }
 }
 
-const MenuShare = props => <MenuItem {...props} icon='share'/>
+const MenuShare = props => <MenuItem {...props} icon='share' persist/>
 
 const ShareButton = props => (
   <ButtonWithPrompt tag={MenuShare} label={<Message>shareReportButton</Message>}>

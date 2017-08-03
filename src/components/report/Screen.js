@@ -84,6 +84,7 @@ function ReportScreen (props, context) {
     </Fence>
   )
 }
+
 ReportScreen.displayName = 'Report-Screen'
 ReportScreen.propTypes = {
   reportLiteMode: PropTypes.bool,

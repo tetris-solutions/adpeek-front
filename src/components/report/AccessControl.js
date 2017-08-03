@@ -94,6 +94,7 @@ function CardButton ({button, icon, description}) {
     </div>
   )
 }
+
 CardButton.displayName = 'Card-Button'
 CardButton.propTypes = {
   button: PropTypes.node.isRequired,
@@ -235,7 +236,7 @@ class ReportAccessControl extends React.Component {
     const fencePerms = {[canEditPermission]: true}
 
     return (
-      <MenuItem icon='visibility' onClick={this.open}>
+      <MenuItem icon='visibility' onClick={this.open} persist>
         <Message>reportAccessControl</Message>{this.state.isModalOpen
         ? (
           <Modal onEscPress={this.close}>
