@@ -64,7 +64,7 @@
     "recompose": "^0.20.2",
     "scrollto-with-animation": "^4.3.3",
     "stable": "^0.1.5",
-    "tetris-iso": "^0.6.6",
+    "tetris-iso": "^0.6.7",
     "winston": "^2.2.0",
     "winston-logstash": "^0.2.11"
   },
