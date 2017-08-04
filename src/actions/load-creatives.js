@@ -6,20 +6,10 @@ import map from 'lodash/map'
 import assign from 'lodash/assign'
 import head from 'lodash/head'
 import get from 'lodash/get'
+import {formatKeyword} from '../functions/keyword-utils'
 
 function loadAdGroups (level, id, filter, config) {
   return GET(`${process.env.ADPEEK_API_URL}/${level}/${id}/creatives?filter=${filter}`, config)
-}
-
-function normalizeTextBasedOnMatchType ({text, match_type}) {
-  switch (match_type) {
-    case 'EXACT':
-      return `[${text}]`
-    case 'PHRASE':
-      return `"${text}"`
-    default:
-      return text
-  }
 }
 
 const normalizeAdGroups = adGroups => map(adGroups,
@@ -33,7 +23,7 @@ const normalizeAdGroups = adGroups => map(adGroups,
           status: keyword.status
             ? keyword.status
             : 'ENABLED',
-          text: normalizeTextBasedOnMatchType(keyword)
+          text: formatKeyword(keyword.text, keyword.match_type)
         }))
     }))
 

@@ -4,7 +4,7 @@ import {node} from '../higher-order/branch'
 import {pure} from 'recompose'
 import {liveEditAdGroupAction} from '../../actions/update-campaign-creatives'
 import {pushAdAction} from '../../actions/create-ad'
-import {pushKeyworddAction} from '../../actions/create-keyword'
+import {pushKeywordsAction} from '../../actions/create-keyword'
 import endsWith from 'lodash/endsWith'
 import AdGroupAd from './AdGroupAd'
 import AdGroupKeyword from './AdGroupKeyword'
@@ -19,6 +19,7 @@ import Modal from 'tetris-iso/Modal'
 import AdGroupEdit from './AdGroupEdit'
 import {Button} from '../Button'
 import {DropdownMenu, MenuItem} from '../DropdownMenu'
+import KeywordInsert from './KeywordInsert'
 
 const style = csjs`
 .header {
@@ -56,7 +57,8 @@ class AdGroup_ extends React.Component {
   }
 
   state = {
-    modalOpen: false
+    modalOpen: false,
+    keywordCreateMode: null
   }
 
   onChange = ({target: {name, value}}) => {
@@ -83,18 +85,27 @@ class AdGroup_ extends React.Component {
     this.createAd('PRODUCT_AD')
   }
 
-  createKeyword = criterionUse => {
-    const {dispatch, params} = this.props
+  createKeyword = keywords => {
+    this.props.dispatch(
+      pushKeywordsAction,
+      this.props.params,
+      this.state.keywordCreateMode,
+      keywords
+    )
 
-    dispatch(pushKeyworddAction, params, criterionUse)
+    this.closeKeywordCreationModal()
+  }
+
+  closeKeywordCreationModal = () => {
+    this.setState({keywordCreateMode: null})
   }
 
   createBiddableKeyword = () => {
-    this.createKeyword('BIDDABLE')
+    this.setState({keywordCreateMode: 'BIDDABLE'})
   }
 
   createNegativeKeyword = () => {
-    this.createKeyword('NEGATIVE')
+    this.setState({keywordCreateMode: 'NEGATIVE'})
   }
 
   toggleModal = () => {
@@ -104,7 +115,7 @@ class AdGroup_ extends React.Component {
   }
 
   render () {
-    const {modalOpen} = this.state
+    const {modalOpen, keywordCreateMode} = this.state
     const editMode = endsWith(this.context.location.pathname, '/edit')
     const {dispatch, params, name, status, ads, keywords, searchTerms} = this.props
     const criterions = groupBy(keywords, 'criterion_use')
@@ -229,6 +240,14 @@ class AdGroup_ extends React.Component {
               close={this.toggleModal}
               onChange={this.onChange}/>
           </Modal>)}
+
+        {keywordCreateMode && (
+          <Modal onEscPress={this.closeKeywordCreationModal} size='small' minHeight={0}>
+            <KeywordInsert
+              save={this.createKeyword}
+              cancel={this.closeKeywordCreationModal}/>
+          </Modal>
+        )}
       </div>
     )
   }
