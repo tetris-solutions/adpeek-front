@@ -520,6 +520,7 @@ module.exports = {
   adDescription2Placeholder: 'Descrição 2',
   displayUrlPlaceholder: 'Url Exibição',
   adContainsBadWords: 'Seu anúncio contém palavras não recomendadas pelo adwords, <a href=\'https://support.google.com/adwordspolicy/answer/6021546\'>confira as regras aqui</a>',
+  keywordsLabel: 'Insira as novas palavras-chave',
   newKeyword: 'Nova palavra-chave',
   keywordPlaceholder: 'Palavra-chave',
   finalUrlLabel: 'URL final',

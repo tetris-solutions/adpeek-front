@@ -39,6 +39,7 @@ class KeywordInsert extends React.Component {
     this.props.save(
       this.state.text
         .split('\n')
+        .filter(Boolean)
         .map(t => parseKeyword(t, true))
     )
   }
@@ -52,6 +53,7 @@ class KeywordInsert extends React.Component {
       matchType,
       text: this.state.text
         .split('\n')
+        .filter(Boolean)
         .map(text => formatKeyword(text, matchType))
         .join('\n')
     })
@@ -77,7 +79,7 @@ class KeywordInsert extends React.Component {
                 required
                 onChange={this.onChangeText}
                 value={this.state.text}
-                placeholder={this.context.messages.newCommentPlaceholder}
+                placeholder={messages.keywordsLabel}
                 className='mdl-textfield__input'
                 name='keywords'/>
             </div>
