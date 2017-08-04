@@ -20,6 +20,8 @@ import AdGroupEdit from './AdGroupEdit'
 import {Button} from '../Button'
 import {DropdownMenu, MenuItem} from '../DropdownMenu'
 import KeywordInsert from './KeywordInsert'
+import head from 'lodash/head'
+import get from 'lodash/get'
 
 const style = csjs`
 .header {
@@ -120,6 +122,8 @@ class AdGroup_ extends React.Component {
     const {dispatch, params, name, status, ads, keywords, searchTerms} = this.props
     const criterions = groupBy(keywords, 'criterion_use')
     const childProps = {params, dispatch, editMode}
+    const firstAdUrl = head(get(head(ads), 'final_urls'))
+
     let color, textColor
 
     switch (upper(status)) {
@@ -189,6 +193,7 @@ class AdGroup_ extends React.Component {
               {map(criterions.BIDDABLE, keyword =>
                 <AdGroupKeyword
                   key={keyword.id}
+                  suggestedUrl={firstAdUrl}
                   {...childProps}
                   {...keyword}/>)}
             </div>) : null}

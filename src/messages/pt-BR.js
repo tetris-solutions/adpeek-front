@@ -529,6 +529,7 @@ module.exports = {
   cpcBidLabel: 'CPC máximo',
   newCustomParam: 'Novo Parâmetro',
   newCampaign: 'Nova campanha',
+  suggestedUrl: 'Sugestão: <a href="{url}" target="_blank">{url}</a>',
   campaignTypeLabel: 'Tipo de campanha',
   salesCountryLabel: 'País de venda',
   merchantLabel: 'Comerciante',

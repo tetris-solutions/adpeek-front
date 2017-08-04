@@ -109,6 +109,7 @@ module.exports = {
   selectOrders: 'Select',
   applyToSelectedOrders: 'Apply',
   copyOfName: 'Copy of {name}',
+  suggestedUrl: 'Suggestion: <a href="{url}" target="_blank">{url}</a>',
   biddableKeywords: 'Keywords',
   negativeKeywords: 'Negative Keywords',
   notYetImplemented: 'Not yet implemented',

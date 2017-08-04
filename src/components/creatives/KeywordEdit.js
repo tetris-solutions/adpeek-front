@@ -24,12 +24,25 @@ class KeywordEdit extends React.Component {
     onChange: PropTypes.func,
     close: PropTypes.func,
     cpc_bid: bidType,
-    final_urls: PropTypes.array
+    final_urls: PropTypes.array,
+    suggestedUrl: PropTypes.string
+  }
+
+  onClickSuggestion = e => {
+    e.preventDefault()
+
+    this.props.onChange({
+      target: {
+        name: 'final_urls',
+        value: this.props.suggestedUrl
+      }
+    })
   }
 
   render () {
-    const {onChange, close} = this.props
+    const {onChange, close, suggestedUrl} = this.props
     const biddable = this.props.criterion_use === 'BIDDABLE'
+    const finalUrl = head(this.props.final_urls) || ''
 
     return (
       <div>
@@ -63,8 +76,17 @@ class KeywordEdit extends React.Component {
                 type='url'
                 name='final_urls'
                 label='finalUrl'
-                value={head(this.props.final_urls) || ''}
+                value={finalUrl}
                 onChange={onChange}/>
+
+              {!finalUrl && suggestedUrl && (
+                <p onClick={this.onClickSuggestion}>
+                  <em>
+                    <Message html url={suggestedUrl}>
+                      suggestedUrl
+                    </Message>
+                  </em>
+                </p>)}
             </div>)}
 
           <div className='mdl-cell mdl-cell--12-col' style={{textAlign: 'right'}}>

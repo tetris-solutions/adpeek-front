@@ -66,6 +66,7 @@ class Keyword extends React.PureComponent {
 
   static propTypes = {
     params: PropTypes.object,
+    suggestedUrl: PropTypes.string,
     dispatch: PropTypes.func,
     draft: PropTypes.bool,
     editMode: PropTypes.bool,
@@ -113,7 +114,7 @@ class Keyword extends React.PureComponent {
 
   render () {
     const {messages} = this.context
-    const {editMode} = this.props
+    const {editMode, suggestedUrl} = this.props
     const keyword = this.props
     const keywordClassName = `${style.keyword} mdl-color-text--${color(keyword.relevance).text} mdl-color--${color(keyword.relevance).bg}`
 
@@ -137,6 +138,7 @@ class Keyword extends React.PureComponent {
           <Modal size='small' minHeight={0} onEscPress={this.toggleModal}>
             <KeywordEdit
               {...keyword}
+              suggestedUrl={suggestedUrl}
               close={this.toggleModal}
               onChange={this.onChange}
               text={keyword.text || messages.newKeyword}/>
