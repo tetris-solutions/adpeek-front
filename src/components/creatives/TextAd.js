@@ -15,6 +15,7 @@ import some from 'lodash/some'
 import debounce from 'lodash/debounce'
 import DisplayUrl from './DisplayUrl'
 import DescriptionLine from './DescriptionLine'
+import {EditLink} from './EditableCreative'
 
 const statusIcon = {
   ENABLED: 'play_arrow',
@@ -25,7 +26,6 @@ const statusIcon = {
 class TextAd extends React.PureComponent {
   static displayName = 'Text-Ad'
   static propTypes = {
-    editMode: PropTypes.bool,
     params: PropTypes.object,
     dispatch: PropTypes.func,
     kpi: kpiType,
@@ -44,11 +44,13 @@ class TextAd extends React.PureComponent {
   }
 
   static contextTypes = {
+    editMode: PropTypes.bool,
+    isOpenModal: PropTypes.func,
+    closeModal: PropTypes.func,
     messages: PropTypes.object
   }
 
   state = {
-    modalOpen: false,
     badWords: false
   }
 
@@ -96,13 +98,8 @@ class TextAd extends React.PureComponent {
     this.setState({badWords})
   }, 1000)
 
-  toggleModal = () => {
-    this.setState({modalOpen: !this.state.modalOpen})
-  }
-
   render () {
-    const {messages} = this.context
-    const {editMode} = this.props
+    const {messages, editMode, closeModal, isOpenModal} = this.context
     const ad = this.props
     const deprecated = ad.type === 'TEXT_AD'
     const badWords = editMode && !deprecated &&
@@ -170,9 +167,13 @@ class TextAd extends React.PureComponent {
             onChange={this.onChange}/>
 
           {editMode && (
-            <a className={`${style.editLink} mdl-color-text--grey-700`} title={ad.status} onClick={this.toggleModal}>
+            <EditLink
+              name='ad'
+              value={ad.id}
+              className={`${style.editLink} mdl-color-text--grey-700`}
+              title={ad.status}>
               <i className='material-icons'>{statusIcon[ad.status]}</i>
-            </a>)}
+            </EditLink>)}
         </div>
 
         {badWords && (
@@ -205,10 +206,10 @@ class TextAd extends React.PureComponent {
             </div>
           </div>)}
 
-        {this.state.modalOpen && (
-          <Modal size='small' minHeight={0} onEscPress={this.toggleModal}>
+        {isOpenModal('ad', ad.id) && (
+          <Modal size='small' minHeight={0} onEscPress={() => closeModal('ad')}>
             <AdEdit
-              close={this.toggleModal}
+              close={() => closeModal('ad')}
               name={join(compact([ad.headline, ad.headline_part_1, ad.headline_part_2]), ' ')}
               status={ad.status}
               onChange={this.onChange}/>
