@@ -21,8 +21,10 @@ import {DropdownMenu, MenuItem} from '../DropdownMenu'
 import KeywordInsert from './KeywordInsert'
 import head from 'lodash/head'
 import get from 'lodash/get'
-import {EditLink} from './EditableCreative'
+import {EditLink, EditableCreative} from './EditableCreative'
+import keys from 'lodash/keys'
 
+const editableContext = keys(EditableCreative.childContextTypes)
 const style = csjs`
 .header {
   font-size: large;
@@ -235,7 +237,11 @@ class AdGroup_ extends React.Component {
             </div>) : null}
 
         {isOpenModal('adGroup', id) && (
-          <Modal onEscPress={() => closeModal('adGroup')} size='medium' minHeight={0}>
+          <Modal
+            provide={editableContext}
+            onEscPress={() => closeModal('adGroup')}
+            size='medium'
+            minHeight={0}>
             <AdGroupEdit
               {...this.props}
               close={() => closeModal('adGroup')}

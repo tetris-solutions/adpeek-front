@@ -11,20 +11,35 @@ import {injectAdGroup} from './inject-adgroup'
 import {node} from '../higher-order/branch'
 import head from 'lodash/head'
 import {
+  style,
   Wrapper,
-  Info,
   SubText,
   list,
   isPlatform,
   isUserList,
   mapExtensions
 } from '../campaign/Utils'
+import {EditLink} from './EditableCreative'
 
 const modalComponent = {
   platform: injectAdGroup(Platform),
   'user-lists': injectAdGroup(UserLists),
   'call-outs': injectAdGroup(CallOut),
   'site-links': injectAdGroup(SiteLinks)
+}
+
+const Info = ({extension, children}) => (
+  <h6 className={style.title}>
+    {children}
+    <EditLink name='extension' value={extension} className={style.edit}>
+      <Message>edit</Message>
+    </EditLink>
+  </h6>
+)
+Info.displayName = 'Info'
+Info.propTypes = {
+  extension: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired
 }
 
 class AdGroupDetails extends React.PureComponent {
@@ -35,26 +50,24 @@ class AdGroupDetails extends React.PureComponent {
     reload: PropTypes.func
   }
 
-  state = {
-    openModal: null
-  }
-
-  setModal = modal => () => {
-    this.setState({openModal: modal})
+  static contextTypes = {
+    getQueryParam: PropTypes.func.isRequired,
+    closeModal: PropTypes.func.isRequired
   }
 
   save = () => {
     return this.props.reload()
-      .then(this.setModal(null))
+      .then(() => this.context.closeModal('extension'))
   }
 
   render () {
-    const Modal = modalComponent[this.state.openModal]
+    const {getQueryParam, closeModal} = this.context
+    const Modal = modalComponent[getQueryParam('extension')]
     const {extensions, criteria} = this.props
 
     return (
       <Wrapper>
-        <Info editClick={this.setModal('platform')}>
+        <Info extension='platform'>
           <Message>platformCriteria</Message>:
           {list(filter(criteria, isPlatform), ({platform}) =>
             <SubText key={platform}>
@@ -62,14 +75,14 @@ class AdGroupDetails extends React.PureComponent {
             </SubText>)}
         </Info>
 
-        <Info editClick={this.setModal('user-lists')}>
+        <Info extension='user-lists'>
           <Message>targetAudience</Message>:
           {list(filter(criteria, isUserList),
             ({user_list_id: id, user_list_name: name}) =>
               <SubText key={id}>{name}</SubText>)}
         </Info>
 
-        <Info editClick={this.setModal('site-links')}>
+        <Info extension='site-links'>
           <Message>siteLinks</Message>:
           {list(mapExtensions(extensions, 'SITELINK',
             ({sitelinkText, sitelinkFinalUrls: {urls}}, index) =>
@@ -80,7 +93,7 @@ class AdGroupDetails extends React.PureComponent {
               </SubText>))}
         </Info>
 
-        <Info editClick={this.setModal('call-outs')}>
+        <Info extension='call-outs'>
           <Message>callOut</Message>:
           {list(mapExtensions(extensions, 'CALLOUT',
             ({calloutText}, index) =>
@@ -93,7 +106,7 @@ class AdGroupDetails extends React.PureComponent {
           <Modal
             {...this.props}
             onSubmit={this.save}
-            cancel={this.setModal(null)}/>)}
+            cancel={() => closeModal('extension')}/>)}
       </Wrapper>
     )
   }
