@@ -6,6 +6,7 @@ import {style, KPI, kpiType} from './AdUtils'
 import {liveEditAdAction, removeAdAction} from '../../actions/update-campaign-creatives'
 import AdEdit from './AdEdit'
 import assign from 'lodash/assign'
+import {EditLink} from './EditableCreative'
 
 const statusIcon = {
   ENABLED: 'play_arrow',
@@ -24,8 +25,10 @@ class ProductAdAd extends React.PureComponent {
     draft: PropTypes.bool
   }
 
-  state = {
-    modalOpen: false
+  static contextTypes = {
+    editMode: PropTypes.bool,
+    isOpenModal: PropTypes.func,
+    closeModal: PropTypes.func
   }
 
   onChange = ({target: {name, value}}) => {
@@ -49,12 +52,8 @@ class ProductAdAd extends React.PureComponent {
       update)
   }
 
-  toggleModal = () => {
-    this.setState({modalOpen: !this.state.modalOpen})
-  }
-
   render () {
-    const {editMode} = this.props
+    const {editMode, isOpenModal, closeModal} = this.context
     const ad = this.props
 
     return (
@@ -71,15 +70,20 @@ class ProductAdAd extends React.PureComponent {
           {ad.kpi && <KPI kpi={ad.kpi}/>}
 
           {editMode && (
-            <a className={`${style.editLink} mdl-color-text--grey-700`} title={ad.status} onClick={this.toggleModal}>
+            <EditLink
+              name='ad'
+              value={ad.id}
+              className={`${style.editLink} mdl-color-text--grey-700`}
+              title={ad.status}
+              onClick={this.toggleModal}>
               <i className='material-icons'>{statusIcon[ad.status]}</i>
-            </a>)}
+            </EditLink>)}
         </div>
 
-        {this.state.modalOpen && (
-          <Modal size='small' minHeight={0} onEscPress={this.toggleModal}>
+        {isOpenModal('ad', ad.id) && (
+          <Modal size='small' minHeight={0} onEscPress={() => closeModal('ad')}>
             <AdEdit
-              close={this.toggleModal}
+              close={() => closeModal('ad')}
               name={<Message>productAd</Message>}
               status={ad.status}
               onChange={this.onChange}/>
