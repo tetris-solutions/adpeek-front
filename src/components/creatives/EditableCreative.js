@@ -72,9 +72,11 @@ export class EditableCreative extends React.Component {
   }
 
   isOpenModal = (name, expectedValue = null) => {
-    return expectedValue
-      ? String(expectedValue) === this.getQueryParam(name)
-      : Boolean(this.getQueryParam(name))
+    return this.editMode() && (
+      expectedValue
+        ? String(expectedValue) === this.getQueryParam(name)
+        : Boolean(this.getQueryParam(name))
+    )
   }
 
   getQueryParam = name => {
