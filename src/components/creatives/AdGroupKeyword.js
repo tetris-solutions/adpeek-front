@@ -7,6 +7,7 @@ import csjs from 'csjs'
 import assign from 'lodash/assign'
 import KeywordEdit from './KeywordEdit'
 import CleanInput from './CleanInput'
+import {inferKeywordMatchType} from '../../functions/keyword-utils'
 
 const style = csjs`
 .keyword {
@@ -46,21 +47,6 @@ const colorPerQualityScore = {
 
 const color = qualityScore => colorPerQualityScore[qualityScore] || colorPerQualityScore.UNKNOWN
 
-function inferMatchType (str) {
-  const firstChar = str[0]
-  const lastChar = str[str.length - 1]
-
-  if (firstChar === '[' && lastChar === ']') {
-    return 'EXACT'
-  }
-
-  if (firstChar === '"' && firstChar === lastChar) {
-    return 'PHRASE'
-  }
-
-  return 'BROAD'
-}
-
 class Keyword extends React.PureComponent {
   static displayName = 'AdGroup-Keyword'
 
@@ -96,7 +82,7 @@ class Keyword extends React.PureComponent {
     }
 
     if (name === 'text') {
-      changes.match_type = inferMatchType(value)
+      changes.match_type = inferKeywordMatchType(value)
     }
 
     if (name === 'final_urls') {

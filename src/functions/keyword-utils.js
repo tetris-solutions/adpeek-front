@@ -1,6 +1,3 @@
-import startsWith from 'lodash/startsWith'
-import endsWith from 'lodash/endsWith'
-
 export const cleanup = text => text.trim().replace(/^["[]/g, '').replace(/["\]]$/g, '')
 
 export function formatKeyword (text, match_type) {
@@ -14,21 +11,26 @@ export function formatKeyword (text, match_type) {
   }
 }
 
+export function inferKeywordMatchType (str) {
+  const firstChar = str[0]
+  const lastChar = str[str.length - 1]
+
+  if (firstChar === '[' && lastChar === ']') {
+    return 'EXACT'
+  }
+
+  if (firstChar === '"' && firstChar === lastChar) {
+    return 'PHRASE'
+  }
+
+  return 'BROAD'
+}
+
 export function parseKeyword (text, asIs = false) {
   text = text.trim()
 
-  const keyword = {
+  return {
     text: asIs ? text : cleanup(text),
-    match_type: 'BROAD'
+    match_type: inferKeywordMatchType(text)
   }
-
-  if (startsWith(text, '[') && endsWith(text, ']')) {
-    keyword.match_type = 'EXACT'
-  }
-
-  if (startsWith(text, '"') && endsWith(text, '"')) {
-    keyword.match_type = 'PHRASE'
-  }
-
-  return keyword
 }
