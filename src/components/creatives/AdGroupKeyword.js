@@ -8,6 +8,7 @@ import assign from 'lodash/assign'
 import KeywordEdit from './KeywordEdit'
 import CleanInput from './CleanInput'
 import {inferKeywordMatchType} from '../../functions/keyword-utils'
+import {EditLink} from './EditableCreative'
 
 const style = csjs`
 .keyword {
@@ -55,7 +56,6 @@ class Keyword extends React.PureComponent {
     suggestedUrl: PropTypes.string,
     dispatch: PropTypes.func,
     draft: PropTypes.bool,
-    editMode: PropTypes.bool,
     id: PropTypes.string,
     relevance: PropTypes.oneOf(['UNKNOWN', 'BELOW_AVERAGE', 'AVERAGE', 'ABOVE_AVERAGE']),
     text: PropTypes.string,
@@ -64,11 +64,10 @@ class Keyword extends React.PureComponent {
   }
 
   static contextTypes = {
+    editMode: PropTypes.bool,
+    isOpenModal: PropTypes.func,
+    closeModal: PropTypes.func,
     messages: PropTypes.object
-  }
-
-  state = {
-    modalOpen: false
   }
 
   onChange = ({target: {name, value}}) => {
@@ -94,24 +93,24 @@ class Keyword extends React.PureComponent {
       changes)
   }
 
-  toggleModal = () => {
-    this.setState({modalOpen: !this.state.modalOpen})
-  }
-
   render () {
-    const {messages} = this.context
-    const {editMode, suggestedUrl} = this.props
+    const {messages, editMode, isOpenModal, closeModal} = this.context
+    const {suggestedUrl} = this.props
     const keyword = this.props
     const keywordClassName = `${style.keyword} mdl-color-text--${color(keyword.relevance).text} mdl-color--${color(keyword.relevance).bg}`
 
     return (
       <div className={keywordClassName}>
         {editMode && (
-          <a className={`${style.icon} mdl-color-text--grey-700`} title={keyword.status} onClick={this.toggleModal}>
+          <EditLink
+            className={`${style.icon} mdl-color-text--grey-700`}
+            title={keyword.status}
+            name='keyword'
+            value={keyword.id}>
             <i className='material-icons'>
               {statusIcon[keyword.status]}
             </i>
-          </a>)}
+          </EditLink>)}
 
         {editMode ? (
           <CleanInput
@@ -120,12 +119,12 @@ class Keyword extends React.PureComponent {
             value={keyword.text}
             onChange={this.onChange}/>) : keyword.text}
 
-        {this.state.modalOpen && (
-          <Modal size='small' minHeight={0} onEscPress={this.toggleModal}>
+        {isOpenModal('keyword', keyword.id) && (
+          <Modal size='small' minHeight={0} onEscPress={() => closeModal('keyword')}>
             <KeywordEdit
               {...keyword}
               suggestedUrl={suggestedUrl}
-              close={this.toggleModal}
+              close={() => closeModal('keyword')}
               onChange={this.onChange}
               text={keyword.text || messages.newKeyword}/>
           </Modal>)}
