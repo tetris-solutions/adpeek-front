@@ -31,7 +31,7 @@ function fitWrapper (wrapper) {
   wrapper.style.height = (window.innerHeight - rect.top - 20) + 'px'
 }
 
-class AdGroups extends React.PureComponent {
+class AdGroups extends React.Component {
   static displayName = 'AdGroups'
 
   static propTypes = {

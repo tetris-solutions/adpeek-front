@@ -5,7 +5,6 @@ import {pure} from 'recompose'
 import {liveEditAdGroupAction} from '../../actions/update-campaign-creatives'
 import {pushAdAction} from '../../actions/create-ad'
 import {pushKeywordsAction} from '../../actions/create-keyword'
-import endsWith from 'lodash/endsWith'
 import AdGroupAd from './AdGroupAd'
 import AdGroupKeyword from './AdGroupKeyword'
 import map from 'lodash/map'
@@ -22,6 +21,7 @@ import {DropdownMenu, MenuItem} from '../DropdownMenu'
 import KeywordInsert from './KeywordInsert'
 import head from 'lodash/head'
 import get from 'lodash/get'
+import {EditLink} from './EditableCreative'
 
 const style = csjs`
 .header {
@@ -45,6 +45,7 @@ class AdGroup_ extends React.Component {
   static displayName = 'AdGroup'
 
   static propTypes = {
+    id: PropTypes.string.isRequired,
     status: PropTypes.string,
     searchTerms: PropTypes.array,
     name: PropTypes.string,
@@ -55,12 +56,12 @@ class AdGroup_ extends React.Component {
   }
 
   static contextTypes = {
-    location: PropTypes.object
-  }
-
-  state = {
-    modalOpen: false,
-    keywordCreateMode: null
+    router: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    editMode: PropTypes.bool,
+    isOpenModal: PropTypes.func,
+    closeModal: PropTypes.func,
+    getQueryParam: PropTypes.func
   }
 
   onChange = ({target: {name, value}}) => {
@@ -91,36 +92,31 @@ class AdGroup_ extends React.Component {
     this.props.dispatch(
       pushKeywordsAction,
       this.props.params,
-      this.state.keywordCreateMode,
+      this.context.getQueryParam('keyword'),
       keywords
     )
 
-    this.closeKeywordCreationModal()
-  }
-
-  closeKeywordCreationModal = () => {
-    this.setState({keywordCreateMode: null})
-  }
-
-  createBiddableKeyword = () => {
-    this.setState({keywordCreateMode: 'BIDDABLE'})
-  }
-
-  createNegativeKeyword = () => {
-    this.setState({keywordCreateMode: 'NEGATIVE'})
-  }
-
-  toggleModal = () => {
-    this.setState({
-      modalOpen: !this.state.modalOpen
-    })
+    this.context.closeModal('keyword')
   }
 
   render () {
-    const {modalOpen, keywordCreateMode} = this.state
-    const editMode = endsWith(this.context.location.pathname, '/edit')
-    const {dispatch, params, name, status, ads, keywords, searchTerms} = this.props
-    const criterions = groupBy(keywords, 'criterion_use')
+    const {
+      dispatch,
+      params,
+      id,
+      name,
+      status,
+      ads,
+      keywords,
+      searchTerms
+    } = this.props
+    const {
+      editMode,
+      isOpenModal,
+      closeModal
+    } = this.context
+
+    const criteria = groupBy(keywords, 'criterion_use')
     const childProps = {params, dispatch, editMode}
     const firstAdUrl = head(get(head(ads), 'final_urls'))
 
@@ -150,11 +146,11 @@ class AdGroup_ extends React.Component {
             : name}
 
           {editMode && (
-            <a className={style.settingsButton} onClick={this.toggleModal}>
+            <EditLink name='adGroup' value={id} className={style.settingsButton}>
               <i className='material-icons'>
                 arrow_drop_down
               </i>
-            </a>)}
+            </EditLink>)}
         </header>
 
         {map(ads, ad =>
@@ -184,13 +180,13 @@ class AdGroup_ extends React.Component {
             </Button>
           </div>)}
 
-        {editMode || criterions.BIDDABLE
+        {editMode || criteria.BIDDABLE
           ? (
             <div>
               <h5>
                 <Message>biddableKeywords</Message>
               </h5>
-              {map(criterions.BIDDABLE, keyword =>
+              {map(criteria.BIDDABLE, keyword =>
                 <AdGroupKeyword
                   key={keyword.id}
                   suggestedUrl={firstAdUrl}
@@ -200,18 +196,18 @@ class AdGroup_ extends React.Component {
 
         {editMode && (
           <div className={style.newBtRow}>
-            <Button className='mdl-button' onClick={this.createBiddableKeyword}>
+            <EditLink className='mdl-button' name='keyword' value='BIDDABLE'>
               <Message>newKeyword</Message>
-            </Button>
+            </EditLink>
           </div>)}
 
-        {editMode || criterions.NEGATIVE
+        {editMode || criteria.NEGATIVE
           ? (
             <div>
               <h5>
                 <Message>negativeKeywords</Message>
               </h5>
-              {map(criterions.NEGATIVE, keyword =>
+              {map(criteria.NEGATIVE, keyword =>
                 <AdGroupKeyword
                   key={keyword.id}
                   {...childProps}
@@ -220,9 +216,9 @@ class AdGroup_ extends React.Component {
 
         {editMode && (
           <div className={style.newBtRow}>
-            <Button className='mdl-button' onClick={this.createNegativeKeyword}>
+            <EditLink className='mdl-button' name='keyword' value='NEGATIVE'>
               <Message>newKeyword</Message>
-            </Button>
+            </EditLink>
           </div>)}
 
         {searchTerms
@@ -238,19 +234,19 @@ class AdGroup_ extends React.Component {
                     text={query}/>)}
             </div>) : null}
 
-        {modalOpen && (
-          <Modal onEscPress={this.toggleModal} size='medium' minHeight={0}>
+        {isOpenModal('adGroup', id) && (
+          <Modal onEscPress={() => closeModal('adGroup')} size='medium' minHeight={0}>
             <AdGroupEdit
               {...this.props}
-              close={this.toggleModal}
+              close={() => closeModal('adGroup')}
               onChange={this.onChange}/>
           </Modal>)}
 
-        {keywordCreateMode && (
-          <Modal onEscPress={this.closeKeywordCreationModal} size='small' minHeight={0}>
+        {(isOpenModal('keyword', 'BIDDABLE') || isOpenModal('keyword', 'NEGATIVE')) && (
+          <Modal onEscPress={() => closeModal('keyword')} size='small' minHeight={0}>
             <KeywordInsert
               save={this.createKeyword}
-              cancel={this.closeKeywordCreationModal}/>
+              cancel={() => closeModal('keyword')}/>
           </Modal>
         )}
       </div>

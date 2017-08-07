@@ -20,7 +20,7 @@ import flatten from 'lodash/flatten'
 import map from 'lodash/map'
 import uniq from 'lodash/uniq'
 import chunk from 'lodash/chunk'
-import endsWith from 'lodash/endsWith'
+import {EditableCreative} from './EditableCreative'
 
 const statusIcons = {
   enabled: 'play_arrow',
@@ -42,6 +42,7 @@ class Creatives extends React.Component {
   }
 
   static contextTypes = {
+    editMode: PropTypes.bool.isRequired,
     location: PropTypes.object.isRequired
   }
 
@@ -226,7 +227,7 @@ class Creatives extends React.Component {
   }
 
   render () {
-    const editMode = endsWith(this.context.location.pathname, '/edit')
+    const {editMode} = this.context
     const {
       saving,
       loadingSearchTerms,
@@ -239,7 +240,7 @@ class Creatives extends React.Component {
     const {adGroups, folder} = this.props
 
     const inner = this.isAdwords()
-      ? <AdGroups location={this.context.location} adGroups={adGroups}/>
+      ? <AdGroups adGroups={adGroups}/>
       : <NotImplemented/>
 
     return (
@@ -308,4 +309,7 @@ class Creatives extends React.Component {
   }
 }
 
-export default Creatives
+export default props =>
+  <EditableCreative>
+    <Creatives {...props}/>
+  </EditableCreative>
