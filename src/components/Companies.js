@@ -40,7 +40,7 @@ Company.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     reports: PropTypes.array,
-    icon: PropTypes.string.isRequired
+    icon: PropTypes.string
   }).isRequired,
   params: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
