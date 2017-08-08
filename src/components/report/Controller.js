@@ -127,7 +127,7 @@ class ReportController extends React.Component {
     const moduleCount = size(report.modules)
 
     const newModule = {
-      type: 'line',
+      type: 'table',
       name: defaultModuleName + ' ' + moduleCount,
       x: 0,
       y,
