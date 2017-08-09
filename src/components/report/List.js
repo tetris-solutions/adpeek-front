@@ -25,6 +25,22 @@ import {deleteReportAction} from '../../actions/delete-report'
 import ShareButton from './ShareButton'
 import csjs from 'csjs'
 import Icon from './Icon'
+import isEmpty from 'lodash/isEmpty'
+import find from 'lodash/find'
+
+const isCompanyShared = ({is_private, is_global}) => (
+  !is_private && !is_global
+)
+
+const sorted = ls => orderBy(ls, ['is_default_report', 'creation'], ['desc', 'desc'])
+
+function grouped (reports) {
+  return {
+    private: sorted(filter(reports, 'is_private')),
+    company: sorted(filter(reports, isCompanyShared)),
+    global: sorted(filter(reports, 'is_global'))
+  }
+}
 
 const style = csjs`
 .descr {
@@ -44,6 +60,16 @@ const style = csjs`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+.defaultReport { 
+  text-align: center;
+}
+.defaultReport a {
+  color: inherit;
+  text-decoration: none
+}
+.defaultReport strong {
+  text-decoration: underline
 }
 .update {
   font-size: x-small;
@@ -148,10 +174,21 @@ class Reports extends React.Component {
 
   render () {
     const searchValue = cleanStr(this.state.searchValue)
-    const {reports, path, dispatch, params} = this.props
-    const matchingReports = searchValue
-      ? filter(reports, ({name}) => includes(cleanStr(name), searchValue))
-      : reports
+    const {path, dispatch, params} = this.props
+    const reports = searchValue
+      ? filter(this.props.reports, ({name}) => includes(cleanStr(name), searchValue))
+      : this.props.reports
+    const sections = grouped(reports)
+
+    const renderThumb = (report, index) =>
+      <Report
+        key={index}
+        {...report}
+        dispatch={dispatch}
+        params={params}
+        path={path}/>
+
+    const defaultReport = find(reports, 'is_default_report')
 
     return (
       <div>
@@ -165,13 +202,43 @@ class Reports extends React.Component {
           <SearchBox onChange={this.onChange}/>
         </SubHeader>
         <Page>
-          <Container>{map(orderBy(matchingReports, ['creation'], ['desc']), (report, index) =>
-            <Report
-              key={index}
-              {...report}
-              dispatch={dispatch}
-              params={params}
-              path={path}/>)}
+          <Container>
+            {defaultReport && (
+              <p className={style.defaultReport}>
+                <em>
+                  <Link to={`${path}/report/${defaultReport.id}`}>
+                    <Message html name={defaultReport.name}>
+                      defaultReportLabel
+                    </Message>
+                  </Link>
+                </em>
+              </p>
+            )}
+
+            {!isEmpty(sections.global) && (
+              <h5>
+                <Message>globalReports</Message>
+              </h5>)}
+
+            {!isEmpty(sections.global) && (
+              map(sections.global, renderThumb))}
+
+            {!isEmpty(sections.private) && (
+              <h5>
+                <Message>privateReports</Message>
+              </h5>)}
+
+            {!isEmpty(sections.private) && (
+              map(sections.private, renderThumb))}
+
+            {!isEmpty(sections.company) && (
+              <h5>
+                <Message>companyReports</Message>
+              </h5>)}
+
+            {!isEmpty(sections.company) && (
+              map(sections.company, renderThumb))}
+
           </Container>
         </Page>
       </div>

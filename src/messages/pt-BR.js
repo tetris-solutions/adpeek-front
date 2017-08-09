@@ -193,6 +193,10 @@ module.exports = {
   moduleContent: 'Configurar Relatório',
   filterModuleResult: 'Filtrar Resultado',
   reports: 'Relatórios',
+  defaultReportLabel: 'ir para relatório padrão, "<strong>{name}</strong>"',
+  privateReports: 'Seus relatórios',
+  companyReports: 'Relatórios da empresa',
+  globalReports: 'Relatórios nativos',
   // breadcrumbs
   companyBreadcrumb: 'Empresa',
   workspaceBreadcrumb: 'Área de trabalho',

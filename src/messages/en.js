@@ -195,6 +195,10 @@ module.exports = {
   moduleContent: 'Report Options',
   filterModuleResult: 'Filter Result',
   reports: 'Reports',
+  defaultReportLabel: 'go to default report "<strong>{name}</strong>"',
+  privateReports: 'Private reports',
+  companyReports: 'Company reports',
+  globalReports: 'Native reports',
   // breadcrumbs
   companyBreadcrumb: 'Company',
   workspaceBreadcrumb: 'Workspace',
