@@ -23,7 +23,7 @@ pipeline {
     }
     stage('Build') {
       steps {
-        sh 'yarn'
+        sh 'npm install'
         sh 'npm run bundle'
       }
     }
@@ -35,7 +35,7 @@ pipeline {
     stage ('Archive') {
       steps {
         sh 'rm -rf node_modules'
-        sh 'yarn install --production'
+        sh 'npm install --production'
         sh "tar -zcf build.${env.BUILD_NUMBER}.tar.gz .env package.json bin lib public node_modules"
         archive "build.${env.BUILD_NUMBER}.tar.gz"
       }
