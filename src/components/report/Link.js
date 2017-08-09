@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {loadReportsAction} from '../../actions/load-reports'
 import get from 'lodash/get'
+import Fence from '../Fence'
 
 class ReportLink extends React.Component {
   static displayName = 'Report-Link'
@@ -11,6 +12,7 @@ class ReportLink extends React.Component {
       PropTypes.string,
       PropTypes.func
     ]).isRequired,
+    canBrowseReports: PropTypes.bool,
     params: PropTypes.object.isRequired,
     children: PropTypes.node.isRequired,
     reports: PropTypes.array,
@@ -22,7 +24,9 @@ class ReportLink extends React.Component {
   }
 
   componentDidMount () {
-    this.loadReports()
+    if (!this.props.canBrowseReports) {
+      this.loadReports()
+    }
   }
 
   loadReports = () => {
@@ -35,7 +39,7 @@ class ReportLink extends React.Component {
   }
 
   getReportUrl = () => {
-    const {params, reports} = this.props
+    const {params, reports, canBrowseReports} = this.props
     const {company, workspace, folder} = params
 
     let baseUrl = `/company/${company}`
@@ -51,8 +55,9 @@ class ReportLink extends React.Component {
     const mainReportId = get(reports, [0, 'id'])
 
     if (!mainReportId) {
-      // @todo check permissions
-      return `${baseUrl}/reports`
+      return canBrowseReports
+        ? `${baseUrl}/reports`
+        : '#'
     }
 
     return `${baseUrl}/report/${mainReportId}`
@@ -70,4 +75,7 @@ class ReportLink extends React.Component {
   }
 }
 
-export default ReportLink
+export default props =>
+  <Fence canBrowseReports>{({canBrowseReports}) =>
+    <ReportLink {...props} canBrowseReports={canBrowseReports}/>}
+  </Fence>
