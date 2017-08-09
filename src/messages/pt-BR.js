@@ -197,6 +197,7 @@ module.exports = {
   privateReports: 'Seus relatórios',
   companyReports: 'Relatórios da empresa',
   globalReports: 'Relatórios nativos',
+  toggleGlobalReports: 'Exibir relatórios nativos',
   // breadcrumbs
   companyBreadcrumb: 'Empresa',
   workspaceBreadcrumb: 'Área de trabalho',

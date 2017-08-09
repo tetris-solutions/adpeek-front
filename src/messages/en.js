@@ -199,6 +199,7 @@ module.exports = {
   privateReports: 'Private reports',
   companyReports: 'Company reports',
   globalReports: 'Native reports',
+  toggleGlobalReports: 'Show native reports',
   // breadcrumbs
   companyBreadcrumb: 'Company',
   workspaceBreadcrumb: 'Workspace',

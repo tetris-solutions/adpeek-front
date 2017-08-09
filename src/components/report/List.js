@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
 import {styledFunctionalComponent} from '../higher-order/styled'
+import loglevel from 'loglevel'
 import {branchChildren} from '../higher-order/branch'
 import {inferLevelFromProps} from '../../functions/infer-level-from-params'
 import map from 'lodash/map'
@@ -27,6 +28,9 @@ import csjs from 'csjs'
 import Icon from './Icon'
 import isEmpty from 'lodash/isEmpty'
 import find from 'lodash/find'
+import Switch from '../Switch'
+import concat from 'lodash/concat'
+import values from 'lodash/values'
 
 const isCompanyShared = ({is_private, is_global}) => (
   !is_private && !is_global
@@ -76,6 +80,9 @@ const style = csjs`
   position: absolute;
   margin-top: .5em;
   right: 1em;
+}
+.switch {
+  float: right
 }`
 
 const cleanStr = str => trim(deburr(lowerCase(str)))
@@ -154,6 +161,26 @@ Report.contextTypes = {
   moment: PropTypes.func.isRequired
 }
 
+const safely = (fn, fallback) => (...args) => {
+  try {
+    return fn(...args)
+  } catch (e) {
+    loglevel.error(e)
+    return fallback
+  }
+}
+
+const showNativeReports = safely(
+  () => window.localStorage.showNativeReports !== 'no',
+  true
+)
+
+const setNativeReportsFlag = safely(val => {
+  window.localStorage.showNativeReports = val
+    ? 'yes'
+    : 'no'
+})
+
 class Reports extends React.Component {
   static displayName = 'Reports'
 
@@ -172,12 +199,19 @@ class Reports extends React.Component {
     this.setState({searchValue})
   }
 
+  onSwitch = ({target: {checked}}) => {
+    setNativeReportsFlag(checked)
+    this.forceUpdate()
+  }
+
   render () {
     const searchValue = cleanStr(this.state.searchValue)
     const {path, dispatch, params} = this.props
+
     const reports = searchValue
       ? filter(this.props.reports, ({name}) => includes(cleanStr(name), searchValue))
       : this.props.reports
+
     const sections = grouped(reports)
 
     const renderThumb = (report, index) =>
@@ -188,7 +222,16 @@ class Reports extends React.Component {
         params={params}
         path={path}/>
 
-    const defaultReport = find(reports, 'is_default_report')
+    const defaultFlag = showNativeReports()
+
+    if (!defaultFlag) {
+      delete sections.global
+    }
+
+    const defaultReport = find(
+      concat(...values(sections)),
+      'is_default_report'
+    )
 
     return (
       <div>
@@ -215,6 +258,14 @@ class Reports extends React.Component {
               </p>
             )}
 
+            <span className={style.switch}>
+              <Switch
+                checked={defaultFlag}
+                name='toggleGlobalReports'
+                label={<Message>toggleGlobalReports</Message>}
+                onChange={this.onSwitch}/>
+            </span>
+
             {!isEmpty(sections.global) && (
               <h5>
                 <Message>globalReports</Message>
@@ -238,7 +289,6 @@ class Reports extends React.Component {
 
             {!isEmpty(sections.company) && (
               map(sections.company, renderThumb))}
-
           </Container>
         </Page>
       </div>
