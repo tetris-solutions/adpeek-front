@@ -58,7 +58,7 @@ const style = csjs`
 export const NavBt = props => {
   const {tag: Tag, children, icon} = props
   const otherProps = omit(props, 'tag', 'icon', 'children')
-  const className = `mdl-button mdl-button--raised mdl-button--colored mdl-color--primary-dark ${style.button}`
+  const className = `mdl-button mdl-button--raised mdl-color-text--white mdl-color--primary-dark ${style.button}`
 
   return (
     <Tag className={className} {...otherProps}>

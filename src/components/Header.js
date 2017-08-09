@@ -21,7 +21,7 @@ const style = csjs`
 }
 .tetris {
   width: auto;
-  height: 24px;
+  height: 54px;
 }
 .manager {
   width: auto;
@@ -181,11 +181,10 @@ class Header extends React.Component {
     }
 
     return (
-      <header className={`mdl-layout__header mdl-color--primary-dark ${style.header}`}>
+      <header className={`mdl-layout__header mdl-color--grey-600 ${style.header}`}>
         <div className={`mdl-layout__header-row ${style.row}`}>
           <GoHome {...homeProps}>
-            <img className={style.tetris} src={'/img/tetris-logo.png'}/>
-            <img className={style.manager} src={'/img/manager-logo.png'}/>
+            <img className={style.tetris} src={'/img/manager_neg_main.png'}/>
           </GoHome>
           <div className='mdl-layout-spacer'/>
 

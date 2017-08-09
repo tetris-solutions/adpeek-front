@@ -29,15 +29,21 @@ const style = csjs`
 .header {
   font-size: large;
   font-weight: 600;
-  padding: .7em 0;
+  padding: 1em 0;
   text-align: center;
+  position: relative;
+}
+.header > h5 {
+  margin: 0;
 }
 .settingsButton {
   color: white;
   cursor: pointer;
   font-size: smaller;
-  float: right;
-  margin-right: .3em;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: .5em;
 }
 .newBtRow {
   text-align: center;
@@ -143,16 +149,18 @@ class AdGroup_ extends React.Component {
     return (
       <div>
         <header title={status} className={headerClassName}>
-          {editMode
-            ? <CleanInput name='name' value={name} onChange={this.onChange}/>
-            : name}
+          <h5>
+            {editMode
+              ? <CleanInput name='name' value={name} onChange={this.onChange}/>
+              : name}
 
-          {editMode && (
-            <EditLink name='adGroup' value={id} className={style.settingsButton}>
-              <i className='material-icons'>
-                arrow_drop_down
-              </i>
-            </EditLink>)}
+            {editMode && (
+              <EditLink name='adGroup' value={id} className={style.settingsButton}>
+                <i className='material-icons'>
+                  arrow_drop_down
+                </i>
+              </EditLink>)}
+          </h5>
         </header>
 
         {map(ads, ad =>

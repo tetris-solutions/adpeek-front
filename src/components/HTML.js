@@ -59,20 +59,15 @@ const HTML = ({state, children, css, helmet}) => (
       {helmet.title.toComponent()}
 
       <link rel='shortcut icon' type='image/png' href='/img/favicon.png'/>
-      <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' type='text/css'/>
+      <link href='https://fonts.googleapis.com/css?family=Open+Sans|Roboto+Slab' rel='stylesheet'/>
       <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons'/>
 
-      <link
-        rel='stylesheet'
-        href={`https://code.getmdl.io/1.3.0/material.${state.debugMode ? 'brown-deep_purple' : 'blue-indigo'}.min.css`}/>
-
+      <link rel='stylesheet' href='/css/material.grey-blue.min.css'/>
       <link rel='stylesheet' href='/css/mdl-selectfield.min.css'/>
       <link rel='stylesheet' href='/css/animate.min.css'/>
-
       <link rel='stylesheet' href='/css/react-s-alert.css'/>
       <link rel='stylesheet' href='/css/react-s-alert-slide.css'/>
       <link rel='stylesheet' href='/css/react-s-alert-flip.css'/>
-
       <link rel='stylesheet' href='/css/react-grid-layout.css'/>
       <link rel='stylesheet' href='/css/react-resizable.css'/>
 

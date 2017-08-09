@@ -31,7 +31,7 @@ SubHeaderButton.propTypes = {
 
 const SubHeader = ({title, children}) => (
   <header className='mdl-layout__header'>
-    <div className={`mdl-layout__header-row mdl-color--primary-dark ${style.row}`}>
+    <div className={`mdl-layout__header-row mdl-color--primary-dark ${style.row} mdl-color-text--white`}>
       <Breadcrumbs title={title}/>
       <div className='mdl-layout-spacer'/>
       <span>{children}</span>

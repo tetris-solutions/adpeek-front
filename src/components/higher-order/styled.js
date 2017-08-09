@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import assign from 'lodash/assign'
+import {isES6Component} from '../../functions/component-utils'
 
 export const styledFunctionalComponent = (fnComponent, style) => class extends React.Component {
   static displayName = fnComponent.displayName
@@ -53,8 +54,6 @@ function inherit (Component, style) {
     }
   }
 }
-
-const isES6Component = c => c.prototype.mixins === undefined
 
 export const styledComponent = (Component, style) =>
   isES6Component(Component)
