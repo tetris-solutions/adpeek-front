@@ -22,7 +22,7 @@ const Workspace = ({workspace, params, dispatch, reload}) => {
 
   return (
     <ThumbLink to={`/company/${params.company}/workspace/${workspace.id}`} title={workspace.name}>
-      <Cap bg={workspace.hidden ? 'grey-600' : undefined}>
+      <Cap bg={workspace.hidden ? 'grey-500' : undefined}>
         {workspace.name}
       </Cap>
 
