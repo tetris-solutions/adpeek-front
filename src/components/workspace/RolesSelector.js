@@ -4,7 +4,7 @@ import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
 import CheckBox from '../Checkbox'
 import includes from 'lodash/includes'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 
 export class WorkspaceRolesSelector extends React.Component {
   static displayName = 'Workspace-Roles-Selector'
@@ -41,4 +41,4 @@ export class WorkspaceRolesSelector extends React.Component {
   }
 }
 
-export default node('user', 'company', WorkspaceRolesSelector)
+export default routeParamsBasedBranch('user', 'company', WorkspaceRolesSelector)

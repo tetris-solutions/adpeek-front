@@ -192,7 +192,7 @@ export function branch (mapping, Component = Placeholder, maxWatchDepth = 1) {
  * @param {Number} [maxDepthWatch=1] max tree depth to watch
  * @return {Function} extended component
  */
-export function derivative (parent, name, resolverOrComponent, Component, maxDepthWatch = 1) {
+export function relativeBranch (parent, name, resolverOrComponent, Component, maxDepthWatch = 1) {
   const resolver = Component
     ? resolverOrComponent
     : () => name
@@ -238,7 +238,7 @@ export function derivative (parent, name, resolverOrComponent, Component, maxDep
   return Temp
 }
 
-export const collection = derivative
+export const branchChildren = relativeBranch
 
 /**
  * @param {String|Function} parent parent cursor name
@@ -247,8 +247,8 @@ export const collection = derivative
  * @param {Number} [maxDepthWatch=1] max depth for watching
  * @return {Function} extended component
  */
-export const node = (parent, name, Component = Placeholder, maxDepthWatch = 1) =>
-  derivative(parent, name, (node, {params}) => {
+export const routeParamsBasedBranch = (parent, name, Component = Placeholder, maxDepthWatch = 1) =>
+  relativeBranch(parent, name, (node, {params}) => {
     if (!node) return null
 
     const list = isArray(node)
@@ -274,7 +274,7 @@ export function many (maps, Component) {
     if (isObject(mapping)) {
       Component = branch(mapping, Component)
     } else {
-      Component = node(...mapping.concat([Component]))
+      Component = routeParamsBasedBranch(...mapping.concat([Component]))
     }
   })
 

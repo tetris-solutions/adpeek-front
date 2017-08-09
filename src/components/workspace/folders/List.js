@@ -11,7 +11,7 @@ import PropTypes from 'prop-types'
 import Fence from '../../Fence'
 import SubHeader, {SubHeaderButton} from '../../SubHeader'
 import SearchBox from '../../HeaderSearchBox'
-import {collection} from '../../higher-order/branch'
+import {branchChildren} from '../../higher-order/branch'
 import {Container} from '../../ThumbLink'
 import {Link} from 'react-router'
 import Page from '../../Page'
@@ -64,7 +64,7 @@ List.propTypes = {
   searchValue: PropTypes.string,
   folders: PropTypes.array
 }
-List = collection('workspace', 'folders', List)
+List = branchChildren('workspace', 'folders', List)
 
 export class Folders extends React.Component {
   static displayName = 'Folders'

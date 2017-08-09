@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
 import {styledFunctionalComponent} from '../higher-order/styled'
-import {collection} from '../higher-order/branch'
+import {branchChildren} from '../higher-order/branch'
 import {inferLevelFromProps} from '../../functions/infer-level-from-params'
 import map from 'lodash/map'
 import orderBy from 'lodash/orderBy'
@@ -194,5 +194,5 @@ Wrapper.propTypes = {
   params: PropTypes.object
 }
 
-export default collection(inferLevelFromProps, 'reports',
+export default branchChildren(inferLevelFromProps, 'reports',
   styledFunctionalComponent(Wrapper, style))

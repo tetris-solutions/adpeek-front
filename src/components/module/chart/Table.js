@@ -1,6 +1,6 @@
 import concat from 'lodash/concat'
 import get from 'lodash/get'
-import {node} from '../../higher-order/branch'
+import {routeParamsBasedBranch} from '../../higher-order/branch'
 import csjs from 'csjs'
 import cx from 'classnames'
 import find from 'lodash/find'
@@ -474,7 +474,7 @@ VideoWrapper.propTypes = {
   company: PropTypes.object
 }
 
-const WithChannel = node('user', 'company', VideoWrapper)
+const WithChannel = routeParamsBasedBranch('user', 'company', VideoWrapper)
 
 const Wrapper = props => {
   if (props.entity.id === 'Video') {

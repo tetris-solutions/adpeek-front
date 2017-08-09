@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import Module from '../module/Container'
 import GridLayout from 'react-grid-layout'
 import sizeMe from 'react-sizeme'
-import {derivative} from '../higher-order/branch'
+import {relativeBranch} from '../higher-order/branch'
 import findIndex from 'lodash/findIndex'
 
 let ModuleWrapper = props => (
@@ -18,7 +18,7 @@ ModuleWrapper.propTypes = {
   module: PropTypes.object.isRequired
 }
 
-ModuleWrapper = derivative(
+ModuleWrapper = relativeBranch(
   'report',
   'module',
   ({modules}, {id}) => ['modules', findIndex(modules, {id})],

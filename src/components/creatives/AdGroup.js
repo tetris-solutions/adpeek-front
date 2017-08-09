@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 import {pure} from 'recompose'
 import {liveEditAdGroupAction} from '../../actions/update-campaign-creatives'
 import {pushAdAction} from '../../actions/create-ad'
@@ -271,4 +271,4 @@ AdGroupWrapper.propTypes = {
 
 const level = ({params}) => params.campaign ? 'campaign' : 'folder'
 
-export default node(level, 'adGroup', pure(AdGroupWrapper), Infinity)
+export default routeParamsBasedBranch(level, 'adGroup', pure(AdGroupWrapper), Infinity)

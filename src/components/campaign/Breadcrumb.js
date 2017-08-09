@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Link from '../BreadcrumbLink'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 
 export const CampaignBreadcrumb = ({params: {company, workspace, folder}, campaign}, {messages: {campaignBreadcrumb}}) => (
   <Link
@@ -27,4 +27,4 @@ CampaignBreadcrumb.contextTypes = {
   messages: PropTypes.object
 }
 
-export default node('folder', 'campaign', CampaignBreadcrumb)
+export default routeParamsBasedBranch('folder', 'campaign', CampaignBreadcrumb)

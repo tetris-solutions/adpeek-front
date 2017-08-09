@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 import Message from 'tetris-iso/Message'
 import startsWith from 'lodash/startsWith'
 import {Navigation, NavBt, NavLink, NavBts, Name} from '../Navigation'
@@ -95,4 +95,4 @@ class CampaignAside extends React.PureComponent {
   }
 }
 
-export default node('folder', 'campaign', CampaignAside)
+export default routeParamsBasedBranch('folder', 'campaign', CampaignAside)

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import OrdersClone from '../order/list/Cloner'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 
 export const Orders = ({workspace: {orders}}) =>
   <OrdersClone orders={orders}/>
@@ -13,4 +13,4 @@ Orders.propTypes = {
   })
 }
 
-export default node('company', 'workspace', Orders)
+export default routeParamsBasedBranch('company', 'workspace', Orders)

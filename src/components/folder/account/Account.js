@@ -1,7 +1,7 @@
 import React from 'react'
 import Message from 'tetris-iso/Message'
 import {breakOnEmptyProp} from '../../higher-order/not-nullable'
-import {derivative} from '../../higher-order/branch'
+import {relativeBranch} from '../../higher-order/branch'
 import {loadAccountDetailsAction} from '../../../actions/load-account-details'
 import PropTypes from 'prop-types'
 import SubHeader from '../../SubHeader'
@@ -103,5 +103,5 @@ class FolderAccount extends React.PureComponent {
   }
 }
 
-export default derivative('folder', 'account',
+export default relativeBranch('folder', 'account',
   breakOnEmptyProp(FolderAccount, 'account'))

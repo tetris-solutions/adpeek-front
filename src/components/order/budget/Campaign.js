@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import campaignType from '../../../propTypes/campaign'
-import {node} from '../../higher-order/branch'
+import {routeParamsBasedBranch} from '../../higher-order/branch'
 import isEmpty from 'lodash/isEmpty'
 import get from 'lodash/get'
 import cx from 'classnames'
@@ -111,7 +111,7 @@ class BudgetCampaign extends React.Component {
   }
 }
 
-const B = node('folder', 'campaign', BudgetCampaign)
+const B = routeParamsBasedBranch('folder', 'campaign', BudgetCampaign)
 
 const C = props =>
   <B {...props} params={{campaign: props.campaign.id}}/>

@@ -7,7 +7,7 @@ import Fence from '../Fence'
 import {Navigation, NavBt, NavLink, NavBts, Name} from '../Navigation'
 import DeleteButton from '../DeleteButton'
 import {deleteFolderAction} from '../../actions/delete-folder'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 import get from 'lodash/get'
 
 class FolderAside extends React.PureComponent {
@@ -96,4 +96,4 @@ class FolderAside extends React.PureComponent {
   }
 }
 
-export default node('workspace', 'folder', FolderAside)
+export default routeParamsBasedBranch('workspace', 'folder', FolderAside)

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Link from '../BreadcrumbLink'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 
 export const CompanyBreadcrumb = ({company: {id, name}}, {messages: {companyBreadcrumb}}) => (
   <Link to={`/company/${id}`} title={companyBreadcrumb}>
@@ -21,4 +21,4 @@ CompanyBreadcrumb.contextTypes = {
   messages: PropTypes.object
 }
 
-export default node('user', 'company', CompanyBreadcrumb)
+export default routeParamsBasedBranch('user', 'company', CompanyBreadcrumb)

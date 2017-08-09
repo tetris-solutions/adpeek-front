@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 import AutoSuggest from '../AutoSuggest'
 import get from 'lodash/get'
 import map from 'lodash/map'
@@ -74,8 +74,8 @@ class Selector extends React.Component {
   }
 }
 
-const injectAccount = C => node('company', 'account', C)
-const injectProperty = C => node('account', 'property', C)
+const injectAccount = C => routeParamsBasedBranch('company', 'account', C)
+const injectProperty = C => routeParamsBasedBranch('account', 'property', C)
 
 const PropertySelector_ = injectAccount(Selector)
 

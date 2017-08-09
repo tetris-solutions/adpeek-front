@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Link from '../BreadcrumbLink'
 import join from 'lodash/join'
 import compact from 'lodash/compact'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 import {inferLevelFromProps} from '../../functions/infer-level-from-params'
 
 export function ReportBreadcrumb ({params: {company, workspace, folder}, report}, {messages: {reportBreadcrumb}}) {
@@ -39,4 +39,4 @@ ReportBreadcrumb.contextTypes = {
   messages: PropTypes.object
 }
 
-export default node(inferLevelFromProps, 'report', ReportBreadcrumb)
+export default routeParamsBasedBranch(inferLevelFromProps, 'report', ReportBreadcrumb)

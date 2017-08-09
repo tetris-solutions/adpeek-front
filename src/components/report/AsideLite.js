@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 import {inferLevelFromProps} from '../../functions/infer-level-from-params'
 import {Navigation, NavBts, NavBt} from '../Navigation'
 import Message from 'tetris-iso/Message'
@@ -32,4 +32,4 @@ AsideLite.propTypes = {
   setIndexMode: PropTypes.func
 }
 
-export default node(inferLevelFromProps, 'report', enhance(AsideLite))
+export default routeParamsBasedBranch(inferLevelFromProps, 'report', enhance(AsideLite))

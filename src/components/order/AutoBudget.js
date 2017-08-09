@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 import Input from '../Input'
 import AutoBudgetLogs from './AutoBudgetLogs'
 
@@ -51,4 +51,4 @@ class OrderAutoBudget extends React.Component {
   }
 }
 
-export default node('folder', 'order', OrderAutoBudget)
+export default routeParamsBasedBranch('folder', 'order', OrderAutoBudget)

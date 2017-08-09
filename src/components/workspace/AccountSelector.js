@@ -10,7 +10,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {removeFromStart} from '../../functions/remove-from-start'
 import {loadCompanyAccountsAction} from '../../actions/load-company-accounts'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 import {styledComponent} from '../higher-order/styled'
 import {
   style,
@@ -198,5 +198,5 @@ class WorkspaceAccountSelector extends React.Component {
   }
 }
 
-export default node('user', 'company',
+export default routeParamsBasedBranch('user', 'company',
   styledComponent(WorkspaceAccountSelector, style))

@@ -2,7 +2,7 @@ import map from 'lodash/map'
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import PropTypes from 'prop-types'
-import {branch, node} from './higher-order/branch'
+import {branch, routeParamsBasedBranch} from './higher-order/branch'
 import SubHeader from './SubHeader'
 import {Container, Gear, Title, ThumbLink} from './ThumbLink'
 import {DropdownMenu, MenuItem} from './DropdownMenu'
@@ -46,7 +46,7 @@ Company.propTypes = {
   dispatch: PropTypes.func.isRequired
 }
 
-const CompanyBranch = node('user', 'company', Company)
+const CompanyBranch = routeParamsBasedBranch('user', 'company', Company)
 
 const Companies = ({user, dispatch}) => (
   <div>

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Message from 'tetris-iso/Message'
-import {node} from '../../higher-order/branch'
+import {routeParamsBasedBranch} from '../../higher-order/branch'
 import {loadAdGroupPartitionsAction} from '../../../actions/load-adgroup-partitions'
 import {liveEditAdGroupAction} from '../../../actions/update-campaign-creatives'
 import once from 'lodash/once'
@@ -286,4 +286,4 @@ class AdGroup extends React.Component {
   }
 }
 
-export default node('campaign', 'adGroup', AdGroup)
+export default routeParamsBasedBranch('campaign', 'adGroup', AdGroup)

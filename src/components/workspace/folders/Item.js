@@ -8,7 +8,7 @@ import {deleteFolderAction} from '../../../actions/delete-folder'
 import {DeleteSpan} from '../../DeleteButton'
 import ReportLink from '../../report/Link'
 import FolderStats from '../../folder/Stats'
-import {node} from '../../higher-order/branch'
+import {routeParamsBasedBranch} from '../../higher-order/branch'
 import {showFolderAction} from '../../../actions/show-folder'
 import {hideFolderAction} from '../../../actions/hide-folder'
 
@@ -121,4 +121,4 @@ Folder.propTypes = {
   params: PropTypes.object
 }
 
-export default node('folders', 'folder', Folder)
+export default routeParamsBasedBranch('folders', 'folder', Folder)

@@ -16,7 +16,7 @@ import SubHeader, {SubHeaderButton} from '../../SubHeader'
 import Page from '../../Page'
 import Order from './Item'
 import Switch from '../../Switch'
-import {collection} from '../../higher-order/branch'
+import {branchChildren} from '../../higher-order/branch'
 import {inferLevelFromProps} from '../../../functions/infer-level-from-params'
 
 const cleanStr = str => trim(deburr(lowerCase(str)))
@@ -110,4 +110,4 @@ export class Orders extends React.Component {
   }
 }
 
-export default collection(inferLevelFromProps, 'orders', Orders)
+export default branchChildren(inferLevelFromProps, 'orders', Orders)

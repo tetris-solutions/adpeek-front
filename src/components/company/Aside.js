@@ -1,7 +1,7 @@
 import Message from 'tetris-iso/Message'
 import React from 'react'
 import PropTypes from 'prop-types'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 import {Navigation, NavLink, NavBt, NavBts, Name} from '../Navigation'
 import Recent from '../Recent'
 import ReportLink from '../report/Link'
@@ -62,4 +62,4 @@ CompanyAside.propTypes = {
   })
 }
 
-export default node('user', 'company', CompanyAside)
+export default routeParamsBasedBranch('user', 'company', CompanyAside)

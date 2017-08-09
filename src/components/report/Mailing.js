@@ -10,7 +10,7 @@ import {updateMailingReportAction} from '../../actions/update-mailing-action'
 import {deleteMailingAction} from '../../actions/delete-mailing'
 import {spawnReportMailingAction} from '../../actions/spawn-report-mailing'
 import {pushSuccessMessageAction} from '../../actions/push-success-message-action'
-import {node, many} from '../higher-order/branch'
+import {routeParamsBasedBranch, many} from '../higher-order/branch'
 import {inferLevelFromParams, inferLevelFromProps} from '../../functions/infer-level-from-params'
 import Edit from './MailingEdit'
 import find from 'lodash/find'
@@ -301,10 +301,10 @@ ReportMailingList.propTypes = {
 }
 
 const wired = {
-  company: node('user', 'company', StandaloneMailingList),
-  workspace: node('company', 'workspace', StandaloneMailingList),
-  folder: node('workspace', 'folder', StandaloneMailingList),
-  report: node(inferLevelFromProps, 'report', ReportMailingList)
+  company: routeParamsBasedBranch('user', 'company', StandaloneMailingList),
+  workspace: routeParamsBasedBranch('company', 'workspace', StandaloneMailingList),
+  folder: routeParamsBasedBranch('workspace', 'folder', StandaloneMailingList),
+  report: routeParamsBasedBranch(inferLevelFromProps, 'report', ReportMailingList)
 }
 
 const Mailing = props => {

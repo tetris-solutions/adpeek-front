@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router'
-import {node} from '../../higher-order/branch'
+import {routeParamsBasedBranch} from '../../higher-order/branch'
 import style from './style'
 import noop from 'lodash/noop'
 import Message from 'tetris-iso/Message'
@@ -112,4 +112,4 @@ Workspace.contextTypes = {
   router: PropTypes.object
 }
 
-export default node('workspaces', 'workspace', Workspace)
+export default routeParamsBasedBranch('workspaces', 'workspace', Workspace)

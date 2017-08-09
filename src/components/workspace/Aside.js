@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Fence from '../Fence'
 import DeleteButton from '../DeleteButton'
 import {deleteWorkspaceAction} from '../../actions/delete-workspace'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 import {Navigation, NavLink, NavBt, NavBts, Name} from '../Navigation'
 import Recent from '../Recent'
 import ReportLink from '../report/Link'
@@ -82,5 +82,5 @@ WorkspaceAside.propTypes = {
   })
 }
 
-export default node('company', 'workspace',
+export default routeParamsBasedBranch('company', 'workspace',
   notNullable(WorkspaceAside, constant(null), 'workspace'))

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Link from '../BreadcrumbLink'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 
 export const OrderBreadcrumb = ({params: {company, workspace, folder}, order}, {messages: {orderBreadcrumb}}) =>
   <Link to={`/company/${company}/workspace/${workspace}/folder/${folder}/order/${order.id}`} title={orderBreadcrumb}>
@@ -25,4 +25,4 @@ OrderBreadcrumb.contextTypes = {
   messages: PropTypes.object
 }
 
-export default node('folder', 'order', OrderBreadcrumb)
+export default routeParamsBasedBranch('folder', 'order', OrderBreadcrumb)

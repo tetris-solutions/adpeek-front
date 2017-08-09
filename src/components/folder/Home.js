@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 import React from 'react'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 import {breakOnEmptyProp} from '../higher-order/not-nullable'
 import AnalyticsFolder from './Analytics'
 import FolderCampaigns from './campaigns/List'
@@ -11,4 +11,4 @@ const FolderHome = props => get(props, 'folder.account.platform') === 'analytics
 
 FolderHome.displayName = 'Folder-Home'
 
-export default node('workspace', 'folder', breakOnEmptyProp(FolderHome, 'folder'))
+export default routeParamsBasedBranch('workspace', 'folder', breakOnEmptyProp(FolderHome, 'folder'))

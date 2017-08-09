@@ -11,7 +11,7 @@ import DocTitle from '../components/DocTitle'
 import App from '../components/App'
 import ErrorScreen from '../components/ErrorScreen'
 
-import {node, branch} from '../components/higher-order/branch'
+import {routeParamsBasedBranch, branch} from '../components/higher-order/branch'
 import {intercept} from '../functions/intercept-preload'
 
 import {loadWorkspaceAccountsActionRouterAdaptor as accounts} from '../actions/load-accounts'
@@ -68,7 +68,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
     <Route breadcrumb={component.ReportsBreadcrumb} onEnter={rConfig[level].action}>
       <Route
         path='report/:report'
-        component={node(level, 'report')}
+        component={routeParamsBasedBranch(level, 'report')}
         aside={component.ReportAside}
         breadcrumb={component.ReportBreadcrumb}
         onEnter={preload(report)}>
@@ -111,7 +111,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
           <Route
             path='company/:company'
-            component={node('user', 'company')}
+            component={routeParamsBasedBranch('user', 'company')}
             breadcrumb={component.CompanyBreadcrumb}
             aside={component.CompanyAside}>
 
@@ -129,7 +129,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
             <Route path='create/workspace' {...render(component.WorkspaceCreate)} onEnter={preload(roles)}/>
 
             <Route path='workspace/:workspace'
-                   component={node('company', 'workspace')}
+                   component={routeParamsBasedBranch('company', 'workspace')}
                    breadcrumb={component.WorkspaceBreadcrumb}
                    onEnter={preload(workspace)}
                    aside={component.WorkspaceAside}>
@@ -148,7 +148,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
               <Route path='create/folder' {...render(component.FolderCreate)} onEnter={preload(accounts)}/>
 
               <Route path='folder/:folder'
-                     component={node('workspace', 'folder')}
+                     component={routeParamsBasedBranch('workspace', 'folder')}
                      aside={component.FolderAside}
                      breadcrumb={component.FolderBreadcrumb}
                      onEnter={preload(folder, campaigns)}>
@@ -168,7 +168,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
                 <Route
                   path='campaign/:campaign'
-                  component={node('folder', 'campaign')}
+                  component={routeParamsBasedBranch('folder', 'campaign')}
                   aside={component.CampaignAside}
                   breadcrumb={component.CampaignBreadcrumb}>
 

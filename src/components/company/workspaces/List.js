@@ -13,7 +13,7 @@ import PropTypes from 'prop-types'
 import Fence from '../../Fence'
 import SearchBox from '../../HeaderSearchBox'
 import {breakOnEmptyProp} from '../../higher-order/not-nullable'
-import {collection} from '../../higher-order/branch'
+import {branchChildren} from '../../higher-order/branch'
 import {Container} from '../../ThumbLink'
 import SubHeader, {SubHeaderButton} from '../../SubHeader'
 import Page from '../../Page'
@@ -79,7 +79,7 @@ List.propTypes = {
   searchValue: PropTypes.string,
   workspaces: PropTypes.array
 }
-List = collection('company', 'workspaces', List)
+List = branchChildren('company', 'workspaces', List)
 
 class Workspaces extends React.Component {
   static displayName = 'Workspaces'

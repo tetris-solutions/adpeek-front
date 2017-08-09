@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import reportParamsType from '../../../propTypes/report-params'
 import {loadCreativeAction} from '../../../actions/load-creative'
-import {node} from '../../higher-order/branch'
+import {routeParamsBasedBranch} from '../../higher-order/branch'
 import {styledComponent} from '../../higher-order/styled'
 
 const style = csjs`
@@ -91,7 +91,7 @@ class AdCreative extends React.Component {
   }
 }
 
-const AdCreativeBranch = node('company', 'creative', styledComponent(AdCreative, style))
+const AdCreativeBranch = routeParamsBasedBranch('company', 'creative', styledComponent(AdCreative, style))
 
 const AdCreativeWrapper = props => (
   <AdCreativeBranch {...props} params={{creative: props.creative_id}}/>

@@ -8,7 +8,7 @@ import UserLists from '../adwords-setup/user-lists/Modal'
 import CallOut from '../adwords-setup/call-out/Modal'
 import SiteLinks from '../adwords-setup/site-links/Modal'
 import {injectAdGroup} from './inject-adgroup'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 import head from 'lodash/head'
 import {
   style,
@@ -112,4 +112,4 @@ class AdGroupDetails extends React.PureComponent {
   }
 }
 
-export default node('workspace', 'folder', AdGroupDetails)
+export default routeParamsBasedBranch('workspace', 'folder', AdGroupDetails)

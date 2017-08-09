@@ -10,7 +10,7 @@ import {Submit} from '../Button'
 import RolesSelector from './RolesSelector'
 import {updateWorkspaceAction} from '../../actions/update-workspace'
 import {Form, Content, Header, Footer} from '../Card'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 import WorkspaceForm from '../mixins/WorkspaceForm'
 import Page from '../Page'
 import SubHeader from '../SubHeader'
@@ -152,4 +152,4 @@ const WorkspaceEdit = createReactClass({
   }
 })
 
-export default node('company', 'workspace', WorkspaceEdit)
+export default routeParamsBasedBranch('company', 'workspace', WorkspaceEdit)

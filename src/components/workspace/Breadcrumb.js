@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Link from '../BreadcrumbLink'
-import {node} from '../higher-order/branch'
+import {routeParamsBasedBranch} from '../higher-order/branch'
 
 const WorkspaceBreadcrumb = ({params: {company}, workspace}, {messages: {workspaceBreadcrumb}}) => workspace
   ? (
@@ -25,4 +25,4 @@ WorkspaceBreadcrumb.contextTypes = {
   messages: PropTypes.object
 }
 
-export default node('company', 'workspace', WorkspaceBreadcrumb)
+export default routeParamsBasedBranch('company', 'workspace', WorkspaceBreadcrumb)
