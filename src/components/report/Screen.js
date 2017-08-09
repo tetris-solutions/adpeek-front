@@ -16,10 +16,11 @@ import qs from 'query-string'
 import Fence from '../Fence'
 import {branch} from '../higher-order/branch'
 
-function borrowed (author, me) {
+function borrowed (user, {is_private, author}) {
   return (
+    is_private &&
     author &&
-    author.id !== me.id
+    author.id !== user.id
   )
 }
 
@@ -79,7 +80,7 @@ function ReportScreen (props, context) {
                 <Message>reportMailing</Message>
               </MenuItem>}
 
-              {reportLiteMode && isRegularUser && !(report.is_private && borrowed(report.author, user)) && (
+              {reportLiteMode && isRegularUser && !borrowed(user, report) && (
                 <MenuItem tag='a' href={reportUrl + dtRangeQueryString} icon='settings'>
                   <Message>viewFullReport</Message>
                 </MenuItem>)}
