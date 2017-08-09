@@ -16,12 +16,11 @@ import negate from 'lodash/negate'
 import omit from 'lodash/omit'
 import pick from 'lodash/pick'
 import orderBy from 'lodash/orderBy'
-import Message from 'intl-messageformat'
 import without from 'lodash/without'
 import {prettyNumber} from './pretty-number'
 import set from 'lodash/set'
 import isDate from 'lodash/isDate'
-import {isValidReportQuery} from '../functions/is-valid-report-query'
+import {getEmptyModuleMessage} from './get-empty-module-message'
 
 const isEntityId = d => d === 'id' || d === 'name'
 const notEntityId = negate(isEntityId)
@@ -173,32 +172,17 @@ function mountAnalyticsCampaign (id) {
   return {id: name, name}
 }
 
-export function reportToChartConfig (type, moduleSetup) {
-  const {comments, query, entity, attributes, messages} = moduleSetup
+export function reportToChartConfig (module) {
+  const emptyModuleLabel = getEmptyModuleMessage(module)
+
+  if (emptyModuleLabel) {
+    return emptyResultChart(emptyModuleLabel)
+  }
+
+  const {comments, query, entity, attributes, type} = module
+  let {result} = module
   const {metrics} = query
-  let {result} = moduleSetup
   let {dimensions} = query
-
-  if (entity.isLoading) {
-    return emptyResultChart(
-      new Message(messages.loadingEntity, moduleSetup.locales)
-        .format({
-          name: entity.name
-        })
-    )
-  }
-
-  if (!isValidReportQuery(type, query)) {
-    return emptyResultChart(messages.invalidModuleLabel)
-  }
-
-  if (moduleSetup.isLoading) {
-    return emptyResultChart(messages.loadingReport)
-  }
-
-  if (isEmpty(result)) {
-    return emptyResultChart(messages.emptyReportResult)
-  }
 
   const getAttributeName = attr => get(attributes, [attr, 'name'], attr)
   const getSeriesAttributeName = (val, key) => key === 'metric'
@@ -214,7 +198,7 @@ export function reportToChartConfig (type, moduleSetup) {
         return prettyNumber(
           this.value,
           readType(attributes[metric]),
-          moduleSetup.locales
+          module.locales
         )
       }
     },
@@ -243,8 +227,8 @@ export function reportToChartConfig (type, moduleSetup) {
     result = orderBy(result, metrics[0], 'desc')
   }
 
-  if ((type === 'pie' || type === 'column') && moduleSetup.limit) {
-    result = result.slice(0, moduleSetup.limit)
+  if ((type === 'pie' || type === 'column') && module.limit) {
+    result = result.slice(0, module.limit)
   }
 
   dimensions = without(dimensions, xAxisDimension)
@@ -253,7 +237,7 @@ export function reportToChartConfig (type, moduleSetup) {
   const getEntityById = memoize(id => {
     if (!id) return mockEntity
 
-    const {accounts, report: {platform: reportPlatform}} = moduleSetup
+    const {accounts, report: {platform: reportPlatform}} = module
     const platform = reportPlatform || get(find(accounts, getAccountSelector(id)), 'platform')
 
     if (platform === 'analytics') {
@@ -427,7 +411,7 @@ export function reportToChartConfig (type, moduleSetup) {
 
   function pointFormatter () {
     const attribute = attributes[this.options.metric]
-    const value = prettyNumber(this.y, readType(attribute), moduleSetup.locales)
+    const value = prettyNumber(this.y, readType(attribute), module.locales)
 
     return `
         <span style="color: ${this.color}">${this.series.name}:</span>

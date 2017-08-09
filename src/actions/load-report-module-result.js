@@ -63,6 +63,12 @@ function dealWithException (tree, params, {message, account: numbersAccount, cod
   })
 }
 
+function setQueryIfNone (cursor, query) {
+  if (!cursor.exists('query')) {
+    cursor.set('query', query)
+  }
+}
+
 export function loadReportModuleResultAction (tree, params, id, query, attributes) {
   const sortConfig = query.sort
 
@@ -82,7 +88,7 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
   const sameQuery = () => isEqual(query, moduleCursor.get('query'))
 
   if (!isCursorOk() || !isValidReportQuery(moduleCursor.get('type'), query)) {
-    return
+    return setQueryIfNone(moduleCursor, query)
   }
 
   const isLoadingCursor = moduleCursor.select('isLoading')
@@ -172,7 +178,7 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
     return response
   }
 
-  function makeTheCall () {
+  function dispatchReportRequest () {
     if (!isCursorOk()) return
 
     if (sameQuery()) {
@@ -185,6 +191,8 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
     }
 
     isLoadingCursor.set(true)
+    setQueryIfNone(moduleCursor, query)
+
     // tree.commit()
 
     loadReportModuleResult(query, isCrossPlatform, getApiFetchConfig(tree))
@@ -195,13 +203,13 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
 
   function makeNextCallOnceFinishedLoading () {
     if (lastCall[id] === myCall) {
-      makeTheCall()
+      dispatchReportRequest()
     }
   }
 
   if (isLoadingCursor.get()) {
     isLoadingCursor.once('update', makeNextCallOnceFinishedLoading)
   } else {
-    makeTheCall()
+    dispatchReportRequest()
   }
 }

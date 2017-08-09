@@ -5,7 +5,7 @@ import Highcharts from '../../Highcharts'
 import {reportToChartConfig} from '../../../functions/report-to-chart-config'
 
 function ChartLine (props) {
-  const config = reportToChartConfig('line', props)
+  const config = reportToChartConfig(props)
 
   return (
     <Highcharts config={config} zoomType='xy'>

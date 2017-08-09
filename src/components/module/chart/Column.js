@@ -4,7 +4,7 @@ import {reportToChartConfig} from '../../../functions/report-to-chart-config'
 import chartType from '../../../propTypes/report-chart'
 
 function ChartColumn (props) {
-  const config = reportToChartConfig('column', props)
+  const config = reportToChartConfig(props)
 
   return (
     <Highcharts config={config} zoomType='xy'>

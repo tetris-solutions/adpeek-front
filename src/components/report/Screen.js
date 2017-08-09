@@ -14,9 +14,17 @@ import join from 'lodash/join'
 import compact from 'lodash/compact'
 import qs from 'query-string'
 import Fence from '../Fence'
+import {branch} from '../higher-order/branch'
+
+function borrowed (author, me) {
+  return (
+    author &&
+    author.id !== me.id
+  )
+}
 
 function ReportScreen (props, context) {
-  const {favoriteReport, report, reportLiteMode, children, downloadReport, isCreatingReport} = props
+  const {user, favoriteReport, report, reportLiteMode, children, downloadReport, isCreatingReport} = props
   const {messages, params: {company, workspace, folder}, location: {query: {from, to}}} = context
   const scope = compact([
     `company/${company}`,
@@ -71,7 +79,7 @@ function ReportScreen (props, context) {
                 <Message>reportMailing</Message>
               </MenuItem>}
 
-              {reportLiteMode && isRegularUser && (
+              {reportLiteMode && isRegularUser && !(report.is_private && borrowed(report.author, user)) && (
                 <MenuItem tag='a' href={reportUrl + dtRangeQueryString} icon='settings'>
                   <Message>viewFullReport</Message>
                 </MenuItem>)}
@@ -87,6 +95,7 @@ function ReportScreen (props, context) {
 
 ReportScreen.displayName = 'Report-Screen'
 ReportScreen.propTypes = {
+  user: PropTypes.object.isRequired,
   reportLiteMode: PropTypes.bool,
   downloadReport: PropTypes.func.isRequired,
   favoriteReport: PropTypes.func.isRequired,
@@ -99,4 +108,5 @@ ReportScreen.contextTypes = {
   params: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired
 }
-export default ReportScreen
+
+export default branch('user', ReportScreen)

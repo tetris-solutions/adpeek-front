@@ -115,6 +115,8 @@ module.exports = {
   notYetImplemented: 'Not yet implemented',
   loadingAds: 'Loading Ads...',
   loadingReport: 'Loading Report...',
+  loadingModuleConfig: 'Loading config...',
+  loadingModuleResult: 'Crunching data...',
   loadingCampaigns: 'Loading Campaigns...',
   loadingCampaignDetails: 'Loading Campaign Details...',
   loadingAccountDetails: 'Loading Account Details...',

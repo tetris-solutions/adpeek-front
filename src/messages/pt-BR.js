@@ -113,6 +113,8 @@ module.exports = {
   notYetImplemented: 'Em construção',
   loadingAds: 'Carregando criativos...',
   loadingReport: 'Carregando relatório...',
+  loadingModuleConfig: 'Carregando configuração...',
+  loadingModuleResult: 'Calculando resultado...',
   loadingCampaigns: 'Carregando campanhas...',
   loadingCampaignDetails: 'Carregando detalhes da campanha...',
   loadingAccountDetails: 'Carregando detalhes da conta...',

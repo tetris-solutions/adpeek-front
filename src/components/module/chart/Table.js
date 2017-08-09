@@ -15,7 +15,6 @@ import pick from 'lodash/pick'
 import sortBy from 'lodash/sortBy'
 import stableSort from 'stable'
 import toPairs from 'lodash/toPairs'
-import Message from 'tetris-iso/Message'
 import React from 'react'
 import PropTypes from 'prop-types'
 import isNumber from 'lodash/isNumber'
@@ -28,6 +27,8 @@ import {styledFunctionalComponent} from '../../higher-order/styled'
 import isDate from 'lodash/isDate'
 import includes from 'lodash/includes'
 import isArray from 'lodash/isArray'
+import isEmpty from 'lodash/isEmpty'
+import {getEmptyModuleMessage} from '../../../functions/get-empty-module-message'
 
 function getAccountSelector (id) {
   if (!includes(id, ':')) return id
@@ -227,11 +228,11 @@ TBody.propTypes = {
   attributes: PropTypes.object
 }
 
-const EmptyTBody = ({isLoading, columns}) => (
+const EmptyTBody = ({colSpan, children}) => (
   <tbody>
     <tr>
-      <td className={style.placeholder} colSpan={columns.length || 1}>
-        <Message>{isLoading ? 'loadingReport' : 'emptyReportResult'}</Message>
+      <td className={style.placeholder} colSpan={colSpan}>
+        {children}
       </td>
     </tr>
   </tbody>
@@ -239,8 +240,8 @@ const EmptyTBody = ({isLoading, columns}) => (
 
 EmptyTBody.displayName = 'Report-Result-Empty-TBody'
 EmptyTBody.propTypes = {
-  isLoading: PropTypes.bool.isRequired,
-  columns: PropTypes.array.isRequired
+  colSpan: PropTypes.number,
+  children: PropTypes.node
 }
 
 class ReportModuleTableTH extends React.Component {
@@ -286,6 +287,7 @@ class ReportModuleTable extends React.Component {
   static displayName = 'Module-Table'
 
   static propTypes = {
+    type: PropTypes.string,
     channels: PropTypes.object,
     sort: PropTypes.array,
     change: PropTypes.func,
@@ -300,22 +302,14 @@ class ReportModuleTable extends React.Component {
   }
 
   static contextTypes = {
+    messages: PropTypes.object.isRequired,
+    locales: PropTypes.string.isRequired,
     report: PropTypes.object.isRequired,
     accounts: PropTypes.array.isRequired
   }
 
   static defaultProps = {
     channels: {}
-  }
-
-  getHeaderName = (_, header) => {
-    const {attributes} = this.props
-
-    const text = attributes[header]
-      ? attributes[header].name
-      : header
-
-    return {text, value: header}
   }
 
   toggleHeader = (id) => {
@@ -385,6 +379,8 @@ class ReportModuleTable extends React.Component {
 
   render () {
     const {
+      type,
+      entity,
       sort,
       limit,
       isLoading,
@@ -395,7 +391,7 @@ class ReportModuleTable extends React.Component {
     } = this.props
 
     const sortPairs = fromPairs(sort)
-    const fields = concat(query.dimensions, query.metrics)
+    const fields = query ? concat(query.dimensions, query.metrics) : []
     const fieldSort = sortPairs._fields_ || fields
 
     delete sortPairs._fields_
@@ -404,7 +400,23 @@ class ReportModuleTable extends React.Component {
     let tbody = null
     let colHeaders = null
 
-    if (result.length) {
+    if (isEmpty(result)) {
+      const {messages, locales} = this.context
+
+      tbody = (
+        <EmptyTBody colSpan={columns.length || 1}>
+          {getEmptyModuleMessage({
+            messages,
+            locales,
+            type,
+            result,
+            isLoading,
+            query,
+            entity
+          })}
+        </EmptyTBody>
+      )
+    } else {
       const customSort = this.getRowCompareFn()
       const normalizeRow = row => {
         const parsedRow = {}
@@ -435,8 +447,6 @@ class ReportModuleTable extends React.Component {
       )
 
       tbody = <TBody rows={rows} columns={columns} attributes={attributes}/>
-    } else {
-      tbody = <EmptyTBody isLoading={isLoading} columns={columns}/>
     }
 
     return (

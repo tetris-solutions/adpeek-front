@@ -4,7 +4,7 @@ import {reportToChartConfig} from '../../../functions/report-to-chart-config'
 import chartType from '../../../propTypes/report-chart'
 
 function ChartPie (props) {
-  const config = reportToChartConfig('pie', props)
+  const config = reportToChartConfig(props)
 
   return (
     <Highcharts config={config}>

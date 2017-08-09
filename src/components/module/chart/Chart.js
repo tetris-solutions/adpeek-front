@@ -45,70 +45,70 @@ const ChartSpinner = () => (
   </div>
 )
 
-const emptyQuery = {
-  metrics: [],
-  dimensions: []
-}
 const emptyResult = []
 
 const A4Ratio = 674 / 1032
 const counters = {}
 
-const Chart = props => {
-  const Renderer = typeComponent[props.type]
+class Chart extends React.Component {
+  static displayName = 'Chart'
 
-  counters[props.id] = (counters[props.id] || 0) + 1
+  static defaultProps = {
+    height: '100%'
+  }
 
-  log.info(`${counters[props.id]}) render module ${props.name} chart`)
+  static propTypes = {
+    change: PropTypes.func,
+    height: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number
+    ]),
+    accounts: PropTypes.array,
+    report: PropTypes.object,
+    renderHiddenTable: PropTypes.bool,
+    type: PropTypes.string,
+    locales: PropTypes.string,
+    sort: PropTypes.array,
+    limit: PropTypes.number,
+    isLoading: PropTypes.bool,
+    reportParams: PropTypes.object,
+    sourceWidth: PropTypes.number,
+    sourceHeight: PropTypes.number,
+    id: PropTypes.string,
+    name: PropTypes.string,
+    messages: PropTypes.object,
+    attributes: PropTypes.object,
+    entity: PropTypes.object,
+    result: PropTypes.array,
+    comments: PropTypes.array,
+    query: PropTypes.object
+  }
 
-  return (
-    <div>
-      <div className={style.wrap} style={{height: props.height}}>
-        <Renderer {...props}/>
-        <div className={style.hidden} data-interface>
-          {props.renderHiddenTable
-            ? <Table {...props}/>
-            : null}
+  render () {
+    const Renderer = typeComponent[this.props.type]
+
+    counters[this.props.id] = (counters[this.props.id] || 0) + 1
+
+    log.info(`${counters[this.props.id]}) render module ${this.props.name} chart`)
+
+    return (
+      <div>
+        <div className={style.wrap} style={{height: this.props.height}}>
+          <Renderer {...this.props}/>
+          <div className={style.hidden} data-interface>
+            {this.props.renderHiddenTable
+              ? <Table {...this.props}/>
+              : null}
+          </div>
         </div>
+        {this.props.isLoading ? <ChartSpinner/> : null}
       </div>
-      {props.isLoading ? <ChartSpinner/> : null}
-    </div>
-  )
-}
-
-Chart.defaultProps = {
-  height: '100%'
-}
-Chart.displayName = 'Pure-Chart'
-Chart.propTypes = {
-  change: PropTypes.func,
-  height: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]),
-  accounts: PropTypes.array,
-  report: PropTypes.object,
-  renderHiddenTable: PropTypes.bool,
-  type: PropTypes.string,
-  locales: PropTypes.string,
-  sort: PropTypes.array,
-  limit: PropTypes.number,
-  isLoading: PropTypes.bool,
-  reportParams: PropTypes.object,
-  sourceWidth: PropTypes.number,
-  sourceHeight: PropTypes.number,
-  id: PropTypes.string,
-  name: PropTypes.string,
-  messages: PropTypes.object,
-  attributes: PropTypes.object,
-  entity: PropTypes.object,
-  result: PropTypes.array,
-  comments: PropTypes.array,
-  query: PropTypes.object
+    )
+  }
 }
 
 class ChartContainer extends React.Component {
-  static displayName = 'Chart'
+  static displayName = 'Chart-Wrapper'
 
   static propTypes = {
     change: PropTypes.func,
@@ -172,7 +172,7 @@ class ChartContainer extends React.Component {
       entity: entity,
       result: module.result || emptyResult,
       comments: module.comments || emptyResult,
-      query: module.query || emptyQuery
+      query: module.query
     }
 
     return (
