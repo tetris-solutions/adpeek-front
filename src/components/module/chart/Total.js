@@ -7,6 +7,8 @@ import get from 'lodash/get'
 import {prettyNumber} from '../../../functions/pretty-number'
 import isObject from 'lodash/isObject'
 import isString from 'lodash/isString'
+import isNumber from 'lodash/isNumber'
+import isEmpty from 'lodash/isEmpty'
 
 const style = csjs`
 .wrapper {
@@ -52,33 +54,36 @@ class TotalChart extends React.Component {
   }
 
   render () {
-    const {query: {metrics}, name, result, attributes} = this.props
-    const metric = head(metrics)
-    const is_percentage = get(attributes, [metric, 'is_percentage'])
+    const {locales} = this.context
+    const {query, name, result, attributes} = this.props
     const divProps = {
       className: `${style.content}`
     }
+    let value, type
 
-    const raw = get(result, [0, metric])
+    if (query && !isEmpty(result)) {
+      const metric = head(query.metrics)
+      const is_percentage = get(attributes, [metric, 'is_percentage'])
 
-    let value = raw
-    let type = get(attributes, [metric, 'type'])
+      const raw = get(result, [0, metric])
 
-    if (type === 'special') {
-      if (isObject(value)) {
-        value = raw.value
+      value = raw
+      type = get(attributes, [metric, 'type'])
 
-        if (isString(raw.raw)) {
-          divProps.title = raw.raw
+      if (type === 'special') {
+        if (isObject(value)) {
+          value = raw.value
+
+          if (isString(raw.raw)) {
+            divProps.title = raw.raw
+          }
+        }
+
+        if (is_percentage) {
+          type = 'percentage'
         }
       }
-
-      if (is_percentage) {
-        type = 'percentage'
-      }
     }
-
-    const {locales} = this.context
 
     return (
       <div className={style.wrapper}>
@@ -87,9 +92,9 @@ class TotalChart extends React.Component {
         </h5>
 
         <div {...divProps}>
-          {value === undefined
-            ? <span className={style.empty}>---</span>
-            : prettyNumber(value, type, locales)}
+          {isNumber(value) || isString(value)
+            ? prettyNumber(value, type, locales)
+            : <span className={style.empty}>---</span>}
         </div>
       </div>
     )
