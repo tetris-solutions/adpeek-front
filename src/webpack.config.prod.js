@@ -6,11 +6,12 @@ const pkg = require('../package.json')
 
 module.exports = function (config) {
   return {
-    devtool: 'source-map',
+    devtool: 'eval',
     context: __dirname,
     entry: config.entry,
     output: {
       path: path.resolve(__dirname, '..', 'public', 'js'),
+      pathinfo: true,
       filename: 'client.' + pkg.version + '.js',
       publicPath: '/js/'
     },

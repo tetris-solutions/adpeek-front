@@ -9,6 +9,7 @@ module.exports = function (config) {
     entry: config.entry,
     output: {
       path: path.resolve(__dirname, '..', 'public', 'js'),
+      pathinfo: true,
       filename: 'client.js',
       publicPath: '/js/'
     },
