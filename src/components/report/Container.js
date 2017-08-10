@@ -20,6 +20,7 @@ import pick from 'lodash/pick'
 import filter from 'lodash/filter'
 import negate from 'lodash/negate'
 import {getCanonicalReportEntity} from '../../functions/get-canonical-report-entity'
+import {notNullable} from '../higher-order/not-nullable'
 
 const empty = []
 
@@ -467,4 +468,4 @@ Report.propTypes = {
   children: PropTypes.node
 }
 
-export default Report
+export default notNullable(Report, 'report')
