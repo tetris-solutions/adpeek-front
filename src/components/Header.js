@@ -195,7 +195,11 @@ class Header extends React.Component {
   }
 }
 
-export default many([
-  {user: ['user']},
-  ['user', 'company']
-], styledComponent(Header, style))
+export default many(
+  [
+    {user: ['user']},
+    ['user', 'company']
+  ],
+  styledComponent(Header, style),
+  true
+)
