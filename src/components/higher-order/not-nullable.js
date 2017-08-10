@@ -43,6 +43,8 @@ export function notNullable (Component, ErrorComponent, ...requiredProps) {
     messages: PropTypes.object.isRequired
   }
 
+  N._safe_ = true
+
   return N
 }
 

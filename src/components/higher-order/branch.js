@@ -12,6 +12,11 @@ import find from 'lodash/find'
 import concat from 'lodash/concat'
 import omit from 'lodash/omit'
 import endsWith from 'lodash/endsWith'
+import {notNullable} from './not-nullable'
+import constant from 'lodash/constant'
+
+const Empty = constant(null)
+Empty.displayName = 'Empty'
 
 const plural = name => endsWith(name, 'y')
   ? name.substr(0, name.length - 1) + 'ies'
@@ -30,6 +35,7 @@ Placeholder.displayName = 'Node'
 Placeholder.propTypes = {
   children: PropTypes.node
 }
+Placeholder._safe_ = true
 
 /**
  * @param {String|Function|Object} mapping cursor mapping
@@ -190,16 +196,23 @@ export function branch (mapping, Component = Placeholder, maxWatchDepth = 1) {
  * @param {Function} resolverOrComponent resolver fn or component
  * @param {Function} [Component] component to extend
  * @param {Number} [maxDepthWatch=1] max tree depth to watch
+ * @param {Boolean} [optional=false] whether branch is optional
  * @return {Function} extended component
  */
-export function relativeBranch (parent, name, resolverOrComponent, Component, maxDepthWatch = 1) {
+export function relativeBranch (parent, name, resolverOrComponent, Component, maxDepthWatch = 1, optional = false) {
   const resolver = Component
     ? resolverOrComponent
     : () => name
 
   Component = Component || resolverOrComponent
 
+  const SafeComponent = optional || Component._safe_
+    ? Component
+    : notNullable(Component, Empty, name)
+
   class Temp extends React.Component {
+    static _safe_ = true
+
     static displayName = `${name}(${Component.displayName})`
 
     static contextTypes = {
@@ -225,7 +238,7 @@ export function relativeBranch (parent, name, resolverOrComponent, Component, ma
           : {}
       }
 
-      this.Branch = branch(solver, Component, maxDepthWatch)
+      this.Branch = branch(solver, SafeComponent, maxDepthWatch)
     }
 
     render () {
@@ -245,9 +258,10 @@ export const branchChildren = relativeBranch
  * @param {String} name cursor name
  * @param {Function} Component component to extend
  * @param {Number} [maxDepthWatch=1] max depth for watching
+ * @param {Boolean} [optional=false] whether branch is optional
  * @return {Function} extended component
  */
-export const routeParamsBasedBranch = (parent, name, Component = Placeholder, maxDepthWatch = 1) =>
+export const routeParamsBasedBranch = (parent, name, Component = Placeholder, maxDepthWatch = 1, optional = false) =>
   relativeBranch(parent, name, (node, {params}) => {
     if (!node) return null
 
@@ -262,19 +276,20 @@ export const routeParamsBasedBranch = (parent, name, Component = Placeholder, ma
     return list === node
       ? index
       : [plural(name), index]
-  }, Component, maxDepthWatch)
+  }, Component, maxDepthWatch, optional)
 
 /**
  * @param {Array} maps maps to use for injection
  * @param {Function} Component react component to extend
+ * @param {Boolean} [optional=false] whether branch is optional
  * @return {Function} extended component
  */
-export function many (maps, Component) {
+export function many (maps, Component, optional = false) {
   forEach(maps.reverse(), mapping => {
     if (isObject(mapping)) {
       Component = branch(mapping, Component)
     } else {
-      Component = routeParamsBasedBranch(...mapping.concat([Component]))
+      Component = routeParamsBasedBranch(...mapping.concat([Component, 1, optional]))
     }
   })
 

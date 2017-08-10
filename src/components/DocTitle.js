@@ -100,4 +100,4 @@ export default many([
   [inferLevelFromProps, 'report'],
   ['folder', 'order'],
   ['folder', 'campaign']
-], DocTitle)
+], DocTitle, true)

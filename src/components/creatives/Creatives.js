@@ -309,7 +309,11 @@ class Creatives extends React.Component {
   }
 }
 
-export default props =>
+const E = props =>
   <EditableCreative>
     <Creatives {...props}/>
   </EditableCreative>
+
+E.displayName = 'Wrap-Editable-Creatives'
+
+export default E

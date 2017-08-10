@@ -75,7 +75,11 @@ class ReportLink extends React.Component {
   }
 }
 
-export default props =>
+const L = props =>
   <Fence canBrowseReports>{({canBrowseReports}) =>
     <ReportLink {...props} canBrowseReports={canBrowseReports}/>}
   </Fence>
+
+L.displayName = 'Wrap-Report-Link'
+
+export default L

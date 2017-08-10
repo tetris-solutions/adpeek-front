@@ -19,6 +19,7 @@ import {showWorkspaceAction} from '../../../actions/show-workspace'
 
 const Workspace = ({workspace, params, dispatch, reload}) => {
   const run = (action, after = noop) => () => dispatch(action, params).then(after)
+  const summary = workspace.summary || {}
 
   return (
     <ThumbLink to={`/company/${params.company}/workspace/${workspace.id}`} title={workspace.name}>
@@ -36,17 +37,17 @@ const Workspace = ({workspace, params, dispatch, reload}) => {
         <div className={style.numbers}>
           <img className={style.platform} src='/img/g-circle-32.png'/>
           <strong className={style.number}>
-            {Number(workspace.summary.adwords || 0)}
+            {Number(summary.adwords || 0)}
           </strong>
 
           <img className={style.platform} src='/img/fb-circle-32.png'/>
           <strong className={style.number}>
-            {Number(workspace.summary.facebook || 0)}
+            {Number(summary.facebook || 0)}
           </strong>
 
-          {workspace.summary.analytics && <img className={style.platform} src='/img/ga-logo-32.png'/>}
-          {workspace.summary.analytics && <strong className={style.number}>
-            {Number(workspace.summary.analytics || 0)}
+          {summary.analytics && <img className={style.platform} src='/img/ga-logo-32.png'/>}
+          {summary.analytics && <strong className={style.number}>
+            {Number(summary.analytics || 0)}
           </strong>}
         </div>
       </BottomLine>
