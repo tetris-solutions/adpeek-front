@@ -75,7 +75,7 @@ export class MenuItem extends React.Component {
     let Tag = this.props.tag
     const {divider, children, icon} = this.props
     const ico = icon ? <i className={`material-icons ${style.ico}`}>{icon}</i> : null
-    const btProps = omit(this.props, 'children', 'icon', 'tag', 'divider')
+    const btProps = omit(this.props, 'children', 'icon', 'tag', 'divider', 'persist')
 
     if (btProps.disabled) {
       delete btProps.onClick
