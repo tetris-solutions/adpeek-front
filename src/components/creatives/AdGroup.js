@@ -100,7 +100,7 @@ class AdGroup_ extends React.Component {
     this.props.dispatch(
       pushKeywordsAction,
       this.props.params,
-      this.context.getQueryParam('keyword'),
+      this.context.getQueryParam('keyword').split('-').pop(),
       keywords
     )
 
@@ -206,7 +206,7 @@ class AdGroup_ extends React.Component {
 
         {editMode && (
           <div className={style.newBtRow}>
-            <EditLink className='mdl-button' name='keyword' value='BIDDABLE'>
+            <EditLink className='mdl-button' name='keyword' value={`${id}-BIDDABLE`}>
               <Message>newKeyword</Message>
             </EditLink>
           </div>)}
@@ -226,7 +226,7 @@ class AdGroup_ extends React.Component {
 
         {editMode && (
           <div className={style.newBtRow}>
-            <EditLink className='mdl-button' name='keyword' value='NEGATIVE'>
+            <EditLink className='mdl-button' name='keyword' value={`${id}-NEGATIVE`}>
               <Message>newKeyword</Message>
             </EditLink>
           </div>)}
@@ -256,7 +256,7 @@ class AdGroup_ extends React.Component {
               onChange={this.onChange}/>
           </Modal>)}
 
-        {(isOpenModal('keyword', 'BIDDABLE') || isOpenModal('keyword', 'NEGATIVE')) && (
+        {(isOpenModal('keyword', `${id}-BIDDABLE`) || isOpenModal('keyword', `${id}-NEGATIVE`)) && (
           <Modal onEscPress={() => closeModal('keyword')} size='small' minHeight={0}>
             <KeywordInsert
               save={this.createKeyword}
