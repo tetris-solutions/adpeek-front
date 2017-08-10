@@ -36,7 +36,7 @@ pipeline {
       steps {
         sh 'rm -rf node_modules'
         sh 'npm install --production'
-        sh "tar -zcf build.${env.BUILD_NUMBER}.tar.gz .env package.json bin lib public node_modules"
+        sh "tar -zcf build.${env.BUILD_NUMBER}.tar.gz .env package.json npm-shrinkwrap.json bin lib public node_modules"
         archive "build.${env.BUILD_NUMBER}.tar.gz"
       }
     }
