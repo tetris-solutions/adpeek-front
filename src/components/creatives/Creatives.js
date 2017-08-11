@@ -21,12 +21,14 @@ import map from 'lodash/map'
 import uniq from 'lodash/uniq'
 import chunk from 'lodash/chunk'
 import {EditableCreative} from './EditableCreative'
+import concat from 'lodash/concat'
 
 const statusIcons = {
   enabled: 'play_arrow',
   enabled_or_paused: 'pause',
   all: 'playlist_add_check'
 }
+const both = (a, b) => uniq(concat(a, b))
 
 class Creatives extends React.Component {
   static displayName = 'Creatives'
@@ -70,7 +72,7 @@ class Creatives extends React.Component {
     window.event$.on('create::adgroup', this.createAdGroup)
 
     if (this.isAdwords()) {
-      this.loadAdGroups()
+      this.loadCreatives()
     }
   }
 
@@ -79,7 +81,7 @@ class Creatives extends React.Component {
     const currentFilter = this.getStatusFilter()
 
     if (!this.state.isLoading && newFilter !== currentFilter) {
-      this.setState({isLoading: true}, this.loadAdGroups)
+      this.setState({isLoading: true}, this.loadCreatives)
     }
   }
 
@@ -93,10 +95,15 @@ class Creatives extends React.Component {
     window.location.href = response.data.url
   }
 
-  loadAdGroups = () => {
+  loadCreatives = () => {
     const {params, dispatch} = this.props
 
-    this.loadingAdGroups = dispatch(loadCreativesAction, params, this.getStatusFilter())
+    this.loadingAdGroups = dispatch(
+      loadCreativesAction,
+      params,
+      this.getStatusFilter(),
+      this.state.editedIds
+    )
       .then(() => this.setState({isLoading: false}))
   }
 
@@ -213,11 +220,29 @@ class Creatives extends React.Component {
     this.setState({saving: true})
 
     dispatch(updateCampaignCreativesAction, params, getAdGroupsWithRelevance())
-      .then(this.loadAdGroups)
+      .then(this.registerEditedIds)
+      .then(this.loadCreatives)
       .then(() => this.setState({saving: false}))
   }
 
+  registerEditedIds = ({data: changed}) => {
+    const {editedIds: old} = this.state
+
+    this.setState({
+      editedIds: {
+        adGroups: both(old.adGroups, changed.adGroups),
+        ads: both(old.ads, changed.ads),
+        keywords: both(old.keywords, changed.keywords)
+      }
+    })
+  }
+
   state = {
+    editedIds: {
+      adGroups: [],
+      ads: [],
+      keywords: []
+    },
     dirty: false,
     saving: false,
     loadingSearchTerms: false,
