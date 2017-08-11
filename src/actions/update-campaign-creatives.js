@@ -15,7 +15,13 @@ export function liveEditAdGroupAction (tree, {company, workspace, folder, campai
     ['adGroups', adGroup]
   ])
 
-  tree.merge(cursor, assign({lastUpdate: Date.now()}, changes))
+  const lastUpdate = assign({}, tree.get(cursor).lastUpdate)
+
+  forEach(changes, (_, key) => {
+    lastUpdate[key] = Date.now()
+  })
+
+  tree.merge(cursor, assign({lastUpdate}, changes))
   tree.commit()
 }
 
