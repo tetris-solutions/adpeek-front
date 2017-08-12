@@ -18,6 +18,10 @@ export function pushKeywordsAction (tree, {company, workspace, folder, campaign,
       adgroup_id: adGroup,
       approval_status: 'APPROVED',
       criterion_use: criterionUse,
+      lastUpdate: {
+        status: Date.now(),
+        text: Date.now()
+      },
       final_urls: null,
       id: Math.random().toString(36).substr(2),
       status: 'ENABLED',
