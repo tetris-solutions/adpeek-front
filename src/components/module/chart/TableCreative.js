@@ -91,7 +91,13 @@ class AdCreative extends React.Component {
   }
 }
 
-const AdCreativeBranch = routeParamsBasedBranch('company', 'creative', styledComponent(AdCreative, style))
+const AdCreativeBranch = routeParamsBasedBranch(
+  'company',
+  'creative',
+  styledComponent(AdCreative, style),
+  1,
+  true
+)
 
 const AdCreativeWrapper = props => (
   <AdCreativeBranch {...props} params={{creative: props.creative_id}}/>
