@@ -6,9 +6,12 @@ import {many, branch} from '../higher-order/branch'
 import {inferLevelFromParams} from '../../functions/infer-level-from-params'
 import compact from 'lodash/compact'
 import get from 'lodash/get'
+import map from 'lodash/map'
+import every from 'lodash/every'
+import assign from 'lodash/assign'
 
-function Wrapper (props) {
-  const {accounts, reportMetaData, location, report, dispatch, params, level} = props
+function ReportWrapper (props) {
+  const {authorized, accounts, reportMetaData, location, report, dispatch, params, level} = props
   const node = props[level]
 
   return (
@@ -17,25 +20,36 @@ function Wrapper (props) {
       dispatch={dispatch}
       location={location}
       accounts={accounts}
-      report={report}
+      report={assign({authorized}, report)}
       params={params}
       metaData={get(reportMetaData, report.platform || '_')}
       reportLiteMode/>
   )
 }
 
-Wrapper.displayName = 'Report-Wrapper'
-Wrapper.propTypes = {
+ReportWrapper.displayName = 'Report-Wrapper'
+ReportWrapper.propTypes = {
   reportMetaData: PropTypes.object,
   report: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   accounts: PropTypes.array.isRequired,
   dispatch: PropTypes.func.isRequired,
   params: PropTypes.object.isRequired,
-  level: PropTypes.string.isRequired
+  level: PropTypes.string.isRequired,
+  authorized: PropTypes.bool.isRequired
 }
 
-class Share extends React.Component {
+const authPats = [
+  'company.authorized',
+  'workspace.authorized',
+  'folder.authorized'
+]
+
+const userHasAccess = shareConfig =>
+  every(map(authPats,
+    path => get(shareConfig, path) !== false))
+
+class ReportShare extends React.Component {
   static displayName = 'Report-Share'
 
   static propTypes = {
@@ -55,12 +69,12 @@ class Share extends React.Component {
     const {params} = this.getReportShare()
     const level = inferLevelFromParams(params)
 
-    this.ReportWrapper = many(compact([
+    this.BranchedReportWrapper = many(compact([
       ['user', 'company'],
       params.workspace && ['company', 'workspace'],
       params.folder && ['workspace', 'folder'],
       [level, 'report']
-    ]), branch('reportMetaData', Wrapper, 2))
+    ]), branch('reportMetaData', ReportWrapper, 2))
   }
 
   getChildContext () {
@@ -74,18 +88,19 @@ class Share extends React.Component {
   }
 
   render () {
-    const Report = this.ReportWrapper
-    const {level, accounts} = this.getReportShare()
+    const ReportBranch = this.BranchedReportWrapper
+    const report = this.getReportShare()
 
     return (
       <UI>
-        <Report
-          level={level}
+        <ReportBranch
+          level={report.level}
+          authorized={userHasAccess(report)}
           location={this.props.location}
-          accounts={accounts}/>
+          accounts={report.accounts}/>
       </UI>
     )
   }
 }
 
-export default Share
+export default ReportShare

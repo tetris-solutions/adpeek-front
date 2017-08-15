@@ -16,8 +16,8 @@ import qs from 'query-string'
 import Fence from '../Fence'
 import {branch} from '../higher-order/branch'
 
-function borrowed (user, {is_private, author}) {
-  return (
+function borrowed (user, {authorized, is_private, author}) {
+  return !authorized || (
     is_private &&
     author &&
     author.id !== user.id
