@@ -12,14 +12,19 @@ class BreadcrumbLink extends React.PureComponent {
   }
 
   static contextTypes = {
-    location: PropTypes.object
+    location: PropTypes.object,
+    isReportAuthorized: PropTypes.bool
   }
 
   render () {
-    if (startsWith(this.context.location.pathname, '/share/')) {
-      return (
-        <a href={this.props.to} {...omit(this.props, 'to')}/>
-      )
+    const {location: {pathname}, isReportAuthorized} = this.context
+
+    if (startsWith(pathname, '/share/')) {
+      const props = omit(this.props, 'to')
+
+      return isReportAuthorized
+        ? <a href={this.props.to} {...props}/>
+        : <span {...props}/>
     }
 
     return <Link {...this.props}/>

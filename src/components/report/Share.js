@@ -62,7 +62,8 @@ class ReportShare extends React.Component {
 
   static childContextTypes = {
     params: PropTypes.object,
-    company: PropTypes.object
+    company: PropTypes.object,
+    isReportAuthorized: PropTypes.bool
   }
 
   componentWillMount () {
@@ -78,9 +79,13 @@ class ReportShare extends React.Component {
   }
 
   getChildContext () {
-    const {params, company} = this.getReportShare()
+    const report = this.getReportShare()
 
-    return {company, params}
+    return {
+      company: report.company,
+      params: report.params,
+      isReportAuthorized: userHasAccess(report)
+    }
   }
 
   getReportShare = () => {
