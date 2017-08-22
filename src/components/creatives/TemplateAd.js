@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 import Modal from 'tetris-iso/Modal'
 import map from 'lodash/map'
 import {style, withPreview, kpiType, DestinationUrl, KPI} from './AdUtils'
-import {findTemplateAdId, findTemplateAdUrl} from '../../functions/find-template-ad-url'
-import {loadBundlePreviewUrlAction} from '../../actions/load-bundle-preview-url'
+import {pickFullUrl} from '../../functions/find-template-ad-url'
 
 let TemplatePreview = ({url, previewMode, setPreviewMode}) => (
   <div className={style.templatePreview}>
@@ -52,31 +51,14 @@ class TemplateAd extends React.Component {
     })
   }
 
-  static contextTypes = {
-    tree: PropTypes.object,
-    params: PropTypes.object
-  }
-
-  componentDidMount () {
-    const {tree, params} = this.context
-    const {urls, id, adgroup_id} = this.props
-    const bundleId = findTemplateAdId(urls)
-
-    if (bundleId) {
-      loadBundlePreviewUrlAction(tree, params, adgroup_id, id, bundleId)
-    }
-  }
-
   render () {
-    const {kpi, preview, final_urls, urls} = this.props
+    const {kpi, final_urls, urls} = this.props
 
     return (
       <div className={style.wrapper}>
         <div className={`mdl-color--yellow-200 ${style.box}`}>
           {kpi && <KPI kpi={kpi}/>}
-          {preview
-            ? <TemplatePreview url={preview.url}/>
-            : <TemplateLink url={findTemplateAdUrl(urls)}/>}
+          <TemplatePreview url={pickFullUrl(urls)}/>
         </div>
         {map(final_urls, (url, index) =>
           <DestinationUrl key={index} url={url}/>)}

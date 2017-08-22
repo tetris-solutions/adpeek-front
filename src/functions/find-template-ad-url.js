@@ -6,7 +6,7 @@ import find from 'lodash/find'
  * @param {Array} urls url array
  * @return {String} as a string
  */
-const pickFullUrl = urls => get(find(urls, {key: 'FULL'}), 'value')
+export const pickFullUrl = urls => get(find(urls, {key: 'FULL'}), 'value')
 
 export function findTemplateAdId (urls) {
   const url = pickFullUrl(urls)
