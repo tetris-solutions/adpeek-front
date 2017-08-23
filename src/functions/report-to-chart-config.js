@@ -1,4 +1,5 @@
 import assign from 'lodash/assign'
+import max from 'lodash/max'
 import groupBy from 'lodash/groupBy'
 import find from 'lodash/find'
 import forEach from 'lodash/forEach'
@@ -15,12 +16,12 @@ import map from 'lodash/map'
 import negate from 'lodash/negate'
 import omit from 'lodash/omit'
 import pick from 'lodash/pick'
-import orderBy from 'lodash/orderBy'
 import without from 'lodash/without'
 import {prettyNumber} from './pretty-number'
 import set from 'lodash/set'
 import isDate from 'lodash/isDate'
 import {getEmptyModuleMessage} from './get-empty-module-message'
+import orderBy from 'lodash/orderBy'
 
 const isEntityId = d => d === 'id' || d === 'name'
 const notEntityId = negate(isEntityId)
@@ -172,6 +173,16 @@ function mountAnalyticsCampaign (id) {
   return {id: name, name}
 }
 
+const comparable = attr => x => {
+  switch (get(x, `__row__.${attr}`)) {
+    case '--':
+    case '---':
+      return -Infinity
+    default:
+      return get(x, `__row__.${attr}`)
+  }
+}
+
 export function reportToChartConfig (module) {
   const emptyModuleLabel = getEmptyModuleMessage(module)
 
@@ -189,6 +200,31 @@ export function reportToChartConfig (module) {
     ? getAttributeName(val)
     : `${getAttributeName(key)}: ${val}`
 
+  function createNewSeries (referenceEntity, seriesSignature, yAxisIndex) {
+    const descriptors = map(seriesSignature, (val, key) => `${key}(${val})`)
+
+    const newSeries = {
+      type,
+      id: join(descriptors, ':'),
+      name: join(descriptors, ':'),
+      seriesSignature,
+      yAxis: yAxisIndex,
+      data: []
+    }
+
+    const nameParts = map(omit(seriesSignature, 'id'), getSeriesAttributeName)
+
+    if (seriesSignature.id !== undefined) {
+      nameParts.unshift(referenceEntity.name)
+    }
+
+    if (!isEmpty(nameParts)) {
+      newSeries.name = nameParts.join(', ')
+    }
+
+    return newSeries
+  }
+
   const yAxis = map(metrics, (metric, index) => ({
     title: {
       text: getAttributeName(metric)
@@ -205,7 +241,6 @@ export function reportToChartConfig (module) {
     opposite: index % 2 !== 0
   }))
 
-  const categories = []
   let xAxisDimension
 
   if (includes(dimensions, 'date')) {
@@ -220,12 +255,6 @@ export function reportToChartConfig (module) {
 
   const xAxis = detectXAxis(result, xAxisDimension)
   const isIdBased = xAxisDimension === 'id'
-
-  if (xAxis.sortable) {
-    result = orderBy(result, xAxisDimension)
-  } else {
-    result = orderBy(result, metrics[0], 'desc')
-  }
 
   if ((type === 'pie' || type === 'column') && module.limit) {
     result = result.slice(0, module.limit)
@@ -247,102 +276,98 @@ export function reportToChartConfig (module) {
     return find(entity.list, {id}) || mockEntity
   })
 
-  function walk (points, xValue) {
-    const firstPoint = points[0]
+  function walk (rows, xValue) {
+    function rowIteratee (row, index) {
+      const rowDimensions = pick(row, dimensions)
+      const referenceEntity = getEntityById(row.id)
 
-    if (isIdBased) {
-      categories.push(getEntityById(firstPoint.id).name)
-    } else if (
-      xAxisDimension === 'qualityscore' ||
-      isString(firstPoint[xAxisDimension])
-    ) {
-      categories.push(String(firstPoint[xAxisDimension]))
-    }
-
-    function pointIterator (point, index) {
-      const pointDimensions = pick(point, dimensions)
-      const referenceEntity = getEntityById(point.id)
-
-      function metricIterator (metric, yAxisIndex) {
+      function metricIteratee (metric, yAxisIndex) {
         const seriesSignature = assign(
-          size(metrics) > 1 || isEmpty(pointDimensions) ? {metric} : {},
-          pointDimensions
+          size(metrics) > 1 || isEmpty(rowDimensions) ? {metric} : {},
+          rowDimensions
         )
 
-        function getNewSeries () {
-          const descriptors = map(seriesSignature, (val, key) => `${key}(${val})`)
-
-          const newSeries = {
-            type,
-            id: join(descriptors, ':'),
-            name: join(descriptors, ':'),
-            seriesSignature,
-            yAxis: yAxisIndex,
-            data: []
-          }
-
-          const nameParts = map(omit(seriesSignature, 'id'), getSeriesAttributeName)
-
-          if (seriesSignature.id !== undefined) {
-            nameParts.unshift(referenceEntity.name)
-          }
-
-          if (!isEmpty(nameParts)) {
-            newSeries.name = nameParts.join(', ')
-          }
-
-          return newSeries
-        }
-
         let seriesConfig = type === 'pie'
-          ? series[0] // always one series
+          ? series[0] // pie always consists of a single series
           : find(series, s => isEqual(s.seriesSignature, seriesSignature))
 
         if (!seriesConfig) {
-          seriesConfig = getNewSeries()
+          seriesConfig = createNewSeries(referenceEntity, seriesSignature, yAxisIndex)
           series.push(seriesConfig)
         }
 
-        const isSpecialPoint = isObject(point[metric]) && point[metric].value !== undefined
+        const isSpecialPoint = isObject(row[metric]) && row[metric].value !== undefined
 
-        const pointConfig = {
+        const point = {
           metric,
-          id: index
+          id: row._index_,
+          __row__: row
         }
 
         if (isSpecialPoint) {
-          pointConfig.y = point[metric].value
-          pointConfig.raw = point[metric].raw
-          pointConfig.marker = {
+          point.y = row[metric].value
+          point.raw = row[metric].raw
+          point.marker = {
             enabled: true,
             fillColor: '#414141',
             symbol: 'circle'
           }
         } else {
-          const value = Number(point[metric])
-          pointConfig.y = isNaN(value) ? null : value
+          const value = Number(row[metric])
+          point.y = isNaN(value) ? null : value
         }
 
         if (type === 'pie') {
-          pointConfig.name = isIdBased
+          point.name = isIdBased
             ? referenceEntity.name
-            : point[xAxisDimension]
+            : row[xAxisDimension]
         }
 
-        if (isDate(point[xAxisDimension])) {
-          pointConfig.x = point[xAxisDimension].getTime()
+        if (isDate(row[xAxisDimension])) {
+          point.x = row[xAxisDimension].getTime()
         }
 
-        seriesConfig.data.push(pointConfig)
+        seriesConfig.data.push(point)
       }
 
-      forEach(metrics, metricIterator)
+      forEach(metrics, metricIteratee)
     }
 
-    forEach(points, pointIterator)
+    forEach(rows, rowIteratee)
   }
 
-  forEach(groupBy(result, xAxisDimension), walk)
+  const grouped = {}
+
+  forEach(result, (row, _index_) => {
+    if (!grouped[xAxisDimension]) {
+      grouped[xAxisDimension] = []
+    }
+    grouped[xAxisDimension].push(assign({_index_}, row))
+  })
+
+  forEach(grouped, walk)
+
+  const categories = new Array(max(map(series, ({data}) => size(data))))
+
+  forEach(series, currentSeries => {
+    if (xAxis.sortable) {
+      currentSeries.data = orderBy(currentSeries.data, comparable(xAxisDimension))
+    } else {
+      currentSeries.data = orderBy(currentSeries.data, comparable(metrics[0]), 'desc')
+    }
+
+    forEach(currentSeries.data, point => {
+      const {__row__: row, id: index} = point
+
+      if (isIdBased) {
+        categories[index] = getEntityById(row.id).name
+      } else if (isString(row[xAxisDimension])) {
+        categories[index] = String(row[xAxisDimension])
+      }
+
+      delete point.__row__
+    })
+  })
 
   if (type === 'line' && xAxisDimension === 'date') {
     const days = groupBy(comments, 'date')
