@@ -27,7 +27,8 @@ class ModuleContainer extends React.Component {
   }
 
   state = {
-    activeOnly: false
+    activeOnly: false,
+    setup: null
   }
 
   getChildContext () {
@@ -35,6 +36,16 @@ class ModuleContainer extends React.Component {
       activeOnly: this.state.activeOnly,
       toggleActiveOnly: this.toggleActiveOnly
     }
+  }
+
+  componentWillMount () {
+    this.getSetup()
+      .then(setup => this.setState({setup}))
+  }
+
+  componentWillReceiveProps (nextProps) {
+    this.getSetup(nextProps)
+      .then(setup => this.setState({setup}))
   }
 
   getEntities = () => {
@@ -54,10 +65,9 @@ class ModuleContainer extends React.Component {
     return Boolean(this.props.metaData.attributes[name])
   }
 
-  render () {
-    const {metaData: {attributes}} = this.props
-    const entities = this.getEntities()
-    const module = assign({}, this.props.module)
+  getSetup = (props = this.props) => this.getEntities().then(entities => {
+    const {metaData: {attributes}} = props
+    const module = assign({}, props.module)
     const filters = assign({}, module.filters)
     const entity = entities[module.entity]
 
@@ -74,13 +84,14 @@ class ModuleContainer extends React.Component {
 
     module.filters = filters
 
+    return (assign({}, props, {entities, module, attributes, entity}))
+  })
+
+  render () {
+    if (!this.state.setup) return null
+
     return (
-      <Controller
-        {...this.props}
-        entities={entities}
-        module={module}
-        entity={entity}
-        attributes={attributes}/>
+      <Controller {...this.state.setup}/>
     )
   }
 }

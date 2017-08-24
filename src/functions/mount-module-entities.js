@@ -8,7 +8,8 @@ import toLower from 'lodash/toLower'
 import countBy from 'lodash/countBy'
 import forEach from 'lodash/forEach'
 import filter from 'lodash/filter'
-import {getCanonicalReportEntity} from '../functions/get-canonical-report-entity'
+import {getCanonicalReportEntity} from './get-canonical-report-entity'
+import {queueHardLift} from './queue-hard-lift'
 
 /**
  *
@@ -16,9 +17,9 @@ import {getCanonicalReportEntity} from '../functions/get-canonical-report-entity
  * @param {String} moduleEntity current module entity
  * @param {Array} selectedIds array of selected ids
  * @param {Boolean} activeOnly whether active only mode is on
- * @returns {Object} structured entity map
+ * @returns {Promise.<Object>} structured entity map
  */
-export function mountModuleEntities (entities, moduleEntity, selectedIds, activeOnly) {
+export const mountModuleEntities = queueHardLift((entities, moduleEntity, selectedIds, activeOnly) => {
   const adGroupLevel = entities.AdSet ? 'AdSet' : 'AdGroup'
   const search = {}
 
@@ -123,4 +124,4 @@ export function mountModuleEntities (entities, moduleEntity, selectedIds, active
   }
 
   return entities
-}
+})
