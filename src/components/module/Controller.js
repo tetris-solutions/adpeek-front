@@ -23,6 +23,7 @@ import CroppedResultDialog from './CroppedResultDialog'
 import TextMessage from 'intl-messageformat'
 import DescriptionDialog from './DescriptionDialog'
 
+const calculateModalMinHeight = () => typeof window !== 'undefined' ? window.innerHeight * 0.8 : 600
 const reportContext = [
   'accounts',
   'report',
@@ -207,7 +208,7 @@ class ModuleController extends React.Component {
         </div>
 
         {this.state.editMode && (
-          <Modal size='huge' provide={reportContext}>
+          <Modal size='huge' minHeight={calculateModalMinHeight()} provide={reportContext}>
             <Editor
               entities={entities}
               loadEntity={loadEntity}

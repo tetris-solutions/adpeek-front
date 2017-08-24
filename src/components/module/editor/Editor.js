@@ -72,12 +72,12 @@ class Editor extends React.Component {
 
     forEach(attributes, (attr, key) => {
       const isAvailable = selected[key] || (
-          (
-            !attr.requires_id || isIdSelected
-          ) && (
-            !attr.pairs_with || isEmpty(diff(map(filter(selected, 'is_breakdown'), 'id'), attr.pairs_with))
-          )
+        (
+          !attr.requires_id || isIdSelected
+        ) && (
+          !attr.pairs_with || isEmpty(diff(map(filter(selected, 'is_breakdown'), 'id'), attr.pairs_with))
         )
+      )
 
       if (isAvailable) {
         selectable[key] = attr
@@ -154,7 +154,7 @@ class Editor extends React.Component {
       <div>
         <form className='mdl-grid'>
           <div className={`mdl-cell mdl-cell--3-col ${style.leftCol}`}>
-            <Lists entities={entities} />
+            <Lists entities={entities}/>
           </div>
           <div className='mdl-cell mdl-cell--9-col'>
             <Tabs>
@@ -162,10 +162,10 @@ class Editor extends React.Component {
                 <Preview entities={entities}/>
               </Tab>
               <Tab id='module-description' title={messages.moduleDescriptionTitle}>
-                <Description />
+                <Description/>
               </Tab>
               <Tab id='module-filters' title={messages.filterModuleResult}>
-                <Filters />
+                <Filters/>
               </Tab>
             </Tabs>
           </div>
