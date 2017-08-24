@@ -18,7 +18,10 @@ import pick from 'lodash/pick'
 import without from 'lodash/without'
 import {isWrapDate} from './is-wrap-date'
 import {getEmptyModuleMessage} from './get-empty-module-message'
+import {queued} from './queued'
 import orderBy from 'lodash/orderBy'
+import {prettyNumber} from './pretty-number'
+import set from 'lodash/set'
 
 const isEntityId = d => d === 'id' || d === 'name'
 const notEntityId = negate(isEntityId)
@@ -119,12 +122,30 @@ function detectXAxis (result, xAxisDimensions) {
   return types.linear
 }
 
+function plainMessage () {
+  /**
+   *
+   * @type {Highcharts.Chart}
+   */
+  const chart = this
+
+  const x = (chart.chartWidth / 2) - 50
+  const y = (chart.chartHeight / 2) - 20
+
+  const label = chart._label_ = chart._label_ || chart.renderer.label().add()
+
+  label.textSetter(chart.userOptions.labelMessage)
+  label.ySetter(y)
+  label.xSetter(x)
+  label.css({fontStyle: 'italic', fontSize: '12pt'})
+}
+
 const emptyResultChart = labelMessage => ({
   labelMessage,
   chart: {
     events: {
-      load: '_placeholder_',
-      redraw: '_placeholder_'
+      load: plainMessage,
+      redraw: plainMessage
     },
     title: {
       style: {
@@ -164,7 +185,11 @@ const comparable = attr => x => {
   }
 }
 
-export function reportToChartConfig (module) {
+const readType = attr => attr.type === 'special' && attr.is_percentage
+  ? 'percentage'
+  : attr.type
+
+export const reportToChartConfig = queued((module) => {
   const emptyModuleLabel = getEmptyModuleMessage(module)
 
   if (emptyModuleLabel) {
@@ -212,7 +237,13 @@ export function reportToChartConfig (module) {
       text: getAttributeName(metric)
     },
     labels: {
-      formatter: '_placeholder_'
+      formatter () {
+        return prettyNumber(
+          this.value,
+          readType(attributes[metric]),
+          module.locales
+        )
+      }
     },
     opposite: index % 2 !== 0
   }))
@@ -355,7 +386,9 @@ export function reportToChartConfig (module) {
       shape: 'circlepin',
       showInLegend: false,
       tooltip: {
-        pointFormatter: '_placeholder_'
+        pointFormatter () {
+          return this.text
+        }
       },
       data: map(days, (groupOfComments, date) => {
         const [year, month, day] = date.split('-').map(Number)
@@ -408,5 +441,18 @@ export function reportToChartConfig (module) {
     config.xAxis.categories = categories
   }
 
+  function pointFormatter () {
+    const attribute = attributes[this.options.metric]
+    const value = prettyNumber(this.y, readType(attribute), module.locales)
+
+    return `
+        <span style="color: ${this.color}">${this.series.name}:</span>
+        <b>${value}</b>
+        ${this.options.raw ? `<em>${this.options.raw}</em>` : ''}
+        <br/>`
+  }
+
+  set(config, ['plotOptions', 'series', 'tooltip', 'pointFormatter'], pointFormatter)
+
   return config
-}
+})

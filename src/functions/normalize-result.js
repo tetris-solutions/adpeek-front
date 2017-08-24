@@ -93,7 +93,7 @@ export function normalizeResult (attributes, result) {
         date = new WrapDate(zeroedMoment().month(monthNameToIndex(value)).toDate(), 'MMMM')
         break
       case 'date':
-        date = new WrapDate(zeroedMoment(value).toDate(), 'DD,MM,YYYY', true)
+        date = new WrapDate(zeroedMoment(value).toDate(), 'DD/MM/YYYY', true)
         break
       case 'day_of_week':
       case 'dayofweekname':

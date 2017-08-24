@@ -11,6 +11,7 @@ import isString from 'lodash/isString'
 import lowerCase from 'lodash/toLower'
 import merge from 'lodash/merge'
 import omit from 'lodash/omit'
+import {queued} from './queued'
 
 function isUpperCase (letter) {
   return letter !== letter.toLowerCase()
@@ -118,7 +119,7 @@ function parseChildren (child, parent) {
   }
 }
 
-function mapPropsToConfig (props) {
+export const mapPropsToConfig = queued((props) => {
   props = cloneDeep(props)
   const parentConfig = props.config
   const chart = omit(props, 'config', 'tag', 'children', 'className', 'style')
@@ -131,7 +132,7 @@ function mapPropsToConfig (props) {
   delete config.isRoot
 
   return merge({}, defaultConfig, config, parentConfig)
-}
+})
 
 function customComparison (a, b, key) {
   if (isFunction(a) && isFunction(b)) {
@@ -142,26 +143,9 @@ function customComparison (a, b, key) {
   }
 }
 
-function hasChanged (configA, configB) {
+export const hasChanged = queued((configA, configB) => {
   const newOptionsForComparision = omit(configA, 'series', 'title')
   const oldOptionsForComparison = omit(configB, 'series', 'title')
 
   return !isEqualWith(newOptionsForComparision, oldOptionsForComparison, customComparison)
-}
-
-/* global self */
-
-self.addEventListener('message', ({data: {op, id, payload}}) => {
-  switch (op) {
-    case 'mapPropsToConfig':
-      return self.postMessage({
-        id,
-        result: mapPropsToConfig(payload)
-      })
-    case 'hasChanged':
-      return self.postMessage({
-        id,
-        result: hasChanged(payload.before, payload.after)
-      })
-  }
 })

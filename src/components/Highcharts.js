@@ -7,66 +7,10 @@ import find from 'lodash/find'
 import get from 'lodash/get'
 import forEach from 'lodash/forEach'
 import isEqual from 'lodash/isEqual'
-import {detachCallbacks, attachCallbacks} from '../functions/worker-comms'
-import {canUseWorker} from '../functions/can-user-worker'
-import noop from 'lodash/noop'
-import {randomString} from '../functions/random-string'
 import cloneDeep from 'lodash/cloneDeep'
+import {mapPropsToConfig, hasChanged} from '../functions/highcart-config'
 
-let worker
 let Highcharts
-const queue = {}
-
-if (canUseWorker()) {
-  const ConfigParserWorker = require('worker-loader!../workers/highcart-config')
-
-  worker = new ConfigParserWorker()
-} else {
-  worker = {
-    postMessage: noop,
-    addEventListener: noop
-  }
-}
-
-worker.addEventListener('message', ({data: {id, result}}) => {
-  if (queue[id]) {
-    queue[id](result)
-    delete queue[id]
-  }
-})
-
-const mapPropsToConfig = config => new Promise(resolve => {
-  const id = randomString()
-
-  queue[id] = r => {
-    resolve(attachCallbacks(r))
-  }
-
-  const msg = {
-    id,
-    op: 'mapPropsToConfig',
-    payload: detachCallbacks(cloneDeep(config))
-  }
-
-  worker.postMessage(msg)
-})
-
-function hasChanged (before, after) {
-  return new Promise(resolve => {
-    const id = randomString()
-
-    queue[id] = resolve
-
-    worker.postMessage({
-      id,
-      op: 'hasChanged',
-      payload: {
-        before: detachCallbacks(before),
-        after: detachCallbacks(cloneDeep(after))
-      }
-    })
-  })
-}
 
 const isSameSeries = (chartSeries, updated) => chartSeries.options.id === updated.id
 
