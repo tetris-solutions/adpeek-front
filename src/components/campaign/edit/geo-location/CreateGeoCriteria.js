@@ -9,6 +9,7 @@ import EditLocation from './Location'
 import EditProximity from './Proximity'
 import isNumber from 'lodash/isNumber'
 import assign from 'lodash/assign'
+import {randomString} from '../../../../functions/random-string'
 
 const style = csjs`
 .item {
@@ -73,7 +74,7 @@ class CreateGeoCriteria extends React.PureComponent {
 
   selectProximity = () => {
     this.setState({
-      id: Math.random().toString(36).substr(2),
+      id: randomString(),
       draft: true,
       type: 'PROXIMITY',
       unit: 'KILOMETERS',

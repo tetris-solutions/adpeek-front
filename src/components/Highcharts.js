@@ -1,162 +1,77 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import log from 'loglevel'
 import pick from 'lodash/pick'
-import camelCase from 'lodash/camelCase'
-import cloneDeep from 'lodash/cloneDeep'
 import diff from 'lodash/differenceWith'
-import isFunction from 'lodash/isFunction'
 import find from 'lodash/find'
+import get from 'lodash/get'
 import forEach from 'lodash/forEach'
-import includes from 'lodash/includes'
-import isArray from 'lodash/isArray'
-import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
-import isEqualWith from 'lodash/isEqualWith'
-import isObject from 'lodash/isObject'
-import isString from 'lodash/isString'
-import lowerCase from 'lodash/toLower'
-import merge from 'lodash/merge'
-import omit from 'lodash/omit'
+import {detachCallbacks, attachCallbacks} from '../functions/worker-comms'
+import {canUseWorker} from '../functions/can-user-worker'
+import noop from 'lodash/noop'
+import {randomString} from '../functions/random-string'
+import cloneDeep from 'lodash/cloneDeep'
 
+let worker
 let Highcharts
+const queue = {}
 
-function isUpperCase (letter) {
-  return letter !== letter.toLowerCase()
-}
+if (canUseWorker()) {
+  const ConfigParserWorker = require('worker-loader!../workers/highcart-config')
 
-function looksLikeAnEventHandler (name) {
-  return name.length > 2 && name.substr(0, 2) === 'on' && isUpperCase(name[2])
-}
-
-const defaultConfig = {
-  credits: {
-    enabled: false
-  },
-  exporting: {
-    fallbackToExportServer: false,
-    type: 'image/jpeg'
-  },
-  navigation: {
-    buttonOptions: {
-      enabled: false
-    }
+  worker = new ConfigParserWorker()
+} else {
+  worker = {
+    postMessage: noop,
+    addEventListener: noop
   }
 }
 
-const seriesTypes = [
-  'area',
-  'arearange',
-  'areaspline',
-  'areasplinerange',
-  'bar',
-  'boxplot',
-  'bubble',
-  'column',
-  'columnrange',
-  'errorbar',
-  'funnel',
-  'gauge',
-  'heatmap',
-  'line',
-  'pie',
-  'polygon',
-  'pyramid',
-  'scatter',
-  'solidgauge',
-  'spline',
-  'treemap',
-  'waterfall'
-]
+worker.addEventListener('message', ({data: {id, result}}) => {
+  if (queue[id]) {
+    queue[id](result)
+    delete queue[id]
+  }
+})
 
-function parseChildren (child, parent) {
-  if (isString(child)) {
-    parent.name = child || ''
-    return
+const mapPropsToConfig = config => new Promise(resolve => {
+  const id = randomString()
+
+  queue[id] = r => {
+    resolve(attachCallbacks(r))
   }
 
-  if (isArray(child)) {
-    React.Children.forEach(child, x => parseChildren(x, parent))
-    return
+  const msg = {
+    id,
+    op: 'mapPropsToConfig',
+    payload: detachCallbacks(cloneDeep(config))
   }
 
-  if (!isObject(child)) return
+  worker.postMessage(msg)
+})
 
-  const {props} = child
-  const type = camelCase(child.type)
-  const node = omit(props, 'children')
+function hasChanged (before, after) {
+  return new Promise(resolve => {
+    const id = randomString()
 
-  if (isEmpty(node) && !isObject(props.children) && !isArray(props.children)) {
-    if (type === 'title') {
-      parent.title = {
-        text: props.children
+    queue[id] = resolve
+
+    worker.postMessage({
+      id,
+      op: 'hasChanged',
+      payload: {
+        before: detachCallbacks(before),
+        after: detachCallbacks(cloneDeep(after))
       }
-    } else {
-      parent[type] = props.children === undefined
-        ? true
-        : props.children
-    }
-
-    return
-  }
-
-  forEach(node, (value, name) => {
-    if (looksLikeAnEventHandler(name)) {
-      node.events = node.events || {}
-      node.events[lowerCase(name.slice(2))] = value
-    }
+    })
   })
-
-  if (parent.isRoot && includes(seriesTypes, type)) {
-    node.type = type
-    node.isSeries = true
-    parent.series = parent.series || []
-    parent.series.push(node)
-  } else if (parent.isSeries && type === 'point') {
-    parent.data = parent.data || []
-    parent.data.push(node)
-  } else {
-    parent[type] = node
-  }
-
-  React.Children.forEach(props.children, children =>
-    parseChildren(children, node))
-}
-
-function mapPropsToConfig (props) {
-  props = cloneDeep(props)
-  const parentConfig = props.config
-  const chart = omit(props, 'config', 'tag', 'children', 'className', 'style')
-  const config = {isRoot: true}
-
-  if (!isEmpty(chart)) config.chart = chart
-
-  parseChildren(props.children, config)
-
-  delete config.isRoot
-
-  return merge({}, defaultConfig, config, parentConfig)
 }
 
 const isSameSeries = (chartSeries, updated) => chartSeries.options.id === updated.id
-const doNotRedraw = false
+
 function removeSeries (series) {
-  series.remove(doNotRedraw)
-}
-
-function customComparison (a, b, key) {
-  if (isFunction(a) && isFunction(b)) {
-    return true
-  }
-  if (key === 'categories') {
-    return true
-  }
-}
-
-function hasChanged (configA, configB) {
-  const newOptionsForComparision = omit(configA, 'series', 'title')
-  const oldOptionsForComparison = omit(configB, 'series', 'title')
-
-  return !isEqualWith(newOptionsForComparision, oldOptionsForComparison, customComparison)
+  series.remove(false)
 }
 
 export class Chart extends React.Component {
@@ -173,17 +88,53 @@ export class Chart extends React.Component {
     tag: 'div'
   }
 
-  state = {
-    config: mapPropsToConfig(this.props)
-  }
+  state = {}
+
+  promise = Promise.resolve()
 
   componentDidMount () {
-    this.draw()
+    this.enqueue(() =>
+      mapPropsToConfig(this.props)
+        .then(this.updateConfig)
+        .then(this.draw))
+
     window.event$.on('aside-toggle', this.resizer)
   }
 
+  componentWillReceiveProps (props) {
+    this.enqueue(() =>
+      mapPropsToConfig(props)
+        .then(this.handleConfig))
+  }
+
+  shouldComponentUpdate () {
+    return false
+  }
+
   componentWillUnmount () {
+    this.dead = true
+
     window.event$.off('aside-toggle', this.resizer)
+  }
+
+  enqueue = fn => {
+    const stopIfDead = () => {
+      if (this.dead) {
+        return Promise.reject('Highchart has been unmounted mid update')
+      }
+    }
+
+    const bypassErr = err => {
+      log.error(err)
+      return fn()
+    }
+
+    const proceed = () => Promise.resolve()
+      .then(fn, bypassErr)
+
+    this.promise = this.promise
+      .then(stopIfDead)
+      .then(proceed)
   }
 
   resizer = () => {
@@ -191,14 +142,18 @@ export class Chart extends React.Component {
   }
 
   draw = () => {
-    this.refs.container.HCharts = this.chart = Highcharts.chart(
-      this.refs.container,
-      cloneDeep(this.state.config)
-    )
+    if (this.state.config) {
+      this.refs.container.HCharts = this.chart = Highcharts.chart(
+        this.refs.container,
+        cloneDeep(this.state.config)
+      )
+    }
   }
 
   hardRedraw = () => {
-    this.chart.destroy()
+    if (this.chart) {
+      this.chart.destroy()
+    }
     this.draw()
   }
 
@@ -206,38 +161,43 @@ export class Chart extends React.Component {
     const oldSeries = find(this.chart.series, ['options.id', series.id])
 
     if (!oldSeries) {
-      return this.chart.addSeries(series, doNotRedraw)
+      return this.chart.addSeries(series, false)
     }
 
-    oldSeries.setData(series.data, doNotRedraw)
+    oldSeries.setData(series.data, false)
   }
 
-  componentWillReceiveProps (props) {
-    const newConfig = mapPropsToConfig(props)
-
-    if (!isEqual(newConfig.title, this.state.config.title)) {
+  handleConfig = newConfig => {
+    if (!isEqual(newConfig.title, get(this, 'state.config.title'))) {
       this.chart.setTitle(newConfig.title)
     }
 
-    if (hasChanged(newConfig, this.state.config)) {
-      this.setState({config: newConfig}, this.hardRedraw)
-    } else {
-      this.setState({config: newConfig})
+    const update = isNewChart => {
+      if (isNewChart) {
+        this.enqueue(() =>
+          this.updateConfig(newConfig)
+            .then(this.hardRedraw))
+      } else {
+        this.updateConfig(newConfig)
 
-      const removed = diff(this.chart.series, newConfig.series, isSameSeries)
+        const removed = diff(this.chart.series, newConfig.series, isSameSeries)
 
-      forEach(removed, removeSeries)
-      forEach(newConfig.series, this.updateSeries)
+        forEach(removed, removeSeries)
+        forEach(newConfig.series, this.updateSeries)
 
-      this.chart.redraw()
+        this.chart.redraw()
+      }
     }
+
+    hasChanged(this.state.config, newConfig)
+      .then(update)
   }
 
-  shouldComponentUpdate () {
-    return false
-  }
+  updateConfig = config => new Promise(resolve => {
+    this.setState({config}, resolve)
+  })
 
-  render () {
+  render = () => {
     const props = pick(this.props, 'className', 'style', 'onClick')
 
     props.ref = 'container'

@@ -1,5 +1,6 @@
 import {getDeepCursor} from '../functions/get-deep-cursor'
 import forEach from 'lodash/forEach'
+import {randomString} from '../functions/random-string'
 
 export function pushKeywordsAction (tree, {company, workspace, folder, campaign, adGroup}, criterionUse, keywords) {
   const keywordsCursor = tree.select(getDeepCursor(tree, [
@@ -23,7 +24,7 @@ export function pushKeywordsAction (tree, {company, workspace, folder, campaign,
         text: Date.now()
       },
       final_urls: null,
-      id: Math.random().toString(36).substr(2),
+      id: randomString(),
       status: 'ENABLED',
       match_type,
       text

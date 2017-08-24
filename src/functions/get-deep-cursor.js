@@ -3,6 +3,7 @@ import findIndex from 'lodash/findIndex'
 import forEach from 'lodash/forEach'
 import size from 'lodash/size'
 import loglevel from 'loglevel'
+import {randomString} from './random-string'
 
 /**
  * transforms dynamic cursor in a working one
@@ -54,6 +55,6 @@ export function getDeepCursor (tree, path) {
   } catch (e) {
     loglevel.error(e)
     // @todo find a better way to deal with data returned from the api but that don't fit the state tree
-    return ['lostAndFound', Math.random().toString(36).substr(2)]
+    return ['lostAndFound', randomString()]
   }
 }

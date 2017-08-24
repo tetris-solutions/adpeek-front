@@ -24,7 +24,7 @@ import reportParamsType from '../../../propTypes/report-params'
 import Ad from './TableAd'
 import Video, {Channel} from './TableVideo'
 import {styledFunctionalComponent} from '../../higher-order/styled'
-import isDate from 'lodash/isDate'
+import {isWrapDate} from '../../../functions/is-wrap-date'
 import includes from 'lodash/includes'
 import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
@@ -89,8 +89,12 @@ function normalizeForSorting (val) {
     return val.value
   }
 
+  if (isWrapDate(val)) {
+    return val.date
+  }
+
   return (
-    isNumber(val) || isString(val) || isDate(val)
+    isNumber(val) || isString(val)
   ) ? val : -Infinity
 }
 
@@ -160,15 +164,15 @@ function Cell ({attribute: {is_metric, type, is_percentage}, value: raw}, {local
     value = prettyNumber(value, type, locales)
   }
 
-  if (isDate(value)) {
-    const m = moment(value)
+  if (isWrapDate(value)) {
+    const m = moment(value.date)
 
-    value = m.format(value._format_)
-
-    if (value._simple_) {
+    if (value.isSimpleDate) {
       tdProps['data-raw'] = JSON.stringify(m.format('YYYY-MM-DD'))
       tdProps['data-date'] = ''
     }
+
+    value = m.format(value.dateFormat)
   }
 
   let content = '---'
@@ -287,18 +291,20 @@ class ReportModuleTable extends React.Component {
   static displayName = 'Module-Table'
 
   static propTypes = {
-    type: PropTypes.string,
-    channels: PropTypes.object,
-    sort: PropTypes.array,
-    change: PropTypes.func,
-    limit: PropTypes.number,
-    isLoading: PropTypes.bool,
-    name: PropTypes.string,
-    reportParams: reportParamsType,
-    query: PropTypes.object,
-    entity: entityType,
-    attributes: PropTypes.object.isRequired,
-    result: PropTypes.array.isRequired
+    config: PropTypes.shape({
+      type: PropTypes.string,
+      channels: PropTypes.object,
+      sort: PropTypes.array,
+      change: PropTypes.func,
+      limit: PropTypes.number,
+      isLoading: PropTypes.bool,
+      name: PropTypes.string,
+      reportParams: reportParamsType,
+      query: PropTypes.object,
+      entity: entityType,
+      attributes: PropTypes.object.isRequired,
+      result: PropTypes.array.isRequired
+    })
   }
 
   static contextTypes = {
@@ -313,7 +319,7 @@ class ReportModuleTable extends React.Component {
   }
 
   toggleHeader = (id) => {
-    const sortObj = pick(fromPairs(this.props.sort), id, '_fields_')
+    const sortObj = pick(fromPairs(this.props.config.sort), id, '_fields_')
 
     if (sortObj[id] === 'desc') {
       sortObj[id] = 'asc'
@@ -321,12 +327,12 @@ class ReportModuleTable extends React.Component {
       sortObj[id] = 'desc'
     }
 
-    this.props.change({sort: toPairs(sortObj)})
+    this.props.config.change({sort: toPairs(sortObj)})
   }
 
   getEntityComponentById = (id) => {
     const {accounts, report: {platform: reportPlatform}} = this.context
-    const {entity: {id: entityId, list}, reportParams} = this.props
+    const {entity: {id: entityId, list}, reportParams} = this.props.config
 
     const platform = reportPlatform ||
       get(find(accounts, getAccountSelector(id)), 'platform')
@@ -356,13 +362,13 @@ class ReportModuleTable extends React.Component {
   }
 
   getChannelColumn = (channelId) => {
-    const data = get(this.props.channels, channelId, {})
+    const data = get(this.props.config.channels, channelId, {})
 
     return new Sortable(<Channel id={channelId} {...data}/>, get(data, 'channel.title', channelId))
   }
 
   getRowCompareFn = () => {
-    const {sort, query: {metrics, dimensions}} = this.props
+    const {sort, query: {metrics, dimensions}} = this.props.config
     const sortCol = find(sort, ([name]) => (
       includes(dimensions, name) ||
       includes(metrics, name)
@@ -388,7 +394,7 @@ class ReportModuleTable extends React.Component {
       result,
       query,
       attributes
-    } = this.props
+    } = this.props.config
 
     const sortPairs = fromPairs(sort)
     const fields = query ? concat(query.dimensions, query.metrics) : []
@@ -443,7 +449,7 @@ class ReportModuleTable extends React.Component {
           columns={columns}
           attributes={attributes}
           sortPairs={sortPairs}
-          toggle={this.props.change ? this.toggleHeader : null}/>
+          toggle={this.props.config.change ? this.toggleHeader : null}/>
       )
 
       tbody = <TBody rows={rows} columns={columns} attributes={attributes}/>
@@ -477,7 +483,7 @@ VideoWrapper.propTypes = {
 const WithChannel = routeParamsBasedBranch('user', 'company', VideoWrapper)
 
 const Wrapper = props => {
-  if (props.entity.id === 'Video') {
+  if (props.config.entity.id === 'Video') {
     return <WithChannel {...props}/>
   }
 
@@ -486,7 +492,9 @@ const Wrapper = props => {
 
 Wrapper.displayName = 'Table-Wrapper'
 Wrapper.propTypes = {
-  entity: entityType
+  config: PropTypes.shape({
+    entity: entityType
+  })
 }
 
 export default styledFunctionalComponent(Wrapper, style)

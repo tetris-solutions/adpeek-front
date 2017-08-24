@@ -6,13 +6,14 @@ import get from 'lodash/get'
 import isArray from 'lodash/isArray'
 import assign from 'lodash/assign'
 import keyBy from 'lodash/keyBy'
+import {randomString} from '../../functions/random-string'
 
 export const cParams = ls =>
   keyBy(map(isArray(ls) ? concat(ls) : concat(get(ls, 'parameters', [])),
     ({key, value}) => ({
       key,
       value,
-      id: Math.random().toString(36).substr(2)
+      id: randomString()
     })), 'id')
 
 export class UrlTracking extends React.Component {
@@ -21,7 +22,7 @@ export class UrlTracking extends React.Component {
   }
 
   addCustomParam = () => {
-    const id = Math.random().toString(36).substr(2)
+    const id = randomString()
     const custom_params = assign({}, this.state.custom_params)
 
     custom_params[id] = {

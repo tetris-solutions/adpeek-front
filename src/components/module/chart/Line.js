@@ -1,30 +1,29 @@
 import React from 'react'
-
-import chartType from '../../../propTypes/report-chart'
+import AsyncChart from './AsyncChart'
 import Highcharts from '../../Highcharts'
-import {reportToChartConfig} from '../../../functions/report-to-chart-config'
 
-function ChartLine (props) {
-  const config = reportToChartConfig(props)
+class ChartLine extends AsyncChart {
+  static displayName = 'Line'
 
-  return (
-    <Highcharts config={config} zoomType='xy'>
-      <title>{props.name}</title>
-      <exporting
-        sourceWidth={props.sourceWidth}
-        sourceHeight={props.sourceHeight}
-        filename={props.name}/>
-      <plot-options>
-        <line>
-          <marker enabled={false}/>
-        </line>
-      </plot-options>
-      <tooltip shared/>
-    </Highcharts>
-  )
+  render () {
+    const props = this.props.config
+
+    return (
+      <Highcharts config={this.state.config} zoomType='xy'>
+        <title>{props.name}</title>
+        <exporting
+          sourceWidth={props.sourceWidth}
+          sourceHeight={props.sourceHeight}
+          filename={props.name}/>
+        <plot-options>
+          <line>
+            <marker enabled={false}/>
+          </line>
+        </plot-options>
+        <tooltip shared/>
+      </Highcharts>
+    )
+  }
 }
-
-ChartLine.displayName = 'Line'
-ChartLine.propTypes = chartType
 
 export default ChartLine

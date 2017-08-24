@@ -19,6 +19,7 @@ import {loadOrdersAction} from '../../actions/load-orders'
 import {pushSuccessMessageAction} from '../../actions/push-success-message-action'
 import {saveOrderAction} from '../../actions/save-order'
 import {spawnAutoBudgetAction} from '../../actions/spawn-auto-budget'
+import {randomString} from '../../functions/random-string'
 
 const n = num => round(num, 2)
 
@@ -221,7 +222,7 @@ export class OrderController extends React.Component {
 
     const newBudget = normalizeBudget({
       isNewBudget: true,
-      id: `NewBudget::${Math.random().toString(36).substr(2)}`,
+      id: `NewBudget::${randomString()}`,
       name: defaultBudgetName(this.context.messages, order.budgets.length + 1),
       amount: remainingAmount,
       delivery_method: find(deliveryMethods, ({id}) => id !== 'UNKNOWN').id,

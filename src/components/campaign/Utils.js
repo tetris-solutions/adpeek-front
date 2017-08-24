@@ -11,6 +11,7 @@ import isArray from 'lodash/isArray'
 import map from 'lodash/map'
 import flatten from 'lodash/flatten'
 import filter from 'lodash/filter'
+import {randomString} from '../../functions/random-string'
 
 export const style = csjs`
 .edit {
@@ -143,7 +144,7 @@ export const Wrapper = styledFunctionalComponent(Wrapper_, style)
 
 const crop = ls => ls.length > 10
   ? ls.slice(0, 10).concat([
-    <SubText key={Math.random().toString(36).substr(2)}>
+    <SubText key={randomString()}>
       ...
     </SubText>
   ]) : ls

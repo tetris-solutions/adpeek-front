@@ -1,23 +1,21 @@
 import React from 'react'
 import Highcharts from '../../Highcharts'
-import {reportToChartConfig} from '../../../functions/report-to-chart-config'
-import chartType from '../../../propTypes/report-chart'
+import AsyncChart from './AsyncChart'
 
-function ChartColumn (props) {
-  const config = reportToChartConfig(props)
+class Column extends AsyncChart {
+  static displayName = 'Column'
 
-  return (
-    <Highcharts config={config} zoomType='xy'>
-      <title>{props.name}</title>
-      <exporting
-        sourceWidth={props.sourceWidth}
-        sourceHeight={props.sourceHeight}
-        filename={props.name}/>
-    </Highcharts>
-  )
+  render () {
+    return (
+      <Highcharts config={this.state.config} zoomType='xy'>
+        <title>{this.props.name}</title>
+        <exporting
+          sourceWidth={this.props.sourceWidth}
+          sourceHeight={this.props.sourceHeight}
+          filename={this.props.name}/>
+      </Highcharts>
+    )
+  }
 }
 
-ChartColumn.displayName = 'Column'
-ChartColumn.propTypes = chartType
-
-export default ChartColumn
+export default Column

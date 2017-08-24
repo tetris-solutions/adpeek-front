@@ -22,6 +22,28 @@ function monthNameToIndex (name) {
   return indexOf(months, toLower(name))
 }
 
+export class WrapDate {
+  /**
+   *
+   * @param {Date} date wrapped date
+   * @param {String} format friendly format
+   * @param {Boolean} [simple=false] whether it is a simple date
+   */
+  constructor (date, format, simple = false) {
+    this.date = date
+    this.dateFormat = format
+    this.isSimpleDate = simple
+  }
+
+  setValue (value) {
+    this._value_ = value
+  }
+
+  toString () {
+    return this.date.toString()
+  }
+}
+
 function zeroedMoment (str) {
   return str
     ? moment(str).hour(0).minute(0).second(0).millisecond(0)
@@ -56,43 +78,34 @@ export function normalizeResult (attributes, result) {
 
     switch (attributeId) {
       case 'year':
-        date = zeroedMoment().year(value).toDate()
-        date._format_ = 'YYYY'
+        date = new WrapDate(date = zeroedMoment().year(value).toDate(), 'YYYY')
         break
       case 'hour':
       case 'hourofday':
-        date = zeroedMoment().hour(value).toDate()
-        date._format_ = 'HH:mm'
+        date = new WrapDate(zeroedMoment().hour(value).toDate(), 'HH:mm')
         break
       case 'yearmonth':
       case 'month':
-        date = zeroedMoment(value).toDate()
-        date._format_ = 'MMMM/YY'
+        date = new WrapDate(zeroedMoment(value).toDate(), 'MMMM/YY')
         break
       case 'month_of_year':
       case 'monthofyear':
-        date = zeroedMoment().month(monthNameToIndex(value)).toDate()
-        date._format_ = 'MMMM'
+        date = new WrapDate(zeroedMoment().month(monthNameToIndex(value)).toDate(), 'MMMM')
         break
       case 'date':
-        date = zeroedMoment(value).toDate()
-        date._format_ = 'DD/MM/YYYY'
-        date._simple_ = true
+        date = new WrapDate(zeroedMoment(value).toDate(), 'DD,MM,YYYY', true)
         break
       case 'day_of_week':
       case 'dayofweekname':
       case 'dayofweek':
-        date = zeroedMoment().weekday(daysOfWeek[toLower(value)] || 0).toDate()
-        date._format_ = 'dddd'
+        date = new WrapDate(zeroedMoment().weekday(daysOfWeek[toLower(value)] || 0).toDate(), 'dddd')
         break
       case 'isoyearisoweek':
       case 'week':
-        date = zeroedMoment(value).toDate()
-        date._format_ = 'W, D/MMM'
+        date = new WrapDate(zeroedMoment(value).toDate(), 'W, D/MMM')
         break
       case 'quarter':
-        date = zeroedMoment(value).toDate()
-        date._format_ = 'MMMM/YY'
+        date = new WrapDate(zeroedMoment(value).toDate(), 'MMMM/YY')
         break
       case 'hourly_stats_aggregated_by_advertiser_time_zone':
       case 'hourly_stats_aggregated_by_audience_time_zone':
@@ -107,13 +120,13 @@ export function normalizeResult (attributes, result) {
           .second(parts[2])
           .toDate()
 
-        date._format_ = 'HH:mm'
+        date = new WrapDate(date, 'HH:mm')
 
         break
     }
 
     if (date) {
-      date._value_ = value
+      date.setValue(value)
       return date
     }
 

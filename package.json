@@ -94,6 +94,7 @@
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-hot-middleware": "^2.18.2",
-    "why-did-you-update": "^0.0.8"
+    "why-did-you-update": "^0.0.8",
+    "worker-loader": "^0.8.1"
   }
 }

@@ -1,28 +1,28 @@
 import React from 'react'
 import Highcharts from '../../Highcharts'
-import {reportToChartConfig} from '../../../functions/report-to-chart-config'
-import chartType from '../../../propTypes/report-chart'
+import AsyncChart from './AsyncChart'
 
-function ChartPie (props) {
-  const config = reportToChartConfig(props)
+class ChartPie extends AsyncChart {
+  static displayName = 'Pie'
 
-  return (
-    <Highcharts config={config}>
-      <title>{props.name}</title>
-      <exporting
-        sourceWidth={props.sourceWidth}
-        sourceHeight={props.sourceHeight}
-        filename={props.name}/>
-      <plot-options>
-        <pie allowPointSelect showInLegend>
-          <data-labels enabled={false}/>
-        </pie>
-      </plot-options>
-    </Highcharts>
-  )
+  render () {
+    const props = this.props.config
+
+    return (
+      <Highcharts config={this.state.config}>
+        <title>{props.name}</title>
+        <exporting
+          sourceWidth={props.sourceWidth}
+          sourceHeight={props.sourceHeight}
+          filename={props.name}/>
+        <plot-options>
+          <pie allowPointSelect showInLegend>
+            <data-labels enabled={false}/>
+          </pie>
+        </plot-options>
+      </Highcharts>
+    )
+  }
 }
-
-ChartPie.displayName = 'Pie'
-ChartPie.propTypes = chartType
 
 export default ChartPie

@@ -58,50 +58,53 @@ class Chart extends React.Component {
   }
 
   static propTypes = {
-    change: PropTypes.func,
-    height: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]),
-    accounts: PropTypes.array,
-    report: PropTypes.object,
-    renderHiddenTable: PropTypes.bool,
-    type: PropTypes.string,
-    locales: PropTypes.string,
-    sort: PropTypes.array,
-    limit: PropTypes.number,
-    isLoading: PropTypes.bool,
-    reportParams: PropTypes.object,
-    sourceWidth: PropTypes.number,
-    sourceHeight: PropTypes.number,
-    id: PropTypes.string,
-    name: PropTypes.string,
-    messages: PropTypes.object,
-    attributes: PropTypes.object,
-    entity: PropTypes.object,
-    result: PropTypes.array,
-    comments: PropTypes.array,
-    query: PropTypes.object
+    config: PropTypes.shape({
+      change: PropTypes.func,
+      height: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+      ]),
+      accounts: PropTypes.array,
+      report: PropTypes.object,
+      renderHiddenTable: PropTypes.bool,
+      type: PropTypes.string,
+      locales: PropTypes.string,
+      sort: PropTypes.array,
+      limit: PropTypes.number,
+      isLoading: PropTypes.bool,
+      reportParams: PropTypes.object,
+      sourceWidth: PropTypes.number,
+      sourceHeight: PropTypes.number,
+      id: PropTypes.string,
+      name: PropTypes.string,
+      messages: PropTypes.object,
+      attributes: PropTypes.object,
+      entity: PropTypes.object,
+      result: PropTypes.array,
+      comments: PropTypes.array,
+      query: PropTypes.object
+    })
   }
 
   render () {
-    const Renderer = typeComponent[this.props.type]
+    const {config} = this.props
+    const Renderer = typeComponent[config.type]
 
-    counters[this.props.id] = (counters[this.props.id] || 0) + 1
+    counters[config.id] = (counters[config.id] || 0) + 1
 
-    log.info(`${counters[this.props.id]}) render module ${this.props.name} chart`)
+    log.info(`${counters[config.id]}) render module ${config.name} chart`)
 
     return (
       <div>
-        <div className={style.wrap} style={{height: this.props.height}}>
-          <Renderer {...this.props}/>
+        <div className={style.wrap} style={{height: config.height}}>
+          <Renderer config={config}/>
           <div className={style.hidden} data-interface>
-            {this.props.renderHiddenTable
-              ? <Table {...this.props}/>
+            {config.renderHiddenTable
+              ? <Table config={config}/>
               : null}
           </div>
         </div>
-        {this.props.isLoading ? <ChartSpinner/> : null}
+        {config.isLoading ? <ChartSpinner/> : null}
       </div>
     )
   }
@@ -176,7 +179,7 @@ class ChartContainer extends React.Component {
     }
 
     return (
-      <Chart {...config}/>
+      <Chart config={config}/>
     )
   }
 }

@@ -41,12 +41,14 @@ class TotalChart extends React.Component {
   static displayName = 'Total-Chart'
 
   static propTypes = {
-    name: PropTypes.string.isRequired,
-    attributes: PropTypes.object,
-    query: PropTypes.shape({
-      metrics: PropTypes.array
-    }).isRequired,
-    result: PropTypes.array.isRequired
+    config: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      attributes: PropTypes.object,
+      query: PropTypes.shape({
+        metrics: PropTypes.array
+      }),
+      result: PropTypes.array.isRequired
+    })
   }
 
   static contextTypes = {
@@ -55,7 +57,7 @@ class TotalChart extends React.Component {
 
   render () {
     const {locales} = this.context
-    const {query, name, result, attributes} = this.props
+    const {query, name, result, attributes} = this.props.config
     const divProps = {
       className: `${style.content}`
     }

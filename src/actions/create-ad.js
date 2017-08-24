@@ -1,4 +1,5 @@
 import {getDeepCursor} from '../functions/get-deep-cursor'
+import {randomString} from '../functions/random-string'
 
 export function pushAdAction (tree, {company, workspace, folder, campaign, adGroup}, type) {
   const adsCursor = tree.select(getDeepCursor(tree, [
@@ -14,7 +15,7 @@ export function pushAdAction (tree, {company, workspace, folder, campaign, adGro
   // @todo support other ad types
 
   const ad = {
-    id: Math.random().toString(36).substr(2),
+    id: randomString(),
     draft: true,
     adgroup_id: adGroup,
     status: 'ENABLED',

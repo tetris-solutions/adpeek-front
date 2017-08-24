@@ -1,4 +1,5 @@
 import {getDeepCursor} from '../functions/get-deep-cursor'
+import {randomString} from '../functions/random-string'
 
 export function pushAdGroupAction (tree, {company, workspace, folder, campaign}) {
   const campaignCursor = tree.select(getDeepCursor(tree, [
@@ -12,7 +13,7 @@ export function pushAdGroupAction (tree, {company, workspace, folder, campaign})
   const {name, id} = campaignCursor.get()
 
   campaignCursor.push('adGroups', {
-    id: Math.random().toString(36).substr(2),
+    id: randomString(),
     draft: true,
     campaign_id: id,
     campaign_name: name,

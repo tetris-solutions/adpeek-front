@@ -1,5 +1,4 @@
 import assign from 'lodash/assign'
-import max from 'lodash/max'
 import groupBy from 'lodash/groupBy'
 import find from 'lodash/find'
 import forEach from 'lodash/forEach'
@@ -17,9 +16,7 @@ import negate from 'lodash/negate'
 import omit from 'lodash/omit'
 import pick from 'lodash/pick'
 import without from 'lodash/without'
-import {prettyNumber} from './pretty-number'
-import set from 'lodash/set'
-import isDate from 'lodash/isDate'
+import {isWrapDate} from './is-wrap-date'
 import {getEmptyModuleMessage} from './get-empty-module-message'
 import orderBy from 'lodash/orderBy'
 
@@ -115,37 +112,19 @@ function detectXAxis (result, xAxisDimensions) {
    */
   const first = get(result, [0, xAxisDimensions])
 
-  if (isDate(first)) {
+  if (isWrapDate(first)) {
     return types.datetime
   }
 
   return types.linear
 }
 
-function plainMessage () {
-  /**
-   *
-   * @type {Highcharts.Chart}
-   */
-  const chart = this
-
-  const x = (chart.chartWidth / 2) - 50
-  const y = (chart.chartHeight / 2) - 20
-
-  const label = chart._label_ = chart._label_ || chart.renderer.label().add()
-
-  label.textSetter(chart.userOptions.labelMessage)
-  label.ySetter(y)
-  label.xSetter(x)
-  label.css({fontStyle: 'italic', fontSize: '12pt'})
-}
-
 const emptyResultChart = labelMessage => ({
   labelMessage,
   chart: {
     events: {
-      load: plainMessage,
-      redraw: plainMessage
+      load: '_placeholder_',
+      redraw: '_placeholder_'
     },
     title: {
       style: {
@@ -154,10 +133,6 @@ const emptyResultChart = labelMessage => ({
     }
   }
 })
-
-const readType = attr => attr.type === 'special' && attr.is_percentage
-  ? 'percentage'
-  : attr.type
 
 function getAccountSelector (id) {
   if (!includes(id, ':')) return id
@@ -174,12 +149,18 @@ function mountAnalyticsCampaign (id) {
 }
 
 const comparable = attr => x => {
-  switch (get(x, `__row__.${attr}`)) {
+  const value = get(x, `__row__.${attr}`)
+
+  if (isWrapDate(value)) {
+    return value.date
+  }
+
+  switch (value) {
     case '--':
     case '---':
       return -Infinity
     default:
-      return get(x, `__row__.${attr}`)
+      return value
   }
 }
 
@@ -226,17 +207,12 @@ export function reportToChartConfig (module) {
   }
 
   const yAxis = map(metrics, (metric, index) => ({
+    metric,
     title: {
       text: getAttributeName(metric)
     },
     labels: {
-      formatter () {
-        return prettyNumber(
-          this.value,
-          readType(attributes[metric]),
-          module.locales
-        )
-      }
+      formatter: '_placeholder_'
     },
     opposite: index % 2 !== 0
   }))
@@ -323,8 +299,8 @@ export function reportToChartConfig (module) {
             : row[xAxisDimension]
         }
 
-        if (isDate(row[xAxisDimension])) {
-          point.x = row[xAxisDimension].getTime()
+        if (isWrapDate(row[xAxisDimension])) {
+          point.x = row[xAxisDimension].date.getTime()
         }
 
         seriesConfig.data.push(point)
@@ -347,7 +323,7 @@ export function reportToChartConfig (module) {
 
   forEach(grouped, walk)
 
-  const categories = new Array(max(map(series, ({data}) => size(data))))
+  const categories = []
 
   forEach(series, currentSeries => {
     if (xAxis.sortable) {
@@ -379,9 +355,7 @@ export function reportToChartConfig (module) {
       shape: 'circlepin',
       showInLegend: false,
       tooltip: {
-        pointFormatter () {
-          return this.text
-        }
+        pointFormatter: '_placeholder_'
       },
       data: map(days, (groupOfComments, date) => {
         const [year, month, day] = date.split('-').map(Number)
@@ -433,19 +407,6 @@ export function reportToChartConfig (module) {
   if (!isEmpty(categories)) {
     config.xAxis.categories = categories
   }
-
-  function pointFormatter () {
-    const attribute = attributes[this.options.metric]
-    const value = prettyNumber(this.y, readType(attribute), module.locales)
-
-    return `
-        <span style="color: ${this.color}">${this.series.name}:</span>
-        <b>${value}</b>
-        ${this.options.raw ? `<em>${this.options.raw}</em>` : ''}
-        <br/>`
-  }
-
-  set(config, ['plotOptions', 'series', 'tooltip', 'pointFormatter'], pointFormatter)
 
   return config
 }
