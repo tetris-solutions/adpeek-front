@@ -55,7 +55,7 @@ const calculateRanges = memoize(({today, yesterday, pastWeek, currentMonth, past
 }))
 
 const DateRangePicker = (props, {messages}) =>
-  <DateRange {...props} ranges={props.ranges || calculateRanges(messages)}/>
+  <DateRange {...props} twoStepChange ranges={props.ranges || calculateRanges(messages)}/>
 
 DateRangePicker.displayName = 'Date-Range-Picker'
 DateRangePicker.propTypes = {
