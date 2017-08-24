@@ -8,7 +8,7 @@ import get from 'lodash/get'
 import forEach from 'lodash/forEach'
 import isEqual from 'lodash/isEqual'
 import cloneDeep from 'lodash/cloneDeep'
-import {mapPropsToConfig, hasChanged} from '../functions/highcart-config'
+import {mapPropsToConfig, requiresFullRedraw} from '../functions/highcart-config'
 
 let Highcharts
 
@@ -133,7 +133,7 @@ export class Chart extends React.Component {
       }
     }
 
-    hasChanged(this.state.config, newConfig)
+    requiresFullRedraw(this.state.config, newConfig)
       .then(update)
   }
 

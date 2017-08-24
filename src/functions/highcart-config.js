@@ -145,7 +145,7 @@ function customComparison (a, b, key) {
 
 const unimportant = ['series', 'title', 'attributes', 'exporting']
 
-export const hasChanged = queueHardLift((configA, configB) => {
+export const requiresFullRedraw = queueHardLift((configA, configB) => {
   const newOptionsForComparision = omit(configA, unimportant)
   const oldOptionsForComparison = omit(configB, unimportant)
 
