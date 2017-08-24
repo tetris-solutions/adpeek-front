@@ -189,6 +189,32 @@ const readType = attr => attr.type === 'special' && attr.is_percentage
   ? 'percentage'
   : attr.type
 
+function simplePointFormatter () {
+  return this.text
+}
+
+function yAxisLabelFormatter () {
+  const {chart, axis} = this
+
+  return prettyNumber(
+    this.value,
+    readType(chart.options.attributes[axis.options.metric]),
+    chart.options.locales
+  )
+}
+
+function pointFormatter () {
+  const {series: {chart: {options}}} = this
+  const attribute = options.attributes[this.options.metric]
+  const value = prettyNumber(this.y, readType(attribute), options.locales)
+
+  return `
+        <span style="color: ${this.color}">${this.series.name}:</span>
+        <b>${value}</b>
+        ${this.options.raw ? `<em>${this.options.raw}</em>` : ''}
+        <br/>`
+}
+
 export const reportToChartConfig = queueHardLift((module) => {
   const emptyModuleLabel = getEmptyModuleMessage(module)
 
@@ -237,13 +263,7 @@ export const reportToChartConfig = queueHardLift((module) => {
       text: getAttributeName(metric)
     },
     labels: {
-      formatter () {
-        return prettyNumber(
-          this.value,
-          readType(attributes[metric]),
-          module.locales
-        )
-      }
+      formatter: yAxisLabelFormatter
     },
     opposite: index % 2 !== 0
   }))
@@ -386,9 +406,7 @@ export const reportToChartConfig = queueHardLift((module) => {
       shape: 'circlepin',
       showInLegend: false,
       tooltip: {
-        pointFormatter () {
-          return this.text
-        }
+        pointFormatter: simplePointFormatter
       },
       data: map(days, (groupOfComments, date) => {
         const [year, month, day] = date.split('-').map(Number)
@@ -404,6 +422,8 @@ export const reportToChartConfig = queueHardLift((module) => {
   }
 
   const config = {
+    locales: module.locales,
+    attributes: attributes,
     chart: {
       events: {
         load: null,
@@ -439,17 +459,6 @@ export const reportToChartConfig = queueHardLift((module) => {
 
   if (!isEmpty(categories)) {
     config.xAxis.categories = categories
-  }
-
-  function pointFormatter () {
-    const attribute = attributes[this.options.metric]
-    const value = prettyNumber(this.y, readType(attribute), module.locales)
-
-    return `
-        <span style="color: ${this.color}">${this.series.name}:</span>
-        <b>${value}</b>
-        ${this.options.raw ? `<em>${this.options.raw}</em>` : ''}
-        <br/>`
   }
 
   set(config, ['plotOptions', 'series', 'tooltip', 'pointFormatter'], pointFormatter)

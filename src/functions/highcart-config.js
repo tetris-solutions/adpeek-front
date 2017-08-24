@@ -143,9 +143,11 @@ function customComparison (a, b, key) {
   }
 }
 
+const unimportant = ['series', 'title', 'attributes', 'exporting']
+
 export const hasChanged = queueHardLift((configA, configB) => {
-  const newOptionsForComparision = omit(configA, 'series', 'title')
-  const oldOptionsForComparison = omit(configB, 'series', 'title')
+  const newOptionsForComparision = omit(configA, unimportant)
+  const oldOptionsForComparison = omit(configB, unimportant)
 
   return !isEqualWith(newOptionsForComparision, oldOptionsForComparison, customComparison)
 })
