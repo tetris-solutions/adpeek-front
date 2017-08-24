@@ -20,7 +20,7 @@ const EditContent = ({entities}, {report, onChangeName, onChangeType, onChangeEn
 
       {report.platform !== 'analytics' && (
         <div className='mdl-cell mdl-cell--4-col'>
-          <Select label='entity' name='entity' onChange={onChangeEntity} value={entity.id}>
+          <Select label='entity' name='entity' onChange={onChangeEntity} defaultValue={entity.id}>
             {map(sortBy(entities, 'name'), ({id, name}) =>
               <option key={id} value={id}>
                 {name}

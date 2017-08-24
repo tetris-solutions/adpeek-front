@@ -9,6 +9,7 @@ import reportParamsType from '../../propTypes/report-params'
 import ModuleCard from './Card'
 import {deleteModuleAction} from '../../actions/delete-module'
 import {loadReportModuleResultAction} from '../../actions/load-report-module-result'
+import {queueHardLift} from '../../functions/queue-hard-lift'
 import {updateModuleAction} from '../../actions/update-module'
 import Editor from './editor/Controller'
 import Modal from 'tetris-iso/Modal'
@@ -21,8 +22,6 @@ import Comments from './Comments'
 import CroppedResultDialog from './CroppedResultDialog'
 import TextMessage from 'intl-messageformat'
 import DescriptionDialog from './DescriptionDialog'
-import log from 'loglevel'
-import isEqual from 'lodash/isEqual'
 
 const reportContext = [
   'accounts',
@@ -87,7 +86,8 @@ class ModuleController extends React.Component {
 
   componentDidMount () {
     this.fetchResult = debounce(this.startResultLoadingAction, 1000)
-    this.fetchResult(this.getChartQuery())
+    this.getChartQuery()
+      .then(this.fetchResult)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -97,7 +97,8 @@ class ModuleController extends React.Component {
   }
 
   componentDidUpdate () {
-    this.fetchResult(this.getChartQuery())
+    this.getChartQuery()
+      .then(this.fetchResult)
   }
 
   startResultLoadingAction = (query) => {
@@ -110,61 +111,34 @@ class ModuleController extends React.Component {
     return dispatch(loadReportModuleResultAction, params, module.id, query, attributes)
   }
 
-  getChartQuery = () => {
+  getChartQuery = queueHardLift(() => {
     const {reportParams} = this.context
     const {module, entity} = this.props
 
-    const query = {
-      metrics: module.metrics,
-      dimensions: module.dimensions,
-      sort: module.sort,
-      to: reportParams.to,
-      from: reportParams.from,
-      accounts: this.getUsedAccounts(module.filters.id),
-      filters: module.filters,
-      entity: entity.id
-    }
+    return this.getUsedAccounts(module.filters.id)
+      .then(accounts => ({
+        metrics: module.metrics,
+        dimensions: module.dimensions,
+        sort: module.sort,
+        to: reportParams.to,
+        from: reportParams.from,
+        accounts,
+        filters: module.filters,
+        entity: entity.id
+      }))
+  })
 
-    const $query = JSON.stringify(query)
-
-    if ($query !== this.$query) {
-      this.$query = $query
-      this.rawQuery = query
-      log.info(`${module.name} has a new query`)
-    } else {
-      log.debug(`${module.name} skipped a query change`)
-    }
-
-    return this.rawQuery
-  }
-
-  getUsedAccounts = (ids) => {
+  getUsedAccounts = queueHardLift(ids => {
     const {report: {platform}, reportParams: {accounts}} = this.context
 
-    if (
-      platform === this.$platform &&
-      accounts === this.$accounts &&
-      isEqual(this.$ids, ids)
-    ) {
-      log.debug(`${this.props.module.name} skipped account change`)
-      return this.$usedAccounts
-    }
-
-    log.info(`${this.props.module.name} is updating accounts`)
-
-    this.$ids = ids
-    this.$platform = platform
-    this.$accounts = accounts
-
     if (platform) {
-      this.$usedAccounts = accounts
-    } else {
-      const usedAccountKeys = uniq(map(ids, getAccountKeyFromId))
-      this.$usedAccounts = filter(accounts, ({id}) => includes(usedAccountKeys, id))
+      return accounts
     }
 
-    return this.$usedAccounts
-  }
+    const usedAccountIds = uniq(map(ids, getAccountKeyFromId))
+
+    return filter(accounts, ({id}) => includes(usedAccountIds, id))
+  })
 
   remove = () => {
     const {params, dispatch, module} = this.props

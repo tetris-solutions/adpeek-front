@@ -1,31 +1,50 @@
-import queue from 'queue'
 import 'setimmediate'
+import noop from 'lodash/noop'
 
-const stack = queue({
-  concurrency: 1,
-  autostart: true
-})
+const tasks = window.task$ = []
+let running = false
+let timeout
 
-const pass = (cb, fulfill) => r => {
-  cb()
-  fulfill(r)
-}
-
-const leak = (cb, fail) => err => {
-  cb()
-  fail(err)
-}
-
-const run = (fn, args) =>
+const run = (fn, ...args) =>
   Promise.resolve()
     .then(() => fn(...args))
 
+const delayed = fn => new Promise(resolve =>
+  setImmediate(() => run(fn).catch(noop).then(resolve)))
+
+function next () {
+  clearTimeout(timeout)
+
+  if (running) {
+    timeout = setTimeout(next, 100)
+    return
+  }
+
+  const task = tasks.shift()
+
+  if (!task) return
+
+  running = true
+
+  run(task)
+    .catch(noop)
+    .then(() => {
+      running = false
+    })
+
+  if (tasks.length) {
+    setImmediate(next)
+  }
+}
+
 export const queueHardLift = (fn, t = 50) => (...args) =>
-  new Promise((resolve, reject) =>
-// eslint-disable-next-line promise/param-names
-    stack.push(() => new Promise(next =>
-      setImmediate(() =>
-        run(fn, args).then(
-          pass(next, resolve),
-          leak(next, reject))))))
+  new Promise((resolve, reject) => {
+    const call = () =>
+      run(fn, ...args)
+        .then(resolve, reject)
+
+    tasks.push(delayed(call))
+
+    next()
+  })
 

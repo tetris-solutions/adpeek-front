@@ -4,7 +4,7 @@ import Select from '../../Select'
 
 function TypeSelect ({onChange, value}, {messages}) {
   return (
-    <Select label='moduleType' name='type' onChange={onChange} value={value}>
+    <Select label='moduleType' name='type' onChange={onChange} defaultValue={value}>
       <option value='column'>
         {messages.columnChart}
       </option>

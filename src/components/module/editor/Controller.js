@@ -21,6 +21,7 @@ import filter from 'lodash/filter'
 import startsWith from 'lodash/startsWith'
 import constant from 'lodash/constant'
 import size from 'lodash/size'
+import {queueHardLift} from '../../../functions/queue-hard-lift'
 
 const editableFields = ['description', 'name', 'type', 'dimensions', 'metrics', 'rows', 'cols', 'entity', 'limit', 'sort', 'filters']
 const MAX_ACCOUNTS = 15
@@ -87,7 +88,8 @@ class ModuleEdit extends React.Component {
 
     this.state = {
       oldModule: snapshot,
-      newModule: snapshot
+      newModule: snapshot,
+      setup: null
     }
   }
 
@@ -111,6 +113,11 @@ class ModuleEdit extends React.Component {
   componentWillMount () {
     this.updateQueue = []
     this.persist = debounce(this.flushUpdateQueue, 500)
+    this.refreshSetup()
+  }
+
+  componentWillReceiveProps (nextProps) {
+    this.refreshSetup(nextProps)
   }
 
   componentDidMount () {
@@ -294,9 +301,12 @@ class ModuleEdit extends React.Component {
 
   change = (changes, forceRedraw = false) => {
     const newModule = assign({}, this.state.newModule, changes)
+
     const redrawIfNecessary = () => {
       if (forceRedraw || changes.sort) {
         this.redraw()
+      } else {
+        this.refreshSetup()
       }
     }
 
@@ -338,7 +348,7 @@ class ModuleEdit extends React.Component {
     return this.props.entities[this.state.newModule.entity]
   }
 
-  getInvalidPermutation (dimensions, metrics) {
+  getInvalidPermutation = queueHardLift((dimensions, metrics) => {
     const {attributes} = this.context
     const selected = concat(dimensions, metrics)
     const isSelected = id => includes(selected, id)
@@ -358,7 +368,7 @@ class ModuleEdit extends React.Component {
     forEach(selected, checkForConflict)
 
     return invalidPermutation
-  }
+  })
 
   getAttributeSelectionLimit (dimensions, metrics) {
     const limit = {
@@ -379,31 +389,52 @@ class ModuleEdit extends React.Component {
     return limit
   }
 
-  render () {
+  refreshSetup (props = this.props) {
+    this.getSetup(props)
+      .then(setup => this.setState({setup}))
+  }
+
+  getSetup = queueHardLift((props = this.props) => {
     const {name, type, dimensions, metrics, filters} = this.getDraftModule()
-    const numberOfSelectedAccounts = this.context.getUsedAccounts(filters.id).length
 
-    const isInvalidModule = (
-      isEmpty(name) ||
-      isEmpty(metrics) ||
-      isEmpty(filters.id) ||
-      (type !== 'total' && isEmpty(dimensions))
-    )
+    return this.context.getUsedAccounts(filters.id)
+      .then(accounts => {
+        const numberOfSelectedAccounts = size(accounts)
 
-    const invalidPermutation = isInvalidModule ? undefined : this.getInvalidPermutation(dimensions, metrics)
+        const isInvalidModule = (
+          isEmpty(name) ||
+          isEmpty(metrics) ||
+          isEmpty(filters.id) ||
+          (type !== 'total' && isEmpty(dimensions))
+        )
+
+        const checkPermutation = isInvalidModule
+          ? Promise.resolve()
+          : this.getInvalidPermutation(dimensions, metrics)
+
+        return checkPermutation
+          .then(invalidPermutation => ({
+            invalidPermutation,
+            maxAccounts: MAX_ACCOUNTS,
+            numberOfSelectedAccounts: numberOfSelectedAccounts,
+            isInvalid: isInvalidModule,
+            isLoading: Boolean(this.context.module.isLoading),
+            gaAttributesLimit: this.getAttributeSelectionLimit(dimensions, metrics),
+            entities: props.entities,
+            cancel: this.cancel,
+            redraw: this.redraw,
+            save: this.save
+          }))
+      })
+  })
+
+  render () {
+    if (!this.state.setup) {
+      return null
+    }
 
     return (
-      <Editor
-        invalidPermutation={invalidPermutation}
-        maxAccounts={MAX_ACCOUNTS}
-        numberOfSelectedAccounts={numberOfSelectedAccounts}
-        isInvalid={isInvalidModule}
-        isLoading={Boolean(this.context.module.isLoading)}
-        gaAttributesLimit={this.getAttributeSelectionLimit(dimensions, metrics)}
-        entities={this.props.entities}
-        cancel={this.cancel}
-        redraw={this.redraw}
-        save={this.save}/>
+      <Editor {...this.state.setup}/>
     )
   }
 }

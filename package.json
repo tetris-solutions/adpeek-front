@@ -51,7 +51,6 @@
     "moment": "^2.15.2",
     "prop-types": "^15.5.10",
     "query-string": "^4.2.3",
-    "queue": "^4.4.0",
     "react": "^15.6.1",
     "react-autosuggest": "^9.0.1",
     "react-date-range": "^0.9.4",
