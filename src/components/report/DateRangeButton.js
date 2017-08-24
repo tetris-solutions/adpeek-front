@@ -5,72 +5,100 @@ import DateRangePicker from '../DateRangePicker'
 import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
 import {Button} from '../Button'
 
-const DateRangeSelector = ({startDate, endDate, close, onChange}) => (
-  <div className='mdl-grid'>
-    <div className='mdl-cell mdl-cell--12-col'>
-      <h4>
-        <Message>reportRangeTitle</Message>
-      </h4>
-
-      <DateRangePicker
-        onChange={onChange}
-        startDate={startDate}
-        endDate={endDate}/>
-
-      <br/>
-      <hr/>
-      <Button className='mdl-button' onClick={close}>
-        <Message>close</Message>
-      </Button>
-    </div>
-  </div>
-)
-
-DateRangeSelector.displayName = 'Date-Range-Modal'
-DateRangeSelector.propTypes = {
-  onChange: PropTypes.func,
-  close: PropTypes.func,
-  startDate: PropTypes.object,
-  endDate: PropTypes.object
-}
-
-function DateRangeButton ({disabled, className}, {moment, reportParams: {from, to}, changeDateRange}) {
-  const startDate = moment(from)
-  const endDate = moment(to)
-
-  const label = (
-    <Message startDate={startDate.format('ddd D, MMM')} endDate={endDate.format('ddd D, MMM - YYYY')}>
-      dateRangeLabel
-    </Message>
-  )
-
-  if (disabled) {
-    return (
-      <Button disabled className={className}>
-        {label}
-      </Button>
-    )
+class DateRangeSelector extends React.Component {
+  static displayName = 'Date-Range-Modal'
+  static propTypes = {
+    onClose: PropTypes.func,
+    onChange: PropTypes.func,
+    close: PropTypes.func,
+    startDate: PropTypes.object,
+    endDate: PropTypes.object
   }
 
-  return (
-    <ButtonWithPrompt className={className} label={label} size='medium'>{({dismiss}) =>
-      <DateRangeSelector
-        close={dismiss}
-        onChange={changeDateRange}
-        startDate={startDate}
-        endDate={endDate}/>}
-    </ButtonWithPrompt>
-  )
+  componentWillUnmount () {
+    this.props.onClose()
+  }
+
+  render () {
+    const {startDate, endDate, close, onChange} = this.props
+
+    return (
+      <div className='mdl-grid'>
+        <div className='mdl-cell mdl-cell--12-col'>
+          <h4>
+            <Message>reportRangeTitle</Message>
+          </h4>
+
+          <DateRangePicker
+            onChange={onChange}
+            startDate={startDate}
+            endDate={endDate}/>
+
+          <br/>
+          <hr/>
+          <Button className='mdl-button' onClick={close}>
+            <Message>close</Message>
+          </Button>
+        </div>
+      </div>
+    )
+  }
 }
 
-DateRangeButton.displayName = 'Report-Date-Range'
-DateRangeButton.propTypes = {
-  className: PropTypes.string.isRequired,
-  disabled: PropTypes.bool
+class DateRangeButton extends React.Component {
+  static displayName = 'Report-Date-Range'
+  static propTypes = {
+    className: PropTypes.string.isRequired,
+    disabled: PropTypes.bool
+  }
+  static contextTypes = {
+    moment: PropTypes.func.isRequired,
+    reportParams: PropTypes.object.isRequired,
+    changeDateRange: PropTypes.func.isRequired
+  }
+
+  state = {
+    startDate: this.context.moment(this.context.reportParams.from),
+    endDate: this.context.moment(this.context.reportParams.to)
+  }
+
+  onChange = ({startDate, endDate}) => {
+    this.setState({startDate, endDate})
+  }
+
+  save = () => {
+    this.context.changeDateRange(this.state)
+  }
+
+  render () {
+    const {startDate, endDate} = this.state
+    const {disabled, className} = this.props
+
+    const label = (
+      <Message startDate={startDate.format('ddd D, MMM')} endDate={endDate.format('ddd D, MMM - YYYY')}>
+        dateRangeLabel
+      </Message>
+    )
+
+    if (disabled) {
+      return (
+        <Button disabled className={className}>
+          {label}
+        </Button>
+      )
+    }
+
+    return (
+      <ButtonWithPrompt className={className} label={label} size='medium'>{({dismiss}) =>
+        <DateRangeSelector
+          onClose={this.save}
+          close={dismiss}
+          onChange={this.onChange}
+          startDate={startDate}
+          endDate={endDate}/>}
+      </ButtonWithPrompt>
+    )
+  }
 }
-DateRangeButton.contextTypes = {
-  moment: PropTypes.func.isRequired,
-  reportParams: PropTypes.object.isRequired,
-  changeDateRange: PropTypes.func.isRequired
-}
+
 export default DateRangeButton
