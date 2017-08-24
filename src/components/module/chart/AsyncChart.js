@@ -1,6 +1,7 @@
 import React from 'react'
 import chartType from '../../../propTypes/report-chart'
 import {reportToChartConfig} from '../../../functions/report-to-chart-config'
+import {queued} from '../../../functions/queued'
 
 class AsyncChart extends React.Component {
   static displayName = 'Async-Chart'
@@ -9,17 +10,16 @@ class AsyncChart extends React.Component {
   state = {config: {}}
 
   componentDidMount () {
-    this.promise = this.reload()
+    this.reload()
   }
 
-  componentWillReceiveProps () {
-    this.promise = this.promise.then(this.reload)
+  componentWillReceiveProps (nextProps) {
+    this.reload(nextProps)
   }
 
-  reload = () => {
-    return reportToChartConfig(this.props.config)
-      .then(config => this.setState({config}))
-  }
+  reload = queued((props = this.props) =>
+    reportToChartConfig(props.config)
+      .then(config => this.setState({config})))
 }
 
 export default AsyncChart
