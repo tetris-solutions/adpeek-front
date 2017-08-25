@@ -39,6 +39,7 @@ class Editor extends React.Component {
   }
 
   static propTypes = {
+    remove: PropTypes.func.isRequired,
     entities: PropTypes.object.isRequired,
     invalidPermutation: PropTypes.array,
     maxAccounts: PropTypes.number.isRequired,
@@ -98,7 +99,8 @@ class Editor extends React.Component {
       gaAttributesLimit,
       redraw,
       save,
-      cancel
+      cancel,
+      remove
     } = this.props
     const {messages, draft} = this.context
     const selectedTooManyAccounts = numberOfSelectedAccounts > maxAccounts
@@ -171,7 +173,7 @@ class Editor extends React.Component {
           </div>
         </form>
 
-        <a className='mdl-button' onClick={cancel}>
+        <a className='mdl-button' onClick={draft.module.blank ? remove : cancel}>
           <Message>cancel</Message>
         </a>
 

@@ -42,6 +42,7 @@ export function updateModuleAction (tree, params, moduleId, moduleChanges, persi
   ]))
 
   tree.merge(cursorPath, moduleChanges)
+  tree.merge(cursorPath, {blank: false})
   tree.commit()
 
   if (persistChanges) {

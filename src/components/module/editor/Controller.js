@@ -64,7 +64,8 @@ class ModuleEdit extends React.Component {
     loadEntity: PropTypes.func.isRequired,
     entities: PropTypes.object.isRequired,
     close: PropTypes.func,
-    save: PropTypes.func
+    save: PropTypes.func,
+    remove: PropTypes.func
   }
 
   static childContextTypes = {
@@ -421,6 +422,7 @@ class ModuleEdit extends React.Component {
             isLoading: Boolean(this.context.module.isLoading),
             gaAttributesLimit: this.getAttributeSelectionLimit(dimensions, metrics),
             entities: props.entities,
+            remove: props.remove,
             cancel: this.cancel,
             redraw: this.redraw,
             save: this.save

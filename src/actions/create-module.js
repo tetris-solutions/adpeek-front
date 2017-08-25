@@ -27,6 +27,8 @@ export function createModuleReportAction (tree, params, module) {
         'modules'
       ]))
 
+      response.data.blank = true
+
       tree.push(modulesCursor, response.data)
       touchReport(tree, params)
       tree.commit()
@@ -35,5 +37,3 @@ export function createModuleReportAction (tree, params, module) {
     })
     .catch(pushResponseErrorToState(tree))
 }
-
-export default createModuleReportAction

@@ -213,6 +213,7 @@ class ModuleController extends React.Component {
               entities={entities}
               loadEntity={loadEntity}
               save={this.save}
+              remove={this.remove}
               close={this.closeModal}/>
           </Modal>
         )}
