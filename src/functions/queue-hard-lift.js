@@ -1,7 +1,7 @@
 import 'setimmediate'
 import noop from 'lodash/noop'
 
-const tasks = window.task$ = []
+const tasks = []
 let running = false
 let timeout
 
