@@ -1,4 +1,5 @@
 import prop from 'lodash/property'
+import set from 'lodash/set'
 import assign from 'lodash/assign'
 import some from 'lodash/some'
 import identity from 'lodash/identity'
@@ -45,83 +46,78 @@ export const mountModuleEntities = queueHardLift((entities, moduleEntity, select
     )
   }
 
-  const toCampaignId = (...nodes) => climbTree(nodes, true)
+  const toCampaignId = queueHardLift((...nodes) => climbTree(nodes, true))
 
-  let isSelected
+  let selectedItems
 
-  switch (getCanonicalReportEntity(moduleEntity)) {
-    case 'AdSet':
-    case 'AdGroup':
-      isSelected = countBy(selectedIds, toCampaignId(toLower(moduleEntity), 'campaign'))
-      break
-    case 'Ad':
-    case 'Keyword':
-      isSelected = countBy(selectedIds, toCampaignId(toLower(moduleEntity), toLower(adGroupLevel), 'campaign'))
-      break
-    default:
-      isSelected = countBy(selectedIds, identity)
+  function getSelection () {
+    let promise
+
+    switch (getCanonicalReportEntity(moduleEntity)) {
+      case 'AdSet':
+      case 'AdGroup':
+        promise = toCampaignId(toLower(moduleEntity), 'campaign')
+        break
+      case 'Ad':
+      case 'Keyword':
+        promise = toCampaignId(toLower(moduleEntity), toLower(adGroupLevel), 'campaign')
+        break
+      default:
+        promise = Promise.resolve(identity)
+    }
+
+    return promise.then(fn => countBy(selectedIds, fn))
   }
 
-  function filterByStatus (entity) {
+  const filterByStatus = queueHardLift(function (entity) {
     if (activeOnly) {
       entity = assign({}, entity)
       entity.list = filter(entity.list, ({status, id}) => (
-        Boolean(isSelected[id]) || status.is_active
+        Boolean(selectedItems[id]) || status.is_active
       ))
     }
     return entity
-  }
+  })
 
-  function filterByParent (entity, parent, parentIdAtribute) {
+  const filterByParent = queueHardLift(function (entity, parent, parentIdAtribute) {
     const hasActiveParent = item => some(parent.list, {id: item[parentIdAtribute]})
 
     return assign({}, entity, {
       list: filter(entity.list, hasActiveParent)
     })
-  }
-
-  if (entities.Placement) {
-    entities.Placement = filterByStatus(entities.Placement)
-  }
-
-  if (entities.Strategy) {
-    entities.Strategy = filterByStatus(entities.Strategy)
-  }
-
-  entities.Campaign = filterByStatus(entities.Campaign)
-
-  forEach([
-    'AdGroup',
-    'AdSet',
-    'Search',
-    'Video',
-    'Location',
-    'Category',
-    'Query',
-    'Product'
-  ], level => {
-    if (entities[level]) {
-      entities[level] = filterByParent(entities[level], entities.Campaign, 'campaign_id')
-    }
   })
 
-  if (entities.Ad) {
-    entities.Ad = entities.AdSet
-      ? filterByParent(entities.Ad, entities.AdSet, 'adset_id')
-      : filterByParent(entities.Ad, entities.AdGroup, 'adgroup_id')
-  }
+  const setEntity = name => value => set(entities, name, value)
 
-  if (entities.Keyword) {
-    entities.Keyword = filterByParent(entities.Keyword, entities.AdGroup, 'adgroup_id')
-  }
+  const setRootEntity = (name, always = false) => () =>
+    entities[name] || always
+      ? filterByStatus(entities[name]).then(setEntity(name))
+      : null
 
-  if (entities.Partition) {
-    entities.Partition = filterByParent(entities.Partition, entities.AdGroup, 'adgroup_id')
-  }
+  const setChildEntity = (name, parent) => () =>
+    entities[name]
+      ? filterByParent(entities[name], entities[parent], `${toLower(parent)}_id`).then(setEntity(name))
+      : null
 
-  if (entities.Audience) {
-    entities.Audience = filterByParent(entities.Audience, entities.AdGroup, 'adgroup_id')
-  }
+  const adGroupEntityName = entities.AdGroup ? 'AdGroup' : 'AdSet'
 
-  return entities
+  return getSelection()
+    .then(selection => {
+      selectedIds = selection
+    })
+    .then(setRootEntity('Placement'))
+    .then(setRootEntity('Strategy'))
+    .then(setRootEntity('Campaign', true))
+    .then(setChildEntity(adGroupEntityName, 'Campaign'))
+    .then(setChildEntity('Search', 'Campaign'))
+    .then(setChildEntity('Video', 'Campaign'))
+    .then(setChildEntity('Location', 'Campaign'))
+    .then(setChildEntity('Category', 'Campaign'))
+    .then(setChildEntity('Query', 'Campaign'))
+    .then(setChildEntity('Product', 'Campaign'))
+    .then(setChildEntity('Ad', adGroupEntityName))
+    .then(setChildEntity('Keyword', adGroupEntityName))
+    .then(setChildEntity('Partition', adGroupEntityName))
+    .then(setChildEntity('Audience', adGroupEntityName))
+    .then(() => entities)
 })

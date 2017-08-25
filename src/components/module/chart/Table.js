@@ -29,6 +29,7 @@ import includes from 'lodash/includes'
 import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
 import {getEmptyModuleMessage} from '../../../functions/get-empty-module-message'
+import {queueHardLift} from '../../../functions/queue-hard-lift'
 
 function getAccountSelector (id) {
   if (!includes(id, ':')) return id
@@ -318,6 +319,18 @@ class ReportModuleTable extends React.Component {
     channels: {}
   }
 
+  state = {
+    setup: null
+  }
+
+  componentWillMount () {
+    this.refreshSetup()
+  }
+
+  componentWillReceiveProps (nextProps) {
+    this.refreshSetup(nextProps)
+  }
+
   toggleHeader = (id) => {
     const sortObj = pick(fromPairs(this.props.config.sort), id, '_fields_')
 
@@ -383,7 +396,12 @@ class ReportModuleTable extends React.Component {
     return (a, b) => comparison(metrics[0], 'desc', a, b)
   }
 
-  render () {
+  refreshSetup (props = this.props) {
+    this.getSetup(props)
+      .then(setup => this.setState({setup}))
+  }
+
+  getSetup = queueHardLift((props = this.props) => {
     const {
       type,
       entity,
@@ -394,15 +412,79 @@ class ReportModuleTable extends React.Component {
       result,
       query,
       attributes
-    } = this.props.config
+    } = props.config
 
     const sortPairs = fromPairs(sort)
     const fields = query ? concat(query.dimensions, query.metrics) : []
     const fieldSort = sortPairs._fields_ || fields
+    const columns = sortHeaders(fields, fieldSort)
+    let rowsPromise
 
     delete sortPairs._fields_
 
-    const columns = sortHeaders(fields, fieldSort)
+    if (!isEmpty(result)) {
+      const customSort = this.getRowCompareFn()
+      const normalizeRow = queueHardLift(row => {
+        const parsedRow = {}
+
+        forEach(columns, field => {
+          if (field === 'id') {
+            parsedRow[field] = this.getEntityComponentById(row[field])
+          } else if (field === 'channelid') {
+            parsedRow[field] = this.getChannelColumn(row[field])
+          } else {
+            parsedRow[field] = row[field]
+          }
+        })
+
+        return parsedRow.id === null ? null : parsedRow
+      })
+
+      rowsPromise = Promise.all(map(result, normalizeRow))
+        .then(normalizedResult => {
+          const validRows = compact(normalizedResult)
+          const sorted = stableSort(validRows, customSort)
+
+          return crop(sorted, limit)
+        })
+    } else {
+      rowsPromise = Promise.resolve([])
+    }
+
+    return rowsPromise.then(rows => ({
+      rows,
+      columns,
+      sortPairs,
+      type,
+      entity,
+      sort,
+      limit,
+      isLoading,
+      name,
+      result,
+      query,
+      attributes
+    }))
+  })
+
+  render () {
+    const {setup} = this.state
+
+    if (!setup) return null
+
+    const {
+      rows,
+      columns,
+      type,
+      entity,
+      isLoading,
+      name,
+      result,
+      query,
+      attributes,
+      sortPairs
+    } = setup
+
     let tbody = null
     let colHeaders = null
 
@@ -423,27 +505,6 @@ class ReportModuleTable extends React.Component {
         </EmptyTBody>
       )
     } else {
-      const customSort = this.getRowCompareFn()
-      const normalizeRow = row => {
-        const parsedRow = {}
-
-        forEach(columns, field => {
-          if (field === 'id') {
-            parsedRow[field] = this.getEntityComponentById(row[field])
-          } else if (field === 'channelid') {
-            parsedRow[field] = this.getChannelColumn(row[field])
-          } else {
-            parsedRow[field] = row[field]
-          }
-        })
-
-        return parsedRow.id === null ? null : parsedRow
-      }
-      const normalizedResult = map(result, normalizeRow)
-      const validRows = compact(normalizedResult)
-      const sorted = stableSort(validRows, customSort)
-      const rows = crop(sorted, limit)
-
       colHeaders = (
         <THeader
           columns={columns}
