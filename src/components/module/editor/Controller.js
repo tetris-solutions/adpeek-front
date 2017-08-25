@@ -333,6 +333,7 @@ class ModuleEdit extends React.Component {
       draftModule.filters.id = []
     }
 
+    draftModule.blank = false
     this.props.save(draftModule, true)
     this.props.close()
   }
