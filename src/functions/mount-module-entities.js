@@ -1,10 +1,9 @@
 import prop from 'lodash/property'
+import keyBy from 'lodash/keyBy'
 import set from 'lodash/set'
 import assign from 'lodash/assign'
 import some from 'lodash/some'
 import identity from 'lodash/identity'
-import memoize from 'lodash/memoize'
-import find from 'lodash/find'
 import toLower from 'lodash/toLower'
 import countBy from 'lodash/countBy'
 import forEach from 'lodash/forEach'
@@ -22,15 +21,15 @@ import {queueHardLift} from './queue-hard-lift'
  */
 export const mountModuleEntities = queueHardLift((entities, moduleEntity, selectedIds, activeOnly) => {
   const adGroupLevel = entities.AdSet ? 'AdSet' : 'AdGroup'
-  const search = {}
+  const index = {}
 
   forEach(entities, ({id, list}) => {
-    search[toLower(id)] = memoize(id => find(list, {id}))
+    index[toLower(id)] = keyBy(list, id)
   })
 
   const reference = (entityName, callback, getId = identity) =>
     item => callback(
-      search[entityName](getId(item))
+      index[entityName][getId(item)]
     )
 
   function climbTree (nodes, first = true) {
