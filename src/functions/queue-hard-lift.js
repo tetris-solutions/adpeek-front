@@ -3,7 +3,6 @@ import noop from 'lodash/noop'
 import global from 'global'
 import {randomString} from './random-string'
 import find from 'lodash/find'
-import without from 'lodash/without'
 
 const q = global.mQueue = {
   tasks: [],
@@ -29,13 +28,24 @@ const delayed = wrapGently(
         .catch(noop)
         .then(resolve))))
 
+function pull (ls, x) {
+  for (let i = 0; i < ls.length; i++) {
+    if (ls[i] === x) {
+      ls.splice(i, 1)
+      break
+    }
+  }
+
+  return ls
+}
+
 function getTask () {
   if (!q.running) return q.tasks.shift()
 
   const task = find(q.tasks, {parent: q.running.signature})
 
   if (task) {
-    q.tasks = without(q.tasks, task)
+    pull(q.tasks, task)
   }
 
   return task
