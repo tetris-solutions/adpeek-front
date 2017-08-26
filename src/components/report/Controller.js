@@ -21,6 +21,8 @@ import {updateReportLayoutAction} from '../../actions/update-report-layout'
 import {cloneModuleAction} from '../../actions/clone-module'
 import ReportScreen from './Screen'
 import ReportGrid from './Grid'
+import qs from 'query-string'
+import {notNullable} from '../higher-order/not-nullable'
 
 const getAccountKey = ({tetris_account, ad_account}) => `${tetris_account}:${ad_account}`
 const insertId = a => assign({}, a, {id: getAccountKey(a)})
@@ -71,6 +73,10 @@ class ReportController extends React.Component {
   componentDidMount () {
     this.ensureDateRange()
 
+    if (this.context.location.query.new) {
+      this.addNewModule()
+    }
+
     window.event$.on('report.onNewModuleClick', this.addNewModule)
   }
 
@@ -100,7 +106,7 @@ class ReportController extends React.Component {
     const {moment} = this.context
 
     to = to || moment().subtract(1, 'day').format('YYYY-MM-DD')
-    from = from || moment(to).subtract(30, 'days').format('YYYY-MM-DD')
+    from = from || moment(to).subtract(29, 'days').format('YYYY-MM-DD')
 
     return {from, to}
   }
@@ -113,9 +119,14 @@ class ReportController extends React.Component {
   }
 
   navigateToNewRange = ({from, to}, method = 'push', context = this.context) => {
-    const {location: {pathname}, router} = context
+    const {location: {pathname, query}, router} = context
 
-    router[method](`${pathname}?from=${from}&to=${to}`)
+    const newQuery = assign({}, query, {
+      from,
+      to
+    })
+
+    router[method](`${pathname}?${qs.stringify(newQuery)}`)
   }
 
   addNewModule = () => {
@@ -204,9 +215,9 @@ class ReportController extends React.Component {
   getReportParams = () => {
     const range = this.getCurrentRange()
     const anyChange = !this._reportParams || (
-        this._reportParams.from !== range.from ||
-        this._reportParams.to !== range.to
-      )
+      this._reportParams.from !== range.from ||
+      this._reportParams.to !== range.to
+    )
 
     if (anyChange) {
       const accounts = uniqBy(map(this.props.accounts, insertId), 'id')
@@ -291,4 +302,4 @@ class ReportController extends React.Component {
   }
 }
 
-export default ReportController
+export default notNullable(ReportController, 'report')

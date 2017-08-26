@@ -54,7 +54,7 @@ const ReportCreate = createReactClass({
           folder && `folder/${folder}`
         ]), '/')
 
-        this.context.router.push(`/${scope}/report/${reportId}/edit`)
+        this.context.router.push(`/${scope}/report/${reportId}/edit?new=true`)
       })
       .catch(this.handleSubmitException)
       .then(this.posSubmit)
