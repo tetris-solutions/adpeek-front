@@ -12,7 +12,6 @@ import Spinner from '../../Spinner'
 import Table from './Table'
 import Total from './Total'
 import {styledComponent} from '../../higher-order/styled'
-import log from 'loglevel'
 
 const style = csjs`
 .wrap {
@@ -91,8 +90,6 @@ class Chart extends React.Component {
     const Renderer = typeComponent[config.type]
 
     counters[config.id] = (counters[config.id] || 0) + 1
-
-    log.info(`${counters[config.id]}) render module ${config.name} chart`)
 
     return (
       <div>

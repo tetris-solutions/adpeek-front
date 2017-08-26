@@ -18,7 +18,7 @@ import pick from 'lodash/pick'
 import without from 'lodash/without'
 import {isWrapDate} from './is-wrap-date'
 import {getEmptyModuleMessage} from './get-empty-module-message'
-import {queueHardLift} from './queue-hard-lift'
+import {createTask} from './queue-hard-lift'
 import orderBy from 'lodash/orderBy'
 import {prettyNumber} from './pretty-number'
 import set from 'lodash/set'
@@ -215,7 +215,7 @@ function pointFormatter () {
         <br/>`
 }
 
-export const reportToChartConfig = queueHardLift((module) => {
+export const reportToChartConfig = createTask((module) => {
   const emptyModuleLabel = getEmptyModuleMessage(module)
 
   if (emptyModuleLabel) {

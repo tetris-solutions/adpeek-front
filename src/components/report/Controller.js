@@ -21,7 +21,6 @@ import {updateReportLayoutAction} from '../../actions/update-report-layout'
 import {cloneModuleAction} from '../../actions/clone-module'
 import ReportScreen from './Screen'
 import ReportGrid from './Grid'
-import log from 'loglevel'
 
 const getAccountKey = ({tetris_account, ad_account}) => `${tetris_account}:${ad_account}`
 const insertId = a => assign({}, a, {id: getAccountKey(a)})
@@ -264,8 +263,6 @@ class ReportController extends React.Component {
   render () {
     const {params, dispatch, entities, loadEntity, reportLiteMode, editMode, metaData, report} = this.props
     const {isCreatingReport, openModule, layout} = this.state
-
-    log.debug('render report <Controller/>')
 
     return (
       <ReportScreen

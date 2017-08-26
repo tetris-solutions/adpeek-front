@@ -29,7 +29,7 @@ import includes from 'lodash/includes'
 import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
 import {getEmptyModuleMessage} from '../../../functions/get-empty-module-message'
-import {queueHardLift} from '../../../functions/queue-hard-lift'
+import {createTask} from '../../../functions/queue-hard-lift'
 
 function getAccountSelector (id) {
   if (!includes(id, ':')) return id
@@ -401,7 +401,7 @@ class ReportModuleTable extends React.Component {
       .then(setup => this.setState({setup}))
   }
 
-  getSetup = queueHardLift((props = this.props) => {
+  getSetup = createTask((props = this.props) => {
     const {
       type,
       entity,
@@ -424,7 +424,7 @@ class ReportModuleTable extends React.Component {
 
     if (!isEmpty(result)) {
       const customSort = this.getRowCompareFn()
-      const normalizeRow = queueHardLift(row => {
+      const normalizeRow = this.getSetup.subRoutine(row => {
         const parsedRow = {}
 
         forEach(columns, field => {

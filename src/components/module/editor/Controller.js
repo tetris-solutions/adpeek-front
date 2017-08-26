@@ -21,7 +21,7 @@ import filter from 'lodash/filter'
 import startsWith from 'lodash/startsWith'
 import constant from 'lodash/constant'
 import size from 'lodash/size'
-import {queueHardLift} from '../../../functions/queue-hard-lift'
+import {createTask} from '../../../functions/queue-hard-lift'
 
 const editableFields = ['description', 'name', 'type', 'dimensions', 'metrics', 'rows', 'cols', 'entity', 'limit', 'sort', 'filters']
 const MAX_ACCOUNTS = 15
@@ -350,7 +350,7 @@ class ModuleEdit extends React.Component {
     return this.props.entities[this.state.newModule.entity]
   }
 
-  getInvalidPermutation = queueHardLift((dimensions, metrics) => {
+  getInvalidPermutation = (dimensions, metrics) => {
     const {attributes} = this.context
     const selected = concat(dimensions, metrics)
     const isSelected = id => includes(selected, id)
@@ -370,7 +370,7 @@ class ModuleEdit extends React.Component {
     forEach(selected, checkForConflict)
 
     return invalidPermutation
-  })
+  }
 
   getAttributeSelectionLimit (dimensions, metrics) {
     const limit = {
@@ -396,7 +396,7 @@ class ModuleEdit extends React.Component {
       .then(setup => this.setState({setup}))
   }
 
-  getSetup = queueHardLift((props = this.props) => {
+  getSetup = createTask((props = this.props) => {
     const {name, type, dimensions, metrics, filters} = this.getDraftModule()
 
     return this.context.getUsedAccounts(filters.id)
@@ -412,7 +412,7 @@ class ModuleEdit extends React.Component {
 
         const checkPermutation = isInvalidModule
           ? Promise.resolve()
-          : this.getInvalidPermutation(dimensions, metrics)
+          : this.getSetup.fork(() => this.getInvalidPermutation(dimensions, metrics))
 
         return checkPermutation
           .then(invalidPermutation => ({

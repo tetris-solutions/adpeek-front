@@ -11,7 +11,7 @@ import isString from 'lodash/isString'
 import lowerCase from 'lodash/toLower'
 import merge from 'lodash/merge'
 import omit from 'lodash/omit'
-import {queueHardLift} from './queue-hard-lift'
+import {createTask} from './queue-hard-lift'
 
 function isUpperCase (letter) {
   return letter !== letter.toLowerCase()
@@ -119,7 +119,7 @@ function parseChildren (child, parent) {
   }
 }
 
-export const mapPropsToConfig = queueHardLift((props) => {
+export const mapPropsToConfig = createTask((props) => {
   props = cloneDeep(props)
   const parentConfig = props.config
   const chart = omit(props, 'config', 'tag', 'children', 'className', 'style')
@@ -145,7 +145,7 @@ function customComparison (a, b, key) {
 
 const unimportant = ['series', 'title', 'attributes', 'exporting']
 
-export const requiresFullRedraw = queueHardLift((configA, configB) => {
+export const requiresFullRedraw = createTask((configA, configB) => {
   const newOptionsForComparision = omit(configA, unimportant)
   const oldOptionsForComparison = omit(configB, unimportant)
 

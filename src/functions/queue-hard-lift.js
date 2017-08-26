@@ -1,50 +1,87 @@
 import 'setimmediate'
 import noop from 'lodash/noop'
+import global from 'global'
+import {randomString} from './random-string'
+import find from 'lodash/find'
+import without from 'lodash/without'
 
-const tasks = []
-let running = false
-let timeout
+const q = global.mQueue = {
+  tasks: [],
+  running: null
+}
+
+let immediateId
+
+const wrapGently = enhancer => op => {
+  const wrapper = enhancer(op)
+  wrapper._op_ = op._op_ || op
+  return wrapper
+}
 
 const run = (fn, ...args) =>
   Promise.resolve()
     .then(() => fn(...args))
 
-const delayed = fn => new Promise(resolve =>
-  setImmediate(() => run(fn).catch(noop).then(resolve)))
+const delayed = wrapGently(
+  task => () => new Promise(resolve =>
+    setImmediate(() =>
+      task()
+        .catch(noop)
+        .then(resolve))))
 
-function next () {
-  clearTimeout(timeout)
+function getTask () {
+  if (!q.running) return q.tasks.shift()
 
-  if (running) {
-    timeout = setTimeout(next, 100)
-    return
+  const task = find(q.tasks, {parent: q.running.signature})
+
+  if (task) {
+    q.tasks = without(q.tasks, task)
   }
 
-  const task = tasks.shift()
+  return task
+}
 
-  if (!task) return
+function next () {
+  clearImmediate(immediateId)
 
-  running = true
+  const task = getTask()
 
-  run(task)
-    .catch(noop)
-    .then(() => {
-      running = false
-    })
+  if (task) {
+    q.running = q.running || task
 
-  if (tasks.length) {
-    setImmediate(next)
+    task()
+      .catch(noop)
+      .then(() => {
+        q.running = null
+      })
+  }
+
+  if (q.tasks.length) {
+    immediateId = setImmediate(next)
   }
 }
 
-export const queueHardLift = (fn, t = 50) => (...args) =>
-  new Promise((resolve, reject) => {
-    const call = () =>
-      run(fn, ...args)
-        .then(resolve, reject)
+export const createTask = (fn, parent = null) => {
+  const signature = randomString() + '-' + (fn.name || 'λ')
 
-    tasks.push(delayed(call))
+  const wrapper = (...args) =>
+    new Promise((resolve, reject) => {
+      const call = wrapGently(fn => () =>
+        run(fn, ...args)
+          .then(resolve, reject))
 
-    next()
-  })
+      const task = delayed(call(fn))
+      task.signature = signature
+      task.parent = parent
 
+      q.tasks.push(task)
+
+      next()
+    })
+
+  wrapper.subRoutine = op => createTask(op, signature)
+  wrapper.fork = op => wrapper.subRoutine(op)()
+  wrapper.recur = (...args) => wrapper.subRoutine(fn)(...args)
+
+  return wrapper
+}

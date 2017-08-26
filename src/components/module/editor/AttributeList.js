@@ -7,7 +7,6 @@ import size from 'lodash/size'
 import intersection from 'lodash/intersection'
 import isEmpty from 'lodash/isEmpty'
 import AttributeItem from './AttributeItem'
-import forEach from 'lodash/forEach'
 import groupBy from 'lodash/groupBy'
 import flatten from 'lodash/flatten'
 import orderBy from 'lodash/orderBy'
@@ -16,10 +15,12 @@ import head from 'lodash/head'
 import tail from 'lodash/tail'
 import every from 'lodash/every'
 import {Tree, Node} from '../../Tree'
+import {createTask} from '../../../functions/queue-hard-lift'
 
 const ids = ({ids, id}) => ids || id
+const buildTree = createTask(builder)
 
-function buildTree (attributes, levels, mount = false) {
+function builder (attributes, levels, mount = false) {
   function extend (attr) {
     attr = assign({}, attr)
 
@@ -49,21 +50,27 @@ function buildTree (attributes, levels, mount = false) {
   const grouped = groupBy(attributes, `${level}.id`)
   const innerLevel = tail(levels)
 
-  forEach(grouped, (items, id) => {
-    const sample = head(items)
-    const list = buildTree(items, innerLevel)
+  const format = (items, id) =>
+    buildTree.recur(items, innerLevel)
+      .then(list => {
+        const sample = head(items)
+        grouped[id] = {
+          id,
+          shared: get(sample, [level, 'shared']),
+          name: get(sample, [level, 'name']),
+          ids: flatten(map(list, ids)),
+          openByDefault,
+          list: list
+        }
+      })
 
-    grouped[id] = {
-      id,
-      shared: get(sample, [level, 'shared']),
-      name: get(sample, [level, 'name']),
-      ids: flatten(map(list, ids)),
-      openByDefault,
-      list: list
-    }
-  })
-
-  return orderBy(grouped, ['shared', 'name'], ['desc', 'asc'])
+  return Promise.all(map(grouped, format))
+    .then(() =>
+      orderBy(
+        grouped,
+        ['shared', 'name'],
+        ['desc', 'asc']
+      ))
 }
 
 class Group extends React.Component {
@@ -104,8 +111,37 @@ class Group extends React.Component {
   }
 }
 
-const AttributeList = ({attributes, selectedAttributes, levels, remove, add}) => {
-  function node (item) {
+class AttributeList extends React.Component {
+  static displayName = 'Attribute-List'
+  static propTypes = {
+    levels: PropTypes.array,
+    attributes: PropTypes.array.isRequired,
+    selectedAttributes: PropTypes.array.isRequired,
+    isIdSelected: PropTypes.bool,
+    remove: PropTypes.func.isRequired,
+    add: PropTypes.func.isRequired
+  }
+  state = {
+    items: []
+  }
+
+  componentDidMount () {
+    this.mountItems()
+  }
+
+  componentWillReceiveProps (nextProps) {
+    this.mountItems(nextProps)
+  }
+
+  mountItems (props = this.props) {
+    const {attributes, levels} = props
+
+    buildTree(attributes, levels, true)
+      .then(items => this.setState({items}))
+  }
+
+  renderNode = item => {
+    const {selectedAttributes, remove, add} = this.props
     const ids = item.ids ? item.ids : [item.id]
     const localSelectionSize = size(intersection(ids, selectedAttributes))
     let selection
@@ -134,29 +170,19 @@ const AttributeList = ({attributes, selectedAttributes, levels, remove, add}) =>
         select={add}
         unselect={remove}>
         <Tree>
-          {map(item.list, node)}
+          {map(item.list, this.renderNode)}
         </Tree>
       </Group>
     )
   }
 
-  const items = buildTree(attributes, levels, true)
-
-  return (
-    <Tree>
-      {map(items, node)}
-    </Tree>
-  )
-}
-
-AttributeList.displayName = 'Attribute-List'
-AttributeList.propTypes = {
-  levels: PropTypes.array,
-  attributes: PropTypes.array.isRequired,
-  selectedAttributes: PropTypes.array.isRequired,
-  isIdSelected: PropTypes.bool,
-  remove: PropTypes.func.isRequired,
-  add: PropTypes.func.isRequired
+  render () {
+    return (
+      <Tree>
+        {map(this.state.items, this.renderNode)}
+      </Tree>
+    )
+  }
 }
 
 export default AttributeList

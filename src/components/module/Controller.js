@@ -9,7 +9,7 @@ import reportParamsType from '../../propTypes/report-params'
 import ModuleCard from './Card'
 import {deleteModuleAction} from '../../actions/delete-module'
 import {loadReportModuleResultAction} from '../../actions/load-report-module-result'
-import {queueHardLift} from '../../functions/queue-hard-lift'
+import {createTask} from '../../functions/queue-hard-lift'
 import {updateModuleAction} from '../../actions/update-module'
 import Editor from './editor/Controller'
 import Modal from 'tetris-iso/Modal'
@@ -112,11 +112,11 @@ class ModuleController extends React.Component {
     return dispatch(loadReportModuleResultAction, params, module.id, query, attributes)
   }
 
-  getChartQuery = queueHardLift(() => {
+  getChartQuery = createTask(() => {
     const {reportParams} = this.context
     const {module, entity} = this.props
 
-    return this.getUsedAccounts(module.filters.id)
+    return this.getChartQuery.fork(() => this.getUsedAccounts(module.filters.id))
       .then(accounts => ({
         metrics: module.metrics,
         dimensions: module.dimensions,
@@ -129,7 +129,7 @@ class ModuleController extends React.Component {
       }))
   })
 
-  getUsedAccounts = queueHardLift(ids => {
+  getUsedAccounts = ids => Promise.resolve().then(() => {
     const {report: {platform}, reportParams: {accounts}} = this.context
 
     if (platform) {

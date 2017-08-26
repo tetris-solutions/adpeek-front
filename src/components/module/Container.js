@@ -9,7 +9,7 @@ import reportMetaDataType from '../../propTypes/report-meta-data'
 import moduleType from '../../propTypes/report-module'
 import Controller from './Controller'
 import {mountModuleEntities} from '../../functions/mount-module-entities'
-import {queueHardLift} from '../../functions/queue-hard-lift'
+import {createTask} from '../../functions/queue-hard-lift'
 import filter from 'lodash/filter'
 
 class ModuleContainer extends React.Component {
@@ -66,7 +66,7 @@ class ModuleContainer extends React.Component {
     return Boolean(this.props.metaData.attributes[name])
   }
 
-  mountSetup = queueHardLift((entities, props) => {
+  mountSetup = createTask((entities, props) => {
     const {metaData: {attributes}} = props
     const module = assign({}, props.module)
     const filters = assign({}, module.filters)

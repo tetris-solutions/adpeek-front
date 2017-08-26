@@ -9,7 +9,7 @@ import countBy from 'lodash/countBy'
 import forEach from 'lodash/forEach'
 import filter from 'lodash/filter'
 import {getCanonicalReportEntity} from './get-canonical-report-entity'
-import {queueHardLift} from './queue-hard-lift'
+import {createTask} from './queue-hard-lift'
 
 /**
  *
@@ -19,7 +19,7 @@ import {queueHardLift} from './queue-hard-lift'
  * @param {Boolean} activeOnly whether active only mode is on
  * @returns {Promise.<Object>} structured entity map
  */
-export const mountModuleEntities = queueHardLift((entities, moduleEntity, selectedIds, activeOnly) => {
+export const mountModuleEntities = createTask((entities, moduleEntity, selectedIds, activeOnly) => {
   const adGroupLevel = entities.AdSet ? 'AdSet' : 'AdGroup'
   const index = {}
 
@@ -45,7 +45,7 @@ export const mountModuleEntities = queueHardLift((entities, moduleEntity, select
     )
   }
 
-  const toCampaignId = queueHardLift((...nodes) => climbTree(nodes, true))
+  const toCampaignId = mountModuleEntities.subRoutine((...nodes) => climbTree(nodes, true))
 
   let selectedItems
 
@@ -68,7 +68,7 @@ export const mountModuleEntities = queueHardLift((entities, moduleEntity, select
     return promise.then(fn => countBy(selectedIds, fn))
   }
 
-  const filterByStatus = queueHardLift(function (entity) {
+  const filterByStatus = mountModuleEntities.subRoutine(entity => {
     if (activeOnly) {
       entity = assign({}, entity)
       entity.list = filter(entity.list, ({status, id}) => (
@@ -78,7 +78,7 @@ export const mountModuleEntities = queueHardLift((entities, moduleEntity, select
     return entity
   })
 
-  const filterByParent = queueHardLift(function (entity, parent, parentIdAtribute) {
+  const filterByParent = mountModuleEntities.subRoutine((entity, parent, parentIdAtribute) => {
     const hasActiveParent = item => some(parent.list, {id: item[parentIdAtribute]})
 
     return assign({}, entity, {
@@ -95,7 +95,8 @@ export const mountModuleEntities = queueHardLift((entities, moduleEntity, select
 
   const setChildEntity = (name, parent) => () =>
     entities[name]
-      ? filterByParent(entities[name], entities[parent], `${toLower(parent)}_id`).then(setEntity(name))
+      ? filterByParent(entities[name], entities[parent], `${toLower(parent)}_id`)
+        .then(setEntity(name))
       : null
 
   const adGroupEntityName = entities.AdGroup ? 'AdGroup' : 'AdSet'
