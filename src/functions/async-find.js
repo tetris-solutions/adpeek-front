@@ -20,6 +20,7 @@ export const asyncFind = (array, matcher, value = undefined, batchSize = 500) =>
       const item = array[i + offset]
       if (matcher(item)) {
         resolve(item)
+        return
       }
     }
 
