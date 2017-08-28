@@ -1,6 +1,6 @@
 import {GET} from '@tetris/http'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
-import {saveResponseData} from '../functions/save-response-data'
+import {mergeList} from '../functions/save-response-data'
 import compact from 'lodash/compact'
 import {inferLevelFromParams} from '../functions/infer-level-from-params'
 
@@ -26,7 +26,7 @@ export function loadReportsAction (tree, params, limitToFirst = false, token = n
 
   return loadReports(level, params[level], limitToFirst, getApiFetchConfig(tree, token))
     .then(saveResponseTokenAsCookie)
-    .then(saveResponseData(tree, path))
+    .then(mergeList(tree, path))
     .catch(pushResponseErrorToState(tree))
 }
 

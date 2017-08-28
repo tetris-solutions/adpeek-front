@@ -250,6 +250,7 @@ module.exports = {
   companyList: 'Empresas',
   emptyReportResult: 'Relatório Vazio',
   invalidModuleLabel: 'Configuração inválida',
+  reportApiException: 'A API encontrou uma exceção e seu relatório não pôde ser gerado',
   invalidModuleConfig: 'Selecione ao menos 1 de cada: {entity}, Dimensões e Métricas',
   resultLimitLabel: 'Limite de linhas',
   all: 'Todos',

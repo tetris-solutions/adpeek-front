@@ -252,6 +252,7 @@ module.exports = {
   companyList: 'Companies',
   emptyReportResult: 'Empty Report',
   invalidModuleLabel: 'Invalid module options',
+  reportApiException: 'The server encountered an exception and your report could not be loaded',
   invalidModuleConfig: 'Please select at least 1 item from: {entity}, Segments and Metrics',
   resultLimitLabel: 'Limit',
   all: 'All',

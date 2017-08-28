@@ -299,6 +299,7 @@ class ReportModuleTable extends React.Component {
       change: PropTypes.func,
       limit: PropTypes.number,
       isLoading: PropTypes.bool,
+      responseError: PropTypes.object,
       name: PropTypes.string,
       reportParams: reportParamsType,
       query: PropTypes.object,
@@ -407,6 +408,7 @@ class ReportModuleTable extends React.Component {
       entity,
       sort,
       limit,
+      responseError,
       isLoading,
       name,
       result,
@@ -454,6 +456,7 @@ class ReportModuleTable extends React.Component {
     return rowsPromise.then(rows => ({
       rows,
       columns,
+      responseError,
       sortPairs,
       type,
       entity,
@@ -475,6 +478,7 @@ class ReportModuleTable extends React.Component {
     const {
       rows,
       columns,
+      responseError,
       type,
       entity,
       isLoading,
@@ -496,6 +500,7 @@ class ReportModuleTable extends React.Component {
           {getEmptyModuleMessage({
             messages,
             locales,
+            responseError,
             type,
             result,
             isLoading,

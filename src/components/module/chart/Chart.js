@@ -160,6 +160,7 @@ class ChartContainer extends React.Component {
       change,
       renderHiddenTable,
       type: module.type,
+      responseError: module.responseError,
       locales: locales,
       sort: module.sort,
       limit: module.limit,

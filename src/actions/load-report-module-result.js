@@ -162,11 +162,16 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
       })
   }
 
-  function onSuccess (response) {
+  function turnOffLoading () {
     isLoadingCursor.set(false)
+  }
+
+  function onSuccess (response) {
+    turnOffLoading()
 
     if (isCursorOk()) {
       moduleCursor.set('query', query)
+      moduleCursor.unset('responseError')
       updateModuleResult(response.data.result)
     }
 
@@ -176,6 +181,14 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
     // tree.commit()
 
     return response
+  }
+
+  function onFailure (err) {
+    turnOffLoading()
+    moduleCursor.set('query', query)
+    moduleCursor.set('result', [])
+    moduleCursor.set('responseError', err)
+    return Promise.reject(err)
   }
 
   function dispatchReportRequest () {
@@ -197,7 +210,7 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
 
     loadReportModuleResult(query, isCrossPlatform, getApiFetchConfig(tree))
       .then(saveResponseTokenAsCookie)
-      .then(onSuccess)
+      .then(onSuccess, onFailure)
       .catch(pushResponseErrorToState(tree))
   }
 

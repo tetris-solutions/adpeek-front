@@ -22,6 +22,8 @@ import Comments from './Comments'
 import CroppedResultDialog from './CroppedResultDialog'
 import TextMessage from 'intl-messageformat'
 import DescriptionDialog from './DescriptionDialog'
+import qs from 'query-string'
+import omit from 'lodash/omit'
 
 const calculateModalMinHeight = () => typeof window !== 'undefined' ? window.innerHeight * 0.8 : 600
 const reportContext = [
@@ -59,7 +61,9 @@ class ModuleController extends React.Component {
     messages: PropTypes.object.isRequired,
     locales: PropTypes.string.isRequired,
     report: PropTypes.object.isRequired,
-    reportParams: reportParamsType.isRequired
+    reportParams: reportParamsType.isRequired,
+    location: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired
   }
 
   static childContextTypes = {
@@ -166,7 +170,16 @@ class ModuleController extends React.Component {
   }
 
   closeModal = () => {
+    this.removeNewReportQueryStringFlag()
     this.setState({editMode: false})
+  }
+
+  removeNewReportQueryStringFlag () {
+    const {router, location: {pathname, query}} = this.context
+
+    if (query.new) {
+      router.push(`${pathname}?${qs.stringify(omit(query, 'new'))}`)
+    }
   }
 
   render () {

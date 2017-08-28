@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import isEqual from 'lodash/isEqual'
+import isEmpty from 'lodash/isEmpty'
 import isNumber from 'lodash/isNumber'
 import assign from 'lodash/assign'
 import map from 'lodash/map'
@@ -72,8 +73,9 @@ class ReportController extends React.Component {
 
   componentDidMount () {
     this.ensureDateRange()
+    const hasNewModuleFlag = this.context.location.query.new
 
-    if (this.context.location.query.new) {
+    if (hasNewModuleFlag && isEmpty(this.props.report.modules)) {
       this.addNewModule()
     }
 

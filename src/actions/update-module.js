@@ -48,5 +48,3 @@ export function updateModuleAction (tree, params, moduleId, moduleChanges, persi
     persist(tree, params, moduleId)
   }
 }
-
-export default updateModuleAction
