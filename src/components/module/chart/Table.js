@@ -424,7 +424,7 @@ class ReportModuleTable extends React.Component {
 
     if (!isEmpty(result)) {
       const customSort = this.getRowCompareFn()
-      const normalizeRow = this.getSetup.subRoutine(row => {
+      const normalizeRow = createTask(row => {
         const parsedRow = {}
 
         forEach(columns, field => {

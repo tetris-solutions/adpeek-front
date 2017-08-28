@@ -116,7 +116,7 @@ class ModuleController extends React.Component {
     const {reportParams} = this.context
     const {module, entity} = this.props
 
-    return this.getChartQuery.fork(() => this.getUsedAccounts(module.filters.id))
+    return this.getUsedAccounts(module.filters.id)
       .then(accounts => ({
         metrics: module.metrics,
         dimensions: module.dimensions,
@@ -129,7 +129,7 @@ class ModuleController extends React.Component {
       }))
   })
 
-  getUsedAccounts = ids => Promise.resolve().then(() => {
+  getUsedAccounts = createTask(ids => {
     const {report: {platform}, reportParams: {accounts}} = this.context
 
     if (platform) {

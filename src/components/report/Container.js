@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import assign from 'lodash/assign'
+import memoize from 'lodash/memoize'
 import head from 'lodash/head'
 import uniq from 'lodash/uniq'
 import delay from 'delay'
@@ -421,15 +422,11 @@ class Container extends React.Component {
 
     forEach(modules, ({entity}) => this.loadEntity(entity))
 
-    Promise.all(promises).then(() =>
-      this.setLoadingState('metaData', false))
+    Promise.all(promises)
+      .then(() => this.setLoadingState('metaData', false))
   }
 
-  getAccounts = () => {
-    this._accounts = this._accounts || map(this.props.accounts, transformAccount)
-
-    return this._accounts
-  }
+  getAccounts = memoize(() => map(this.props.accounts, transformAccount))
 
   render () {
     if (this.getLoadingState('metaData')) {

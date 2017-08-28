@@ -347,7 +347,7 @@ class ModuleEdit extends React.Component {
     return this.props.entities[this.state.newModule.entity]
   }
 
-  getInvalidPermutation = (dimensions, metrics) => {
+  getInvalidPermutation = createTask((dimensions, metrics) => {
     const {attributes} = this.context
     const selected = concat(dimensions, metrics)
     const isSelected = id => includes(selected, id)
@@ -367,7 +367,7 @@ class ModuleEdit extends React.Component {
     forEach(selected, checkForConflict)
 
     return invalidPermutation
-  }
+  })
 
   getAttributeSelectionLimit (dimensions, metrics) {
     const limit = {
@@ -409,7 +409,7 @@ class ModuleEdit extends React.Component {
 
         const checkPermutation = isInvalidModule
           ? Promise.resolve()
-          : this.getSetup.fork(() => this.getInvalidPermutation(dimensions, metrics))
+          : this.getInvalidPermutation(dimensions, metrics)
 
         return checkPermutation
           .then(invalidPermutation => ({

@@ -45,7 +45,7 @@ export const mountModuleEntities = createTask((entities, moduleEntity, selectedI
     )
   }
 
-  const toCampaignId = mountModuleEntities.subRoutine((...nodes) => climbTree(nodes, true))
+  const toCampaignId = createTask((...nodes) => climbTree(nodes, true))
 
   let selectedItems
 
@@ -68,7 +68,7 @@ export const mountModuleEntities = createTask((entities, moduleEntity, selectedI
     return promise.then(fn => countBy(selectedIds, fn))
   }
 
-  const filterByStatus = mountModuleEntities.subRoutine(entity => {
+  const filterByStatus = createTask(entity => {
     if (activeOnly) {
       entity = assign({}, entity)
       entity.list = filter(entity.list, ({status, id}) => (
@@ -78,7 +78,7 @@ export const mountModuleEntities = createTask((entities, moduleEntity, selectedI
     return entity
   })
 
-  const filterByParent = mountModuleEntities.subRoutine((entity, parent, parentIdAtribute) => {
+  const filterByParent = createTask((entity, parent, parentIdAtribute) => {
     const hasActiveParent = item => some(parent.list, {id: item[parentIdAtribute]})
 
     return assign({}, entity, {

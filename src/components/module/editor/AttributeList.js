@@ -18,9 +18,8 @@ import {Tree, Node} from '../../Tree'
 import {createTask} from '../../../functions/queue-hard-lift'
 
 const ids = ({ids, id}) => ids || id
-const buildTree = createTask(builder)
 
-function builder (attributes, levels, mount = false) {
+const buildTree = createTask(function builder (attributes, levels, mount = false) {
   function extend (attr) {
     attr = assign({}, attr)
 
@@ -51,7 +50,7 @@ function builder (attributes, levels, mount = false) {
   const innerLevel = tail(levels)
 
   const format = (items, id) =>
-    buildTree.recur(items, innerLevel)
+    buildTree(items, innerLevel)
       .then(list => {
         const sample = head(items)
         grouped[id] = {
@@ -71,7 +70,7 @@ function builder (attributes, levels, mount = false) {
         ['shared', 'name'],
         ['desc', 'asc']
       ))
-}
+})
 
 class Group extends React.Component {
   static displayName = 'Group'
