@@ -1,10 +1,15 @@
 import isEmpty from 'lodash/isEmpty'
 import Message from 'intl-messageformat'
 import {isValidReportQuery} from './is-valid-report-query'
-import log from 'loglevel'
+import get from 'lodash/get'
 
 export function getEmptyModuleMessage ({messages, locales, type, result, isLoading, query, entity}) {
-  if (entity.isLoading) {
+  const entityListStillProcessing = (
+    isEmpty(get(query, 'filters.id')) &&
+    !isEmpty(entity.list)
+  )
+
+  if (entity.isLoading || entityListStillProcessing) {
     return new Message(messages.loadingEntity, locales)
       .format({
         name: entity.name
@@ -16,7 +21,6 @@ export function getEmptyModuleMessage ({messages, locales, type, result, isLoadi
   }
 
   if (!isValidReportQuery(type, query)) {
-    log.debug('invalid module config', arguments[0])
     return messages.invalidModuleLabel
   }
 

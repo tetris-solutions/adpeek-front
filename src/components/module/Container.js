@@ -85,7 +85,7 @@ class ModuleContainer extends React.Component {
 
     module.filters = filters
 
-    return (assign({}, props, {entities, module, attributes, entity}))
+    return assign({}, props, {entities, module, attributes, entity})
   })
 
   getSetup = (props = this.props) => {
