@@ -39,7 +39,7 @@ class ModuleContainer extends React.Component {
     }
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.getSetup()
       .then(setup => this.setState({setup}))
   }

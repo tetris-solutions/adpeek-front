@@ -111,18 +111,15 @@ class ModuleEdit extends React.Component {
     }
   }
 
-  componentWillMount () {
-    this.updateQueue = []
-    this.persist = debounce(this.flushUpdateQueue, 500)
-    this.refreshSetup()
-  }
-
   componentWillReceiveProps (nextProps) {
     this.refreshSetup(nextProps)
   }
 
   componentDidMount () {
     this.$e = new Emmett()
+    this.updateQueue = []
+    this.persist = debounce(this.flushUpdateQueue, 500)
+    this.refreshSetup()
   }
 
   componentDidUpdate () {
