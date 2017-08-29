@@ -129,12 +129,14 @@ function plainMessage () {
    */
   const chart = this
 
-  const x = (chart.chartWidth / 2) - 50
-  const y = (chart.chartHeight / 2) - 20
-
   const label = chart._label_ = chart._label_ || chart.renderer.label().add()
 
   label.textSetter(chart.userOptions.labelMessage)
+
+  const labelBox = label.getBBox()
+  const x = chart.plotLeft + (chart.plotWidth * 0.5) - (labelBox.width * 0.5)
+  const y = chart.plotTop + (chart.plotHeight * 0.5) - (labelBox.height * 0.5)
+
   label.ySetter(y)
   label.xSetter(x)
   label.css({fontStyle: 'italic', fontSize: '12pt'})
