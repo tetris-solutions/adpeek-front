@@ -4,8 +4,9 @@ import {inferLevelFromParams} from '../functions/infer-level-from-params'
 import compact from 'lodash/compact'
 import {saveResponseData} from '../functions/save-response-data'
 import assign from 'lodash/assign'
-function loadReportShareUrl (level, entityId, report, config) {
-  return GET(`${process.env.ADPEEK_API_URL}/${level}/${entityId}/share/report/${report}`, config)
+
+function loadReportShareUrl (level, entityId, report, from, to, config) {
+  return GET(`${process.env.ADPEEK_API_URL}/${level}/${entityId}/share/report/${report}?from=${from}&to=${to}`, config)
 }
 
 export function loadReportShareUrlAction (tree, params, report, {from, to}) {
@@ -18,9 +19,9 @@ export function loadReportShareUrlAction (tree, params, report, {from, to}) {
     ['reports', report]
   ])
 
-  const saveUrl = ({url}, report) => assign({}, report, {shareUrl: `${url}&from=${from}&to=${to}`})
+  const saveUrl = ({url: shareUrl}, report) => assign({}, report, {shareUrl})
 
-  return loadReportShareUrl(level, params[level], report, getApiFetchConfig(tree))
+  return loadReportShareUrl(level, params[level], report, from, to, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .then(saveResponseData(tree, path, saveUrl))
     .catch(pushResponseErrorToState(tree))
