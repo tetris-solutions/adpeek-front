@@ -171,7 +171,6 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
 
     if (isCursorOk()) {
       moduleCursor.set('query', query)
-      moduleCursor.unset('responseError')
       updateModuleResult(response.data.result)
     }
 
@@ -203,6 +202,7 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
       return
     }
 
+    moduleCursor.unset('responseError')
     isLoadingCursor.set(true)
     setQueryIfNone(moduleCursor, query)
 
@@ -215,7 +215,7 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
   }
 
   function makeNextCallOnceFinishedLoading () {
-    if (lastCall[id] === myCall) {
+    if (lastCall[id] === myCall) { // was not replaced by a new query
       dispatchReportRequest()
     }
   }
