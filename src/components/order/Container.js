@@ -95,7 +95,7 @@ class Order extends React.PureComponent {
       name: new MessageFormat(newOrderName, locales).format({month: upperFirst(nextMonth.format('MMMM, YY'))}),
       start: nextMonth.date(1).format('YYYY-MM-DD'),
       end: nextMonth.add(1, 'month').date(0).format('YYYY-MM-DD'),
-      auto_budget: true,
+      auto_budget: false,
       amount: 1000,
       budgets: []
     }
