@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
+
 const isBrowser = typeof document !== 'undefined'
 
 export class Switch extends React.Component {
@@ -32,19 +33,31 @@ export class Switch extends React.Component {
   }
 
   render () {
-    const wrapperClasses = cx('mdl-switch',
-      isBrowser && 'mdl-js-switch mdl-js-ripple-effect')
+    const {checked} = this.state
     const {name, label} = this.props
+    const wrapperClass = cx({
+      'mdl-switch': true,
+      'mdl-js-switch': isBrowser,
+      'mdl-js-ripple-effect': isBrowser
+    })
+    const labelClass = cx({
+      'mdl-switch__label': true,
+      'mdl-color-text--blue-800': checked
+    })
+    const Label = checked ? 'strong' : 'span'
 
     return (
-      <label className={wrapperClasses} ref='wrapper'>
+      <label className={wrapperClass} ref='wrapper'>
         <input
           type='checkbox'
           name={name}
           className='mdl-switch__input'
-          checked={this.state.checked}
+          checked={checked}
           onChange={this.onChange}/>
-        <span className='mdl-switch__label'>{label}</span>
+
+        <Label className={labelClass}>
+          {label}
+        </Label>
       </label>
     )
   }
