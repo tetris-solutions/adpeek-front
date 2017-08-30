@@ -43,12 +43,18 @@ class AdGroups extends React.Component {
   }
 
   componentDidMount () {
-    fitWrapper(this.refs.wrapper)
+    this.onResize()
+    window.addEventListener('resize', this.onResize)
     window.event$.on('create::adgroup', this.scrollRight)
   }
 
   componentWillUnmount () {
+    window.removeEventListener('resize', this.onResize)
     window.event$.off('create::adgroup', this.scrollRight)
+  }
+
+  onResize = () => {
+    fitWrapper(this.refs.wrapper)
   }
 
   scrollRight = () => {

@@ -19,10 +19,10 @@ const style = csjs`
 textarea.input {
   display: block;
   width: 100%;
-  resize: none;
+  resize: vertical;
   overflow: hidden;
   line-height: 1.3em;
-  height: 2.6em;
+  height: 4em;
 }`
 
 class CleanInput extends React.PureComponent {
