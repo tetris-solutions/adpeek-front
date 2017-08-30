@@ -328,7 +328,7 @@ export const reportToChartConfig = createTask((module) => {
 
       const point = {
         metric,
-        id: row._index_,
+        id: index,
         __row__: row
       }
 
