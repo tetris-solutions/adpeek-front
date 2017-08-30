@@ -372,8 +372,8 @@ export const reportToChartConfig = createTask((module) => {
       currentSeries.data = orderBy(currentSeries.data, comparable(metrics[0]), 'desc')
     }
 
-    forEach(currentSeries.data, point => {
-      const {__row__: row, id: index} = point
+    forEach(currentSeries.data, (point, index) => {
+      const {__row__: row} = point
 
       if (isIdBased) {
         categories[index] = getEntityById(row.id).name
