@@ -6,15 +6,16 @@ class ChartLine extends AsyncChart {
   static displayName = 'Line'
 
   render () {
-    const props = this.props.config
+    const module = this.props.config
+    const chartConfig = this.state.config
 
     return (
-      <Highcharts config={this.state.config} zoomType='xy'>
-        <title>{props.name}</title>
+      <Highcharts config={chartConfig} zoomType='xy'>
+        <title>{module.name}</title>
         <exporting
-          sourceWidth={props.sourceWidth}
-          sourceHeight={props.sourceHeight}
-          filename={props.name}/>
+          sourceWidth={module.sourceWidth}
+          sourceHeight={module.sourceHeight}
+          filename={module.name}/>
         <plot-options>
           <line>
             <marker enabled={false}/>

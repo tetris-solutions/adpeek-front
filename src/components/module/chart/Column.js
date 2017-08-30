@@ -6,13 +6,16 @@ class Column extends AsyncChart {
   static displayName = 'Column'
 
   render () {
+    const module = this.props.config
+    const chartConfig = this.state.config
+
     return (
-      <Highcharts config={this.state.config} zoomType='xy'>
-        <title>{this.props.name}</title>
+      <Highcharts config={chartConfig} zoomType='xy'>
+        <title>{module.name}</title>
         <exporting
-          sourceWidth={this.props.sourceWidth}
-          sourceHeight={this.props.sourceHeight}
-          filename={this.props.name}/>
+          sourceWidth={module.sourceWidth}
+          sourceHeight={module.sourceHeight}
+          filename={module.name}/>
       </Highcharts>
     )
   }

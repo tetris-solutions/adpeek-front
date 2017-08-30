@@ -6,15 +6,16 @@ class ChartPie extends AsyncChart {
   static displayName = 'Pie'
 
   render () {
-    const props = this.props.config
+    const module = this.props.config
+    const chartConfig = this.state.config
 
     return (
-      <Highcharts config={this.state.config}>
-        <title>{props.name}</title>
+      <Highcharts config={chartConfig}>
+        <title>{module.name}</title>
         <exporting
-          sourceWidth={props.sourceWidth}
-          sourceHeight={props.sourceHeight}
-          filename={props.name}/>
+          sourceWidth={module.sourceWidth}
+          sourceHeight={module.sourceHeight}
+          filename={module.name}/>
         <plot-options>
           <pie allowPointSelect showInLegend>
             <data-labels enabled={false}/>

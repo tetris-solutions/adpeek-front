@@ -368,10 +368,13 @@ export const reportToChartConfig = createTask((module) => {
   const grouped = {}
 
   forEach(result, (row, _index_) => {
-    if (!grouped[xAxisDimension]) {
-      grouped[xAxisDimension] = []
+    const x = row[xAxisDimension]
+
+    if (!grouped[x]) {
+      grouped[x] = []
     }
-    grouped[xAxisDimension].push(assign({_index_}, row))
+
+    grouped[x].push(assign({_index_}, row))
   })
 
   forEach(grouped, walk)
