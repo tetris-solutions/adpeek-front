@@ -224,8 +224,7 @@ export const reportToChartConfig = createTask((module) => {
     return emptyResultChart(emptyModuleLabel)
   }
 
-  const {comments, query, entity, attributes, type} = module
-  let {result} = module
+  const {result, comments, query, entity, attributes, type} = module
   const {metrics} = query
   let {dimensions} = query
 
@@ -284,10 +283,6 @@ export const reportToChartConfig = createTask((module) => {
 
   const xAxis = detectXAxis(result, xAxisDimension)
   const isIdBased = xAxisDimension === 'id'
-
-  if ((type === 'pie' || type === 'column') && module.limit) {
-    result = result.slice(0, module.limit)
-  }
 
   dimensions = without(dimensions, xAxisDimension)
 
@@ -370,6 +365,10 @@ export const reportToChartConfig = createTask((module) => {
       currentSeries.data = orderBy(currentSeries.data, comparable(xAxisDimension))
     } else {
       currentSeries.data = orderBy(currentSeries.data, comparable(metrics[0]), 'desc')
+    }
+
+    if ((type === 'pie' || type === 'column') && module.limit) {
+      currentSeries.data = currentSeries.data.slice(0, module.limit)
     }
 
     forEach(currentSeries.data, (point, index) => {
