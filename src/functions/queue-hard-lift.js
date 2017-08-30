@@ -1,2 +1,3 @@
-export const createTask = (fn, parent = null) =>
-  (...args) => Promise.resolve().then(() => fn(...args))
+export const createTask = fn => (...args) =>
+  Promise.resolve()
+    .then(() => fn(...args))
