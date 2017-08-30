@@ -106,10 +106,10 @@ class Workspaces extends React.Component {
   }
 
   componentDidMount () {
-    const {company: {id: companyId, workspaces}, dispatch, location: {query}} = this.props
+    const {company: {id: companyId, workspaces}, dispatch} = this.props
 
     forEach(workspaces, ({id: workspaceId}) =>
-      dispatch(loadWorkspaceStatsAction, companyId, workspaceId, Boolean(query.fresh)))
+      dispatch(loadWorkspaceStatsAction, companyId, workspaceId))
   }
 
   onChange = (searchValue) => {

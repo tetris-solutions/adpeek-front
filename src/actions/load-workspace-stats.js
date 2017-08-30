@@ -13,11 +13,6 @@ function loadWorkspaceStats (id, updateMode, config) {
 const statsRequestRegister = {}
 
 export function loadWorkspaceStatsAction (tree, company, workspace, updateMode = 'normal') {
-  // @todo delete this
-  if (window.sessionStorage.getItem('cardStats') !== 'enabled') {
-    updateMode = 'cached'
-  }
-
   statsRequestRegister[workspace] = statsRequestRegister[workspace] ||
     loadWorkspaceStats(workspace, updateMode, getApiFetchConfig(tree))
       .then(saveResponseTokenAsCookie)

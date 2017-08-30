@@ -11,11 +11,6 @@ function loadFolderStats (id, updateMode, config) {
 }
 
 export function loadFolderStatsAction (tree, {company, workspace}, folder, updateMode = 'normal') {
-  // @todo delete this
-  if (window.sessionStorage.getItem('cardStats') !== 'enabled') {
-    updateMode = 'cached'
-  }
-
   return loadFolderStats(folder, updateMode, getApiFetchConfig(tree))
     .then(saveResponseTokenAsCookie)
     .then(mergeResponseData(tree, [

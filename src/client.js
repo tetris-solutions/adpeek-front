@@ -4,7 +4,6 @@ import defaultState from './default-state'
 import {extend as extendBaseContext} from 'tetris-iso/base-context'
 import loglevel from 'loglevel'
 import Emitter from 'emmett'
-import includes from 'lodash/includes'
 
 extendBaseContext(
   'company',
@@ -14,16 +13,6 @@ extendBaseContext(
   'isAdmin',
   'isLoggedIn',
   'cursors')
-
-// @todo delete this
-try {
-  if (includes(window.location.search, 'enableCardStats')) {
-    window.sessionStorage
-      .setItem('cardStats', 'enabled')
-  }
-} catch (e) {
-  loglevel.error(e)
-}
 
 window.event$ = new Emitter()
 
