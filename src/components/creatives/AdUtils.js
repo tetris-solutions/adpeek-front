@@ -64,7 +64,7 @@ export const style = csjs`
   margin: 100px auto;
 }
 .templatePreview {
-  display: relative;
+  position: relative;
 }
 .templatePreviewOverlay {
   position: absolute;
