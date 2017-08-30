@@ -305,79 +305,63 @@ export const reportToChartConfig = createTask((module) => {
     return find(entity.list, {id}) || mockEntity
   })
 
-  function walk (rows, xValue) {
-    function rowIteratee (row, index) {
-      const rowDimensions = pick(row, dimensions)
-      const referenceEntity = getEntityById(row.id)
+  function rowIteratee (row, index) {
+    const rowDimensions = pick(row, dimensions)
+    const referenceEntity = getEntityById(row.id)
 
-      function metricIteratee (metric, yAxisIndex) {
-        const seriesSignature = assign(
-          size(metrics) > 1 || isEmpty(rowDimensions) ? {metric} : {},
-          rowDimensions
-        )
+    function metricIteratee (metric, yAxisIndex) {
+      const seriesSignature = assign(
+        size(metrics) > 1 || isEmpty(rowDimensions) ? {metric} : {},
+        rowDimensions
+      )
 
-        let seriesConfig = type === 'pie'
-          ? series[0] // pie always consists of a single series
-          : find(series, s => isEqual(s.seriesSignature, seriesSignature))
+      let seriesConfig = type === 'pie'
+        ? series[0] // pie always consists of a single series
+        : find(series, s => isEqual(s.seriesSignature, seriesSignature))
 
-        if (!seriesConfig) {
-          seriesConfig = createNewSeries(referenceEntity, seriesSignature, yAxisIndex)
-          series.push(seriesConfig)
-        }
-
-        const isSpecialPoint = isObject(row[metric]) && row[metric].value !== undefined
-
-        const point = {
-          metric,
-          id: row._index_,
-          __row__: row
-        }
-
-        if (isSpecialPoint) {
-          point.y = row[metric].value
-          point.raw = row[metric].raw
-          point.marker = {
-            enabled: true,
-            fillColor: '#414141',
-            symbol: 'circle'
-          }
-        } else {
-          const value = Number(row[metric])
-          point.y = isNaN(value) ? null : value
-        }
-
-        if (type === 'pie') {
-          point.name = isIdBased
-            ? referenceEntity.name
-            : row[xAxisDimension]
-        }
-
-        if (isWrapDate(row[xAxisDimension])) {
-          point.x = row[xAxisDimension].date.getTime()
-        }
-
-        seriesConfig.data.push(point)
+      if (!seriesConfig) {
+        seriesConfig = createNewSeries(referenceEntity, seriesSignature, yAxisIndex)
+        series.push(seriesConfig)
       }
 
-      forEach(metrics, metricIteratee)
+      const isSpecialPoint = isObject(row[metric]) && row[metric].value !== undefined
+
+      const point = {
+        metric,
+        id: row._index_,
+        __row__: row
+      }
+
+      if (isSpecialPoint) {
+        point.y = row[metric].value
+        point.raw = row[metric].raw
+        point.marker = {
+          enabled: true,
+          fillColor: '#414141',
+          symbol: 'circle'
+        }
+      } else {
+        const value = Number(row[metric])
+        point.y = isNaN(value) ? null : value
+      }
+
+      if (type === 'pie') {
+        point.name = isIdBased
+          ? referenceEntity.name
+          : row[xAxisDimension]
+      }
+
+      if (isWrapDate(row[xAxisDimension])) {
+        point.x = row[xAxisDimension].date.getTime()
+      }
+
+      seriesConfig.data.push(point)
     }
 
-    forEach(rows, rowIteratee)
+    forEach(metrics, metricIteratee)
   }
 
-  const grouped = {}
-
-  forEach(result, (row, _index_) => {
-    const x = row[xAxisDimension]
-
-    if (!grouped[x]) {
-      grouped[x] = []
-    }
-
-    grouped[x].push(assign({_index_}, row))
-  })
-
-  forEach(grouped, walk)
+  forEach(result, rowIteratee)
 
   const categories = []
 
@@ -394,7 +378,7 @@ export const reportToChartConfig = createTask((module) => {
       if (isIdBased) {
         categories[index] = getEntityById(row.id).name
       } else if (isString(row[xAxisDimension])) {
-        categories[index] = String(row[xAxisDimension])
+        categories[index] = row[xAxisDimension]
       }
 
       delete point.__row__
