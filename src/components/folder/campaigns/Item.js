@@ -4,7 +4,7 @@ import Checkbox from '../../Checkbox'
 import {Link} from 'react-router'
 
 export function FolderCampaignLi ({id, name, status, readOnly}, {params}) {
-  const campaignUri = `/c/${params.company}/w/${params.workspace}/f/${params.folder}/campaign/${id}`
+  const campaignUri = `/c/${params.company}/w/${params.workspace}/f/${params.folder}/c/${id}`
 
   return (
     <li className='mdl-list__item'>
