@@ -253,7 +253,7 @@ const Content = props => {
         `c/${params.company}`,
         params.workspace && `w/${params.workspace}`,
         params.folder && `f/${params.folder}`,
-        params.report && `report/${params.report}`,
+        params.report && `r/${params.report}`,
         'mailing'
       ]), '/')
 

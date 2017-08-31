@@ -91,7 +91,7 @@ function Report (props, {moment}) {
   const {dispatch, params, shareUrl, path, id, name, author, last_update, description} = props
 
   return (
-    <ThumbLink to={`${path}/report/${id}`} title={name}>
+    <ThumbLink to={`${path}/r/${id}`} title={name}>
       <Cap>{name}</Cap>
 
       {last_update && <small className={`mdl-color-text--grey-500 ${style.update}`}>
@@ -116,13 +116,13 @@ function Report (props, {moment}) {
           <DropdownMenu>
             <ShareButton {...{id, shareUrl}}/>
 
-            <MenuItem tag={Link} to={`${path}/report/${id}/mailing?skipEmptyList=true`} icon='mail_outline'>
+            <MenuItem tag={Link} to={`${path}/r/${id}/mailing?skipEmptyList=true`} icon='mail_outline'>
               <Message>reportMailing</Message>
             </MenuItem>
 
             {canEditReport &&
 
-            <MenuItem tag={Link} icon='mode_edit' to={`${path}/report/${id}/edit`}>
+            <MenuItem tag={Link} icon='mode_edit' to={`${path}/r/${id}/edit`}>
               <Message>editReport</Message>
             </MenuItem>}
 
@@ -249,7 +249,7 @@ class Reports extends React.Component {
             {defaultReport && (
               <p className={style.defaultReport}>
                 <em>
-                  <Link to={`${path}/report/${defaultReport.id}`}>
+                  <Link to={`${path}/r/${defaultReport.id}`}>
                     <Message html name={defaultReport.name}>
                       defaultReportLabel
                     </Message>

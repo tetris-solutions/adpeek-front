@@ -33,7 +33,7 @@ function ReportScreen (props, context) {
     folder && `f/${folder}`
   ])
 
-  const reportUrl = '/' + join(scope, '/') + `/report/${report.id}`
+  const reportUrl = '/' + join(scope, '/') + `/r/${report.id}`
   const dtRangeQueryString = '?' + qs.stringify({from, to})
 
   const cloneReportUrl = '/' + join(scope, '/') + `/reports/new?clone=${report.id}&name=${report.name}`

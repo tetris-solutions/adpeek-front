@@ -60,7 +60,7 @@ class ReportLink extends React.Component {
         : '#'
     }
 
-    return `${baseUrl}/report/${mainReportId}`
+    return `${baseUrl}/r/${mainReportId}`
   }
 
   render () {

@@ -77,7 +77,7 @@ class ReportEditPrompt extends React.Component {
       folder && `f/${folder}`
     ]), '/')
 
-    this.context.router.push(`/${scope}/report/${report}/edit`)
+    this.context.router.push(`/${scope}/r/${report}/edit`)
   }
 
   confirm = () => {

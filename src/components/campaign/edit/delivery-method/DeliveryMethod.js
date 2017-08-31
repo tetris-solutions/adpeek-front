@@ -23,7 +23,7 @@ const CampaignOrder = ({cancel, params: {company, workspace, folder, campaign}, 
       <Link
         style={{float: 'right'}}
         className='mdl-button mdl-button--raised mdl-button--colored'
-        to={`/c/${company}/w/${workspace}/f/${folder}/order/${id}/budget/${budget.id}`}>
+        to={`/c/${company}/w/${workspace}/f/${folder}/o/${id}/budget/${budget.id}`}>
         <Message>editBudget</Message>
       </Link>
     </p>

@@ -45,7 +45,7 @@ export function ReportAside ({report, user, dispatch, indexMode, setIndexMode}, 
   const shouldSkipEditPrompt = report.is_private || canSkipReportEditPrompt()
 
   const cloneUrl = `${scopeUrl}/reports/new?clone=${report.id}&name=${cloneName}`
-  const reportUrl = `${scopeUrl}/report/${report.id}`
+  const reportUrl = `${scopeUrl}/r/${report.id}`
 
   /* eslint-disable */
   function navigation ({canEditReport, canBrowseReports}) {

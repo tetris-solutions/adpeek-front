@@ -23,7 +23,7 @@ const dFormat = 'DD/MMM'
 
 const Order = ({dispatch, amount, auto_budget, start, end, company, workspace, folder, id, name, folder_name, workspace_name}, {params, moment, locales}) => {
   const folderUrl = `/c/${company}/w/${workspace}/f/${folder}`
-  const orderUrl = `${folderUrl}/order/${id}`
+  const orderUrl = `${folderUrl}/o/${id}`
 
   return (
     <ThumbLink to={orderUrl} title={name}>

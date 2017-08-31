@@ -12,7 +12,7 @@ export function ReportBreadcrumb ({params: {company, workspace, folder}, report}
       `c/${company}`,
       workspace && `w/${workspace}`,
       folder && `f/${folder}`,
-      `report/${report.id}`
+      `r/${report.id}`
     ]), '/')
 
   return (

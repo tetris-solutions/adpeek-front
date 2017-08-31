@@ -222,7 +222,7 @@ const MailingEdit = createReactClass({
       `c/${params.company}`,
       params.workspace && `w/${params.workspace}`,
       params.folder && `f/${params.folder}`,
-      params.report && `report/${params.report}`,
+      params.report && `r/${params.report}`,
       mailingId ? `mailing/${mailingId}` : 'mailing'
     ])
 
@@ -236,7 +236,7 @@ const MailingEdit = createReactClass({
       `c/${params.company}`,
       workspace && `w/${workspace.id}`,
       folder && `f/${folder.id}`,
-      `report/${report.id}`
+      `r/${report.id}`
     ])
 
     return '/' + join(path, '/')

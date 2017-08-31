@@ -28,7 +28,7 @@ export function OrderAside ({params, order, dispatch}, {router}) {
             <Message>cloneSingleOrder</Message>
           </NavBt>}
 
-          <NavBt tag={Link} to={`${folderUrl}/order/${order.id}/autobudget`} icon='today'>
+          <NavBt tag={Link} to={`${folderUrl}/o/${order.id}/autobudget`} icon='today'>
             <Message>autoBudgetLog</Message>
           </NavBt>
 

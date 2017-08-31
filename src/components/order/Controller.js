@@ -267,7 +267,7 @@ export class OrderController extends React.Component {
     const onSuccess = response => {
       this.setState({dirty: false})
 
-      const url = `/c/${params.company}/w/${params.workspace}/f/${params.folder}/order/${response.data.id}`
+      const url = `/c/${params.company}/w/${params.workspace}/f/${params.folder}/o/${response.data.id}`
 
       const reloadStuff = isNewOrder
         ? dispatch(loadOrdersAction, params.company, params.workspace, params.folder)
