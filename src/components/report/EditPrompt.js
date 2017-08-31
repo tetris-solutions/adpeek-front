@@ -46,7 +46,7 @@ class ReportEditPrompt extends React.Component {
     const scope = join(compact([
       `c/${company}`,
       workspace && `w/${workspace}`,
-      folder && `folder/${folder}`
+      folder && `f/${folder}`
     ]), '/')
 
     router.push(`/${scope}/reports/new?clone=${report.id}&name=${cloneName}`)
@@ -74,7 +74,7 @@ class ReportEditPrompt extends React.Component {
     const scope = join(compact([
       `c/${company}`,
       workspace && `w/${workspace}`,
-      folder && `folder/${folder}`
+      folder && `f/${folder}`
     ]), '/')
 
     this.context.router.push(`/${scope}/report/${report}/edit`)

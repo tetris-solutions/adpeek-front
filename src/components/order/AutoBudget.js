@@ -24,7 +24,7 @@ class OrderAutoBudget extends React.Component {
     const day = e.target.value
 
     this.context.router.push(
-      `/c/${company}/w/${workspace}/folder/${folder}/order/${order}/autobudget/${day}`
+      `/c/${company}/w/${workspace}/f/${folder}/order/${order}/autobudget/${day}`
     )
   }
 

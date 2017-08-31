@@ -301,7 +301,7 @@ const Wrapper = props =>
     join(compact([
       `c/${props.params.company}`,
       props.params.workspace && `w/${props.params.workspace}`,
-      props.params.folder && `folder/${props.params.folder}`
+      props.params.folder && `f/${props.params.folder}`
     ]), '/')
   )}/>
 

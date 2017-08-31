@@ -10,7 +10,7 @@ function ReportsBreadcrumb ({params: {company, workspace, folder}}) {
   const scope = join(compact([
     `c/${company}`,
     workspace && `w/${workspace}`,
-    folder && `folder/${folder}`
+    folder && `f/${folder}`
   ]), '/')
 
   const url = `/${scope}/reports`

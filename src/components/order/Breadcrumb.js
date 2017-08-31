@@ -4,7 +4,7 @@ import Link from '../BreadcrumbLink'
 import {routeParamsBasedBranch} from '../higher-order/branch'
 
 export const OrderBreadcrumb = ({params: {company, workspace, folder}, order}, {messages: {orderBreadcrumb}}) =>
-  <Link to={`/c/${company}/w/${workspace}/folder/${folder}/order/${order.id}`} title={orderBreadcrumb}>
+  <Link to={`/c/${company}/w/${workspace}/f/${folder}/order/${order.id}`} title={orderBreadcrumb}>
     <i className='material-icons'>monetization_on</i>
     {order.name}
   </Link>

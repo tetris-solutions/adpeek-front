@@ -10,7 +10,7 @@ import {Navigation, Name, NavBt, NavBts} from '../Navigation'
 
 export function OrderAside ({params, order, dispatch}, {router}) {
   const {company, workspace, folder} = params
-  const folderUrl = `/c/${company}/w/${workspace}/folder/${folder}`
+  const folderUrl = `/c/${company}/w/${workspace}/f/${folder}`
 
   function onClick () {
     dispatch(deleteOrderAction, params, order.id)

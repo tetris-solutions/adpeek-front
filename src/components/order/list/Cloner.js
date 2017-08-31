@@ -120,7 +120,7 @@ export const OrdersClone = createReactClass({
       const scope = join(compact([
         `c/${params.company}`,
         params.workspace && `w/${params.workspace}`,
-        params.folder && `folder/${params.folder}`
+        params.folder && `f/${params.folder}`
       ]), '/')
 
       router.push(`/${scope}/orders`)

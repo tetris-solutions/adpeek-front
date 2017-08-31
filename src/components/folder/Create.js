@@ -83,7 +83,7 @@ const CreateFolder = createReactClass({
     this.preSubmit()
 
     const navigateToFolderList = response => {
-      this.context.router.push(`/c/${company}/w/${workspace}/folder/${response.data.id}`)
+      this.context.router.push(`/c/${company}/w/${workspace}/f/${response.data.id}`)
     }
 
     return dispatch(createFolderAction, workspace, folder)

@@ -26,7 +26,7 @@ function FolderCampaignLooseLi ({external_id, name, status, platform, is_adwords
         <Link
           className='mdl-list__item-secondary-action'
           title={new TextMessage(messages.openFolderName, locales).format({name: folder.name})}
-          to={`/c/${folder.company}/w/${folder.workspace}/folder/${folder.id}`}>
+          to={`/c/${folder.company}/w/${folder.workspace}/f/${folder.id}`}>
           <i className='material-icons'>
             folder_open
           </i>

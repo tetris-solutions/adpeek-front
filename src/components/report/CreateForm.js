@@ -51,7 +51,7 @@ const ReportCreate = createReactClass({
         const scope = join(compact([
           `c/${company}`,
           workspace && `w/${workspace}`,
-          folder && `folder/${folder}`
+          folder && `f/${folder}`
         ]), '/')
 
         this.context.router.push(`/${scope}/report/${reportId}/edit?new=true`)

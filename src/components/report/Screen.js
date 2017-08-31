@@ -30,7 +30,7 @@ function ReportScreen (props, context) {
   const scope = compact([
     `c/${company}`,
     workspace && `w/${workspace}`,
-    folder && `folder/${folder}`
+    folder && `f/${folder}`
   ])
 
   const reportUrl = '/' + join(scope, '/') + `/report/${report.id}`

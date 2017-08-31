@@ -252,7 +252,7 @@ const Content = props => {
       compact([
         `c/${params.company}`,
         params.workspace && `w/${params.workspace}`,
-        params.folder && `folder/${params.folder}`,
+        params.folder && `f/${params.folder}`,
         params.report && `report/${params.report}`,
         'mailing'
       ]), '/')

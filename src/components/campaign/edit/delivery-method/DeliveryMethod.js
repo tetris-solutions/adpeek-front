@@ -23,7 +23,7 @@ const CampaignOrder = ({cancel, params: {company, workspace, folder, campaign}, 
       <Link
         style={{float: 'right'}}
         className='mdl-button mdl-button--raised mdl-button--colored'
-        to={`/c/${company}/w/${workspace}/folder/${folder}/order/${id}/budget/${budget.id}`}>
+        to={`/c/${company}/w/${workspace}/f/${folder}/order/${id}/budget/${budget.id}`}>
         <Message>editBudget</Message>
       </Link>
     </p>
@@ -53,7 +53,7 @@ const CreateOrderPrompt = ({cancel, params: {company, workspace, folder, campaig
       <Link
         style={{float: 'right'}}
         className='mdl-button mdl-button--raised mdl-button--colored'
-        to={`/c/${company}/w/${workspace}/folder/${folder}/orders`}>
+        to={`/c/${company}/w/${workspace}/f/${folder}/orders`}>
         <Message>openOrders</Message>
       </Link>
     </div>

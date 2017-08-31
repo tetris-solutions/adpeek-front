@@ -47,7 +47,7 @@ class FolderAside extends React.PureComponent {
     const {company, workspace} = params
 
     const isAnalytics = get(folder, 'account.platform') === 'analytics'
-    const baseUrl = `/c/${company}/w/${workspace}/folder/${folder.id}`
+    const baseUrl = `/c/${company}/w/${workspace}/f/${folder.id}`
     const backspaceUrl = endsWith(location.pathname, folder.id)
       ? `/c/${company}/w/${workspace}`
       : baseUrl

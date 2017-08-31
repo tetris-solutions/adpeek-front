@@ -49,7 +49,7 @@ class ReportLink extends React.Component {
     }
 
     if (folder) {
-      baseUrl += `/folder/${folder}`
+      baseUrl += `/f/${folder}`
     }
 
     const mainReportId = get(reports, [0, 'id'])

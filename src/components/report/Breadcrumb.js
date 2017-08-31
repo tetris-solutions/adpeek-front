@@ -11,7 +11,7 @@ export function ReportBreadcrumb ({params: {company, workspace, folder}, report}
     join(compact([
       `c/${company}`,
       workspace && `w/${workspace}`,
-      folder && `folder/${folder}`,
+      folder && `f/${folder}`,
       `report/${report.id}`
     ]), '/')
 

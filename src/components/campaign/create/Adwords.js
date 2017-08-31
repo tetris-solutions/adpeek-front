@@ -106,7 +106,7 @@ class CreateAdwordsCampaign extends React.Component {
         .then(() => createResponse))
       .then(({data: {id}}) => {
         this.context.router
-          .push(`/c/${company}/w/${workspace}/folder/${folder}/campaign/${id}`)
+          .push(`/c/${company}/w/${workspace}/f/${folder}/campaign/${id}`)
       })
   }
 

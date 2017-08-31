@@ -30,7 +30,7 @@ export function ReportAside ({report, user, dispatch, indexMode, setIndexMode}, 
     join(compact([
       `c/${company}`,
       workspace && `w/${workspace}`,
-      folder && `folder/${folder}`
+      folder && `f/${folder}`
     ]), '/')
 
   const deleteReport = () => {
