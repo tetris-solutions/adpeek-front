@@ -300,7 +300,7 @@ const Wrapper = props =>
   <Reports {...props} path={'/' + (
     join(compact([
       `c/${props.params.company}`,
-      props.params.workspace && `workspace/${props.params.workspace}`,
+      props.params.workspace && `w/${props.params.workspace}`,
       props.params.folder && `folder/${props.params.folder}`
     ]), '/')
   )}/>

@@ -76,7 +76,7 @@ export class Orders extends React.Component {
             {canEditOrder && Boolean(params.folder) && (
               <SubHeaderButton
                 tag={Link}
-                to={`/c/${params.company}/workspace/${params.workspace}/folder/${params.folder}/create/order`}>
+                to={`/c/${params.company}/w/${params.workspace}/folder/${params.folder}/create/order`}>
                 <i className='material-icons'>add</i>
                 <Message>newOrderHeader</Message>
               </SubHeaderButton>)}

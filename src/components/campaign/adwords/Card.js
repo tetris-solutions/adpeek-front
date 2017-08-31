@@ -29,7 +29,7 @@ import {
 } from '../Utils'
 
 const urlFor = ({company, workspace, folder, campaign}, fragment = null) => {
-  const campaignUrl = `/c/${company}/workspace/${workspace}/folder/${folder}/campaign/${campaign}`
+  const campaignUrl = `/c/${company}/w/${workspace}/folder/${folder}/campaign/${campaign}`
 
   return fragment
     ? `${campaignUrl}/edit/${fragment}`

@@ -45,7 +45,7 @@ class ReportLink extends React.Component {
     let baseUrl = `/c/${company}`
 
     if (workspace) {
-      baseUrl += `/workspace/${workspace}`
+      baseUrl += `/w/${workspace}`
     }
 
     if (folder) {

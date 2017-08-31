@@ -37,7 +37,7 @@ class FolderAside extends React.PureComponent {
 
     return dispatch(deleteFolderAction, params, folder)
       .then(() => {
-        router.replace(`/c/${company}/workspace/${workspace}`)
+        router.replace(`/c/${company}/w/${workspace}`)
       })
   }
 
@@ -47,9 +47,9 @@ class FolderAside extends React.PureComponent {
     const {company, workspace} = params
 
     const isAnalytics = get(folder, 'account.platform') === 'analytics'
-    const baseUrl = `/c/${company}/workspace/${workspace}/folder/${folder.id}`
+    const baseUrl = `/c/${company}/w/${workspace}/folder/${folder.id}`
     const backspaceUrl = endsWith(location.pathname, folder.id)
-      ? `/c/${company}/workspace/${workspace}`
+      ? `/c/${company}/w/${workspace}`
       : baseUrl
 
     return (

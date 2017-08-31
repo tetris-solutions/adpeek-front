@@ -30,7 +30,7 @@ class CampaignAside extends React.PureComponent {
     const {params: {company, workspace, folder}, campaign} = this.props
     const {location: {query, pathname}} = this.context
 
-    const folderUrl = `/c/${company}/workspace/${workspace}/folder/${folder}`
+    const folderUrl = `/c/${company}/w/${workspace}/folder/${folder}`
     const campaignUrl = `${folderUrl}/campaign/${campaign.id}`
 
     let creativesUrl = `${campaignUrl}/creatives`

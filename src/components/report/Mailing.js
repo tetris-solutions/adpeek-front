@@ -251,7 +251,7 @@ const Content = props => {
   const url = '/' + join(
       compact([
         `c/${params.company}`,
-        params.workspace && `workspace/${params.workspace}`,
+        params.workspace && `w/${params.workspace}`,
         params.folder && `folder/${params.folder}`,
         params.report && `report/${params.report}`,
         'mailing'

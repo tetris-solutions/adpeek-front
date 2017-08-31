@@ -45,7 +45,7 @@ class ReportEditPrompt extends React.Component {
 
     const scope = join(compact([
       `c/${company}`,
-      workspace && `workspace/${workspace}`,
+      workspace && `w/${workspace}`,
       folder && `folder/${folder}`
     ]), '/')
 
@@ -73,7 +73,7 @@ class ReportEditPrompt extends React.Component {
 
     const scope = join(compact([
       `c/${company}`,
-      workspace && `workspace/${workspace}`,
+      workspace && `w/${workspace}`,
       folder && `folder/${folder}`
     ]), '/')
 

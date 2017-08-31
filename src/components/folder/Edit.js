@@ -98,7 +98,7 @@ const EditFolder = createReactClass({
 
     this.preSubmit()
 
-    const navigateToUpdatedFolder = () => this.context.router.push(`/c/${company}/workspace/${workspace}/folder/${id}`)
+    const navigateToUpdatedFolder = () => this.context.router.push(`/c/${company}/w/${workspace}/folder/${id}`)
 
     return dispatch(updateFolderAction, company, workspace, folder)
       .then(() => dispatch(pushSuccessMessageAction))

@@ -107,7 +107,7 @@ export class Folders extends React.Component {
         <div>
           <SubHeader>
             {canEditFolder && (
-              <SubHeaderButton tag={Link} to={`/c/${company}/workspace/${workspace}/create/folder`}>
+              <SubHeaderButton tag={Link} to={`/c/${company}/w/${workspace}/create/folder`}>
                 <i className='material-icons'>add</i>
                 <Message>newFolderHeader</Message>
               </SubHeaderButton>)}

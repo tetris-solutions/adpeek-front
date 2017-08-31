@@ -19,7 +19,7 @@ export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
       })
   }
 
-  const baseUrl = `/c/${company}/workspace/${workspace.id}`
+  const baseUrl = `/c/${company}/w/${workspace.id}`
 
   return (
     <Fence canEditWorkspace>{({canEditWorkspace}) =>

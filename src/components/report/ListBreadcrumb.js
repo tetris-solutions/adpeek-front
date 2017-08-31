@@ -9,7 +9,7 @@ import join from 'lodash/join'
 function ReportsBreadcrumb ({params: {company, workspace, folder}}) {
   const scope = join(compact([
     `c/${company}`,
-    workspace && `workspace/${workspace}`,
+    workspace && `w/${workspace}`,
     folder && `folder/${folder}`
   ]), '/')
 

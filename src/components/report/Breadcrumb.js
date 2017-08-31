@@ -10,7 +10,7 @@ export function ReportBreadcrumb ({params: {company, workspace, folder}, report}
   const url = '/' +
     join(compact([
       `c/${company}`,
-      workspace && `workspace/${workspace}`,
+      workspace && `w/${workspace}`,
       folder && `folder/${folder}`,
       `report/${report.id}`
     ]), '/')
