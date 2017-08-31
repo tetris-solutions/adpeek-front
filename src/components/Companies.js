@@ -10,7 +10,7 @@ import {Link} from 'react-router'
 import ReportLink from './report/Link'
 
 const Company = ({company: {id, name, reports, icon}, params, dispatch}) => (
-  <ThumbLink key={id} title={name} to={`/company/${id}`} img={icon}>
+  <ThumbLink key={id} title={name} to={`/c/${id}`} img={icon}>
     {icon ? null : <Title>{name}</Title>}
     <Gear>
       <DropdownMenu>
@@ -26,7 +26,7 @@ const Company = ({company: {id, name, reports, icon}, params, dispatch}) => (
           <Message>manageCompany</Message>
         </MenuItem>
 
-        <MenuItem tag={Link} to={`/company/${id}/orders`} icon='attach_money'>
+        <MenuItem tag={Link} to={`/c/${id}/orders`} icon='attach_money'>
           <Message>companyOrders</Message>
         </MenuItem>
       </DropdownMenu>

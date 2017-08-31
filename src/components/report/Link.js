@@ -42,7 +42,7 @@ class ReportLink extends React.Component {
     const {params, reports, canBrowseReports} = this.props
     const {company, workspace, folder} = params
 
-    let baseUrl = `/company/${company}`
+    let baseUrl = `/c/${company}`
 
     if (workspace) {
       baseUrl += `/workspace/${workspace}`

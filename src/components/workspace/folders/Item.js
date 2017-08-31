@@ -37,7 +37,7 @@ const platformColor = {
 
 const FolderCard = ({id, account: {platform}, kpi_goal, name, stats, reports, editable, hidden, reload, dispatch, params}) => {
   const {company, workspace} = params
-  const folderUrl = `/company/${company}/workspace/${workspace}/folder/${id}`
+  const folderUrl = `/c/${company}/workspace/${workspace}/folder/${id}`
   const isAnalytics = platform === 'analytics'
 
   return (

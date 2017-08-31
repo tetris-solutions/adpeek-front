@@ -219,7 +219,7 @@ const MailingEdit = createReactClass({
     const {params} = this.props
 
     const path = compact([
-      `company/${params.company}`,
+      `c/${params.company}`,
       params.workspace && `workspace/${params.workspace}`,
       params.folder && `folder/${params.folder}`,
       params.report && `report/${params.report}`,
@@ -233,7 +233,7 @@ const MailingEdit = createReactClass({
     const {params, mailing: {workspace, folder, report}} = this.props
 
     const path = compact([
-      `company/${params.company}`,
+      `c/${params.company}`,
       workspace && `workspace/${workspace.id}`,
       folder && `folder/${folder.id}`,
       `report/${report.id}`

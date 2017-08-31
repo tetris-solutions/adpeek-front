@@ -9,7 +9,7 @@ import {inferLevelFromProps} from '../../functions/infer-level-from-params'
 export function ReportBreadcrumb ({params: {company, workspace, folder}, report}, {messages: {reportBreadcrumb}}) {
   const url = '/' +
     join(compact([
-      `company/${company}`,
+      `c/${company}`,
       workspace && `workspace/${workspace}`,
       folder && `folder/${folder}`,
       `report/${report.id}`

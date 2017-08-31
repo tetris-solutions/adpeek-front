@@ -44,7 +44,7 @@ class ReportEditPrompt extends React.Component {
     const cloneName = new TextMessage(messages.copyOfName, locales).format({name: report.name})
 
     const scope = join(compact([
-      `company/${company}`,
+      `c/${company}`,
       workspace && `workspace/${workspace}`,
       folder && `folder/${folder}`
     ]), '/')
@@ -72,7 +72,7 @@ class ReportEditPrompt extends React.Component {
     const {params: {company, workspace, folder, report}} = this.props
 
     const scope = join(compact([
-      `company/${company}`,
+      `c/${company}`,
       workspace && `workspace/${workspace}`,
       folder && `folder/${folder}`
     ]), '/')

@@ -49,7 +49,7 @@ const ReportCreate = createReactClass({
         const reportId = response.data.id
 
         const scope = join(compact([
-          `company/${company}`,
+          `c/${company}`,
           workspace && `workspace/${workspace}`,
           folder && `folder/${folder}`
         ]), '/')

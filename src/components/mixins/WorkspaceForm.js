@@ -33,7 +33,7 @@ export default {
 
     return dispatch(action, company, data)
       .then(response => {
-        this.context.router.push(`/company/${company}/workspace/${workspace || response.data.id}`)
+        this.context.router.push(`/c/${company}/workspace/${workspace || response.data.id}`)
       })
       .then(() => dispatch(pushSuccessMessageAction))
       .catch(this.handleSubmitException)

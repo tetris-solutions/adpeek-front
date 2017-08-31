@@ -22,7 +22,7 @@ const style = csjs`
 const dFormat = 'DD/MMM'
 
 const Order = ({dispatch, amount, auto_budget, start, end, company, workspace, folder, id, name, folder_name, workspace_name}, {params, moment, locales}) => {
-  const folderUrl = `/company/${company}/workspace/${workspace}/folder/${folder}`
+  const folderUrl = `/c/${company}/workspace/${workspace}/folder/${folder}`
   const orderUrl = `${folderUrl}/order/${id}`
 
   return (

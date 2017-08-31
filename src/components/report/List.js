@@ -299,7 +299,7 @@ class Reports extends React.Component {
 const Wrapper = props =>
   <Reports {...props} path={'/' + (
     join(compact([
-      `company/${props.params.company}`,
+      `c/${props.params.company}`,
       props.params.workspace && `workspace/${props.params.workspace}`,
       props.params.folder && `folder/${props.params.folder}`
     ]), '/')

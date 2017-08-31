@@ -22,7 +22,7 @@ const Workspace = ({workspace, params, dispatch, reload}) => {
   const summary = workspace.summary || {}
 
   return (
-    <ThumbLink to={`/company/${params.company}/workspace/${workspace.id}`} title={workspace.name}>
+    <ThumbLink to={`/c/${params.company}/workspace/${workspace.id}`} title={workspace.name}>
       <Cap bg={workspace.hidden ? 'grey-500' : undefined}>
         {workspace.name}
       </Cap>
@@ -73,7 +73,7 @@ const Workspace = ({workspace, params, dispatch, reload}) => {
           </ReportLink>
 
           <Fence canEditWorkspace>
-            <MenuItem tag={Link} to={`/company/${params.company}/workspace/${workspace.id}/edit`} icon='mode_edit'>
+            <MenuItem tag={Link} to={`/c/${params.company}/workspace/${workspace.id}/edit`} icon='mode_edit'>
               <Message>editWorkspace</Message>
             </MenuItem>
           </Fence>

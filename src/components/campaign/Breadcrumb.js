@@ -5,7 +5,7 @@ import {routeParamsBasedBranch} from '../higher-order/branch'
 
 export const CampaignBreadcrumb = ({params: {company, workspace, folder}, campaign}, {messages: {campaignBreadcrumb}}) => (
   <Link
-    to={`/company/${company}/workspace/${workspace}/folder/${folder}/campaign/${campaign.id}`}
+    to={`/c/${company}/workspace/${workspace}/folder/${folder}/campaign/${campaign.id}`}
     title={campaignBreadcrumb}>
     <i className='material-icons'>format_shapes</i>
     {campaign.name}

@@ -28,7 +28,7 @@ export function ReportAside ({report, user, dispatch, indexMode, setIndexMode}, 
 
   const scopeUrl = '/' +
     join(compact([
-      `company/${company}`,
+      `c/${company}`,
       workspace && `workspace/${workspace}`,
       folder && `folder/${folder}`
     ]), '/')

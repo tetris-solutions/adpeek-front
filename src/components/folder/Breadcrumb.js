@@ -5,7 +5,7 @@ import {routeParamsBasedBranch} from '../higher-order/branch'
 
 const FolderBreadcrumb = ({params: {company, workspace}, folder}, {messages: {folderBreadcrumb}}) => folder
   ? (
-    <Link to={`/company/${company}/workspace/${workspace}/folder/${folder.id}`} title={folderBreadcrumb}>
+    <Link to={`/c/${company}/workspace/${workspace}/folder/${folder.id}`} title={folderBreadcrumb}>
       <i className='material-icons'>folder</i>
       {folder.name}
     </Link>

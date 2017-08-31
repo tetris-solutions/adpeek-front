@@ -5,7 +5,7 @@ import {routeParamsBasedBranch} from '../higher-order/branch'
 
 const WorkspaceBreadcrumb = ({params: {company}, workspace}, {messages: {workspaceBreadcrumb}}) => workspace
   ? (
-    <Link to={`/company/${company}/workspace/${workspace.id}`} title={workspaceBreadcrumb}>
+    <Link to={`/c/${company}/workspace/${workspace.id}`} title={workspaceBreadcrumb}>
       <i className='material-icons'>domain</i>
       {workspace.name}
     </Link>

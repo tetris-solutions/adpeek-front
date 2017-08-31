@@ -135,7 +135,7 @@ class Workspaces extends React.Component {
       <div>
         <SubHeader>
           <Fence canEditWorkspace>
-            <SubHeaderButton tag={Link} to={`/company/${this.props.company.id}/create/workspace`}>
+            <SubHeaderButton tag={Link} to={`/c/${this.props.company.id}/create/workspace`}>
               <i className='material-icons'>add</i>
               <Message>newWorkspaceHeader</Message>
             </SubHeaderButton>

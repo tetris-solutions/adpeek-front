@@ -28,7 +28,7 @@ function ReportScreen (props, context) {
   const {user, favoriteReport, report, reportLiteMode, children, downloadReport, isCreatingReport} = props
   const {messages, params: {company, workspace, folder}, location: {query: {from, to}}} = context
   const scope = compact([
-    `company/${company}`,
+    `c/${company}`,
     workspace && `workspace/${workspace}`,
     folder && `folder/${folder}`
   ])

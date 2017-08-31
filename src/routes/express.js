@@ -52,107 +52,107 @@ export function setAppRoutes (app, render) {
     preload(statuses, reportShareMetaData, reportShare),
     render)
 
-  app.get('/company/:company',
+  app.get('/c(ompany)?/:company',
     protect,
     ensureLoad(workspaces),
     render)
 
-  app.get('/company/:company/mailing/:mailing?',
+  app.get('/c(ompany)?/:company/mailing/:mailing?',
     protect,
     ensureLoad(mailings),
     render)
 
-  app.get('/company/:company/reports',
+  app.get('/c(ompany)?/:company/reports',
     protect,
     ensureLoad(savedAccounts, reports),
     render)
 
-  app.get('/company/:company/reports/new',
+  app.get('/c(ompany)?/:company/reports/new',
     protect,
     ensureLoad(savedAccounts, reports),
     render)
 
-  app.get('/company/:company/report/:report',
+  app.get('/c(ompany)?/:company/report/:report',
     protect,
     ensureLoad(savedAccounts, report),
     render)
 
-  app.get('/company/:company/report/:report/edit',
+  app.get('/c(ompany)?/:company/report/:report/edit',
     protect,
     ensureLoad(savedAccounts, report),
     render)
 
-  app.get('/company/:company/report/:report/mailing/:mailing?',
+  app.get('/c(ompany)?/:company/report/:report/mailing/:mailing?',
     protect,
     ensureLoad(savedAccounts, report, mailings),
     render)
 
-  app.get('/company/:company/orders',
+  app.get('/c(ompany)?/:company/orders',
     protect,
     ensureLoad(orders),
     render)
 
-  app.get('/company/:company/orders',
+  app.get('/c(ompany)?/:company/orders',
     protect,
     ensureLoad(orders),
     render)
 
-  app.get('/company/:company/orders/clone',
+  app.get('/c(ompany)?/:company/orders/clone',
     protect,
     ensureLoad(orders),
     render)
 
-  app.get('/company/:company/create/workspace',
+  app.get('/c(ompany)?/:company/create/workspace',
     protect,
     ensureLoad(roles),
     render)
 
-  app.get('/company/:company/workspace/:workspace',
+  app.get('/c(ompany)?/:company/workspace/:workspace',
     protect,
     ensureLoad(workspace, folders),
     render)
 
-  app.get('/company/:company/workspace/:workspace/reports',
+  app.get('/c(ompany)?/:company/workspace/:workspace/reports',
     protect,
     ensureLoad(workspace, reports),
     render)
 
-  app.get('/company/:company/workspace/:workspace/reports/new',
+  app.get('/c(ompany)?/:company/workspace/:workspace/reports/new',
     protect,
     ensureLoad(workspace, reports),
     render)
 
-  app.get('/company/:company/workspace/:workspace/report/:report',
+  app.get('/c(ompany)?/:company/workspace/:workspace/report/:report',
     protect,
     ensureLoad(workspace, report),
     render)
 
-  app.get('/company/:company/workspace/:workspace/report/:report/edit',
+  app.get('/c(ompany)?/:company/workspace/:workspace/report/:report/edit',
     protect,
     ensureLoad(workspace, report),
     render)
 
-  app.get('/company/:company/workspace/:workspace/report/:report/mailing/:mailing?',
+  app.get('/c(ompany)?/:company/workspace/:workspace/report/:report/mailing/:mailing?',
     protect,
     ensureLoad(workspace, report, mailings),
     render)
 
-  app.get('/company/:company/workspace/:workspace/orders',
+  app.get('/c(ompany)?/:company/workspace/:workspace/orders',
     protect,
     ensureLoad(workspace, orders),
     render)
 
-  app.get('/company/:company/workspace/:workspace/orders/clone',
+  app.get('/c(ompany)?/:company/workspace/:workspace/orders/clone',
     protect,
     ensureLoad(workspace, orders),
     render)
 
-  app.get('/company/:company/workspace/:workspace/edit',
+  app.get('/c(ompany)?/:company/workspace/:workspace/edit',
     protect,
     ensureLoad(roles, workspace),
     render)
 
-  app.get('/company/:company/workspace/:workspace/create/folder',
+  app.get('/c(ompany)?/:company/workspace/:workspace/create/folder',
     protect,
     ensureLoad(workspace, accounts),
     render)
@@ -166,31 +166,31 @@ export function setAppRoutes (app, render) {
     '/call-outs',
     '/tracking'
   ], section =>
-    app.get(`/company/:company/workspace/:workspace/folder/:folder/account${section}`,
+    app.get(`/c(ompany)?/:company/workspace/:workspace/folder/:folder/account${section}`,
       protect,
       ensureLoad(workspace, folder),
       render))
 
   const subFolderActions = [workspace, folder, campaigns]
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder',
+  app.get('/c(ompany)?/:company/workspace/:workspace/folder/:folder',
     protect,
     ensureLoad(...subFolderActions),
     render)
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/create/campaign',
+  app.get('/c(ompany)?/:company/workspace/:workspace/folder/:folder/create/campaign',
     protect,
     ensureLoad(...subFolderActions),
     render)
 
   subFolderActions.push(reports)
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/reports',
+  app.get('/c(ompany)?/:company/workspace/:workspace/folder/:folder/reports',
     protect,
     ensureLoad(...subFolderActions),
     render)
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/reports/new',
+  app.get('/c(ompany)?/:company/workspace/:workspace/folder/:folder/reports/new',
     protect,
     ensureLoad(...subFolderActions),
     render)
@@ -198,22 +198,22 @@ export function setAppRoutes (app, render) {
   subFolderActions.pop()
   subFolderActions.push(report)
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/report/:report',
+  app.get('/c(ompany)?/:company/workspace/:workspace/folder/:folder/report/:report',
     protect,
     ensureLoad(...subFolderActions),
     render)
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/report/:report/edit',
+  app.get('/c(ompany)?/:company/workspace/:workspace/folder/:folder/report/:report/edit',
     protect,
     ensureLoad(...subFolderActions),
     render)
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/report/:report/mailing/:mailing?',
+  app.get('/c(ompany)?/:company/workspace/:workspace/folder/:folder/report/:report/mailing/:mailing?',
     protect,
     ensureLoad(...subFolderActions.concat([mailings])),
     render)
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/creatives',
+  app.get('/c(ompany)?/:company/workspace/:workspace/folder/:folder/creatives',
     protect,
     ensureLoad(workspace, folder, campaigns),
     render)
@@ -238,43 +238,43 @@ export function setAppRoutes (app, render) {
     '/edit/user-lists',
     '/creatives',
     '/creatives/edit'], path =>
-    app.get(`/company/:company/workspace/:workspace/folder/:folder/campaign/:campaign${path}`,
+    app.get(`/c(ompany)?/:company/workspace/:workspace/folder/:folder/campaign/:campaign${path}`,
       protect,
       ensureLoad(workspace, folder, campaigns),
       render))
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/orders',
+  app.get('/c(ompany)?/:company/workspace/:workspace/folder/:folder/orders',
     protect,
     ensureLoad(workspace, folder, orders),
     render)
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/orders/clone',
+  app.get('/c(ompany)?/:company/workspace/:workspace/folder/:folder/orders/clone',
     protect,
     ensureLoad(workspace, folder, orders),
     render)
 
   forEach(['', '/budget/:budget'], sPath =>
-    app.get(`/company/:company/workspace/:workspace/folder/:folder/order/:order${sPath}`,
+    app.get(`/c(ompany)?/:company/workspace/:workspace/folder/:folder/order/:order${sPath}`,
       protect,
       ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets),
       render))
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/order/:order/autobudget',
+  app.get('/c(ompany)?/:company/workspace/:workspace/folder/:folder/order/:order/autobudget',
     protect,
     ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets, autoBudgetLogs),
     render)
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/order/:order/autobudget/:day',
+  app.get('/c(ompany)?/:company/workspace/:workspace/folder/:folder/order/:order/autobudget/:day',
     protect,
     ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets, autoBudgetLogs),
     render)
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/create/order',
+  app.get('/c(ompany)?/:company/workspace/:workspace/folder/:folder/create/order',
     protect,
     ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders),
     render)
 
-  app.get('/company/:company/workspace/:workspace/folder/:folder/edit',
+  app.get('/c(ompany)?/:company/workspace/:workspace/folder/:folder/edit',
     protect,
     ensureLoad(workspace, accounts, folder),
     render)

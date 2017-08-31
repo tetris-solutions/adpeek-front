@@ -15,11 +15,11 @@ export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
   function onClick () {
     dispatch(deleteWorkspaceAction, params, workspace.id)
       .then(() => {
-        router.replace(`/company/${company}`)
+        router.replace(`/c/${company}`)
       })
   }
 
-  const baseUrl = `/company/${company}/workspace/${workspace.id}`
+  const baseUrl = `/c/${company}/workspace/${workspace.id}`
 
   return (
     <Fence canEditWorkspace>{({canEditWorkspace}) =>
@@ -47,7 +47,7 @@ export function WorkspaceAside ({params, workspace, dispatch}, {router}) {
               <Message>deleteWorkspace</Message>
             </NavBt>)}
 
-          <NavLink to={`/company/${company}`} icon='close'>
+          <NavLink to={`/c/${company}`} icon='close'>
             <Message>oneLevelUpNavigation</Message>
           </NavLink>
         </NavBts>

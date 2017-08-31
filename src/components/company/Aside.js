@@ -7,7 +7,7 @@ import Recent from '../Recent'
 import ReportLink from '../report/Link'
 
 export const CompanyAside = ({company, params, dispatch}) => {
-  const baseUrl = `/company/${company.id}`
+  const baseUrl = `/c/${company.id}`
 
   return (
     <Navigation img={company.icon} icon='account_balance'>

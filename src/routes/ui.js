@@ -64,23 +64,25 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
     }
   }
 
+  const reportLevel = (level, alias) => (
+    <Route
+      path={`${alias}/:report`}
+      component={routeParamsBasedBranch(level, 'report')}
+      aside={component.ReportAside}
+      breadcrumb={component.ReportBreadcrumb}
+      onEnter={preload(report)}>
+
+      <IndexRoute {...render(rConfig[level].item)}/>
+
+      <Route path='edit' {...render(rConfig[level].item)}/>
+      <Route path='mailing(/:mailing)' onEnter={preload(mailings)} {...render(component.Mailing)}/>
+    </Route>
+  )
+
   const getReportRoutes = level => (
     <Route breadcrumb={component.ReportsBreadcrumb} onEnter={rConfig[level].action}>
-      <Route
-        path='report/:report'
-        component={routeParamsBasedBranch(level, 'report')}
-        aside={component.ReportAside}
-        breadcrumb={component.ReportBreadcrumb}
-        onEnter={preload(report)}>
-
-        <IndexRoute {...render(rConfig[level].item)}/>
-        <Route path='edit' {...render(rConfig[level].item)}/>
-        <Route
-          path='mailing(/:mailing)'
-          onEnter={preload(mailings)}
-          {...render(component.Mailing)}/>
-
-      </Route>
+      {reportLevel(level, 'report')}
+      {reportLevel(level, 'r')}
 
       <Route path='reports'>
         <IndexRoute onEnter={preload(reports)} {...render(component.ReportList)}/>
@@ -90,6 +92,158 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
   )
 
   /* eslint-disable react/jsx-indent-props */
+
+  const campaignEditLevel = () => (
+    <Route path='edit' {...render(component.CampaignHome)}>
+      <Route path='name' {...render(component.CampaignName)}/>
+      <Route path='status' {...render(component.CampaignStatus)}/>
+      <Route path='language' {...render(component.CampaignLanguage)}/>
+      <Route path='delivery-method' {...render(component.CampaignDeliveryMethod)}/>
+      <Route path='network' {...render(component.CampaignNetwork)}/>
+      <Route path='geo-location' {...render(component.CampaignGeoLocation)}/>
+      <Route path='optimization-status' {...render(component.CampaignOptimizationStatus)}/>
+      <Route path='platform' {...render(component.CampaignPlatform)}/>
+      <Route path='bid-strategy' {...render(component.CampaignBidStrategy)}/>
+      <Route path='site-links' {...render(component.CampaignSiteLinks)} />
+      <Route path='call-outs' {...render(component.CampaignCallOuts)} />
+      <Route path='apps' {...render(component.CampaignApps)} />
+      <Route path='dynamic-search-ads' {...render(component.CampaignDynamicSearchAds)}/>
+      <Route path='user-lists' {...render(component.CampaignUserLists)} />
+      <Route path='tracking' {...render(component.CampaignTracking)}/>
+    </Route>
+  )
+
+  const campaignLevel = alias => (
+    <Route
+      path={`${alias}/:campaign`}
+      component={routeParamsBasedBranch('folder', 'campaign')}
+      aside={component.CampaignAside}
+      breadcrumb={component.CampaignBreadcrumb}>
+
+      <IndexRoute {...render(component.CampaignHome)}/>
+
+      <Route path='shopping-setup' {...render(component.ShoppingSetup)}/>
+
+      {campaignEditLevel()}
+
+      <Route path='creatives' {...render(component.CampaignCreatives)}>
+        <Route path='edit' {...render(component.EditCreatives)}/>
+      </Route>
+    </Route>
+  )
+
+  const orderLevel = alias => (
+    <Route
+      aside={component.OrderAside}
+      path={`${alias}/:order`}
+      breadcrumb={component.OrderBreadCrumb}>
+
+      <IndexRoute onEnter={preload(budgets)} {...render(component.Order)}/>
+      <Route path='budget/:budget' onEnter={preload(budgets)} {...render(component.Order)}/>
+
+      <Route path='autobudget(/:day)'
+             onEnter={preload(autoBudgetLogs)}
+             {...render(component.OrderAutoBudget)}/>
+    </Route>
+  )
+
+  const folderAccountLevel = () => (
+    <Route path='account' {...render(component.FolderAccount)}>
+      <Route path='locations' {...render(component.AccountLocations)}/>
+      <Route path='conversion-trackers' {...render(component.ConversionTracker)}/>
+      <Route path='site-links' {...render(component.AccountSiteLinks)}/>
+      <Route path='call-outs' {...render(component.AccountCallOuts)}/>
+      <Route path='apps' {...render(component.AccountApps)}/>
+      <Route path='tracking' {...render(component.AccountTracking)}/>
+    </Route>
+  )
+
+  const folderLevel = alias => (
+    <Route path={`${alias}/:folder`}
+           component={routeParamsBasedBranch('workspace', 'folder')}
+           aside={component.FolderAside}
+           breadcrumb={component.FolderBreadcrumb}
+           onEnter={preload(folder, campaigns)}>
+
+      {folderAccountLevel()}
+
+      <IndexRoute {...render(component.FolderCampaigns)}/>
+      <Route path='creatives' {...render(component.FolderCreatives)}/>
+      <Route path='create/campaign' {...render(component.CreateCampaign)}/>
+
+      {campaignLevel('campaign')}
+      {campaignLevel('c')}
+
+      {getReportRoutes('folder')}
+
+      <Route path='orders' breadcrumb={component.OrdersBreadCrumb} onEnter={preload(orders)}>
+        <IndexRoute {...render(component.Orders)}/>
+        <Route path='clone' {...render(component.FolderOrdersCloning)}/>
+      </Route>
+
+      <Route breadcrumb={component.OrdersBreadCrumb}
+             onEnter={preload(deliveryMethods, campaignsWithAdsets, orders)}>
+
+        {orderLevel('order')}
+        {orderLevel('o')}
+
+        <Route path='create/order' {...render(component.Order)}/>
+      </Route>
+
+      <Route path='edit' onEnter={preload(accounts)} {...render(component.FolderEdit)}/>
+    </Route>
+  )
+
+  const workspaceLevel = alias => (
+    <Route path={`${alias}/:workspace`}
+           component={routeParamsBasedBranch('company', 'workspace')}
+           breadcrumb={component.WorkspaceBreadcrumb}
+           onEnter={preload(workspace)}
+           aside={component.WorkspaceAside}>
+
+      <IndexRoute {...render(component.WorkspaceFolders)} onEnter={preload(folders)}/>
+
+      {getReportRoutes('workspace')}
+
+      <Route path='orders' breadcrumb={component.OrdersBreadCrumb} onEnter={preload(orders)}>
+        <IndexRoute {...render(component.Orders)}/>
+        <Route path='clone' {...render(component.WorkspaceOrdersCloning)}/>
+      </Route>
+
+      <Route path='edit' onEnter={preload(roles)} {...render(component.WorkspaceEdit)}/>
+
+      {folderLevel('folder')}
+      {folderLevel('f')}
+
+      <Route path='create/folder' {...render(component.FolderCreate)} onEnter={preload(accounts)}/>
+    </Route>
+  )
+
+  const companyLevel = alias => (
+    <Route
+      path={`${alias}/:company`}
+      component={routeParamsBasedBranch('user', 'company')}
+      breadcrumb={component.CompanyBreadcrumb}
+      aside={component.CompanyAside}>
+
+      <IndexRoute {...render(component.CompanyWorkspaces)} onEnter={preload(workspaces)}/>
+
+      <Route path='mailing(/:mailing)' onEnter={preload(mailings)} {...render(component.Mailing)}/>
+
+      {getReportRoutes('company')}
+
+      <Route path='orders' breadcrumb={component.OrdersBreadCrumb} onEnter={preload(orders)}>
+        <IndexRoute {...render(component.Orders)}/>
+        <Route path='clone' {...render(component.CompanyOrdersCloning)}/>
+      </Route>
+
+      <Route path='create/workspace' {...render(component.WorkspaceCreate)} onEnter={preload(roles)}/>
+
+      {workspaceLevel('workspace')}
+      {workspaceLevel('w')}
+    </Route>
+  )
+
   return (
     <Route path='/' component={root(tree, createRoot(DocTitle, ErrorScreen))}>
       <Route path='expired/report/:report' {...render(component.Expired)}/>
@@ -106,129 +260,10 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
           {...render(component.ReportShare)}/>
 
         <Route onEnter={preload(medias, statuses, companies)} component={App}>
-
           <IndexRoute {...render(component.Companies)}/>
 
-          <Route
-            path='company/:company'
-            component={routeParamsBasedBranch('user', 'company')}
-            breadcrumb={component.CompanyBreadcrumb}
-            aside={component.CompanyAside}>
-
-            <IndexRoute {...render(component.CompanyWorkspaces)} onEnter={preload(workspaces)}/>
-
-            <Route path='mailing(/:mailing)' onEnter={preload(mailings)} {...render(component.Mailing)}/>
-
-            {getReportRoutes('company')}
-
-            <Route path='orders' breadcrumb={component.OrdersBreadCrumb} onEnter={preload(orders)}>
-              <IndexRoute {...render(component.Orders)}/>
-              <Route path='clone' {...render(component.CompanyOrdersCloning)}/>
-            </Route>
-
-            <Route path='create/workspace' {...render(component.WorkspaceCreate)} onEnter={preload(roles)}/>
-
-            <Route path='workspace/:workspace'
-                   component={routeParamsBasedBranch('company', 'workspace')}
-                   breadcrumb={component.WorkspaceBreadcrumb}
-                   onEnter={preload(workspace)}
-                   aside={component.WorkspaceAside}>
-
-              <IndexRoute {...render(component.WorkspaceFolders)} onEnter={preload(folders)}/>
-
-              {getReportRoutes('workspace')}
-
-              <Route path='orders' breadcrumb={component.OrdersBreadCrumb} onEnter={preload(orders)}>
-                <IndexRoute {...render(component.Orders)}/>
-                <Route path='clone' {...render(component.WorkspaceOrdersCloning)}/>
-              </Route>
-
-              <Route path='edit' onEnter={preload(roles)} {...render(component.WorkspaceEdit)}/>
-
-              <Route path='create/folder' {...render(component.FolderCreate)} onEnter={preload(accounts)}/>
-
-              <Route path='folder/:folder'
-                     component={routeParamsBasedBranch('workspace', 'folder')}
-                     aside={component.FolderAside}
-                     breadcrumb={component.FolderBreadcrumb}
-                     onEnter={preload(folder, campaigns)}>
-
-                <Route path='account' {...render(component.FolderAccount)}>
-                  <Route path='locations' {...render(component.AccountLocations)}/>
-                  <Route path='conversion-trackers' {...render(component.ConversionTracker)}/>
-                  <Route path='site-links' {...render(component.AccountSiteLinks)}/>
-                  <Route path='call-outs' {...render(component.AccountCallOuts)}/>
-                  <Route path='apps' {...render(component.AccountApps)}/>
-                  <Route path='tracking' {...render(component.AccountTracking)}/>
-                </Route>
-
-                <IndexRoute {...render(component.FolderCampaigns)}/>
-                <Route path='creatives' {...render(component.FolderCreatives)}/>
-                <Route path='create/campaign' {...render(component.CreateCampaign)}/>
-
-                <Route
-                  path='campaign/:campaign'
-                  component={routeParamsBasedBranch('folder', 'campaign')}
-                  aside={component.CampaignAside}
-                  breadcrumb={component.CampaignBreadcrumb}>
-
-                  <IndexRoute {...render(component.CampaignHome)}/>
-
-                  <Route path='shopping-setup' {...render(component.ShoppingSetup)}/>
-
-                  <Route path='edit' {...render(component.CampaignHome)}>
-                    <Route path='name' {...render(component.CampaignName)}/>
-                    <Route path='status' {...render(component.CampaignStatus)}/>
-                    <Route path='language' {...render(component.CampaignLanguage)}/>
-                    <Route path='delivery-method' {...render(component.CampaignDeliveryMethod)}/>
-                    <Route path='network' {...render(component.CampaignNetwork)}/>
-                    <Route path='geo-location' {...render(component.CampaignGeoLocation)}/>
-                    <Route path='optimization-status' {...render(component.CampaignOptimizationStatus)}/>
-                    <Route path='platform' {...render(component.CampaignPlatform)}/>
-                    <Route path='bid-strategy' {...render(component.CampaignBidStrategy)}/>
-                    <Route path='site-links' {...render(component.CampaignSiteLinks)} />
-                    <Route path='call-outs' {...render(component.CampaignCallOuts)} />
-                    <Route path='apps' {...render(component.CampaignApps)} />
-                    <Route path='dynamic-search-ads' {...render(component.CampaignDynamicSearchAds)}/>
-                    <Route path='user-lists' {...render(component.CampaignUserLists)} />
-                    <Route path='tracking' {...render(component.CampaignTracking)}/>
-                  </Route>
-
-                  <Route path='creatives' {...render(component.CampaignCreatives)}>
-                    <Route path='edit' {...render(component.EditCreatives)}/>
-                  </Route>
-                </Route>
-
-                {getReportRoutes('folder')}
-
-                <Route path='orders' breadcrumb={component.OrdersBreadCrumb} onEnter={preload(orders)}>
-                  <IndexRoute {...render(component.Orders)}/>
-                  <Route path='clone' {...render(component.FolderOrdersCloning)}/>
-                </Route>
-
-                <Route breadcrumb={component.OrdersBreadCrumb}
-                       onEnter={preload(deliveryMethods, campaignsWithAdsets, orders)}>
-
-                  <Route
-                    aside={component.OrderAside}
-                    path='order/:order'
-                    breadcrumb={component.OrderBreadCrumb}>
-
-                    <IndexRoute onEnter={preload(budgets)} {...render(component.Order)}/>
-                    <Route path='budget/:budget' onEnter={preload(budgets)} {...render(component.Order)}/>
-
-                    <Route path='autobudget(/:day)'
-                           onEnter={preload(autoBudgetLogs)}
-                           {...render(component.OrderAutoBudget)}/>
-                  </Route>
-
-                  <Route path='create/order' {...render(component.Order)}/>
-                </Route>
-
-                <Route path='edit' onEnter={preload(accounts)} {...render(component.FolderEdit)}/>
-              </Route>
-            </Route>
-          </Route>
+          {companyLevel('company')}
+          {companyLevel('c')}
         </Route>
       </Route>
     </Route>

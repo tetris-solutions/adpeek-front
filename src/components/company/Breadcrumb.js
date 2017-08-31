@@ -4,7 +4,7 @@ import Link from '../BreadcrumbLink'
 import {routeParamsBasedBranch} from '../higher-order/branch'
 
 export const CompanyBreadcrumb = ({company: {id, name}}, {messages: {companyBreadcrumb}}) => (
-  <Link to={`/company/${id}`} title={companyBreadcrumb}>
+  <Link to={`/c/${id}`} title={companyBreadcrumb}>
     <i className='material-icons'>account_balance</i>
     {name}
   </Link>
