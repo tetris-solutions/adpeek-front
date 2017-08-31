@@ -1,6 +1,5 @@
 import bind from 'lodash/bind'
 import React from 'react'
-import {loadUserCompaniesActionRouterAdaptor as companies} from 'tetris-iso/actions'
 import {root} from 'baobab-react/higher-order'
 import {IndexRoute, Route} from 'react-router'
 
@@ -32,6 +31,7 @@ import {loadWorkspaceActionRouterAdaptor as workspace} from '../actions/load-wor
 import {loadCompanySavedAccountsActionRouterAdaptor as savedAccounts} from '../actions/load-company-saved-accounts'
 import {loadMailingListActionRouterAdaptor as mailings} from '../actions/load-mailing-list'
 import {unsubscribeActionRouterAdaptor as unsub} from '../actions/unsub'
+import {loadUserCompaniesActionRouterAdaptor as companies} from '../actions/load-user-companies'
 
 /**
  * returns the route config

@@ -9,7 +9,7 @@ import {DropdownMenu, MenuItem} from './DropdownMenu'
 import {Link} from 'react-router'
 import ReportLink from './report/Link'
 
-const Company = ({company: {id, name, reports, icon}, params, dispatch}) => (
+const Company = ({company: {id, _id, name, reports, icon}, params, dispatch}) => (
   <ThumbLink key={id} title={name} to={`/c/${id}`} img={icon}>
     {icon ? null : <Title>{name}</Title>}
     <Gear>
@@ -22,7 +22,7 @@ const Company = ({company: {id, name, reports, icon}, params, dispatch}) => (
           <Message>companyReport</Message>
         </ReportLink>
 
-        <MenuItem tag='a' href={`${process.env.FRONT_URL}/dashboard/company/${id}/info`} icon='info_outline'>
+        <MenuItem tag='a' href={`${process.env.FRONT_URL}/dashboard/company/${_id}/info`} icon='info_outline'>
           <Message>manageCompany</Message>
         </MenuItem>
 

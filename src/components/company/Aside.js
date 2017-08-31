@@ -20,7 +20,7 @@ export const CompanyAside = ({company, params, dispatch}) => {
       </Name>
       <br/>
       <NavBts>
-        <NavBt href={`${process.env.FRONT_URL}/dashboard/company/${company.id}/info`} icon='info_outline'>
+        <NavBt href={`${process.env.FRONT_URL}/dashboard/company/${company._id}/info`} icon='info_outline'>
           <Message>manageCompany</Message>
         </NavBt>
 

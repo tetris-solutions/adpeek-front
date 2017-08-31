@@ -1,6 +1,5 @@
 import bind from 'lodash/bind'
 import forEach from 'lodash/forEach'
-import {loadUserCompaniesActionServerAdaptor as companies} from 'tetris-iso/actions'
 import {protectedRouteMiddleware as protect, performActionsMiddleware as preload} from 'tetris-iso/server'
 import {allowGuestMiddleware} from '../middlewares/allow-guest'
 import {protectSharedReportMiddleware} from '../middlewares/protect-shared-report'
@@ -29,6 +28,7 @@ import {loadWorkspaceActionServerAdaptor as workspace} from '../actions/load-wor
 import {loadCompanySavedAccountsActionServerAdaptor as savedAccounts} from '../actions/load-company-saved-accounts'
 import {loadMailingListActionServerAdaptor as mailings} from '../actions/load-mailing-list'
 import {unsubscribeActionServerAdaptor as unsub} from '../actions/unsub'
+import {loadUserCompaniesActionServerAdaptor as companies} from '../actions/load-user-companies'
 
 export function setAppRoutes (app, render) {
   const _ = bind.placeholder
