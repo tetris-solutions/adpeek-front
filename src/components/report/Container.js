@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import constant from 'lodash/constant'
 import assign from 'lodash/assign'
 import memoize from 'lodash/memoize'
 import head from 'lodash/head'
@@ -465,4 +466,4 @@ Report.propTypes = {
   children: PropTypes.node
 }
 
-export default notNullable(Report, 'report')
+export default notNullable(Report, constant(null), 'report')

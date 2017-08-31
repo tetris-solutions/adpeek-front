@@ -162,31 +162,26 @@ export function loadReportModuleResultAction (tree, params, id, query, attribute
       })
   }
 
-  function turnOffLoading () {
-    isLoadingCursor.set(false)
-  }
-
   function onSuccess (response) {
-    turnOffLoading()
-
     if (isCursorOk()) {
+      isLoadingCursor.set(false)
       moduleCursor.set('query', query)
       updateModuleResult(response.data.result)
+
+      forEach(response.data.exceptions,
+        e => dealWithException(tree, params, e))
     }
-
-    forEach(response.data.exceptions,
-      e => dealWithException(tree, params, e))
-
-    // tree.commit()
 
     return response
   }
 
   function onFailure (err) {
-    turnOffLoading()
-    moduleCursor.set('query', query)
-    moduleCursor.set('result', [])
-    moduleCursor.set('responseError', err)
+    if (isCursorOk()) {
+      isLoadingCursor.set(false)
+      moduleCursor.set('query', query)
+      moduleCursor.set('result', [])
+      moduleCursor.set('responseError', err)
+    }
     return Promise.reject(err)
   }
 

@@ -146,6 +146,9 @@ class ModuleController extends React.Component {
   })
 
   remove = () => {
+    if (this.deleted) return Promise.resolve()
+
+    this.deleted = true
     const {params, dispatch, module} = this.props
 
     return dispatch(deleteModuleAction, params, module.id)

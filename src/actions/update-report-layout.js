@@ -3,6 +3,7 @@ import assign from 'lodash/assign'
 import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
 import {getDeepCursor} from '../functions/get-deep-cursor'
 import map from 'lodash/map'
+import filter from 'lodash/filter'
 import findIndex from 'lodash/findIndex'
 import forEach from 'lodash/forEach'
 import compact from 'lodash/compact'
@@ -23,16 +24,16 @@ export function updateReportLayoutAction (tree, {company, workspace, folder, rep
     'modules'
   ]))
 
-  layout = map(layout, ({i: id, x, y, h: rows, w: cols}) => ({id, x, y, rows, cols}))
-
   const modules = tree.get(modulesPath)
 
-  forEach(layout, module => {
-    const index = findIndex(modules, {id: module.id})
+  const indexOf = ({id}) => findIndex(modules, {id})
+  const exists = m => indexOf(m) >= 0
+  const parse = ({i: id, x, y, h: rows, w: cols}) => ({id, x, y, rows, cols})
 
-    if (index >= 0) {
-      tree.merge(modulesPath.concat([index]), module)
-    }
+  layout = filter(map(layout, parse), exists)
+
+  forEach(layout, moduleLayout => {
+    tree.merge(modulesPath.concat([indexOf(moduleLayout)]), moduleLayout)
   })
 
   tree.commit()
@@ -41,5 +42,3 @@ export function updateReportLayoutAction (tree, {company, workspace, folder, rep
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
-
-export default updateReportLayoutAction

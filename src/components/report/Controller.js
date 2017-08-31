@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
+import constant from 'lodash/constant'
 import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 import isNumber from 'lodash/isNumber'
@@ -83,6 +84,7 @@ class ReportController extends React.Component {
   }
 
   componentWillUnmount () {
+    this.dead = true
     window.event$.off('report.onNewModuleClick', this.addNewModule)
   }
 
@@ -257,6 +259,8 @@ class ReportController extends React.Component {
   }
 
   onLayoutChange = (layout) => {
+    if (this.dead) return
+
     const {params, dispatch} = this.props
 
     layout = this.calculateLayout(layout)
@@ -304,4 +308,4 @@ class ReportController extends React.Component {
   }
 }
 
-export default notNullable(ReportController, 'report')
+export default notNullable(ReportController, constant(null), 'report')
