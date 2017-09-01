@@ -25,7 +25,11 @@ const n = num => round(num, 2)
 
 const includeBidStrategyOnBudgetCampaigns = (budget, campaigns) =>
   assign({}, budget, {
-    campaigns: map(budget.campaigns, ({id}) => find(campaigns, {id}))
+    campaigns: map(budget.campaigns,
+      campaign => campaign.platform === 'facebook'
+        ? campaign
+        : assign(campaign, find(campaigns, {id: campaign.id}))
+    )
   })
 
 const getCampaignIds = ({campaigns}) => map(campaigns, 'id')
