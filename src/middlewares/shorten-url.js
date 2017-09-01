@@ -35,7 +35,7 @@ export function shortenUrlMiddleware (req, res, next) {
         url = url.replace(uuid, alias)
       })
 
-      res.redirect(url)
+      res.redirect(301, url)
     })
     .catch(() => next())
 }
