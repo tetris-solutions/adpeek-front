@@ -402,6 +402,17 @@ class ReportModuleTable extends React.Component {
       .then(setup => this.setState({setup}))
   }
 
+  componentDidUpdate () {
+    if (this.state.setup) {
+      /**
+       * @type {HTMLTableElement}
+       */
+      const table = this.refs.table
+
+      table.closest('[data-interface]').onRendered()
+    }
+  }
+
   getSetup = createTask((props = this.props) => {
     const {
       type,
@@ -522,7 +533,7 @@ class ReportModuleTable extends React.Component {
     }
 
     return (
-      <table className={`mdl-data-table ${style.table}`}>
+      <table ref='table' className={`mdl-data-table ${style.table}`}>
         <thead>
           <tr>
             <th className={`mdl-data-table__cell--non-numeric ${style.title}`} colSpan={columns.length || 1}>

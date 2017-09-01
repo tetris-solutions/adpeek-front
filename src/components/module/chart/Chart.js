@@ -133,17 +133,24 @@ class ChartContainer extends React.Component {
   renderAsTable = () => {
     const unlock = () => this.setState({renderHiddenTable: false})
 
-    return new Promise(resolve => this.setState({renderHiddenTable: true},
+    return new Promise(resolve => {
       function resolveThenUnlock () {
         resolve()
         setTimeout(unlock, 300)
-      }))
+      }
+
+      this.getInterfaceElement().onRendered = resolveThenUnlock
+
+      this.setState({renderHiddenTable: true})
+    })
+  }
+
+  getInterfaceElement () {
+    return ReactDOM.findDOMNode(this).querySelector('[data-interface]')
   }
 
   componentDidMount () {
-    const intr = ReactDOM.findDOMNode(this).querySelector('[data-interface]')
-
-    intr.renderAsTable = this.renderAsTable
+    this.getInterfaceElement().renderAsTable = this.renderAsTable
   }
 
   render () {
