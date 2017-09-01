@@ -12,7 +12,7 @@ export function loadCompanyRolesAction (tree, id, token) {
     .then(saveResponseTokenAsCookie)
     .then(saveResponseData(tree, [
       'user',
-      ['companies', id],
+      ['companies', id, '_id'],
       'roles'
     ]))
     .catch(pushResponseErrorToState(tree))
