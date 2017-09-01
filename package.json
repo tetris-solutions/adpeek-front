@@ -1,6 +1,6 @@
 {
   "name": "@tetris/manager-client",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "adpeek frontend",
   "main": "bin/cmd.js",
   "engineStrict": true,
