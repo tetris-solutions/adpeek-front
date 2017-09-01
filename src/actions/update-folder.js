@@ -35,5 +35,3 @@ export function updateFolderAction (tree, company, workspace, folder) {
     ], mergeUpdatedFolder))
     .catch(pushResponseErrorToState(tree))
 }
-
-export default updateFolderAction

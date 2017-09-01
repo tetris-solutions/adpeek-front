@@ -19,6 +19,7 @@ import FolderFormMixin from '../mixins/FolderForm'
 import AutoSuggest from '../AutoSuggest'
 import Page from '../Page'
 import SubHeader from '../SubHeader'
+import {loadFolderCampaignsAction} from '../../actions/load-folder-campaigns'
 
 const EditFolder = createReactClass({
   displayName: 'Edit-Folder',
@@ -99,9 +100,11 @@ const EditFolder = createReactClass({
     this.preSubmit()
 
     const navigateToUpdatedFolder = () => this.context.router.push(`/c/${company}/w/${workspace}/f/${id}`)
+    const reloadCampaigns = () => dispatch(loadFolderCampaignsAction, company, workspace, id)
 
     return dispatch(updateFolderAction, company, workspace, folder)
       .then(() => dispatch(pushSuccessMessageAction))
+      .then(folder.searchTagsRightAway ? reloadCampaigns : undefined)
       .then(navigateToUpdatedFolder)
       .catch(this.handleSubmitException)
       .then(this.posSubmit)

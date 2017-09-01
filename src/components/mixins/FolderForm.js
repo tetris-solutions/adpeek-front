@@ -72,12 +72,8 @@ export default {
   loadDashCampaigns () {
     const {company, dispatch} = this.props
 
-    if (company.dashCampaigns) {
-      this.setState({isLoadingDashCampaigns: false})
-    } else {
-      dispatch(loadDashCampaignsAction, company.id)
-        .then(() => this.setState({isLoadingDashCampaigns: false}))
-    }
+    dispatch(loadDashCampaignsAction, company.id)
+      .then(() => this.setState({isLoadingDashCampaigns: false}))
   },
   getCurrentCampaign (dashCampaigns = this.props.company.dashCampaigns) {
     const campaignId = get(this.state, 'dashCampaign.id') || get(this.props, 'folder.dash_campaign')
