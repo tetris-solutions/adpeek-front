@@ -23,7 +23,7 @@ const ExpiredReport = ({params, location}) => (
 
       <Content>
         <p>
-          <Message html report={params.report}>
+          <Message html report={params.reportShare}>
             expiredReportBody
           </Message>
         </p>
@@ -45,7 +45,7 @@ ExpiredReport.propTypes = {
     search: PropTypes.string
   }),
   params: PropTypes.shape({
-    report: PropTypes.string
+    reportShare: PropTypes.string
   })
 }
 

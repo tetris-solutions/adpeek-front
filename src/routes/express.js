@@ -29,253 +29,214 @@ import {loadCompanySavedAccountsActionServerAdaptor as savedAccounts} from '../a
 import {loadMailingListActionServerAdaptor as mailings} from '../actions/load-mailing-list'
 import {unsubscribeActionServerAdaptor as unsub} from '../actions/unsub'
 import {loadUserCompaniesActionServerAdaptor as companies} from '../actions/load-user-companies'
+import {shortenUrlMiddleware} from '../middlewares/shorten-url'
+
+const subAccountRoutes = [
+  '',
+  '/locations',
+  '/conversion-trackers',
+  '/site-links',
+  '/apps',
+  '/call-outs',
+  '/tracking'
+]
+
+const subCampaignRoutes = [
+  '',
+  '/shopping-setup',
+  '/edit/tracking',
+  '/edit/name',
+  '/edit/status',
+  '/edit/language',
+  '/edit/delivery-method',
+  '/edit/network',
+  '/edit/geo-location',
+  '/edit/optimization-status',
+  '/edit/platform',
+  '/edit/bid-strategy',
+  '/edit/site-links',
+  '/edit/call-outs',
+  '/edit/apps',
+  '/edit/locations',
+  '/edit/dynamic-search-ads',
+  '/edit/user-lists',
+  '/creatives',
+  '/creatives/edit'
+]
+
+function getHelpers (app, render) {
+  const ensureLoad = (...args) =>
+    preload(statuses, medias, companies, ...args)
+
+  const route = (url, ...middlewares) =>
+    app.get(url, shortenUrlMiddleware, ...middlewares, render)
+
+  const protectedRoute = (url, ...middlewares) =>
+    route(url, protect, ...middlewares)
+
+  const publicRoute = route
+
+  const wrap = (segment, wrapper = protectedRoute) => (url, ...args) =>
+    wrapper(`${segment}${url || ''}`, ...args)
+
+  const companyLevel = wrap('/c(ompany)?/:company')
+  const workspaceLevel = wrap('/w(orkspace)?/:workspace', companyLevel)
+  const folderLevel = wrap('/f(older)?/:folder', workspaceLevel)
+
+  return {
+    protectedRoute,
+    publicRoute,
+    ensureLoad,
+    companyLevel,
+    workspaceLevel,
+    folderLevel
+  }
+}
+
+const _ = bind.placeholder
+const campaignsWithAdsets = bind(campaigns, null, _, _, 'include-adsets')
 
 export function setAppRoutes (app, render) {
-  const _ = bind.placeholder
-  const campaignsWithAdsets = bind(campaigns, null, _, _, 'include-adsets')
+  const {
+    publicRoute,
+    protectedRoute,
+    ensureLoad,
+    companyLevel,
+    workspaceLevel,
+    folderLevel
+  } = getHelpers(app, render)
 
-  const ensureLoad = (...args) => preload(statuses, medias, companies, ...args)
+  publicRoute('/expired/report/:reportShare')
+  publicRoute('/mailing/:mailing/unsubscribe/:email', preload(unsub))
 
-  app.get('/expired/report/:report', render)
-  app.get('/mailing/:mailing/unsubscribe/:email',
-    preload(unsub),
-    render)
-
-  app.get('/',
-    protect,
-    ensureLoad(),
-    render)
-
-  app.get('/share/report/:reportShare',
+  publicRoute('/share/report/:reportShare',
     allowGuestMiddleware,
     protectSharedReportMiddleware,
-    preload(statuses, reportShareMetaData, reportShare),
-    render)
+    preload(statuses, reportShareMetaData, reportShare))
 
-  app.get('/c(ompany)?/:company',
-    protect,
-    ensureLoad(workspaces),
-    render)
+  protectedRoute('/', ensureLoad())
 
-  app.get('/c(ompany)?/:company/mailing/:mailing?',
-    protect,
-    ensureLoad(mailings),
-    render)
+  companyLevel('', ensureLoad(workspaces))
+  companyLevel('/mailing/:mailing?',
+    ensureLoad(mailings))
 
-  app.get('/c(ompany)?/:company/reports',
-    protect,
-    ensureLoad(savedAccounts, reports),
-    render)
+  companyLevel('/reports',
+    ensureLoad(savedAccounts, reports))
 
-  app.get('/c(ompany)?/:company/reports/new',
-    protect,
-    ensureLoad(savedAccounts, reports),
-    render)
+  companyLevel('/reports/new',
+    ensureLoad(savedAccounts, reports))
 
-  app.get('/c(ompany)?/:company/r(eport)?/:report',
-    protect,
-    ensureLoad(savedAccounts, report),
-    render)
+  companyLevel('/r(eport)?/:report',
+    ensureLoad(savedAccounts, report))
 
-  app.get('/c(ompany)?/:company/r(eport)?/:report/edit',
-    protect,
-    ensureLoad(savedAccounts, report),
-    render)
+  companyLevel('/r(eport)?/:report/edit',
+    ensureLoad(savedAccounts, report))
 
-  app.get('/c(ompany)?/:company/r(eport)?/:report/mailing/:mailing?',
-    protect,
-    ensureLoad(savedAccounts, report, mailings),
-    render)
+  companyLevel('/r(eport)?/:report/mailing/:mailing?',
+    ensureLoad(savedAccounts, report, mailings))
 
-  app.get('/c(ompany)?/:company/orders',
-    protect,
-    ensureLoad(orders),
-    render)
+  companyLevel('/orders',
+    ensureLoad(orders))
 
-  app.get('/c(ompany)?/:company/orders',
-    protect,
-    ensureLoad(orders),
-    render)
+  companyLevel('/orders',
+    ensureLoad(orders))
 
-  app.get('/c(ompany)?/:company/orders/clone',
-    protect,
-    ensureLoad(orders),
-    render)
+  companyLevel('/orders/clone',
+    ensureLoad(orders))
 
-  app.get('/c(ompany)?/:company/create/workspace',
-    protect,
-    ensureLoad(roles),
-    render)
+  companyLevel('/create/workspace',
+    ensureLoad(roles))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace',
-    protect,
-    ensureLoad(workspace, folders),
-    render)
+  workspaceLevel('',
+    ensureLoad(workspace, folders))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/reports',
-    protect,
-    ensureLoad(workspace, reports),
-    render)
+  workspaceLevel('/reports',
+    ensureLoad(workspace, reports))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/reports/new',
-    protect,
-    ensureLoad(workspace, reports),
-    render)
+  workspaceLevel('/reports/new',
+    ensureLoad(workspace, reports))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/r(eport)?/:report',
-    protect,
-    ensureLoad(workspace, report),
-    render)
+  workspaceLevel('/r(eport)?/:report',
+    ensureLoad(workspace, report))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/r(eport)?/:report/edit',
-    protect,
-    ensureLoad(workspace, report),
-    render)
+  workspaceLevel('/r(eport)?/:report/edit',
+    ensureLoad(workspace, report))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/r(eport)?/:report/mailing/:mailing?',
-    protect,
-    ensureLoad(workspace, report, mailings),
-    render)
+  workspaceLevel('/r(eport)?/:report/mailing/:mailing?',
+    ensureLoad(workspace, report, mailings))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/orders',
-    protect,
-    ensureLoad(workspace, orders),
-    render)
+  workspaceLevel('/orders',
+    ensureLoad(workspace, orders))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/orders/clone',
-    protect,
-    ensureLoad(workspace, orders),
-    render)
+  workspaceLevel('/orders/clone',
+    ensureLoad(workspace, orders))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/edit',
-    protect,
-    ensureLoad(roles, workspace),
-    render)
+  workspaceLevel('/edit',
+    ensureLoad(roles, workspace))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/create/folder',
-    protect,
-    ensureLoad(workspace, accounts),
-    render)
+  workspaceLevel('/create/folder',
+    ensureLoad(workspace, accounts))
 
-  forEach([
-    '',
-    '/locations',
-    '/conversion-trackers',
-    '/site-links',
-    '/apps',
-    '/call-outs',
-    '/tracking'
-  ], section =>
-    app.get(`/c(ompany)?/:company/w(orkspace)?/:workspace/f(older)?/:folder/account${section}`,
-      protect,
-      ensureLoad(workspace, folder),
-      render))
+  forEach(subAccountRoutes, section =>
+    folderLevel(`/account${section}`,
+      ensureLoad(workspace, folder)))
 
   const subFolderActions = [workspace, folder, campaigns]
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/f(older)?/:folder',
-    protect,
-    ensureLoad(...subFolderActions),
-    render)
+  folderLevel('',
+    ensureLoad(...subFolderActions))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/f(older)?/:folder/create/campaign',
-    protect,
-    ensureLoad(...subFolderActions),
-    render)
+  folderLevel('/edit',
+    ensureLoad(workspace, accounts, folder))
+
+  folderLevel('/create/campaign',
+    ensureLoad(...subFolderActions))
 
   subFolderActions.push(reports)
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/f(older)?/:folder/reports',
-    protect,
-    ensureLoad(...subFolderActions),
-    render)
+  folderLevel('/reports',
+    ensureLoad(...subFolderActions))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/f(older)?/:folder/reports/new',
-    protect,
-    ensureLoad(...subFolderActions),
-    render)
+  folderLevel('/reports/new',
+    ensureLoad(...subFolderActions))
 
   subFolderActions.pop()
   subFolderActions.push(report)
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/f(older)?/:folder/r(eport)?/:report',
-    protect,
-    ensureLoad(...subFolderActions),
-    render)
+  folderLevel('/r(eport)?/:report',
+    ensureLoad(...subFolderActions))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/f(older)?/:folder/r(eport)?/:report/edit',
-    protect,
-    ensureLoad(...subFolderActions),
-    render)
+  folderLevel('/r(eport)?/:report/edit',
+    ensureLoad(...subFolderActions))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/f(older)?/:folder/r(eport)?/:report/mailing/:mailing?',
-    protect,
-    ensureLoad(...subFolderActions.concat([mailings])),
-    render)
+  folderLevel('/r(eport)?/:report/mailing/:mailing?',
+    ensureLoad(...subFolderActions.concat([mailings])))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/f(older)?/:folder/creatives',
-    protect,
-    ensureLoad(workspace, folder, campaigns),
-    render)
+  folderLevel('/creatives',
+    ensureLoad(workspace, folder, campaigns))
 
-  forEach(['',
-    '/shopping-setup',
-    '/edit/tracking',
-    '/edit/name',
-    '/edit/status',
-    '/edit/language',
-    '/edit/delivery-method',
-    '/edit/network',
-    '/edit/geo-location',
-    '/edit/optimization-status',
-    '/edit/platform',
-    '/edit/bid-strategy',
-    '/edit/site-links',
-    '/edit/call-outs',
-    '/edit/apps',
-    '/edit/locations',
-    '/edit/dynamic-search-ads',
-    '/edit/user-lists',
-    '/creatives',
-    '/creatives/edit'], path =>
-    app.get(`/c(ompany)?/:company/w(orkspace)?/:workspace/f(older)?/:folder/c(ampaign)/:campaign${path}`,
-      protect,
-      ensureLoad(workspace, folder, campaigns),
-      render))
+  forEach(subCampaignRoutes, path =>
+    folderLevel(`/c(ampaign)/:campaign${path}`,
+      ensureLoad(workspace, folder, campaigns)))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/f(older)?/:folder/orders',
-    protect,
-    ensureLoad(workspace, folder, orders),
-    render)
+  folderLevel('/orders',
+    ensureLoad(workspace, folder, orders))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/f(older)?/:folder/orders/clone',
-    protect,
-    ensureLoad(workspace, folder, orders),
-    render)
+  folderLevel('/orders/clone',
+    ensureLoad(workspace, folder, orders))
 
-  forEach(['', '/budget/:budget'], sPath =>
-    app.get(`/c(ompany)?/:company/w(orkspace)?/:workspace/f(older)?/:folder/o(rder)?/:order${sPath}`,
-      protect,
-      ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets),
-      render))
+  folderLevel('/o(rder)?/:order',
+    ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/f(older)?/:folder/o(rder)?/:order/autobudget',
-    protect,
-    ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets, autoBudgetLogs),
-    render)
+  folderLevel('/o(rder)?/:order/budget/:budget',
+    ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/f(older)?/:folder/o(rder)?/:order/autobudget/:day',
-    protect,
-    ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets, autoBudgetLogs),
-    render)
+  folderLevel('/o(rder)?/:order/autobudget',
+    ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets, autoBudgetLogs))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/f(older)?/:folder/create/order',
-    protect,
-    ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders),
-    render)
+  folderLevel('/o(rder)?/:order/autobudget/:day',
+    ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets, autoBudgetLogs))
 
-  app.get('/c(ompany)?/:company/w(orkspace)?/:workspace/f(older)?/:folder/edit',
-    protect,
-    ensureLoad(workspace, accounts, folder),
-    render)
+  folderLevel('/create/order',
+    ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders))
 }

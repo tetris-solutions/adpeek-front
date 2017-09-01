@@ -246,7 +246,7 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
 
   return (
     <Route path='/' component={root(tree, createRoot(DocTitle, ErrorScreen))}>
-      <Route path='expired/report/:report' {...render(component.Expired)}/>
+      <Route path='expired/report/:reportShare' {...render(component.Expired)}/>
       <Route
         path='mailing/:mailing/unsubscribe/:email'
         onEnter={preload(unsub)}
