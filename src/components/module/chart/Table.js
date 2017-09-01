@@ -408,8 +408,11 @@ class ReportModuleTable extends React.Component {
        * @type {HTMLTableElement}
        */
       const table = this.refs.table
+      const dataInterface = table.closest('[data-interface]')
 
-      table.closest('[data-interface]').onRendered()
+      if (dataInterface && dataInterface.onRendered) {
+        dataInterface.onRendered()
+      }
     }
   }
 

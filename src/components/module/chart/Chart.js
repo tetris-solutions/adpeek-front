@@ -134,12 +134,11 @@ class ChartContainer extends React.Component {
     const unlock = () => this.setState({renderHiddenTable: false})
 
     return new Promise(resolve => {
-      function resolveThenUnlock () {
+      this.getInterfaceElement().onRendered = () => {
         resolve()
         setTimeout(unlock, 300)
+        delete this.getInterfaceElement().onRendered
       }
-
-      this.getInterfaceElement().onRendered = resolveThenUnlock
 
       this.setState({renderHiddenTable: true})
     })
