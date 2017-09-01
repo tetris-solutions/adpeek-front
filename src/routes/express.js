@@ -63,175 +63,172 @@ const subCampaignRoutes = [
   '/creatives',
   '/creatives/edit'
 ]
+const _ = bind.placeholder
+const campaigns_ = bind(campaigns, null, _, _, 'include-adsets')
 
-function getHelpers (app, render) {
-  const ensureLoad = (...args) =>
-    preload(statuses, medias, companies, ...args)
+const baseActions = [
+  statuses, medias, companies
+]
+const workspaceActions = [
+  workspace, folders
+]
+const folderActions = [
+  workspace, folder, campaigns
+]
+const orderActions = [
+  deliveryMethods,
+  workspace, folder, campaigns_, orders, budgets
+]
 
+export function setAppRoutes (app, render) {
   const route = (url, ...middlewares) =>
-    app.get(url, shortenUrlMiddleware, ...middlewares, render)
+    app.get(url,
+      shortenUrlMiddleware,
+      preload(...baseActions),
+      ...middlewares,
+      render)
 
   const protectedRoute = (url, ...middlewares) =>
     route(url, protect, ...middlewares)
 
   const publicRoute = route
 
-  const wrap = (segment, wrapper = protectedRoute) => (url, ...args) =>
-    wrapper(`${segment}${url || ''}`, ...args)
+  const wrap = (segment, wrapper = protectedRoute) =>
+    (url, ...middlewares) =>
+      wrapper(`${segment}${url || ''}`, ...middlewares)
 
   const companyLevel = wrap('/c(ompany)?/:company')
+
   const workspaceLevel = wrap('/w(orkspace)?/:workspace', companyLevel)
   const folderLevel = wrap('/f(older)?/:folder', workspaceLevel)
 
-  return {
-    protectedRoute,
-    publicRoute,
-    ensureLoad,
-    companyLevel,
-    workspaceLevel,
-    folderLevel
-  }
-}
-
-const _ = bind.placeholder
-const campaignsWithAdsets = bind(campaigns, null, _, _, 'include-adsets')
-
-export function setAppRoutes (app, render) {
-  const {
-    publicRoute,
-    protectedRoute,
-    ensureLoad,
-    companyLevel,
-    workspaceLevel,
-    folderLevel
-  } = getHelpers(app, render)
-
   publicRoute('/expired/report/:reportShare')
-  publicRoute('/mailing/:mailing/unsubscribe/:email', preload(unsub))
+  publicRoute('/mailing/:mailing/unsubscribe/:email',
+    preload(unsub))
 
   publicRoute('/share/report/:reportShare',
     allowGuestMiddleware,
     protectSharedReportMiddleware,
     preload(statuses, reportShareMetaData, reportShare))
 
-  protectedRoute('/', ensureLoad())
+  protectedRoute('/')
 
-  companyLevel('', ensureLoad(workspaces))
+  companyLevel('',
+    preload(workspaces))
+
   companyLevel('/mailing/:mailing?',
-    ensureLoad(mailings))
+    preload(mailings))
 
   companyLevel('/reports',
-    ensureLoad(savedAccounts, reports))
+    preload(savedAccounts, reports))
 
   companyLevel('/reports/new',
-    ensureLoad(savedAccounts, reports))
+    preload(savedAccounts, reports))
 
   companyLevel('/r(eport)?/:report',
-    ensureLoad(savedAccounts, report))
+    preload(savedAccounts, report))
 
   companyLevel('/r(eport)?/:report/edit',
-    ensureLoad(savedAccounts, report))
+    preload(savedAccounts, report))
 
   companyLevel('/r(eport)?/:report/mailing/:mailing?',
-    ensureLoad(savedAccounts, report, mailings))
+    preload(savedAccounts, report, mailings))
 
   companyLevel('/orders',
-    ensureLoad(orders))
+    preload(orders))
 
   companyLevel('/orders',
-    ensureLoad(orders))
+    preload(orders))
 
   companyLevel('/orders/clone',
-    ensureLoad(orders))
+    preload(orders))
 
   companyLevel('/create/workspace',
-    ensureLoad(roles))
+    preload(roles))
 
   workspaceLevel('',
-    ensureLoad(workspace, folders))
+    preload(...workspaceActions))
 
   workspaceLevel('/reports',
-    ensureLoad(workspace, reports))
+    preload(...workspaceActions, reports))
 
   workspaceLevel('/reports/new',
-    ensureLoad(workspace, reports))
+    preload(...workspaceActions, reports))
 
   workspaceLevel('/r(eport)?/:report',
-    ensureLoad(workspace, report))
+    preload(...workspaceActions, report))
 
   workspaceLevel('/r(eport)?/:report/edit',
-    ensureLoad(workspace, report))
+    preload(...workspaceActions, report))
 
   workspaceLevel('/r(eport)?/:report/mailing/:mailing?',
-    ensureLoad(workspace, report, mailings))
+    preload(...workspaceActions, report, mailings))
 
   workspaceLevel('/orders',
-    ensureLoad(workspace, orders))
+    preload(...workspaceActions, orders))
 
   workspaceLevel('/orders/clone',
-    ensureLoad(workspace, orders))
+    preload(...workspaceActions, orders))
 
   workspaceLevel('/edit',
-    ensureLoad(roles, workspace))
+    preload(...workspaceActions, roles))
 
   workspaceLevel('/create/folder',
-    ensureLoad(workspace, accounts))
+    preload(...workspaceActions, accounts))
+
+  folderLevel('',
+    preload(...folderActions))
 
   forEach(subAccountRoutes, section =>
     folderLevel(`/account${section}`,
-      ensureLoad(workspace, folder)))
-
-  const subFolderActions = [workspace, folder, campaigns]
-
-  folderLevel('',
-    ensureLoad(...subFolderActions))
+      preload(...folderActions)))
 
   folderLevel('/edit',
-    ensureLoad(...subFolderActions, accounts))
+    preload(...folderActions, accounts))
 
   folderLevel('/create/campaign',
-    ensureLoad(...subFolderActions))
+    preload(...folderActions))
 
   folderLevel('/reports',
-    ensureLoad(...subFolderActions, reports))
+    preload(...folderActions, reports))
 
   folderLevel('/reports/new',
-    ensureLoad(...subFolderActions, reports))
+    preload(...folderActions, reports))
 
   folderLevel('/r(eport)?/:report',
-    ensureLoad(...subFolderActions, report))
+    preload(...folderActions, report))
 
   folderLevel('/r(eport)?/:report/edit',
-    ensureLoad(...subFolderActions, report))
+    preload(...folderActions, report))
 
   folderLevel('/r(eport)?/:report/mailing/:mailing?',
-    ensureLoad(...subFolderActions, report, mailings))
+    preload(...folderActions, report, mailings))
 
   folderLevel('/creatives',
-    ensureLoad(...subFolderActions))
+    preload(...folderActions))
 
   forEach(subCampaignRoutes, path =>
     folderLevel(`/c(ampaign)/:campaign${path}`,
-      ensureLoad(...subFolderActions)))
+      preload(...folderActions)))
 
   folderLevel('/orders',
-    ensureLoad(workspace, folder, orders))
+    preload(...folderActions, orders))
 
   folderLevel('/orders/clone',
-    ensureLoad(workspace, folder, orders))
+    preload(...folderActions, orders))
 
   folderLevel('/o(rder)?/:order',
-    ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets))
+    preload(...orderActions))
 
   folderLevel('/o(rder)?/:order/budget/:budget',
-    ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets))
+    preload(...orderActions))
 
   folderLevel('/o(rder)?/:order/autobudget',
-    ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets, autoBudgetLogs))
+    preload(...orderActions, autoBudgetLogs))
 
   folderLevel('/o(rder)?/:order/autobudget/:day',
-    ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders, budgets, autoBudgetLogs))
+    preload(...orderActions, autoBudgetLogs))
 
   folderLevel('/create/order',
-    ensureLoad(deliveryMethods, workspace, folder, campaignsWithAdsets, orders))
+    preload(...orderActions.slice(0, -2), orders))
 }
