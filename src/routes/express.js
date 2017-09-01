@@ -187,37 +187,32 @@ export function setAppRoutes (app, render) {
     ensureLoad(...subFolderActions))
 
   folderLevel('/edit',
-    ensureLoad(workspace, accounts, folder))
+    ensureLoad(...subFolderActions, accounts))
 
   folderLevel('/create/campaign',
     ensureLoad(...subFolderActions))
 
-  subFolderActions.push(reports)
-
   folderLevel('/reports',
-    ensureLoad(...subFolderActions))
+    ensureLoad(...subFolderActions, reports))
 
   folderLevel('/reports/new',
-    ensureLoad(...subFolderActions))
-
-  subFolderActions.pop()
-  subFolderActions.push(report)
+    ensureLoad(...subFolderActions, reports))
 
   folderLevel('/r(eport)?/:report',
-    ensureLoad(...subFolderActions))
+    ensureLoad(...subFolderActions, report))
 
   folderLevel('/r(eport)?/:report/edit',
-    ensureLoad(...subFolderActions))
+    ensureLoad(...subFolderActions, report))
 
   folderLevel('/r(eport)?/:report/mailing/:mailing?',
-    ensureLoad(...subFolderActions.concat([mailings])))
+    ensureLoad(...subFolderActions, report, mailings))
 
   folderLevel('/creatives',
-    ensureLoad(workspace, folder, campaigns))
+    ensureLoad(...subFolderActions))
 
   forEach(subCampaignRoutes, path =>
     folderLevel(`/c(ampaign)/:campaign${path}`,
-      ensureLoad(workspace, folder, campaigns)))
+      ensureLoad(...subFolderActions)))
 
   folderLevel('/orders',
     ensureLoad(workspace, folder, orders))
