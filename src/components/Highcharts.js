@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import log from 'loglevel'
 import pick from 'lodash/pick'
 import diff from 'lodash/differenceWith'
 import find from 'lodash/find'
@@ -34,21 +33,17 @@ export class Chart extends React.Component {
 
   state = {}
 
-  promise = Promise.resolve()
-
   componentDidMount () {
-    this.enqueue(() =>
-      mapPropsToConfig(this.props)
-        .then(this.updateConfig)
-        .then(this.draw))
+    mapPropsToConfig(this.props)
+      .then(this.updateConfig)
+      .then(this.draw)
 
     window.event$.on('aside-toggle', this.resizer)
   }
 
   componentWillReceiveProps (props) {
-    this.enqueue(() =>
-      mapPropsToConfig(props)
-        .then(this.handleConfig))
+    mapPropsToConfig(props)
+      .then(this.handleConfig)
   }
 
   shouldComponentUpdate () {
@@ -59,26 +54,6 @@ export class Chart extends React.Component {
     this.dead = true
 
     window.event$.off('aside-toggle', this.resizer)
-  }
-
-  enqueue = fn => {
-    const stopIfDead = () => {
-      if (this.dead) {
-        return Promise.reject('Highchart has been unmounted mid update')
-      }
-    }
-
-    const bypassErr = err => {
-      log.error(err)
-      return fn()
-    }
-
-    const proceed = () => Promise.resolve()
-      .then(fn, bypassErr)
-
-    this.promise = this.promise
-      .then(stopIfDead)
-      .then(proceed)
   }
 
   resizer = () => {
@@ -118,9 +93,8 @@ export class Chart extends React.Component {
 
     const update = isNewChart => {
       if (isNewChart) {
-        this.enqueue(() =>
-          this.updateConfig(newConfig)
-            .then(this.hardRedraw))
+        this.updateConfig(newConfig)
+          .then(this.hardRedraw)
       } else {
         this.updateConfig(newConfig)
 
