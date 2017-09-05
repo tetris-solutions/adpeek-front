@@ -1,26 +1,76 @@
 {
-  "presets": [
-    "es2015",
-    "react"
-  ],
-  "plugins": [
-    [
-      "transform-class-properties",
-      [
-        "csjs-postcss",
-        {
-          "plugins": [
-            [
-              "autoprefixer",
-              {
-                "browsers": [
-                  "> 2%"
-                ]
-              }
+  "env": {
+    "development": {
+      "presets": [
+        [
+          "env",
+          {
+            "targets": {
+              "browsers": [
+                "last 2 versions of chrome"
+              ],
+              "node": "current"
+            },
+            "include": [
+              "syntax-jsx",
+              "transform-react-jsx",
+              "transform-class-properties",
+              [
+                "csjs-postcss",
+                {
+                  "plugins": [
+                    [
+                      "autoprefixer",
+                      {
+                        "browsers": [
+                          "> 2%"
+                        ]
+                      }
+                    ]
+                  ]
+                }
+              ]
             ]
-          ]
-        }
+          }
+        ]
       ]
-    ]
-  ]
+    },
+    "production": {
+      "presets": [
+        [
+          "env",
+          {
+            "targets": {
+              "browsers": [
+                ">= 15% in BR"
+              ],
+              "node": "7"
+            },
+            "include": [
+              "syntax-jsx",
+              "transform-react-jsx",
+              "transform-react-inline-elements",
+              "transform-react-constant-elements",
+              "transform-class-properties",
+              [
+                "csjs-postcss",
+                {
+                  "plugins": [
+                    [
+                      "autoprefixer",
+                      {
+                        "browsers": [
+                          "> 15% IN BR"
+                        ]
+                      }
+                    ]
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    }
+  }
 }
