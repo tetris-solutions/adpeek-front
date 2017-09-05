@@ -3,7 +3,7 @@
 const webpack = require('webpack')
 const path = require('path')
 const pkg = require('../package.json')
-const BabelMinify = require('babel-minify-webpack-plugin')
+const Ugly = require('uglifyjs-webpack-plugin')
 
 module.exports = function (config) {
   return {
@@ -20,7 +20,7 @@ module.exports = function (config) {
       config.envs,
       config.ignore,
       new webpack.optimize.AggressiveMergingPlugin(),
-      new BabelMinify()
+      new Ugly()
     ],
     module: {
       rules: [{
