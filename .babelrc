@@ -7,26 +7,29 @@
           {
             "targets": {
               "browsers": [
-                "last 2 versions of chrome"
+                "last 2 Chrome versions"
               ],
               "node": "current"
             },
-            "include": [
-              "syntax-jsx",
-              "transform-react-jsx",
-              "transform-class-properties",
+            "useBuiltIns": true,
+            "loose": true
+          }
+        ]
+      ],
+      "plugins": [
+        "external-helpers",
+        "syntax-jsx",
+        "transform-react-jsx",
+        "transform-class-properties",
+        [
+          "csjs-postcss",
+          {
+            "plugins": [
               [
-                "csjs-postcss",
+                "autoprefixer",
                 {
-                  "plugins": [
-                    [
-                      "autoprefixer",
-                      {
-                        "browsers": [
-                          "> 2%"
-                        ]
-                      }
-                    ]
+                  "browsers": [
+                    "> 2%"
                   ]
                 }
               ]
@@ -42,28 +45,31 @@
           {
             "targets": {
               "browsers": [
-                ">= 15% in BR"
+                "> 15% in BR"
               ],
               "node": "7"
             },
-            "include": [
-              "syntax-jsx",
-              "transform-react-jsx",
-              "transform-react-inline-elements",
-              "transform-react-constant-elements",
-              "transform-class-properties",
+            "useBuiltIns": true,
+            "loose": true
+          }
+        ]
+      ],
+      "plugins": [
+        "external-helpers",
+        "syntax-jsx",
+        "transform-react-jsx",
+        "transform-react-inline-elements",
+        "transform-react-constant-elements",
+        "transform-class-properties",
+        [
+          "csjs-postcss",
+          {
+            "plugins": [
               [
-                "csjs-postcss",
+                "autoprefixer",
                 {
-                  "plugins": [
-                    [
-                      "autoprefixer",
-                      {
-                        "browsers": [
-                          "> 15% IN BR"
-                        ]
-                      }
-                    ]
+                  "browsers": [
+                    "> 15%"
                   ]
                 }
               ]

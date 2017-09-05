@@ -1,4 +1,7 @@
-var path = require('path')
+require('./babel-helpers')
+require('./polyfill')
+
+const path = require('path')
 
 require('dotenv').config({
   path: path.resolve(__dirname, '..', '.env'),

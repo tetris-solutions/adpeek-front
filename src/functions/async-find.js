@@ -1,4 +1,3 @@
-import 'setimmediate'
 import isPlainObject from 'lodash/isPlainObject'
 import isString from 'lodash/isString'
 import matchesProperty from 'lodash/matchesProperty'
