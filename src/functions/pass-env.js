@@ -1,8 +1,8 @@
-var each = require('lodash/each')
-var pick = require('lodash/pick')
+const each = require('lodash/each')
+const pick = require('lodash/pick')
 
 module.exports = function passEnv () {
-  var env = {}
+  const env = {}
 
   each(pick(process.env,
 

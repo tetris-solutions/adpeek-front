@@ -10,8 +10,8 @@
   },
   "scripts": {
     "compile": "rimraf lib && babel --quiet src -d lib",
-    "bundle": "webpack --config src/webpack.config.js --optimize-minimize",
-    "analyze": "webpack --config src/webpack.config.js --optimize-minimize --profile --json > bundle-stats.json",
+    "bundle": "webpack --config src/webpack.config.js",
+    "analyze": "webpack --config src/webpack.config.js --profile --json > bundle-stats.json",
     "start": "bin/cmd.js",
     "start:dev": "nodemon src/main.js",
     "lint": "eslint src",
@@ -75,6 +75,7 @@
     "babel-cli": "^6.18.0",
     "babel-eslint": "^7.2.1",
     "babel-loader": "^6.2.10",
+    "babel-minify-webpack-plugin": "^0.2.0",
     "babel-plugin-csjs-postcss": "^0.3.0",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-syntax-jsx": "^6.18.0",

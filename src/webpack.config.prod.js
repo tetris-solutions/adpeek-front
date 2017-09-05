@@ -3,10 +3,11 @@
 const webpack = require('webpack')
 const path = require('path')
 const pkg = require('../package.json')
+const BabelMinify = require('babel-minify-webpack-plugin')
 
 module.exports = function (config) {
   return {
-    devtool: 'cheap-source-map',
+    devtool: 'source-map',
     context: __dirname,
     entry: config.entry,
     output: {
@@ -18,7 +19,8 @@ module.exports = function (config) {
     plugins: [
       config.envs,
       config.ignore,
-      new webpack.optimize.AggressiveMergingPlugin()
+      new webpack.optimize.AggressiveMergingPlugin(),
+      new BabelMinify()
     ],
     module: {
       rules: [{
