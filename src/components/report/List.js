@@ -170,15 +170,17 @@ const safely = (fn, fallback) => (...args) => {
   }
 }
 
-const showNativeReports = safely(
-  () => window.localStorage.showNativeReports !== 'no',
-  true
-)
+const showNativeReports = safely(() => (
+  typeof window === 'undefined' ||
+  window.localStorage.showNativeReports !== 'no'
+), true)
 
 const setNativeReportsFlag = safely(val => {
-  window.localStorage.showNativeReports = val
-    ? 'yes'
-    : 'no'
+  if (typeof window !== 'undefined') {
+    window.localStorage.showNativeReports = val
+      ? 'yes'
+      : 'no'
+  }
 })
 
 class Reports extends React.Component {
