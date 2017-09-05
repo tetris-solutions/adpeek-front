@@ -80,18 +80,22 @@ const orderActions = [
   workspace, folder, campaigns_, orders, budgets
 ]
 
+const bypass = (req, res, next) => next()
+
 export function setAppRoutes (app, render) {
-  const route = (url, ...middlewares) =>
+  const route = (url, isProtected, ...middlewares) =>
     app.get(url,
+      isProtected ? protect : bypass,
       shortenUrlMiddleware,
       preload(...baseActions),
       ...middlewares,
       render)
 
   const protectedRoute = (url, ...middlewares) =>
-    route(url, protect, ...middlewares)
+    route(url, true, ...middlewares)
 
-  const publicRoute = route
+  const publicRoute = (url, ...middlewares) =>
+    route(url, false, ...middlewares)
 
   const wrap = (segment, wrapper = protectedRoute) =>
     (url, ...middlewares) =>
