@@ -7,7 +7,7 @@ const BabelMinify = require('babel-minify-webpack-plugin')
 
 module.exports = function (config) {
   return {
-    devtool: 'source-map',
+    devtool: 'cheap-module-source-map',
     context: __dirname,
     entry: config.entry,
     output: {
