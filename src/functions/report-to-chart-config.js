@@ -6,6 +6,7 @@ import get from 'lodash/get'
 import size from 'lodash/size'
 import memoize from 'lodash/memoize'
 import includes from 'lodash/includes'
+import fromPairs from 'lodash/fromPairs'
 import isObject from 'lodash/isPlainObject'
 import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
@@ -217,6 +218,29 @@ function pointFormatter () {
         <br/>`
 }
 
+function getOrderedFields ({sort, query: {metrics, dimensions}}) {
+  sort = fromPairs(sort)
+
+  const ordered = sort._fields_
+
+  if (isEmpty(ordered)) {
+    return {dimensions, metrics}
+  }
+
+  const index = field => {
+    const i = ordered.indexOf(field)
+
+    return i <= 0
+      ? Infinity
+      : i
+  }
+
+  return {
+    dimensions: orderBy(dimensions, index),
+    metrics: orderBy(metrics, index)
+  }
+}
+
 export const reportToChartConfig = createTask((module) => {
   const emptyModuleLabel = getEmptyModuleMessage(module)
 
@@ -224,9 +248,10 @@ export const reportToChartConfig = createTask((module) => {
     return emptyResultChart(emptyModuleLabel)
   }
 
-  const {result, comments, query, entity, attributes, type} = module
-  const {metrics} = query
-  let {dimensions} = query
+  const {result, comments, entity, attributes, type} = module
+  const fields = getOrderedFields(module)
+  const {metrics} = fields
+  let {dimensions} = fields
 
   const getAttributeName = attr => get(attributes, [attr, 'name'], attr)
   const getSeriesAttributeName = (val, key) => key === 'metric'
