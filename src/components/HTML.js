@@ -1,18 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const talkToSrc = `
-var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-(function () {
-  var s1 = document.createElement('script'), s0 = document.getElementsByTagName('script')[0]
-  s1.async = true
-  s1.src = 'https://embed.tawk.to/593598acb3d02e11ecc68532/default'
-  s1.charset = 'UTF-8'
-  s1.setAttribute('crossorigin', '*')
-  s0.parentNode.insertBefore(s1, s0)
-})()`
+// const talkToSrc = `
+// var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+// (function () {
+//   var s1 = document.createElement('script'), s0 = document.getElementsByTagName('script')[0]
+//   s1.async = true
+//   s1.src = 'https://embed.tawk.to/593598acb3d02e11ecc68532/default'
+//   s1.charset = 'UTF-8'
+//   s1.setAttribute('crossorigin', '*')
+//   s0.parentNode.insertBefore(s1, s0)
+// })()`
 
-const talkTo = <script dangerouslySetInnerHTML={{__html: talkToSrc}}/>
+// const talkTo = <script dangerouslySetInnerHTML={{__html: talkToSrc}}/>
 
 const gTMSrc = `(function (w, d, s, l, i) {
   w[l] = w[l] || [];
@@ -89,7 +89,7 @@ const HTML = ({state, children, css, helmet}) => (
 
       {gTMIFrame}
 
-      {process.env.NODE_ENV === 'production' && talkTo}
+      {/* process.env.NODE_ENV === 'production' && talkTo */}
     </body>
   </html>
 )
