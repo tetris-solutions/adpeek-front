@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 import pick from 'lodash/pick'
 import diff from 'lodash/differenceWith'
 import find from 'lodash/find'
+import noop from 'lodash/noop'
+import debounce from 'lodash/debounce'
 import get from 'lodash/get'
 import forEach from 'lodash/forEach'
 import isEqual from 'lodash/isEqual'
-import cloneDeep from 'lodash/cloneDeep'
 import {mapPropsToConfig, requiresFullRedraw} from '../functions/highcart-config'
 
 let Highcharts
@@ -34,16 +35,17 @@ export class Chart extends React.Component {
   state = {}
 
   componentDidMount () {
-    mapPropsToConfig(this.props)
+    this.mounting = mapPropsToConfig(this.props)
       .then(this.updateConfig)
       .then(this.draw)
+      .catch(noop)
 
     window.event$.on('aside-toggle', this.resizer)
   }
 
-  componentWillReceiveProps (props) {
-    mapPropsToConfig(props)
-      .then(this.handleConfig)
+  componentWillReceiveProps (nextProps) {
+    this.mounting
+      .then(() => this.receiveProps(nextProps))
   }
 
   shouldComponentUpdate () {
@@ -56,6 +58,11 @@ export class Chart extends React.Component {
     window.event$.off('aside-toggle', this.resizer)
   }
 
+  receiveProps = debounce(props => {
+    return mapPropsToConfig(props)
+      .then(this.handleConfig)
+  }, 1000)
+
   resizer = () => {
     this.chart.reflow()
   }
@@ -64,7 +71,7 @@ export class Chart extends React.Component {
     if (this.state.config) {
       this.refs.container.HCharts = this.chart = Highcharts.chart(
         this.refs.container,
-        cloneDeep(this.state.config)
+        this.state.config
       )
     }
   }
@@ -87,6 +94,11 @@ export class Chart extends React.Component {
   }
 
   handleConfig = newConfig => {
+    if (!this.chart) {
+      return this.updateConfig(newConfig)
+        .then(this.draw)
+    }
+
     if (!isEqual(newConfig.title, get(this, 'state.config.title'))) {
       this.chart.setTitle(newConfig.title)
     }
@@ -116,11 +128,12 @@ export class Chart extends React.Component {
   })
 
   render = () => {
+    const Tag = this.props.tag
     const props = pick(this.props, 'className', 'style', 'onClick')
 
     props.ref = 'container'
 
-    return React.createElement(this.props.tag, props)
+    return <Tag {...props}/>
   }
 }
 

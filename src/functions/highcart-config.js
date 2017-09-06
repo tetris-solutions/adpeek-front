@@ -1,5 +1,4 @@
 import camelCase from 'lodash/camelCase'
-import cloneDeep from 'lodash/cloneDeep'
 import isFunction from 'lodash/isFunction'
 import forEach from 'lodash/forEach'
 import includes from 'lodash/includes'
@@ -119,8 +118,7 @@ function parseChildren (child, parent) {
   }
 }
 
-export const mapPropsToConfig = createTask((props) => {
-  props = cloneDeep(props)
+export const mapPropsToConfig = createTask(props => {
   const parentConfig = props.config
   const chart = omit(props, 'config', 'tag', 'children', 'className', 'style')
   const config = {isRoot: true}
