@@ -1,10 +1,10 @@
 import React from 'react'
+import delay from 'delay'
 import PropTypes from 'prop-types'
 import pick from 'lodash/pick'
 import diff from 'lodash/differenceWith'
 import find from 'lodash/find'
 import noop from 'lodash/noop'
-import throttle from 'lodash/throttle'
 import get from 'lodash/get'
 import forEach from 'lodash/forEach'
 import isEqual from 'lodash/isEqual'
@@ -35,17 +35,21 @@ export class Chart extends React.Component {
   state = {}
 
   componentDidMount () {
-    this.mounting = mapPropsToConfig(this.props)
+    this.promise = mapPropsToConfig(this.props)
       .then(this.updateConfig)
       .then(this.draw)
       .catch(noop)
+      .then(delay(500))
 
     window.event$.on('aside-toggle', this.resizer)
   }
 
   componentWillReceiveProps (nextProps) {
-    this.mounting
-      .then(() => this.receiveProps(nextProps))
+    this.promise = this.promise
+      .then(() => mapPropsToConfig(nextProps))
+      .then(this.handleConfig)
+      .catch(noop)
+      .then(delay(500))
   }
 
   shouldComponentUpdate () {
@@ -57,11 +61,6 @@ export class Chart extends React.Component {
 
     window.event$.off('aside-toggle', this.resizer)
   }
-
-  receiveProps = throttle(props => {
-    return mapPropsToConfig(props)
-      .then(this.handleConfig)
-  }, 1000)
 
   resizer = () => {
     this.chart.reflow()
