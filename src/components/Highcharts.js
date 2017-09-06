@@ -4,7 +4,7 @@ import pick from 'lodash/pick'
 import diff from 'lodash/differenceWith'
 import find from 'lodash/find'
 import noop from 'lodash/noop'
-import debounce from 'lodash/debounce'
+import throttle from 'lodash/throttle'
 import get from 'lodash/get'
 import forEach from 'lodash/forEach'
 import isEqual from 'lodash/isEqual'
@@ -58,7 +58,7 @@ export class Chart extends React.Component {
     window.event$.off('aside-toggle', this.resizer)
   }
 
-  receiveProps = debounce(props => {
+  receiveProps = throttle(props => {
     return mapPropsToConfig(props)
       .then(this.handleConfig)
   }, 1000)
