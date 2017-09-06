@@ -1,5 +1,4 @@
 import React from 'react'
-import delay from 'delay'
 import PropTypes from 'prop-types'
 import pick from 'lodash/pick'
 import diff from 'lodash/differenceWith'
@@ -9,6 +8,7 @@ import get from 'lodash/get'
 import forEach from 'lodash/forEach'
 import isEqual from 'lodash/isEqual'
 import {mapPropsToConfig, requiresFullRedraw} from '../functions/highcart-config'
+import log from 'loglevel'
 
 let Highcharts
 
@@ -35,21 +35,19 @@ export class Chart extends React.Component {
   state = {}
 
   componentDidMount () {
-    this.promise = mapPropsToConfig(this.props)
+    this.startRunning()
+
+    mapPropsToConfig(this.props)
       .then(this.updateConfig)
       .then(this.draw)
       .catch(noop)
-      .then(delay(500))
+      .then(this.stopRunning)
 
     window.event$.on('aside-toggle', this.resizer)
   }
 
   componentWillReceiveProps (nextProps) {
-    this.promise = this.promise
-      .then(() => mapPropsToConfig(nextProps))
-      .then(this.handleConfig)
-      .catch(noop)
-      .then(delay(500))
+    this.receiveProps(nextProps)
   }
 
   shouldComponentUpdate () {
@@ -60,6 +58,31 @@ export class Chart extends React.Component {
     this.dead = true
 
     window.event$.off('aside-toggle', this.resizer)
+  }
+
+  startRunning = () => {
+    this.running = true
+  }
+
+  stopRunning = () => {
+    this.running = false
+  }
+
+  receiveProps (nextProps) {
+    clearTimeout(this.timeout)
+
+    if (this.running) {
+      log.debug('Highcharts skip update')
+      this.timeout = setTimeout(() => this.receiveProps(nextProps), 300)
+      return
+    }
+
+    this.startRunning()
+
+    mapPropsToConfig(nextProps)
+      .then(this.handleConfig)
+      .catch(noop)
+      .then(this.stopRunning)
   }
 
   resizer = () => {
@@ -104,21 +127,22 @@ export class Chart extends React.Component {
 
     const update = isNewChart => {
       if (isNewChart) {
-        this.updateConfig(newConfig)
+        return this.updateConfig(newConfig)
           .then(this.hardRedraw)
-      } else {
-        this.updateConfig(newConfig)
-
-        const removed = diff(this.chart.series, newConfig.series, isSameSeries)
-
-        forEach(removed, removeSeries)
-        forEach(newConfig.series, this.updateSeries)
-
-        this.chart.redraw()
       }
+
+      return this.updateConfig(newConfig)
+        .then(() => {
+          const removed = diff(this.chart.series, newConfig.series, isSameSeries)
+
+          forEach(removed, removeSeries)
+          forEach(newConfig.series, this.updateSeries)
+
+          this.chart.redraw()
+        })
     }
 
-    requiresFullRedraw(this.state.config, newConfig)
+    return requiresFullRedraw(this.state.config, newConfig)
       .then(update)
   }
 
