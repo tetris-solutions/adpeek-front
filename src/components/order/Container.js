@@ -1,4 +1,5 @@
 import React from 'react'
+import chunk from 'lodash/chunk'
 import PropTypes from 'prop-types'
 import {many} from '../higher-order/branch'
 import {loadCampaignBiddingStrategyAction} from '../../actions/load-campaign-bidding-strategy'
@@ -78,10 +79,16 @@ class Order extends React.PureComponent {
 
   loadBidStrategy () {
     const {params, dispatch} = this.props
-    const loadBidStrategy = ({id: campaign}) =>
-      dispatch(loadCampaignBiddingStrategyAction, assign({campaign}, params))
+    const loadBidStrategy = ({id: campaign}) => dispatch(loadCampaignBiddingStrategyAction, assign({campaign}, params))
+    const campaigns = this.getCampaignsRequiringStrategy()
 
-    Promise.all(map(this.getCampaignsRequiringStrategy(), loadBidStrategy))
+    let promise = Promise.resolve()
+
+    chunk(campaigns, 5).forEach(fiveCampaigns => {
+      promise = promise.then(() => Promise.all(map(fiveCampaigns, loadBidStrategy)))
+    })
+
+    promise
       .then(() => this.setState({
         isLoading: false
       }))
