@@ -49,9 +49,9 @@ class ModuleContainer extends React.Component {
       .then(setup => this.setState({setup}))
   }
 
-  getEntities = () => {
+  getEntities = (props = this.props) => {
     const {activeOnly} = this.state
-    const {module, entities} = this.props
+    const {module, entities} = props
 
     return mountModuleEntities(keyBy(entities, 'id'), module.entity, module.filters.id, activeOnly)
   }
@@ -89,7 +89,7 @@ class ModuleContainer extends React.Component {
   })
 
   getSetup = (props = this.props) => {
-    return this.getEntities()
+    return this.getEntities(props)
       .then(entities =>
         this.mountSetup(entities, props))
   }
