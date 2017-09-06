@@ -153,9 +153,7 @@ class ReportController extends React.Component {
       newModule.filters.impressions = ['greater than', 1]
     }
 
-    if (!moduleCount) {
-      loadEntity(newModule.entity)
-    }
+    loadEntity(newModule.entity)
 
     dispatch(createModuleReportAction, params, newModule)
   }

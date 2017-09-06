@@ -13,10 +13,12 @@ const style = csjs`
   display: none
 }
 .total {
-  color: #004465
+  background-color: #405e92
+  color: white;
 }
 .partial {
-  color: #4650a0
+  background-color: #717171;
+  color: white;
 }
 .item {
   display: block;
@@ -68,8 +70,8 @@ export class Node extends React.Component {
     const {selection, label, onClick, children} = this.props
 
     return (
-      <li>
-        <header className={`${style.item} ${selection ? style[selection] : ''}`}>
+      <li className={selection ? style[selection] : ''}>
+        <header className={style.item}>
           <i onClick={this.toggle} className='material-icons'>{
             open ? 'keyboard_arrow_down' : 'keyboard_arrow_right'
           }</i>

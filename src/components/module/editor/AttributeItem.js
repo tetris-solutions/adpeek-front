@@ -67,16 +67,19 @@ const style = csjs`
   overflow: hidden;
 }
 .fixed {
-  color: #232363
+  background-color: #616161;
+  color: white;
 }
 .disabled {
   font-weight: bold;
-  color: #e4e4e4
+  background-color: #c3c3c3 !important;
+  color: grey;
 }
 .selected {
   border-left: 3px solid #79cbf3;
   font-weight: bold;
-  color: #004465
+  background-color: #405e92;
+  color: white;
 }`
 
 function TextAd ({onClick, className, headline, description, selectable}) {
