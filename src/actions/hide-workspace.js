@@ -10,4 +10,3 @@ export function hideWorkspaceAction (tree, {workspace}) {
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
-

@@ -27,4 +27,3 @@ export function unlinkCampaignsAction (tree, company, workspace, folder, campaig
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
-

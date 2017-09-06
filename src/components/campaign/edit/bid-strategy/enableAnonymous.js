@@ -42,4 +42,3 @@ export const enableAnonymous = BiddingScheme => class AnonymousStrategyToggle ex
     )
   }
 }
-

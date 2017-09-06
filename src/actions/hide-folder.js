@@ -10,4 +10,3 @@ export function hideFolderAction (tree, {folder}) {
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
-

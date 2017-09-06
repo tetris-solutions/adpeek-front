@@ -11,4 +11,3 @@ export function updateCampaignUserListsAction (tree, {campaign}, userLists) {
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
-

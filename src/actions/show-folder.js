@@ -10,4 +10,3 @@ export function showFolderAction (tree, {folder}) {
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
-

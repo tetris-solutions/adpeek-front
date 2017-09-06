@@ -34,4 +34,3 @@ export function cloneModuleAction (tree, params, module, newModule) {
     })
     .catch(pushResponseErrorToState(tree))
 }
-

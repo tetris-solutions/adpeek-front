@@ -10,4 +10,3 @@ export function showWorkspaceAction (tree, {workspace}) {
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
-

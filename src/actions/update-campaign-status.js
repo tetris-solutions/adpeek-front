@@ -29,4 +29,3 @@ export function updateCampaignStatusAction (tree, {company, workspace, folder, c
     })
     .catch(pushResponseErrorToState(tree))
 }
-

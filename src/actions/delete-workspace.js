@@ -20,4 +20,3 @@ export function deleteWorkspaceAction (tree, {company, workspace}) {
     })
     .catch(pushResponseErrorToState(tree))
 }
-

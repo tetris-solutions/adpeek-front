@@ -122,12 +122,10 @@ class AdwordsCampaign extends React.Component {
 
           <Info editLink={editable ? urlFor(params, 'tracking') : null}>
             <Message>trackingUrl</Message>:
-            {list([details.tracking_url]
-                .concat(map(details.url_params &&
-                  details.url_params.parameters, flattenParam)),
-              txt => txt
-                ? <SubText>{txt}</SubText>
-                : null)}
+            {list(
+              [details.tracking_url].concat(map(details.url_params && details.url_params.parameters, flattenParam)),
+              txt => txt ? <SubText>{txt}</SubText> : null
+            )}
           </Info>
 
           <SectionTitle>

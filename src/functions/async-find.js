@@ -28,7 +28,7 @@ export const asyncFind = (array, matcher, value = undefined, batchSize = 500) =>
     if (array[offset]) {
       setImmediate(search)
     } else {
-      reject(-1)
+      reject(new Error('Not found', -1))
     }
   }
 

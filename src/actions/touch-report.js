@@ -13,4 +13,3 @@ export function touchReport (tree, {company, workspace, folder, report}) {
 
   tree.set(cursor, (new Date()).toISOString())
 }
-

@@ -237,8 +237,8 @@ class ReportAccessControl extends React.Component {
 
     return (
       <MenuItem icon='visibility' onClick={this.open} persist>
-        <Message>reportAccessControl</Message>{this.state.isModalOpen
-        ? (
+        <Message>reportAccessControl</Message>
+        {this.state.isModalOpen ? (
           <Modal onEscPress={this.close}>
             <Fence {...fencePerms}>{permissions => (
               <Options

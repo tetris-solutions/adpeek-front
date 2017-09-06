@@ -11,4 +11,3 @@ export function updateCampaignNetworkAction (tree, {campaign}, network) {
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
-

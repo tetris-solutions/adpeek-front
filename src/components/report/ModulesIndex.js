@@ -34,10 +34,11 @@ const iconFor = {
 }
 
 export const Modules = ({name, modules, exit}) =>
-  <NavBts>{map(sortBy(modules, 'y'), ({id, name, type}) =>
-    <NavBt key={id} tag={Button} onClick={scrollToModule(id)} icon={iconFor[type] || 'timeline'}>
-      {name}
-    </NavBt>)}
+  <NavBts>
+    {map(sortBy(modules, 'y'), ({id, name, type}) =>
+      <NavBt key={id} tag={Button} onClick={scrollToModule(id)} icon={iconFor[type] || 'timeline'}>
+        {name}
+      </NavBt>)}
 
     <NavBt tag={Button} onClick={exit} icon='close'>
       <Message>oneLevelUpNavigation</Message>

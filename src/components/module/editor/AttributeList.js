@@ -185,4 +185,3 @@ class AttributeList extends React.Component {
 }
 
 export default AttributeList
-

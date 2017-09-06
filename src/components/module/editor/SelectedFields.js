@@ -1,4 +1,3 @@
-import assign from 'lodash/assign'
 import concat from 'lodash/concat'
 import csjs from 'csjs'
 import fromPairs from 'lodash/fromPairs'
@@ -8,7 +7,7 @@ import sortBy from 'lodash/sortBy'
 import toPairs from 'lodash/toPairs'
 import React from 'react'
 import PropTypes from 'prop-types'
-import Reorder from 'react-reorder'
+import Reorder, {reorder} from 'react-reorder'
 import {Button} from '../../Button'
 import {styledComponent} from '../../higher-order/styled'
 
@@ -24,27 +23,6 @@ const style = csjs`
   display: inline-block;
   width: auto;
 }`
-
-function Field ({item: {name, remove, id}}) {
-  const onClick = () => remove(id, true)
-  return (
-    <span className='mdl-chip mdl-chip--deletable'>
-      <span className='mdl-chip__text'>{name}</span>
-      <Button className='mdl-chip__action' onClick={onClick}>
-        <i className='material-icons'>cancel</i>
-      </Button>
-    </span>
-  )
-}
-
-Field.displayName = 'Field'
-Field.propTypes = {
-  item: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    remove: PropTypes.func.isRequired
-  }).isRequired
-}
 
 function mountFields (attributes, dimensions, metrics, fieldSort) {
   function normalizeField (field) {
@@ -69,38 +47,48 @@ class SelectedFields extends React.Component {
     change: PropTypes.func.isRequired
   }
 
-  onReorder = (event, movedItem, previousIndex, nextIndex, fieldSort) => {
-    const {draft: {module}, change} = this.context
-    const sort = fromPairs(module.sort)
-
-    sort._fields_ = map(fieldSort, 'id')
-
-    change({sort: toPairs(sort)})
-  }
-
-  render () {
-    const {attributes, removeAttribute, draft: {module: {dimensions, metrics, sort}}} = this.context
+  getFields () {
+    const {attributes, draft: {module: {dimensions, metrics, sort}}} = this.context
     const sortPairs = fromPairs(sort)
-    const fields = mountFields(
+    return mountFields(
       attributes,
       dimensions,
       metrics,
       sortPairs._fields_
     )
+  }
 
-    const list = map(fields, field => assign(field, {remove: removeAttribute}))
+  onReorder = (event, previousIndex, nextIndex) => {
+    const {draft: {module}, change} = this.context
+    const fieldSort = this.getFields()
+    const sort = fromPairs(module.sort)
+
+    sort._fields_ = reorder(map(fieldSort, 'id'), previousIndex, nextIndex)
+
+    change({sort: toPairs(sort)})
+  }
+
+  render () {
+    const {removeAttribute, draft: {module: {id}}} = this.context
+    const fields = this.getFields()
 
     return (
       <div className='mdl-cell mdl-cell--12-col'>
         <Reorder
-          itemKey='id'
+          reorderId={`fields-${id}`}
           lock='vertical'
           holdTime={300}
-          list={list}
-          listClass={`${style.list}`}
-          itemClass={`${style.item}`}
-          template={Field}
-          callback={this.onReorder}/>
+          className={style.list}
+          onReorder={this.onReorder}>
+          {map(fields, ({id, name, remove}) => (
+            <span key={id} className={`mdl-chip mdl-chip--deletable ${style.item}`}>
+              <span className='mdl-chip__text'>{name}</span>
+              <Button className='mdl-chip__action' onClick={() => removeAttribute(id, true)}>
+                <i className='material-icons'>cancel</i>
+              </Button>
+            </span>
+          ))}
+        </Reorder>
       </div>
     )
   }

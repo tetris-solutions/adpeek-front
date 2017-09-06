@@ -27,4 +27,3 @@ const tree = createClient(getRoutes, defaultState)
 loglevel.setLevel(tree.get('debugMode')
   ? 'debug'
   : 'warn')
-

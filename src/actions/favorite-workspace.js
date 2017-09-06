@@ -20,4 +20,3 @@ export function favoriteWorkspaceAction (tree, {company, workspace}) {
     })
     .catch(pushResponseErrorToState(tree))
 }
-

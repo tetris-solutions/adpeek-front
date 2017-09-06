@@ -211,8 +211,8 @@ class List extends React.Component {
       : this.props.mailings
 
     const shouldDisplayCreationForm = endsWith(pathname, '/new') || (
-        query.skipEmptyList && isEmpty(mailings)
-      )
+      query.skipEmptyList && isEmpty(mailings)
+    )
 
     if (shouldDisplayCreationForm) {
       return <NewMailing {...this.props}/>
@@ -249,13 +249,13 @@ const Content = props => {
   const {params} = props
 
   const url = '/' + join(
-      compact([
-        `c/${params.company}`,
-        params.workspace && `w/${params.workspace}`,
-        params.folder && `f/${params.folder}`,
-        params.report && `r/${params.report}`,
-        'mailing'
-      ]), '/')
+    compact([
+      `c/${params.company}`,
+      params.workspace && `w/${params.workspace}`,
+      params.folder && `f/${params.folder}`,
+      params.report && `r/${params.report}`,
+      'mailing'
+    ]), '/')
 
   return (
     <div>

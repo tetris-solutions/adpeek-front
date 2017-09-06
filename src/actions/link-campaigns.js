@@ -30,4 +30,3 @@ export function linkCampaignsAction (tree, company, workspace, folder, campaigns
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
-

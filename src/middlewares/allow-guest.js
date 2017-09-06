@@ -12,7 +12,7 @@ export function allowGuestMiddleware ({query, path, user}, res, next) {
     return next()
   }
 
-  const accessToken = new Buffer(query.tkn, 'base64').toString('ascii')
+  const accessToken = Buffer.from(query.tkn, 'base64').toString('ascii')
   const domain = process.env.TOKEN_COOKIE_DOMAIN
   const cookieName = process.env.TOKEN_COOKIE_NAME
 

@@ -11,4 +11,3 @@ export function updateCampaignDynamicSearchAdsAction (tree, {company, workspace,
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
-

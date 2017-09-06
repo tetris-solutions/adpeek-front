@@ -161,7 +161,8 @@ const saveMetaData = curry((tree, platform, entity, response) => {
     metrics: map(filter(attributes, 'is_metric'), 'id')
   }
 
-  tree.set(platform
+  tree.set(
+    platform
       ? ['reportMetaData', platform, entity]
       : ['reportMetaData', '_', entity],
     metaData)

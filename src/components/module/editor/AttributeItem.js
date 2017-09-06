@@ -145,7 +145,7 @@ class AttributeItem extends React.Component {
     const topUl = getTopUl(li)
 
     if (topUl) {
-      if (topUl._lastChecked && shiftKey || ctrlKey) {
+      if (ctrlKey || (topUl._lastChecked && shiftKey)) {
         ids = ids.concat(getIdsBetween(topUl, topUl._lastChecked, li))
       }
       topUl._lastChecked = li

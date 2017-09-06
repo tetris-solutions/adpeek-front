@@ -87,7 +87,7 @@ export function detachCallbacks (obj) {
   forEach(obj, (value, key) => {
     if (!serializable(value) || dangerous(key)) {
       obj = setSafely(obj, key, createStashKey(value))
-    } else if (value && isArray(value) || isObject(value)) {
+    } else if ((value && isArray(value)) || isObject(value)) {
       obj = setSafely(obj, key, detachCallbacks(value))
     }
   })

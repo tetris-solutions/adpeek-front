@@ -11,4 +11,3 @@ export function updateAccountSiteLinksAction (tree, {folder}, siteLinks) {
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
-

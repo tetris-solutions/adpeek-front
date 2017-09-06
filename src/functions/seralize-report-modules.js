@@ -15,8 +15,8 @@ function serializeTableCell (td, type) {
   let tableCell = td
 
   const hasIcons = tableCell
-      .querySelectorAll('.material-icons')
-      .length > 0
+    .querySelectorAll('.material-icons')
+    .length > 0
 
   if (hasIcons) {
     tableCell = tableCell.cloneNode(true)
@@ -77,6 +77,7 @@ function serializeTableCell (td, type) {
 function serializeTr (tr, type) {
   return toArray(tr.cells).map(el => serializeTableCell(el, type))
 }
+
 /**
  * serializes modules
  * @param {Array} modules the modules to be exported

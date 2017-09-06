@@ -25,4 +25,3 @@ export function updateCampaignOptimizationStatusAction (tree, {company, workspac
     })
     .catch(pushResponseErrorToState(tree))
 }
-

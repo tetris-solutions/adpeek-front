@@ -11,4 +11,3 @@ export function updateAdGroupSiteLinksAction (tree, {campaign, adGroup}, siteLin
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
-

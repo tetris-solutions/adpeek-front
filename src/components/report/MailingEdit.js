@@ -136,17 +136,15 @@ PeriodicitySelector.contextTypes = {
 }
 
 const Email = ({drop, dead, email}, {messages}) => (
-  <div className='mdl-list__item'>{dead
-    ? (
+  <div className='mdl-list__item'>
+    {dead ? (
       <span className='mdl-list__item-primary-content mdl-color-text--grey-500' title={messages.unsubscribedEmail}>
         <del>{email}</del>
       </span>
-    )
-    : (
+    ) : (
       <span className='mdl-list__item-primary-content'>
         {email}
-      </span>
-    )}
+      </span>)}
     <a className='mdl-list__item-secondary-action' onClick={drop}>
       <i className='material-icons'>clear</i>
     </a>

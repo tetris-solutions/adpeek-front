@@ -11,4 +11,3 @@ export function updateCampaignBidStrategyAction (tree, {campaign}, bidStrategy) 
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
-

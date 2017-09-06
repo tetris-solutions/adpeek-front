@@ -21,4 +21,3 @@ export function deleteFolderAction (tree, {company, workspace}, folder) {
     })
     .catch(pushResponseErrorToState(tree))
 }
-

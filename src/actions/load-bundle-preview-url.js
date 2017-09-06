@@ -11,8 +11,8 @@ const register = {}
 
 export function loadBundlePreviewUrlAction (tree, {company, workspace, folder, campaign}, adGroupId, adId, bundleId) {
   register[bundleId] = register[bundleId] || loadBundlePreviewUrl(folder, bundleId, getApiFetchConfig(tree))
-      .then(saveResponseTokenAsCookie)
-      .catch(pushResponseErrorToState(tree))
+    .then(saveResponseTokenAsCookie)
+    .catch(pushResponseErrorToState(tree))
 
   return register[bundleId]
     .then(saveResponseData(tree, compact([

@@ -11,4 +11,3 @@ export function updateCampaignSiteLinksAction (tree, {campaign}, siteLinks) {
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
-

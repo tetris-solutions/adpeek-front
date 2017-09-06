@@ -91,8 +91,6 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
     </Route>
   )
 
-  /* eslint-disable react/jsx-indent-props */
-
   const campaignEditLevel = () => (
     <Route path='edit' {...render(component.CampaignHome)}>
       <Route path='name' {...render(component.CampaignName)}/>
@@ -141,9 +139,10 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
       <IndexRoute onEnter={preload(budgets)} {...render(component.Order)}/>
       <Route path='budget/:budget' onEnter={preload(budgets)} {...render(component.Order)}/>
 
-      <Route path='autobudget(/:day)'
-             onEnter={preload(autoBudgetLogs)}
-             {...render(component.OrderAutoBudget)}/>
+      <Route
+        path='autobudget(/:day)'
+        onEnter={preload(autoBudgetLogs)}
+        {...render(component.OrderAutoBudget)}/>
     </Route>
   )
 
@@ -159,11 +158,12 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
   )
 
   const folderLevel = alias => (
-    <Route path={`${alias}/:folder`}
-           component={routeParamsBasedBranch('workspace', 'folder')}
-           aside={component.FolderAside}
-           breadcrumb={component.FolderBreadcrumb}
-           onEnter={preload(folder, campaigns)}>
+    <Route
+      path={`${alias}/:folder`}
+      component={routeParamsBasedBranch('workspace', 'folder')}
+      aside={component.FolderAside}
+      breadcrumb={component.FolderBreadcrumb}
+      onEnter={preload(folder, campaigns)}>
 
       {folderAccountLevel()}
 
@@ -181,8 +181,9 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
         <Route path='clone' {...render(component.FolderOrdersCloning)}/>
       </Route>
 
-      <Route breadcrumb={component.OrdersBreadCrumb}
-             onEnter={preload(deliveryMethods, campaignsWithAdsets, orders)}>
+      <Route
+        breadcrumb={component.OrdersBreadCrumb}
+        onEnter={preload(deliveryMethods, campaignsWithAdsets, orders)}>
 
         {orderLevel('order')}
         {orderLevel('o')}
@@ -195,11 +196,12 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
   )
 
   const workspaceLevel = alias => (
-    <Route path={`${alias}/:workspace`}
-           component={routeParamsBasedBranch('company', 'workspace')}
-           breadcrumb={component.WorkspaceBreadcrumb}
-           onEnter={preload(workspace)}
-           aside={component.WorkspaceAside}>
+    <Route
+      path={`${alias}/:workspace`}
+      component={routeParamsBasedBranch('company', 'workspace')}
+      breadcrumb={component.WorkspaceBreadcrumb}
+      onEnter={preload(workspace)}
+      aside={component.WorkspaceAside}>
 
       <IndexRoute {...render(component.WorkspaceFolders)} onEnter={preload(folders)}/>
 
@@ -268,5 +270,4 @@ export function getRoutes (tree, protectRoute, preload, createRoot) {
       </Route>
     </Route>
   )
-  /* eslint-enable react/jsx-indent-props */
 }

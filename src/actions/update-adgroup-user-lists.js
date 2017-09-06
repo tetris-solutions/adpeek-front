@@ -12,4 +12,3 @@ export function updateAdGroupUserListsAction (tree, {campaign, adGroup}, userLis
     .then(saveResponseTokenAsCookie)
     .catch(pushResponseErrorToState(tree))
 }
-
