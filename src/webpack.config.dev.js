@@ -4,7 +4,7 @@ const path = require('path')
 
 module.exports = function (config) {
   return {
-    devtool: 'eval',
+    devtool: 'cheap-eval-source-map',
     context: __dirname,
     entry: config.entry,
     output: {

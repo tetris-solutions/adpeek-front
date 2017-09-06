@@ -7,7 +7,7 @@ const Ugly = require('uglifyjs-webpack-plugin')
 
 module.exports = function (config) {
   return {
-    devtool: 'cheap-module-source-map',
+    devtool: 'source-map',
     context: __dirname,
     entry: config.entry,
     output: {
@@ -20,7 +20,9 @@ module.exports = function (config) {
       config.envs,
       config.ignore,
       new webpack.optimize.AggressiveMergingPlugin(),
-      new Ugly()
+      new Ugly({
+        sourceMap: true
+      })
     ],
     module: {
       rules: [{
