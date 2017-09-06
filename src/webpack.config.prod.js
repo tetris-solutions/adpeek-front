@@ -21,7 +21,13 @@ module.exports = function (config) {
       config.ignore,
       new webpack.optimize.AggressiveMergingPlugin(),
       new Ugly({
-        sourceMap: true
+        sourceMap: true,
+        uglifyOptions: {
+          mangle: {
+            keep_classnames: true,
+            keep_fnames: true
+          }
+        }
       })
     ],
     module: {
