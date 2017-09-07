@@ -1,5 +1,5 @@
 import React from 'react'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 import {breakOnEmptyProp} from '../higher-order/not-nullable'
 import {loadCampaignDetailsAction} from '../../actions/load-campaign-details'
 import PropTypes from 'prop-types'

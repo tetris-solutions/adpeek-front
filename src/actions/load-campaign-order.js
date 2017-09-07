@@ -1,5 +1,5 @@
 import {GET} from '@tetris/http'
-import {saveResponseTokenAsCookie, getApiFetchConfig} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig} from '@tetris/front-server/utils'
 import {saveResponseData} from '../functions/save-response-data'
 
 function loadCampaignOrder (campaign, config) {

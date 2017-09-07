@@ -1,4 +1,4 @@
-import {getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 import {GET} from '@tetris/http'
 import assign from 'lodash/assign'
 import get from 'lodash/get'

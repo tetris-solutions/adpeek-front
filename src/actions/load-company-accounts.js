@@ -1,6 +1,6 @@
 import {GET} from '@tetris/http'
 import unionBy from 'lodash/unionBy'
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 import {saveResponseData} from '../functions/save-response-data'
 
 export function loadCompanyAccounts (id, config, platform = null) {

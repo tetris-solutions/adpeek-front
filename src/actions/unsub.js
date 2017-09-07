@@ -1,5 +1,5 @@
 import {DELETE} from '@tetris/http'
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 
 function unsubscribe (mailing, email, config) {
   return DELETE(`${process.env.ADPEEK_API_URL}/public/mailing/${mailing}/subscriber/${email}`, config)

@@ -1,6 +1,6 @@
 import {GET} from '@tetris/http'
 import {saveResponseData} from '../functions/save-response-data'
-import {getApiFetchConfig, saveResponseTokenAsCookie, pushResponseErrorToState} from 'tetris-iso/utils'
+import {getApiFetchConfig, saveResponseTokenAsCookie, pushResponseErrorToState} from '@tetris/front-server/utils'
 
 function loadFolderBidStrategies (folder, config) {
   return GET(`${process.env.ADPEEK_API_URL}/folder/${folder}/bid-strategies`, config)

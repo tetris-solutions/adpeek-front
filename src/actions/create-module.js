@@ -1,5 +1,5 @@
 import assign from 'lodash/assign'
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 import {POST} from '@tetris/http'
 import compact from 'lodash/compact'
 import {inferLevelFromParams} from '../functions/infer-level-from-params'

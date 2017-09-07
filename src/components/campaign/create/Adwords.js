@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 import Page from '../../Page'
 import SubHeader from '../../SubHeader'
 import {Form, Content, Header, Footer} from '../../Card'

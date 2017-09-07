@@ -1,7 +1,7 @@
 import assign from 'lodash/assign'
 import debounce from 'lodash/debounce'
 import omit from 'lodash/omit'
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 import {PUT} from '@tetris/http'
 import compact from 'lodash/compact'
 import {inferLevelFromParams} from '../functions/infer-level-from-params'

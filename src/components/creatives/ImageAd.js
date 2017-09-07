@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Modal from 'tetris-iso/Modal'
+import Modal from '@tetris/front-server/Modal'
 import map from 'lodash/map'
 import {style, withPreview, DestinationUrl, KPI, kpiType} from './AdUtils'
 import {findImageAdUrl} from '../../functions/find-image-ad-url'

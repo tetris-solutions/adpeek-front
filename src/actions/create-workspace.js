@@ -1,6 +1,6 @@
 import {POST} from '@tetris/http'
 import assign from 'lodash/assign'
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 
 /**
  * sends a POST request to the create workspace API

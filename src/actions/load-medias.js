@@ -1,5 +1,5 @@
 import {GET} from '@tetris/http'
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 
 export function loadMedias (config) {
   return GET(`${process.env.ADPEEK_API_URL}/medias`, config)

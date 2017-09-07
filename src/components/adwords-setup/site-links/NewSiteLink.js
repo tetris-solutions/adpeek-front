@@ -1,5 +1,5 @@
 import React from 'react'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 import Form from '../../Form'
 import {Button, Submit} from '../../Button'
 import {style} from '../../campaign/edit/style'

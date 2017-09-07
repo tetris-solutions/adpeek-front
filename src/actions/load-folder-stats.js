@@ -1,6 +1,6 @@
 import {GET} from '@tetris/http'
 import {mergeResponseData} from '../functions/save-response-data'
-import {getApiFetchConfig, saveResponseTokenAsCookie, pushResponseErrorToState} from 'tetris-iso/utils'
+import {getApiFetchConfig, saveResponseTokenAsCookie, pushResponseErrorToState} from '@tetris/front-server/utils'
 
 function loadFolderStats (id, updateMode, config) {
   const qs = updateMode !== 'normal'

@@ -1,6 +1,6 @@
 import omitBy from 'lodash/omitBy'
 import includes from 'lodash/includes'
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 import {GET} from '@tetris/http'
 import filter from 'lodash/filter'
 import map from 'lodash/map'

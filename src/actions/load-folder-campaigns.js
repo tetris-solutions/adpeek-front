@@ -1,4 +1,4 @@
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 import {GET} from '@tetris/http'
 
 import {saveCampaigns} from '../functions/save-campaigns'

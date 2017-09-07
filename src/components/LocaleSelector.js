@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Select from './Select'
 import {branch} from './higher-order/branch'
-import {changeLocaleAction} from 'tetris-iso/actions'
+import {changeLocaleAction} from '@tetris/front-server/actions'
 
 const makeChangeEventHandler = dispatch => function onChange ({target: {value}}) {
   dispatch(changeLocaleAction, value)

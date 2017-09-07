@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import every from 'lodash/every'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 import {Card, Content, Header, Footer} from '../Card'
 import {Link} from 'react-router'
 

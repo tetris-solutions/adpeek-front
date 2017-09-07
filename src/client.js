@@ -1,9 +1,9 @@
 import './babel-helpers'
 import './polyfill'
-import {createClient} from 'tetris-iso/client'
+import {createClient} from '@tetris/front-server/client'
 import {getRoutes} from './routes/ui'
 import defaultState from './default-state'
-import {extend as extendBaseContext} from 'tetris-iso/base-context'
+import {extend as extendBaseContext} from '@tetris/front-server/base-context'
 import loglevel from 'loglevel'
 import Emitter from 'emmett'
 

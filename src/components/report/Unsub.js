@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {branch} from '../higher-order/branch'
 import UI from '../UI'
 import {Card, Header, Content} from '../Card'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 
 const Unsub = ({mailing, params}) => (
   <UI hideLogin>

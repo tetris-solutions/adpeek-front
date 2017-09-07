@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Modal from 'tetris-iso/Modal'
+import Modal from '@tetris/front-server/Modal'
 import EditBidStrategy from './BidStrategy'
 
 const EditBidStrategyModal = props =>

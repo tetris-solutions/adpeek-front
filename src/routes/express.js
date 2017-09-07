@@ -1,6 +1,6 @@
 import bind from 'lodash/bind'
 import forEach from 'lodash/forEach'
-import {protectedRouteMiddleware as protect, performActionsMiddleware as preload} from 'tetris-iso/server'
+import {protectedRouteMiddleware as protect, performActionsMiddleware as preload} from '@tetris/front-server/server'
 import {allowGuestMiddleware} from '../middlewares/allow-guest'
 import {protectSharedReportMiddleware} from '../middlewares/protect-shared-report'
 

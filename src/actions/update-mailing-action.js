@@ -1,5 +1,5 @@
 import assign from 'lodash/assign'
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 import {PUT} from '@tetris/http'
 import qs from 'query-string'
 import {getDeepCursor} from '../functions/get-deep-cursor'

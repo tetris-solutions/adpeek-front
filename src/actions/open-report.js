@@ -1,6 +1,6 @@
 import {PUT} from '@tetris/http'
 import assign from 'lodash/assign'
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 
 function openReport (company, report, config) {
   return PUT(`${process.env.ADPEEK_API_URL}/company/${company}/report/${report}/open`,

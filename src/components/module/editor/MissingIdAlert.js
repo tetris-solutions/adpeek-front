@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import csjs from 'csjs'
 import {Button} from '../../Button'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 import {styledFunctionalComponent} from '../../higher-order/styled'
 
 const style = csjs`

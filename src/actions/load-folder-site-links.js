@@ -1,6 +1,6 @@
 import {GET} from '@tetris/http'
 import {saveResponseData} from '../functions/save-response-data'
-import {getApiFetchConfig, saveResponseTokenAsCookie, pushResponseErrorToState} from 'tetris-iso/utils'
+import {getApiFetchConfig, saveResponseTokenAsCookie, pushResponseErrorToState} from '@tetris/front-server/utils'
 
 function loadFolderSiteLinks (folder, config) {
   return GET(`${process.env.ADPEEK_API_URL}/folder/${folder}/extension/site-links`, config)

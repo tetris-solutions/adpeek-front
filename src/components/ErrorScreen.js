@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {branch} from './higher-order/branch'
 import {Card, Content, Header, Footer} from './Card'
-import {forgetError} from 'tetris-iso/actions'
-import Message from 'tetris-iso/Message'
+import {forgetError} from '@tetris/front-server/actions'
+import Message from '@tetris/front-server/Message'
 import {Button} from './Button'
 
 function ErrorScreen ({error, dispatch}, {router}) {

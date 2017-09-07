@@ -1,7 +1,7 @@
 import React from 'react'
 import csjs from 'csjs'
 import {styledFunctionalComponent} from './higher-order/styled'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 
 const style = csjs`
 .notImplementedCard {

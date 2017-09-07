@@ -31,6 +31,7 @@
   "homepage": "https://github.com/tetris-solutions/adpeek-front#readme",
   "dependencies": {
     "@tetris/base-lib": "^0.1.0",
+    "@tetris/front-server": "^0.7.1",
     "@tetris/http": "^0.2.4",
     "babel-polyfill": "^6.26.0",
     "baobab": "^2.3.3",
@@ -66,7 +67,6 @@
     "recompose": "^0.25.0",
     "scrollto-with-animation": "^4.3.3",
     "stable": "^0.1.5",
-    "tetris-iso": "^0.6.7",
     "winston": "^2.2.0",
     "winston-logstash": "^0.3.0"
   },

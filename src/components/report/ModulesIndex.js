@@ -5,7 +5,7 @@ import scrollTo from 'scrollto-with-animation'
 import {NavBts, NavBt} from '../Navigation'
 import sortBy from 'lodash/sortBy'
 import {Button} from '../Button'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 
 /**
  *

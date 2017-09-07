@@ -1,5 +1,5 @@
 import {DELETE} from '@tetris/http'
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 import {getDeepCursor} from '../functions/get-deep-cursor'
 
 export function deleteWorkspace (workspace, config) {

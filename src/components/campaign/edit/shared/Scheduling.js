@@ -1,5 +1,5 @@
 import React from 'react'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 import PropTypes from 'prop-types'
 import Select from '../../../Select'
 import map from 'lodash/map'

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Calendar} from 'react-date-range'
-import Tooltip from 'tetris-iso/Tooltip'
+import Tooltip from '@tetris/front-server/Tooltip'
 import Input from './Input'
 
 const DatePicker = (props, {moment}) => {

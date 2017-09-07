@@ -12,7 +12,7 @@ import {loadReportModuleResultAction} from '../../actions/load-report-module-res
 import {createTask} from '../../functions/queue-hard-lift'
 import {updateModuleAction} from '../../actions/update-module'
 import Editor from './editor/Controller'
-import Modal from 'tetris-iso/Modal'
+import Modal from '@tetris/front-server/Modal'
 import DeleteButton from '../DeleteButton'
 import isEmpty from 'lodash/isEmpty'
 import filter from 'lodash/filter'

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 import Radio from '../../../Radio'
 import Input from '../../../Input'
 import map from 'lodash/map'

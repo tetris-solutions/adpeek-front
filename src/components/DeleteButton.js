@@ -1,8 +1,8 @@
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Button} from './Button'
-import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
+import ButtonWithPrompt from '@tetris/front-server/ButtonWithPrompt'
 import flow from 'lodash/flow'
 
 const Prompt = ({entityName, onConfirm, onCancel}) => (

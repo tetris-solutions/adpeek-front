@@ -1,5 +1,5 @@
 import isNumber from 'lodash/isNumber'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 import React from 'react'
 import PropTypes from 'prop-types'
 import {prettyNumber} from '../../../functions/pretty-number'

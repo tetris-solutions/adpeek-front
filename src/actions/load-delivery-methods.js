@@ -1,5 +1,5 @@
 import {GET} from '@tetris/http'
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 
 export function loadDeliveryMethods (config) {
   return GET(`${process.env.ADPEEK_API_URL}/delivery_methods`, config)

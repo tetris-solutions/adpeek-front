@@ -1,7 +1,7 @@
 import csjs from 'csjs'
 import {Button, Submit} from '../../Button'
 import forEach from 'lodash/forEach'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 import React from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'

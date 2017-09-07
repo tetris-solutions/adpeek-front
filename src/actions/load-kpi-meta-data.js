@@ -1,5 +1,5 @@
 import {GET} from '@tetris/http'
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 import merge from 'lodash/merge'
 
 function loadKPIMetadata (kpi, platform, config) {

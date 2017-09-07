@@ -1,5 +1,5 @@
 import {POST} from '@tetris/http'
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 import assign from 'lodash/assign'
 import {saveResponseData} from '../functions/save-response-data'
 import concat from 'lodash/concat'

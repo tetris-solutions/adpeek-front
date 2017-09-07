@@ -1,5 +1,5 @@
 import React from 'react'
-import Modal from 'tetris-iso/Modal'
+import Modal from '@tetris/front-server/Modal'
 import EditGeoLocation from './GeoLocation'
 import PropTypes from 'prop-types'
 

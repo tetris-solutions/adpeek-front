@@ -4,7 +4,7 @@ import {styledFunctionalComponent} from '../../higher-order/styled'
 import {loadFolderChannelAction} from '../../../actions/load-folder-channel'
 import csjs from 'csjs'
 import {withState} from 'recompose'
-import Modal from 'tetris-iso/Modal'
+import Modal from '@tetris/front-server/Modal'
 import floor from 'lodash/floor'
 
 const style = csjs`

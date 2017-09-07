@@ -1,5 +1,5 @@
 import qs from 'query-string'
-import {protectedRouteMiddleware} from 'tetris-iso/server'
+import {protectedRouteMiddleware} from '@tetris/front-server/server'
 import pick from 'lodash/pick'
 
 export function protectSharedReportMiddleware (req, res, next) {

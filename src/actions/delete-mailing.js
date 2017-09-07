@@ -1,4 +1,4 @@
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 import {DELETE} from '@tetris/http'
 import compact from 'lodash/compact'
 import {getDeepCursor} from '../functions/get-deep-cursor'

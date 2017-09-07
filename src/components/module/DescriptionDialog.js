@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Button} from '../Button'
-import Message from 'tetris-iso/Message'
-import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
+import Message from '@tetris/front-server/Message'
+import ButtonWithPrompt from '@tetris/front-server/ButtonWithPrompt'
 
 const DescriptionDialog = ({module}, {messages}) => (
   <ButtonWithPrompt

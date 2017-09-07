@@ -1,5 +1,5 @@
 import {POST} from '@tetris/http'
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 import forEach from 'lodash/forEach'
 import {getDeepCursor} from '../functions/get-deep-cursor'
 import assign from 'lodash/assign'

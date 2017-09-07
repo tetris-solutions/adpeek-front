@@ -1,5 +1,5 @@
 import path from 'path'
-import {createServer} from 'tetris-iso/server'
+import {createServer} from '@tetris/front-server/server'
 import {setAppRoutes} from './routes/express'
 import defaultState from './default-state'
 import {getRoutes} from './routes/ui'

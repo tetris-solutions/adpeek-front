@@ -1,6 +1,6 @@
 import {GET} from '@tetris/http'
 import {saveResponseData} from '../functions/save-response-data'
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 import find from 'lodash/find'
 
 export function loadCompanyRoles (id, config) {

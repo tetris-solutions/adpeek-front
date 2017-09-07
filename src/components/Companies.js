@@ -1,5 +1,5 @@
 import map from 'lodash/map'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 import React from 'react'
 import PropTypes from 'prop-types'
 import {branch, routeParamsBasedBranch} from './higher-order/branch'

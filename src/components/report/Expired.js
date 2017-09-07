@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import UI from '../UI'
 import {Card, Header, Content, Footer} from '../Card'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 
 const makeLoginUrl = ({pathname, search}) => (
   process.env.FRONT_URL + '/login?next=' + encodeURIComponent(

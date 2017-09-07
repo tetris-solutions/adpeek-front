@@ -1,5 +1,5 @@
 import React from 'react'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 import {breakOnEmptyProp} from '../../higher-order/not-nullable'
 import {relativeBranch} from '../../higher-order/branch'
 import {loadAccountDetailsAction} from '../../../actions/load-account-details'

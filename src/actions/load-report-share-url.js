@@ -1,4 +1,4 @@
-import {getApiFetchConfig, saveResponseTokenAsCookie, pushResponseErrorToState} from 'tetris-iso/utils'
+import {getApiFetchConfig, saveResponseTokenAsCookie, pushResponseErrorToState} from '@tetris/front-server/utils'
 import {GET} from '@tetris/http'
 import {inferLevelFromParams} from '../functions/infer-level-from-params'
 import compact from 'lodash/compact'

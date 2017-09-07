@@ -1,4 +1,4 @@
-import {saveResponseTokenAsCookie, getApiFetchConfig} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig} from '@tetris/front-server/utils'
 import {PUT} from '@tetris/http'
 import qs from 'query-string'
 

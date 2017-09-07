@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Button} from '../Button'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 import DateRangePicker from '../DateRangePicker'
-import ButtonWithPrompt from 'tetris-iso/ButtonWithPrompt'
+import ButtonWithPrompt from '@tetris/front-server/ButtonWithPrompt'
 import memoize from 'lodash/memoize'
 
 const calculateDateRanges = memoize(({nextWeek, nextMonth, nextSemester, nextYear}) => ({

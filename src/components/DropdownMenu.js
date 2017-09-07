@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {Link} from 'react-router'
 import csjs from 'csjs'
 import {styledComponent} from './higher-order/styled'
-import Tooltip from 'tetris-iso/Tooltip'
+import Tooltip from '@tetris/front-server/Tooltip'
 import omit from 'lodash/omit'
 
 const style = csjs`

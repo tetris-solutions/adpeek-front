@@ -1,5 +1,5 @@
 import {PUT} from '@tetris/http'
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 import assign from 'lodash/assign'
 
 function updateAdGroupPlatform (campaign, adGroup, platforms, config) {

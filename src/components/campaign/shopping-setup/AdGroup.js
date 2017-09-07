@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 import {routeParamsBasedBranch} from '../../higher-order/branch'
 import {loadAdGroupPartitionsAction} from '../../../actions/load-adgroup-partitions'
 import {liveEditAdGroupAction} from '../../../actions/update-campaign-creatives'

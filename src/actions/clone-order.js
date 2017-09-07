@@ -1,6 +1,6 @@
 import {POST} from '@tetris/http'
 import assign from 'lodash/assign'
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 
 export function cloneOrder (originalOrderId, newOrder, config) {
   return POST(`${process.env.ADPEEK_API_URL}/order/${originalOrderId}/clone`, assign({body: newOrder}, config))

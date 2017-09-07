@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {routeParamsBasedBranch} from '../higher-order/branch'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 import startsWith from 'lodash/startsWith'
 import {Navigation, NavBt, NavLink, NavBts, Name} from '../Navigation'
 import qs from 'query-string'

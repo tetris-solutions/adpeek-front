@@ -1,6 +1,6 @@
 import omit from 'lodash/omit'
 import FormMixin from '../mixins/FormMixin'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 import React from 'react'
 import createReactClass from 'create-react-class'
 import PropTypes from 'prop-types'

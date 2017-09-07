@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Radio from '../../../Radio'
-import Message from 'tetris-iso/Message'
+import Message from '@tetris/front-server/Message'
 import SharedStrategy from './SharedStrategy'
 
 const PageOnePromoted = props => (

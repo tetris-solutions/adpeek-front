@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Modal from 'tetris-iso/Modal'
+import Modal from '@tetris/front-server/Modal'
 import {styledComponent} from '../higher-order/styled'
 import {liveEditKeywordAction, removeKeywordAction} from '../../actions/update-campaign-creatives'
 import csjs from 'csjs'

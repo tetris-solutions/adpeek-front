@@ -1,5 +1,5 @@
 import {DELETE, PUT} from '@tetris/http'
-import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from 'tetris-iso/utils'
+import {saveResponseTokenAsCookie, getApiFetchConfig, pushResponseErrorToState} from '@tetris/front-server/utils'
 import {getDeepCursor} from '../functions/get-deep-cursor'
 import compact from 'lodash/compact'
 
