@@ -15,40 +15,69 @@ import {canSkipReportEditPrompt} from '../../functions/can-skip-report-edit-prom
 import ReportAsideHeader from './AsideHeader'
 import compact from 'lodash/compact'
 import join from 'lodash/join'
-
 import {Modules} from './ModulesIndex'
 import Icon from './Icon'
 
 const createModule = () => window.event$.emit('report.onNewModuleClick')
 
-export function ReportAside ({report, user, dispatch}, {messages, locales, router, location: {pathname, search}, params}) {
-  const {company, workspace, folder} = params
+class ReportAsideMenu extends React.Component {
+  static displayName = 'Report-Aside-Menu'
 
-  const scopeUrl = '/' +
-    join(compact([
-      `c/${company}`,
-      workspace && `w/${workspace}`,
-      folder && `f/${folder}`
-    ]), '/')
+  static propTypes = {
+    canEditReport: PropTypes.bool.isRequired,
+    canBrowseReports: PropTypes.bool.isRequired,
+    user: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    report: PropTypes.shape({
+      id: PropTypes.string,
+      modules: PropTypes.array
+    })
+  }
 
-  const deleteReport = () => {
+  static contextTypes = {
+    messages: PropTypes.object,
+    locales: PropTypes.string,
+    router: PropTypes.object,
+    location: PropTypes.object,
+    params: PropTypes.shape({
+      company: PropTypes.string.isRequired,
+      workspace: PropTypes.string,
+      folder: PropTypes.string
+    }).isRequired
+  }
+
+  getScopeUrl () {
+    const {company, workspace, folder} = this.context.params
+
+    return '/' +
+      join(compact([
+        `c/${company}`,
+        workspace && `w/${workspace}`,
+        folder && `f/${folder}`
+      ]), '/')
+  }
+
+  onClickDelete () {
+    const {params, router} = this.context
+    const {dispatch, report} = this.props
+
     dispatch(deleteReportAction, params, report.id)
       .then(() => {
-        router.push(`${scopeUrl}/reports`)
+        router.push(`${this.getScopeUrl()}/reports`)
       })
   }
 
-  const inEditMode = endsWith(pathname, '/edit')
-  const cloneName = new TextMessage(messages.copyOfName, locales).format({name: report.name})
-  const shouldSkipEditPrompt = report.is_private || canSkipReportEditPrompt()
+  render () {
+    const {messages, locales, location: {pathname, search}, params} = this.context
+    const {report, user, dispatch, canBrowseReports} = this.props
+    let {canEditReport} = this.props
 
-  const cloneUrl = `${scopeUrl}/reports/new?clone=${report.id}&name=${cloneName}`
-  const reportUrl = `${scopeUrl}/r/${report.id}`
-
-  /* eslint-disable */
-  function navigation ({canEditReport, canBrowseReports}) {
-    /* eslint-enable */
-
+    const inEditMode = endsWith(pathname, '/edit')
+    const cloneName = new TextMessage(messages.copyOfName, locales).format({name: report.name})
+    const shouldSkipEditPrompt = report.is_private || canSkipReportEditPrompt()
+    const scopeUrl = this.getScopeUrl()
+    const cloneUrl = `${scopeUrl}/reports/new?clone=${report.id}&name=${cloneName}`
+    const reportUrl = `${scopeUrl}/r/${report.id}`
     const isGlobalReport = !report.company
     const canCloneReport = canEditReport
 
@@ -94,7 +123,7 @@ export function ReportAside ({report, user, dispatch}, {messages, locales, route
             </NavBt>)}
 
           {canEditReport && (
-            <NavBt tag={DeleteButton} entityName={report.name} onClick={deleteReport} icon='delete'>
+            <NavBt tag={DeleteButton} entityName={report.name} onClick={this.onClickDelete} icon='delete'>
               <Message>deleteReport</Message>
             </NavBt>)}
 
@@ -105,26 +134,17 @@ export function ReportAside ({report, user, dispatch}, {messages, locales, route
       </Navigation>
     )
   }
-
-  return <Fence canEditReport canBrowseReports>{navigation}</Fence>
 }
+
+const ReportAside = props =>
+  <Fence canEditReport canBrowseReports>{({canEditReport, canBrowseReports}) =>
+    <ReportAsideMenu
+      {...props}
+      canEditReport={canEditReport}
+      canBrowseReports={canBrowseReports}/>}
+  </Fence>
 
 ReportAside.displayName = 'Report-Aside'
-ReportAside.propTypes = {
-  dispatch: PropTypes.func,
-  user: PropTypes.object,
-  report: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string
-  })
-}
-ReportAside.contextTypes = {
-  messages: PropTypes.object,
-  locales: PropTypes.string,
-  router: PropTypes.object,
-  location: PropTypes.object,
-  params: PropTypes.object
-}
 
 export default many([
   {user: ['user']},

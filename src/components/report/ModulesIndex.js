@@ -4,6 +4,14 @@ import map from 'lodash/map'
 import scrollTo from 'scrollto-with-animation'
 import sortBy from 'lodash/sortBy'
 import {DropdownMenu, MenuItem} from '../DropdownMenu'
+import {styledFunctionalComponent} from '../higher-order/styled'
+import csjs from 'csjs'
+
+const style = csjs`
+.menu {
+  max-height: 336px;
+  overflow-y: auto;
+}`
 
 /**
  *
@@ -34,17 +42,19 @@ const iconFor = {
   total: 'looks_one'
 }
 
-export const Modules = ({name, modules, exit}) =>
-  <DropdownMenu position='top right inside outside'>
+const _Modules = ({name, modules, exit}) =>
+  <DropdownMenu position='top right inside outside' className={style.menu}>
     {map(sortBy(modules, 'y'), ({id, name, type}) =>
       <MenuItem key={id} onClick={scrollToModule(id)} icon={iconFor[type] || 'timeline'}>
         {name}
       </MenuItem>)}
   </DropdownMenu>
 
-Modules.displayName = 'Modules'
-Modules.propTypes = {
+_Modules.displayName = 'Modules'
+_Modules.propTypes = {
   exit: PropTypes.func,
   name: PropTypes.string,
   modules: PropTypes.array
 }
+
+export const Modules = styledFunctionalComponent(_Modules, style)

@@ -111,6 +111,7 @@ HeaderMenuItem.propTypes = {
 class DMenu extends React.Component {
   static displayName = 'Dropdown-Menu'
   static propTypes = {
+    className: PropTypes.string,
     position: PropTypes.string,
     children: PropTypes.node.isRequired,
     provide: PropTypes.array,
@@ -119,16 +120,17 @@ class DMenu extends React.Component {
   }
 
   static defaultProps = {
+    className: '',
     provide: [],
     hover: false,
     persist: false
   }
 
   render () {
-    const {children, provide, hover, persist, position} = this.props
+    const {children, provide, hover, persist, position, className} = this.props
     return (
       <Tooltip provide={provide} hover={hover} persist={persist} position={position}>
-        <div className={`mdl-menu__container is-visible ${style.menu}`}>
+        <div className={`mdl-menu__container is-visible ${style.menu} ${className}`}>
           <ul className={`mdl-menu ${style.options}`}>
             {children}
           </ul>
