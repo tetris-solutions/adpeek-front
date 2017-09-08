@@ -2,10 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import map from 'lodash/map'
 import scrollTo from 'scrollto-with-animation'
-import {NavBts, NavBt} from '../Navigation'
 import sortBy from 'lodash/sortBy'
-import {Button} from '../Button'
-import Message from '@tetris/front-server/Message'
+import {DropdownMenu, MenuItem} from '../DropdownMenu'
 
 /**
  *
@@ -34,16 +32,12 @@ const iconFor = {
 }
 
 export const Modules = ({name, modules, exit}) =>
-  <NavBts>
+  <DropdownMenu position='top right outside inside'>
     {map(sortBy(modules, 'y'), ({id, name, type}) =>
-      <NavBt key={id} tag={Button} onClick={scrollToModule(id)} icon={iconFor[type] || 'timeline'}>
+      <MenuItem key={id} onClick={scrollToModule(id)} icon={iconFor[type] || 'timeline'}>
         {name}
-      </NavBt>)}
-
-    <NavBt tag={Button} onClick={exit} icon='close'>
-      <Message>oneLevelUpNavigation</Message>
-    </NavBt>
-  </NavBts>
+      </MenuItem>)}
+  </DropdownMenu>
 
 Modules.displayName = 'Modules'
 Modules.propTypes = {

@@ -36,6 +36,7 @@ const style = csjs`
 }
 .button {
   display: block;
+  cursor: pointer;
   margin: .7em 0;
   padding: 0;
   line-height: 3.5em;

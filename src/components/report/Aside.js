@@ -18,12 +18,10 @@ import join from 'lodash/join'
 
 import {Modules} from './ModulesIndex'
 import Icon from './Icon'
-import {withState} from 'recompose'
 
-const indexModeToggle = withState('indexMode', 'setIndexMode', false)
 const createModule = () => window.event$.emit('report.onNewModuleClick')
 
-export function ReportAside ({report, user, dispatch, indexMode, setIndexMode}, {messages, locales, router, location: {pathname, search}, params}) {
+export function ReportAside ({report, user, dispatch}, {messages, locales, router, location: {pathname, search}, params}) {
   const {company, workspace, folder} = params
 
   const scopeUrl = '/' +
@@ -67,46 +65,43 @@ export function ReportAside ({report, user, dispatch, indexMode, setIndexMode}, 
     return (
       <Navigation icon={<Icon {...report}/>}>
         <ReportAsideHeader {...{dispatch, params, report, inEditMode}}/>
+        <NavBts>
+          <NavBt icon='list'>
+            <Message>moduleIndexLabel</Message>
+            <Modules {...report}/>
+          </NavBt>
 
-        {indexMode
-          ? <Modules {...report} exit={() => setIndexMode(false)}/>
-          : (
-            <NavBts>
-              <NavBt icon='list' onClick={() => setIndexMode(true)}>
-                <Message>moduleIndexLabel</Message>
-              </NavBt>
+          {inEditMode && canEditReport && (
+            <NavBt onClick={createModule} icon='add'>
+              <Message>newModule</Message>
+            </NavBt>)}
 
-              {inEditMode && canEditReport && (
-                <NavBt onClick={createModule} icon='add'>
-                  <Message>newModule</Message>
-                </NavBt>)}
+          {canEditReport && !inEditMode && shouldSkipEditPrompt && (
+            <NavBt tag={Link} to={`${reportUrl}/edit${search}`} icon='create'>
+              <Message>editReport</Message>
+            </NavBt>)}
 
-              {canEditReport && !inEditMode && shouldSkipEditPrompt && (
-                <NavBt tag={Link} to={`${reportUrl}/edit${search}`} icon='create'>
-                  <Message>editReport</Message>
-                </NavBt>)}
+          {canEditReport && !inEditMode && !shouldSkipEditPrompt && (
+            <NavBt
+              tag={ReportEditPrompt}
+              report={report}
+              params={params}
+              icon='create'/>)}
 
-              {canEditReport && !inEditMode && !shouldSkipEditPrompt && (
-                <NavBt
-                  tag={ReportEditPrompt}
-                  report={report}
-                  params={params}
-                  icon='create'/>)}
+          {canCloneReport && (
+            <NavBt tag={Link} to={cloneUrl} icon='content_copy'>
+              <Message>cloneReport</Message>
+            </NavBt>)}
 
-              {canCloneReport && (
-                <NavBt tag={Link} to={cloneUrl} icon='content_copy'>
-                  <Message>cloneReport</Message>
-                </NavBt>)}
+          {canEditReport && (
+            <NavBt tag={DeleteButton} entityName={report.name} onClick={deleteReport} icon='delete'>
+              <Message>deleteReport</Message>
+            </NavBt>)}
 
-              {canEditReport && (
-                <NavBt tag={DeleteButton} entityName={report.name} onClick={deleteReport} icon='delete'>
-                  <Message>deleteReport</Message>
-                </NavBt>)}
-
-              <NavBt tag={Link} to={backUrl} icon='close'>
-                <Message>oneLevelUpNavigation</Message>
-              </NavBt>
-            </NavBts>)}
+          <NavBt tag={Link} to={backUrl} icon='close'>
+            <Message>oneLevelUpNavigation</Message>
+          </NavBt>
+        </NavBts>
       </Navigation>
     )
   }
@@ -121,9 +116,7 @@ ReportAside.propTypes = {
   report: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string
-  }),
-  indexMode: PropTypes.bool,
-  setIndexMode: PropTypes.func
+  })
 }
 ReportAside.contextTypes = {
   messages: PropTypes.object,
@@ -136,4 +129,4 @@ ReportAside.contextTypes = {
 export default many([
   {user: ['user']},
   [inferLevelFromProps, 'report']
-], indexModeToggle(ReportAside))
+], ReportAside)
