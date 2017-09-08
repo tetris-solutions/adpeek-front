@@ -31,7 +31,7 @@
   "homepage": "https://github.com/tetris-solutions/adpeek-front#readme",
   "dependencies": {
     "@tetris/base-lib": "^0.1.0",
-    "@tetris/front-server": "^0.7.2",
+    "@tetris/front-server": "^0.7.3",
     "@tetris/http": "^0.2.4",
     "babel-polyfill": "^6.26.0",
     "baobab": "^2.3.3",

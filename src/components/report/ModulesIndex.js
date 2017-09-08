@@ -32,7 +32,7 @@ const iconFor = {
 }
 
 export const Modules = ({name, modules, exit}) =>
-  <DropdownMenu position='top right outside inside'>
+  <DropdownMenu position='top right inside outside'>
     {map(sortBy(modules, 'y'), ({id, name, type}) =>
       <MenuItem key={id} onClick={scrollToModule(id)} icon={iconFor[type] || 'timeline'}>
         {name}

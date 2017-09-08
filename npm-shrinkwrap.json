@@ -19,9 +19,9 @@
       "integrity": "sha1-x9a+pt/BNuk1H3rYSYajiwOZAjA="
     },
     "@tetris/front-server": {
-      "version": "0.7.2",
-      "resolved": "https://registry.npmjs.org/@tetris/front-server/-/front-server-0.7.2.tgz",
-      "integrity": "sha512-CfqPFlj+RoWPto8ZDnNwwwX15ayqgg3uZdf3agxJWW4vNSVfSZw/gmLej95AtBmC7JFMTQcxZI8omFgr93AaZA==",
+      "version": "0.7.3",
+      "resolved": "https://registry.npmjs.org/@tetris/front-server/-/front-server-0.7.3.tgz",
+      "integrity": "sha512-VTtAe//VTih8ZKK6xgZCgMj5PtkHWOO59x5I5akrSgO7/ZHg+rpHe4Jd67ndvGMPAr1RzuuISNGxsNOxobsVFw==",
       "requires": {
         "@tetris/debug-middleware": "0.1.0",
         "@tetris/locale-middleware": "0.1.1",
