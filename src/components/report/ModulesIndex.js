@@ -20,7 +20,10 @@ const scrollToModule = id => () => {
 
   if (!module) return
 
-  scrollTo(main, 'scrollTop', top(module) - top(main))
+  scrollTo(main, 'scrollTop',
+    module.previousElementSibling // just scroll all the way up for the first module
+      ? (top(module) + main.scrollTop) - top(main) - 5
+      : 0)
 }
 
 const iconFor = {
