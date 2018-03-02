@@ -97,6 +97,7 @@ class CreateAdwordsCampaign extends React.Component {
   onSubmit = () => {
     const {dispatch, params} = this.props
     const {company, workspace, folder} = params
+    const {name} = this.state
 
     const create = () => dispatch(createCampaignAction, params, this.state)
     const reload = () => dispatch(loadFolderCampaignsAction, company, workspace, folder)
@@ -106,7 +107,7 @@ class CreateAdwordsCampaign extends React.Component {
         .then(() => createResponse))
       .then(({data: {id}}) => {
         this.context.router
-          .push(`/c/${company}/w/${workspace}/f/${folder}/c/${id}`)
+          .push(`/c/${company}/w/${workspace}/f/${folder}/c/${name}`)
       })
   }
 
