@@ -24,7 +24,7 @@ const nullifiedValues = assign({}, ...map(valueFields, aNull))
 
 const isCategory = partition => (
   partition.dimension &&
-  partition.dimension.ProductDimensionType === 'ProductBiddingCategory' &&
+  partition.dimension.productDimensionType === 'ProductBiddingCategory' &&
   Boolean(partition.dimension.value)
 )
 
@@ -49,7 +49,7 @@ function normalize (partition) {
     partition.dimension = assign({}, partition.dimension)
     partition.dimension.type = (
       partition.dimension.type ||
-      productScopeClasses[partition.dimension.ProductDimensionType].defaultType
+      productScopeClasses[partition.dimension.productDimensionType].defaultType
     )
   }
 
@@ -110,7 +110,7 @@ function mountTree (partitions, categories) {
 
     if (branch.dimension) {
       branch.dimension = assign({
-        type: productScopeClasses[branch.dimension.ProductDimensionType].defaultType
+        type: productScopeClasses[branch.dimension.productDimensionType].defaultType
       }, branch.dimension)
     }
 
@@ -236,7 +236,7 @@ class AdGroup extends React.Component {
     // @todo adapt for non-binary trees
 
     child.dimension = {
-      ProductDimensionType: 'ProductOfferId',
+      productDimensionType: 'ProductOfferId',
       type: 'OFFER_ID',
       value: ''
     }

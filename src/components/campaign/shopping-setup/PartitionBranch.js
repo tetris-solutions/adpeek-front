@@ -23,7 +23,7 @@ const parseCategory = ({name: text, value}) => ({text, value})
 function isBiddingCategory (dimension) {
   return (
     dimension &&
-    dimension.ProductDimensionType === 'ProductBiddingCategory' &&
+    dimension.productDimensionType === 'ProductBiddingCategory' &&
     dimension.value !== null
   )
 }
@@ -55,7 +55,7 @@ class PartitionBranch extends React.Component {
     cpc: PropTypes.number,
     dimension: PropTypes.shape({
       id: PropTypes.string,
-      ProductDimensionType: PropTypes.string,
+      productDimensionType: PropTypes.string,
       type: PropTypes.string,
       channel: PropTypes.string,
       channelExclusivity: PropTypes.string,
@@ -160,7 +160,7 @@ class PartitionBranch extends React.Component {
       const dimension = {[name]: value}
 
       if (name === 'type') {
-        dimension.ProductDimensionType = productScopeTypes[value].scopeClass
+        dimension.productDimensionType = productScopeTypes[value].scopeClass
         dimension.value = ''
       }
 

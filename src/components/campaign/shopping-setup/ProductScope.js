@@ -17,7 +17,7 @@ import first from 'lodash/first'
 import isEmpty from 'lodash/isEmpty'
 
 const normalize = ls => map(ls, p => assign({
-  type: productScopeClasses[p.ProductDimensionType].defaultType
+  type: productScopeClasses[p.productDimensionType].defaultType
 }, p))
 const availableTypes = map(productScopeTypes, (d, type) =>
   assign({}, d, {type}))
@@ -52,7 +52,7 @@ class ProductScope extends React.Component {
 
     const dimensions = concat(this.state.dimensions, {
       type: next.type,
-      ProductDimensionType: next.scopeClass,
+      productDimensionType: next.scopeClass,
       value: null
     })
 
@@ -97,7 +97,7 @@ class ProductScope extends React.Component {
     return (currentDimension, myIndex) => {
       const config = productScopeTypes[currentDimension.type]
 
-      const scope = assign({ProductDimensionType: config.scopeClass}, currentDimension, {
+      const scope = assign({productDimensionType: config.scopeClass}, currentDimension, {
         id: myIndex,
         config,
         categories,

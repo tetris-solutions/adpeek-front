@@ -44,7 +44,7 @@ class ProductScopeEditor extends React.PureComponent {
     const newConfig = productScopeTypes[type]
 
     update(id, {
-      ProductDimensionType: newConfig.scopeClass,
+      productDimensionType: newConfig.scopeClass,
       [newConfig.valueField]: null,
       [config.valueField]: null,
       type
