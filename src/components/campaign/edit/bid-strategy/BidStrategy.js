@@ -15,7 +15,6 @@ import camelCase from 'lodash/camelCase'
 import ManualCPC from './ManualCPC'
 import TargetCPA from './TargetCPA'
 import TargetROAS from './TargetROAS'
-import EnhancedCPC from './EnhancedCPC'
 import TargetSpend from './TargetSpend'
 import TargetOutrankShare from './TargetOutrankShare'
 import PageOnePromoted from './PageOnePromoted'
@@ -44,7 +43,6 @@ const changed = (a, b) => (
 const isset = a => a !== undefined
 const types = {
   MANUAL_CPC: ManualCPC,
-  ENHANCED_CPC: EnhancedCPC,
   TARGET_CPA: TargetCPA,
   TARGET_ROAS: TargetROAS,
   TARGET_SPEND: TargetSpend,
@@ -54,7 +52,6 @@ const types = {
 }
 
 const sharedOnly = [
-  'ENHANCED_CPC',
   'TARGET_OUTRANK_SHARE',
   'PAGE_ONE_PROMOTED'
 ]
@@ -104,12 +101,10 @@ class EditBidStrategy extends React.PureComponent {
       isLoading: false,
       strategyName: null,
       strategyId: details.bidding_strategy_id,
-      enhancedCPC: details.enhanced_cpc,
       type: details.bidding_strategy_type,
       targetCPA: details.cpa,
       targetROAS: details.roas,
-      spendBidCeiling: details.spend_bid_ceiling,
-      spendEnhancedCPC: details.spend_enhanced_cpc
+      spendBidCeiling: details.spend_bid_ceiling
     })
   }
 
@@ -178,19 +173,6 @@ class EditBidStrategy extends React.PureComponent {
             newState.targetROAS,
             scheme.targetRoas,
             currentState.targetROAS)
-          break
-
-        case 'TARGET_SPEND':
-          if (newState.useSharedStrategy) {
-            newState.spendEnhancedCPC = null
-          } else if (!isset(newState.spendEnhancedCPC)) {
-            newState.spendEnhancedCPC = currentState.spendEnhancedCPC
-          }
-
-          newState.spendBidCeiling = firstNumber(
-            newState.spendBidCeiling,
-            scheme.bidCeiling,
-            currentState.spendBidCeiling)
           break
 
         case 'PAGE_ONE_PROMOTED':
