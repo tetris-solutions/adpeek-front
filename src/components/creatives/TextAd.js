@@ -34,6 +34,7 @@ class TextAd extends React.PureComponent {
     headline: PropTypes.string,
     headline_part_1: PropTypes.string,
     headline_part_2: PropTypes.string,
+    headline_part_3: PropTypes.string,
     display_url: PropTypes.string,
     description: PropTypes.string,
     description_1: PropTypes.string,
@@ -90,6 +91,7 @@ class TextAd extends React.PureComponent {
       ad.headline,
       ad.headline_part_1,
       ad.headline_part_2,
+      ad.headline_part_3,
       ad.description,
       ad.description_1,
       ad.description_2
@@ -131,7 +133,19 @@ class TextAd extends React.PureComponent {
                   placeholder={messages.adHeadline2Placeholder}
                   value={ad.headline_part_2}
                   onChange={this.onChange}/>
-                : ad.headline_part_2}</h6>}
+                : ad.headline_part_2}
+
+              {!editMode && <br/>}
+
+              {editMode
+                ? <CleanInput
+                  block
+                  name='headline_part_3'
+                  maxLength={30}
+                  placeholder={messages.adHeadline3Placeholder}
+                  value={ad.headline_part_3}
+                  onChange={this.onChange}/>
+                : ad.headline_part_3}</h6>}
 
           {ad.kpi && <KPI kpi={ad.kpi}/>}
 
@@ -198,7 +212,7 @@ class TextAd extends React.PureComponent {
                     <CleanInput
                       value={url}
                       style={{width: '100%'}}
-                      placeholder='example.com'
+                      placeholder='examples.com'
                       onChange={this.onChange}
                       name='final_urls'/>
                   ) : url}
@@ -210,7 +224,7 @@ class TextAd extends React.PureComponent {
           <Modal size='small' minHeight={0} onEscPress={() => closeModal('ad')}>
             <AdEdit
               close={() => closeModal('ad')}
-              name={join(compact([ad.headline, ad.headline_part_1, ad.headline_part_2]), ' ')}
+              name={join(compact([ad.headline, ad.headline_part_1, ad.headline_part_2, ad.headline_part_3]), ' ')}
               status={ad.status}
               onChange={this.onChange}/>
           </Modal>)}

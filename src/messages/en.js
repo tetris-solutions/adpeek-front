@@ -522,6 +522,7 @@ module.exports = {
   callOnlyAd: 'Call-Only Ad',
   adHeadline1Placeholder: 'Title 1',
   adHeadline2Placeholder: 'Title 2',
+  adHeadline3Placeholder: 'Title 3',
   adDescriptionPlaceholder: 'Description',
   adDescription1Placeholder: 'Description 1',
   adDescription2Placeholder: 'Description 2',

@@ -22,7 +22,8 @@ function normalize (item) {
   if (item.headline_part_1) {
     item.headline = (
       trim(item.headline_part_1) + ' ' +
-      trim(item.headline_part_2)
+      trim(item.headline_part_2) + ' ' +
+      trim(item.headline_part_3)
     )
   }
 

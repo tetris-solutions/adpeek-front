@@ -26,6 +26,7 @@ export function pushAdAction (tree, {company, workspace, folder, campaign, adGro
     case 'EXPANDED_TEXT_AD':
       ad.headline_part_1 = ''
       ad.headline_part_2 = ''
+      ad.headline_part_3 = ''
       ad.path_1 = ''
       ad.path_2 = ''
       ad.final_urls = ['']
