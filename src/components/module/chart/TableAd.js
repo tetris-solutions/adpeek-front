@@ -5,17 +5,20 @@ import {findTemplateAdUrl} from '../../../functions/find-template-ad-url'
 import {findImageAdUrl} from '../../../functions/find-image-ad-url'
 
 import AdCreative from './TableCreative'
-const TextAd = ({description, headline}) => (
+const TextAd = ({description, description_2, headline}) => (
   <div>
     <strong>{headline}</strong>
     <br/>
     <small>{description}</small>
+    <br/>
+    <small>{description_2}</small>
   </div>
 )
 
 TextAd.displayName = 'Text-Ad'
 TextAd.propTypes = {
   description: PropTypes.string.isRequired,
+  description_2: PropTypes.string.isRequired,
   headline: PropTypes.string.isRequired
 }
 
