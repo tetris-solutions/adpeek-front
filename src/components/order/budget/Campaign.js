@@ -58,8 +58,7 @@ class BudgetCampaign extends React.Component {
     return (
       !this.props.maybeDisabled ||
       this.isEmptyBudget() || (
-        !this.isFacebook() &&
-        !this.isConversionOptimized()
+        !this.isFacebook()
       )
     )
   }
