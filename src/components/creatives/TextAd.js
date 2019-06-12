@@ -39,6 +39,8 @@ class TextAd extends React.PureComponent {
     description: PropTypes.string,
     description_1: PropTypes.string,
     description_2: PropTypes.string,
+    responsive_search_ad_headlines: PropTypes.string,
+    responsive_search_ad_descriptions: PropTypes.string,
     final_urls: PropTypes.array,
     path_1: PropTypes.string,
     path_2: PropTypes.string

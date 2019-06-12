@@ -67,6 +67,10 @@ function ReportModuleTableAd (props) {
     return <TextAd {...props} />
   }
 
+  if (type === 'RESPONSIVE_SEARCH_AD') {
+    return <TextAd {...props} />
+  }
+
   if (type === 'IMAGE_AD') {
     return <ImageAd {...props} />
   }

@@ -27,6 +27,21 @@ function normalize (item) {
     )
   }
 
+  if (item.responsive_search_ad_headlines) {
+    item.headline = (
+      item.responsive_search_ad_headlines.join(' || ')
+    )
+  }
+
+  if (item.responsive_search_ad_descriptions) {
+    item.description = (
+      item.responsive_search_ad_descriptions[0] + ' ...'
+    )
+    item.description_2 = (
+      item.responsive_search_ad_descriptions[1] + ' ...'
+    )
+  }
+
   return item
 }
 
