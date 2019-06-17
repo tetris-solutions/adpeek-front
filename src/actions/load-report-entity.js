@@ -14,22 +14,22 @@ import trim from 'lodash/trim'
 function normalize (item) {
   if (item.description_1) {
     item.description = (
-      trim(item.description_1) + ' ' +
+      trim(item.description_1) + ' | ' +
       trim(item.description_2)
     )
   }
 
   if (item.headline_part_1) {
     item.headline = (
-      trim(item.headline_part_1) + ' ' +
-      trim(item.headline_part_2) + ' ' +
+      trim(item.headline_part_1) + ' | ' +
+      trim(item.headline_part_2) + ' | ' +
       trim(item.headline_part_3)
     )
   }
 
   if (item.responsive_search_ad_headlines) {
     item.headline = (
-      item.responsive_search_ad_headlines.join(' || ')
+      (item.responsive_search_ad_headlines.join(' || ')).substr(0, 100) + ' ...'
     )
   }
 
